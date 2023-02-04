@@ -8,20 +8,22 @@
                 <span class="text-danger">(Obligatorio)</span>
             </h6>
             <textarea name="sustento-g" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; " required>response.sustento</textarea>
+                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="response.sustento"></textarea>
         </li>
 
         <li class="list-group-item text-wrap">
             <h6 class="alert alert-warning text-center font-weight-bold">
                 Adjuntos de las guias <span class="text-danger">(Obligatorio)</span>
             </h6>
-            <input type="file" name="correcion_g_adjuntos" id="correcion_f_adjuntos"  class="form-control" placeholder="">
+            <input type="file" name="correcion_g_adjuntos" id="correcion_f_adjuntos"  class="form-control" placeholder="" multiple>
         </li>
 
         <li class="list-group-item text-wrap">
-            <h6 class="alert alert-warning text-center font-weight-bold">Detalle o cambio que se va a realizar</h6>
+            <h6 class="alert alert-warning text-center font-weight-bold">
+                <b>Detalle o cambio que se va a realizar<span class="text-danger">(Obligatorio)</span></b>
+            </h6>
             <textarea name="detalle-g" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; " required>response.detalle</textarea>
+                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="response.detalle"></textarea>
         </li>
 
 

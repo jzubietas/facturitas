@@ -277,39 +277,42 @@
                     //let cant_captura_pc=$('input[name="correcion_pc_captura"]').length;
                     if(cant_sustento_pc==0)
                     {
-                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning').then(function(){
+                            console.log("before")
+                            $("textarea[name='sustento-pc']").focus()
+                        });
+                        return false;
                     }else if(cant_detalle_pc==0)
                     {
                         Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
-                    }/*else if(cant_captura_pc==0)
-                    {
-                        Swal.fire('Error','No se puede ingresar una captura vacio','warning');return false;
-                    }*/
+                    }if(dataForm_pc.correcion_pc_captura === undefined) {
+                        Swal.fire('Error','No se puede ingresar una captura vacia','warning');return false;
+                    }
                 }
                 else if(e.target.id=='form-correccionpedido-f')
                 {
                     let cant_sustento_f=$("textarea[name='sustento-f']").val().length;
+                    let cant_facturas_f=$('input[name="correcion_f_facturas"]')[0].files.length
                     let cant_detalle_f=$("textarea[name='detalle-f']").val().length;
-                    let cant_facturas_f=$('input[name="correcion_f_facturas"]').length;
-                    let cant_adjuntos_f=$('input[name="correcion_f_adjuntos"]').length;
+                    let cant_adjuntos_f=$('input[name="correcion_f_adjuntos"]')[0].files.length
                     if(cant_sustento_f==0)
                     {
                         Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
-                    }else if(cant_detalle_f==0)
-                    {
-                        Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
                     }else if(cant_facturas_f==0)
                     {
                         Swal.fire('Error','No se puede ingresar facturas vacias','warning');return false;
-                    }else if(cant_adjuntos_f==0)
+                    }else if(cant_detalle_f==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+                    }/*else if(cant_adjuntos_f==0)
                     {
                         Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
-                    }
+                    }*/
                 }
                 else if(e.target.id=='form-correccionpedido-g')
                 {
-                    let cant_sustento_g=$("textarea[name='sustento-g']").val().length;
-                    let cant_adjuntos_g=$('input[name="correcion_g_adjuntos"]').length;
+                    let cant_sustento_g=$("textarea[name='sustento-g']").val().length
+                    let cant_adjuntos_g=$('input[name="correcion_g_adjuntos"]')[0].files.length
                     let cant_detalle_g=$("textarea[name='detalle-g']").val().length;
                     if(cant_sustento_g==0)
                     {
@@ -334,6 +337,7 @@
                         Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
                     }
                 }
+                return false;
                 switch (e.target.id)
                 {
                     case 'form-correccionpedido-pc':

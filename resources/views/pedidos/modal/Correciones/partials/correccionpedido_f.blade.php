@@ -7,12 +7,14 @@
                 <b>Sustento por Pedido Completo <span class="text-danger">(Obligatorio):</span></b>
             </h6>
             <textarea name="sustento-f" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; " required>response.sustento</textarea>
+                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="response.sustento"></textarea>
         </li>
 
         <li class="list-group-item text-wrap">
-            <h6 class="alert alert-warning text-center font-weight-bold">Facturas que se van a recoger</h6>
-            <input type="file" name="correcion_f_facturas" id="correcion_f_facturas"  class="form-control" placeholder="">
+            <h6 class="alert alert-warning text-center font-weight-bold">
+                <b>Facturas que se van a corregir <span class="text-danger">(Obligatorio):</span></b>
+            </h6>
+            <input type="file" name="correcion_f_facturas" id="correcion_f_facturas"  class="form-control" placeholder="" multiple>
         </li>
 
         <li class="list-group-item text-wrap">
@@ -20,12 +22,12 @@
                 <b>Detalle <span class="text-danger">(Obligatorio):</span></b>
             </h6>
             <textarea name="detalle-f" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; " required>response.detalle</textarea>
+                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="response.detalle"></textarea>
         </li>
 
         <li class="list-group-item text-wrap">
             <h6 class="alert alert-warning text-center font-weight-bold">Adjuntos referenciales</h6>
-            <input type="file" name="correcion_f_adjuntos" id="correcion_f_adjuntos"  class="form-control" placeholder="">
+            <input type="file" name="correcion_f_adjuntos" id="correcion_f_adjuntos"  class="form-control" placeholder="" multiple>
         </li>
     </ul>
     <hr class="mt-2 mb-3"/>
