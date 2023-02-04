@@ -14,15 +14,15 @@
     @can('base_fria.exportar')
     <div class="float-right btn-group dropleft">
 
-
+        @if(Auth::user()->rol == 'Asesor')
             <a href="{{route('excel/basefria/exportar')}}" target="_blank" class="btn btn-dark mr-4">
                 <i class="fa fa-download"></i>
                 <i class="fa fa-file-excel"></i>
                 Base fria Asesor
             </a>
+        @endif
 
-
-        @if(Auth::user()->rol == 'Administrador')
+        @if(Auth::user()->rol == 'Administrador' || uth::user()->rol == 'Llamadas' || uth::user()->rol == 'Jefe de llamadas')
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Exportar
             </button>
