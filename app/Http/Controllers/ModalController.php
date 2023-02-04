@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alerta;
 use App\Models\Cliente;
+use App\Models\Correction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,8 +23,20 @@ class ModalController extends Controller
                     $sustento=$request->sustento-pc;
                     $detalle=$request->detalle-pc;
                     $captura=$request->correcion_pc_captura;
-
-                    //corrections_tables
+                    $correction=Correction::create([
+                        'type' => 'PEDIDO COMPLETO',
+                        'code'=>'',
+                        'ruc'=>'',
+                        'razon_social'=>'',
+                        'asesor_id'=>0,
+                        'asesor_identify'=>'1.5',
+                        'fecha_correccion'=>now(),
+                        'motivo'=>$sustento,
+                        'aduntos'=>0,
+                        'detalle'=>$detalle,
+                        'estado'=>1
+                    ]);
+                    Correction::find($correction->id)->update(['estado'=>1]);
 
                     break;
                 case '2':

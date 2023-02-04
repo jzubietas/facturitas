@@ -13,6 +13,15 @@
     @endcan
     @can('base_fria.exportar')
     <div class="float-right btn-group dropleft">
+
+
+            <a href="{{route('excel/basefria/exportar')}}" target="_blank" class="btn btn-dark mr-4">
+                <i class="fa fa-download"></i>
+                <i class="fa fa-file-excel"></i>
+                Base fria Asesor
+            </a>
+
+
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
@@ -152,7 +161,7 @@ $(document).ready(function () {
       //solo completo datos
       //hiddenId
       //
-      
+
       console.log(idcodigo)
       $(".textcode").html(idcodigo);
       $("#motivo").val('');
@@ -163,7 +172,7 @@ $(document).ready(function () {
     $(document).on("submit", "#formdelete", function (evento) {
         evento.preventDefault();
         console.log("action delete action")
-        
+
         var formData = new FormData();
         formData.append("hiddenID", $("#hiddenIDdelete").val())
 
