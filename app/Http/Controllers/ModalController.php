@@ -7,8 +7,10 @@ use App\Models\AttachCorrection;
 use App\Models\Cliente;
 use App\Models\Correction;
 use App\Models\DetallePedido;
+use App\Models\ImagenAtencion;
 use App\Models\Pedido;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -59,7 +61,47 @@ class ModalController extends Controller
                             'estado'=>1,
                         ]);
                     }
-                    return response()->json(['html' => $correction->id]);
+                    //creando pedido con correlativo -C
+                    $post = Pedido::find($pedido->id);
+                    $resourcorrelativo = $post->replicate();
+                    $correla=$post->codigo;
+                    $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
+                    $resourcorrelativo->codigo = $pedido->codigo.'-C'.($conta_correcion+1);
+                    $resourcorrelativo->created_at = Carbon::now();
+                    $resourcorrelativo->pago = "1";
+                    $resourcorrelativo->pagado = "2";
+                    $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
+                    $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                    $resourcorrelativo->estado_correccion = '1';
+                    $resourcorrelativo->save();
+                    Pedido::where("id",$resourcorrelativo->id)->update([
+                        'correlativo' =>  'PED'.$resourcorrelativo->id
+                    ]);
+                    $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+                    $resourcorrelativo_det = $post_det->replicate();
+                    $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
+                    $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
+                    $resourcorrelativo_det->saldo = 0;
+                    $resourcorrelativo_det->save();
+
+                    $destinationPath = base_path('public/storage/adjuntos/');
+                    $files = $request->file('adjunto');
+                    if ($request->hasFile('adjunto'))
+                    {
+                        foreach ($files as $file)
+                        {
+                            $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                            $file->move($destinationPath, $file_name);
+                            ImagenAtencion::create([
+                                'pedido_id' => $resourcorrelativo->id,
+                                'adjunto' => $file_name,
+                                'estado' => '1',
+                                'confirm' => '1'
+                            ]);
+                        }
+                    }
+
+                    return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
 
                     break;
                 case '2':
@@ -114,13 +156,13 @@ class ModalController extends Controller
                             ]);
                         }
                     }
+                    return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
                     break;
                 case '3':
                     $hiden=$request->correccion_g;
                     $sustento=$request->sustento_g;
                     $adjuntos=$request->correcion_g_adjuntos;
                     $detalle=$request->detalle_g;
-
                     $codigo=$request->modalcorreccionpedido;
                     $pedido=Pedido::where('codigo',$codigo)->first();
                     $detallepedido=DetallePedido::where('codigo',$codigo)->first();
@@ -153,6 +195,7 @@ class ModalController extends Controller
                             ]);
                         }
                     }
+                    return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
                     break;
                 case '4':
                     $hiden=$request->correccion_b;
@@ -189,6 +232,7 @@ class ModalController extends Controller
                             ]);
                         }
                     }
+                    return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
                     break;
             }
         }

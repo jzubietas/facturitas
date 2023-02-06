@@ -407,12 +407,16 @@
                 },
                 createdRow: function (row, data, dataIndex) {
                     //console.log(row);
-                    if (data["estado"] == "1") {
-
-                        //    $('td', row).css('background', 'red').css('font-weight', 'bold');
-
-                    } else if (data["estado"] == "0"){
-                        $(row).addClass('textred');
+                    if (data["type"] == "PEDIDO COMPLETO") {
+                        $('td', row).css('background', 'orange').css('font-weight', 'bold');
+                    } else if (data["type"] == "FACTURAS"){
+                        $('td', row).css('background', 'purple').css('font-weight', 'bold');
+                    }
+                    else if (data["type"] == "GUIAS"){
+                        $('td', row).css('background', 'green').css('font-weight', 'bold');
+                    }
+                    else if (data["type"] == "BANCARIZACIONES"){
+                        $('td', row).css('background', 'blue').css('font-weight', 'bold');
                     }
                 },
                 rowCallback: function (row, data, index) {
