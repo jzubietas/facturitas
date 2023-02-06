@@ -6,6 +6,7 @@ use App\Events\PedidoAnulledEvent;
 use App\Events\PedidoAtendidoEvent;
 use App\Events\PedidoEntregadoEvent;
 use App\Events\PedidoEvent;
+use App\Models\AttachCorrection;
 use App\Models\Cliente;
 use App\Models\Departamento;
 use App\Models\DetallePago;
@@ -40,6 +41,7 @@ use PDF;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
+use Storage;
 
 class PedidoController extends Controller
 {
@@ -789,6 +791,20 @@ class PedidoController extends Controller
             ->orderBy('created_at', 'DESC')->get();
         foreach ($imagenesatencion as $imagenatencion) {
             $array_html[] = $imagenatencion->adjunto;
+        }
+        $html = implode("|", $array_html);
+        return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
+    }
+
+    public function correccionobteneradjuntoRequest(Request $request)
+    {
+        $buscar_pedido = $request->correccion;
+        $array_html = [];
+        $imagenes = AttachCorrection::where('correction_id', $request->correccion)
+            ->where("estado", "1")
+            ->orderBy('created_at', 'DESC')->get();
+        foreach ($imagenes as $imagen) {
+            $array_html[] = '<p><a href="'.Storage::disk($imagen->disk)->url($imagen->file_name).'"><i class="fa fa-file mr-2"></i>'.$imagen->file_name.'</a><p>';
         }
         $html = implode("|", $array_html);
         return response()->json(['html' => $html, 'cantidad' => count($array_html)]);

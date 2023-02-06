@@ -580,7 +580,13 @@ class OperacionController extends Controller
         return Datatables::of(DB::table($data))
             ->addIndexColumn()
             ->editColumn('adjuntos', function ($pedido) {
-                return 'adjuntos';
+                $btn = [];
+                $btn[] = '<a href="" data-target="#modalcorreccion-veradjunto"'.
+                            'data-correccion="' . $pedido->id . '"'.
+                            'data-toggle="modal" >'.
+                                '<button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button>'.
+                                '</a>';
+                return join('', $btn);
             })
             ->addColumn('action', function ($pedido) {
                 $btn = [];
@@ -591,7 +597,7 @@ class OperacionController extends Controller
 
                 return join('', $btn);
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','adjuntos'])
             ->make(true);
     }
 

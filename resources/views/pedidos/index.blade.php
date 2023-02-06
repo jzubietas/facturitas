@@ -340,8 +340,7 @@
                 {
                     let cant_sustento_b=$("textarea[name='sustento-b']").val().length;
                     dataForm_b.sustento_b = $("textarea[name='sustento-b']").val()
-                    let cant_adjuntos_b=$('input[name="correcion_b_adjuntos[]"]').length;
-                    //dataForm_b.correcion_b_adjuntos=$('input[name="correcion_b_adjuntos"]')[0].files;
+                    let cant_adjuntos_b=$('input[name="correcion_b_adjuntos[]"]')[0].files.length
                     if(cant_sustento_b==0)
                     {
                         Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;

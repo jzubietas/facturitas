@@ -62,6 +62,7 @@
                 <tbody>
                 </tbody>
             </table>
+            @include('operaciones.modal.Correcciones.veradjunto')
 
         </div>
     </div>
@@ -128,6 +129,24 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
+
+            $('#modalcorreccion-veradjunto').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                //$(".textcode").html(idcodigo);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('correccionobteneradjuntoRequest') }}",
+                    data: {"correccion": button.data('correccion')},
+                }).done(function (data) {
+                    console.log(data.cantidad);
+                    $(".textcountadj").html(data.cantidad);
+                    if (data.cantidad > 0) {
+                        $("#imagenes_adjunto").html(data.html)
+                    } else {
+                        console.log("sin imagenes");
+                    }
+                });
             });
 
 

@@ -32,7 +32,7 @@
                                         <h3>Imagen para asesores <br>de <b>6 al 12</b></h3>
                                     </div>
                                     <div class="card-body" id="imagecontent2">
-                                        <img src="{{Storage::disk($oldDisk2)->url($oldPath2)}}" class="w-100"/>
+                                        <img src="{{Storag1e::disk($oldDisk2)->url($oldPath2)}}" class="w-100"/>
                                     </div>
                                 </div>
                             </div>

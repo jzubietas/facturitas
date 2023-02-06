@@ -287,6 +287,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('pedidoobteneradjuntoRequest', [PedidoController::class, 'pedidoobteneradjuntoRequest'])->name('pedidoobteneradjuntoRequest');
     Route::post('pedidoobteneradjuntoOPRequest', [PedidoController::class, 'pedidoobteneradjuntoOPRequest'])->name('pedidoobteneradjuntoOPRequest');
+    Route::post('correccionobteneradjuntoRequest', [PedidoController::class, 'correccionobteneradjuntoRequest'])->name('correccionobteneradjuntoRequest');
 
     /*Controller Pedido */
 
