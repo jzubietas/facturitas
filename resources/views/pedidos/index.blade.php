@@ -727,8 +727,6 @@
                         if(data.html!="0")
                         {
                             $("#modal-correccion-pedidos").modal("hide");
-                            //abrir modal correcciones pdf
-
                             var urlpdf = '{{ route('pedidosPDF', ':id') }}';
                             urlpdf = urlpdf.replace(':id', data.codigo);
                             window.open(urlpdf, '_blank');

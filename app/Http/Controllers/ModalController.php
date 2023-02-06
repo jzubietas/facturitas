@@ -23,6 +23,7 @@ class ModalController extends Controller
         if($request->opcion)
         {
             $opcion=$request->opcion;
+            $codigo_pdf='';
             switch ($opcion)
             {
                 case '1':
@@ -75,7 +76,7 @@ class ModalController extends Controller
                         //no crea codigo nuevo solo remplaza
                         $post = Pedido::find($pedido->id);
                         $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-
+                        $codigo_pdf=$post->codigo;
 
                     }else if(in_array($condicion_pedido,[
                         Pedido::RECEPCION_COURIER_INT
@@ -118,10 +119,8 @@ class ModalController extends Controller
                                 ]);
                             }
                         }
+                        $codigo_pdf=$resourcorrelativo->id;
                     }
-
-                    return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
-
                     break;
                 case '2':
                     $hiden=$request->correccion_f;
@@ -187,8 +186,7 @@ class ModalController extends Controller
                         //no crea codigo nuevo solo remplaza
                         $post = Pedido::find($pedido->id);
                         $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-
-
+                        $codigo_pdf=$post->codigo;
                     }else if(in_array($condicion_pedido,[
                         Pedido::RECEPCION_COURIER_INT
                     ]))
@@ -230,8 +228,8 @@ class ModalController extends Controller
                                 ]);
                             }
                         }
+                        $codigo_pdf=$resourcorrelativo->id;
                     }
-                    return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
                     break;
                 case '3':
                     $hiden=$request->correccion_g;
@@ -282,8 +280,7 @@ class ModalController extends Controller
                         //no crea codigo nuevo solo remplaza
                         $post = Pedido::find($pedido->id);
                         $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-
-
+                        $codigo_pdf=$post->codigo;
                     }else if(in_array($condicion_pedido,[
                         Pedido::RECEPCION_COURIER_INT
                     ]))
@@ -325,8 +322,8 @@ class ModalController extends Controller
                                 ]);
                             }
                         }
+                        $codigo_pdf=$resourcorrelativo->id;
                     }
-                    return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
                     break;
                 case '4':
                     $hiden=$request->correccion_b;
@@ -375,8 +372,7 @@ class ModalController extends Controller
                         //no crea codigo nuevo solo remplaza
                         $post = Pedido::find($pedido->id);
                         $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-
-
+                        $codigo_pdf=$post->codigo;
                     }else if(in_array($condicion_pedido,[
                         Pedido::RECEPCION_COURIER_INT
                     ]))
@@ -418,10 +414,11 @@ class ModalController extends Controller
                                 ]);
                             }
                         }
+                        $codigo_pdf=$resourcorrelativo->id;
                     }
-                    return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
                     break;
             }
+            return response()->json(['html' => $correction->id,'codigo'=>$codigo_pdf]);
         }
 
     }
