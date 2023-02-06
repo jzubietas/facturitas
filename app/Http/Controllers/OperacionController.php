@@ -1997,4 +1997,27 @@ class OperacionController extends Controller
         return response()->json(['html' => $html]);
     }
 
+    public function correccionesJson(Request $request)
+    {
+        $codigo=Pedido::where('id',$request->pedido)->first()->codigo;
+        if (str_contains($codigo, '-C'))
+        {
+            return response()->json(['html' => 'No tiene correcciones']);
+        }else{
+            $correcciones=Correction::where('code','like','%'.$codigo.'%')->where('estado',"1")->get();
+            $html = '<ul style="text-decoration:none;list-style: none;">';
+            //type  code  razon_social  fecha_correccion   motivo  detalle
+            foreach ($correcciones as $correccion) {
+                $html .= '<li>Tipo: ' . $correccion->type.'  Codigo:'.$correccion->code.'  Razon Social:'.$correccion->razon_social.'</li>';
+                $html .='<li>Sustento:'.$correccion->motivo.'</li>';
+                $html .='<li>Detalle:'.$correccion->detalle.'</li>';
+                $html .='<li></li>';
+            }
+            $html.='</ul>';
+
+            return response()->json(['html' => $html]);
+        }
+
+    }
+
 }

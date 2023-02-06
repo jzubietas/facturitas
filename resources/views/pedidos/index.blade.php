@@ -86,6 +86,7 @@
             <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
                 <thead>
                 <tr>
+                    <th></th>
                     <th scope="col">Item</th>
                     <th scope="col">Código</th>
                     <th scope="col">Cliente</th>
@@ -96,16 +97,10 @@
                     <th scope="col">F. Registro</th>
                     <th scope="col">F. Actualizacion</th>
                     <th scope="col">Total (S/)</th>
-                    <!--<th scope="col">Est. pedido</th> -->
-
                     <th scope="col">Est. pago</th>
                     <th scope="col">Con. pago</th>
-                    <!--   <th scope="col">Est. sobre</th> -->
                     <th scope="col">Est. Sobre</th>
-                    <!--  <th scope="col">Cond. Pago</th> -->
-                    <!-- <th scope="col">Estado</th>-->
                     <th scope="col">Diferencia</th>
-                    {{--<th scope="col">Resp. Pedido</th>--}}
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
@@ -122,7 +117,9 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
+
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//scdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
 
     <style>
 
@@ -179,6 +176,14 @@
             background-color: #ff4c00;
             transition: all 0.5s ease;
             text-shadow: 10px 2px #6ac7c2;
+        }
+
+        td.details-control {
+            background: url("/images/details_open.png")  no-repeat center center;
+            cursor: pointer;
+        }
+        tr.details td.details-control {
+            background: url('/images/details_close.png') no-repeat center center;
         }
 
     </style>
@@ -358,14 +363,11 @@
                 if (recojo_pedido == "") {
                     Swal.fire('Debe elegir un pedido', '', 'warning');
                     return false;
-                    return false;
                 } else if (recojo_grupo = "") {
                     Swal.fire('El pedido no se ubica dentro de un paquete, consulte a sistemas', '', 'warning');
                     return false;
-                    return false;
                 } else if (recojo_fecha == "") {
                     Swal.fire('Debe elegir una fecha correspondiente', '', 'warning');
-                    return false;
                     return false;
                 } else if (recojo_distrito == "") {
                     Swal.fire('Debe elegir un distrito', '', 'warning');
@@ -724,12 +726,14 @@
                         $('button:submit').prop("disabled",true)
                     },
                     success: function (data) {
+                        console.log(data);
                         if(data.html!="0")
                         {
                             $("#modal-correccion-pedidos").modal("hide");
-                            var urlpdf = '{{ route('pedidosPDF', ':id') }}';
+                            var urlpdf = '{{ route('correccionPDF', ':id') }}';
                             urlpdf = urlpdf.replace(':id', data.codigo);
                             window.open(urlpdf, '_blank');
+                            console.log(data.codigo);
 
                             console.log("response 1")
                         } else {
@@ -911,13 +915,15 @@
                     },
                 });
             }
+            var detailRows = [];
+
             var tablaPrincipal = $('#tablaPrincipal').DataTable({
                 dom: 'Blfrtip',
                 processing: true,
                 serverSide: true,
                 searching: true,
                 stateSave: true,
-                order: [[0, "desc"]],
+                order: [[1, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
@@ -1085,7 +1091,13 @@ ${data.foto3 ? `
 
                 },
                 columns: [
-                    //ID
+                    {
+                        class: 'details-control',
+                        orderable: false,
+                        data: null,
+                        defaultContent: '',
+                        "searchable": false
+                    },
                     {
                         data: 'id',
                         name: 'id',
@@ -1115,51 +1127,25 @@ ${data.foto3 ? `
                             }
 
                         },
-                        //searchable: true
                     },
-                    //EMPRESAS
                     {data: 'empresas', name: 'empresas',},
                     {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
-                    //USUARIOS
                     {data: 'users', name: 'users',},
                     {data: 'ruc', name: 'ruc',},
-
-                    //FECHA
                     {
                         data: 'fecha',
                         name: 'fecha',
-                        //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
                     },
                     {
                         data: 'fecha_up',
                         name: 'fecha_up',
                         "visible": false,
-                        //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
                     },
                     {
                         data: 'total',
                         name: 'total',
                         render: $.fn.dataTable.render.number(',', '.', 2, '')
                     },
-                        {{--
-                            {data: 'condicion_code',
-                                name: 'condicion_code',
-                                render: function ( data, type, row, meta ) {
-                                    if(row.pendiente_anulacion){
-                                        return '{{\App\Models\Pedido::PENDIENTE_ANULACION}}';
-                        }
-                        if(row.condicion_code==1){
-                            return '{{\App\Models\Pedido::POR_ATENDER }}';
-                        }else if(row.condicion_code==2){
-                            return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
-                        }else if(row.condicion_code==3){
-                            return '{{\App\Models\Pedido::ATENDIDO }}';
-                        }else if(row.condicion_code==4||row.estado==0){
-                            return '{{\App\Models\Pedido::ANULADO }}';
-                        }
-                    }
-                },
-                        --}}
                     {
                         data: 'condicion_pa',
                         name: 'condicion_pa',
@@ -1307,6 +1293,72 @@ ${data.foto3 ? `
                         }
                     }
                 ],
+            });
+
+            function charge_corrections(pedido_id) {
+                //obtener datos por ajax
+                var formData = new FormData();
+                formData.append("pedido", pedido_id);
+
+                $.ajax({
+                    async:false,data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('correccionesJson') }}",
+                    success:function(res){
+                        console.log(res);
+                        return res;
+                    }
+                });
+
+                //return 'Detalles';
+
+            }
+
+            $('#tablaPrincipal tbody').on('click', 'tr td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = tablaPrincipal.row(tr);
+
+                var data = tablaPrincipal.row( $(this).closest('tr') ).data()
+                var idxio = detailRows.indexOf(data.id);
+                console.log(idxio)
+                var idx=data.id;
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+                    detailRows.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    console.log(idx);
+                    if (idxio === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+
+                    var formData = new FormData();
+                    formData.append("pedido", idx);
+                    //row.child('asdasd').show();
+
+                    $.ajax({url: "{{ route('correccionesJson') }}" ,
+                        data: formData,processData: false,contentType: false,type: 'POST'})
+                        .done(function(data,textStatus, jqXHR){
+                            //code to handle data from webservice here.
+                            console.log(data.html);
+                            row.child(data.html).show()
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown){
+                            //code to handle error here.
+                        })
+                        .always(function(data, textStatus, jqXHR){
+                        //this code will always execute regardless
+                        });
+
+
+                    //row.child(charge_corrections(idx)).show();
+
+                }
+            });
+
+            tablaPrincipal.on('draw', function () {
+                detailRows.forEach(function(id, i) {
+                    $('#' + id + ' td.details-control').trigger('click');
+                });
             });
 
 

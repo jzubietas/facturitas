@@ -164,6 +164,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('users.profile', [UserController::class, 'profile'])->name('users.profile');
     //Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
 
+    Route::any('correccionesJson', [OperacionController::class, 'correccionesJson'])->name('correccionesJson');
+
     Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
     Route::post('asesorcombomodal', [UserController::class, 'AsesorcomboModal'])->name('asesorcombomodal');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
@@ -575,6 +577,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 //PDF
     //MODULO PEDIDOS
     Route::get('PDF/{pedido}/pedido', [PdfController::class, 'pedidosPDF'])->name('pedidosPDF');
+    Route::get('PDF/{pedido}/correccion', [PdfController::class, 'correccionPDF'])->name('correccionPDF');
     Route::get('pedidosPDFpreview', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview');
 
     Route::get('pedidosPDFpreview2', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview2');

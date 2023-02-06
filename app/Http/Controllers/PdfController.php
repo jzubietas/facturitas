@@ -529,4 +529,79 @@ class PdfController extends Controller
         //return $canvas;
         return $pdf->stream('pedido ' . $pedido->id . '.pdf');
     }
+
+    public function correccionPDF(Pedido $pedido)
+    {
+        $mirol=Auth::user()->rol;
+        $identificador=Auth::user()->identificador;
+
+        //para pedidos anulados y activos
+        $fecha = Carbon::now('America/Lima')->format('Y-m-d');
+
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            //->join('corrections as cc','pedidos.codigo','cc.code')
+            ->select([
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.name as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                //'cc.motivo descripcion',
+                DB::raw(' (select cc.motivo from corrections cc where cc.code=pedidos.codigo and cc.estado=1 order by cc.created_at desc limit 1) as descripcion'),
+                DB::raw(' (select cc.detalle from corrections cc where cc.code=pedidos.codigo and cc.estado=1 order by cc.created_at desc limit 1) as nota'),
+                //'dp.nota',
+                'dp.total',
+                'pedidos.condicion as condiciones',
+                'pedidos.created_at as fecha'
+            ])
+            ->where('pedidos.id', $pedido->id)
+            /*->groupBy(
+                'pedidos.id',
+                'c.nombre',
+                'c.celular',
+                'u.name',
+                'dp.codigo',
+                'dp.nombre_empresa',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.total',
+                'pedidos.condicion',
+                'pedidos.created_at'
+            )*/
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+
+
+        $codigo_barras = Pedido::find($pedido->id)->codigo;
+        $codigo_barras_img = generate_bar_code($codigo_barras);
+
+        $funcion_qr = route('envio.escaneoqr',$codigo_barras);
+        $codigo_qr_img = generate_bar_code($codigo_barras,10,10,'black',true,"QRCODE");
+
+
+        $pdf = PDF::loadView('pedidos.reportes.correccionPDF', compact('pedidos', 'fecha','mirol','identificador', 'codigo_barras_img', 'codigo_qr_img'))
+            ->setPaper('a4', 'portrait');
+        //$canvas = PDF::getDomPDF();
+        //return $canvas;
+        return $pdf->stream('pedido ' . $pedido->id . '.pdf');
+    }
 }

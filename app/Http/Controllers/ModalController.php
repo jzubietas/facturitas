@@ -24,6 +24,18 @@ class ModalController extends Controller
         {
             $opcion=$request->opcion;
             $codigo_pdf='';
+            $condicion_pedido="";
+            $condiciones_en_op=[
+                Pedido::POR_ATENDER_OPE_INT
+                ,Pedido::ATENDIDO_OPE_INT
+                ,Pedido::ENVIADO_OPE
+                ,Pedido::RECIBIDO_JEFE_OPE_INT
+                ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
+            ];
+            $condiciones_despues_op=[
+                Pedido::RECEPCION_COURIER_INT
+                ,Pedido::ENTREGADO_CLIENTE_INT
+            ];
             switch ($opcion)
             {
                 case '1':
@@ -34,7 +46,6 @@ class ModalController extends Controller
 
                     $pedido=Pedido::where('codigo',$codigo)->first();
                     $detallepedido=DetallePedido::where('codigo',$codigo)->first();
-                    // $detallepedido;
                     $correction=Correction::create([
                         'type' => 'PEDIDO COMPLETO',
                         'code'=>$pedido->codigo,
@@ -50,7 +61,6 @@ class ModalController extends Controller
                     ]);
                     $captura = '';
                     if ($request->hasFile('correcion_pc_captura')) {
-                        //Correction::find($correction->id)->update(['estado'=>1]);
                         $captura = $request->file('correcion_pc_captura')->store('pedidos/correcciones', 'pstorage');
                         AttachCorrection::create([
                             'correction_id'=>$correction->id,
@@ -62,27 +72,13 @@ class ModalController extends Controller
                             'estado'=>1,
                         ]);
                     }
-                    //creando pedido con correlativo -C
-                    //condicion del pedido original
                     $condicion_pedido=$pedido->condicion_envio_code;
-                    if(in_array($condicion_pedido,[
-                        Pedido::POR_ATENDER_OPE_INT
-                        ,Pedido::ATENDIDO_OPE_INT
-                        ,Pedido::ENVIADO_OPE
-                        ,Pedido::RECIBIDO_JEFE_OPE_INT
-                        ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
-                    ]))
+                    if(in_array($condicion_pedido,$condiciones_en_op))
                     {
-                        //no crea codigo nuevo solo remplaza
-                        $post = Pedido::find($pedido->id);
-                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-                        $codigo_pdf=$post->codigo;
-
-                    }else if(in_array($condicion_pedido,[
-                        Pedido::RECEPCION_COURIER_INT
-                    ]))
+                        $codigo_pdf=$pedido->id;
+                    }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
-                        $post = Pedido::find($pedido->id);
+                        $post = Pedido::where('id',$pedido->id)->first();
                         $resourcorrelativo = $post->replicate();
                         $correla=$post->codigo;
                         $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
@@ -119,6 +115,7 @@ class ModalController extends Controller
                                 ]);
                             }
                         }
+
                         $codigo_pdf=$resourcorrelativo->id;
                     }
                     break;
@@ -175,23 +172,12 @@ class ModalController extends Controller
                         }
                     }
                     $condicion_pedido=$pedido->condicion_envio_code;
-                    if(in_array($condicion_pedido,[
-                        Pedido::POR_ATENDER_OPE_INT
-                        ,Pedido::ATENDIDO_OPE_INT
-                        ,Pedido::ENVIADO_OPE
-                        ,Pedido::RECIBIDO_JEFE_OPE_INT
-                        ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
-                    ]))
+                    if(in_array($condicion_pedido,$condiciones_en_op))
                     {
-                        //no crea codigo nuevo solo remplaza
-                        $post = Pedido::find($pedido->id);
-                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-                        $codigo_pdf=$post->codigo;
-                    }else if(in_array($condicion_pedido,[
-                        Pedido::RECEPCION_COURIER_INT
-                    ]))
+                        $codigo_pdf=$pedido->id;
+                    }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
-                        $post = Pedido::find($pedido->id);
+                        $post = Pedido::where('id',$pedido->id)->first();
                         $resourcorrelativo = $post->replicate();
                         $correla=$post->codigo;
                         $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
@@ -269,23 +255,12 @@ class ModalController extends Controller
                         }
                     }
                     $condicion_pedido=$pedido->condicion_envio_code;
-                    if(in_array($condicion_pedido,[
-                        Pedido::POR_ATENDER_OPE_INT
-                        ,Pedido::ATENDIDO_OPE_INT
-                        ,Pedido::ENVIADO_OPE
-                        ,Pedido::RECIBIDO_JEFE_OPE_INT
-                        ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
-                    ]))
+                    if(in_array($condicion_pedido,$condiciones_en_op))
                     {
-                        //no crea codigo nuevo solo remplaza
-                        $post = Pedido::find($pedido->id);
-                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-                        $codigo_pdf=$post->codigo;
-                    }else if(in_array($condicion_pedido,[
-                        Pedido::RECEPCION_COURIER_INT
-                    ]))
+                        $codigo_pdf=$pedido->id;
+                    }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
-                        $post = Pedido::find($pedido->id);
+                        $post = Pedido::where('id',$pedido->id)->first();
                         $resourcorrelativo = $post->replicate();
                         $correla=$post->codigo;
                         $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
@@ -361,21 +336,10 @@ class ModalController extends Controller
                         }
                     }
                     $condicion_pedido=$pedido->condicion_envio_code;
-                    if(in_array($condicion_pedido,[
-                        Pedido::POR_ATENDER_OPE_INT
-                        ,Pedido::ATENDIDO_OPE_INT
-                        ,Pedido::ENVIADO_OPE
-                        ,Pedido::RECIBIDO_JEFE_OPE_INT
-                        ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
-                    ]))
+                    if(in_array($condicion_pedido,$condiciones_en_op))
                     {
-                        //no crea codigo nuevo solo remplaza
-                        $post = Pedido::find($pedido->id);
-                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-                        $codigo_pdf=$post->codigo;
-                    }else if(in_array($condicion_pedido,[
-                        Pedido::RECEPCION_COURIER_INT
-                    ]))
+                        $codigo_pdf=$pedido->id;
+                    }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
                         $post = Pedido::find($pedido->id);
                         $resourcorrelativo = $post->replicate();
@@ -418,6 +382,7 @@ class ModalController extends Controller
                     }
                     break;
             }
+            //return $condicion_pedido;
             return response()->json(['html' => $correction->id,'codigo'=>$codigo_pdf]);
         }
 
