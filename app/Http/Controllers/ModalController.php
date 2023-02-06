@@ -11,6 +11,7 @@ use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class ModalController extends Controller
 {
@@ -82,13 +83,20 @@ class ModalController extends Controller
                         'detalle'=>$detalle,
                         'estado'=>1
                     ]);
-                    $files = $request->correcion_f_facturas;
-                    $files = $files->get('correcion_f_facturas');
-                    foreach ($files as $file) {
-                        var_dump_safe($file->getClientOriginalName());
-                        //\Log::Info(var_dump_safe($file->getClientOriginalName()));
+
+                    /*if($request->hasfile('correcion_f_facturas'))
+                    {
+                        foreach($request->file('correcion_f_facturas') as $file)
+                        {
+                            $name=$file->getClientOriginalName();
+                            $file->move(public_path().'/files/', $name);
+                            $data[] = $name;
+                        }
                     }
-                    return '1';
+                    $file= new File();
+                    $file->filename=json_encode($data);
+                    return $data;*/
+
                     if ($request->hasFile('correcion_f_facturas')) {
                         Correction::find($correction->id)->update(['estado'=>1]);
                         $captura = $request->file('correcion_f_facturas')->store('pedidos/correcciones', 'pstorage');
