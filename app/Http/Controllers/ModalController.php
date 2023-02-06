@@ -84,48 +84,36 @@ class ModalController extends Controller
                         'estado'=>1
                     ]);
 
-                    /*if($request->hasfile('correcion_f_facturas'))
-                    {
-                        foreach($request->file('correcion_f_facturas') as $file)
-                        {
-                            $name=$file->getClientOriginalName();
-                            $file->move(public_path().'/files/', $name);
-                            $data[] = $name;
+                    $facturas = $request->file('correcion_f_facturas');
+                    if (isset($facturas)) {
+                        foreach ($facturas as $factura) {
+                            $factura_file = $factura->store('pedidos/correcciones', 'pstorage');
+                            AttachCorrection::create([
+                                'correction_id'=>$correction->id,
+                                'type'=>'factura',
+                                'name'=>$factura_file,
+                                'file_name'=>$factura_file,
+                                'mime_type'=>$factura->file('correcion_f_facturas')->getMimeType(),
+                                'disk'=>'pedidos/correcciones',
+                                'estado'=>1,
+                            ]);
                         }
                     }
-                    $file= new File();
-                    $file->filename=json_encode($data);
-                    return $data;*/
-
-                    if ($request->hasFile('correcion_f_facturas')) {
-                        Correction::find($correction->id)->update(['estado'=>1]);
-                        $captura = $request->file('correcion_f_facturas')->store('pedidos/correcciones', 'pstorage');
-                        AttachCorrection::create([
-                            'correction_id'=>$correction->id,
-                            'type'=>'factura',
-                            'name'=>$captura,
-                            'file_name'=>$captura,
-                            'mime_type'=>$request->file('correcion_f_facturas')->getMimeType(),
-                            'disk'=>'pedidos/correcciones',
-                            'estado'=>1,
-
-                        ]);
+                    $adjuntos = $request->file('correcion_f_adjuntos');
+                    if (isset($adjuntos)) {
+                        foreach ($adjuntos as $adjunto) {
+                            $adjunto_file = $adjunto->store('pedidos/correcciones', 'pstorage');
+                            AttachCorrection::create([
+                                'correction_id'=>$correction->id,
+                                'type'=>'adjunto',
+                                'name'=>$adjunto_file,
+                                'file_name'=>$adjunto_file,
+                                'mime_type'=>$adjunto->file('correcion_f_adjuntos')->getMimeType(),
+                                'disk'=>'pedidos/correcciones',
+                                'estado'=>1,
+                            ]);
+                        }
                     }
-                    if ($request->hasFile('correcion_f_adjuntos')) {
-                        Correction::find($correction->id)->update(['estado'=>1]);
-                        $captura = $request->file('correcion_f_adjuntos')->store('pedidos/correcciones', 'pstorage');
-                        AttachCorrection::create([
-                            'correction_id'=>$correction->id,
-                            'type'=>'adjunto',
-                            'name'=>$captura,
-                            'file_name'=>$captura,
-                            'mime_type'=>$request->file('correcion_f_adjuntos')->getMimeType(),
-                            'disk'=>'pedidos/correcciones',
-                            'estado'=>1,
-
-                        ]);
-                    }
-
                     break;
                 case '3':
                     $hiden=$request->correccion_g;
@@ -150,22 +138,21 @@ class ModalController extends Controller
                         'detalle'=>$detalle,
                         'estado'=>1
                     ]);
-                    if ($request->hasFile('correcion_g_adjuntos')) {
-                        Correction::find($correction->id)->update(['estado'=>1]);
-                        $captura = $request->file('correcion_g_adjuntos')->store('pedidos/correcciones', 'pstorage');
-                        AttachCorrection::create([
-                            'correction_id'=>$correction->id,
-                            'type'=>'adjunto',
-                            'name'=>$captura,
-                            'file_name'=>$captura,
-                            'mime_type'=>$request->file('correcion_g_adjuntos')->getMimeType(),
-                            'disk'=>'pedidos/correcciones',
-                            'estado'=>1,
-
-                        ]);
+                    $adjuntos = $request->file('correcion_g_adjuntos');
+                    if (isset($adjuntos)) {
+                        foreach ($adjuntos as $adjunto) {
+                            $adjunto_file = $adjunto->store('pedidos/correcciones', 'pstorage');
+                            AttachCorrection::create([
+                                'correction_id'=>$correction->id,
+                                'type'=>'adjunto',
+                                'name'=>$adjunto_file,
+                                'file_name'=>$adjunto_file,
+                                'mime_type'=>$adjunto->file('correcion_g_adjuntos')->getMimeType(),
+                                'disk'=>'pedidos/correcciones',
+                                'estado'=>1,
+                            ]);
+                        }
                     }
-
-
                     break;
                 case '4':
                     $hiden=$request->correccion_b;
@@ -187,19 +174,20 @@ class ModalController extends Controller
                         'detalle'=>'SIN DETALLE',
                         'estado'=>1
                     ]);
-                    if ($request->hasFile('correcion_b_adjuntos')) {
-                        Correction::find($correction->id)->update(['estado'=>1]);
-                        $captura = $request->file('correcion_b_adjuntos')->store('pedidos/correcciones', 'pstorage');
-                        AttachCorrection::create([
-                            'correction_id'=>$correction->id,
-                            'type'=>'adjunto',
-                            'name'=>$captura,
-                            'file_name'=>$captura,
-                            'mime_type'=>$request->file('correcion_b_adjuntos')->getMimeType(),
-                            'disk'=>'pedidos/correcciones',
-                            'estado'=>1,
-
-                        ]);
+                    $adjuntos = $request->file('correcion_b_adjuntos');
+                    if (isset($adjuntos)) {
+                        foreach ($adjuntos as $adjunto) {
+                            $adjunto_file = $adjunto->store('pedidos/correcciones', 'pstorage');
+                            AttachCorrection::create([
+                                'correction_id'=>$correction->id,
+                                'type'=>'adjunto',
+                                'name'=>$adjunto_file,
+                                'file_name'=>$adjunto_file,
+                                'mime_type'=>$adjunto->file('correcion_b_adjuntos')->getMimeType(),
+                                'disk'=>'pedidos/correcciones',
+                                'estado'=>1,
+                            ]);
+                        }
                     }
                     break;
             }

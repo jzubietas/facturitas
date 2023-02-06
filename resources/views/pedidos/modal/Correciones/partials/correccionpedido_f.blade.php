@@ -14,7 +14,7 @@
             <h6 class="alert alert-warning text-center font-weight-bold">
                 <b>Facturas que se van a corregir <span class="text-danger">(Obligatorio):</span></b>
             </h6>
-            <input type="file" name="correcion_f_facturas" id="correcion_f_facturas"  class="form-control" placeholder="" multiple>
+            <input type="file" name="correcion_f_facturas[]" id="correcion_f_facturas"  class="form-control" placeholder="" multiple>
         </li>
 
         <li class="list-group-item text-wrap">

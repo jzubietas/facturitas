@@ -301,8 +301,18 @@
                     let cant_sustento_f=$("textarea[name='sustento-f']").val().length;
                     dataForm_f.sustento_f = $("textarea[name='sustento-f']").val()
                     let cant_facturas_f=$('input[name="correcion_f_facturas"]')[0].files.length
+
+
                     console.log($('input[name="correcion_f_facturas"]')[0].files);
                     dataForm_f.correcion_f_facturas=$('input[name="correcion_f_facturas"]')[0].files;
+
+
+                    let files = $('[name="correcion_f_facturas[]');
+                    if (files[0].files.length > 0) {
+                        for (let i in files[0].files) {
+                            fd.append('adjunto[]', files[0].files[i]);
+                        }
+                    }
 
                     var names_ = [];
                     for (var i = 0; i < $('input[name="correcion_f_facturas"]')[0].files.length; ++i) {
@@ -425,6 +435,15 @@
                         fd.append(key, formData[key]);
                     }
                 })
+                switch(e.target.id)
+                {
+                    case 'form-correccionpedido-pc':break;
+                    case 'form-correccionpedido-f':break;
+                    case 'form-correccionpedido-g':break;
+                    case 'form-correccionpedido-b':break;
+
+
+                }
                 console.log(fd);
                 $.ajax({
                     data: fd,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal_correccionpedidos') }}",
