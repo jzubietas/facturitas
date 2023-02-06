@@ -100,6 +100,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
         ->post('clientedeleteRequest', [ClienteController::class, 'destroyid'])
         ->name('clientedeleteRequest.post');
 
+    Route::post('correccionconfirmacionRequest', [OperacionController::class, 'correccionconfirmacion'])->name('correccionconfirmacionRequest.post');
+    Route::post('correccionrechazoRequest', [OperacionController::class, 'correccionrechazo'])->name('correccionrechazoRequest.post');
 
     //Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
     Route::get('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');

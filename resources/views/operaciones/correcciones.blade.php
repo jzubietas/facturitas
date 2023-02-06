@@ -63,7 +63,8 @@
                 </tbody>
             </table>
             @include('operaciones.modal.Correcciones.veradjunto')
-
+            @include('operaciones.modal.Correcciones.confirmacion')
+            @include('operaciones.modal.Correcciones.rechazar')
         </div>
     </div>
 @stop
@@ -130,6 +131,54 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            $('#modalcorreccion-confirmacion').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                console.log((button.data('correccion')))
+                $("#confirmacion").val(button.data('correccion'))
+            })
+
+            $('#modalcorreccion-rechazo').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $("#rechazo").val(button.data('correccion'))
+            })
+
+            $(document).on("submit","#formcorreccion_confirmacion",function(event) {
+                event.preventDefault();
+                var formData = new FormData();
+                formData.append("confirmacion", $("#confirmacion").val())
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('correccionconfirmacionRequest.post') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                }).done(function (data) {
+                    $("#modalcorreccion-confirmacion").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+                }).fail(function (err, error, errMsg) {
+                    console.log(arguments, err, errMsg)
+                });
+            });
+
+            $(document).on("submit","#formcorreccion_rechazo",function(event) {
+                event.preventDefault();
+                var formData = new FormData();
+                formData.append("rechazo", $("#rechazo").val())
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('correccionrechazoRequest.post') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                }).done(function (data) {
+                    $("#modalcorreccion-rechazo").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+                }).fail(function (err, error, errMsg) {
+                    console.log(arguments, err, errMsg)
+                });
+            });
+
 
             $('#modalcorreccion-veradjunto').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)

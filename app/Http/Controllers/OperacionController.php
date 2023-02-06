@@ -548,7 +548,7 @@ class OperacionController extends Controller
         $data=Correction::join('users as u','u.id','corrections.asesor_id')
             ->select([
                 'corrections.*',
-            ]);
+            ])->where('corrections.estado',"1");
 
 
         if (Auth::user()->rol == "Operario") {
@@ -592,6 +592,20 @@ class OperacionController extends Controller
                 $btn = [];
 
                 $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton">';
+                $btn[] = '<a class="btn-sm dropdown-item text-success" href="#"'.
+                    'data-toggle="modal"'.
+                    'data-correccion="'.$pedido->id.'"'.
+                    'data-target="#modalcorreccion-confirmacion">
+                            <i class="fa fa-check"></i>
+                        CORREGIR
+                        </a>';
+                /*$btn[] = '<a class="btn-sm dropdown-item text-danger" href="#"'.
+                        'data-toggle="modal"'.
+                        'data-correccion="'.$pedido->id.'"'.
+                        'data-target="#modalcorreccion-rechazo">
+                            <i class="fa fa-ban"></i>
+                        RECHAZAR
+                        </a>';*/
 
                 $btn[] = '</ul></div>';
 
@@ -1940,6 +1954,47 @@ class OperacionController extends Controller
 
         return response()->json(['html' => $request->pedido]);
 
+    }
+
+    public function correccionconfirmacion(Request $request)
+    {
+        if (!$request->confirmacion) {
+            $html = '';
+        } else {
+            $correccion=Correction::where('id',$request->confirmacion)->first();
+            $pedido=$correccion->code;
+            $ped=Pedido::where('codigo',$pedido)->first();
+            $dped=DetallePedido::where('codigo',$pedido)->first();
+            $html=$correccion->id;
+            //antes de operaciones
+            $list_antes_op=[Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE,Pedido::ENVIADO_OPE_INT];
+            //fuera de operaciones
+            $list_despues_op=[Pedido::ENVIO_COURIER_JEFE_OPE_INT];
+            switch ($correccion->type)
+            {
+                case 'PEDIDO COMPLETO':
+                    $condicion=$ped->condicion_envio;
+                    //i(in_array($condicion,))
+                    break;
+                case 'FACTURA':break;
+                case 'GUIAS':break;
+                case 'BANCARIZACIONES':break;
+            }
+
+            $correccion->update(['estado'=>"0"]);
+
+        }
+        return response()->json(['html' => $html]);
+    }
+
+    public function correccionrechazo(Request $request)
+    {
+        if (!$request->rechazo) {
+            $html = '';
+        } else {
+            $html = 'a';
+        }
+        return response()->json(['html' => $html]);
     }
 
 }
