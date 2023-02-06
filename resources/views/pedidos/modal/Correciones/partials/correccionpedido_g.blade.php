@@ -15,7 +15,7 @@
             <h6 class="alert alert-warning text-center font-weight-bold">
                 Adjuntos de las guias <span class="text-danger">(Obligatorio)</span>
             </h6>
-            <input type="file" name="correcion_g_adjuntos" id="correcion_g_adjuntos"  class="form-control" placeholder="" multiple>
+            <input type="file" name="correcion_g_adjuntos[]" id="correcion_g_adjuntos"  class="form-control" placeholder="" multiple>
         </li>
 
         <li class="list-group-item text-wrap">

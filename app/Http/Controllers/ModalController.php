@@ -93,7 +93,7 @@ class ModalController extends Controller
                                 'type'=>'factura',
                                 'name'=>$factura_file,
                                 'file_name'=>$factura_file,
-                                'mime_type'=>$factura->file('correcion_f_facturas')->getMimeType(),
+                                'mime_type'=>$factura->getMimeType(),
                                 'disk'=>'pedidos/correcciones',
                                 'estado'=>1,
                             ]);
@@ -108,7 +108,7 @@ class ModalController extends Controller
                                 'type'=>'adjunto',
                                 'name'=>$adjunto_file,
                                 'file_name'=>$adjunto_file,
-                                'mime_type'=>$adjunto->file('correcion_f_adjuntos')->getMimeType(),
+                                'mime_type'=>$adjunto->getMimeType(),
                                 'disk'=>'pedidos/correcciones',
                                 'estado'=>1,
                             ]);
@@ -147,7 +147,7 @@ class ModalController extends Controller
                                 'type'=>'adjunto',
                                 'name'=>$adjunto_file,
                                 'file_name'=>$adjunto_file,
-                                'mime_type'=>$adjunto->file('correcion_g_adjuntos')->getMimeType(),
+                                'mime_type'=>$adjunto->getMimeType(),
                                 'disk'=>'pedidos/correcciones',
                                 'estado'=>1,
                             ]);
@@ -183,7 +183,7 @@ class ModalController extends Controller
                                 'type'=>'adjunto',
                                 'name'=>$adjunto_file,
                                 'file_name'=>$adjunto_file,
-                                'mime_type'=>$adjunto->file('correcion_b_adjuntos')->getMimeType(),
+                                'mime_type'=>$adjunto->getMimeType(),
                                 'disk'=>'pedidos/correcciones',
                                 'estado'=>1,
                             ]);

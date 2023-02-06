@@ -15,7 +15,7 @@
             <h6 class="alert alert-warning text-center font-weight-bold">
                 Bancarizaciones adjuntas <span class="text-danger">(Obligatorio)</span>
             </h6>
-            <input type="file" name="correcion_b_adjuntos" id="correcion_b_adjuntos"  class="form-control" placeholder="" multiple>
+            <input type="file" name="correcion_b_adjuntos[]" id="correcion_b_adjuntos"  class="form-control" placeholder="" multiple>
         </li>
 
 

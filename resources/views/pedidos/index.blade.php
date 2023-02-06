@@ -300,46 +300,11 @@
                 {
                     let cant_sustento_f=$("textarea[name='sustento-f']").val().length;
                     dataForm_f.sustento_f = $("textarea[name='sustento-f']").val()
-                    let cant_facturas_f=$('input[name="correcion_f_facturas"]')[0].files.length
-
-
-                    console.log($('input[name="correcion_f_facturas"]')[0].files);
-                    dataForm_f.correcion_f_facturas=$('input[name="correcion_f_facturas"]')[0].files;
-
-
-                    let files = $('[name="correcion_f_facturas[]');
-                    if (files[0].files.length > 0) {
-                        for (let i in files[0].files) {
-                            fd.append('adjunto[]', files[0].files[i]);
-                        }
-                    }
-
-                    var names_ = [];
-                    for (var i = 0; i < $('input[name="correcion_f_facturas"]')[0].files.length; ++i) {
-                        names_.push($('input[name="correcion_f_facturas"]')[0].files[i]);
-                    }
-                    dataForm_f.correcion_f_facturas=names_
-                    console.log(names_);
-
+                    let cant_facturas_f=$('input[name="correcion_f_facturas[]"]')[0].files.length
+                    //dataForm_f.correcion_f_facturas=$('input[name="correcion_f_facturas"]')[0].files;
                     let cant_detalle_f=$("textarea[name='detalle-f']").val().length;
                     dataForm_f.detalle_f = $("textarea[name='detalle-f']").val()
-                    let cant_adjuntos_f=$('input[name="correcion_f_adjuntos"]')[0].files.length
-                    //dataForm_f.correcion_f_adjuntos=$('input[name="correcion_f_adjuntos"]')[0].files;
 
-                    var names = [];
-                    for (var i = 0; i < $('input[name="correcion_f_adjuntos"]').get(0).files.length; ++i) {
-                        names.push($('input[name="correcion_f_adjuntos"]').get(0).files[i]);
-                    }
-                    dataForm_f.correcion_f_adjuntos=names
-                    console.log(names);
-
-                    //$('input[name="correcion_f_adjuntos"]').each(function(i, v) {
-                        //console.log(i)
-                        //console.log(v)
-                        /*post_data.append('my_file[]', v.files[0]);
-                        console.log(v.files[0]);*/
-                   // });
-                    //return false;
 
                     if(cant_sustento_f==0)
                     {
@@ -350,17 +315,14 @@
                     }else if(cant_detalle_f==0)
                     {
                         Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
-                    }/*else if(cant_adjuntos_f==0)
-                    {
-                        Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
-                    }*/
+                    }
                 }
                 else if(e.target.id=='form-correccionpedido-g')
                 {
                     let cant_sustento_g=$("textarea[name='sustento-g']").val().length
                     dataForm_g.sustento_g = $("textarea[name='sustento-g']").val()
-                    let cant_adjuntos_g=$('input[name="correcion_g_adjuntos"]')[0].files.length
-                    dataForm_g.correcion_g_adjuntos=$('input[name="correcion_g_adjuntos"]')[0].files;
+                    let cant_adjuntos_g=$('input[name="correcion_g_adjuntos[]"]')[0].files.length
+
                     let cant_detalle_g=$("textarea[name='detalle-g']").val().length;
                     dataForm_g.detalle_g = $("textarea[name='detalle-g']").val()
                     if(cant_sustento_g==0)
@@ -378,18 +340,8 @@
                 {
                     let cant_sustento_b=$("textarea[name='sustento-b']").val().length;
                     dataForm_b.sustento_b = $("textarea[name='sustento-b']").val()
-                    let cant_adjuntos_b=$('input[name="correcion_b_adjuntos"]').length;
-                    dataForm_b.correcion_b_adjuntos=$('input[name="correcion_b_adjuntos"]')[0].files;
-
-
-                    $('input[name="correcion_b_adjuntos"]')[0].files.each(function(i, v) {
-                        console.log(i)
-                        console.log(v)
-                            /*post_data.append('my_file[]', v.files[0]);
-                            console.log(v.files[0]);*/
-                        });
-                    return false;
-
+                    let cant_adjuntos_b=$('input[name="correcion_b_adjuntos[]"]').length;
+                    //dataForm_b.correcion_b_adjuntos=$('input[name="correcion_b_adjuntos"]')[0].files;
                     if(cant_sustento_b==0)
                     {
                         Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
@@ -398,7 +350,6 @@
                         Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
                     }
                 }
-                //return false;
                 switch (e.target.id)
                 {
                     case 'form-correccionpedido-pc':
@@ -409,10 +360,6 @@
                     case 'form-correccionpedido-f':
                         dataForm_f.opcion = 2
                         dataForm_f.modalcorreccionpedido=$('#modalcorreccionpedido').val();
-                        /*attachments.each(function(i, v) {
-                            post_data.append('my_file[]', v.files[0]);
-                            console.log(v.files[0]);
-                        });*/
                         formData=dataForm_f
                         break;
                     case 'form-correccionpedido-g':
@@ -426,7 +373,6 @@
                         formData=dataForm_b
                         break;
                 }
-                //return false;
                 var fd = new FormData();
                 Object.keys(formData).forEach(function (key) {
                     if (key == 'file' && formData[key]) {
@@ -438,11 +384,36 @@
                 switch(e.target.id)
                 {
                     case 'form-correccionpedido-pc':break;
-                    case 'form-correccionpedido-f':break;
-                    case 'form-correccionpedido-g':break;
-                    case 'form-correccionpedido-b':break;
-
-
+                    case 'form-correccionpedido-f':
+                        let files_f_f = $('[name="correcion_f_facturas[]');
+                        if (files_f_f[0].files.length > 0) {
+                            for (let i in files_f_f[0].files) {
+                                fd.append('correcion_f_facturas[]', files_f_f[0].files[i]);
+                            }
+                        }
+                        let files_a_f = $('[name="correcion_f_adjuntos[]');
+                        if (files_a_f[0].files.length > 0) {
+                            for (let i in files_a_f[0].files) {
+                                fd.append('correcion_f_adjuntos[]', files_a_f[0].files[i]);
+                            }
+                        }
+                        break;
+                    case 'form-correccionpedido-g':
+                        let files_a_g = $('[name="correcion_g_adjuntos[]');
+                        if (files_a_g[0].files.length > 0) {
+                            for (let i in files_a_g[0].files) {
+                                fd.append('correcion_g_adjuntos[]', files_a_g[0].files[i]);
+                            }
+                        }
+                        break;
+                    case 'form-correccionpedido-b':
+                        let files_a_b = $('[name="correcion_b_adjuntos[]');
+                        if (files_a_b[0].files.length > 0) {
+                            for (let i in files_a_b[0].files) {
+                                fd.append('correcion_b_adjuntos[]', files_a_b[0].files[i]);
+                            }
+                        }
+                        break;
                 }
                 console.log(fd);
                 $.ajax({

@@ -27,7 +27,7 @@
 
         <li class="list-group-item text-wrap">
             <h6 class="alert alert-warning text-center font-weight-bold">Adjuntos referenciales</h6>
-            <input type="file" name="correcion_f_adjuntos" id="correcion_f_adjuntos"  class="form-control" placeholder="" multiple>
+            <input type="file" name="correcion_f_adjuntos[]" id="correcion_f_adjuntos"  class="form-control" placeholder="" multiple>
         </li>
     </ul>
     <hr class="mt-2 mb-3"/>
