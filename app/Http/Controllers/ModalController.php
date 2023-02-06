@@ -62,42 +62,61 @@ class ModalController extends Controller
                         ]);
                     }
                     //creando pedido con correlativo -C
-                    $post = Pedido::find($pedido->id);
-                    $resourcorrelativo = $post->replicate();
-                    $correla=$post->codigo;
-                    $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
-                    $resourcorrelativo->codigo = $pedido->codigo.'-C'.($conta_correcion+1);
-                    $resourcorrelativo->created_at = Carbon::now();
-                    $resourcorrelativo->pago = "1";
-                    $resourcorrelativo->pagado = "2";
-                    $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
-                    $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
-                    $resourcorrelativo->estado_correccion = '1';
-                    $resourcorrelativo->save();
-                    Pedido::where("id",$resourcorrelativo->id)->update([
-                        'correlativo' =>  'PED'.$resourcorrelativo->id
-                    ]);
-                    $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
-                    $resourcorrelativo_det = $post_det->replicate();
-                    $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
-                    $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
-                    $resourcorrelativo_det->saldo = 0;
-                    $resourcorrelativo_det->save();
-
-                    $destinationPath = base_path('public/storage/adjuntos/');
-                    $files = $request->file('adjunto');
-                    if ($request->hasFile('adjunto'))
+                    //condicion del pedido original
+                    $condicion_pedido=$pedido->condicion_envio_code;
+                    if(in_array($condicion_pedido,[
+                        Pedido::POR_ATENDER_OPE_INT
+                        ,Pedido::ATENDIDO_OPE_INT
+                        ,Pedido::ENVIADO_OPE
+                        ,Pedido::RECIBIDO_JEFE_OPE_INT
+                        ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
+                    ]))
                     {
-                        foreach ($files as $file)
+                        //no crea codigo nuevo solo remplaza
+                        $post = Pedido::find($pedido->id);
+                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+
+
+                    }else if(in_array($condicion_pedido,[
+                        Pedido::RECEPCION_COURIER_INT
+                    ]))
+                    {
+                        $post = Pedido::find($pedido->id);
+                        $resourcorrelativo = $post->replicate();
+                        $correla=$post->codigo;
+                        $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
+                        $resourcorrelativo->codigo = $pedido->codigo.'-C'.($conta_correcion+1);
+                        $resourcorrelativo->created_at = Carbon::now();
+                        $resourcorrelativo->pago = "1";
+                        $resourcorrelativo->pagado = "2";
+                        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
+                        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                        $resourcorrelativo->estado_correccion = '1';
+                        $resourcorrelativo->save();
+                        Pedido::where("id",$resourcorrelativo->id)->update([
+                            'correlativo' =>  'PED'.$resourcorrelativo->id
+                        ]);
+                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+                        $resourcorrelativo_det = $post_det->replicate();
+                        $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
+                        $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
+                        $resourcorrelativo_det->saldo = 0;
+                        $resourcorrelativo_det->save();
+                        $destinationPath = base_path('public/storage/adjuntos/');
+                        $files = $request->file('adjunto');
+                        if ($request->hasFile('adjunto'))
                         {
-                            $file_name = Carbon::now()->second . $file->getClientOriginalName();
-                            $file->move($destinationPath, $file_name);
-                            ImagenAtencion::create([
-                                'pedido_id' => $resourcorrelativo->id,
-                                'adjunto' => $file_name,
-                                'estado' => '1',
-                                'confirm' => '1'
-                            ]);
+                            foreach ($files as $file)
+                            {
+                                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                                $file->move($destinationPath, $file_name);
+                                ImagenAtencion::create([
+                                    'pedido_id' => $resourcorrelativo->id,
+                                    'adjunto' => $file_name,
+                                    'estado' => '1',
+                                    'confirm' => '1'
+                                ]);
+                            }
                         }
                     }
 
@@ -156,6 +175,62 @@ class ModalController extends Controller
                             ]);
                         }
                     }
+                    $condicion_pedido=$pedido->condicion_envio_code;
+                    if(in_array($condicion_pedido,[
+                        Pedido::POR_ATENDER_OPE_INT
+                        ,Pedido::ATENDIDO_OPE_INT
+                        ,Pedido::ENVIADO_OPE
+                        ,Pedido::RECIBIDO_JEFE_OPE_INT
+                        ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
+                    ]))
+                    {
+                        //no crea codigo nuevo solo remplaza
+                        $post = Pedido::find($pedido->id);
+                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+
+
+                    }else if(in_array($condicion_pedido,[
+                        Pedido::RECEPCION_COURIER_INT
+                    ]))
+                    {
+                        $post = Pedido::find($pedido->id);
+                        $resourcorrelativo = $post->replicate();
+                        $correla=$post->codigo;
+                        $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
+                        $resourcorrelativo->codigo = $pedido->codigo.'-C'.($conta_correcion+1);
+                        $resourcorrelativo->created_at = Carbon::now();
+                        $resourcorrelativo->pago = "1";
+                        $resourcorrelativo->pagado = "2";
+                        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
+                        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                        $resourcorrelativo->estado_correccion = '1';
+                        $resourcorrelativo->save();
+                        Pedido::where("id",$resourcorrelativo->id)->update([
+                            'correlativo' =>  'PED'.$resourcorrelativo->id
+                        ]);
+                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+                        $resourcorrelativo_det = $post_det->replicate();
+                        $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
+                        $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
+                        $resourcorrelativo_det->saldo = 0;
+                        $resourcorrelativo_det->save();
+                        $destinationPath = base_path('public/storage/adjuntos/');
+                        $files = $request->file('adjunto');
+                        if ($request->hasFile('adjunto'))
+                        {
+                            foreach ($files as $file)
+                            {
+                                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                                $file->move($destinationPath, $file_name);
+                                ImagenAtencion::create([
+                                    'pedido_id' => $resourcorrelativo->id,
+                                    'adjunto' => $file_name,
+                                    'estado' => '1',
+                                    'confirm' => '1'
+                                ]);
+                            }
+                        }
+                    }
                     return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
                     break;
                 case '3':
@@ -195,6 +270,62 @@ class ModalController extends Controller
                             ]);
                         }
                     }
+                    $condicion_pedido=$pedido->condicion_envio_code;
+                    if(in_array($condicion_pedido,[
+                        Pedido::POR_ATENDER_OPE_INT
+                        ,Pedido::ATENDIDO_OPE_INT
+                        ,Pedido::ENVIADO_OPE
+                        ,Pedido::RECIBIDO_JEFE_OPE_INT
+                        ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
+                    ]))
+                    {
+                        //no crea codigo nuevo solo remplaza
+                        $post = Pedido::find($pedido->id);
+                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+
+
+                    }else if(in_array($condicion_pedido,[
+                        Pedido::RECEPCION_COURIER_INT
+                    ]))
+                    {
+                        $post = Pedido::find($pedido->id);
+                        $resourcorrelativo = $post->replicate();
+                        $correla=$post->codigo;
+                        $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
+                        $resourcorrelativo->codigo = $pedido->codigo.'-C'.($conta_correcion+1);
+                        $resourcorrelativo->created_at = Carbon::now();
+                        $resourcorrelativo->pago = "1";
+                        $resourcorrelativo->pagado = "2";
+                        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
+                        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                        $resourcorrelativo->estado_correccion = '1';
+                        $resourcorrelativo->save();
+                        Pedido::where("id",$resourcorrelativo->id)->update([
+                            'correlativo' =>  'PED'.$resourcorrelativo->id
+                        ]);
+                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+                        $resourcorrelativo_det = $post_det->replicate();
+                        $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
+                        $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
+                        $resourcorrelativo_det->saldo = 0;
+                        $resourcorrelativo_det->save();
+                        $destinationPath = base_path('public/storage/adjuntos/');
+                        $files = $request->file('adjunto');
+                        if ($request->hasFile('adjunto'))
+                        {
+                            foreach ($files as $file)
+                            {
+                                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                                $file->move($destinationPath, $file_name);
+                                ImagenAtencion::create([
+                                    'pedido_id' => $resourcorrelativo->id,
+                                    'adjunto' => $file_name,
+                                    'estado' => '1',
+                                    'confirm' => '1'
+                                ]);
+                            }
+                        }
+                    }
                     return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
                     break;
                 case '4':
@@ -230,6 +361,62 @@ class ModalController extends Controller
                                 'disk'=>'pedidos/correcciones',
                                 'estado'=>1,
                             ]);
+                        }
+                    }
+                    $condicion_pedido=$pedido->condicion_envio_code;
+                    if(in_array($condicion_pedido,[
+                        Pedido::POR_ATENDER_OPE_INT
+                        ,Pedido::ATENDIDO_OPE_INT
+                        ,Pedido::ENVIADO_OPE
+                        ,Pedido::RECIBIDO_JEFE_OPE_INT
+                        ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
+                    ]))
+                    {
+                        //no crea codigo nuevo solo remplaza
+                        $post = Pedido::find($pedido->id);
+                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+
+
+                    }else if(in_array($condicion_pedido,[
+                        Pedido::RECEPCION_COURIER_INT
+                    ]))
+                    {
+                        $post = Pedido::find($pedido->id);
+                        $resourcorrelativo = $post->replicate();
+                        $correla=$post->codigo;
+                        $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
+                        $resourcorrelativo->codigo = $pedido->codigo.'-C'.($conta_correcion+1);
+                        $resourcorrelativo->created_at = Carbon::now();
+                        $resourcorrelativo->pago = "1";
+                        $resourcorrelativo->pagado = "2";
+                        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
+                        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                        $resourcorrelativo->estado_correccion = '1';
+                        $resourcorrelativo->save();
+                        Pedido::where("id",$resourcorrelativo->id)->update([
+                            'correlativo' =>  'PED'.$resourcorrelativo->id
+                        ]);
+                        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
+                        $resourcorrelativo_det = $post_det->replicate();
+                        $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
+                        $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
+                        $resourcorrelativo_det->saldo = 0;
+                        $resourcorrelativo_det->save();
+                        $destinationPath = base_path('public/storage/adjuntos/');
+                        $files = $request->file('adjunto');
+                        if ($request->hasFile('adjunto'))
+                        {
+                            foreach ($files as $file)
+                            {
+                                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                                $file->move($destinationPath, $file_name);
+                                ImagenAtencion::create([
+                                    'pedido_id' => $resourcorrelativo->id,
+                                    'adjunto' => $file_name,
+                                    'estado' => '1',
+                                    'confirm' => '1'
+                                ]);
+                            }
                         }
                     }
                     return response()->json(['html' => $correction->id,'codigo'=>$pedido->codigo]);
