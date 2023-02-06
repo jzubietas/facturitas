@@ -91,7 +91,7 @@ class ModalController extends Controller
                             AttachCorrection::create([
                                 'correction_id'=>$correction->id,
                                 'type'=>'factura',
-                                'name'=>$factura_file,
+                                'name'=>$factura->getClientOriginalName(),
                                 'file_name'=>$factura_file,
                                 'mime_type'=>$factura->getMimeType(),
                                 'disk'=>'pedidos/correcciones',
@@ -106,7 +106,7 @@ class ModalController extends Controller
                             AttachCorrection::create([
                                 'correction_id'=>$correction->id,
                                 'type'=>'adjunto',
-                                'name'=>$adjunto_file,
+                                'name'=>$adjunto->getClientOriginalName(),
                                 'file_name'=>$adjunto_file,
                                 'mime_type'=>$adjunto->getMimeType(),
                                 'disk'=>'pedidos/correcciones',
@@ -145,7 +145,7 @@ class ModalController extends Controller
                             AttachCorrection::create([
                                 'correction_id'=>$correction->id,
                                 'type'=>'adjunto',
-                                'name'=>$adjunto_file,
+                                'name'=>$adjunto->getClientOriginalName(),
                                 'file_name'=>$adjunto_file,
                                 'mime_type'=>$adjunto->getMimeType(),
                                 'disk'=>'pedidos/correcciones',
@@ -181,7 +181,7 @@ class ModalController extends Controller
                             AttachCorrection::create([
                                 'correction_id'=>$correction->id,
                                 'type'=>'adjunto',
-                                'name'=>$adjunto_file,
+                                'name'=>$adjunto->getClientOriginalName(),
                                 'file_name'=>$adjunto_file,
                                 'mime_type'=>$adjunto->getMimeType(),
                                 'disk'=>'pedidos/correcciones',

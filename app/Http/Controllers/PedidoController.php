@@ -804,7 +804,7 @@ class PedidoController extends Controller
             ->where("estado", "1")
             ->orderBy('created_at', 'DESC')->get();
         foreach ($imagenes as $imagen) {
-            $array_html[] = '<p><a href="'.Storage::disk($imagen->disk)->url($imagen->file_name).'"><i class="fa fa-file mr-2"></i>'.$imagen->file_name.'</a><p>';
+            $array_html[] = '<p><a href="'.Storage::disk($imagen->disk)->url($imagen->file_name).'"><i class="fa fa-file mr-2"></i>'.$imagen->name.'</a><p>';
         }
         $html = implode("|", $array_html);
         return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
