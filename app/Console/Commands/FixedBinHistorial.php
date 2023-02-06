@@ -42,7 +42,7 @@ class FixedBinHistorial extends Command
     public function handle()
     {
         $grupos = DireccionGrupo::query()->activo()->where('observacion', 'like', '%.bin')->get();
-        $historialesprov = GastoEnvio::query()->activo()->where('foto', 'like', '%.bin')->get();
+        $historialesprov = GastoEnvio::query()->where('foto', 'like', '%.bin')->get();
         $pedidos = Pedido::query()->activo()->where('env_rotulo', 'like', '%.bin')->get();
         $this->fixedName($grupos, 'grupos', 'observacion');
         $this->fixedName($historialesprov, 'envios', 'foto');
