@@ -807,7 +807,7 @@ class PedidoController extends Controller
             $array_html[] = '<p><a href="'.Storage::disk($imagen->disk)->url($imagen->file_name).'"><i class="fa fa-file mr-2"></i>'.$imagen->name.'</a><p>';
         }
         $html = implode("|", $array_html);
-        return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
+        return response()->json(['html' => $array_html, 'cantidad' => count($array_html)]);
     }
 
     public function ruc(Request $request)//rucs
