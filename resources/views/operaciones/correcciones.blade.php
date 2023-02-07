@@ -132,6 +132,28 @@
                 }
             });
 
+            $(document).on('change',"#adjunto1",function (e) {
+                //recorrer todas las fotos
+                const [file] = e.target.files
+                if (file) {
+                    $("#picture1").show();
+                    $("#picture1").attr('src', URL.createObjectURL(file))
+                }
+            })
+
+            /*$(document).on('change',"#adjunto3",function (e) {
+                const [file] = e.target.files
+                if (file) {
+                    $("#picture3").show();
+                    $("#picture3").attr('src', URL.createObjectURL(file))
+                }
+            })*/
+
+            /*$(document).on("click","#trash_adjunto1",function (){
+                self.$content.find("#picture1").attr('src', self.$content.find("#picture1").data('src'))
+                self.$content.find("#adjunto1").val(null)
+            });*/
+
             $('#modalcorreccion-confirmacion').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 console.log((button.data('correccion')))
