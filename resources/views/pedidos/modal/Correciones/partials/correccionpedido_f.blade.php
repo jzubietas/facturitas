@@ -7,7 +7,7 @@
                 <b>Sustento por Pedido Completo <span class="text-danger">(Obligatorio):</span></b>
             </h6>
             <textarea name="sustento-f" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="response.sustento"></textarea>
+                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar sustento"></textarea>
         </li>
 
         <li class="list-group-item text-wrap">
@@ -22,7 +22,7 @@
                 <b>Detalle <span class="text-danger">(Obligatorio):</span></b>
             </h6>
             <textarea name="detalle-f" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="response.detalle"></textarea>
+                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar detalle"></textarea>
         </li>
 
         <li class="list-group-item text-wrap">

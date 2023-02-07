@@ -8,7 +8,7 @@
                 <span class="text-danger">(Obligatorio)</span>
             </h6>
             <textarea name="sustento-b" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="response.sustento"></textarea>
+                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar sustento"></textarea>
         </li>
 
         <li class="list-group-item text-wrap">
