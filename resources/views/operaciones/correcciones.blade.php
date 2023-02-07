@@ -552,7 +552,7 @@
                     if (data["type"] == "PEDIDO COMPLETO") {
                         $('td', row).css('background', 'orange').css('font-weight', 'bold');
                     } else if (data["type"] == "FACTURAS"){
-                        $('td', row).css('background', 'purple').css('font-weight', 'bold');
+                        $('td', row).css('background', '#572364').css('font-weight', 'bold');
                     }
                     else if (data["type"] == "GUIAS"){
                         $('td', row).css('background', 'green').css('font-weight', 'bold');

@@ -129,7 +129,7 @@ class ModalController extends Controller
                     $pedido=Pedido::where('codigo',$codigo)->first();
                     $detallepedido=DetallePedido::where('codigo',$codigo)->first();
                     $correction=Correction::create([
-                        'type' => 'FACTURA',
+                        'type' => 'FACTURAS',
                         'code'=>$codigo,
                         'ruc'=>$detallepedido->ruc,
                         'razon_social'=>$detallepedido->nombre_empresa,
