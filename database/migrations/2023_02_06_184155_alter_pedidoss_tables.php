@@ -14,16 +14,6 @@ class AlterPedidossTables extends Migration
     public function up()
     {
         //
-
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
         Schema::table('pedidos',function (Blueprint $table){
             if(!Schema::hasColumn('pedidos','condicion_envio_anterior'))
             {
@@ -34,5 +24,16 @@ class AlterPedidossTables extends Migration
                 $table->integer('condicion_envio_code_anterior');
             }
         });
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+
     }
 }
