@@ -38,6 +38,7 @@ class Pedido extends Model
     const POR_ATENDER_OPE = 'POR ATENDER - OPE'; // 1
     const EN_ATENCION_OPE = 'EN ATENCION - OPE'; // 2
     const ATENDIDO_OPE = 'ATENDIDO - OPE'; // 3
+    const CORRECCION_OPE = 'CORRECCION - OPE'; // 27
     const ENVIADO_OPE = 'ENVIADO A JEFE OPE - OPE'; // 5 // ENVIADO A JEFE OPE - OPE //ENVIADO - OPE
     const RECIBIDO_JEFE_OPE = 'RECIBIDO - JEFE OPE'; // 6
     const ENVIO_COURIER_JEFE_OPE = 'ENVIO A COURIER - JEFE OPE'; // 12

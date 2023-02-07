@@ -467,7 +467,59 @@ class ClienteController extends Controller
             return $porcentaje;
         });
 
-        return view('clientes.edit', compact('cliente', 'users', 'porcentajes', 'mirol'));
+        $ultimopedido=Pedido::where('cliente_id',$cliente->id)
+            ->activo()
+            ->orderBy('created_at','desc')
+            ->limit(1)
+            ->first();
+        if($ultimopedido)
+        {
+            $ultimopedido_fecha=Carbon::parse($ultimopedido->created_at)->format('Y_m');
+            $mes_situacion_up='s_'.$ultimopedido_fecha;
+            $mes_situacion_actual='s_'.date('Y').'_'.date('M');
+            if($ultimopedido_fecha==$mes_situacion_actual)
+            {
+                $situacion='RECURRENTE';
+            }else{
+                $fecha = now()->startOfDay();
+                $fecha_comparar=Carbon::parse($ultimopedido->created_at)->startOfDay();
+                $count=$fecha_comparar->diffInMonths($fecha);
+                $situacion="";
+                switch($count)
+                {
+                    case 1:
+                        $situacion='RECURRENTE';
+                        break;
+                    case 2:
+                        $situacion='ABANDONO RECIENTE';
+                        break;
+                    case 3:
+                        $situacion='ABANDONO';
+                        break;
+                    default:
+                        $situacion='ABANDONO';
+                        break;
+                }
+            }
+            $asesor=Cliente::where("id",$cliente->id)->first()->user_id;
+            $asesor_identi=User::where('id',$asesor)->first()->identificador;
+            $ultimopedido_fecha_comparacion=Carbon::parse($ultimopedido->created_at)->format('Y-m-d');
+            $porcentaje_retorno=0;
+            if($asesor_identi=='01')
+            {
+                if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion<'2022-11-01'){
+                    $porcentaje_retorno=1.5;
+                }
+            }else{
+                if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion<'2022-10-01'){
+                    $porcentaje_retorno=1.8;
+                }
+                else if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion>='2022-10-01'){
+                    $porcentaje_retorno=2.0;
+                }
+            }
+        }
+        return view('clientes.edit', compact('cliente', 'users', 'porcentajes', 'mirol','porcentaje_retorno'));
     }
 
     /**
