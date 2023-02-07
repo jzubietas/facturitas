@@ -548,6 +548,7 @@ class OperacionController extends Controller
         $data=Correction::join('users as u','u.id','corrections.asesor_id')
             ->select([
                 'corrections.*',
+                DB::raw(' (select pe.id from pedidos pe where corrections.code=pe.codigo and corrections.estado=1 order by corrections.created_at desc limit 1) as pedido_id'),
             ])->where('corrections.estado',"1");
 
         if (Auth::user()->rol == "Operario") {
@@ -599,7 +600,7 @@ class OperacionController extends Controller
                             <i class="fa fa-check"></i>
                         CORREGIR
                         </a>';
-                $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                $btn []= '<a href="' . route('correccionpedidoPDF', data_get($pedido, 'pedido_id')) . '" class="btn-sm dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                 /*$btn[] = '<a class="btn-sm dropdown-item text-danger" href="#"'.
                         'data-toggle="modal"'.
                         'data-correccion="'.$pedido->id.'"'.

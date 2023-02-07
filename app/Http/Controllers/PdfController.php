@@ -585,4 +585,5 @@ class PdfController extends Controller
         //return $canvas;
         return $pdf->stream('pedido ' . $pedido->id . '.pdf');
     }
+
 }

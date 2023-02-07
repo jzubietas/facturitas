@@ -583,6 +583,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     //MODULO PEDIDOS
     Route::get('PDF/{pedido}/pedido', [PdfController::class, 'pedidosPDF'])->name('pedidosPDF');
     Route::get('PDF/{pedido}/correccion', [PdfController::class, 'correccionPDF'])->name('correccionPDF');
+    Route::get('PDF/{pedido}/correccionpedido', [PdfController::class, 'correccionpedidoPDF'])->name('correccionpedidoPDF');
     Route::get('pedidosPDFpreview', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview');
 
     Route::get('pedidosPDFpreview2', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview2');
