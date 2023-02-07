@@ -585,9 +585,9 @@
                         render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss'),
                         "visible": true,
                     },
-                    {data: 'motivo', name: 'motivo', "visible": true},
+                    {data: 'motivo', name: 'motivo', "visible": false,},
                     {data: 'adjuntos',name: 'adjuntos',},
-                    {data: 'detalle', name: 'detalle',},
+                    {data: 'detalle', name: 'detalle',"visible":false,},
                     {
                         data: 'action',
                         name: 'action',
