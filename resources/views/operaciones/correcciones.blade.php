@@ -63,8 +63,10 @@
                 </tbody>
             </table>
             @include('operaciones.modal.Correcciones.veradjunto')
-            @include('operaciones.modal.Correcciones.confirmacion')
+            {{--@include('operaciones.modal.Correcciones.confirmacion')--}}
             @include('operaciones.modal.Correcciones.rechazar')
+            @include('operaciones.modal.Correcciones.corregir')
+            @include('operaciones.modal.Correcciones.DeleteAdjunto')
         </div>
     </div>
 @stop
@@ -123,7 +125,6 @@
 
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
-
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -131,44 +132,156 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+        });
 
-            $(document).on('change',"#adjunto1",function (e) {
-                //recorrer todas las fotos
-                const [file] = e.target.files
-                if (file) {
-                    $("#picture1").show();
-                    $("#picture1").attr('src', URL.createObjectURL(file))
-                }
-            })
+    </script>
 
-            /*$(document).on('change',"#adjunto3",function (e) {
-                const [file] = e.target.files
-                if (file) {
-                    $("#picture3").show();
-                    $("#picture3").attr('src', URL.createObjectURL(file))
-                }
-            })*/
+    <script>
+        $(document).ready(function () {
 
-            /*$(document).on("click","#trash_adjunto1",function (){
-                self.$content.find("#picture1").attr('src', self.$content.find("#picture1").data('src'))
-                self.$content.find("#adjunto1").val(null)
-            });*/
+            $('#modal-delete-adjunto').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var img_pedidoid = button.data('imgid')
+                var imgadjunto = button.data('imgadjunto')
+                var imgadjuntoconfirm = button.data('imgadjuntoconfirm')
+                $(".textcode").html("PED" + img_pedidoid);
+                $("#eliminar_pedido_id").val(img_pedidoid);
+                $("#eliminar_pedido_id_imagen").val(imgadjunto);
+                $("#eliminar_pedido_id_confirmado").val(imgadjuntoconfirm);
+            });
 
-            $('#modalcorreccion-confirmacion').on('show.bs.modal', function (event) {
+            $(document).on("change", "#adjunto", function (evento) {
+                $("#cargar_adjunto").trigger("click");
+            });
+
+            $(document).on("click", "#cargar_adjunto", function (evento) {
+                let idunico = $("#corregir").val();
+                console.log(idunico);
+                $('#cargar_adjunto').attr("disabled", true);
+                $('#cargar_adjunto').html('Subiendo archivos...');
+
+                var data = new FormData(document.getElementById("formcorreccion_corregir"));
+                $("#loading_upload_attachment_file").show()
+                $("#adjunto").hide()
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('operaciones.subircorreccionsinconfirmar',':id') }}".replace(':id', idunico),
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#cargar_adjunto').prop("disabled", false);
+                        $('#cargar_adjunto').text('Subir Informacion');
+                        $('#listado_adjuntos').html(data);
+                    }
+                })
+                    .done(function (data) {
+                        $("#adjunto").val(null)
+                    })
+                    .always(function () {
+                        $("#adjunto").show()
+                        $("#loading_upload_attachment_file").hide()
+                    });
+                return false;
+            });
+
+            $(document).on("submit", "#formdeleteadjunto", function (evento) {
+                evento.preventDefault();
+                console.log("ejecutando eliminando adjunto")
+                let pedidoidimagenes = $("#eliminar_pedido_id").val();
+                let pedidoconfirmado = $("#eliminar_pedido_id_confirmado").val();/*0 o 1*/
+                console.log(pedidoidimagenes);
+                var fddeleteadjunto = new FormData();
+                fddeleteadjunto.append('eliminar_pedido_id', pedidoidimagenes);
+                fddeleteadjunto.append('eliminar_pedido_id_imagen', $("#eliminar_pedido_id_imagen").val());
+                fddeleteadjunto.append('eliminar_pedido_id_confirmado', pedidoconfirmado);
+
+                console.log(fddeleteadjunto);
+
+                //return false;
+                $.ajax({
+                    url: "{{ route('operaciones.eliminaradjunto') }}",
+                    type: 'POST',
+                    data: fddeleteadjunto,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log("rest ajax")
+                        $('.adjuntos[data-adjunto="' + data.html + '"]').remove();
+                        $('#modal-delete-adjunto').modal('toggle');
+                        if (pedidoconfirmado == 1) {
+                            $.ajax({
+                                url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', pedidoidimagenes),
+                                data: pedidoidimagenes,
+                                method: 'POST',
+                                success: function (data) {
+                                    console.log(data)
+                                    console.log("obtuve las imagenes atencion del pedido " + pedidoidimagenes)
+                                    $('#listado_adjuntos_antes').html(data);
+                                }
+                            });
+                        } else if (pedidoconfirmado == 0) {
+                            $.ajax({
+                                url: "{{ route('operaciones.editatencionsinconfirmar',':id') }}".replace(':id', pedidoidimagenes),
+                                data: pedidoidimagenes,
+                                method: 'POST',
+                                success: function (data) {
+                                    console.log(data)
+                                    console.log("obtuve las imagenes atencion del pedido " + pedidoidimagenes)
+                                    $('#listado_adjuntos').html(data);
+                                }
+                            });
+                        }
+
+                    }
+                }).done(function (data) {
+                });
+
+            });
+
+            $('#modalcorreccion-corregir').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 console.log((button.data('correccion')))
-                $("#confirmacion").val(button.data('correccion'))
+                $("#corregir").val(button.data('correccion'))
+                idunico=button.data('correccion');
+
+                $.ajax({
+                    url: "{{ route('operaciones.cargarimagenes.correccion',':id') }}".replace(':id', idunico),
+                    data: idunico,
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos').html("");
+                        $('#listado_adjuntos_antes').html(data);
+                    }
+                });
             })
 
-            $('#modalcorreccion-rechazo').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                $("#rechazo").val(button.data('correccion'))
-            })
+            $(document).on("click", "#cerrarmodalcorreccion", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append('corregir', $("#corregir").val());
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.correccioncerrarmodal') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modalcorreccion-corregir .textcode").text('');
+                        $("#modalcorreccion-corregir").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+            });
 
-            $(document).on("submit","#formcorreccion_confirmacion",function(event) {
+            $(document).on("submit","#formcorreccion_corregir",function(event) {
                 event.preventDefault();
                 var formData = new FormData();
-                formData.append("confirmacion", $("#confirmacion").val())
+                formData.append("corregir", $("#corregir").val())
                 $.ajax({
                     type: 'POST',
                     url: "{{ route('correccionconfirmacionRequest.post') }}",
@@ -182,6 +295,14 @@
                     console.log(arguments, err, errMsg)
                 });
             });
+
+
+            $('#modalcorreccion-rechazo').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $("#rechazo").val(button.data('correccion'))
+            })
+
+
 
             $(document).on("submit","#formcorreccion_rechazo",function(event) {
                 event.preventDefault();

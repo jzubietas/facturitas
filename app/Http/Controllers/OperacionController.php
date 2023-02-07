@@ -550,7 +550,6 @@ class OperacionController extends Controller
                 'corrections.*',
             ])->where('corrections.estado',"1");
 
-
         if (Auth::user()->rol == "Operario") {
             $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
                 ->where('users.estado', '1')
@@ -593,9 +592,10 @@ class OperacionController extends Controller
 
                 $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton">';
                 $btn[] = '<a class="btn-sm dropdown-item text-success" href="#"'.
+                    'data-backdrop="static" data-keyboard="false"'.
                     'data-toggle="modal"'.
                     'data-correccion="'.$pedido->id.'"'.
-                    'data-target="#modalcorreccion-confirmacion">
+                    'data-target="#modalcorreccion-corregir">
                             <i class="fa fa-check"></i>
                         CORREGIR
                         </a>';
@@ -897,8 +897,8 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::BANCARIZACION_INT]);
+            ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT);
+            //->whereIn('pedidos.condicion_envio_code', [Pedido::BANCARIZACION_INT]);
         //->whereIn('pedidos.envio', ['1'])
         //->whereIn('pedidos.envio', ['0'])
         //->whereBetween( DB::raw('DATE(pedidos.created_at)'), [$min, $max]);
@@ -911,13 +911,8 @@ class OperacionController extends Controller
                 ->Where('users.operario', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
+                )
                 ->pluck('users.identificador');
-
             $pedidos->WhereIn('u.identificador', $asesores);
 
 
@@ -966,6 +961,17 @@ class OperacionController extends Controller
         $hiddenAtender = $request->hiddenAtender;
         $pedido = Pedido::where("id", $hiddenAtender)->first();
         $imagenesatencion_ = ImagenAtencion::where("pedido_id", $hiddenAtender)->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);
+    }
+
+    public function CerarModalCorreccion(Request $request)
+    {
+        $corregir = $request->corregir;
+        $correccion=Correction::where('id',$corregir)->first();
+        $pedido = Pedido::where("codigo", $correccion->code)->first();
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $pedido->id)->where("confirm", '0');
         $imagenesatencion_->update([
             'estado' => '0'
         ]);
@@ -1313,6 +1319,15 @@ class OperacionController extends Controller
 
         return view('pedidos.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+    }
+
+    public function cargarImagenCorreccion(Pedido $pedido)
+    {
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)
+            ->where('estado', '1')
+            ->where('confirm', '1')->get();
+
+        return view('pedidos.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
     }
 
     public function verAtencion(Pedido $pedido)
@@ -1704,6 +1719,41 @@ class OperacionController extends Controller
         //return redirect()->route('operaciones.atendidos')->with('info', 'actualizado');
     }
 
+    public function subircorreccionsinconfirmar(Request $request)
+    {
+        $correccion=Correction::where('id',$request->corregir)->first();
+        $codigo=$correccion->code;
+        $pedido=Pedido::where('codigo',$codigo)->first();
+        $files = $request->file('adjunto');
+        $destinationPath = base_path('public/storage/adjuntos/');
+
+        $pedido->update([
+            'modificador' => 'USER' . Auth::user()->id
+        ]);
+
+        if ($request->hasFile('adjunto')) {
+
+            foreach ($files as $file) {
+                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                $file->move($destinationPath, $file_name);
+                ImagenAtencion::create([
+                    'pedido_id' => $pedido->id,
+                    'adjunto' => $file_name,
+                    'estado' => '1',
+                    'confirm' => '0'
+                ]);
+            }
+        }
+
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)
+            ->where('estado', '1')->where('confirm', '0')->get();
+        $imagenes_confirm = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)
+            ->where('estado', '1')->where('confirm', '1')->get();
+
+
+        return view('pedidos.modal.ContenidoModal.ListadoAdjuntosSinConfirmar', compact('imagenes','imagenes_confirm', 'pedido'));
+    }
+
     public function updateAtenderId(Request $request)
     {
         $pedido = Pedido::where('id', $request->hiddenAtender)->first();
@@ -1964,24 +2014,39 @@ class OperacionController extends Controller
             $correccion=Correction::where('id',$request->confirmacion)->first();
             $pedido=$correccion->code;
             $ped=Pedido::where('codigo',$pedido)->first();
-            $dped=DetallePedido::where('codigo',$pedido)->first();
+            //$dped=DetallePedido::where('codigo',$pedido)->first();
             $html=$correccion->id;
-            //antes de operaciones
-            $list_antes_op=[Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE,Pedido::ENVIADO_OPE_INT];
-            //fuera de operaciones
-            $list_despues_op=[Pedido::ENVIO_COURIER_JEFE_OPE_INT];
+            //$list_antes_op=[Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE,Pedido::ENVIADO_OPE_INT];
+            //$list_despues_op=[Pedido::ENVIO_COURIER_JEFE_OPE_INT];
+            //$condicion_pedido=$ped->condicion_envio_code;
             switch ($correccion->type)
             {
                 case 'PEDIDO COMPLETO':
-                    $condicion=$ped->condicion_envio;
-                    //i(in_array($condicion,))
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)->where("confirm", '0');
+                    $imagenesatencion_->update([
+                        'confirm' => '1'
+                    ]);
                     break;
-                case 'FACTURA':break;
-                case 'GUIAS':break;
-                case 'BANCARIZACIONES':break;
+                case 'FACTURA':
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)->where("confirm", '0');
+                    $imagenesatencion_->update([
+                        'confirm' => '1'
+                    ]);
+                    break;
+                case 'GUIAS':
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)->where("confirm", '0');
+                    $imagenesatencion_->update([
+                        'confirm' => '1'
+                    ]);
+                    break;
+                case 'BANCARIZACIONES':
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)->where("confirm", '0');
+                    $imagenesatencion_->update([
+                        'confirm' => '1'
+                    ]);
+                    break;
             }
-
-            $correccion->update(['estado'=>"0"]);
+            $correccion->update(['estado'=>"1"]);
 
         }
         return response()->json(['html' => $html]);
