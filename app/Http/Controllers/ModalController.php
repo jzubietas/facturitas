@@ -103,8 +103,9 @@ class ModalController extends Controller
                         $resourcorrelativo->created_at = Carbon::now();
                         $resourcorrelativo->pago = "1";
                         $resourcorrelativo->pagado = "2";
-                        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
-                        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                        $resourcorrelativo->condicion_envio_code = Pedido::CORRECCION_OPE_INT;
+                        $resourcorrelativo->condicion_envio = Pedido::CORRECCION_OPE;
+
                         $resourcorrelativo->estado_correccion = '1';
                         $resourcorrelativo->save();
                         Pedido::where("id",$resourcorrelativo->id)->update([
@@ -214,8 +215,8 @@ class ModalController extends Controller
                         $resourcorrelativo->created_at = Carbon::now();
                         $resourcorrelativo->pago = "1";
                         $resourcorrelativo->pagado = "2";
-                        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
-                        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                        $resourcorrelativo->condicion_envio_code = Pedido::CORRECCION_OPE_INT;
+                        $resourcorrelativo->condicion_envio = Pedido::CORRECCION_OPE;
                         $resourcorrelativo->estado_correccion = '1';
                         $resourcorrelativo->save();
                         Pedido::where("id",$resourcorrelativo->id)->update([
@@ -309,8 +310,8 @@ class ModalController extends Controller
                         $resourcorrelativo->created_at = Carbon::now();
                         $resourcorrelativo->pago = "1";
                         $resourcorrelativo->pagado = "2";
-                        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
-                        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                        $resourcorrelativo->condicion_envio_code = Pedido::CORRECCION_OPE_INT;
+                        $resourcorrelativo->condicion_envio = Pedido::CORRECCION_OPE;
                         $resourcorrelativo->estado_correccion = '1';
                         $resourcorrelativo->save();
                         Pedido::where("id",$resourcorrelativo->id)->update([
@@ -402,8 +403,8 @@ class ModalController extends Controller
                         $resourcorrelativo->created_at = Carbon::now();
                         $resourcorrelativo->pago = "1";
                         $resourcorrelativo->pagado = "2";
-                        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
-                        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+                        $resourcorrelativo->condicion_envio_code = Pedido::CORRECCION_OPE_INT;
+                        $resourcorrelativo->condicion_envio = Pedido::CORRECCION_OPE;
                         $resourcorrelativo->estado_correccion = '1';
                         $resourcorrelativo->save();
                         Pedido::where("id",$resourcorrelativo->id)->update([
