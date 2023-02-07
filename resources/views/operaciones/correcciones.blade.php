@@ -53,6 +53,7 @@
                     <th scope="col">Empresa</th>
                     <th scope="col">Asesor</th>
                     <th scope="col">Fecha de correccion</th>
+                    <th scope="col">Condicion</th>
                     <th scope="col">Motivo</th>
                     <th scope="col">Adjuntos</th>
                     <th scope="col">Detalle</th>
@@ -585,6 +586,7 @@
                         render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss'),
                         "visible": true,
                     },
+                    {data: 'condicion_envio', name: 'condicion_envio',},
                     {data: 'motivo', name: 'motivo', "visible": false,},
                     {data: 'adjuntos',name: 'adjuntos',},
                     {data: 'detalle', name: 'detalle',"visible":false,},

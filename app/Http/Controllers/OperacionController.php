@@ -586,6 +586,12 @@ class OperacionController extends Controller
                                 '</a>';
                 return join('', $btn);
             })
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado='';
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado.= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = [];
 
@@ -611,7 +617,7 @@ class OperacionController extends Controller
 
                 return join('', $btn);
             })
-            ->rawColumns(['action','adjuntos'])
+            ->rawColumns(['action','adjuntos','condicion_envio'])
             ->make(true);
     }
 
