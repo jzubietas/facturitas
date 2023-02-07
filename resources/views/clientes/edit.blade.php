@@ -15,7 +15,7 @@
       <div class="card-body">
         <div class="form-row">
 
-          <input type="text" name="id" id="id" class="form-control" value="{{ $cliente->id }}">
+          <input type="hidden" name="id" id="id" class="form-control" value="{{ $cliente->id }}">
 
           <div class="form-group col-lg-6">
             {!! Form::label('tipo', 'Tipo de cliente') !!}
@@ -98,8 +98,8 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                       <div class="form-group">
                         <label>{{ $porcentaje->nombre }}</label>
-                        <input type="hidden" name="idporcentaje[]" value={{ $porcentaje->id }}>
-                        <input type="text" step="0.1" name="porcentaje[]" id="porcentaje{{$porcentaje->rownumber }}" min="1.7" class="form-control porcentaje-banca decimal" value={{ $porcentaje->porcentaje}} required>
+                        <input type="hidden" name="idporcentaje[]" value="{{ $porcentaje->id }}">
+                        <input autocomplete="off" type="text" step="0.1" name="porcentaje[]" id="porcentaje{{$porcentaje->rownumber }}" min="1.7" class="form-control porcentaje-banca decimal" value={{ $porcentaje->porcentaje}} required>
                       </div>
                     </div>
 
