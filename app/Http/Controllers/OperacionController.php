@@ -83,12 +83,10 @@ class OperacionController extends Controller
 
     public function PorAtendertabla(Request $request)
     {
-        $mirol = Auth::user()->rol;
-
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'pedidos.correlativo as id2',
                 'c.nombre as nombres',
@@ -112,7 +110,7 @@ class OperacionController extends Controller
                 'pedidos.condicion_code',
                 'pedidos.estado',
                 'pedidos.estado_ruta'
-            )
+            ])
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
@@ -665,6 +663,7 @@ class OperacionController extends Controller
                         "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id limit 1) " .
                         "else '' end) as fecha_envio_sobre "),
                     DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos "),
+                    DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes "),
                 ]
             )
             //->where('pedidos.estado', '1')

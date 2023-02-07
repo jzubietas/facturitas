@@ -62,6 +62,7 @@
                     <th scope="col">Fecha de registro</th>
                     <th scope="col">Destino</th>
                     <th scope="col">Estado</th>
+                    <th scope="col">Adjuntos</th>
                     <th scope="col">Atendido por</th>
                     <th scope="col">Jefe</th>
                     <th scope="col">Accion</th>
@@ -76,6 +77,7 @@
             @include('operaciones.modal.revertirasindireccion')
             @include('operaciones.modal.CorreccionAtencion')
             @include('operaciones.modal.VerAdjuntosAtencion')
+            @include('operaciones.modal.veradjuntoid')
         </div>
     </div>
 @stop
@@ -179,6 +181,44 @@
                         $('#listado_adjuntos_ver').html("");
                         $('#listado_adjuntos_antes_ver').html(data);
                         console.log(data);
+                    }
+                });
+
+            });
+
+            $('#modal-veradjunto').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var idunico = button.data('adjunto')
+                var idcodigo = button.data('codigo')
+                $(".textcode").html(idcodigo);
+
+                //consulta de imagenes
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('pedidoobteneradjuntoRequest') }}",
+                    data: {"pedido": idunico},
+                }).done(function (data) {
+                    //console.log(data.html);
+                    console.log(data.cantidad);
+                    if (data.cantidad > 0) {
+                        ////recorrer y poner imagenes en div con router
+                        var adjuntos = data.html.split('|');
+                        //console.log(adjuntos);
+                        var urladjunto = "";
+                        var datal = "";
+                        $.each(adjuntos, function (index, value) {
+                            urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
+                            urladjunto = urladjunto.replace(':id', value);
+                            datal = datal + '<p><a href="' + urladjunto + '"><i class="fa fa-file mr-2"></i>' + value + '</a><p>';
+                            //console.log(datal);
+                            //console.log( index + ": " + value );
+                        });
+                        $("#imagenes_adjunto").html(datal)
+                        return datal;
+                        //console.log(data.html)
+                    } else {
+                        console.log("sin imagenes");
                     }
                 });
 
@@ -653,6 +693,26 @@
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
+                    },
+                    {
+                        data: 'imagenes',
+                        name: 'imagenes',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '10%',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return '';
+                            } else {
+                                if (data > 0) {
+                                    data = '<a href="" data-target="#modal-veradjunto" data-adjunto=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                                    return data;
+                                } else {
+                                    return '';
+                                }
+                            }
+
+                        }
                     },
                     {data: 'atendido_por', name: 'atendido_por',},
                     {data: 'jefe', name: 'jefe',},
