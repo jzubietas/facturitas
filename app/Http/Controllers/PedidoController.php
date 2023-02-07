@@ -1182,6 +1182,7 @@ class PedidoController extends Controller
                 'icelular_asesor' => $identi_asesor->letra,
                 'icelular_cliente' => $cliente_AB->icelular,
                 'celular_cliente' => $cliente_AB->celular,
+                'estado_correccion' =>'0'
             ]);
 
             $pedido->update([
