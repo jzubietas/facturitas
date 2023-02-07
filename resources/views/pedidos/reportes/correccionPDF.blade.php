@@ -78,7 +78,7 @@
         </tr>
       <tr>
           <td colspan="3">
-              <h2>CORRECCION {{$pedido->typecorreccion}}</h2>
+              <h2>CORRECCION {{$pedido->type_correccion}}</h2>
           </td>
       </tr>
 
