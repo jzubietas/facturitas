@@ -600,7 +600,7 @@ class OperacionController extends Controller
                             <i class="fa fa-check"></i>
                         CORREGIR
                         </a>';
-                $btn []= '<a href="' . route('correccionpedidoPDF', data_get($pedido, 'pedido_id')) . '" class="btn-sm dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'pedido_id')) . '" class="btn-sm dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                 /*$btn[] = '<a class="btn-sm dropdown-item text-danger" href="#"'.
                         'data-toggle="modal"'.
                         'data-correccion="'.$pedido->id.'"'.
