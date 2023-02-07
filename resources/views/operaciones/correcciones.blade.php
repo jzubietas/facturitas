@@ -558,7 +558,7 @@
                         $('td', row).css('background', 'green').css('font-weight', 'bold');
                     }
                     else if (data["type"] == "BANCARIZACIONES"){
-                        $('td', row).css('background', 'blue').css('font-weight', 'bold');
+                        $('td', row).css('background', '#ADD8E6 ').css('font-weight', 'bold');
                     }
                 },
                 rowCallback: function (row, data, index) {
