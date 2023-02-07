@@ -1186,7 +1186,7 @@ class PedidoController extends Controller
                 'condicion_envio_anterior'=>'',
                 'condicion_envio_code_anterior'=>"0",
                 'codigo_anterior'=>'',
-                'pedidoid_anterior'=>'',
+                'pedidoid_anterior'=>0,
             ]);
 
             $pedido->update([
