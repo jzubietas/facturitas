@@ -560,33 +560,14 @@ class PdfController extends Controller
                 //'cc.motivo descripcion',
                 DB::raw(' (select cc.motivo from corrections cc where cc.code=pedidos.codigo and cc.estado=1 order by cc.created_at desc limit 1) as descripcion'),
                 DB::raw(' (select cc.detalle from corrections cc where cc.code=pedidos.codigo and cc.estado=1 order by cc.created_at desc limit 1) as nota'),
+                DB::raw(' (select cc.type from corrections cc where cc.code=pedidos.codigo and cc.estado=1 order by cc.created_at desc limit 1) as type_correccion'),
                 //'dp.nota',
                 'dp.total',
                 'pedidos.condicion as condiciones',
                 'pedidos.created_at as fecha'
             ])
             ->where('pedidos.id', $pedido->id)
-            /*->groupBy(
-                'pedidos.id',
-                'c.nombre',
-                'c.celular',
-                'u.name',
-                'dp.codigo',
-                'dp.nombre_empresa',
-                'dp.mes',
-                'dp.anio',
-                'dp.ruc',
-                'dp.cantidad',
-                'dp.tipo_banca',
-                'dp.porcentaje',
-                'dp.courier',
-                'dp.ft',
-                'dp.descripcion',
-                'dp.nota',
-                'dp.total',
-                'pedidos.condicion',
-                'pedidos.created_at'
-            )*/
+
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
