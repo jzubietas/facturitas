@@ -534,14 +534,13 @@
                         {data: 'action', name: 'action',},
                     ],
                 });
-
-
             });
 
             window.ocultar_div_modal_correccion_pedidos = function () {
                 console.log("ocultar div")
                 $("#modal-correccionpedido-pc-container").hide();
                 $("#form-correccionpedido-pc input").val("");
+                $("#form-correccionpedido-pc img").attr('src', '');
                 $("#form-correccionpedido-pc textarea").val("");
                 $("#modal-correccionpedido-f-container").hide();
                 $("#form-correccionpedido-f input").val("");
