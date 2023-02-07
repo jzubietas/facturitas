@@ -79,7 +79,9 @@ class ModalController extends Controller
                         $pedido->update([
                             'estado_correccion'=>"0",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
-                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
+                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
+                            'condicion_envio'=>Pedido::CORRECCION_OPE,
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
                         $codigo_pdf=$pedido->id;
 

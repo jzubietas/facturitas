@@ -71,6 +71,7 @@ class Pedido extends Model
     const POR_ATENDER_OPE_INT = 1;
     const EN_ATENCION_OPE_INT = 2;
     const ATENDIDO_OPE_INT = 3;
+    const CORRECCION_OPE_INT=27;
     const ENVIADO_OPE_INT = 5;
     const RECIBIDO_JEFE_OPE_INT = 6;
     const ENVIO_COURIER_JEFE_OPE_INT = 12;
