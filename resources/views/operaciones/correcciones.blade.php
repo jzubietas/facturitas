@@ -419,7 +419,6 @@
                 });
             });
 
-
             $('#modal-revertir').on('show.bs.modal', function (event) {
                 //cuando abre el form de anular pedido
                 var button = $(event.relatedTarget)
