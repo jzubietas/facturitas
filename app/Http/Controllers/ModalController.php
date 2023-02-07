@@ -77,15 +77,13 @@ class ModalController extends Controller
                     if(in_array($condicion_pedido,$condiciones_en_op))
                     {
                         $pedido->update([
-                            'estado_correccion'=>"0",
+                            'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
                             'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
                         $codigo_pdf=$pedido->id;
-
-
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
                         //-C-1
@@ -194,7 +192,7 @@ class ModalController extends Controller
                     if(in_array($condicion_pedido,$condiciones_en_op))
                     {
                         $pedido->update([
-                            'estado_correccion'=>"0",
+                            'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
                         ]);
@@ -289,7 +287,7 @@ class ModalController extends Controller
                     if(in_array($condicion_pedido,$condiciones_en_op))
                     {
                         $pedido->update([
-                            'estado_correccion'=>"0",
+                            'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
                         ]);
@@ -382,7 +380,7 @@ class ModalController extends Controller
                     if(in_array($condicion_pedido,$condiciones_en_op))
                     {
                         $pedido->update([
-                            'estado_correccion'=>"0",
+                            'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
                         ]);
