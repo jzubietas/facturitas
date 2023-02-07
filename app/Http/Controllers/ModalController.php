@@ -86,7 +86,13 @@ class ModalController extends Controller
 
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
-                        $pedido->update(['estado_correccion'=>"1"]);
+                        $pedido->update([
+                            'estado_correccion'=>"1",
+                            'condicion_envio_anterior'=>$pedido->condicion_envio,
+                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
+                            ''
+                        ]);
+                        //$pedido->update(['estado_correccion'=>"1"]);
                         $post = Pedido::where('id',$pedido->id)->first();
                         $resourcorrelativo = $post->replicate();
                         $correla=$post->codigo;
