@@ -1088,9 +1088,9 @@ class PedidoController extends Controller
             $codigo = intval($identi_asesor->identificador);
         }
         if ($cliente_AB->icelular != null) {
-            if ($identi_asesor->identificador != 'B') {
+            //if ($identi_asesor->identificador != 'B') {
                 $codigo = $codigo . $cliente_AB->icelular;
-            }
+            //}
         }
         $codigo = $codigo . "-" . $fecha . "-" . $numped;
 
