@@ -472,6 +472,7 @@ class ClienteController extends Controller
             ->orderBy('created_at','desc')
             ->limit(1)
             ->first();
+        $porcentaje_retorno=0;
         if($ultimopedido)
         {
             $ultimopedido_fecha=Carbon::parse($ultimopedido->created_at)->format('Y_m');
@@ -504,7 +505,7 @@ class ClienteController extends Controller
             $asesor=Cliente::where("id",$cliente->id)->first()->user_id;
             $asesor_identi=User::where('id',$asesor)->first()->identificador;
             $ultimopedido_fecha_comparacion=Carbon::parse($ultimopedido->created_at)->format('Y-m-d');
-            $porcentaje_retorno=0;
+
             if($asesor_identi=='01')
             {
                 if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion<'2022-11-01'){
