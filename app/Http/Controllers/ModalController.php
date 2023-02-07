@@ -46,6 +46,7 @@ class ModalController extends Controller
                     $codigo=$request->modalcorreccionpedido;
 
                     $pedido=Pedido::where('codigo',$codigo)->first();
+                    $pedido->update(['estado_correccion'=>"1"]);
                     $detallepedido=DetallePedido::where('codigo',$codigo)->first();
                     $correction=Correction::create([
                         'type' => 'PEDIDO COMPLETO',
