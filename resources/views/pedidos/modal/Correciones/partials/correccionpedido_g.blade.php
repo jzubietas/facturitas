@@ -23,7 +23,7 @@
                 <b>Detalle o cambio que se va a realizar<span class="text-danger">(Obligatorio)</span></b>
             </h6>
             <textarea name="detalle-g" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="response.detalle"></textarea>
+                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar detalle"></textarea>
         </li>
 
 
