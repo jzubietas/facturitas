@@ -80,7 +80,7 @@ class BasefriaController extends Controller
         }
         else if (Auth::user()->rol == 'Asesor') {
             $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
+                //->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
                 ->select(
                     DB::raw("users.id as id")
