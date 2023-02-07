@@ -632,7 +632,6 @@ class OperacionController extends Controller
         return view('operaciones.terminados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
     }
 
-
     public function Terminadostabla(Request $request)
     {
         $min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
