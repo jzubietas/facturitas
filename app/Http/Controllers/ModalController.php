@@ -242,6 +242,13 @@ class ModalController extends Controller
                         $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
                         $resourcorrelativo_det->saldo = 0;
                         $resourcorrelativo_det->save();
+
+                        Correction::where('id',$correction->id) ->update([
+                            'code'=>$resourcorrelativo->codigo,
+                            'condicion_envio'=>Pedido::CORRECCION_OPE,
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
+                        ]);
+
                         $destinationPath = base_path('public/storage/adjuntos/');
                         $files = $request->file('adjunto');
                         if ($request->hasFile('adjunto'))
@@ -339,6 +346,13 @@ class ModalController extends Controller
                         $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
                         $resourcorrelativo_det->saldo = 0;
                         $resourcorrelativo_det->save();
+
+                        Correction::where('id',$correction->id) ->update([
+                            'code'=>$resourcorrelativo->codigo,
+                            'condicion_envio'=>Pedido::CORRECCION_OPE,
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
+                        ]);
+
                         $destinationPath = base_path('public/storage/adjuntos/');
                         $files = $request->file('adjunto');
                         if ($request->hasFile('adjunto'))
@@ -434,6 +448,13 @@ class ModalController extends Controller
                         $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
                         $resourcorrelativo_det->saldo = 0;
                         $resourcorrelativo_det->save();
+
+                        Correction::where('id',$correction->id) ->update([
+                            'code'=>$resourcorrelativo->codigo,
+                            'condicion_envio'=>Pedido::CORRECCION_OPE,
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
+                        ]);
+
                         $destinationPath = base_path('public/storage/adjuntos/');
                         $files = $request->file('adjunto');
                         if ($request->hasFile('adjunto'))
