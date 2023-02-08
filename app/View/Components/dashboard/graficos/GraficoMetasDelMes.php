@@ -59,7 +59,13 @@ class GraficoMetasDelMes extends Widgets
         if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
             //$id = auth()->user()->id;
             $asesores = [];//User::rolAsesor()->where('llamada', '=', $id)->get();
-        } else {
+        } else if (auth()->user()->rol == User::ROL_FORMACION)
+        {
+            $asesores = User::query()
+                ->activo()
+                ->rolAsesor()
+                ->get();
+        }else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
                 $encargado = auth()->user()->id;
@@ -73,13 +79,7 @@ class GraficoMetasDelMes extends Widgets
                 })
                 ->get();
         }
-        if (auth()->user()->rol == User::ROL_FORMACION)
-        {
-            $asesores = User::query()
-                ->activo()
-                ->rolAsesor()
-                ->get();
-        }
+
 
         $progressData = [];
         foreach ($asesores as $asesor) {
@@ -204,7 +204,14 @@ class GraficoMetasDelMes extends Widgets
             $id = auth()->user()->id;
             $asesores = User::rolAsesor()->where('llamada', '=', $id)->get();
         }
-        else{
+        else if (auth()->user()->rol == User::ROL_FORMACION)
+        {
+            $asesores = User::query()
+                ->activo()
+                ->rolAsesor()
+                ->get();
+        }else
+        {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
                 $encargado = auth()->user()->id;
@@ -218,13 +225,7 @@ class GraficoMetasDelMes extends Widgets
                 })
                 ->get();
         }
-        if (auth()->user()->rol == User::ROL_FORMACION)
-        {
-            $asesores = User::query()
-                ->activo()
-                ->rolAsesor()
-                ->get();
-        }
+
         $progressData = [];
         foreach ($asesores as $asesor) {
             if (auth()->user()->rol != User::ROL_ADMIN || auth()->user()->rol!=User::ROL_FORMACION){
