@@ -347,7 +347,7 @@ class PedidoController extends Controller
 
                 if (!in_array($pedido->condicion_envio_code,[Pedido::POR_ATENDER_OPE_INT,Pedido::EN_ATENCION_OPE_INT] ) )
                 {
-                    if($pedido->estado_correccion=="0")
+                    if($pedido->estado_correccion=="0" && (\Str::contains(\Str::lower($pedido->codigo), '-c')) )
                     {
                         $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item"
                             data-target="#modal-correccion-pedidos"
