@@ -81,7 +81,7 @@ class GraficoMetasDelMes extends Widgets
 
 
         $progressData = [];
-        dd($asesores);
+        //dd($asesores);
         /*return (object)[
             'usuarios'=>$asesores
         ];*/
