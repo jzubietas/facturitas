@@ -36,6 +36,7 @@ class ModalController extends Controller
             $condiciones_despues_op=[
                 Pedido::RECEPCION_COURIER_INT
                 ,Pedido::ENTREGADO_CLIENTE_INT
+                ,Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
             ];
             switch ($opcion)
             {
