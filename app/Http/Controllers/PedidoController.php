@@ -312,7 +312,10 @@ class PedidoController extends Controller
                     } else {
                         if ($pedido->condicion_envio_code != Pedido::ENTREGADO_CLIENTE_INT) {
                             if (!$pedido->pendiente_anulacion) {
-                                if ($pedido->condicion_pa == 0 || $pedido->estado_correccion==1) {
+                                if(\Str::contains(\Str::lower($pedido->codigo), '-c'))
+                                {
+                                    $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                }else if ($pedido->condicion_pa == 0 || $pedido->estado_correccion==1) {
                                     $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                 }
                             }
