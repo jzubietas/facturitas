@@ -418,6 +418,10 @@ class NotificationsController extends Controller
             ->where('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT)
             ->count();
 
+        $contador_correcciones = Pedido::where('estado', 1)
+            ->where('condicion_envio_code', Pedido::CORRECCION_OPE_INT)
+            ->count();
+
         $contador_sobres_confirmar_recepcion_motorizado = DireccionGrupo::join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
@@ -497,6 +501,7 @@ class NotificationsController extends Controller
             'contador_pedidos_atendidos_operacion' => $contador_pedidos_atendidos_operacion,
             'contador_pedidos_pen_anulacion' => $contador_pedidos_pen_anulacion,
             'contador_sobres_entregados' => $contador_sobres_entregados,
+            'contador_correcciones' => $contador_correcciones,
             'contador_sobres_confirmar_recepcion' => $contador_sobres_confirmar_recepcion,
             'contador_sobres_confirmar_recepcion_motorizado' => $contador_sobres_confirmar_recepcion_motorizado,
             'contador_jefe_op' => $contador_jefe_op,
