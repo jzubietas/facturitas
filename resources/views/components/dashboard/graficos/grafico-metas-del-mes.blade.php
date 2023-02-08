@@ -83,7 +83,7 @@
                                                 <x-bs-progressbar :progress="$data['progress']">
                                                     <span> <b>{{$data['progress']}}%</b> - {{$data['current']}}/{{$data['total']}}</span>
                                                 </x-bs-progressbar>
-                                                <sub>% -  Pagados/ Asignados</sub>
+                                                <sub class="d-none">% -  Pagados/ Asignados</sub>
                                             </div>
                                             <div class="col-4">
                                                 @if ($dicResult[$key]['progress']<100)
