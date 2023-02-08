@@ -79,9 +79,10 @@ class GraficoMetasDelMes extends Widgets
 
 
         $progressData = [];
-        return (object)[
+        dd($asesores);
+        /*return (object)[
             'usuarios'=>$asesores
-        ];
+        ];*/
         foreach ($asesores as $asesor) {
             if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/){
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
