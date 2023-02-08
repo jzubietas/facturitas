@@ -354,7 +354,7 @@ return [
                 [
                     'text' => 'Bandeja de correcciones',
                     'route' => 'operaciones.correcciones',
-                    'can' => 'operacion.terminados',
+                    'can' => 'operacion.correccion',
                     'icon' => 'fas fa-check-circle',
                     'active' => [' correcciones'],
                 ],
