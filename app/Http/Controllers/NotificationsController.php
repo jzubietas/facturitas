@@ -419,9 +419,38 @@ class NotificationsController extends Controller
             ->where('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT)
             ->count();
 
-        $contador_correcciones = Correction::where('estado', 1)
-            ->where('condicion_envio_code', Pedido::CORRECCION_OPE_INT)
-            ->count();
+        $contador_correcciones = Correction::join('users as u','u.id','corrections.asesor_id')
+            ->where('estado', 1)
+            ->where('condicion_envio_code', Pedido::CORRECCION_OPE_INT);
+
+        if (Auth::user()->rol == "Operario") {
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $contador_correcciones->WhereIn('u.identificador', $asesores);
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
+            $operarios = User::where('users.rol', 'Operario')
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $contador_correcciones->WhereIn('u.identificador', $asesores);
+        }
+
+        $contador_correcciones=$contador_correcciones->count();
 
         $contador_sobres_confirmar_recepcion_motorizado = DireccionGrupo::join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
