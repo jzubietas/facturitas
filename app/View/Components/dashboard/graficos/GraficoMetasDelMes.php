@@ -61,6 +61,7 @@ class GraficoMetasDelMes extends Widgets
             $asesores = [];//User::rolAsesor()->where('llamada', '=', $id)->get();
         } else if (auth()->user()->rol == User::ROL_FORMACION)
         {
+            $encargado = null;
             $asesores = User::query()
                 ->activo()
                 ->rolAsesor()
@@ -206,6 +207,7 @@ class GraficoMetasDelMes extends Widgets
         }
         else if (auth()->user()->rol == User::ROL_FORMACION)
         {
+            $encargado = null;
             $asesores = User::query()
                 ->activo()
                 ->rolAsesor()
@@ -228,7 +230,7 @@ class GraficoMetasDelMes extends Widgets
 
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN || auth()->user()->rol!=User::ROL_FORMACION){
+            /*if (auth()->user()->rol != User::ROL_ADMIN || auth()->user()->rol!=User::ROL_FORMACION){
                 //&& auth()->user()->rol != User::ROL_JEFE_LLAMADAS//HASTA MAÑANA
                 // auth()->user()->rol != User::ROL_LLAMADAS) {//HASTA MAÑANA
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
@@ -240,7 +242,7 @@ class GraficoMetasDelMes extends Widgets
                         continue;
                     }
                 }
-            }
+            }*/
 
             $meta = (float)$asesor->meta_pedido;
             $meta_2 = (float)$asesor->meta_pedido_2;
