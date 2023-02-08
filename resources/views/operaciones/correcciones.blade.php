@@ -574,15 +574,15 @@
                 createdRow: function (row, data, dataIndex) {
                     //console.log(row);
                     if (data["type"] == "PEDIDO COMPLETO") {
-                        $('td', row).css('background', 'orange').css('font-weight', 'bold');
+                        $('td', row).css('background', '#ffab66').css('font-weight', 'bold');
                     } else if (data["type"] == "FACTURAS"){
-                        $('td', row).css('background', '#572364').css('font-weight', 'bold');
+                        $('td', row).css('background', '#aa8caf').css('font-weight', 'bold');
                     }
                     else if (data["type"] == "GUIAS"){
-                        $('td', row).css('background', 'green').css('font-weight', 'bold');
+                        $('td', row).css('background', '#9edc9c').css('font-weight', 'bold');
                     }
                     else if (data["type"] == "BANCARIZACIONES"){
-                        $('td', row).css('background', '#ADD8E6 ').css('font-weight', 'bold');
+                        $('td', row).css('background', '#a8e0e0 ').css('font-weight', 'bold');
                     }
                 },
                 rowCallback: function (row, data, index) {
