@@ -2020,7 +2020,7 @@ class OperacionController extends Controller
             $html = '';
         } else {
             $cant=$request->cant_compro;
-            $correccion=Correction::where('id',$request->confirmacion)->first();
+            $correccion=Correction::where('id',$request->corregir)->first();
 
             $pedido=$correccion->code;
             $ped=Pedido::where('codigo',$pedido)->first();
