@@ -431,7 +431,7 @@ class NotificationsController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            $contador_correcciones->WhereIn('u.identificador', $asesores);
+            $contador_correcciones=$contador_correcciones->WhereIn('u.identificador', $asesores);
         } else if (Auth::user()->rol == "Jefe de operaciones") {
             $operarios = User::where('users.rol', 'Operario')
                 ->where('users.estado', '1')
@@ -447,7 +447,7 @@ class NotificationsController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            $contador_correcciones->WhereIn('u.identificador', $asesores);
+            $contador_correcciones=$contador_correcciones->WhereIn('u.identificador', $asesores);
         }
 
         $contador_correcciones=$contador_correcciones->count();
