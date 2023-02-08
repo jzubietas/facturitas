@@ -86,17 +86,23 @@ class GraficoMetasDelMes extends Widgets
             'usuarios'=>$asesores
         ];*/
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/){
-                if (auth()->user()->rol != User::ROL_ENCARGADO) {
-                    if (auth()->user()->id != $asesor->id) {
-                        continue;
-                    }
-                } else {
-                    if (auth()->user()->id != $asesor->supervisor) {
-                        continue;
+            if(auth()->user()->rol==User::ROL_FORMACION)
+            {
+
+            }else{
+                if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/){
+                    if (auth()->user()->rol != User::ROL_ENCARGADO) {
+                        if (auth()->user()->id != $asesor->id) {
+                            continue;
+                        }
+                    } else {
+                        if (auth()->user()->id != $asesor->supervisor) {
+                            continue;
+                        }
                     }
                 }
             }
+
 
             $metatotal = (float)$asesor->meta_pedido;
             $metatotal_2 = (float)$asesor->meta_pedido_2;
@@ -209,11 +215,9 @@ class GraficoMetasDelMes extends Widgets
         }
         else if (auth()->user()->rol == User::ROL_FORMACION)
         {
-            $encargado = null;
             $asesores = User::query()
                 ->activo()
-                ->rolAsesor()
-                ->get();
+                ->rolAsesor()->get();
         }else
         {
             $encargado = null;
@@ -232,17 +236,23 @@ class GraficoMetasDelMes extends Widgets
 
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN || auth()->user()->rol!=User::ROL_FORMACION){
-                if (auth()->user()->rol != User::ROL_ENCARGADO) {
-                    if (auth()->user()->id != $asesor->id) {
-                        continue;
-                    }
-                } else {
-                    if (auth()->user()->id != $asesor->supervisor) {
-                        continue;
+            if(auth()->user()->rol==User::ROL_FORMACION)
+            {
+
+            }else{
+                if (auth()->user()->rol != User::ROL_ADMIN || auth()->user()->rol!=User::ROL_FORMACION){
+                    if (auth()->user()->rol != User::ROL_ENCARGADO) {
+                        if (auth()->user()->id != $asesor->id) {
+                            continue;
+                        }
+                    } else {
+                        if (auth()->user()->id != $asesor->supervisor) {
+                            continue;
+                        }
                     }
                 }
             }
+
 
             $meta = (float)$asesor->meta_pedido;
             $meta_2 = (float)$asesor->meta_pedido_2;
