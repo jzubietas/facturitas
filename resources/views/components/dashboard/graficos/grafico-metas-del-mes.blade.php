@@ -44,7 +44,7 @@
                                                 </div>
                                             @endif
 
-                                            <sub>% -  Pagados/ Asignados</sub>
+                                            <sub class="d-none">% -  Pagados/ Asignados</sub>
                                         </div>
                                         <div class="col-4">
                                             @if ($data_diciembre->progress<'100')
@@ -65,7 +65,7 @@
                                                     </div>
                                                 </div>
                                             @endif
-                                            <sub>% -  Pagados/ Meta</sub>
+                                            <sub class="d-none">% -  Pagados/ Meta</sub>
                                         </div>
                                     </div>
                                 </li>
@@ -103,7 +103,7 @@
                                                 @endif
 
 
-                                                <sub>% - Asignados / Meta</sub>
+                                                <sub class="d-none">% - Asignados / Meta</sub>
                                             </div>
                                         </div>
                                     </li>
@@ -145,7 +145,7 @@
                                                     <x-bs-progressbar :progress="$excludeDic[$index]['progress']">
                                                         <span><b>{{$excludeDic[$index]['progress']}}%</b> - {{$excludeDic[$index]['total']}}/{{$excludeDic[$index]['meta']}}</span>
                                                     </x-bs-progressbar>
-                                                    <sub>% - Asignados / Meta</sub>
+                                                    <sub class="d-none">% - Asignados / Meta</sub>
                                                 </div>
                                             </div>
                                         </li>
