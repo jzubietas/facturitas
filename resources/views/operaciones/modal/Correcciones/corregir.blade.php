@@ -8,6 +8,7 @@
 
             <form id="formcorreccion_corregir" name="formcorreccion_corregir" enctype="multipart/form-data">
                 <input type="hidden" id="corregir" name="corregir">
+                <input type="text" id="cant_adjuntos" name="cant_adjuntos">
                 <div class="modal-body">
                     <div class="card">
                         <div class="border rounded card-body border-secondary">
@@ -29,6 +30,12 @@
                                                             <span class="sr-only">Enviando...</span>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                    {!! Form::label('cant_compro', 'Total de facturas adjuntadas') !!}
+                                                    {!! Form::number('cant_compro', '0', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
+
                                                 </div>
 
                                             </div>

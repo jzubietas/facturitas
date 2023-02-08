@@ -1330,6 +1330,7 @@ class OperacionController extends Controller
     public function cargarImagenCorreccion(Pedido $pedido)
     {
         $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)
+            ->where('tipo','correccion')
             ->where('estado', '1')
             ->where('confirm', '1')->get();
 
@@ -1746,7 +1747,8 @@ class OperacionController extends Controller
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
                     'estado' => '1',
-                    'confirm' => '0'
+                    'confirm' => '0',
+                    'tipo'=>'correccion'
                 ]);
             }
         }
@@ -2017,42 +2019,59 @@ class OperacionController extends Controller
         if (!$request->confirmacion) {
             $html = '';
         } else {
+            $cant=$request->cant_compro;
             $correccion=Correction::where('id',$request->confirmacion)->first();
+
             $pedido=$correccion->code;
             $ped=Pedido::where('codigo',$pedido)->first();
-            //$dped=DetallePedido::where('codigo',$pedido)->first();
             $html=$correccion->id;
-            //$list_antes_op=[Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE,Pedido::ENVIADO_OPE_INT];
-            //$list_despues_op=[Pedido::ENVIO_COURIER_JEFE_OPE_INT];
-            //$condicion_pedido=$ped->condicion_envio_code;
+
+            $ped->update([
+                'condicion_envio_anterior' => Pedido::CORRECCION_OPE,
+                'condicion_envio_code_anterior' => Pedido::CORRECCION_OPE_INT,
+                'condicon_envio'=>Pedido::ATENDIDO_OPE,
+                'condicion_envio_code'=>Pedido::ATENDIDO_OPE_INT,
+                'estado_correccion'=>"0"
+            ]);
             switch ($correccion->type)
             {
                 case 'PEDIDO COMPLETO':
-                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)->where("confirm", '0');
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)
+                        ->where("confirm", '0')
+                        ->where("tipo", 'correccion');
                     $imagenesatencion_->update([
                         'confirm' => '1'
                     ]);
                     break;
                 case 'FACTURA':
-                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)->where("confirm", '0');
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)
+                        ->where("confirm", '0')
+                        ->where("tipo", 'correccion');
                     $imagenesatencion_->update([
                         'confirm' => '1'
                     ]);
                     break;
                 case 'GUIAS':
-                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)->where("confirm", '0');
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)
+                        ->where("confirm", '0')
+                        ->where("tipo", 'correccion');
                     $imagenesatencion_->update([
                         'confirm' => '1'
                     ]);
                     break;
                 case 'BANCARIZACIONES':
-                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)->where("confirm", '0');
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)
+                        ->where("confirm", '0')
+                        ->where("tipo", 'correccion');
                     $imagenesatencion_->update([
                         'confirm' => '1'
                     ]);
                     break;
             }
-            $correccion->update(['estado'=>"1"]);
+            $correccion->update([
+                'cant_compro'=>$correccion,
+                'estado'=>"0"
+            ]);
 
         }
         return response()->json(['html' => $html]);

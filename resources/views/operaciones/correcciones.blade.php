@@ -172,6 +172,7 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
+
                         $('#cargar_adjunto').prop("disabled", false);
                         $('#cargar_adjunto').text('Subir Informacion');
                         $('#listado_adjuntos').html(data);
@@ -283,6 +284,19 @@
                 event.preventDefault();
                 var formData = new FormData();
                 formData.append("corregir", $("#corregir").val())
+                console.log($("#adjunto_total_attachment").val());
+                formData.append("adjunto_total_attachment", $("#adjunto_total_attachment").val())
+                formData.append("cant_compro", $("#cant_compro").val())// solo numeros en cant compro
+                let cant_compro=$("#cant_compro").val();
+                if(cant_compro<=0)
+                {
+                    Swal.fire(
+                        'Ingrese una cantidad diferente de 0 en total de facturas adjuntadas',
+                        '',
+                        'warning'
+                    );
+                    return false;
+                }
                 $.ajax({
                     type: 'POST',
                     url: "{{ route('correccionconfirmacionRequest.post') }}",
