@@ -34,7 +34,7 @@
 
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                                     {!! Form::label('cant_compro', 'Total de facturas adjuntadas') !!}
-                                                    {!! Form::number('cant_compro', '0', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
+                                                    {!! Form::number('cant_compro', '', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0','placeholder'=>'0']) !!}
 
                                                 </div>
 

@@ -280,6 +280,15 @@
                 });
             });
 
+            $("#cant_compro").bind('keypress', function (event) {
+                var regex = new RegExp("^[0-9]+$");
+                var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                if (!regex.test(key)) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
             $(document).on("submit","#formcorreccion_corregir",function(event) {
                 event.preventDefault();
                 var formData = new FormData();
@@ -288,10 +297,10 @@
                 formData.append("adjunto_total_attachment", $("#adjunto_total_attachment").val())
                 formData.append("cant_compro", $("#cant_compro").val())// solo numeros en cant compro
                 let cant_compro=$("#cant_compro").val();
-                if(cant_compro<=0)
+                if(cant_compro<=0 || cant_compro=='')
                 {
                     Swal.fire(
-                        'Ingrese una cantidad diferente de 0 en total de facturas adjuntadas',
+                        'Ingrese una cantidad diferente de 0 o vacio en total de facturas adjuntadas',
                         '',
                         'warning'
                     );
