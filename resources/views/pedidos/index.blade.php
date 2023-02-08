@@ -729,6 +729,8 @@
                         if(data.html!="0")
                         {
                             $("#modal-correccion-pedidos").modal("hide");
+                            //recargar tabla
+                            $('#tablaPrincipal').DataTable().ajax.reload();
                             var urlpdf = '{{ route('correccionPDF', ':id') }}';
                             urlpdf = urlpdf.replace(':id', data.codigo);
                             window.open(urlpdf, '_blank');

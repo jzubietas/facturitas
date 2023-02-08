@@ -87,15 +87,15 @@ class ModalController extends Controller
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
                         //-C-1
-                        /*$pedido->update([
+                        $pedido->update([
                             'estado_correccion'=>"1",
-                            'condicion_envio_anterior'=>$pedido->condicion_envio,
+                            /*'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
                             'codigo_anterior'=>$pedido->codigo,
                             'pedidoid_anterior'=>$pedido->id,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
-                        ]);*/
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT*/
+                        ]);
                         //$pedido->update(['estado_correccion'=>"1"]);
                         $post = Pedido::where('id',$pedido->id)->first();
                         $resourcorrelativo = $post->replicate();
@@ -120,7 +120,7 @@ class ModalController extends Controller
                         $resourcorrelativo_det->saldo = 0;
                         $resourcorrelativo_det->save();
 
-                        $correction->update([
+                        Correction::where('id',$correction->id) ->update([
                             'code'=>$resourcorrelativo->codigo,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
                             'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
@@ -209,15 +209,15 @@ class ModalController extends Controller
                         $codigo_pdf=$pedido->id;
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
-                        /*$pedido->update([
+                        $pedido->update([
                             'estado_correccion'=>"1",
-                            'condicion_envio_anterior'=>$pedido->condicion_envio,
+                            /*'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
                             'codigo_anterior'=>$pedido->codigo,
                             'pedidoid_anterior'=>$pedido->id,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
-                        ]);*/
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT*/
+                        ]);
                         $post = Pedido::where('id',$pedido->id)->first();
                         $resourcorrelativo = $post->replicate();
                         $correla=$post->codigo;
@@ -306,15 +306,15 @@ class ModalController extends Controller
                         $codigo_pdf=$pedido->id;
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
-                        /*$pedido->update([
+                        $pedido->update([
                             'estado_correccion'=>"1",
-                            'condicion_envio_anterior'=>$pedido->condicion_envio,
+                            /*'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
                             'codigo_anterior'=>$pedido->codigo,
                             'pedidoid_anterior'=>$pedido->id,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
-                        ]);*/
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT*/
+                        ]);
                         $post = Pedido::where('id',$pedido->id)->first();
                         $resourcorrelativo = $post->replicate();
                         $correla=$post->codigo;
@@ -401,15 +401,15 @@ class ModalController extends Controller
                         $codigo_pdf=$pedido->id;
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
-                        /*$pedido->update([
+                        $pedido->update([
                             'estado_correccion'=>"1",
-                            'condicion_envio_anterior'=>$pedido->condicion_envio,
+                            /*'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
                             'codigo_anterior'=>$pedido->codigo,
                             'pedidoid_anterior'=>$pedido->id,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
-                        ]);*/
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT*/
+                        ]);
                         $post = Pedido::find($pedido->id);
                         $resourcorrelativo = $post->replicate();
                         $correla=$post->codigo;
