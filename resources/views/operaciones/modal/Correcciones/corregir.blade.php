@@ -8,7 +8,7 @@
 
             <form id="formcorreccion_corregir" name="formcorreccion_corregir" enctype="multipart/form-data">
                 <input type="hidden" id="corregir" name="corregir">
-                <input type="text" id="cant_adjuntos" name="cant_adjuntos">
+                <input type="hidden" id="cant_adjuntos" name="cant_adjuntos">
                 <div class="modal-body">
                     <div class="card">
                         <div class="border rounded card-body border-secondary">
