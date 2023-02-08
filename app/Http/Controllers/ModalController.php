@@ -114,6 +114,7 @@ class ModalController extends Controller
                         $resourcorrelativo->pagado = "2";
                         $resourcorrelativo->condicion_envio_code = Pedido::CORRECCION_OPE_INT;
                         $resourcorrelativo->condicion_envio = Pedido::CORRECCION_OPE;
+                        $resourcorrelativo->da_confirmar_descarga=0;
 
                         $resourcorrelativo->estado_correccion = '1';
                         $resourcorrelativo->save();
@@ -241,6 +242,7 @@ class ModalController extends Controller
                         $resourcorrelativo->condicion_envio_code = Pedido::CORRECCION_OPE_INT;
                         $resourcorrelativo->condicion_envio = Pedido::CORRECCION_OPE;
                         $resourcorrelativo->estado_correccion = '1';
+                        $resourcorrelativo->da_confirmar_descarga=0;
                         $resourcorrelativo->save();
                         Pedido::where("id",$resourcorrelativo->id)->update([
                             'correlativo' =>  'PED'.$resourcorrelativo->id
@@ -343,6 +345,7 @@ class ModalController extends Controller
                         $resourcorrelativo->condicion_envio_code = Pedido::CORRECCION_OPE_INT;
                         $resourcorrelativo->condicion_envio = Pedido::CORRECCION_OPE;
                         $resourcorrelativo->estado_correccion = '1';
+                        $resourcorrelativo->da_confirmar_descarga=0;
                         $resourcorrelativo->save();
                         Pedido::where("id",$resourcorrelativo->id)->update([
                             'correlativo' =>  'PED'.$resourcorrelativo->id
@@ -442,6 +445,7 @@ class ModalController extends Controller
                         $resourcorrelativo->pagado = "2";
                         $resourcorrelativo->condicion_envio_code = Pedido::CORRECCION_OPE_INT;
                         $resourcorrelativo->condicion_envio = Pedido::CORRECCION_OPE;
+                        $resourcorrelativo->da_confirmar_descarga=0;
                         $resourcorrelativo->estado_correccion = '1';
                         $resourcorrelativo->save();
                         Pedido::where("id",$resourcorrelativo->id)->update([
