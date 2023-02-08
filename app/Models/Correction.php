@@ -25,7 +25,9 @@ class Correction extends Model
         'motivo',
         'adjuntos',
         'detalle',
-        'estado'
+        'estado',
+        'condicion_envio',
+        'condicion_envio_code'
         ];
 
 }
