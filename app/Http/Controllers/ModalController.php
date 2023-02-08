@@ -83,6 +83,11 @@ class ModalController extends Controller
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
                             'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
+                        Correction::where('id',$correction->id) ->update([
+                            'code'=>$pedido->codigo,
+                            'condicion_envio'=>Pedido::CORRECCION_OPE,
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
+                        ]);
                         $codigo_pdf=$pedido->id;
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
@@ -206,6 +211,11 @@ class ModalController extends Controller
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
                         ]);
+                        Correction::where('id',$correction->id) ->update([
+                            'code'=>$pedido->codigo,
+                            'condicion_envio'=>Pedido::CORRECCION_OPE,
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
+                        ]);
                         $codigo_pdf=$pedido->id;
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
@@ -303,6 +313,11 @@ class ModalController extends Controller
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
                         ]);
+                        Correction::where('id',$correction->id) ->update([
+                            'code'=>$pedido->codigo,
+                            'condicion_envio'=>Pedido::CORRECCION_OPE,
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
+                        ]);
                         $codigo_pdf=$pedido->id;
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
                     {
@@ -397,6 +412,11 @@ class ModalController extends Controller
                             'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
+                        ]);
+                        Correction::where('id',$correction->id) ->update([
+                            'code'=>$pedido->codigo,
+                            'condicion_envio'=>Pedido::CORRECCION_OPE,
+                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
                         $codigo_pdf=$pedido->id;
                     }else if(in_array($condicion_pedido,$condiciones_despues_op))
