@@ -37,6 +37,7 @@ class ModalController extends Controller
                 Pedido::RECEPCION_COURIER_INT
                 ,Pedido::ENTREGADO_CLIENTE_INT
                 ,Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
+                ,Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT
             ];
             switch ($opcion)
             {
