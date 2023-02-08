@@ -28,7 +28,7 @@ class ModalController extends Controller
             $condiciones_en_op=[
                // Pedido::POR_ATENDER_OPE_INT
                 Pedido::ATENDIDO_OPE_INT
-                ,Pedido::ENVIADO_OPE
+                ,Pedido::ENVIADO_OPE_INT
                 ,Pedido::RECIBIDO_JEFE_OPE_INT
                 ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
                 ,Pedido::ENTREGADO_SIN_SOBRE_OPE_INT
