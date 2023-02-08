@@ -86,7 +86,7 @@ class GraficoMetasDelMes extends Widgets
             'usuarios'=>$asesores
         ];*/
         foreach ($asesores as $asesor) {
-            if(auth()->user()->rol==User::ROL_FORMACION)
+            if(in_array(auth()->user()->rol,[User::ROL_FORMACION,User::ROL_ADMIN]))
             {
 
             }else{
@@ -236,7 +236,7 @@ class GraficoMetasDelMes extends Widgets
 
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if(auth()->user()->rol==User::ROL_FORMACION)
+            if(in_array(auth()->user()->rol,[User::ROL_FORMACION,User::ROL_ADMIN]))
             {
 
             }else{
