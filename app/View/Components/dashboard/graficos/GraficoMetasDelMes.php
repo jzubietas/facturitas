@@ -83,7 +83,7 @@ class GraficoMetasDelMes extends Widgets
 
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN){
+            if (auth()->user()->rol != User::ROL_ADMIN || auth()->user()->rol!=User::ROL_FORMACION){
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
                     if (auth()->user()->id != $asesor->id) {
                         continue;
@@ -227,7 +227,7 @@ class GraficoMetasDelMes extends Widgets
         }
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN){
+            if (auth()->user()->rol != User::ROL_ADMIN || auth()->user()->rol!=User::ROL_FORMACION){
                 //&& auth()->user()->rol != User::ROL_JEFE_LLAMADAS//HASTA MAÑANA
                 // auth()->user()->rol != User::ROL_LLAMADAS) {//HASTA MAÑANA
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
