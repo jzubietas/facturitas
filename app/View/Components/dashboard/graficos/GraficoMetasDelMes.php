@@ -33,7 +33,6 @@ class GraficoMetasDelMes extends Widgets
         $now_submonth = $this->startDate->clone()->startOfMonth()->subMonth();
         $data_noviembre = $this->generarDataNoviembre($now_submonth);
 
-
         if (\auth()->user()->rol == User::ROL_ASESOR) {
             $this->novResult = [];
             $this->dicResult = [];
