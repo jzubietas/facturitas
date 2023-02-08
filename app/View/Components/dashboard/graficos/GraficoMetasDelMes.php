@@ -56,28 +56,29 @@ class GraficoMetasDelMes extends Widgets
 
     public function generarDataNoviembre($date)
     {
-        if (auth()->user()->rol != User::ROL_ADMIN
-            && auth()->user()->rol != User::ROL_FORMACION){
+        if (auth()->user()->rol != User::ROL_ADMIN){
             $asesores = [];
-        } else if (auth()->user()->rol == User::ROL_FORMACION){
-            $asesores = User::query()
-                ->activo()
-                ->rolAsesor()
-                ->get();
         }
         else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
                 $encargado = auth()->user()->id;
             }
-            $asesores = User::query()
-                ->activo()
-                ->rolAsesor()
-                //->incluidoMeta()
-                ->when($encargado != null, function ($query) use ($encargado) {
-                    return $query->where('supervisor', '=', $encargado);
-                })
-                ->get();
+            if (auth()->user()->rol == User::ROL_FORMACION) {
+                $asesores = User::query()
+                    ->activo()
+                    ->rolAsesor()
+                    ->get();
+            }else{
+                $asesores = User::query()
+                    ->activo()
+                    ->rolAsesor()
+                    //->incluidoMeta()
+                    ->when($encargado != null, function ($query) use ($encargado) {
+                        return $query->where('supervisor', '=', $encargado);
+                    })
+                    ->get();
+            }
         }
 
         $progressData = [];
@@ -202,31 +203,34 @@ class GraficoMetasDelMes extends Widgets
         if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
             $id = auth()->user()->id;
             $asesores = User::rolAsesor()->where('llamada', '=', $id)->get();
-        } else if (auth()->user()->rol == User::ROL_FORMACION){
-            $asesores = User::query()
-                ->activo()
-                ->rolAsesor()
-                ->get();
         }
         else{
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
                 $encargado = auth()->user()->id;
             }
-            $asesores = User::query()
-                ->activo()
-                ->rolAsesor()
-                //->incluidoMeta()
-                ->when($encargado != null, function ($query) use ($encargado) {
-                    return $query->where('supervisor', '=', $encargado);
-                })
-                ->get();
+            if (auth()->user()->rol == User::ROL_FORMACION)
+            {
+                $asesores = User::query()
+                    ->activo()
+                    ->rolAsesor()
+                    ->get();
+            }else{
+                $asesores = User::query()
+                    ->activo()
+                    ->rolAsesor()
+                    //->incluidoMeta()
+                    ->when($encargado != null, function ($query) use ($encargado) {
+                        return $query->where('supervisor', '=', $encargado);
+                    })
+                    ->get();
+            }
+
         }
 
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN
-                && auth()->user()->rol != User::ROL_FORMACION){
+            if (auth()->user()->rol != User::ROL_ADMIN){
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
                     if (auth()->user()->id != $asesor->id) {
                         continue;
