@@ -88,9 +88,15 @@ class GraficoMetasDelMes extends Widgets
                         continue;
                     }
                 } else {
-                    if (auth()->user()->id != $asesor->supervisor) {
+                    if (auth()->user()->rol != User::ROL_FORMACION)
+                    {
+                        continue;
+                    }else if (auth()->user()->id != $asesor->supervisor) {
                         continue;
                     }
+
+
+
                 }
             }
 
