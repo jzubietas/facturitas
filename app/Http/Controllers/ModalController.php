@@ -26,7 +26,6 @@ class ModalController extends Controller
             $codigo_pdf='';
             $condicion_pedido="";
             $condiciones_en_op=[
-               // Pedido::POR_ATENDER_OPE_INT
                 Pedido::ATENDIDO_OPE_INT
                 ,Pedido::ENVIADO_OPE_INT
                 ,Pedido::RECIBIDO_JEFE_OPE_INT
