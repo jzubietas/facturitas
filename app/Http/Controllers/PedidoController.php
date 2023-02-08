@@ -347,13 +347,17 @@ class PedidoController extends Controller
 
                 if (!in_array($pedido->condicion_envio_code,[Pedido::POR_ATENDER_OPE_INT,Pedido::EN_ATENCION_OPE_INT] ) )
                 {
-                    if($pedido->estado_correccion=="0" && (\Str::contains(\Str::lower($pedido->codigo), '-c')) )
+                    if($pedido->estado_correccion=="0" )
                     {
-                        $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item"
+                        if(\Str::contains(\Str::lower($pedido->codigo), '-c'))
+                        {
+                        }else{
+                            $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item"
                             data-target="#modal-correccion-pedidos"
                             data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" >
                                 <i class="fa fa-check-circle text-warning"></i>
                                 Correccion</a>';
+                        }
                     }
 
                 }
