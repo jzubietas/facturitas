@@ -2029,7 +2029,7 @@ class OperacionController extends Controller
             $pedido->update([
                 'condicion_envio_anterior' => Pedido::CORRECCION_OPE,
                 'condicion_envio_code_anterior' => Pedido::CORRECCION_OPE_INT,
-                'condicon_envio'=>Pedido::ATENDIDO_OPE,
+                'condicion_envio'=>Pedido::ATENDIDO_OPE,
                 'condicion_envio_code'=>Pedido::ATENDIDO_OPE_INT,
                 'estado_correccion'=>"0"
             ]);
