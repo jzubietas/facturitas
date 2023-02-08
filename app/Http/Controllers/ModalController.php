@@ -38,6 +38,9 @@ class ModalController extends Controller
                 ,Pedido::ENTREGADO_CLIENTE_INT
                 ,Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
                 ,Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT
+                ,Pedido::MOTORIZADO_INT
+                ,Pedido::CONFIRM_MOTORIZADO_INT
+                ,Pedido::EN_CAMINO_OLVA_INT
             ];
             switch ($opcion)
             {
