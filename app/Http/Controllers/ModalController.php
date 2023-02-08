@@ -165,7 +165,9 @@ class ModalController extends Controller
                         'motivo'=>$sustento,
                         'aduntos'=>0,
                         'detalle'=>$detalle,
-                        'estado'=>1
+                        'estado'=>1,
+                        'condicion_envio'=>Pedido::CORRECCION_OPE,
+                        'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                     ]);
 
                     $facturas = $request->file('correcion_f_facturas');
@@ -282,7 +284,9 @@ class ModalController extends Controller
                         'motivo'=>$sustento,
                         'aduntos'=>0,
                         'detalle'=>$detalle,
-                        'estado'=>1
+                        'estado'=>1,
+                        'condicion_envio'=>Pedido::CORRECCION_OPE,
+                        'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                     ]);
                     $adjuntos = $request->file('correcion_g_adjuntos');
                     if (isset($adjuntos)) {
@@ -381,7 +385,9 @@ class ModalController extends Controller
                         'motivo'=>$sustento,
                         'aduntos'=>0,
                         'detalle'=>'SIN DETALLE',
-                        'estado'=>1
+                        'estado'=>1,
+                        'condicion_envio'=>Pedido::CORRECCION_OPE,
+                        'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                     ]);
                     $adjuntos = $request->file('correcion_b_adjuntos');
                     if (isset($adjuntos)) {
