@@ -420,8 +420,8 @@ class NotificationsController extends Controller
             ->count();
 
         $contador_correcciones = Correction::join('users as u','u.id','corrections.asesor_id')
-            ->where('estado', 1)
-            ->where('condicion_envio_code', Pedido::CORRECCION_OPE_INT);
+            ->where('corrections.estado', 1)
+            ->where('corrections.condicion_envio_code', Pedido::CORRECCION_OPE_INT);
 
         if (Auth::user()->rol == "Operario") {
             $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
