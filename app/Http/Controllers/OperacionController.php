@@ -2032,7 +2032,8 @@ class OperacionController extends Controller
                 'condicion_envio'=>Pedido::ATENDIDO_OPE,
                 'condicion_envio_code'=>Pedido::ATENDIDO_OPE_INT,
                 'da_confirmar_descarga'=>"0",
-                'estado_correccion'=>"0"
+                'estado_correccion'=>"0",
+                'resultado_correccion'=>"1"
             ]);
             switch ($correccion->type)
             {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Pedidos;
 
 use App\Http\Controllers\Controller;
+use App\Models\AttachCorrection;
+use App\Models\Correction;
 use App\Models\ImagenAtencion;
 use App\Models\Pedido;
 use App\Models\PedidoMovimientoEstado;
@@ -546,10 +548,18 @@ class PedidoStatusController extends Controller
         $total = $pedido->detallePedido->cantidad;
         $banca = $pedido->detallePedido->tipo_banca;
         $fecha = $pedido->created_at->format('y-m');
+        $data_resumen=$pedido->resultado_correccion;
+        $data=null;
+        if($data_resumen==1)
+        {
+            $data=ImagenAtencion::where('pedido_id',$pedido->pedido_id)->activo()->where('tipo','correccion')->where('confirm','1')->get();
+        }else{
+            $data=ImagenAtencion::where('pedido_id',$pedido->pedido_id)->activo()->whereNull('tipo')->where('confirm','1')->get();
+        }
         return response()->json([
             "cliente" => $pedido->cliente,
             "detalle_pedido" => $pedido->detallePedido,
-            "data" => $pedido->imagenAtencion()->activo()->get(),
+            "data" => $data,
             "sustento" => ($pedido->da_confirmar_descarga == 0 ? $pedido->sustento_adjunto : null),
             'copyText' => "$empresa - $fecha
 $ruc
