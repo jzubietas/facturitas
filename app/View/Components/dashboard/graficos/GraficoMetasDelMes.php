@@ -57,7 +57,8 @@ class GraficoMetasDelMes extends Widgets
     public function generarDataNoviembre($date)
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {
-            $asesores = [];
+            //$asesores = [];
+            $asesores = User::rolAsesor()->where('llamada', '=', auth()->user()->id)->get();
         } else if (auth()->user()->rol == User::ROL_FORMACION)
         {
             $asesores = [];
@@ -78,8 +79,11 @@ class GraficoMetasDelMes extends Widgets
 
 
         $progressData = [];
+        return (object)[
+            'usuarios'=>$asesores
+        ];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN || auth()->user()->rol!=User::ROL_FORMACION){
+            if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/){
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
                     if (auth()->user()->id != $asesor->id) {
                         continue;
