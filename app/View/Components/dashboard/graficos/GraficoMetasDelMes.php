@@ -61,7 +61,9 @@ class GraficoMetasDelMes extends Widgets
             $asesores = User::rolAsesor()->where('llamada', '=', auth()->user()->id)->get();
         } else if (auth()->user()->rol == User::ROL_FORMACION)
         {
-            $asesores = [];
+            $asesores = User::query()
+                ->activo()
+                ->rolAsesor()->get();
         }else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -79,7 +81,7 @@ class GraficoMetasDelMes extends Widgets
 
 
         $progressData = [];
-        //dd($asesores);
+        dd($asesores);
         /*return (object)[
             'usuarios'=>$asesores
         ];*/
