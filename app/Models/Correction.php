@@ -27,7 +27,8 @@ class Correction extends Model
         'detalle',
         'estado',
         'condicion_envio',
-        'condicion_envio_code'
+        'condicion_envio_code',
+        'cant_compro'
         ];
 
 }
