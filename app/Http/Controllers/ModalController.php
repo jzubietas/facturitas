@@ -63,7 +63,9 @@ class ModalController extends Controller
                         'motivo'=>$sustento,
                         'adjuntos'=>0,
                         'detalle'=>$detalle,
-                        'estado'=>true
+                        'estado'=>true,
+                        'condicion_envio'=>Pedido::CORRECCION_OPE,
+                        'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                     ]);
                     $captura = '';
                     if ($request->hasFile('correcion_pc_captura')) {
@@ -85,11 +87,6 @@ class ModalController extends Controller
                             'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
                             'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
-                            'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
-                        ]);
-                        Correction::where('id',$correction->id)->first()->update([
-                            'code'=>$pedido->codigo,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
                             'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
@@ -207,10 +204,7 @@ class ModalController extends Controller
                         $pedido->update([
                             'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
-                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
-                        ]);
-                        Correction::where('id',$correction->id)->first()->update([
-                            'code'=>$pedido->codigo,
+                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
                             'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
@@ -311,10 +305,7 @@ class ModalController extends Controller
                         $pedido->update([
                             'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
-                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
-                        ]);
-                        Correction::where('id',$correction->id)->first()->update([
-                            'code'=>$pedido->codigo,
+                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
                             'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
@@ -413,10 +404,7 @@ class ModalController extends Controller
                         $pedido->update([
                             'estado_correccion'=>"1",
                             'condicion_envio_anterior'=>$pedido->condicion_envio,
-                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code
-                        ]);
-                        Correction::where('id',$correction->id)->first()->update([
-                            'code'=>$pedido->codigo,
+                            'condicion_envio_code_anterior'=>$pedido->condicion_envio_code,
                             'condicion_envio'=>Pedido::CORRECCION_OPE,
                             'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
