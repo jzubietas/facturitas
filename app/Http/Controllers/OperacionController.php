@@ -2016,7 +2016,7 @@ class OperacionController extends Controller
 
     public function correccionconfirmacion(Request $request)
     {
-        if (!$request->confirmacion) {
+        if (!$request->corregir) {
             $html = '';
         } else {
             $cant=$request->cant_compro;
