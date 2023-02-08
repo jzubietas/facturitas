@@ -2022,11 +2022,11 @@ class OperacionController extends Controller
             $cant=$request->cant_compro;
             $correccion=Correction::where('id',$request->corregir)->first();
 
-            $pedido=$correccion->code;
-            $ped=Pedido::where('codigo',$pedido)->first();
+
+            $pedido=Pedido::where('codigo',$correccion->code)->first();
             $html=$correccion->id;
 
-            $ped->update([
+            $pedido->update([
                 'condicion_envio_anterior' => Pedido::CORRECCION_OPE,
                 'condicion_envio_code_anterior' => Pedido::CORRECCION_OPE_INT,
                 'condicon_envio'=>Pedido::ATENDIDO_OPE,
@@ -2036,7 +2036,7 @@ class OperacionController extends Controller
             switch ($correccion->type)
             {
                 case 'PEDIDO COMPLETO':
-                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $pedido->id)
                         ->where("confirm", '0')
                         ->where("tipo", 'correccion');
                     $imagenesatencion_->update([
@@ -2044,7 +2044,7 @@ class OperacionController extends Controller
                     ]);
                     break;
                 case 'FACTURA':
-                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $pedido->id)
                         ->where("confirm", '0')
                         ->where("tipo", 'correccion');
                     $imagenesatencion_->update([
@@ -2052,7 +2052,7 @@ class OperacionController extends Controller
                     ]);
                     break;
                 case 'GUIAS':
-                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $pedido->id)
                         ->where("confirm", '0')
                         ->where("tipo", 'correccion');
                     $imagenesatencion_->update([
@@ -2060,7 +2060,7 @@ class OperacionController extends Controller
                     ]);
                     break;
                 case 'BANCARIZACIONES':
-                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $ped->id)
+                    $imagenesatencion_ = ImagenAtencion::where("pedido_id", $pedido->id)
                         ->where("confirm", '0')
                         ->where("tipo", 'correccion');
                     $imagenesatencion_->update([
