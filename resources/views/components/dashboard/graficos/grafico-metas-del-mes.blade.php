@@ -23,7 +23,8 @@
                                 </li>
                                 <li class="list-group-item" style=" background-color: #b7b7b7; ">
                                     <div class="row">
-                                        <div class="col-4">GENERAL</div>
+                                        <div class="col-2">Asesor</div>
+                                        <div class="col-2">Identificador</div>
                                         <div class="col-4">
                                             @if ($data_noviembre->progress<'100')
                                             <x-bs-progressbar :progress="$data_noviembre->progress">
@@ -72,8 +73,11 @@
                                 @foreach($novResult as $key=>$data)
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-4">
-                                                <b>{{data_get($data,'code')}}</b> <br> {{data_get($data,'name')}}
+                                            <div class="col-2">
+                                                 {{data_get($data,'name')}}
+                                            </div>
+                                            <div class="col-2">
+                                                <b>{{data_get($data,'code')}}</b>
                                             </div>
                                             <div class="col-4">
                                                 <x-bs-progressbar :progress="$data['progress']">
@@ -132,8 +136,11 @@
                                     @foreach($excludeNov as $index=>$data)
                                         <li class="list-group-item" style="background: #0000001a;">
                                             <div class="row">
-                                                <div class="col-4">
-                                                    <b>{{$data['code']}}</b> <br> {{$data['name']}}
+                                                <div class="col-2">
+                                                   {{$data['name']}}
+                                                </div>
+                                                <div class="col-2">
+                                                    <b>{{$data['code']}}</b>
                                                 </div>
                                                 <div class="col-4">
                                                     <x-bs-progressbar :progress="$data['progress']">
