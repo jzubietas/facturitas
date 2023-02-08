@@ -2069,7 +2069,7 @@ class OperacionController extends Controller
                     break;
             }
             $correccion->update([
-                'cant_compro'=>$correccion,
+                'cant_compro'=>$cant,
                 'estado'=>"0"
             ]);
 
