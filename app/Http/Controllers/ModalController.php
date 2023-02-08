@@ -67,7 +67,6 @@ class ModalController extends Controller
                         'condicion_envio'=>Pedido::CORRECCION_OPE,
                         'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                     ]);
-                    $captura = '';
                     if ($request->hasFile('correcion_pc_captura')) {
                         $captura = $request->file('correcion_pc_captura')->store('pedidos/correcciones', 'pstorage');
                         AttachCorrection::create([
@@ -120,10 +119,8 @@ class ModalController extends Controller
                         $resourcorrelativo_det->saldo = 0;
                         $resourcorrelativo_det->save();
 
-                        Correction::where('id',$correction->id) ->update([
+                        Correction::where('id',$correction->id)->first()->update([
                             'code'=>$resourcorrelativo->codigo,
-                            'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
 
                         $destinationPath = base_path('public/storage/adjuntos/');
@@ -239,10 +236,8 @@ class ModalController extends Controller
                         $resourcorrelativo_det->saldo = 0;
                         $resourcorrelativo_det->save();
 
-                        Correction::where('id',$correction->id) ->update([
+                        Correction::where('id',$correction->id)->first()->update([
                             'code'=>$resourcorrelativo->codigo,
-                            'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
 
                         $destinationPath = base_path('public/storage/adjuntos/');
@@ -342,10 +337,8 @@ class ModalController extends Controller
                         $resourcorrelativo_det->saldo = 0;
                         $resourcorrelativo_det->save();
 
-                        Correction::where('id',$correction->id) ->update([
+                        Correction::where('id',$correction->id)->first()->update([
                             'code'=>$resourcorrelativo->codigo,
-                            'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
 
                         $destinationPath = base_path('public/storage/adjuntos/');
@@ -443,10 +436,8 @@ class ModalController extends Controller
                         $resourcorrelativo_det->saldo = 0;
                         $resourcorrelativo_det->save();
 
-                        Correction::where('id',$correction->id) ->update([
+                        Correction::where('id',$correction->id)->first()->update([
                             'code'=>$resourcorrelativo->codigo,
-                            'condicion_envio'=>Pedido::CORRECCION_OPE,
-                            'condicion_envio_code'=>Pedido::CORRECCION_OPE_INT
                         ]);
 
                         $destinationPath = base_path('public/storage/adjuntos/');
