@@ -7,7 +7,7 @@
     <div class="card-body">
         <div class="row">
             <div class="@if(count($excludeNov)>0)col-md-12 @else col-md-12 @endif">
-                <div class="@if(count($excludeNov)==0) d-flex justify-content-center @endif">
+                <div class="@if(count($excludeNov)==0)  justify-content-center @endif">
                     <ul class="list-group">
                         <li class="list-group-item">
                             <h4 class="text-center"><b>METAS DEL MES</b></h4>
