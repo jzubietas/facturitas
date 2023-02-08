@@ -217,6 +217,13 @@ class GraficoMetasDelMes extends Widgets
                 })
                 ->get();
         }
+        if (auth()->user()->rol == User::ROL_FORMACION)
+        {
+            $asesores = User::query()
+                ->activo()
+                ->rolAsesor()
+                ->get();
+        }
         $progressData = [];
         foreach ($asesores as $asesor) {
             if (auth()->user()->rol != User::ROL_ADMIN){
