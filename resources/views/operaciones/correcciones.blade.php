@@ -313,7 +313,7 @@
                     processData: false,
                     contentType: false,
                 }).done(function (data) {
-                    $("#modalcorreccion-confirmacion").modal("hide");
+                    $("#modalcorreccion-corregir").modal("hide");
                     $('#tablaPrincipal').DataTable().ajax.reload();
                 }).fail(function (err, error, errMsg) {
                     console.log(arguments, err, errMsg)
