@@ -596,14 +596,19 @@ class OperacionController extends Controller
                 $btn = [];
 
                 $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton">';
-                $btn[] = '<a class="btn-sm dropdown-item text-success" href="#"'.
-                    'data-backdrop="static" data-keyboard="false"'.
-                    'data-toggle="modal"'.
-                    'data-correccion="'.$pedido->id.'"'.
-                    'data-target="#modalcorreccion-corregir">
+
+                if(in_array(auth()->user()->rol, [User::ROL_ASESOR,User::ROL_ENCARGADO,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS]))
+                {
+                    $btn[] = '<a class="btn-sm dropdown-item text-success" href="#"'.
+                        'data-backdrop="static" data-keyboard="false"'.
+                        'data-toggle="modal"'.
+                        'data-correccion="'.$pedido->id.'"'.
+                        'data-target="#modalcorreccion-corregir">
                             <i class="fa fa-check"></i>
                         CORREGIR
                         </a>';
+                }
+
                 $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'pedido_id')) . '" class="btn-sm dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                 /*$btn[] = '<a class="btn-sm dropdown-item text-danger" href="#"'.
                         'data-toggle="modal"'.
