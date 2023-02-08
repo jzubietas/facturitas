@@ -550,11 +550,11 @@ class PedidoStatusController extends Controller
         $fecha = $pedido->created_at->format('y-m');
         $data_resumen=$pedido->resultado_correccion;
         $data=null;
-        if($data_resumen==1)
+        if($data_resumen==1 || $data_resumen=='1')
         {
-            $data=ImagenAtencion::where('pedido_id',$pedido->pedido_id)->activo()->where('tipo','correccion')->where('confirm','1')->get();
+            $data=ImagenAtencion::where('pedido_id',$pedido->id)->activo()->where('tipo','correccion')->get();
         }else{
-            $data=ImagenAtencion::where('pedido_id',$pedido->pedido_id)->activo()->whereNull('tipo')->where('confirm','1')->get();
+            $data=ImagenAtencion::where('pedido_id',$pedido->id)->activo()->whereNull('tipo')->get();
         }
         return response()->json([
             "cliente" => $pedido->cliente,
