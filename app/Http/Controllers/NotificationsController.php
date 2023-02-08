@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alerta;
+use App\Models\Correction;
 use App\Models\Devolucion;
 use App\Models\DireccionGrupo;
 use App\Models\Pedido;
@@ -418,7 +419,7 @@ class NotificationsController extends Controller
             ->where('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT)
             ->count();
 
-        $contador_correcciones = Pedido::where('estado', 1)
+        $contador_correcciones = Correction::where('estado', 1)
             ->where('condicion_envio_code', Pedido::CORRECCION_OPE_INT)
             ->count();
 
