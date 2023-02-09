@@ -1615,6 +1615,25 @@ class EnvioController extends Controller
             ]);
             //desarmo el grupo
 
+            //destruyo grupo pedido items y relacion
+            $gpi=DB::table('grupo_pedido_items')
+                ->where('pedido_id', $request->quitardireccion)->get();
+                //->update(['status' => '0']);
+
+            $count_gpi=DB::table('grupo_pedido_items')
+                ->where('pedido_id', $request->quitardireccion)->count();
+            if($count_gpi==1)
+            {
+                //destruyo
+                DB::table('grupo_pedido_items')
+                    ->where('grupo_pedido_id', $gpi->grupo_pedido_id)->delete();
+                    //->update(['status' => '0']);
+                DB::table('grupo_pedidos')
+                    ->where('id', $gpi->grupo_pedido_id)->delete();
+            }
+
+            //$gp=GrupoPedidoItem::where()
+
             if ($direccion_g) {
                 DireccionGrupo::restructurarCodigos($direccion_g);
             }
