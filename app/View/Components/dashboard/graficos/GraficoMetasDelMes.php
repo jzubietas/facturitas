@@ -106,12 +106,12 @@ class GraficoMetasDelMes extends Widgets
 
             $metatotal = (float)$asesor->meta_pedido;
             $metatotal_2 = (float)$asesor->meta_pedido_2;
-            $all = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->activo(), $date, 'created_at')
+            $all = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
                 ->count();
-            $all_2 = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->activo(), $date, 'created_at')
+            $all_2 = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
                 ->count();
 
-            $pay = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->activo()->pagados(), $date, 'created_at')
+            $pay = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->where('codigo','not like',"%-C%")->activo()->pagados(), $date, 'created_at')
                 ->count();
 
             $item = [
@@ -256,7 +256,7 @@ class GraficoMetasDelMes extends Widgets
 
             $meta = (float)$asesor->meta_pedido;
             $meta_2 = (float)$asesor->meta_pedido_2;
-            $asignados = $this->applyFilterCustom(Pedido::query()->whereUserId($asesor->id)->activo())->count();
+            $asignados = $this->applyFilterCustom(Pedido::query()->whereUserId($asesor->id)->where('codigo','not like',"%-C%")->activo())->count();
             //$pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
 
             $item = [
