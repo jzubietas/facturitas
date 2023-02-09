@@ -220,7 +220,7 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else if (Auth::user()->rol == "Encargado") {
+        } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
 
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -371,7 +371,7 @@ class PedidoController extends Controller
                 $btn[] = '</ul></div>';
                 return join('', $btn);
             })
-            ->rawColumns(['action', 'condicion_envio'])
+            ->rawColumns(['action', 'condicion_envio','condicion_envio_color'])
             ->make(true);
     }
 
