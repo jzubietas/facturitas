@@ -33,6 +33,7 @@ class DashboardController extends Controller
                 DB::raw("COUNT(u.identificador) AS total, u.identificador ")
             )
             ->where('pedidos.codigo','not like',"%-C%")
+            ->where('u.identificador','<>','B')
             ->whereDate('pedidos.created_at', '=', now())
             ->groupBy('u.identificador');
         add_query_filtros_por_roles_pedidos($_pedidos, 'u.identificador');
@@ -52,6 +53,7 @@ class DashboardController extends Controller
         $_pedidos_totalpedidosdia = Pedido::activo()->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->where('pedidos.codigo','not like',"%-C%")
+            ->where('u.identificador','<>','B')
             ->whereDate('pedidos.created_at', '=', now());
 
         add_query_filtros_por_roles_pedidos($_pedidos_totalpedidosdia, 'u.identificador');
