@@ -537,7 +537,6 @@
                         }
 
                         tabla_pedidos.columns.adjust().draw();
-
                         $('#nombre').val('')
                         $('#celular').val('')
                         $('#direccion').val('')
@@ -1150,6 +1149,7 @@
                 $("#pdf_renderer_object").attr("data", '');
                 $("#pdf_renderer_object").addClass("d-none");
             })
+
             $('#modal-direccion').on('show.bs.modal', function (event) {
 
                 var button = $(event.relatedTarget)

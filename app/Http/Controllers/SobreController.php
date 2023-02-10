@@ -578,7 +578,7 @@ class SobreController extends Controller
 
     public function RegistrarRecojo(Request $request)
     {
-        //return $request->all();
+        return $request->all();
         $recojo_cliente = $request->recojo_cliente;
         $recojo_pedido = $request->recojo_pedido;
         $recojo_fecha = $request->recojo_fecha;

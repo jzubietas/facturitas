@@ -90,6 +90,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
     Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
+
+
+    Route::get('recojolistclientes', [ClienteController::class, 'recojolistclientes'])->name('cargar.recojolistclientes');
     //Route::get('clientes.createbf', [BasefriaController::class, 'createbf'])->name('clientes.createbf');
     //Route::post('clientes.storebf', [BasefriaController::class, 'storebf'])->name('clientes.storebf');
 

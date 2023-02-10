@@ -946,6 +946,35 @@ class ClienteController extends Controller
         }
     }
 
+    public function recojolistclientes(Request $request)
+    {
+        $pedidos = null;
+
+
+        $idrequest = $request->cliente_id;
+        $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                        ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->select(
+                [
+                    'pedidos.id as pedidoid',
+                    'c.id',
+                    'dp.codigo',
+                    'dp.nombre_empresa',
+
+                ]
+            )
+            ->where('pedidos.cliente_id', $idrequest);
+        //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
+        //->get();
+
+        return Datatables::query(DB::table($pedidos))
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+
+
+
     public function indexabandono()
     {
         $dateM = Carbon::now()->format('m');

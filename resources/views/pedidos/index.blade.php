@@ -110,6 +110,8 @@
             @include('pedidos.modalid')
             @include('pedidos.modal.restaurarid')
             @include('pedidos.modal.Correciones.Correccion')
+            @include('pedidos.modal.Correciones.Recojo')
+            @include('pedidos.modal.Correciones.recojo-submodals.Modal-listclientes')
 
         </div>
     </div>
@@ -186,6 +188,8 @@
             background: url('/images/details_close.png') no-repeat center center;
         }
 
+
+
     </style>
 @stop
 
@@ -201,9 +205,15 @@
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+    <script
+        src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
     <!--  <script src="{{ asset('js/datatables.js') }}"></script>-->
     <script>
+        //variable
+        var tabla_pedidos = null;
+
+
         //VALIDAR CAMPO CELULAR
         function maxLengthCheck(object)
         {
@@ -343,61 +353,78 @@
                 $("#recojo_pedido_observacion").val("")
             });
 
-            $(document).on("submit", "#formrecojo", function (event) {
+
+            $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $('#Cliente').val(button.data('pedidoid'))
+                $('#Id-Cliente').val(button.data('clienteid'))
+                $('#cod_Cliente').val(button.data('clientenombre'))
+                $('#cod_pedido').val(button.data('pedidocodigo'))
+                console.log(button.data)
+                $('#direccion_recojo').val(console.log(button.data('direccionReco')))
+                $('#Nombre_recibe').val(button.data('nombreResiv'))
+                $('#celular_recojo').val(button.data('telefonoResiv'))
+                $('#referencia_recojo').val(button.data('referenciaReco'))
+                $('#observacion_recojo').val(button.data('observacionReco'))
+                $('#gmlink_recojo').val(button.data('gmclink'))
+
+                $('button:submit').prop("disabled",false)
+                ocultar_div_modal_correccion_pedidos();
+            })
+
+            $(document).on("submit", "#form-recojo", function (event) {
                 event.preventDefault();
-                let recojo_cliente = $("#recojo_cliente").val();
-                let recojo_pedido = $("#recojo_pedido").val();
-                let recojo_grupo = $("#recojo_pedido_grupo").val();
-                let recojo_fecha = $("#recojo_fecha").val();
-                console.log("fecha " + recojo_fecha)
-                let recojo_distrito = $("#distrito_recoger").val();
-                let recojo_pedido_quienrecibe_nombre = $.trim($("#recojo_pedido_quienrecibe_nombre").val());
-                let recojo_pedido_quienrecibe_celular = $.trim($("#recojo_pedido_quienrecibe_celular").val());
-                console.log(recojo_pedido_quienrecibe_celular)
-                let recojo_pedido_direccion = $.trim($("#recojo_pedido_direccion").val());
-                let recojo_pedido_referencia = $.trim($("#recojo_pedido_referencia").val());
-                let recojo_pedido_observacion = $.trim($("#recojo_pedido_observacion").val());
+                let direccion_recojo = $("#direccion_recojo").val();
+                let Nombre_recibe = $("#nombre_recojo").val();
+                let celular_id = $("#celular_recojo").val();
+                let referencia_recojo = $("#referencia_recojo").val();
+                let observacion_recojo= $("#observacion_recojo").val();
+                let gm_link= $("#gmlink_recojo").val();
+                let direccion_entrega = $("#Direccion_de_entrega").val();
+                let sustento_recojo = $("#sustento-recojo").val();
+
+
 
                 //validaciones
                 //pedido
-                if (recojo_pedido == "") {
-                    Swal.fire('Debe elegir un pedido', '', 'warning');
+                if (direccion_entrega == "") {
+                    Swal.fire('Debe colocar una direccion de entrega', '', 'warning');
                     return false;
-                } else if (recojo_grupo = "") {
-                    Swal.fire('El pedido no se ubica dentro de un paquete, consulte a sistemas', '', 'warning');
+                } else if (sustento_recojo == "") {
+                    Swal.fire('Debe colocar un sustento', '', 'warning');
                     return false;
-                } else if (recojo_fecha == "") {
-                    Swal.fire('Debe elegir una fecha correspondiente', '', 'warning');
+                } else if (direccion_recojo== "") {
+                    Swal.fire('Debe colocar una direccion de recojo', '', 'warning');
                     return false;
-                } else if (recojo_distrito == "") {
-                    Swal.fire('Debe elegir un distrito', '', 'warning');
+                } else if (Nombre_recibe == "") {
+                    Swal.fire('Debe colocar el nombre del que recive', '', 'warning');
                     return false;
-                }//datos de envio
-                else if (recojo_pedido_quienrecibe_nombre == "") {
-                    Swal.fire('Debe ingresar quien recibe', '', 'warning');
+                } else if (celular_id== "") {
+                    Swal.fire('Debe colocar el celular del quien recibe', '', 'warning');
                     return false;
-                } else if (recojo_pedido_quienrecibe_celular == "") {
-                    Swal.fire('Debe ingresar celular de quien recibe', '', 'warning');
+                } else if (referencia_recojo == "") {
+                    Swal.fire('debe colocar un referencia', '', 'warning');
                     return false;
-                } else if (recojo_pedido_direccion == "") {
-                    Swal.fire('Debe ingresar direccion', '', 'warning');
+                } else if (observacion_recojo == "") {
+                    Swal.fire('Debe colocar una observacion', '', 'warning');
                     return false;
-                } else if (recojo_pedido_referencia == "") {
-                    Swal.fire('Debe ingresar referencia', '', 'warning');
+                } else if (gm_link == "") {
+                    Swal.fire('Debe colocar el link de Google Maps', '', 'warning');
                     return false;
                 }
 
                 var fd_courier = new FormData();
-                fd_courier.append('recojo_cliente', recojo_cliente);
-                fd_courier.append('recojo_pedido', recojo_pedido);
-                fd_courier.append('recojo_grupo', recojo_grupo);
-                fd_courier.append('recojo_fecha', recojo_fecha);
-                fd_courier.append('recojo_distrito', recojo_distrito);
-                fd_courier.append('recojo_pedido_quienrecibe_nombre', recojo_pedido_quienrecibe_nombre);
-                fd_courier.append('recojo_pedido_quienrecibe_celular', recojo_pedido_quienrecibe_celular);
-                fd_courier.append('recojo_pedido_direccion', recojo_pedido_direccion);
-                fd_courier.append('recojo_pedido_referencia', recojo_pedido_referencia);
-                fd_courier.append('recojo_pedido_observacion', recojo_pedido_observacion);
+                fd_courier.append('direccion_entrega', direccion_entrega);
+                fd_courier.append('sustento_recojo', sustento_recojo);
+                fd_courier.append('direccion_recojo', direccion_recojo);
+                fd_courier.append('Nombre_recibe', Nombre_recibe);
+                fd_courier.append('celular_id', celular_id);
+                fd_courier.append('referencia_recojo', referencia_recojo);
+                fd_courier.append('observacion_recojo', observacion_recojo);
+                fd_courier.append('gm_link', gm_link);
+
+
+
                 $.ajax({
                     data: fd_courier,
                     processData: false,
@@ -405,9 +432,119 @@
                     type: 'POST',
                     url: "{{ route('registrar_recojer_pedido') }}",
                     success: function (data) {
-                        $("#modal-recoger-sobre").modal("hide");
+                        $("#modal-recojo-pedidos").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
                     }
+
+
                 });
+            });
+
+
+
+
+            $('#modal-listclientes').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var cliente = $('#Id-Cliente').val()
+
+
+                tabla_pedidos.destroy();
+                tabla_pedidos = $('#tabla-listar-clientes').DataTable({
+                    responsive: true,
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "bInfo": false,
+                    'ajax': {
+                        url: "{{ route('cargar.recojolistclientes') }}",
+                        'data': {"cliente_id": cliente},
+                        "type": "get",
+                    },
+                    columnDefs: [{
+                        'orderable': false,
+                        'className': 'select-checkbox',
+                        'targets': [0], /* column index */
+                        'orderable': false, /* true or false */
+                    }] ,
+                    columns: [
+                        {
+                            "data": "id",
+                            'targets': 0,
+                            'checkboxes': {
+                                'selectRow': false
+                            },
+                            defaultContent: '',
+                            orderable: false,
+                            sWidth: '5%',
+                        },
+                        {data: 'codigo', name: 'codigo',sWidth: '40%',},
+                        {
+                            "data": 'nombre_empresa',
+                            "name": 'nombre_empresa',
+                            "render": function (data, type, row, meta) {
+                                return data;
+                            },
+                            sWidth: '40%',
+                        },
+                    ],
+                    'select': {
+                        'style': 'multi',
+                        selector: 'td:first-child'
+                    },
+                    order: [[ 1, 'asc' ]]
+                });
+
+            })
+
+
+        $(document).on("change", "#departamento", function () {
+
+        });
+
+
+        tabla_pedidos = $('#tabla-listar-clientes').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+                [
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'codigo'
+                    },
+                    {
+                        data: 'saldo'
+                    }
+                ],
+
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+
+        $('#celular_recojo').on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
             });
 
             $('#datatable-clientes-lista-recojer tbody').on('click', 'button.elegir', function () {

@@ -2,8 +2,8 @@
     <div class="inner">
        <div class="d-flex align-items-center">
            <h5> PEDIDOS CREADOS {{  \Carbon\Carbon::now()->format('d-m-Y') }} </h5>
-           <h3 class="ml-4"><span
-                   class="badge badge-{{$_pedidos_totalpedidosdia==0?'danger':'light'}}">TOTAL: {{$_pedidos_totalpedidosdia}}</span></h3>
+           <h3 class="ml-4">
+               {{--}}<span class="badge badge-{{$_pedidos_totalpedidosdia==0?'danger':'light'}}">TOTAL: {{$_pedidos_totalpedidosdia}}</span></h3>}}{{--}}
        </div>
     </div>
     <div class="row">

@@ -41,6 +41,52 @@
         </div>
 
         <div class="col-md-12">
+            @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
+            <div class="card">
+                <div class="card-header">
+                    <h3>Agregar dirección</h3>
+                </div>
+                <div class="card-body">
+
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Distrito</label>
+                            <input type="text" class="form-control" id="ingreso_direccionadmin_A"  placeholder="Lo Olivos" disabled>
+                            <label class="mt-2" for="formGroupExampleInput">Ingresar direccion</label>
+                            <input type="text" class="form-control" id="ingreso_direccionadmin_A" placeholder="Dirección">
+                            <label class="mt-2" for="formGroupExampleInput">Ingresar numero de celular</label>
+                            <input type="text" class="form-control" id="ingreso_telefono_administrador" placeholder="Celular">
+                        </div>
+
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    Enviar
+                </button>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Agregar dirección</h3>
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Distrito</label>
+                        <input type="text" class="form-control" id="ingreso_direccionadmin_B"  placeholder="Lo Olivos" disabled>
+                        <label class="mt-2" for="formGroupExampleInput">Ingresar direccion</label>
+                        <input type="text" class="form-control" id="ingreso_direccionadmin_B" placeholder="Dirección">
+                        <label class="mt-2" for="formGroupExampleInput">Ingresar numero de celular</label>
+                        <input type="text" class="form-control" id="ingreso_telefono_administrador" placeholder="Celular">
+                    </div>
+
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    Enviar
+                </button>
+            </div>
+            @endif
+        </div>
+
+
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h3>
