@@ -103,7 +103,8 @@ class GraficoMetasDelMes extends Widgets
                 }
             }
 
-
+            $asesor_pedido_dia=Pedido::query()->join('users as u','u.id','pedidos.user_id')->where('u.identificador',$asesor->identificador)
+                ->where('pedidos.codigo','not like',"%-C")->whereDate('pedidos.created_at',now())->count();
             $metatotal = (float)$asesor->meta_pedido;
             $metatotal_2 = (float)$asesor->meta_pedido_2;
             $all = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
@@ -117,6 +118,7 @@ class GraficoMetasDelMes extends Widgets
             $item = [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
+                "pedidos_dia"=>$asesor_pedido_dia,
                 "name" => $asesor->name,
                 "total" => $all,
                 "total_2" => $all_2,
