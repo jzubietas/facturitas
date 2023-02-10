@@ -82,7 +82,7 @@
                                             </div>
                                             <div class="col-1 border border-danger bg-danger rounded text-center">
                                                 @if (data_get($data,'pedidos_dia')==0)
-                                                <span class="text-white">
+                                                <span class="text-white d-block bg-success">
                                                     <b>{{data_get($data,'pedidos_dia')}}</b>
                                                 </span>
                                                 @else
