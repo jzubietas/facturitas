@@ -179,7 +179,7 @@ class GraficoMetasDelMes extends Widgets
             $item['progress'] = $p;
             $item['progress_2'] = $p_2;
             return $item;
-        })->sortBy('progress_2',SORT_NUMERIC,true)->all();
+        })->sortBy('total',SORT_NUMERIC,true)->all();
 
         $this->novResult = $progressData;
 
@@ -332,7 +332,7 @@ class GraficoMetasDelMes extends Widgets
             $item['progress'] = $p;
             $item['progress_2'] = $p_2;
             return $item;
-        })->sortBy('progress_2',SORT_NUMERIC,SORT_DESC)->all();
+        })->sortBy('total',SORT_NUMERIC,SORT_DESC)->all();
 
         $this->dicResult = $dicResult;
 
