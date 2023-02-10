@@ -181,6 +181,11 @@ class GraficoMetasDelMes extends Widgets
             $all_2 = data_get($item, 'total_2');
             $meta_2 = data_get($item, 'meta_2');
             $pay = data_get($item, 'current');
+
+            $all_meta = data_get($item, 'meta');
+            $all_meta_2 = data_get($item, 'meta_2');
+            $asignados = data_get($item, 'total');
+
             if ($all > 0) {
                 $p = round(($pay / $all) * 100, 2);
             } else {
@@ -192,12 +197,12 @@ class GraficoMetasDelMes extends Widgets
                 $p_2 = 0;
             }
             if ($all > 0) {
-                $p_pedidos = round(($all / $meta) * 100, 2);
+                $p_pedidos = round(($asignados / $all_meta) * 100, 2);
             } else {
                 $p_pedidos = 0;
             }
             if ($all_2 > 0) {
-                $p_pedidos_2 = round(($all / $meta_2) * 100, 2);
+                $p_pedidos_2 = round(($asignados / $all_meta_2) * 100, 2);
             } else {
                 $p_pedidos_2 = 0;
             }
