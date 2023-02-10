@@ -124,6 +124,26 @@
                                         </div>
                                     </li>
                                 @endforeach
+                                <li class="list-group-item" style=" min-width: 300px; ">
+                                    <div class="row">
+                                        <div class="col-2"></div>
+                                        <div class="col-1"></div>
+                                        <div class="col-1 text-center">
+                                            @if ($data_noviembre->pedidos_dia==0)
+                                                <span class="text-white d-block bg-danger rounded">
+                                                    <b>{{$data_noviembre->pedidos_dia}}</b>
+                                                </span>
+                                            @else
+                                                <span class="text-dark  d-block bg-white rounded">
+                                                    <b>{{$data_noviembre->pedidos_dia}}</b>
+                                                </span>
+                                            @endif
+
+                                        </div>
+                                        <div class="col-4"></div>
+                                        <div class="col-4"></div>
+                                    </div>
+                                </li>
                             </ul>
                         </li>
                     </ul>

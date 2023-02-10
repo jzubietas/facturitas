@@ -188,6 +188,7 @@ class GraficoMetasDelMes extends Widgets
         $pay = collect($progressData)->pluck('current')->sum();
         $meta = collect($progressData)->pluck('meta')->sum();
         $meta_2 = collect($progressData)->pluck('meta_2')->sum();
+        $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
         if ($all > 0) {
             $p = round(($pay / $all) * 100, 2);
         } else {
@@ -199,6 +200,8 @@ class GraficoMetasDelMes extends Widgets
             $p_2 = 0;
         }
 
+
+
         $object=(object)[
             "progress" => $p,
             "progress_2" => $p_2,
@@ -207,6 +210,7 @@ class GraficoMetasDelMes extends Widgets
             "current" => $pay,
             "meta" => $meta,
             "meta_2" => $meta_2,
+            "pedidos_dia"=>$pedidos_dia
         ];
         //sort($object['progress'],  SORT_NUMERIC);
 
@@ -335,6 +339,7 @@ class GraficoMetasDelMes extends Widgets
         $metaTotal = collect($dicResult)->pluck('meta')->sum();
         $meta2Total = collect($dicResult)->pluck('meta_2')->sum();
         $asignados = collect($dicResult)->pluck('total')->sum();
+        $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
         //$pagados = collect($dicResult)->pluck('current')->sum();
         if ($metaTotal > 0) {
             $p = intval(($asignados / $metaTotal) * 100);
@@ -353,6 +358,7 @@ class GraficoMetasDelMes extends Widgets
             "meta" => $metaTotal,
             "total" => $asignados,//$metaTotal,
             "current" => $asignados,
+            "pedidos_dia"=>$pedidos_dia
         ];
         //sort($object['progress'],  SORT_NUMERIC);
 
