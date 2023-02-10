@@ -48,27 +48,10 @@
 
                                             <sub class="d-none">% -  Pagados/ Asignados</sub>
                                         </div>
-                                        <div class="col-4">
-                                            @if ($data_diciembre->progress<'100')
-                                            <x-bs-progressbar :progress="$data_diciembre->progress">
-                                                <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
-                                            </x-bs-progressbar>
-                                            @else
-                                                <div class="position-relative">
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                             style="width: {{$data_diciembre->progress_2}}%"
-                                                             aria-valuenow="{{$data_diciembre->progress_2}}"
-                                                             aria-valuemin="0"
-                                                             aria-valuemax="100"></div>
-                                                    </div>
-                                                    <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
-                                                        <span> <b>  {{$data_diciembre->progress_2}}%</b> - {{$data_diciembre->current}}/{{$data_diciembre->total_2}}</span>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                            <sub class="d-none">% -  Pagados/ Meta</sub>
-                                        </div>
+
+
+
+
                                     </div>
                                 </li>
                                 @foreach($novResult as $key=>$data)
@@ -97,30 +80,14 @@
                                                 </x-bs-progressbar>
                                                 <sub class="d-none">% -  Pagados/ Asignados</sub>
                                             </div>
+
                                             <div class="col-4">
-                                                @if ($dicResult[$key]['progress']<100)
-                                                    <x-bs-progressbar :progress="$dicResult[$key]['progress']">
-                                                        <span><b>{{$dicResult[$key]['progress']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta']}}</span>
-
-                                                    </x-bs-progressbar>
-                                                @else
-                                                    <div class="position-relative">
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-celeste"  role="progressbar"
-                                                                 style="width: {{$dicResult[$key]['progress_2']}}%"
-                                                                 aria-valuenow="{{$dicResult[$key]['progress_2']}}"
-                                                                 aria-valuemin="0"
-                                                                 aria-valuemax="100"></div>
-                                                        </div>
-                                                        <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
-                                                            <span><b>{{$dicResult[$key]['progress_2']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta_2']}}</span>
-                                                        </div>
-                                                    </div>
-                                                @endif
-
-
-                                                <sub class="d-none">% - Asignados / Meta</sub>
+                                                <x-bs-progressbar :progress="$data['progress']">
+                                                    <span> <b>{{$data['progress_pedidos']}}%</b> - {{$data['current']}}/{{$data['total']}}</span>
+                                                </x-bs-progressbar>
+                                                <sub class="d-none">% -  Pagados/ Asignados</sub>
                                             </div>
+
                                         </div>
                                     </li>
                                 @endforeach
@@ -150,7 +117,7 @@
                 </div>
             </div>
             @if(count($excludeNov)>0)
-                <div class="col-md-6">
+                <div class="col-md-6 d-none">
                     <div class="">
                         <ul class="list-group">
                             <li class="list-group-item" style="background: #0000001a; min-width: 300px; ">
