@@ -80,13 +80,13 @@
                                             <div class="col-1">
                                                 <b>{{data_get($data,'code')}}</b>
                                             </div>
-                                            <div class="col-1 border border-danger bg-danger rounded text-center">
+                                            <div class="col-1 text-center">
                                                 @if (data_get($data,'pedidos_dia')==0)
-                                                <span class="text-white d-block bg-success">
+                                                <span class="text-white d-block bg-danger rounded">
                                                     <b>{{data_get($data,'pedidos_dia')}}</b>
                                                 </span>
                                                 @else
-                                                <span class="text-dark">
+                                                <span class="text-dark  d-block bg-white rounded">
                                                     <b>{{data_get($data,'pedidos_dia')}}</b>
                                                 </span>
                                                 @endif
