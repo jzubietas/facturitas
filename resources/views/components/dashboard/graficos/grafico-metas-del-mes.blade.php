@@ -28,9 +28,9 @@
                                         <div class="col-1">Pedidos</div>
                                         <div class="col-4">
                                             @if ($data_noviembre->progress<'100')
-                                            <x-bs-progressbar :progress="$data_noviembre->progress">
-                                                <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
-                                            </x-bs-progressbar>
+                                                <x-bs-progressbar :progress="$data_noviembre->progress">
+                                                    <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
+                                                </x-bs-progressbar>
                                             @else
                                                 <div class="position-relative">
                                                     <div class="progress">
@@ -48,28 +48,45 @@
 
                                             <sub class="d-none">% -  Pagados/ Asignados</sub>
                                         </div>
-
-
-
-
+                                        <div class="col-4">
+                                            @if ($data_diciembre->progress<'100')
+                                                <x-bs-progressbar :progress="$data_diciembre->progress">
+                                                    <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
+                                                </x-bs-progressbar>
+                                            @else
+                                                <div class="position-relative">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info" role="progressbar"
+                                                             style="width: {{$data_diciembre->progress_2}}%"
+                                                             aria-valuenow="{{$data_diciembre->progress_2}}"
+                                                             aria-valuemin="0"
+                                                             aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
+                                                        <span> <b>  {{$data_diciembre->progress_2}}%</b> - {{$data_diciembre->current}}/{{$data_diciembre->total_2}}</span>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            <sub class="d-none">% -  Pagados/ Meta</sub>
+                                        </div>
                                     </div>
                                 </li>
                                 @foreach($novResult as $key=>$data)
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="col-2">
-                                                 {{data_get($data,'name')}}
+                                                {{data_get($data,'name')}}
                                             </div>
                                             <div class="col-1">
                                                 <b>{{data_get($data,'code')}}</b>
                                             </div>
                                             <div class="col-1 text-center">
                                                 @if (data_get($data,'pedidos_dia')==0)
-                                                <span class="text-white d-block bg-danger rounded">
+                                                    <span class="text-white d-block bg-danger rounded">
                                                     <b>{{data_get($data,'pedidos_dia')}}</b>
                                                 </span>
                                                 @else
-                                                <span class="text-dark  d-block bg-white rounded">
+                                                    <span class="text-dark  d-block bg-white rounded">
                                                     <b>{{data_get($data,'pedidos_dia')}}</b>
                                                 </span>
                                                 @endif
@@ -80,14 +97,30 @@
                                                 </x-bs-progressbar>
                                                 <sub class="d-none">% -  Pagados/ Asignados</sub>
                                             </div>
-
                                             <div class="col-4">
-                                                <x-bs-progressbar :progress="$data['progress']">
-                                                    <span> <b>{{$data['progress_pedidos']}}%</b> - {{$data['current']}}/{{$data['total']}}</span>
-                                                </x-bs-progressbar>
-                                                <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                            </div>
+                                                @if ($dicResult[$key]['progress']<100)
+                                                    <x-bs-progressbar :progress="$dicResult[$key]['progress']">
+                                                        <span><b>{{$dicResult[$key]['progress']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta']}}</span>
 
+                                                    </x-bs-progressbar>
+                                                @else
+                                                    <div class="position-relative">
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-celeste"  role="progressbar"
+                                                                 style="width: {{$dicResult[$key]['progress_2']}}%"
+                                                                 aria-valuenow="{{$dicResult[$key]['progress_2']}}"
+                                                                 aria-valuemin="0"
+                                                                 aria-valuemax="100"></div>
+                                                        </div>
+                                                        <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
+                                                            <span><b>{{$dicResult[$key]['progress_2']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta_2']}}</span>
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+
+                                                <sub class="d-none">% - Asignados / Meta</sub>
+                                            </div>
                                         </div>
                                     </li>
                                 @endforeach
@@ -117,7 +150,7 @@
                 </div>
             </div>
             @if(count($excludeNov)>0)
-                <div class="col-md-6 d-none">
+                <div class="col-md-6">
                     <div class="">
                         <ul class="list-group">
                             <li class="list-group-item" style="background: #0000001a; min-width: 300px; ">
@@ -136,7 +169,7 @@
                                         <li class="list-group-item" style="background: #0000001a;">
                                             <div class="row">
                                                 <div class="col-2">
-                                                   {{$data['name']}}
+                                                    {{$data['name']}}
                                                 </div>
                                                 <div class="col-2">
                                                     <b>{{$data['code']}}</b>

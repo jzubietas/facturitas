@@ -28,8 +28,7 @@ class GraficoMetasDelMes extends Widgets
     public function render()
     {
         $this->startDate = now();
-        //$data_diciembre = $this->generarDataDiciembre();
-        //$data_diciembre="";
+        $data_diciembre = $this->generarDataDiciembre();
 
         $now_submonth = $this->startDate->clone()->startOfMonth()->subMonth();
         $data_noviembre = $this->generarDataNoviembre($now_submonth);
@@ -37,11 +36,11 @@ class GraficoMetasDelMes extends Widgets
 
         if (\auth()->user()->rol == User::ROL_ASESOR) {
             $this->novResult = [];
-            //$this->dicResult = [];
+            $this->dicResult = [];
         }
         $now = $this->startDate->clone();
 
-        return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'now', 'now_submonth'));
+        return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'data_diciembre', 'now', 'now_submonth'));
     }
 
     public function applyFilterCustom($query, CarbonInterface $date = null, $column = 'created_at')
@@ -82,13 +81,16 @@ class GraficoMetasDelMes extends Widgets
 
 
         $progressData = [];
-
+        //dd($asesores);
+        /*return (object)[
+            'usuarios'=>$asesores
+        ];*/
         foreach ($asesores as $asesor) {
             if(in_array(auth()->user()->rol,[User::ROL_FORMACION,User::ROL_ADMIN]))
             {
 
             }else{
-                if (auth()->user()->rol != User::ROL_ADMIN ){
+                if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/){
                     if (auth()->user()->rol != User::ROL_ENCARGADO) {
                         if (auth()->user()->id != $asesor->id) {
                             continue;
@@ -112,7 +114,6 @@ class GraficoMetasDelMes extends Widgets
 
             $pay = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->where('codigo','not like',"%-C%")->activo()->pagados(), $date, 'created_at')
                 ->count();
-            $asignados = $this->applyFilterCustom(Pedido::query()->whereUserId($asesor->id)->where('codigo','not like',"%-C%")->activo())->count();
 
             $item = [
                 "identificador" => $asesor->identificador,
@@ -126,17 +127,6 @@ class GraficoMetasDelMes extends Widgets
                 "meta_2" => $metatotal_2,
             ];
             if ($asesor->excluir_meta) {
-                if ($metatotal > 0) {
-                    $p_pedidos = round(($asignados / $metatotal) * 100, 2);
-                } else {
-                    $p_pedidos = 0;
-                }
-                if ($metatotal_2 > 0) {
-                    $p_pedidos_2 = round(($asignados / $metatotal_2) * 100, 2);
-                } else {
-                    $p_pedidos_2 = 0;
-                }
-
                 if ($all > 0) {
                     $p = round(($pay / $all) * 100, 2);
                 } else {
@@ -147,11 +137,8 @@ class GraficoMetasDelMes extends Widgets
                 } else {
                     $p_2 = 0;
                 }
-                $item['progress_pedidos'] = $p_pedidos;
-                $item['progress_pedidos_2'] = $p_pedidos_2;
                 $item['progress'] = $p;
                 $item['progress_2'] = $p_2;
-                $item['progreso']= ($p_pedidos);
                 $this->excludeNov[] = $item;
             } else {
                 $progressData[] = $item;
@@ -177,15 +164,8 @@ class GraficoMetasDelMes extends Widgets
         }
         $progressData = collect($newData)->values()->map(function ($item) {
             $all = data_get($item, 'total');
-            $meta = data_get($item, 'meta');
             $all_2 = data_get($item, 'total_2');
-            $meta_2 = data_get($item, 'meta_2');
             $pay = data_get($item, 'current');
-
-            $all_meta = data_get($item, 'meta');
-            $all_meta_2 = data_get($item, 'meta_2');
-            $asignados = data_get($item, 'total');
-
             if ($all > 0) {
                 $p = round(($pay / $all) * 100, 2);
             } else {
@@ -196,23 +176,10 @@ class GraficoMetasDelMes extends Widgets
             } else {
                 $p_2 = 0;
             }
-            if ($all > 0) {
-                $p_pedidos = round(($asignados / $all_meta) * 100, 2);
-            } else {
-                $p_pedidos = 0;
-            }
-            if ($all_2 > 0) {
-                $p_pedidos_2 = round(($asignados / $all_meta_2) * 100, 2);
-            } else {
-                $p_pedidos_2 = 0;
-            }
             $item['progress'] = $p;
             $item['progress_2'] = $p_2;
-            $item['progreso']= (($p<100)? $p:$p_2);
-            $item['progress_pedidos'] = $p_pedidos;
-            $item['progress_pedidos_2'] = $p_pedidos_2;
             return $item;
-        })->sortBy('progress',SORT_NUMERIC,true)->all();
+        })->sortBy('total',SORT_NUMERIC,true)->all();
 
         $this->novResult = $progressData;
 
@@ -251,7 +218,7 @@ class GraficoMetasDelMes extends Widgets
         return $object;
     }
 
-    /*public function generarDataDiciembre()
+    public function generarDataDiciembre()
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
             $id = auth()->user()->id;
@@ -301,6 +268,7 @@ class GraficoMetasDelMes extends Widgets
             $meta = (float)$asesor->meta_pedido;
             $meta_2 = (float)$asesor->meta_pedido_2;
             $asignados = $this->applyFilterCustom(Pedido::query()->whereUserId($asesor->id)->where('codigo','not like',"%-C%")->activo())->count();
+            //$pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
 
             $item = [
                 "identificador" => $asesor->identificador,
@@ -340,6 +308,7 @@ class GraficoMetasDelMes extends Widgets
                     $newData[$identificador]['meta'] += data_get($item, 'meta');
                     $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
                     $newData[$identificador]['total'] += data_get($item, 'total');
+                    //$newData[$identificador]['current'] += data_get($item, 'current');
                 }
             }
             $newData[$identificador]['name'] = collect($items)->map(function ($item) {
@@ -362,9 +331,8 @@ class GraficoMetasDelMes extends Widgets
             }
             $item['progress'] = $p;
             $item['progress_2'] = $p_2;
-            $item['progreso']= $p;
             return $item;
-        })->sortBy('progreso',SORT_NUMERIC,SORT_DESC)->all();
+        })->sortBy('total',SORT_NUMERIC,SORT_DESC)->all();
 
         $this->dicResult = $dicResult;
 
@@ -372,6 +340,7 @@ class GraficoMetasDelMes extends Widgets
         $meta2Total = collect($dicResult)->pluck('meta_2')->sum();
         $asignados = collect($dicResult)->pluck('total')->sum();
         $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
+        //$pagados = collect($dicResult)->pluck('current')->sum();
         if ($metaTotal > 0) {
             $p = intval(($asignados / $metaTotal) * 100);
         } else {
@@ -391,9 +360,11 @@ class GraficoMetasDelMes extends Widgets
             "current" => $asignados,
             "pedidos_dia"=>$pedidos_dia
         ];
+        //sort($object['progress'],  SORT_NUMERIC);
+
 
         return $object;
 
-    }*/
+    }
 
 }
