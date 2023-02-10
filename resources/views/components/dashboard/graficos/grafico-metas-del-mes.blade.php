@@ -80,8 +80,16 @@
                                             <div class="col-1">
                                                 <b>{{data_get($data,'code')}}</b>
                                             </div>
-                                            <div class="col-1">
-                                                <b>{{data_get($data,'pedidos_dia')}}</b>
+                                            <div class="col-1 border border-danger bg-danger rounded text-center">
+                                                @if (data_get($data,'pedidos_dia')==0)
+                                                <span class="text-white">
+                                                    <b>{{data_get($data,'pedidos_dia')}}</b>
+                                                </span>
+                                                @else
+                                                <span class="border">
+                                                    <b>{{data_get($data,'pedidos_dia')}}</b>
+                                                </span>
+                                                @endif
                                             </div>
                                             <div class="col-4">
                                                 <x-bs-progressbar :progress="$data['progress']">
