@@ -86,7 +86,7 @@
                                                     <b>{{data_get($data,'pedidos_dia')}}</b>
                                                 </span>
                                                 @else
-                                                <span class="border">
+                                                <span class="text-dark">
                                                     <b>{{data_get($data,'pedidos_dia')}}</b>
                                                 </span>
                                                 @endif
