@@ -179,7 +179,7 @@ class GraficoMetasDelMes extends Widgets
             $item['progress'] = $p;
             $item['progress_2'] = $p_2;
             return $item;
-        })->sortBy('identificador')->all();
+        })->sortBy('progress',SORT_NUMERIC,true)->all();
 
         $this->novResult = $progressData;
 
@@ -198,7 +198,8 @@ class GraficoMetasDelMes extends Widgets
         } else {
             $p_2 = 0;
         }
-        return (object)[
+
+        $object=(object)[
             "progress" => $p,
             "progress_2" => $p_2,
             "total" => $all,
@@ -207,6 +208,10 @@ class GraficoMetasDelMes extends Widgets
             "meta" => $meta,
             "meta_2" => $meta_2,
         ];
+        //sort($object['progress'],  SORT_NUMERIC);
+
+
+        return $object;
     }
 
     public function generarDataDiciembre()
@@ -323,7 +328,7 @@ class GraficoMetasDelMes extends Widgets
             $item['progress'] = $p;
             $item['progress_2'] = $p_2;
             return $item;
-        })->sortBy('identificador')->all();
+        })->sortBy('progress',SORT_NUMERIC,SORT_DESC)->all();
 
         $this->dicResult = $dicResult;
 
@@ -341,13 +346,19 @@ class GraficoMetasDelMes extends Widgets
         } else {
             $p2 = 0;
         }
-        return (object)[
+
+        $object=(object)[
             "progress" => $p,
             "progress_2" => $p2,
             "meta" => $metaTotal,
             "total" => $asignados,//$metaTotal,
             "current" => $asignados,
         ];
+        //sort($object['progress'],  SORT_NUMERIC);
+
+
+        return $object;
+
     }
 
 }
