@@ -103,7 +103,8 @@ class GraficoMetasDelMes extends Widgets
                 }
             }
 
-
+            $asesor_pedido_dia=Pedido::query()->join('users as u','u.id','pedidos.user_id')->where('u.identificador',$asesor->identificador)
+                ->where('pedidos.codigo','not like',"%-C")->whereDate('pedidos.created_at',now())->count();
             $metatotal = (float)$asesor->meta_pedido;
             $metatotal_2 = (float)$asesor->meta_pedido_2;
             $all = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
@@ -117,6 +118,7 @@ class GraficoMetasDelMes extends Widgets
             $item = [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
+                "pedidos_dia"=>$asesor_pedido_dia,
                 "name" => $asesor->name,
                 "total" => $all,
                 "total_2" => $all_2,
@@ -177,7 +179,7 @@ class GraficoMetasDelMes extends Widgets
             $item['progress'] = $p;
             $item['progress_2'] = $p_2;
             return $item;
-        })->sortBy('identificador')->all();
+        })->sortBy('total',SORT_NUMERIC,true)->all();
 
         $this->novResult = $progressData;
 
@@ -186,6 +188,7 @@ class GraficoMetasDelMes extends Widgets
         $pay = collect($progressData)->pluck('current')->sum();
         $meta = collect($progressData)->pluck('meta')->sum();
         $meta_2 = collect($progressData)->pluck('meta_2')->sum();
+        $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
         if ($all > 0) {
             $p = round(($pay / $all) * 100, 2);
         } else {
@@ -196,7 +199,10 @@ class GraficoMetasDelMes extends Widgets
         } else {
             $p_2 = 0;
         }
-        return (object)[
+
+
+
+        $object=(object)[
             "progress" => $p,
             "progress_2" => $p_2,
             "total" => $all,
@@ -204,7 +210,12 @@ class GraficoMetasDelMes extends Widgets
             "current" => $pay,
             "meta" => $meta,
             "meta_2" => $meta_2,
+            "pedidos_dia"=>$pedidos_dia
         ];
+        //sort($object['progress'],  SORT_NUMERIC);
+
+
+        return $object;
     }
 
     public function generarDataDiciembre()
@@ -321,13 +332,14 @@ class GraficoMetasDelMes extends Widgets
             $item['progress'] = $p;
             $item['progress_2'] = $p_2;
             return $item;
-        })->sortBy('identificador')->all();
+        })->sortBy('total',SORT_NUMERIC,SORT_DESC)->all();
 
         $this->dicResult = $dicResult;
 
         $metaTotal = collect($dicResult)->pluck('meta')->sum();
         $meta2Total = collect($dicResult)->pluck('meta_2')->sum();
         $asignados = collect($dicResult)->pluck('total')->sum();
+        $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
         //$pagados = collect($dicResult)->pluck('current')->sum();
         if ($metaTotal > 0) {
             $p = intval(($asignados / $metaTotal) * 100);
@@ -339,13 +351,20 @@ class GraficoMetasDelMes extends Widgets
         } else {
             $p2 = 0;
         }
-        return (object)[
+
+        $object=(object)[
             "progress" => $p,
             "progress_2" => $p2,
             "meta" => $metaTotal,
             "total" => $asignados,//$metaTotal,
             "current" => $asignados,
+            "pedidos_dia"=>$pedidos_dia
         ];
+        //sort($object['progress'],  SORT_NUMERIC);
+
+
+        return $object;
+
     }
 
 }

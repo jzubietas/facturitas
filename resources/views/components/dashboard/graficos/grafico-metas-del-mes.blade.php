@@ -24,12 +24,13 @@
                                 <li class="list-group-item" style=" background-color: #b7b7b7; ">
                                     <div class="row">
                                         <div class="col-2">Asesor</div>
-                                        <div class="col-2">Identificador</div>
+                                        <div class="col-1">Identificador</div>
+                                        <div class="col-1">Pedidos</div>
                                         <div class="col-4">
                                             @if ($data_noviembre->progress<'100')
-                                            <x-bs-progressbar :progress="$data_noviembre->progress">
-                                                <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
-                                            </x-bs-progressbar>
+                                                <x-bs-progressbar :progress="$data_noviembre->progress">
+                                                    <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
+                                                </x-bs-progressbar>
                                             @else
                                                 <div class="position-relative">
                                                     <div class="progress">
@@ -49,9 +50,9 @@
                                         </div>
                                         <div class="col-4">
                                             @if ($data_diciembre->progress<'100')
-                                            <x-bs-progressbar :progress="$data_diciembre->progress">
-                                                <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
-                                            </x-bs-progressbar>
+                                                <x-bs-progressbar :progress="$data_diciembre->progress">
+                                                    <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
+                                                </x-bs-progressbar>
                                             @else
                                                 <div class="position-relative">
                                                     <div class="progress">
@@ -74,10 +75,21 @@
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="col-2">
-                                                 {{data_get($data,'name')}}
+                                                {{data_get($data,'name')}}
                                             </div>
-                                            <div class="col-2">
+                                            <div class="col-1">
                                                 <b>{{data_get($data,'code')}}</b>
+                                            </div>
+                                            <div class="col-1 text-center">
+                                                @if (data_get($data,'pedidos_dia')==0)
+                                                    <span class="text-white d-block bg-danger rounded">
+                                                    <b>{{data_get($data,'pedidos_dia')}}</b>
+                                                </span>
+                                                @else
+                                                    <span class="text-dark  d-block bg-white rounded">
+                                                    <b>{{data_get($data,'pedidos_dia')}}</b>
+                                                </span>
+                                                @endif
                                             </div>
                                             <div class="col-4">
                                                 <x-bs-progressbar :progress="$data['progress']">
@@ -112,6 +124,26 @@
                                         </div>
                                     </li>
                                 @endforeach
+                                <li class="list-group-item" style=" min-width: 300px; ">
+                                    <div class="row">
+                                        <div class="col-2"></div>
+                                        <div class="col-1"></div>
+                                        <div class="col-1 text-center">
+                                            @if ($data_noviembre->pedidos_dia==0)
+                                                <span class="text-white d-block bg-danger rounded">
+                                                    <b>{{$data_noviembre->pedidos_dia}}</b>
+                                                </span>
+                                            @else
+                                                <span class="text-dark  d-block bg-white rounded">
+                                                    <b>{{$data_noviembre->pedidos_dia}}</b>
+                                                </span>
+                                            @endif
+
+                                        </div>
+                                        <div class="col-4"></div>
+                                        <div class="col-4"></div>
+                                    </div>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -137,7 +169,7 @@
                                         <li class="list-group-item" style="background: #0000001a;">
                                             <div class="row">
                                                 <div class="col-2">
-                                                   {{$data['name']}}
+                                                    {{$data['name']}}
                                                 </div>
                                                 <div class="col-2">
                                                     <b>{{$data['code']}}</b>
