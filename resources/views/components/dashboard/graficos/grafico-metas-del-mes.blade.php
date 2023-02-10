@@ -24,7 +24,8 @@
                                 <li class="list-group-item" style=" background-color: #b7b7b7; ">
                                     <div class="row">
                                         <div class="col-2">Asesor</div>
-                                        <div class="col-2">Identificador</div>
+                                        <div class="col-1">Identificador</div>
+                                        <div class="col-1">Pedidos</div>
                                         <div class="col-4">
                                             @if ($data_noviembre->progress<'100')
                                             <x-bs-progressbar :progress="$data_noviembre->progress">
@@ -76,8 +77,11 @@
                                             <div class="col-2">
                                                  {{data_get($data,'name')}}
                                             </div>
-                                            <div class="col-2">
+                                            <div class="col-1">
                                                 <b>{{data_get($data,'code')}}</b>
+                                            </div>
+                                            <div class="col-1">
+                                                <b>{{data_get($data,'pedidos_dia')}}</b>
                                             </div>
                                             <div class="col-4">
                                                 <x-bs-progressbar :progress="$data['progress']">
