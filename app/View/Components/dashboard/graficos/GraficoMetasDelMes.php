@@ -126,7 +126,7 @@ class GraficoMetasDelMes extends Widgets
                 "meta_cobro" => $metatotal_cobro,
             ];
             if ($asesor->excluir_meta) {
-                if ($total_pedido > 0) {
+                if ($metatotal_cobro > 0) {
                     $p_pagos = round(($total_pagado / $metatotal_cobro) * 100, 2);
                 } else {
                     $p_pagos = 0;
@@ -170,20 +170,13 @@ class GraficoMetasDelMes extends Widgets
             $allmeta_2 = data_get($item, 'meta_2');
             $allmeta_cobro = data_get($item, 'meta_cobro');
 
-            if ($all > 0) {
-                if($allmeta_cobro==0)
-                {
-                    $p_pagos=round(0,2);
-                }else{
-                    $p_pagos = round(($pay / $allmeta_cobro) * 100, 2);
-                }
-
+            if ($allmeta_cobro > 0) {
+                $p_pagos = round(($pay / $allmeta_cobro) * 100, 2);
             } else {
                 $p_pagos = 0;
             }
 
             if ($allmeta > 0) {
-
                 $p_pedidos = round(($all / $allmeta) * 100, 2);
             } else {
                 $p_pedidos = 0;
