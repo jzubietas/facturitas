@@ -29,7 +29,7 @@
                                         <div class="col-4">
 
                                                 <x-bs-progressbar :progress="$data_noviembre->progress_pagos">
-                                                    <span> <b>  {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pedido_mespasado}}/{{$data_noviembre->total_pagado}}</span>
+                                                    <span> <b>  {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}}</span>
                                                 </x-bs-progressbar>
 
 

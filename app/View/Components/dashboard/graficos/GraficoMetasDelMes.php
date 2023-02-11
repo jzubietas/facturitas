@@ -212,7 +212,7 @@ class GraficoMetasDelMes extends Widgets
         }
 
         if ($pay > 0) {
-            $p_pagos = round(($all_mespasado/$pay) * 100, 2);
+            $p_pagos = round(($pay/$all_mespasado) * 100, 2);
         } else {
             $p_pagos = 0;
         }
