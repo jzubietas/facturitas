@@ -13,7 +13,9 @@ class SettingsController extends Controller
 
     public function settingAdmin(Request $request)
     {
-        return view('settings.administration');
+        $jefe_operaciones = User::where('rol', User::ROL_JEFE_OPERARIO)->get();
+        return view('settings.administration', compact('jefe_operaciones',));
+
     }
 
     public function settingTimeClienteStore(Request $request)
@@ -124,5 +126,9 @@ class SettingsController extends Controller
             DireccionGrupo::clearSolicitudAuthorization($user);
         }
         return $user->id;
+
     }
+
+
+
 }
