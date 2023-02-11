@@ -112,6 +112,10 @@ class GraficoMetasDelMes extends Widgets
                 ->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
                 ->count();
 
+            /*$total_pedido_mespasado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo','not like',"%-C%")->activo()->pagados(), $date_pagos, 'created_at')
+                ->count();*/
+
             $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
                 ->where('codigo','not like',"%-C%")->activo()->pagados(), $date_pagos, 'created_at')
                 ->count();
