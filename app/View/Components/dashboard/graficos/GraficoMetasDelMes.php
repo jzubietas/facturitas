@@ -58,7 +58,10 @@ class GraficoMetasDelMes extends Widgets
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {
             //$asesores = [];
-            $asesores = User::rolAsesor()->where('llamada', '=', auth()->user()->id)->get();
+            //$asesores = User::rolAsesor()->where('llamada', '=', auth()->user()->id)->get();
+            $asesores = User::query()
+                ->activo()
+                ->rolAsesor()->get();
         } else if (auth()->user()->rol == User::ROL_FORMACION)
         {
             $asesores = User::query()
