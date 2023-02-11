@@ -42,46 +42,28 @@
 
         <div class="col-md-12">
             @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
-            <div class="card">
-                <div class="card-header">
-                    <h3>Agregar dirección</h3>
-                </div>
-                <div class="card-body">
-
-                        <div class="form-group">
-                            <label for="formGroupExampleInput">Distrito</label>
-                            <input type="text" class="form-control" id="ingreso_direccionadmin_A"  placeholder="Lo Olivos" disabled>
-                            <label class="mt-2" for="formGroupExampleInput">Ingresar direccion</label>
-                            <input type="text" class="form-control" id="ingreso_direccionadmin_A" placeholder="Dirección">
-                            <label class="mt-2" for="formGroupExampleInput">Ingresar numero de celular</label>
-                            <input type="text" class="form-control" id="ingreso_telefono_administrador" placeholder="Celular">
+                @foreach($jefe_operaciones as $jefe_op)
+                    <form class="form-group" id="form_direccion_JFO{{$jefe_op->id}}}">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Agregar dirección {{$jefe_op->name}}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Distrito</label>
+                                    <input type="text" class="form-control" id="ingreso_distrito_{{$jefe_op->id}}" placeholder="Lo Olivos" disabled>
+                                    <label class="mt-2" for="formGroupExampleInput" >Ingresar direccion</label>
+                                    <input type="text" name="direccion_jfo" class="form-control" id="ingreso_adminD_{{$jefe_op->id}}" placeholder="Dirección">
+                                    <label class="mt-2" for="formGroupExampleInput">Ingresar numero de celular</label>
+                                    <input type="text"   name="numero_jfo" class="form-control" id="ingreso_telefonoA{{$jefe_op->id}}" placeholder="Celular">
+                                </div>
+                            </div>
+                            <button type="submit" id="btn_AgregarD{{$jefe_op->id}}" class="btn btn-primary">
+                                Enviar
+                            </button>
                         </div>
-
-                </div>
-                <button type="submit" class="btn btn-primary">
-                    Enviar
-                </button>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h3>Agregar dirección</h3>
-                </div>
-                <div class="card-body">
-
-                    <div class="form-group">
-                        <label for="formGroupExampleInput">Distrito</label>
-                        <input type="text" class="form-control" id="ingreso_direccionadmin_B"  placeholder="Lo Olivos" disabled>
-                        <label class="mt-2" for="formGroupExampleInput">Ingresar direccion</label>
-                        <input type="text" class="form-control" id="ingreso_direccionadmin_B" placeholder="Dirección">
-                        <label class="mt-2" for="formGroupExampleInput">Ingresar numero de celular</label>
-                        <input type="text" class="form-control" id="ingreso_telefono_administrador" placeholder="Celular">
-                    </div>
-
-                </div>
-                <button type="submit" class="btn btn-primary">
-                    Enviar
-                </button>
-            </div>
+                    </form>
+                @endforeach
             @endif
         </div>
 
@@ -367,5 +349,31 @@
                 $("#attachment_file_two").val(null)
             });
         });
+
+        @foreach($jefe_operaciones as $jefe_op)
+        $(document).on("submit","#form_direccion_JFO{{$jefe_op->id}}}",function(event) {
+            event.preventDefault();
+
+            var form= $(this)[0];
+
+            var formData = new FormData(form);
+
+            formData.append('user_id', {{$jefe_op->id}})
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('correccionconfirmacionRequest.post') }}",
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function (data) {
+                $("#modalcorreccion-confirmacion").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+            }).fail(function (err, error, errMsg) {
+                console.log(arguments, err, errMsg)
+            });
+        });
+        @endforeach
+
     </script>
 @endsection
