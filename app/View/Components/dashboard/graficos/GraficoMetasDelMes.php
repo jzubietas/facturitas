@@ -179,7 +179,7 @@ class GraficoMetasDelMes extends Widgets
             $allmeta_2 = data_get($item, 'meta_2');
             $allmeta_cobro = data_get($item, 'meta_cobro');
 
-            if ($allmeta_cobro > 0) {
+            if ($pay > 0) {
                 $p_pagos = round(($all_mespasado/$pay ) * 100, 2);
             } else {
                 $p_pagos = 0;
@@ -205,13 +205,13 @@ class GraficoMetasDelMes extends Widgets
         $meta_2 = collect($progressData)->pluck('meta_2')->sum();
         $meta_cobro = collect($progressData)->pluck('meta_cobro')->sum();
         $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
-        if ($all > 0) {
+        if ($meta > 0) {
             $p_pedidos = round(($all / $meta) * 100, 2);
         } else {
             $p_pedidos = 0;
         }
 
-        if ($all > 0) {
+        if ($pay > 0) {
             $p_pagos = round(($all_mespasado/$pay) * 100, 2);
         } else {
             $p_pagos = 0;
