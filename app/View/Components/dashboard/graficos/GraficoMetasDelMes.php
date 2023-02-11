@@ -112,9 +112,9 @@ class GraficoMetasDelMes extends Widgets
                 ->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
                 ->count();
 
-            /*$total_pedido_mespasado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-                ->where('codigo','not like',"%-C%")->activo()->pagados(), $date_pagos, 'created_at')
-                ->count();*/
+            $total_pedido_mespasado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo','not like',"%-C%")->activo(), $date_pagos, 'created_at')
+                ->count();
 
             $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
                 ->where('codigo','not like',"%-C%")->activo()->pagados(), $date_pagos, 'created_at')
@@ -126,6 +126,7 @@ class GraficoMetasDelMes extends Widgets
                 "pedidos_dia"=>$asesor_pedido_dia,
                 "name" => $asesor->name,
                 "total_pedido" => $total_pedido,
+                "total_pedido_mespasado" => $total_pedido_mespasado,
                 "total_pagado" => $total_pagado,
                 "meta" => $metatotal,
                 "meta_2" => $metatotal_2,
@@ -133,7 +134,7 @@ class GraficoMetasDelMes extends Widgets
             ];
             if ($asesor->excluir_meta) {
                 if ($metatotal_cobro > 0) {
-                    $p_pagos = round(($total_pagado / $metatotal_cobro) * 100, 2);
+                    $p_pagos = round(($total_pedido_mespasado/$total_pagado) * 100, 2);
                 } else {
                     $p_pagos = 0;
                 }
@@ -159,6 +160,7 @@ class GraficoMetasDelMes extends Widgets
                     $newData[$identificador] = $item;
                 } else {
                     $newData[$identificador]['total_pedido'] += data_get($item, 'total_pedido');
+                    $newData[$identificador]['total_pedido_pasado'] += data_get($item, 'total_pedido_mespasado');
                     $newData[$identificador]['total_pagado'] += data_get($item, 'total_pagado');
                     $newData[$identificador]['meta'] += data_get($item, 'meta');
                     $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
@@ -171,13 +173,14 @@ class GraficoMetasDelMes extends Widgets
         }
         $progressData = collect($newData)->values()->map(function ($item) {
             $all = data_get($item, 'total_pedido');
+            $all_mespasado = data_get($item, 'total_pedido_mespasado');
             $pay = data_get($item, 'total_pagado');
             $allmeta = data_get($item, 'meta');
             $allmeta_2 = data_get($item, 'meta_2');
             $allmeta_cobro = data_get($item, 'meta_cobro');
 
             if ($allmeta_cobro > 0) {
-                $p_pagos = round(($pay / $allmeta_cobro) * 100, 2);
+                $p_pagos = round(($all_mespasado/$pay ) * 100, 2);
             } else {
                 $p_pagos = 0;
             }
@@ -196,6 +199,7 @@ class GraficoMetasDelMes extends Widgets
         $this->novResult = $progressData;
 
         $all = collect($progressData)->pluck('total_pedido')->sum();
+        $all_mespasado = collect($progressData)->pluck('total_pedido_mespasado')->sum();
         $pay = collect($progressData)->pluck('total_pagado')->sum();
         $meta = collect($progressData)->pluck('meta')->sum();
         $meta_2 = collect($progressData)->pluck('meta_2')->sum();
@@ -208,7 +212,7 @@ class GraficoMetasDelMes extends Widgets
         }
 
         if ($all > 0) {
-            $p_pagos = round(($pay / $meta_cobro) * 100, 2);
+            $p_pagos = round(($all_mespasado/$pay) * 100, 2);
         } else {
             $p_pagos = 0;
         }
@@ -217,6 +221,7 @@ class GraficoMetasDelMes extends Widgets
             "progress_pedidos" => $p_pedidos,
             "progress_pagos" => $p_pagos,
             "total_pedido" => $all,
+            "total_pedido_mespasado" => $all_mespasado,
             "total_pagado" => $pay,
             "meta" => $meta,
             "meta_2" => $meta_2,
