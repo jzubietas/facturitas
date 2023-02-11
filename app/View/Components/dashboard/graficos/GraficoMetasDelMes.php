@@ -31,7 +31,7 @@ class GraficoMetasDelMes extends Widgets
         //$data_diciembre = $this->generarDataDiciembre();
 
         $now_submonth = $this->startDate->clone()->startOfMonth()->subMonth();
-        $data_noviembre = $this->generarDataNoviembre($now_submonth);
+        $data_noviembre = $this->generarDataNoviembre($this->startDate,$now_submonth);
 
 
         if (\auth()->user()->rol == User::ROL_ASESOR) {
@@ -54,7 +54,7 @@ class GraficoMetasDelMes extends Widgets
         ]);
     }
 
-    public function generarDataNoviembre($date)
+    public function generarDataNoviembre($date,$date_pagos)
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {
             //$asesores = [];
@@ -108,10 +108,12 @@ class GraficoMetasDelMes extends Widgets
             $metatotal = (float)$asesor->meta_pedido;
             $metatotal_2 = (float)$asesor->meta_pedido_2;
             $metatotal_cobro = (float)$asesor->meta_cobro;
-            $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
+            $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
                 ->count();
 
-            $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->where('codigo','not like',"%-C%")->activo()->pagados(), $date, 'created_at')
+            $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo','not like',"%-C%")->activo()->pagados(), $date_pagos, 'created_at')
                 ->count();
 
             $item = [
