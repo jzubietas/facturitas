@@ -84,7 +84,7 @@
                                             <div class="col-4">
 
                                                     <x-bs-progressbar :progress="$novResult[$key]['progress_pagos']">
-                                                        <span><b>{{$novResult[$key]['progress_pagos']}}%</b> - {{$novResult[$key]['total_pedido_mespasado']}}/{{$novResult[$key]['total_pagado']}}</span>
+                                                        <span><b>{{$novResult[$key]['progress_pagos']}}%</b> - {{$novResult[$key]['total_pagado']}}/{{$novResult[$key]['total_pedido_mespasado']}}</span>
 
                                                     </x-bs-progressbar>
 
