@@ -711,6 +711,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('direcciongrupo/{grupo}/no_contesto/get_sustentos_adjuntos', [DireccionGrupoController::class, 'get_sustentos_adjuntos'])->name('direcciongrupo.no-contesto.get-sustentos-adjuntos');
 
 
+    Route::post('agregardireccionjefeoperaciones', [SettingsController::class, 'agregardireccionjefeoperaciones'])->name('agregardireccionjefeoperaciones.post');
+
+
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);
     }); */
