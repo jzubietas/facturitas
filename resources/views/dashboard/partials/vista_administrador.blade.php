@@ -106,9 +106,38 @@
     <div class="col-lg-12">
         <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
     </div>
+    {{-- <div class="col-lg-12">
+        <x-grafico-metas-mes></x-grafico-metas-mes>
+    </div> --}}
+
     <div class="col-lg-12">
-        {{--<x-grafico-metas-mes></x-grafico-metas-mes>--}}
+        <div class="">
+            <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+    <table id="metas" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Asesor</th>
+                <th>Identificador</th>
+                <th>Pedidos</th>
+                <th class="animated-progress"> TITULO
+                    {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}} --}}
+                <br>
+                {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
+                
+            </th>
+                <th> 
+                    {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
+                <br>
+                {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
     </div>
+</div>  
 
     <div class="container-fluid">
         <div class="row">
@@ -259,3 +288,94 @@
 {{-- @include('dashboard.modal.alerta') --}}
 
 @yield('js-datatables')
+
+
+@section('css-datatables')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css">
+@endsection
+
+@section('js-datatables')
+<script>
+    $(".animated-progress span").each(function () {
+  $(this).animate(
+    {
+      width: $(this).attr("data-progress") + "%",
+    },
+    1000
+  );
+  $(this).text($(this).attr("data-progress") + "%");
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  var meta = null
+    meta = $('#metas').DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                dom: "",
+                "order": [[0, "desc"]],
+                ajax: {
+                    url: "{{ route('dashboard.graficoMetaTable') }}",
+                },
+                columns: [
+                    {
+                        data: 'name',
+                        name: ' name',
+                    },
+                    {
+                        data: 'code'
+                        , name: 'code'
+                    },
+                    {data: 'total_pedido', name: 'total_pedido',},
+                    
+                    {data: 'progress_pagos', name: 'progress_pagos', render: function ( data, type, row, meta ) {
+              if(data==null)
+              {
+                return "SIN PEDIDOS";
+              }else{
+                
+
+                return "asdasdasd";
+                //return data;
+              }
+
+            }},
+                    {data: 'progress_pedidos', name: 'progress_pedidos',},
+
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+
+            });
+</script>
+<script>
+// function refresh() {    
+//     setTimeout(function () {
+//         meta.DataTable().ajax.reload()
+//     }, 1000);
+// }
+</script>
+
+@endsection
