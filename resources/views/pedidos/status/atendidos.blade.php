@@ -258,9 +258,14 @@
 
                         },
                         //searchable: true
+                        //data tabla de atendidos
                     },
                     {data: 'empresas', name: 'empresas',},
+<<<<<<< HEAD
+                    {data: 'mes', name: 'mes',}, //se llama a mes
+=======
                     {data: 'mes', name: 'mes',},
+>>>>>>> b8c9717054b614375246fe330630935094e6d4c9
                     {data: 'users', name: 'users',},
                     {
                         data: 'fecha',
