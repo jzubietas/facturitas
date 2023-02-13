@@ -339,7 +339,10 @@
               }else{
                 
 
-                return "asdasdasd";
+                return `
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"> $this.$progress_pagos - total_pedido </div>
+                </div>`;
                 //return data;
               }
 
