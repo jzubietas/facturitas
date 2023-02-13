@@ -599,7 +599,7 @@ class OperacionController extends Controller
 
                 if(in_array(auth()->user()->rol, [User::ROL_ASESOR,User::ROL_ENCARGADO,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS,User::ROL_ADMIN]))
                 {
-                    $btn[] = '<a class="btn-sm dropdown-item text-success bg-white" href="#"'.
+                    $btn[] = '<a class="btn-md dropdown-item text-success bg-white" href="#"'.
                         'data-backdrop="static" data-keyboard="false"'.
                         'data-toggle="modal"'.
                         'data-correccion="'.$pedido->id.'"'.
@@ -609,7 +609,7 @@ class OperacionController extends Controller
                         </a>';
                 }
 
-                $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'pedido_id')) . '" class="btn-sm dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'pedido_id')) . '" class="btn-md dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                 /*$btn[] = '<a class="btn-sm dropdown-item text-danger" href="#"'.
                         'data-toggle="modal"'.
                         'data-correccion="'.$pedido->id.'"'.
