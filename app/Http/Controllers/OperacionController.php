@@ -599,7 +599,7 @@ class OperacionController extends Controller
 
                 if(in_array(auth()->user()->rol, [User::ROL_ASESOR,User::ROL_ENCARGADO,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS,User::ROL_ADMIN]))
                 {
-                    $btn[] = '<a class="btn-sm dropdown-item text-success" href="#"'.
+                    $btn[] = '<a class="btn-sm dropdown-item text-success bg-white" href="#"'.
                         'data-backdrop="static" data-keyboard="false"'.
                         'data-toggle="modal"'.
                         'data-correccion="'.$pedido->id.'"'.
