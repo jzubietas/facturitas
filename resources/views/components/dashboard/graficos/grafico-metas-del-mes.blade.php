@@ -148,7 +148,7 @@
 
 
     <div class="">
-        <div class="">
+        <div class="@if(count($excludeNov)==0)  justify-content-center @endif">
             <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
     <table id="metas" class="table table-striped table-bordered" style="width:100%">
         <thead>
@@ -156,9 +156,10 @@
                 <th>Asesor</th>
                 <th>Identificador</th>
                 <th>Pedidos</th>
-                <th>{{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
+                <th class="animated-progress">{{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
                 <br>
-                {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}}
+                <span data-progress={{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}}> </span> 
+                
             </th>
                 <th> {{Str::upper($now->monthName)}} - {{$now->year}}
                 <br>
@@ -182,6 +183,26 @@
             background: #a5770f1a;
         }
 
+        .animated-progress {
+  width: 300px;
+  height: 30px;
+  border-radius: 5px;
+  margin: 20px 10px;
+  border: 1px solid rgb(189, 113, 113);
+  overflow: hidden;
+  position: relative;
+}
+
+.animated-progress span {
+  height: 100%;
+  display: block;
+  width: 0;
+  color: rgb(255, 251, 251);
+  line-height: 30px;
+  text-align: end;
+  padding-right: 5px;
+}
+
     </style>
 @endpush
 
@@ -191,6 +212,17 @@
 @endsection
 
 @section('js-datatables')
+<script>
+    $(".animated-progress span").each(function () {
+  $(this).animate(
+    {
+      width: $(this).attr("data-progress") + "%",
+    },
+    1000
+  );
+  $(this).text($(this).attr("data-progress") + "%");
+});
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
