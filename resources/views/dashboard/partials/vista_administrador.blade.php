@@ -107,7 +107,7 @@
         <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
     </div>
     <div class="col-lg-12">
-        <x-grafico-metas-mes></x-grafico-metas-mes>
+        {{--<x-grafico-metas-mes></x-grafico-metas-mes>--}}
     </div>
 
     <div class="container-fluid">
