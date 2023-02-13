@@ -597,7 +597,7 @@ class OperacionController extends Controller
 
                 $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton">';
 
-                if(in_array(auth()->user()->rol, [User::ROL_ASESOR,User::ROL_ENCARGADO,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS,User::ROL_ADMIN]))
+                if(in_array(auth()->user()->rol, [User::ROL_ADMIN,User::ROL_OPERARIO,User::ROL_JEFE_OPERARIO]))
                 {
                     $btn[] = '<a class="btn-md dropdown-item text-success " href="#"'.
                         'data-backdrop="static" data-keyboard="false"'.
