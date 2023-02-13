@@ -50,6 +50,13 @@ if (!function_exists("generate_correlativo")) {
     }
 }
 
+if (!function_exists("generate_correlativo_pago")) {
+    function generate_correlativo_pago($prefix, $next, $digit = 4)
+    {
+        return $prefix . str_pad($next, $digit, '0', STR_PAD_LEFT);
+    }
+}
+
 if (!function_exists("money_f")) {
     function money_f($amount, $currency = 'PEN', $locale = 'es-PE')
     {

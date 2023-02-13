@@ -1035,7 +1035,7 @@ Ver Rotulo</a>')
                                             data-btntext="Retornar"
                                             data-count="' . $count . '"
                                             data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
-                                            data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'retornar_para_reparto']) . '"
+                                            data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'retornar_para_sindireccion']) . '"
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"
                                             style="font-size: 8px;"><i class="fa fa-times-circle-o" aria-hidden="true"></i>Retornar</button>
                                         </li>';

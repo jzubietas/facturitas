@@ -1,3 +1,5 @@
+@yield('css-datatables')
+
 <div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
     <h2>
         <p>
@@ -255,3 +257,5 @@
 
 </div>
 {{-- @include('dashboard.modal.alerta') --}}
+
+@yield('js-datatables')

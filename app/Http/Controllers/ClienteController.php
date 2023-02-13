@@ -467,7 +467,60 @@ class ClienteController extends Controller
             return $porcentaje;
         });
 
-        return view('clientes.edit', compact('cliente', 'users', 'porcentajes', 'mirol'));
+        $ultimopedido=Pedido::where('cliente_id',$cliente->id)
+            ->activo()
+            ->orderBy('created_at','desc')
+            ->limit(1)
+            ->first();
+        $porcentaje_retorno=0;
+        if($ultimopedido)
+        {
+            $ultimopedido_fecha=Carbon::parse($ultimopedido->created_at)->format('Y_m');
+            $mes_situacion_up='s_'.$ultimopedido_fecha;
+            $mes_situacion_actual='s_'.date('Y').'_'.date('M');
+            if($ultimopedido_fecha==$mes_situacion_actual)
+            {
+                $situacion='RECURRENTE';
+            }else{
+                $fecha = now()->startOfDay();
+                $fecha_comparar=Carbon::parse($ultimopedido->created_at)->startOfDay();
+                $count=$fecha_comparar->diffInMonths($fecha);
+                $situacion="";
+                switch($count)
+                {
+                    case 1:
+                        $situacion='RECURRENTE';
+                        break;
+                    case 2:
+                        $situacion='ABANDONO RECIENTE';
+                        break;
+                    case 3:
+                        $situacion='ABANDONO';
+                        break;
+                    default:
+                        $situacion='ABANDONO';
+                        break;
+                }
+            }
+            $asesor=Cliente::where("id",$cliente->id)->first()->user_id;
+            $asesor_identi=User::where('id',$asesor)->first()->identificador;
+            $ultimopedido_fecha_comparacion=Carbon::parse($ultimopedido->created_at)->format('Y-m-d');
+
+            if($asesor_identi=='01')
+            {
+                if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion<'2022-11-01'){
+                    $porcentaje_retorno=1.5;
+                }
+            }else{
+                if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion<'2022-10-01'){
+                    $porcentaje_retorno=1.8;
+                }
+                else if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion>='2022-10-01'){
+                    $porcentaje_retorno=2.0;
+                }
+            }
+        }
+        return view('clientes.edit', compact('cliente', 'users', 'porcentajes', 'mirol','porcentaje_retorno'));
     }
 
     /**
@@ -754,13 +807,12 @@ class ClienteController extends Controller
         //ahora con el identificador de  Usuarios
         $mirol = Auth::user()->rol;
         $clientes = null;
-        $clientes = Cliente::whereIn('user_id',
-            User::query()->select('users.id')
-                ->whereIn('users.rol', ['Asesor', User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
-                ->where('users.estado', '1')
-                ->where('users.identificador', $request->user_id)
-        )
-            ->where('clientes.estado', '1')
+        //$user_id=User::where('identificador',$request->user_id)->pluck('id');
+        $clientes = Cliente::where('clientes.estado', '1')
+            ->when($request->user_id, function ($query) use ($request) {
+                return $query->whereIn('clientes.user_id', User::query()->select('users.id')->whereIdentificador($request->user_id));
+            })
+            //->where('clientes.estado', '1')
             ->where("clientes.tipo", "1");
         $html = "";
 
@@ -864,6 +916,7 @@ class ClienteController extends Controller
                         'dp.codigo',
                         'dp.nombre_empresa',
                         'pedidos.da_confirmar_descarga',
+                        'pedidos.condicion_envio',
                         //DB::raw(" (select dd.nombre_empresa from detalle_pedidos de where de.pedido_id=direcion_grupos.id) as clientes "),
                     ]
                 )
@@ -881,9 +934,46 @@ class ClienteController extends Controller
 
             return Datatables::query(DB::table($pedidos))
                 ->addIndexColumn()
+                ->editColumn('condicion_envio', function ($pedido) {
+                    $badge_estado='';
+
+                    $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                    $badge_estado.= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                    return $badge_estado;
+                })
+                ->rawColumns(['condicion_envio'])
                 ->make(true);
         }
     }
+
+    public function recojolistclientes(Request $request)
+    {
+        $pedidos = null;
+
+
+        $idrequest = $request->cliente_id;
+        $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                        ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->select(
+                [
+                    'pedidos.id as pedidoid',
+                    'c.id',
+                    'dp.codigo',
+                    'dp.nombre_empresa',
+
+                ]
+            )
+            ->where('pedidos.cliente_id', $idrequest);
+        //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
+        //->get();
+
+        return Datatables::query(DB::table($pedidos))
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+
+
 
     public function indexabandono()
     {

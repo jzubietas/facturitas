@@ -90,6 +90,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
     Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
+
+
+    Route::get('recojolistclientes', [ClienteController::class, 'recojolistclientes'])->name('cargar.recojolistclientes');
     //Route::get('clientes.createbf', [BasefriaController::class, 'createbf'])->name('clientes.createbf');
     //Route::post('clientes.storebf', [BasefriaController::class, 'storebf'])->name('clientes.storebf');
 
@@ -100,6 +103,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
         ->post('clientedeleteRequest', [ClienteController::class, 'destroyid'])
         ->name('clientedeleteRequest.post');
 
+    Route::post('correccionconfirmacionRequest', [OperacionController::class, 'correccionconfirmacion'])->name('correccionconfirmacionRequest.post');
+    Route::post('correccionrechazoRequest', [OperacionController::class, 'correccionrechazo'])->name('correccionrechazoRequest.post');
 
     //Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
     Route::get('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
@@ -162,6 +167,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('users.profile', [UserController::class, 'profile'])->name('users.profile');
     //Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
 
+    Route::any('correccionesJson', [OperacionController::class, 'correccionesJson'])->name('correccionesJson');
+
     Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
     Route::post('asesorcombomodal', [UserController::class, 'AsesorcomboModal'])->name('asesorcombomodal');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
@@ -174,6 +181,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('users.llamadastabla', [UserController::class, 'Llamadastabla'])->name('users.llamadastabla');////llamadas
 
     Route::post('users.asignarsupervisor/{user}', [UserController::class, 'AsignarSupervisor'])->name('users.asignarsupervisor');
+    Route::post('users.asignarasesorpost', [UserController::class, 'AsignarAsesorpost'])->name('users.asignarasesorpost');////
     Route::post('users.asignarencargadopost', [UserController::class, 'AsignarEncargadopost'])->name('users.asignarencargadopost');////
     Route::post('users.asignarjefellamadaspost', [UserController::class, 'AsignarJefellamadaspost'])->name('users.asignarjefellamadaspost');////
     Route::post('users.asignarllamadaspost', [UserController::class, 'AsignarLlamadaspost'])->name('users.asignarllamadaspost');
@@ -188,8 +196,13 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('users.asignarjefe/{user}', [UserController::class, 'AsignarJefe'])->name('users.asignarjefe');
     Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
     Route::post('users.asignarmetaasesor/{user}', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesor');
+
+    Route::post('users.asignarmetaasesorPost', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesorPost');
+
     Route::get('users.encargados', [UserController::class, 'Encargados'])->name('users.encargados');
     Route::post('users.asignarmetaencargado/{user}', [UserController::class, 'AsignarMetaEncargado'])->name('users.asignarmetaencargado');
+
+
     Route::get('users.operarios', [UserController::class, 'Operarios'])->name('users.operarios');
     Route::get('users.misoperarios', [UserController::class, 'MisOperarios'])->name('users.misoperarios');
     Route::get('users.jefes', [UserController::class, 'Jefes'])->name('users.jefes');
@@ -281,6 +294,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('pedidoobteneradjuntoRequest', [PedidoController::class, 'pedidoobteneradjuntoRequest'])->name('pedidoobteneradjuntoRequest');
     Route::post('pedidoobteneradjuntoOPRequest', [PedidoController::class, 'pedidoobteneradjuntoOPRequest'])->name('pedidoobteneradjuntoOPRequest');
+    Route::post('correccionobteneradjuntoRequest', [PedidoController::class, 'correccionobteneradjuntoRequest'])->name('correccionobteneradjuntoRequest');
 
     /*Controller Pedido */
 
@@ -362,8 +376,14 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.atenderid', [OperacionController::class, 'Atenderid'])->name('operaciones.atenderid');
     Route::post('operaciones.correccionajax', [OperacionController::class, 'CorreccionAccion'])->name('operaciones.correccionajax');
 
+    Route::get('operaciones.correcciones', [OperacionController::class, 'Correcciones'])->name('operaciones.correcciones');
+    Route::get('operaciones.correccionestabla', [OperacionController::class, 'Correccionestabla'])->name('operaciones.correccionestabla');
+
     Route::post('envios.recepcionmotorizado.iniciar_ruta_masiva', [EnvioController::class, 'IniciarRutaMasiva'])->name('envios.recepcionmotorizado.iniciar_ruta_masiva');
 
+    Route::post('operaciones.cargarimagenes.correccion/{pedido}', [OperacionController::class, 'cargarImagenCorreccion'])->name('operaciones.cargarimagenes.correccion');
+
+    Route::post('operaciones.correccioncerrarmodal', [OperacionController::class, 'CerarModalCorreccion'])->name('operaciones.correccioncerrarmodal');
 
     Route::post('operaciones.atenderiddismiss', [OperacionController::class, 'Atenderiddismiss'])->name('operaciones.atenderiddismiss');
     Route::post('operaciones.corregircerrar', [OperacionController::class, 'Corregircerrar'])->name('operaciones.corregircerrar');
@@ -373,6 +393,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.editatencionsinconfirmar/{pedido}', [OperacionController::class, 'editatencionsinconfirmar'])->name('operaciones.editatencionsinconfirmar');
     Route::post('operaciones.datossubidaadj/{pedido}', [OperacionController::class, 'DatosSubidaAdjunto'])->name('operaciones.datossubidaadj');
     Route::post('operaciones.eliminaradjunto', [OperacionController::class, 'eliminarAdjuntoOperaciones'])->name('operaciones.eliminaradjunto');
+
+    Route::post('operaciones.subircorreccionsinconfirmar', [OperacionController::class, 'subircorreccionsinconfirmar'])->name('operaciones.subircorreccionsinconfirmar');
 
     Route::post('operaciones.updateatender/{pedido}', [OperacionController::class, 'updateAtender'])->name('operaciones.updateatender');
     Route::post('operaciones.updateatendersinconfirmar/{pedido}', [OperacionController::class, 'updateatendersinconfirmar'])->name('operaciones.updateatendersinconfirmar');
@@ -463,6 +485,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Sobres*/
 
     Route::any('ajax_modal1_response', [ModalController::class, 'ajax_modal1_response'])->name('ajax_modal1_response');
+    Route::any('ajax_modal_correccionpedidos', [ModalController::class, 'ajax_modal_correccionpedidos'])->name('ajax_modal_correccionpedidos');
 
     //Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
     //Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])->name('envios.enviar');
@@ -562,6 +585,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 //PDF
     //MODULO PEDIDOS
     Route::get('PDF/{pedido}/pedido', [PdfController::class, 'pedidosPDF'])->name('pedidosPDF');
+    Route::get('PDF/{pedido}/correccion', [PdfController::class, 'correccionPDF'])->name('correccionPDF');
+    Route::get('PDF/{pedido}/correccionpedido', [PdfController::class, 'correccionpedidoPDF'])->name('correccionpedidoPDF');
     Route::get('pedidosPDFpreview', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview');
 
     Route::get('pedidosPDFpreview2', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview2');
@@ -588,6 +613,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('excel/clientes/two_month_ago', [ExcelController::class, 'clientesTwoMonthAgoExcel'])->name('excel.clientes-two-month-ago-excel');
     Route::get('excel/clientes/four_month_ago', [ExcelController::class, 'clientesFourMonthAgoExcel'])->name('excel.clientes-four-month-ago-excel');
+
+    Route::get('excel/basefria/exportar', [ExcelController::class, 'excelBaseFriaExportar'])->name('excel/basefria/exportar');
 
     // Route::get('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
     Route::post('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');

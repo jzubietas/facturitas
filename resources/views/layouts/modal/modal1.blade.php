@@ -41,6 +41,10 @@
                                 {{--<input type="text" name="clientenuevo_op1" id="clientenuevo_op1"  class="form-control" placeholder="Cliente nuevo" maxlength="9">--}}
                                 {!! Form::text('clientenuevo_op1', null, ['autocomplete'=>'off','class' => 'form-control', 'id' => 'clientenuevo_op1', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9','placeholder' => '9 digitos']) !!}
                             </div>
+                            <div class="form-group col-lg-6">
+                                {!! Form::label('clientenuevocontacto_op1', 'Nombre del contacto') !!}
+                                {!! Form::text('clientenuevocontacto_op1', null, ['autocomplete'=>'off','class' => 'form-control', 'id' => 'clientenuevocontacto_op1','placeholder' => 'Nombre de contacto']) !!}
+                            </div>
 
                             <div class="form-group col-lg-12">
                                 {!! Form::label('captura_op1', 'Captura de pantalla') !!}
@@ -72,7 +76,7 @@
 
                             <div class="form-group col-lg-6">
                                 {!! Form::label('cantidadpedidos_op2', 'Cantidad de pedidos') !!}
-                                <input type="text" name="cantidadpedidos_op2" id="cantidadpedidos_op2"  class="form-control" placeholder="Cliente nuevo" maxlength="1">
+                                <input type="text" name="cantidadpedidos_op2" id="cantidadpedidos_op2"  class="form-control" placeholder="Cantidad de pedidos" maxlength="1">
                             </div>
 
                             <div class="form-group col-lg-12">

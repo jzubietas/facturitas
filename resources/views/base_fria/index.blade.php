@@ -13,14 +13,24 @@
     @endcan
     @can('base_fria.exportar')
     <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        {{-- <a href="{{ route('basefriaExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría - Total</a> --}}
-        {{--<a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a>--}}
-        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría por asesor</a>
-      </div>
+
+        @if(Auth::user()->rol == 'Asesor')
+            <a href="{{route('excel/basefria/exportar')}}" target="_blank" class="btn btn-dark mr-4">
+                <i class="fa fa-download"></i>
+                <i class="fa fa-file-excel"></i>
+                Base fria Asesor
+            </a>
+        @endif
+
+        @if(Auth::user()->rol == 'Administrador' || Auth::user()->rol == 'Llamadas' || Auth::user()->rol == 'Jefe de llamadas')
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Exportar
+            </button>
+            <div class="dropdown-menu">
+                <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría por asesor</a>
+            </div>
+        @endif
+
     </div>
     {{-- @include('base_fria.modal.exportar') --}}
     @include('base_fria.modal.exportar2')
@@ -152,7 +162,7 @@ $(document).ready(function () {
       //solo completo datos
       //hiddenId
       //
-      
+
       console.log(idcodigo)
       $(".textcode").html(idcodigo);
       $("#motivo").val('');
@@ -163,7 +173,7 @@ $(document).ready(function () {
     $(document).on("submit", "#formdelete", function (evento) {
         evento.preventDefault();
         console.log("action delete action")
-        
+
         var formData = new FormData();
         formData.append("hiddenID", $("#hiddenIDdelete").val())
 

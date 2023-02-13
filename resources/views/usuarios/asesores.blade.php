@@ -28,6 +28,7 @@
                     <th scope="col">CODIGO</th>
                     <th scope="col">NOMBRES Y APELLIDOS</th>
                     <th scope="col">CORREO</th>
+                    <th scope="col">IDENTIFICADOR</th>
                     <th scope="col">ENCARGADO</th>
                     <th scope="col">OPERARIO</th>
                     <th scope="col">LLAMADA</th>
@@ -42,6 +43,7 @@
             @include('usuarios.modal.asignarencargado')
             @include('usuarios.modal.asignaroperario')
             @include('usuarios.modal.asignarllamada')
+            @include('usuarios.modal.asignarmetaasesor')
         </div>
     </div>
 
@@ -99,10 +101,15 @@
 
     <script>
         $(document).ready(function () {
-            $('#modal-asignarencargado').on('show.bs.modal', function (event) {
+
+            $('#modal-asignarmetaasesor').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
-                var idunico = button.data('encargado')
-                $("#hiddenIdencargado").val(idunico);
+                var idunico = button.data('asesor')
+                $("#meta_pedido_1").val(0);
+                $("#meta_pedido_2").val(0);
+                $("#meta_cobro").val(0);
+
+                $("#asesor").val(idunico);
                 if (idunico < 10) {
                     idunico = 'USER000' + idunico;
                 } else if (idunico < 100) {
@@ -165,22 +172,20 @@
 
             });
 
-            $(document).on("submit", "#formencargado", function (evento) {
+            $(document).on("submit", "#formasignarmetaasesor", function (evento) {
                 evento.preventDefault();
-                var formData = $("#formencargado").serialize();
+                var formData = $("#formasignarmetaasesor").serialize();
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('users.asignarencargadopost') }}",
+                    url: "{{ route('users.asignarmetaasesorPost') }}",
                     data: formData
                 }).done(function (data) {
-                    $("#modal-asignarencargado").modal("hide");
+                    $("#modal-asignarmetaasesor").modal("hide");
                     Swal.fire(
-                        'Usuario asignado correctamente',
+                        'Meta asignado correctamente',
                         '',
                         'success'
                     )
-
-
                     $('#tablaPrincipal').DataTable().ajax.reload();
                 });
             });
@@ -250,7 +255,7 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
-                "order": [[0, "desc"]],
+                "order": [[3, "asc"]],
                 ajax: "{{ route('users.asesorestabla') }}",
                 createdRow: function (el, data, dataIndex) {
 
@@ -286,6 +291,7 @@
                     },
                     {data: 'name', name: 'name',},
                     {data: 'email', name: 'email',},
+                    {data: 'identificador', name: 'identificador',},
                     {
                         data: 'encargado',
                         name: 'encargado',

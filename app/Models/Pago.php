@@ -49,6 +49,10 @@ class Pago extends Model
 
     protected $guarded = ['id'];
 
+    public function getIdCodeAttribute(): string
+    {
+        return generate_correlativo_pago('PAG', $this->id, 4);
+    }
     public function scopeCondicion($query, $value)
     {
         $query->where('condicion', '=', $value);

@@ -69,18 +69,23 @@ class Cliente extends Model
 
     public static function restructurarCodigos($anio,$mes,self $cliente)
     {
-        $cliente->situacion;
-
-        /*2021*/
-        //11
-        $cont_2021_11=Pedidos::where("cliente_id",$cliente->id)->whereYear('created_at','2021')->whereMonth('created_at','11')->activo()->count();
-        if($cont_2021_11==0)
+        $analisis=SituacionClientes::where('id',$cliente->id)->orderBy('periodo')->get();
+        if($analisis)
         {
-
+            $anio='2021';
+            for($i=11;$i<=12;$i++)
+            {
+                switch ($i)
+                {
+                    case '11':
+                        break;
+                    case '12':
+                        break;
+                }
+            }
         }else{
-
+            Clientes::where('id',$cliente->id)->update(['situacion'=>'BASE FRIA']);
         }
-
     }
 
 }

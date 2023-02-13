@@ -15,7 +15,7 @@
       <div class="card-body">
         <div class="form-row">
 
-          <input type="text" name="id" id="id" class="form-control" value="{{ $cliente->id }}">
+          <input type="hidden" name="id" id="id" class="form-control" value="{{ $cliente->id }}">
 
           <div class="form-group col-lg-6">
             {!! Form::label('tipo', 'Tipo de cliente') !!}
@@ -98,8 +98,8 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                       <div class="form-group">
                         <label>{{ $porcentaje->nombre }}</label>
-                        <input type="hidden" name="idporcentaje[]" value={{ $porcentaje->id }}>
-                        <input type="text" step="0.1" name="porcentaje[]" id="porcentaje{{$porcentaje->rownumber }}" min="1.7" class="form-control porcentaje-banca decimal" value={{ $porcentaje->porcentaje}} required>
+                        <input type="hidden" name="idporcentaje[]" value="{{ $porcentaje->id }}">
+                        <input autocomplete="off" type="text" step="0.1" name="porcentaje[]" id="porcentaje{{$porcentaje->rownumber }}" min="1.7" class="form-control porcentaje-banca decimal" value={{ $porcentaje->porcentaje}} required>
                       </div>
                     </div>
 
@@ -112,6 +112,7 @@
     </div>
 
     <div class="card-footer">
+        <input type="hidden" id="porcentaje_retorno" name="porcentaje_retorno" value="{{$porcentaje_retorno}}">
       <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar</button>
       <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
     </div>
@@ -143,13 +144,182 @@
     }
 
     //VALIDAR CAMPOS ANTES DE ENVIAR
-    document.addEventListener("DOMContentLoaded", function() {
+    /*document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("formulario").addEventListener('submit', validarFormulario);
-    });
+    });*/
 
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(document).on("submit", "#formulario", function (evento) {
+        evento.preventDefault();
+        var usuario = $('#user_id').val();
+        var nombre = $('#nombre').val();
+        var dni = $('#dni').val();
+        var celular = $('#celular').val();
+        var provincia = $('#provincia').val();
+        var distrito = $('#distrito').val();
+        var direccion = $('#direccion').val();
+        var referencia = $('#referencia').val();
+        //var porcentaje_banca = $(".porcentaje-banca").val
+
+        let porcentajeretorno=$("#porcentaje_retorno").val();
+        let condi=true;
+        $('.porcentaje-banca').each(function() {
+            obj=$(this).val();
+            if(porcentajeretorno==0)
+            {
+                if(obj>=1.8)
+                {
+                }else{
+                    Swal.fire(
+                        'Ingrese un numero mayor a 1.7',
+                        '',
+                        'warning'
+                    )
+                    $(this).val(1.8)
+                    condi=false;
+
+                }
+            }else{
+                if(obj<porcentajeretorno)
+                {
+                    Swal.fire(
+                        'Ingrese un numero mayor a '+porcentajeretorno,
+                        '',
+                        'warning'
+                    )
+                    condi=false;
+
+                }
+            }
+        });
+        if(condi===false){
+            return false;
+        }
+
+        if (usuario == '') {
+            Swal.fire(
+                'Error',
+                'Seleccione asesor para el cliente',
+                'warning'
+            )
+            return false;
+        }
+        else if (nombre == '') {
+            Swal.fire(
+                'Error',
+                'Ingrese nombre de cliente',
+                'warning'
+            )
+            return false;
+        }
+        else if (celular == ''){
+            Swal.fire(
+                'Error',
+                'Agregue número celular del cliente',
+                'warning'
+            )
+            return false;
+        }
+        else if (celular.length != 9){
+            Swal.fire(
+                'Error',
+                'Número celular del cliente debe tener 9 dígitos',
+                'warning'
+            )
+            return false;
+        }
+        else if (provincia == ''){
+            Swal.fire(
+                'Error',
+                'Registre la provincia del cliente',
+                'warning'
+            )
+            return false;
+        }
+        else if (distrito == ''){
+            Swal.fire(
+                'Error',
+                'Registre el distrito del cliente',
+                'warning'
+            )
+            return false;
+        }
+        else if (direccion == ''){
+            Swal.fire(
+                'Error',
+                'Registre la direccion del cliente',
+                'warning'
+            )
+            return false;
+        }
+        else if (referencia == ''){
+            Swal.fire(
+                'Error',
+                'Registre la referencia del cliente',
+                'warning'
+            )
+            return false;
+        }
+        else if (provincia.toUpperCase() != ('lima').toUpperCase() && dni.length == 0){
+            Swal.fire(
+                'Error',
+                'Clientes de provincia necesitan registrar el DNI',
+                'warning'
+            )
+            return false;
+        }
+        else if (provincia.toUpperCase() != ('lima').toUpperCase() && dni.length != 8){
+            Swal.fire(
+                'Error',
+                'El DNI debe tener 8 dígitos',
+                'warning'
+            )
+            return false;
+        }
+        else {
+            //valida numero que no exista
+            var fd2=new FormData();
+            fd2.append("celular", celular);
+            console.log(celular)
+            fd2.append("id", $('#id').val() );
+
+            $.ajax({
+                data: fd2,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'json',
+                url:"{{ route('cliente.edit.celularduplicado') }}",
+                success:function(data)
+                {
+                    console.log(data)
+                    if(data.html.status==true)
+                    {
+                        evento.currentTarget.submit();
+                        /* letdata=new FormData($("#formulario")[0]);
+                        console.log(letdata);
+                        console.log("verdadero")*/
+
+                        //$("#formulario").trigger('submit');
+                    }else{
+                        Swal.fire(
+                            'Error',
+                            'Se encontro un error',
+                            'warning'
+                        )
+                        return false;
+                    }
+
+                }
+            })
+            return false;
+
+
         }
     });
 
@@ -166,157 +336,39 @@
             )
             $(this).val(1.8)
         }else{
-            console.log("no es nan")
-            if(val>=1.8)
+            let porcentajeretorno=$("#porcentaje_retorno").val();
+            if(porcentajeretorno==0)
             {
+                console.log("no es nan")
+                if(val>=1.8)
+                {
 
+                }else{
+                    Swal.fire(
+                        'Ingrese un numero mayor a 1.7',
+                        '',
+                        'warning'
+                    )
+                    $(this).val(1.8)
+                }
             }else{
-                Swal.fire(
-                    'Ingrese un numero mayor a 1.7',
-                    '',
-                    'warning'
-                )
-                $(this).val(1.8)
+                if(val<porcentajeretorno)
+                {
+                    Swal.fire(
+                        'Ingrese un numero mayor a '+porcentajeretorno,
+                        '',
+                        'warning'
+                    )
+                }
             }
         }
-
     })
 
 
 
-    function validarFormulario(evento) {
+    /*function validarFormulario(evento) {
       evento.preventDefault();
-      var usuario = document.getElementById('user_id').value;
-      var nombre = document.getElementById('nombre').value;
-      var dni = document.getElementById('dni').value;
-      var celular = document.getElementById('celular').value;
-      var provincia = document.getElementById('provincia').value;
-      var distrito = document.getElementById('distrito').value;
-      var direccion = document.getElementById('direccion').value;
-      var referencia = document.getElementById('referencia').value;
-        var porcentaje_banca = document.getElementsByClassName('porcentaje-banca').value;
 
-        var por = $('.porcentaje-banca').filter(function(e){
-            var porcent = parseFloat($(this).val());
-            return isNaN(porcent)||porcent < 1.5
-        });
-        if(por.length >0){
-            Swal.fire(
-                'Error',
-                'El porcentaje debe ser mayor a 1.5',
-                'warning'
-            );
-            return ;
-        }
-      if (usuario == '') {
-          Swal.fire(
-            'Error',
-            'Seleccione asesor para el cliente',
-            'warning'
-          )
-        }
-        else if (nombre == '') {
-          Swal.fire(
-            'Error',
-            'Ingrese nombre de cliente',
-            'warning'
-          )
-        }
-        else if (celular == ''){
-          Swal.fire(
-            'Error',
-            'Agregue número celular del cliente',
-            'warning'
-          )
-        }
-        else if (celular.length != 9){
-          Swal.fire(
-            'Error',
-            'Número celular del cliente debe tener 9 dígitos',
-            'warning'
-          )
-        }
-        else if (provincia == ''){
-          Swal.fire(
-            'Error',
-            'Registre la provincia del cliente',
-            'warning'
-          )
-        }
-        else if (distrito == ''){
-          Swal.fire(
-            'Error',
-            'Registre el distrito del cliente',
-            'warning'
-          )
-        }
-        else if (direccion == ''){
-          Swal.fire(
-            'Error',
-            'Registre la direccion del cliente',
-            'warning'
-          )
-        }
-        else if (referencia == ''){
-          Swal.fire(
-            'Error',
-            'Registre la referencia del cliente',
-            'warning'
-          )
-        }
-      else if (porcentaje_banca < '1.5'){
-          Swal.fire(
-              'Error',
-              'El valor debe ser mayor a 1.5',
-              'warning'
-          )
-      }
-        else if (provincia.toUpperCase() != ('lima').toUpperCase() && dni.length == 0){
-          Swal.fire(
-            'Error',
-            'Clientes de provincia necesitan registrar el DNI',
-            'warning'
-          )
-        }
-        else if (provincia.toUpperCase() != ('lima').toUpperCase() && dni.length != 8){
-          Swal.fire(
-            'Error',
-            'El DNI debe tener 8 dígitos',
-            'warning'
-          )
-        }
-        else {
-          //valida numero que no exista
-          var fd2=new FormData();
-          fd2.append("celular", celular);
-          fd2.append("id", {{$cliente->id }});
-
-          $.ajax({
-            data: fd2,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            data:'json',
-            url:"{{ route('cliente.edit.celularduplicado') }}",
-            success:function(data)
-            {
-              console.log(data)
-              if(data.html.status==true)
-              {
-                $("#formulario").trigger('submit');
-              }else{
-                Swal.fire(
-                  'Error',
-                  'Se encontro un error',
-                  'warning'
-                )
-              }
-
-            }
-          })
-
-
-        }
-    }
+    }*/
   </script>
 @stop

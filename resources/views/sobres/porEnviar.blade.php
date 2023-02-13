@@ -407,18 +407,6 @@
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
 
-            $('#recojo_pedido_quienrecibe_nombre').on('input', function () {
-                this.value = this.value.replace(/[^a-zA-Z >]/g, '');
-            });
-
-            $('#recojo_pedido_quienrecibe_celular').on('input', function () {
-                this.value = this.value.replace(/[^0-9]/g, '');
-            });
-
-            $('#recojo_pedido_direccion,#recojo_pedido_referencia,#recojo_pedido_observacion').on('input', function () {
-                this.value = this.value.replace(/[^0-9 a-zA-Z]/g, '');
-            });
-
             $("#direccion", '#referencia', '#observacion').bind('keypress', function (event) {
                 var regex = new RegExp("^[a-zA-Z0-9 ]+$");
                 var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -514,9 +502,7 @@
             $(".provincia").addClass("d-none");
             $(".lima").addClass("d-none");
 
-            $(document).on("change", "#recojo_destino", function () {
-                $("#distrito").val("").selectpicker("refresh")
-            });
+
 
             $(document).on("change", "#user_id", function () {
                 $("#datatable-clientes-lista-recojer").DataTable().ajax.reload();
@@ -551,7 +537,6 @@
                         }
 
                         tabla_pedidos.columns.adjust().draw();
-
                         $('#nombre').val('')
                         $('#celular').val('')
                         $('#direccion').val('')
@@ -1021,6 +1006,7 @@
                                     return '<span class="banco">' + data + '</span>';
                                 }
                             },
+                            {data: 'foto',name: 'foto',},
                             {
                                 data: 'action',
                                 name: 'action',
@@ -1111,34 +1097,7 @@
             })
 
 
-            $(document).on('click', '.button_load_history_recojo', function (e) {
-                const json = $(this).data('json');
-                const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
-                console.log(selectedData)
-                var form = $("#formrecojo")[0];
 
-                form.direccion_id.value = selectedData.id;
-                form.nombre.value = selectedData.nombre;
-                form.celular.value = selectedData.celular;
-                form.direccion.value = selectedData.direccion;
-                form.referencia.value = selectedData.referencia;
-                $(form.distrito).val(selectedData.distrito).trigger('change');
-
-                form.observacion.value = selectedData.observacion;
-
-                $(form.direccion_id).data('old_value', selectedData.id);
-                $(form.nombre).data('old_value', form.nombre.value);
-                $(form.celular).data('old_value', form.celular.value);
-                $(form.direccion).data('old_value', form.direccion.value);
-                $(form.referencia).data('old_value', form.referencia.value);
-                $(form.distrito).data('old_value', form.distrito.value);
-                $(form.observacion).data('old_value', form.observacion.value);
-
-                /*$("#modal-historial-lima").modal('hide')
-                $("#set_cliente_clear").show()
-                $("#saveHistoricoLima").parent().hide()
-                $("#saveHistoricoLimaEditar").parent().show()*/
-            })
 
 
             $("#distrito").on('change', function () {
@@ -1190,6 +1149,7 @@
                 $("#pdf_renderer_object").attr("data", '');
                 $("#pdf_renderer_object").addClass("d-none");
             })
+
             $('#modal-direccion').on('show.bs.modal', function (event) {
 
                 var button = $(event.relatedTarget)
@@ -1267,15 +1227,18 @@
                             },
                             defaultContent: '',
                             orderable: false,
+                            sWidth: '5%',
                         },
-                        {data: 'codigo', name: 'codigo',},
+                        {data: 'codigo', name: 'codigo',sWidth: '40%',},
                         {
                             "data": 'nombre_empresa',
                             "name": 'nombre_empresa',
                             "render": function (data, type, row, meta) {
                                 return data;
-                            }
+                            },
+                            sWidth: '40%',
                         },
+                        {data: 'condicion_envio', name: 'condicion_envio',sWidth: '15%',},
                     ],
                     'select': {
                         'style': 'multi',
@@ -1415,32 +1378,9 @@
                 });
             });
 
-            tablaClienteLista = $('#datatable-clientes-lista-recojer').DataTable({
-                ...configDataTableLanguages,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                columns: [
-                    {data: 'id', name: 'id', "visible": false},
-                    {data: 'user_id', name: 'user_id',},
-                    {data: 'celular', name: 'celular',},
-                    {data: 'action', name: 'action',},
-                ],
-            });
 
-            tablaPedidosLista = $('#datatable-pedidos-lista-recojer').DataTable({
-                ...configDataTableLanguages,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                columns:
-                    [
-                        {data: 'id', name: 'id', "visible": false},
-                        {data: 'codigo', name: 'codigo',},
-                        {data: 'condicion_envio', name: 'condicion_envio',},
-                        {data: 'action', name: 'action',},
-                    ],
-            });
+
+
 
             tablaPrincipal = $('#tablaPrincipal').DataTable({
                 dom: 'Blfrtip',
@@ -1561,220 +1501,21 @@
                 ],
             });
 
-            $('#datatable-pedidos-lista-recojer tbody').on('click', 'button.elegir', function () {
-                var data = tablaPedidosLista.row($(this).parents('tr')).data();
-                console.log(data);
-                $("span.nombre_cliente_recojo").html(data.nombre)
-                $("#recojo_pedido").val(data.id)
-                $("#recojo_pedido_codigo").val(data.codigo)
 
-                $("#recojo_pedido_grupo").val(((data.direccion_grupo == null) ? 'SIN GRUPO' : data.direccion_grupo))
-                $("span.destino_recojo").html(data.env_destino);
-                $("span.distrito_recojo").html(data.env_distrito);
-                $("span.direccion_recojo").html(data.env_direccion);
-            })
 
-            $(document).on("click", ".btn-charge-history", function () {
-                console.log($("#recojo_cliente").val())
-                let clienteid = $("#recojo_cliente").val();
-                if (clienteid != '') {
-                    //cargar modal
-                    //
-                    $("#modal-historico-recojo").modal("show");
-                }
-            })
+
 
             /*$('#datatable-historial-recojer tbody').on( 'click', 'button.elegir', function () {
 
             })*/
 
 
-            $('#datatable-clientes-lista-recojer tbody').on('click', 'button.elegir', function () {
-                var data = tablaClienteLista.row($(this).parents('tr')).data();
-                console.log(data);
-                console.log("The ID is: " + data.id + " user id : " + data.user_id + " celular:" + data.celular + " action" + data.action);
-                //disparar la otra tabla
-                //pinto la clase span
-
-                $(".card_clientes").hide()
-                $(".card_pedidos").show()
-                $(".card_form").show()
-
-                $("span.nombre_cliente_recojo").html(data.nombre)
-                $("#recojo_cliente").val(data.id)
-                $("#recojo_cliente_name").val(data.nombre)
-
-                $("#recojo_pedido").val("")
-                $("#recojo_pedido_codigo").val("")
-                $("#recojo_pedido_grupo").val("")
-
-                $("span.destino_recojo").html("");
-                $("span.distrito_recojo").html("");
-                $("span.direccion_recojo").html("");
-
-                $('#datatable-pedidos-lista-recojer').DataTable().clear().destroy();
-
-                tablaPedidosLista = $('#datatable-pedidos-lista-recojer').DataTable({
-                    ...configDataTableLanguages,
-                    processing: true,
-                    stateSave: false,
-                    serverSide: true,
-                    searching: true,
-                    "order": [[0, "desc"]],
-                    createdRow: function (row, data, dataIndex) {
-                    },
-                    ajax: {
-                        url: "{{ route('pedidos.recoger.clientes.pedidos') }}",
-                        data: function (d) {
-                            d.length = 5;
-                            d.cliente_id = data.id;
-                        },
-                    },
-                    columns:
-                        [
-                            {data: 'id', name: 'id', "visible": false},
-                            {data: 'codigo', name: 'codigo',},
-                            {data: 'condicion_envio', name: 'condicion_envio',},
-                            {data: 'action', name: 'action',},
-                        ],
-                });
-                $("#distrito_recoger").val("").selectpicker("refresh")
-            });
-
-            $(document).on("submit", "#formrecojo", function (event) {
-                event.preventDefault();
-                let recojo_cliente = $("#recojo_cliente").val();
-                let recojo_pedido = $("#recojo_pedido").val();
-                let recojo_grupo = $("#recojo_pedido_grupo").val();
-                let recojo_fecha = $("#recojo_fecha").val();
-                console.log("fecha " + recojo_fecha)
-                let recojo_distrito = $("#distrito_recoger").val();
-                let recojo_pedido_quienrecibe_nombre = $.trim($("#recojo_pedido_quienrecibe_nombre").val());
-                let recojo_pedido_quienrecibe_celular = $.trim($("#recojo_pedido_quienrecibe_celular").val());
-                console.log(recojo_pedido_quienrecibe_celular)
-                let recojo_pedido_direccion = $.trim($("#recojo_pedido_direccion").val());
-                let recojo_pedido_referencia = $.trim($("#recojo_pedido_referencia").val());
-                let recojo_pedido_observacion = $.trim($("#recojo_pedido_observacion").val());
-
-                //validaciones
-                //pedido
-                if (recojo_pedido == "") {
-                    Swal.fire('Debe elegir un pedido', '', 'warning');
-                    return false;
-                    return false;
-                } else if (recojo_grupo = "") {
-                    Swal.fire('El pedido no se ubica dentro de un paquete, consulte a sistemas', '', 'warning');
-                    return false;
-                    return false;
-                } else if (recojo_fecha == "") {
-                    Swal.fire('Debe elegir una fecha correspondiente', '', 'warning');
-                    return false;
-                    return false;
-                } else if (recojo_distrito == "") {
-                    Swal.fire('Debe elegir un distrito', '', 'warning');
-                    return false;
-                }//datos de envio
-                else if (recojo_pedido_quienrecibe_nombre == "") {
-                    Swal.fire('Debe ingresar quien recibe', '', 'warning');
-                    return false;
-                } else if (recojo_pedido_quienrecibe_celular == "") {
-                    Swal.fire('Debe ingresar celular de quien recibe', '', 'warning');
-                    return false;
-                } else if (recojo_pedido_direccion == "") {
-                    Swal.fire('Debe ingresar direccion', '', 'warning');
-                    return false;
-                } else if (recojo_pedido_referencia == "") {
-                    Swal.fire('Debe ingresar referencia', '', 'warning');
-                    return false;
-                }
-
-                var fd_courier = new FormData();
-                fd_courier.append('recojo_cliente', recojo_cliente);
-                fd_courier.append('recojo_pedido', recojo_pedido);
-                fd_courier.append('recojo_grupo', recojo_grupo);
-                fd_courier.append('recojo_fecha', recojo_fecha);
-                fd_courier.append('recojo_distrito', recojo_distrito);
-                fd_courier.append('recojo_pedido_quienrecibe_nombre', recojo_pedido_quienrecibe_nombre);
-                fd_courier.append('recojo_pedido_quienrecibe_celular', recojo_pedido_quienrecibe_celular);
-                fd_courier.append('recojo_pedido_direccion', recojo_pedido_direccion);
-                fd_courier.append('recojo_pedido_referencia', recojo_pedido_referencia);
-                fd_courier.append('recojo_pedido_observacion', recojo_pedido_observacion);
-                $.ajax({
-                    data: fd_courier,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('registrar_recojer_pedido') }}",
-                    success: function (data) {
-                        $("#modal-recoger-sobre").modal("hide");
-                    }
-                });
-            });
-
-            $(document).on("click", ".btn-cancel-recojo", function () {
-                $(".card_pedidos").hide();
-                $(".card_form").hide();
-                $(".card_clientes").show();
-                //limpiar datos de direcion
-                $("#distrito_recoger").val("").selectpicker("refresh")
-                $("#recojo_pedido_quienrecibe_nombre").val("")
-                $("#recojo_pedido_quienrecibe_celular").val("")
-                $("#recojo_pedido_direccion").val("")
-                $("#recojo_pedido_referencia").val("")
-                $("#recojo_pedido_observacion").val("")
-            });
-
-            $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
-                $(".card_clientes").show()
-                $(".card_pedidos").hide()
-                $(".card_form").hide()
-
-                $("#recojo_cliente").val("")
-                $("#recojo_cliente_name").val("")
-                $("#recojo_pedido").val("")
-                $("#recojo_pedido_codigo").val("")
-                $("#recojo_pedido_grupo").val("")
-                $("#distrito_recoger").val("").selectpicker("refresh")
-                $("#recojo_pedido_direccion").val("")
-                $("#recojo_pedido_quienrecibe_nombre").val("")
-                $("#recojo_pedido_quienrecibe_celular").val("")
-                $("#recojo_pedido_direccion").val("")
-                $("#recojo_pedido_referencia").val("")
-                $("#recojo_pedido_observacion").val("")
 
 
-                $('#datatable-clientes-lista-recojer').DataTable().clear().destroy();
-
-                tablaClienteLista = $('#datatable-clientes-lista-recojer').DataTable({
-                    ...configDataTableLanguages,
-                    processing: true,
-                    stateSave: false,
-                    serverSide: true,
-                    searching: true,
-                    lengthMenu: [
-                        [5, -1],
-                        [5, 'All'],
-                    ],
-                    "order": [[0, "desc"]],
-                    createdRow: function (row, data, dataIndex) {
-                    },
-                    ajax: {
-                        url: "{{ route('pedidos.recoger.clientes') }}",
-                        data: function (d) {
-                            //d.length=5;
-                            d.user_id = $("#user_id").val();
-                        },
-                    },
-                    columns: [
-                        {data: 'id', name: 'id', "visible": false},
-                        {data: 'nombre', name: 'nombre',},
-                        {data: 'celular', name: 'celular',},
-                        {data: 'action', name: 'action',},
-                    ],
-                });
 
 
-            });
+
+
 
             $('#tablaPrincipal tbody').on('click', 'button', function () {
                 var data = tablaPrincipal.row($(this).closest('tr')).data();

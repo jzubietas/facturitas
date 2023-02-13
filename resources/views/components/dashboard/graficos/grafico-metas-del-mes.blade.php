@@ -1,8 +1,13 @@
+<style>
+    .bg-celeste{
+        background-color:#9ff1ed !important;"
+    }
+</style>
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="@if(count($excludeNov)>0)col-md-6 @else col-md-12 @endif">
-                <div class="@if(count($excludeNov)==0) d-flex justify-content-center @endif">
+            <div class="@if(count($excludeNov)>0)col-md-12 @else col-md-12 @endif">
+                <div class="@if(count($excludeNov)==0)  justify-content-center @endif">
                     <ul class="list-group">
                         <li class="list-group-item">
                             <h4 class="text-center"><b>METAS DEL MES</b></h4>
@@ -18,92 +23,171 @@
                                 </li>
                                 <li class="list-group-item" style=" background-color: #b7b7b7; ">
                                     <div class="row">
-                                        <div class="col-4">GENERAL</div>
+                                        <div class="col-2">Asesor</div>
+                                        <div class="col-1">Identificador</div>
+                                        <div class="col-1">Pedidos</div>
                                         <div class="col-4">
-                                            <x-bs-progressbar :progress="$data_noviembre->progress">
-                                                <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
-                                            </x-bs-progressbar>
-                                            <sub>% -  Pagados/ Asignados</sub>
+
+                                                <x-bs-progressbar :progress="$data_noviembre->progress_pagos">
+                                                    <span> <b>  {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}}</span>
+                                                </x-bs-progressbar>
+
+
+                                            <sub class="d-none">% -  Pagados/ Asignados</sub>
                                         </div>
+
                                         <div class="col-4">
-                                            <x-bs-progressbar :progress="$data_diciembre->progress">
-                                                <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
-                                            </x-bs-progressbar>
-                                            <sub>% -  Pagados/ Meta</sub>
+                                            @if ($data_noviembre->progress_pedidos<'100')
+                                                <x-bs-progressbar :progress="$data_noviembre->progress_pedidos">
+                                                    <span> <b>  {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}}</span>
+                                                </x-bs-progressbar>
+                                            @else
+                                                <div class="position-relative">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info" role="progressbar"
+                                                             style="width: {{$data_noviembre->progress_pedidos}}%"
+                                                             aria-valuenow="{{$data_noviembre->progress_pedidos}}"
+                                                             aria-valuemin="0"
+                                                             aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
+                                                        <span> <b>  {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}}</span>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            <sub class="d-none">% -  Pagados/ Asignados</sub>
                                         </div>
+
                                     </div>
                                 </li>
                                 @foreach($novResult as $key=>$data)
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-4">
-                                                <b>{{$data['code']}}</b> <br> {{$data['name']}}
+                                            <div class="col-2">
+                                                {{data_get($data,'name')}}
+                                            </div>
+                                            <div class="col-1">
+                                                <b>{{data_get($data,'code')}}</b>
+                                            </div>
+                                            <div class="col-1 text-center">
+                                                @if (data_get($data,'pedidos_dia')==0)
+                                                    <span class="text-white d-block bg-danger rounded">
+                                                    <b>{{data_get($data,'pedidos_dia')}}</b>
+                                                </span>
+                                                @else
+                                                    <span class="text-dark  d-block bg-white rounded">
+                                                    <b>{{data_get($data,'pedidos_dia')}}</b>
+                                                </span>
+                                                @endif
                                             </div>
                                             <div class="col-4">
-                                                <x-bs-progressbar :progress="$data['progress']">
-                                                    <span> <b>{{$data['progress']}}%</b> - {{$data['current']}}/{{$data['total']}}</span>
-                                                </x-bs-progressbar>
-                                                <sub>% -  Pagados/ Asignados</sub>
+
+                                                    <x-bs-progressbar :progress="$novResult[$key]['progress_pagos']">
+                                                        <span><b>{{$novResult[$key]['progress_pagos']}}% </b> - {{$novResult[$key]['total_pagado']}}/{{$novResult[$key]['total_pedido_mespasado']}}</span>
+
+                                                    </x-bs-progressbar>
+
+                                                <sub class="d-none">% -  Pagados/ Asignados</sub>
                                             </div>
                                             <div class="col-4">
-                                                <x-bs-progressbar :progress="$dicResult[$key]['progress']">
-                                                    <span><b>{{$dicResult[$key]['progress']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta']}}</span>
-                                                </x-bs-progressbar>
-                                                <sub>% - Asignados / Meta</sub>
+                                                @if ($novResult[$key]['progress_pedidos']<100)
+                                                    <x-bs-progressbar :progress="$novResult[$key]['progress_pedidos']">
+                                                        <span><b>{{$novResult[$key]['progress_pedidos']}}% </b> - {{$novResult[$key]['total_pedido']}}/{{$novResult[$key]['meta']}}</span>
+
+                                                    </x-bs-progressbar>
+                                                @else
+                                                    <div class="position-relative">
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-celeste"  role="progressbar"
+                                                                 style="width: {{$novResult[$key]['progress_pedidos']}}%"
+                                                                 aria-valuenow="{{$novResult[$key]['progress_pedidos']}}"
+                                                                 aria-valuemin="0"
+                                                                 aria-valuemax="100"></div>
+                                                        </div>
+                                                        <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
+                                                            <span><b>{{$novResult[$key]['progress_pedidos']}}%</b> - {{$novResult[$key]['total_pedido']}}/{{$novResult[$key]['meta_2']}}</span>
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+
+                                                <sub class="d-none">% - Asignados / Meta</sub>
                                             </div>
                                         </div>
                                     </li>
                                 @endforeach
+                                <li class="list-group-item" style=" min-width: 300px; ">
+                                    <div class="row">
+                                        <div class="col-2"></div>
+                                        <div class="col-1"></div>
+                                        <div class="col-1 text-center">
+                                            @if ($data_noviembre->pedidos_dia==0)
+                                                <span class="text-white d-block bg-danger rounded">
+                                                    <b>{{$data_noviembre->pedidos_dia}}</b>
+                                                </span>
+                                            @else
+                                                <span class="text-dark  d-block bg-white rounded">
+                                                    <b>{{$data_noviembre->pedidos_dia}}</b>
+                                                </span>
+                                            @endif
+
+                                        </div>
+                                        <div class="col-4"></div>
+                                        <div class="col-4"></div>
+                                    </div>
+                                </li>
                             </ul>
                         </li>
                     </ul>
                 </div>
             </div>
-            @if(count($excludeNov)>0)
-                <div class="col-md-6">
-                    <div class="">
-                        <ul class="list-group">
-                            <li class="list-group-item" style="background: #0000001a; min-width: 300px; ">
-                                <h4 class="text-center"><b>EXCLUIDOS</b></h4>
-                            </li>
-                            <li class="list-group-item" style="background: #0000001a; min-width: 300px; ">
-                                <ul class="list-group">
-                                    <li class="list-group-item" style="background: #0000001a; min-width: 300px; ">
-                                        <div class="row">
-                                            <div class="col-2"></div>
-                                            <div class="col-6"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}} {{$now_submonth->year}}</h5></div>
-                                            <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}} {{$now->year}}</h5></div>
-                                        </div>
-                                    </li>
-                                    @foreach($excludeNov as $index=>$data)
-                                        <li class="list-group-item" style="background: #0000001a;">
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <b>{{$data['code']}}</b> <br> {{$data['name']}}
-                                                </div>
-                                                <div class="col-4">
-                                                    <x-bs-progressbar :progress="$data['progress']">
-                                                        <span><b>{{$data['progress']}}%</b> - {{$data['total']}}/{{$data['meta']}}</span>
-                                                    </x-bs-progressbar>
-                                                    <sub>% - Pagados / Asignados</sub>
-                                                </div>
-                                                <div class="col-4">
-                                                    <x-bs-progressbar :progress="$excludeDic[$index]['progress']">
-                                                        <span><b>{{$excludeDic[$index]['progress']}}%</b> - {{$excludeDic[$index]['total']}}/{{$excludeDic[$index]['meta']}}</span>
-                                                    </x-bs-progressbar>
-                                                    <sub>% - Asignados / Meta</sub>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            @endif
+
         </div>
     </div>
+
+
+    <div class="@if(count($excludeNov)>0)col-md-12 @else col-md-12 @endif">
+        <div class="@if(count($excludeNov)==0)  justify-content-center @endif">
+            <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+    <table id="metas" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Asesor</th>
+                <th>Identificador</th>
+                <th>Pedidos</th>
+                <th>{{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
+                <br>
+                {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}}
+            </th>
+                <th> {{Str::upper($now->monthName)}} - {{$now->year}}
+                <br>
+                {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($novResult as $key=>$data)
+            <tr>
+                <td>{{data_get($data,'name')}}</td>
+                <td>{{data_get($data,'code')}}</td>
+
+                <td>{{data_get($data,'pedidos_dia')}}</td>
+
+
+                <td>{{$novResult[$key]['progress_pagos']}}% </b> - {{$novResult[$key]['total_pagado']}}/{{$novResult[$key]['total_pedido_mespasado']}}</td>
+
+
+                <td>{{$novResult[$key]['progress_pedidos']}}% </b> - {{$novResult[$key]['total_pedido']}}/{{$novResult[$key]['meta']}}</td>
+                @endforeach
+
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>    
+
+
 </div>
 
 @push('css')
@@ -114,3 +198,20 @@
 
     </style>
 @endpush
+
+@section('css-datatables')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css">
+@endsection
+
+@section('js-datatables')
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    var table = $(document).ready(function () {
+        $('#metas').DataTable().reload();
+    });
+</script>
+
+@endsection

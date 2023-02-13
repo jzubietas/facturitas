@@ -57,6 +57,7 @@ class User extends Authenticatable
         'estado',
         'equipo',
         'meta_pedido',
+        'meta_pedido_2',
         'meta_cobro',
         'supervisor',
         'operario',

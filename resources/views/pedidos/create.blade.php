@@ -94,7 +94,7 @@ __________________________________
 *RAZON SOCIAL* ${pempresa}
 *MES* ${pmes}
 *AÑO* ${panio}
-*FISICO O ELECTRONICO* ${ptipo_banca}
+*TIPO* ${ptipo_banca}
 *DESCRIPCIÓN*
     ${pdescripcion}
 *NOTA*

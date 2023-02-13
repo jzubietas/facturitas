@@ -6,6 +6,7 @@ use App\Events\PedidoAnulledEvent;
 use App\Events\PedidoAtendidoEvent;
 use App\Events\PedidoEntregadoEvent;
 use App\Events\PedidoEvent;
+use App\Models\AttachCorrection;
 use App\Models\Cliente;
 use App\Models\Departamento;
 use App\Models\DetallePago;
@@ -40,6 +41,7 @@ use PDF;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
+use Storage;
 
 class PedidoController extends Controller
 {
@@ -218,7 +220,7 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else if (Auth::user()->rol == "Encargado") {
+        } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
 
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -310,13 +312,15 @@ class PedidoController extends Controller
                     } else {
                         if ($pedido->condicion_envio_code != Pedido::ENTREGADO_CLIENTE_INT) {
                             if (!$pedido->pendiente_anulacion) {
-                                if ($pedido->condicion_pa == 0 || $pedido->estado_correccion==1) {
+                                if (\Str::contains(\Str::lower($pedido->codigo), '-c')) {
+                                    $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                } else if ($pedido->condicion_pa == 0 || $pedido->estado_correccion == 1) {
                                     $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                 }
                             }
                         } else {
                             if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
-                                if ($pedido->condicion_pa == 0 || $pedido->estado_correccion==1) {
+                                if ($pedido->condicion_pa == 0 || $pedido->estado_correccion == 1) {
                                     $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                 }
 
@@ -343,13 +347,42 @@ class PedidoController extends Controller
                                 </button>';
                 }
 
+                if (!in_array($pedido->condicion_envio_code, [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])) {
+                    if ($pedido->estado_correccion == "0") {
+                        if (\Str::contains(\Str::lower($pedido->codigo), '-c')) {
+                        } else {
+                            $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item"
+                            data-target="#modal-correccion-pedidos"
+                            data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" >
+                                <i class="fa fa-check-circle text-warning"></i>
+                                Correccion</a>';
+                        }
+                    }
+
+                }
+                if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
+                    $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item"
+                                data-target="#modal-recojo-pedidos"
+                                data-pedidoid="' . $pedido->id . '" data-pedidocodigo="' . $pedido->codigos . '" data-toggle="modal"
+                                data-clienteid="'. $pedido->cliente_id . '" data-clientenombre="' . $pedido->nombres . '"
+                                data-nombreResiv="'. $pedido->env_nombre_cliente_recibe . '" data-telefonoResiv="' . $pedido->env_celular_cliente_recibe . '"
+                                data-direccionReco="'. $pedido->env_direccion . '" data-referenciaReco="' . $pedido->env_referencia . '"
+                                data-observacionReco="'. $pedido->env_observacion . '" data-gmclink="' . $pedido->env_gmlink . '"
+                                >
+                                <i class="fa fa-check-circle text-warning"></i>
+                                Recojo</a>';
+                }
+
 
                 $btn[] = '</ul></div>';
                 return join('', $btn);
             })
-            ->rawColumns(['action', 'condicion_envio'])
+            ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color'])
             ->make(true);
     }
+
+/*    data-nombreResiv="' . $pedido->env_nombre_cliente_recibe . '" data-telefonoResiv="' . $pedido->env_celular_cliente_recibe . '" data-toggle="modal"
+        data-clienteid="'. $pedido->cliente_id . '" data-clientenombre="' . $pedido->nombres . '"*/
 
 
     public function indexperdonarcurriertabla(Request $request)
@@ -783,6 +816,20 @@ class PedidoController extends Controller
         return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
     }
 
+    public function correccionobteneradjuntoRequest(Request $request)
+    {
+        $buscar_pedido = $request->correccion;
+        $array_html = [];
+        $imagenes = AttachCorrection::where('correction_id', $request->correccion)
+            ->where("estado", "1")
+            ->orderBy('created_at', 'DESC')->get();
+        foreach ($imagenes as $imagen) {
+            $array_html[] = '<p><a href="' . Storage::disk($imagen->disk)->url($imagen->file_name) . '"><i class="fa fa-file mr-2"></i>' . $imagen->name . '</a><p>';
+        }
+        $html = implode("|", $array_html);
+        return response()->json(['html' => $array_html, 'cantidad' => count($array_html)]);
+    }
+
     public function ruc(Request $request)//rucs
     {
         if (!$request->cliente_id || $request->cliente_id == '') {
@@ -873,7 +920,7 @@ class PedidoController extends Controller
             $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')
                 ->where('clientes.tipo', '1')
                 ->where('clientes.estado', '1');
-            if($request->rol!=User::ROL_ADMIN){
+            if ($request->rol != User::ROL_ADMIN) {
                 $clientes->where('u.identificador', $request->user_id);
             }
 
@@ -1057,9 +1104,9 @@ class PedidoController extends Controller
             $codigo = intval($identi_asesor->identificador);
         }
         if ($cliente_AB->icelular != null) {
-            if ($identi_asesor->identificador != 'B') {
-                $codigo = $codigo . $cliente_AB->icelular;
-            }
+            //if ($identi_asesor->identificador != 'B') {
+            $codigo = $codigo . $cliente_AB->icelular;
+            //}
         }
         $codigo = $codigo . "-" . $fecha . "-" . $numped;
 
@@ -1151,6 +1198,12 @@ class PedidoController extends Controller
                 'icelular_asesor' => $identi_asesor->letra,
                 'icelular_cliente' => $cliente_AB->icelular,
                 'celular_cliente' => $cliente_AB->celular,
+                'estado_correccion' => '0',
+                'condicion_envio_anterior' => '',
+                'condicion_envio_code_anterior' => "0",
+                'codigo_anterior' => '',
+                'pedidoid_anterior' => 0,
+                'resultado_correccion' => 0
             ]);
 
             $pedido->update([
@@ -1349,7 +1402,7 @@ class PedidoController extends Controller
                 'dp.fecha_recepcion',
                 'dp.saldo as diferencia',
             )
-            ->activo()
+            //->activo()
             ->where('pedidos.id', $pedido)
             ->orderBy('pedidos.created_at', 'DESC')
             ->firstOrFail();

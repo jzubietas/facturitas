@@ -268,12 +268,12 @@
         },
         columns: [
         {
-            data: 'id',
-            name: 'id',
+            data: 'id2',
+            name: 'id2',
                     },
                     {
-                        data: 'id2',
-                        name: 'id2',
+                        data: 'id',
+                        name: 'id',
                         visible: false
                     },
                     {

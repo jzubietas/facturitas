@@ -23,6 +23,7 @@ class GrupoPedido extends Model
 
     public static function createGroupByPedido(Pedido $pedido, $createAnother = false, $attach = false)
     {
+        //return $pedido;
         if ($pedido->estado_sobre = 1) {
             $grupo = self::createGroupByArray([
                 "zona" => $pedido->env_zona,
@@ -30,8 +31,8 @@ class GrupoPedido extends Model
                 'distrito' => $pedido->env_distrito,
                 //'direccion' => $pedido->env_direccion,
                 //'referencia' => $pedido->env_referencia,
-                'direccion' => (($pedido->destino == 'PROVINCIA') ? 'OLVA' : $pedido->direccion),
-                'referencia' => (($pedido->destino == 'PROVINCIA') ? $pedido->tracking : $pedido->referencia),
+                'direccion' => (($pedido->env_destino == 'PROVINCIA') ? 'OLVA' : $pedido->env_direccion),
+                'referencia' => (($pedido->env_destino == 'PROVINCIA') ? $pedido->tracking : $pedido->env_referencia),
                 'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
                 'telefono' => $pedido->env_celular_cliente_recibe,
             ], $createAnother);

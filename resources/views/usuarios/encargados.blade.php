@@ -28,7 +28,8 @@
             <th scope="col">CODIGO</th>
             <th scope="col">NOMBRES Y APELLIDOS</th>
             <th scope="col">CORREO</th>
-            <th scope="col">META DE PEDIDOS</th>
+            <th scope="col">META DE PEDIDOS 1</th>
+              <th scope="col">META DE PEDIDOS 2</th>
             <th scope="col">META DE COBRO</th>
             <th scope="col">ESTADO</th>
             <th scope="col">ACCIONES</th>
@@ -41,6 +42,7 @@
               <td>{{ $user->name }}</td>
               <td>{{ $user->email }}</td>
               <td>{{ $user->meta_pedido }}</td>
+                <td>{{ $user->meta_pedido_2 }}</td>
               <td>{{ $user->meta_cobro }}</td>
               <td>
                 @php
@@ -53,7 +55,9 @@
               </td>
               <td>
                 {{-- @can('users.asignarsupervisor') --}}
-                  <a href="" data-target="#modal-asignarmetaasesor-{{ $user->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Asignar metas del mes</button></a>
+                  <a href="" data-target="#modal-asignarmetaencargado-{{ $user->id }}" data-toggle="modal">
+                      <button class="btn btn-info btn-sm">Asignar metas del mes</button>
+                  </a>
                 {{-- @endcan --}}
               </td>
             </tr>
@@ -125,7 +129,7 @@
 
   <script>
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
+
     $('input.number').keyup(function(event) {
 
     if(event.which >= 37 && event.which <= 40){
@@ -135,7 +139,7 @@
     $(this).val(function(index, value) {
       return value
         .replace(/\D/g, "")
-        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')
         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
       ;
     });

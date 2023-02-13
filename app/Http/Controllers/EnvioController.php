@@ -1615,6 +1615,25 @@ class EnvioController extends Controller
             ]);
             //desarmo el grupo
 
+            //destruyo grupo pedido items y relacion
+            $gpi=DB::table('grupo_pedido_items')
+                ->where('pedido_id', $request->quitardireccion)->get();
+                //->update(['status' => '0']);
+
+            $count_gpi=DB::table('grupo_pedido_items')
+                ->where('pedido_id', $request->quitardireccion)->count();
+            if($count_gpi==1)
+            {
+                //destruyo
+                DB::table('grupo_pedido_items')
+                    ->where('grupo_pedido_id', $gpi->grupo_pedido_id)->delete();
+                    //->update(['status' => '0']);
+                DB::table('grupo_pedidos')
+                    ->where('id', $gpi->grupo_pedido_id)->delete();
+            }
+
+            //$gp=GrupoPedidoItem::where()
+
             if ($direccion_g) {
                 DireccionGrupo::restructurarCodigos($direccion_g);
             }
@@ -1721,6 +1740,65 @@ class EnvioController extends Controller
             return response()->json(['html' => "Grupo rechazado"]);
         } else if ($accion == "retornar_para_reparto") {
             if ($request->has('pedidos')) {
+                $pedidos = Pedido::query()->whereIn('id', $request->pedidos)->get();
+                if ($pedidos->count() > 0) {
+                    $diff = $pedidosIds->diff($request->pedidos);
+                    if ($diff->count() > 0) {
+                        $grupo = DireccionGrupo::desvincularPedidos($grupo, $pedidos, '', 0);
+                    }
+                }
+            }
+
+            $grupo->update([
+                'condicion_envio' => Pedido::REPARTO_COURIER,
+                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                'motorizado_status' => 0,
+                'motorizado_sustento_text' => '',
+                'codigos_confirmados' => '',
+                'cambio_direccion_at' => null
+            ]);
+            $grupo->pedidos()->update([
+                'pedido_scaneo' => null
+            ]);
+
+            PedidoMovimientoEstado::create([
+                'pedido' => $request->hiddenEnvio,
+                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                'notificado' => 0,
+            ]);
+
+            return response()->json(['html' => "Grupo RETORNADO"]);
+        }
+        else if ($accion == "retornar_para_sindireccion") {
+            if ($request->has('pedidos')) {
+                $pedidos = Pedido::query()->whereIn('id', $request->pedidos)->update([
+                    'destino' => null,
+                    'direccion' => null,
+                    'env_destino' => null,
+                    'env_distrito' => null,
+                    'env_zona' => null,
+                    'env_zona_asignada' => null,
+                    'env_nombre_cliente_recibe' => null,
+                    'env_celular_cliente_recibe' => null,
+                    'env_cantidad' => null,
+                    'env_direccion' => null,
+                    'env_tracking' => null,
+                    'env_referencia' => null,
+                    'env_numregistro' => null,
+                    'env_rotulo' => null,
+                    'env_observacion' => null,
+                    'env_gmlink' => null,
+                    'env_importe' => null,
+                    'estado_ruta' => 0,
+                    'estado_sobre' => 0,
+                    'estado_consinsobre' => 0,
+                    'fecha_recepcion_courier' => null,
+                    //'modificador' => 'USER' . Auth::user()->id,
+                    'condicion_envio' => Pedido::RECEPCION_COURIER,
+                    'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'condicion_envio_at' => now(),
+                    'direccion_grupo' => null
+                ]);
                 $pedidos = Pedido::query()->whereIn('id', $request->pedidos)->get();
                 if ($pedidos->count() > 0) {
                     $diff = $pedidosIds->diff($request->pedidos);

@@ -15,3 +15,9 @@
 --}}
 
 </div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <x-grafico-metas-mes></x-grafico-metas-mes>
+    </div>
+</div>

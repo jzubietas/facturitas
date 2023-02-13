@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Pedidos;
 
 use App\Http\Controllers\Controller;
+use App\Models\AttachCorrection;
+use App\Models\Correction;
 use App\Models\ImagenAtencion;
 use App\Models\Pedido;
 use App\Models\PedidoMovimientoEstado;
@@ -353,7 +355,7 @@ class PedidoStatusController extends Controller
             //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
-            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
+            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
             ->count();
         //$pedidos_atendidos_total = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->atendidos()->noPendingAnulation()->count();
 
@@ -362,7 +364,7 @@ class PedidoStatusController extends Controller
             ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
-            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
+            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
             ->count();
 
         $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])->porAtender()->noPendingAnulation()->count();
@@ -381,6 +383,7 @@ class PedidoStatusController extends Controller
                     'c.nombre as nombres',
                     'c.celular as celulares',
                     'u.identificador as users',
+                    'dp.mes',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     'dp.total as total',
@@ -406,6 +409,7 @@ class PedidoStatusController extends Controller
                     DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
                 ])
                 ->where('pedidos.estado', '1')
+                ->whereNotIn('pedidos.condicion_envio_code',[Pedido::CORRECCION_OPE_INT])
                 ->where('dp.estado', '1');
 
 
@@ -545,10 +549,18 @@ class PedidoStatusController extends Controller
         $total = $pedido->detallePedido->cantidad;
         $banca = $pedido->detallePedido->tipo_banca;
         $fecha = $pedido->created_at->format('y-m');
+        $data_resumen=$pedido->resultado_correccion;
+        $data=null;
+        if($data_resumen==1 || $data_resumen=='1')
+        {
+            $data=ImagenAtencion::where('pedido_id',$pedido->id)->activo()->where('tipo','correccion')->get();
+        }else{
+            $data=ImagenAtencion::where('pedido_id',$pedido->id)->activo()->whereNull('tipo')->get();
+        }
         return response()->json([
             "cliente" => $pedido->cliente,
             "detalle_pedido" => $pedido->detallePedido,
-            "data" => $pedido->imagenAtencion()->activo()->get(),
+            "data" => $data,
             "sustento" => ($pedido->da_confirmar_descarga == 0 ? $pedido->sustento_adjunto : null),
             'copyText' => "$empresa - $fecha
 $ruc

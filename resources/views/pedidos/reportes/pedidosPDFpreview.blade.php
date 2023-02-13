@@ -121,7 +121,7 @@
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
             <td><br>{{$ptipo_banca}}<br><br></td>
           @else
-            <th scope="row"><br>*FISICO O ELECTRONICO*<br><br></th>
+            <th scope="row"><br>*TIPO*<br><br></th>
             <td><br>{{$ptipo_banca}}<br><br></td>
           @endif
 

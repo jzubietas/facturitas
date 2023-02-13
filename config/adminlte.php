@@ -352,6 +352,13 @@ return [
                     'active' => ['pedidos terminados'],
                 ],
                 [
+                    'text' => 'Bandeja de correcciones',
+                    'route' => 'operaciones.correcciones',
+                    'can' => 'operacion.correccion',
+                    'icon' => 'fas fa-check-circle dot_correcciones_count',
+                    'active' => [' correcciones'],
+                ],
+                [
                     'text' => 'Pedidos por atender',
                     'route' => 'operaciones.poratender',
                     'can' => 'operacion.poratender',

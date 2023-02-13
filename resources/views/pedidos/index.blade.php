@@ -86,6 +86,7 @@
             <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
                 <thead>
                 <tr>
+                    <th></th>
                     <th scope="col">Item</th>
                     <th scope="col">Código</th>
                     <th scope="col">Cliente</th>
@@ -96,16 +97,10 @@
                     <th scope="col">F. Registro</th>
                     <th scope="col">F. Actualizacion</th>
                     <th scope="col">Total (S/)</th>
-                    <!--<th scope="col">Est. pedido</th> -->
-
                     <th scope="col">Est. pago</th>
                     <th scope="col">Con. pago</th>
-                    <!--   <th scope="col">Est. sobre</th> -->
                     <th scope="col">Est. Sobre</th>
-                    <!--  <th scope="col">Cond. Pago</th> -->
-                    <!-- <th scope="col">Estado</th>-->
                     <th scope="col">Diferencia</th>
-                    {{--<th scope="col">Resp. Pedido</th>--}}
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
@@ -114,6 +109,9 @@
             </table>
             @include('pedidos.modalid')
             @include('pedidos.modal.restaurarid')
+            @include('pedidos.modal.Correciones.Correccion')
+            @include('pedidos.modal.Correciones.Recojo')
+            @include('pedidos.modal.Correciones.recojo-submodals.Modal-listclientes')
 
         </div>
     </div>
@@ -121,7 +119,9 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
+
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//scdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
 
     <style>
 
@@ -180,6 +180,16 @@
             text-shadow: 10px 2px #6ac7c2;
         }
 
+        td.details-control {
+            background: url("/images/details_open.png")  no-repeat center center;
+            cursor: pointer;
+        }
+        tr.details td.details-control {
+            background: url('/images/details_close.png') no-repeat center center;
+        }
+
+
+
     </style>
 @stop
 
@@ -192,11 +202,18 @@
     {{--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>--}}
     {{--<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.24/sorting/datetime-moment.js"></script>--}}
 
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+    <script
+        src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
     <!--  <script src="{{ asset('js/datatables.js') }}"></script>-->
     <script>
+        //variable
+        var tabla_pedidos = null;
+
+
         //VALIDAR CAMPO CELULAR
         function maxLengthCheck(object)
         {
@@ -205,7 +222,34 @@
         }
     </script>
     <script>
+        //import objects from "lodash/_SetCache";
 
+        let dataForm_pc={};
+        let dataForm_f={};
+        let dataForm_g={};
+        let dataForm_b={};
+        const configDataTableLanguages = {
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "_START_ - _END_ / _TOTAL_",
+                "infoEmpty": "0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": ``,
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+        }
         $(document).ready(function () {
             //moment.updateLocale(moment.locale(), { invalidDate: "Invalid Date Example" });
             //$.fn.dataTable.moment('DD-MMM-Y HH:mm:ss');
@@ -216,6 +260,669 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            $(document).on("change", "#recojo_destino", function () {
+                $("#distrito").val("").selectpicker("refresh")
+            });
+
+            $('#recojo_pedido_quienrecibe_nombre').on('input', function () {
+                this.value = this.value.replace(/[^a-zA-Z >]/g, '');
+            });
+
+            $('#recojo_pedido_quienrecibe_celular').on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            $('#recojo_pedido_direccion,#recojo_pedido_referencia,#recojo_pedido_observacion').on('input', function () {
+                this.value = this.value.replace(/[^0-9 a-zA-Z]/g, '');
+            });
+
+            $(document).on('click', '.button_load_history_recojo', function (e) {
+                const json = $(this).data('json');
+                const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
+                console.log(selectedData)
+                var form = $("#formrecojo")[0];
+
+                form.direccion_id.value = selectedData.id;
+                form.nombre.value = selectedData.nombre;
+                form.celular.value = selectedData.celular;
+                form.direccion.value = selectedData.direccion;
+                form.referencia.value = selectedData.referencia;
+                $(form.distrito).val(selectedData.distrito).trigger('change');
+
+                form.observacion.value = selectedData.observacion;
+
+                $(form.direccion_id).data('old_value', selectedData.id);
+                $(form.nombre).data('old_value', form.nombre.value);
+                $(form.celular).data('old_value', form.celular.value);
+                $(form.direccion).data('old_value', form.direccion.value);
+                $(form.referencia).data('old_value', form.referencia.value);
+                $(form.distrito).data('old_value', form.distrito.value);
+                $(form.observacion).data('old_value', form.observacion.value);
+
+                /*$("#modal-historial-lima").modal('hide')
+                $("#set_cliente_clear").show()
+                $("#saveHistoricoLima").parent().hide()
+                $("#saveHistoricoLimaEditar").parent().show()*/
+            })
+
+            tablaPedidosLista = $('#datatable-pedidos-lista-recojer').DataTable({
+                ...configDataTableLanguages,
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
+                columns:
+                    [
+                        {data: 'id', name: 'id', "visible": false},
+                        {data: 'codigo', name: 'codigo',},
+                        {data: 'condicion_envio', name: 'condicion_envio',},
+                        {data: 'action', name: 'action',},
+                    ],
+            });
+
+            tablaClienteLista = $('#datatable-clientes-lista-recojer').DataTable({
+                ...configDataTableLanguages,
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
+                columns: [
+                    {data: 'id', name: 'id', "visible": false},
+                    {data: 'user_id', name: 'user_id',},
+                    {data: 'celular', name: 'celular',},
+                    {data: 'action', name: 'action',},
+                ],
+            });
+
+            $('#modal-correccion-pedidos').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $('#modalcorreccionpedido').val(button.data('codigo'))
+                $('button:submit').prop("disabled",false)
+                ocultar_div_modal_correccion_pedidos();
+            })
+
+            $(document).on("click", ".btn-cancel-recojo", function () {
+                $(".card_pedidos").hide();
+                $(".card_form").hide();
+                $(".card_clientes").show();
+                //limpiar datos de direcion
+                $("#distrito_recoger").val("").selectpicker("refresh")
+                $("#recojo_pedido_quienrecibe_nombre").val("")
+                $("#recojo_pedido_quienrecibe_celular").val("")
+                $("#recojo_pedido_direccion").val("")
+                $("#recojo_pedido_referencia").val("")
+                $("#recojo_pedido_observacion").val("")
+            });
+
+
+            $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $('#Cliente').val(button.data('pedidoid'))
+                $('#Id-Cliente').val(button.data('clienteid'))
+                $('#cod_Cliente').val(button.data('clientenombre'))
+                $('#cod_pedido').val(button.data('pedidocodigo'))
+                console.log(button.data('direccionreco'))
+                $('#direccion_recojo').val(button.data('direccionreco'))
+                $('#nombre_recojo').val(button.data('nombreresiv'))
+                $('#celular_recojo').val(button.data('telefonoresiv'))
+                $('#referencia_recojo').val(button.data('referenciareco'))
+                $('#observacion_recojo').val(button.data('observacionreco'))
+                $('#gmlink_recojo').val(button.data('gmclink'))
+
+                $('button:submit').prop("disabled",false)
+                ocultar_div_modal_correccion_pedidos();
+            })
+
+            $(document).on("submit", "#form-recojo", function (event) {
+                event.preventDefault();
+                let direccion_recojo = $("#direccion_recojo").val();
+                let Nombre_recibe = $("#nombre_recojo").val();
+                let celular_id = $("#celular_recojo").val();
+                let referencia_recojo = $("#referencia_recojo").val();
+                let observacion_recojo= $("#observacion_recojo").val();
+                let gm_link= $("#gmlink_recojo").val();
+                let direccion_entrega = $("#Direccion_de_entrega").val();
+                let sustento_recojo = $("#sustento-recojo").val();
+
+
+
+                //validaciones
+                //pedido
+                if (direccion_entrega == "") {
+                    Swal.fire('Debe colocar una direccion de entrega', '', 'warning');
+                    return false;
+                } else if (sustento_recojo == "") {
+                    Swal.fire('Debe colocar un sustento', '', 'warning');
+                    return false;
+                } else if (direccion_recojo== "") {
+                    Swal.fire('Debe colocar una direccion de recojo', '', 'warning');
+                    return false;
+                } else if (Nombre_recibe == "") {
+                    Swal.fire('Debe colocar el nombre del que recive', '', 'warning');
+                    return false;
+                } else if (celular_id== "") {
+                    Swal.fire('Debe colocar el celular del quien recibe', '', 'warning');
+                    return false;
+                } else if (referencia_recojo == "") {
+                    Swal.fire('debe colocar un referencia', '', 'warning');
+                    return false;
+                } else if (observacion_recojo == "") {
+                    Swal.fire('Debe colocar una observacion', '', 'warning');
+                    return false;
+                } else if (gm_link == "") {
+                    Swal.fire('Debe colocar el link de Google Maps', '', 'warning');
+                    return false;
+                }
+
+                var fd_courier = new FormData();
+                fd_courier.append('direccion_entrega', direccion_entrega);
+                fd_courier.append('sustento_recojo', sustento_recojo);
+                fd_courier.append('direccion_recojo', direccion_recojo);
+                fd_courier.append('Nombre_recibe', Nombre_recibe);
+                fd_courier.append('celular_id', celular_id);
+                fd_courier.append('referencia_recojo', referencia_recojo);
+                fd_courier.append('observacion_recojo', observacion_recojo);
+                fd_courier.append('gm_link', gm_link);
+
+
+
+                $.ajax({
+                    data: fd_courier,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('registrar_recojer_pedido') }}",
+                    success: function (data) {
+                        $("#modal-recojo-pedidos").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+
+
+                });
+            });
+
+
+
+
+            $('#modal-listclientes').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var cliente = $('#Id-Cliente').val()
+
+
+                tabla_pedidos.destroy();
+                tabla_pedidos = $('#tabla-listar-clientes').DataTable({
+                    responsive: true,
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "bInfo": false,
+                    'ajax': {
+                        url: "{{ route('cargar.recojolistclientes') }}",
+                        'data': {"cliente_id": cliente},
+                        "type": "get",
+                    },
+                    columnDefs: [{
+                        'orderable': false,
+                        'className': 'select-checkbox',
+                        'targets': [0], /* column index */
+                        'orderable': false, /* true or false */
+                    }] ,
+                    columns: [
+                        {
+                            "data": "id",
+                            'targets': 0,
+                            'checkboxes': {
+                                'selectRow': false
+                            },
+                            defaultContent: '',
+                            orderable: false,
+                            sWidth: '5%',
+                        },
+                        {data: 'codigo', name: 'codigo',sWidth: '40%',},
+                        {
+                            "data": 'nombre_empresa',
+                            "name": 'nombre_empresa',
+                            "render": function (data, type, row, meta) {
+                                return data;
+                            },
+                            sWidth: '40%',
+                        },
+                    ],
+                    'select': {
+                        'style': 'multi',
+                        selector: 'td:first-child'
+                    },
+                    order: [[ 1, 'asc' ]]
+                });
+
+            })
+
+
+        $(document).on("change", "#departamento", function () {
+
+        });
+
+
+        tabla_pedidos = $('#tabla-listar-clientes').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+                [
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'codigo'
+                    },
+                    {
+                        data: 'saldo'
+                    }
+                ],
+
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+
+        $('#celular_recojo').on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            $('#datatable-clientes-lista-recojer tbody').on('click', 'button.elegir', function () {
+                var data = tablaClienteLista.row($(this).parents('tr')).data();
+                console.log(data);
+                console.log("The ID is: " + data.id + " user id : " + data.user_id + " celular:" + data.celular + " action" + data.action);
+                //disparar la otra tabla
+                //pinto la clase span
+
+                $(".card_clientes").hide()
+                $(".card_pedidos").show()
+                $(".card_form").show()
+
+                $("span.nombre_cliente_recojo").html(data.nombre)
+                $("#recojo_cliente").val(data.id)
+                $("#recojo_cliente_name").val(data.nombre)
+
+                $("#recojo_pedido").val("")
+                $("#recojo_pedido_codigo").val("")
+                $("#recojo_pedido_grupo").val("")
+
+                $("span.destino_recojo").html("");
+                $("span.distrito_recojo").html("");
+                $("span.direccion_recojo").html("");
+
+                $('#datatable-pedidos-lista-recojer').DataTable().clear().destroy();
+
+                tablaPedidosLista = $('#datatable-pedidos-lista-recojer').DataTable({
+                    ...configDataTableLanguages,
+                    processing: true,
+                    stateSave: false,
+                    serverSide: true,
+                    searching: true,
+                    "order": [[0, "desc"]],
+                    createdRow: function (row, data, dataIndex) {
+                    },
+                    ajax: {
+                        url: "{{ route('pedidos.recoger.clientes.pedidos') }}",
+                        data: function (d) {
+                            d.length = 5;
+                            d.cliente_id = data.id;
+                        },
+                    },
+                    columns:
+                        [
+                            {data: 'id', name: 'id', "visible": false},
+                            {data: 'codigo', name: 'codigo',},
+                            {data: 'condicion_envio', name: 'condicion_envio',},
+                            {data: 'action', name: 'action',},
+                        ],
+                });
+                $("#distrito_recoger").val("").selectpicker("refresh")
+            });
+
+            $(document).on("click", ".btn-charge-history", function () {
+                console.log($("#recojo_cliente").val())
+                let clienteid = $("#recojo_cliente").val();
+                if (clienteid != '') {
+                    //cargar modal
+                    //
+                    $("#modal-historico-recojo").modal("show");
+                }
+            })
+
+            $('#datatable-pedidos-lista-recojer tbody').on('click', 'button.elegir', function () {
+                var data = tablaPedidosLista.row($(this).parents('tr')).data();
+                console.log(data);
+                $("span.nombre_cliente_recojo").html(data.nombre)
+                $("#recojo_pedido").val(data.id)
+                $("#recojo_pedido_codigo").val(data.codigo)
+
+                $("#recojo_pedido_grupo").val(((data.direccion_grupo == null) ? 'SIN GRUPO' : data.direccion_grupo))
+                $("span.destino_recojo").html(data.env_destino);
+                $("span.distrito_recojo").html(data.env_distrito);
+                $("span.direccion_recojo").html(data.env_direccion);
+            })
+
+
+            $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
+                $(".card_clientes").show()
+                $(".card_pedidos").hide()
+                $(".card_form").hide()
+
+                $("#recojo_cliente").val("")
+                $("#recojo_cliente_name").val("")
+                $("#recojo_pedido").val("")
+                $("#recojo_pedido_codigo").val("")
+                $("#recojo_pedido_grupo").val("")
+                $("#distrito_recoger").val("").selectpicker("refresh")
+                $("#recojo_pedido_direccion").val("")
+                $("#recojo_pedido_quienrecibe_nombre").val("")
+                $("#recojo_pedido_quienrecibe_celular").val("")
+                $("#recojo_pedido_direccion").val("")
+                $("#recojo_pedido_referencia").val("")
+                $("#recojo_pedido_observacion").val("")
+
+
+                $('#datatable-clientes-lista-recojer').DataTable().clear().destroy();
+
+                tablaClienteLista = $('#datatable-clientes-lista-recojer').DataTable({
+                    ...configDataTableLanguages,
+                    processing: true,
+                    stateSave: false,
+                    serverSide: true,
+                    searching: true,
+                    lengthMenu: [
+                        [5, -1],
+                        [5, 'All'],
+                    ],
+                    "order": [[0, "desc"]],
+                    createdRow: function (row, data, dataIndex) {
+                    },
+                    ajax: {
+                        url: "{{ route('pedidos.recoger.clientes') }}",
+                        data: function (d) {
+                            //d.length=5;
+                            d.user_id = $("#user_id").val();
+                        },
+                    },
+                    columns: [
+                        {data: 'id', name: 'id', "visible": false},
+                        {data: 'nombre', name: 'nombre',},
+                        {data: 'celular', name: 'celular',},
+                        {data: 'action', name: 'action',},
+                    ],
+                });
+            });
+
+            window.ocultar_div_modal_correccion_pedidos = function () {
+                console.log("ocultar div")
+                $("#modal-correccionpedido-pc-container").hide();
+                $("#form-correccionpedido-pc input").val("");
+                $("#form-correccionpedido-pc img").attr('src', '');
+                $("#form-correccionpedido-pc textarea").val("");
+                $("#modal-correccionpedido-f-container").hide();
+                $("#form-correccionpedido-f input").val("");
+                $("#form-correccionpedido-f textarea").val("");
+                $("#modal-correccionpedido-g-container").hide();
+                $("#form-correccionpedido-g input").val("");
+                $("#form-correccionpedido-g textarea").val("");
+                $("#modal-correccionpedido-b-container").hide();
+                $("#form-correccionpedido-b input").val("");
+                $("#form-correccionpedido-b textarea").val("");
+            }
+
+            $(document).on('click',
+                "button#btn_correccion_pc,button#btn_correccion_f,button#btn_correccion_g,button#btn_correccion_b",
+                function(e){
+                ocultar_div_modal_correccion_pedidos();
+                switch (e.target.id)
+                {
+                    case 'btn_correccion_pc':
+                        $("#modal-correccionpedido-pc-container").show();
+                        break;
+                    case 'btn_correccion_f':
+                        $("#modal-correccionpedido-f-container").show();
+                        break;
+                    case 'btn_correccion_g':
+                        $("#modal-correccionpedido-g-container").show();
+                        break;
+                    case 'btn_correccion_b':
+                        $("#modal-correccionpedido-b-container").show();
+                        break;
+                }
+
+            })
+
+            $(document).on("submit", "form.correccion", function (e) {
+                e.preventDefault();
+                var form=null;
+                var formData=null;
+                console.log(e.target.id)
+                if(e.target.id=='form-correccionpedido-pc')
+                {
+                    let cant_sustento_pc=$("textarea[name='sustento-pc']").val().length;
+                    dataForm_pc.sustento_pc = $("textarea[name='sustento-pc']").val()
+                    let cant_detalle_pc=$("textarea[name='detalle-pc']").val().length;
+                    dataForm_pc.detalle_pc=$("textarea[name='detalle-pc']").val();
+                    if(cant_sustento_pc==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning').then(function(){
+                            console.log("before")
+                            $("textarea[name='sustento-pc']").focus()
+                        });
+                        return false;
+                    }else if(cant_detalle_pc==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+                    }if(dataForm_pc.correcion_pc_captura === undefined) {
+                        Swal.fire('Error','No se puede ingresar una captura vacia','warning');return false;
+                    }
+                }
+                else if(e.target.id=='form-correccionpedido-f')
+                {
+                    let cant_sustento_f=$("textarea[name='sustento-f']").val().length;
+                    dataForm_f.sustento_f = $("textarea[name='sustento-f']").val()
+                    let cant_facturas_f=$('input[name="correcion_f_facturas[]"]')[0].files.length
+                    //dataForm_f.correcion_f_facturas=$('input[name="correcion_f_facturas"]')[0].files;
+                    let cant_detalle_f=$("textarea[name='detalle-f']").val().length;
+                    dataForm_f.detalle_f = $("textarea[name='detalle-f']").val()
+
+
+                    if(cant_sustento_f==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
+                    }else if(cant_facturas_f==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar facturas vacias','warning');return false;
+                    }else if(cant_detalle_f==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+                    }
+                }
+                else if(e.target.id=='form-correccionpedido-g')
+                {
+                    let cant_sustento_g=$("textarea[name='sustento-g']").val().length
+                    dataForm_g.sustento_g = $("textarea[name='sustento-g']").val()
+                    let cant_adjuntos_g=$('input[name="correcion_g_adjuntos[]"]')[0].files.length
+
+                    let cant_detalle_g=$("textarea[name='detalle-g']").val().length;
+                    dataForm_g.detalle_g = $("textarea[name='detalle-g']").val()
+                    if(cant_sustento_g==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
+                    }else if(cant_adjuntos_g==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
+                    }else if(cant_detalle_g==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+                    }
+                }
+                else if(e.target.id=='form-correccionpedido-b')
+                {
+                    let cant_sustento_b=$("textarea[name='sustento-b']").val().length;
+                    dataForm_b.sustento_b = $("textarea[name='sustento-b']").val()
+                    let cant_adjuntos_b=$('input[name="correcion_b_adjuntos[]"]')[0].files.length
+                    if(cant_sustento_b==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
+                    }else if(cant_adjuntos_b==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
+                    }
+                }
+                switch (e.target.id)
+                {
+                    case 'form-correccionpedido-pc':
+                        dataForm_pc.opcion = 1
+                        dataForm_pc.modalcorreccionpedido=$('#modalcorreccionpedido').val();
+                        formData=dataForm_pc
+                        break;
+                    case 'form-correccionpedido-f':
+                        dataForm_f.opcion = 2
+                        dataForm_f.modalcorreccionpedido=$('#modalcorreccionpedido').val();
+                        formData=dataForm_f
+                        break;
+                    case 'form-correccionpedido-g':
+                        dataForm_g.opcion = 3
+                        dataForm_g.modalcorreccionpedido=$('#modalcorreccionpedido').val();
+                        formData=dataForm_g
+                        break;
+                    case 'form-correccionpedido-b':
+                        dataForm_b.opcion = 4
+                        dataForm_b.modalcorreccionpedido=$('#modalcorreccionpedido').val();
+                        formData=dataForm_b
+                        break;
+                }
+                var fd = new FormData();
+                Object.keys(formData).forEach(function (key) {
+                    if (key == 'file' && formData[key]) {
+                        fd.append(key, formData[key], formData[key].name);
+                    } else {
+                        fd.append(key, formData[key]);
+                    }
+                })
+                switch(e.target.id)
+                {
+                    case 'form-correccionpedido-pc':break;
+                    case 'form-correccionpedido-f':
+                        let files_f_f = $('[name="correcion_f_facturas[]');
+                        if (files_f_f[0].files.length > 0) {
+                            for (let i in files_f_f[0].files) {
+                                fd.append('correcion_f_facturas[]', files_f_f[0].files[i]);
+                            }
+                        }
+                        let files_a_f = $('[name="correcion_f_adjuntos[]');
+                        if (files_a_f[0].files.length > 0) {
+                            for (let i in files_a_f[0].files) {
+                                fd.append('correcion_f_adjuntos[]', files_a_f[0].files[i]);
+                            }
+                        }
+                        break;
+                    case 'form-correccionpedido-g':
+                        let files_a_g = $('[name="correcion_g_adjuntos[]');
+                        if (files_a_g[0].files.length > 0) {
+                            for (let i in files_a_g[0].files) {
+                                fd.append('correcion_g_adjuntos[]', files_a_g[0].files[i]);
+                            }
+                        }
+                        break;
+                    case 'form-correccionpedido-b':
+                        let files_a_b = $('[name="correcion_b_adjuntos[]');
+                        if (files_a_b[0].files.length > 0) {
+                            for (let i in files_a_b[0].files) {
+                                fd.append('correcion_b_adjuntos[]', files_a_b[0].files[i]);
+                            }
+                        }
+                        break;
+                }
+                console.log(fd);
+                $.ajax({
+                    data: fd,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal_correccionpedidos') }}",
+                    beforeSend: function() {
+                        $('button:submit').prop("disabled",true)
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if(data.html!="0")
+                        {
+                            $("#modal-correccion-pedidos").modal("hide");
+                            //recargar tabla
+                            $('#tablaPrincipal').DataTable().ajax.reload();
+                            var urlpdf = '{{ route('correccionPDF', ':id') }}';
+                            urlpdf = urlpdf.replace(':id', data.codigo);
+                            window.open(urlpdf, '_blank');
+                            console.log(data.codigo);
+
+                            console.log("response 1")
+                        } else {
+                            console.log("response 0")
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log("Error occured.please try again");
+                        //$(placeholder).append(xhr.statusText + xhr.responseText);
+                        //$(placeholder).removeClass('loading');
+                    },
+                })
+            });
+
+            $(document).on("click","#form-correccionpedido-pc #attachmentfiles",function(){
+                console.log("creando input virtual")
+                var file = document.createElement('input');
+                file.type = 'file';
+                file.click()
+                file.addEventListener('change', function (e) {
+                    console.log("change")
+                    if (file.files.length > 0) {
+                        $('#form-correccionpedido-pc').find('.result_picture').css('display', 'block');
+                        console.log(URL.createObjectURL(file.files[0]))
+                        dataForm_pc.correcion_pc_captura = file.files[0]
+                        $('#form-correccionpedido-pc').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
+                    }
+                })
+            })
+
+            window.document.onpaste = function (event) {
+                var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+                console.log(items);
+                console.log((event.clipboardData || event.originalEvent.clipboardData));
+                var files = []
+                for (index in items) {
+                    var item = items[index];
+                    if (item.kind === 'file') {
+                        // adds the file to your dropzone instance
+                        var file = item.getAsFile()
+                        files.push(file)
+                    }
+                }
+                if (files.length > 0) {
+                    $('#form-correccionpedido-pc').find('.result_picture').css('display', 'block')
+                    console.log(URL.createObjectURL(files[0]))
+                    $('#form-correccionpedido-pc').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+                    dataForm_pc.correcion_pc_captura = files[0]
+                }
+            }
+
 
             if (localStorage.getItem("search_tabla") === null) {
                 //...
@@ -250,7 +957,7 @@
                 //solo completo datos
                 //hiddenId
                 //
-                $
+
 
                 $(".textcode").html(idcodigo);
                 $("#motivo").val('');
@@ -346,12 +1053,15 @@
                     },
                 });
             }
+            var detailRows = [];
+
             var tablaPrincipal = $('#tablaPrincipal').DataTable({
+                dom: 'Blfrtip',
                 processing: true,
                 serverSide: true,
                 searching: true,
                 stateSave: true,
-                order: [[0, "desc"]],
+                order: [[1, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
@@ -366,15 +1076,15 @@
                     var pedidodiferencia = data.diferencia;
 
                     if (data.condicion_code == 4 || data.estado == 0) {
-                        $('td:eq(11)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                        $('td:eq(12)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                     } else {
                         if (pedidodiferencia == null) {
-                            $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                            $('td:eq(12)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                         } else {
                             if (pedidodiferencia > 3) {
-                                $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                                $('td:eq(12)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                             } else {
-                                $('td:eq(11)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
+                                $('td:eq(12)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
                             }
                         }
                     }
@@ -519,7 +1229,13 @@ ${data.foto3 ? `
 
                 },
                 columns: [
-                    //ID
+                    {
+                        class: 'details-control',
+                        orderable: false,
+                        data: null,
+                        defaultContent: '',
+                        "searchable": false
+                    },
                     {
                         data: 'id',
                         name: 'id',
@@ -549,51 +1265,25 @@ ${data.foto3 ? `
                             }
 
                         },
-                        //searchable: true
                     },
-                    //EMPRESAS
                     {data: 'empresas', name: 'empresas',},
                     {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
-                    //USUARIOS
                     {data: 'users', name: 'users',},
                     {data: 'ruc', name: 'ruc',},
-
-                    //FECHA
                     {
                         data: 'fecha',
                         name: 'fecha',
-                        //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
                     },
                     {
                         data: 'fecha_up',
                         name: 'fecha_up',
                         "visible": false,
-                        //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
                     },
                     {
                         data: 'total',
                         name: 'total',
                         render: $.fn.dataTable.render.number(',', '.', 2, '')
                     },
-                        {{--
-                            {data: 'condicion_code',
-                                name: 'condicion_code',
-                                render: function ( data, type, row, meta ) {
-                                    if(row.pendiente_anulacion){
-                                        return '{{\App\Models\Pedido::PENDIENTE_ANULACION}}';
-                        }
-                        if(row.condicion_code==1){
-                            return '{{\App\Models\Pedido::POR_ATENDER }}';
-                        }else if(row.condicion_code==2){
-                            return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
-                        }else if(row.condicion_code==3){
-                            return '{{\App\Models\Pedido::ATENDIDO }}';
-                        }else if(row.condicion_code==4||row.estado==0){
-                            return '{{\App\Models\Pedido::ANULADO }}';
-                        }
-                    }
-                },
-                        --}}
                     {
                         data: 'condicion_pa',
                         name: 'condicion_pa',
@@ -732,6 +1422,81 @@ ${data.foto3 ? `
                         "previous": "Anterior"
                     }
                 },
+                buttons: [
+                    {
+                        text: 'RECOGER',
+                        className: 'btn btn-danger visible_button_recoger mb-4',
+                        action: function (e, dt, node, config) {
+                            $('#modal-recoger-sobre').modal("show");
+                        }
+                    }
+                ],
+            });
+
+            function charge_corrections(pedido_id) {
+                //obtener datos por ajax
+                var formData = new FormData();
+                formData.append("pedido", pedido_id);
+
+                $.ajax({
+                    async:false,data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('correccionesJson') }}",
+                    success:function(res){
+                        console.log(res);
+                        return res;
+                    }
+                });
+
+                //return 'Detalles';
+
+            }
+
+            $('#tablaPrincipal tbody').on('click', 'tr td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = tablaPrincipal.row(tr);
+
+                var data = tablaPrincipal.row( $(this).closest('tr') ).data()
+                var idxio = detailRows.indexOf(data.id);
+                console.log(idxio)
+                var idx=data.id;
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+                    detailRows.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    console.log(idx);
+                    if (idxio === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+
+                    var formData = new FormData();
+                    formData.append("pedido", idx);
+                    //row.child('asdasd').show();
+
+                    $.ajax({url: "{{ route('correccionesJson') }}" ,
+                        data: formData,processData: false,contentType: false,type: 'POST'})
+                        .done(function(data,textStatus, jqXHR){
+                            //code to handle data from webservice here.
+                            console.log(data.html);
+                            row.child(data.html).show()
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown){
+                            //code to handle error here.
+                        })
+                        .always(function(data, textStatus, jqXHR){
+                        //this code will always execute regardless
+                        });
+
+
+                    //row.child(charge_corrections(idx)).show();
+
+                }
+            });
+
+            tablaPrincipal.on('draw', function () {
+                detailRows.forEach(function(id, i) {
+                    $('#' + id + ' td.details-control').trigger('click');
+                });
             });
 
 

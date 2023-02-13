@@ -42,7 +42,7 @@
                                     <p>{{ $notification->created_at->diffForHumans() }}</p>
 
                                     @if(isset($notification->data['devolucion_id']))
-                                        <a href="{{ route('pagos.devolucion',[$notification->data['devolucion_id'],'read_notification'=>$notification->id]) }}"
+                                        <a class="btn btm-sm btn-dark" href="{{ route('pagos.devolucion',[$notification->data['devolucion_id'],'read_notification'=>$notification->id]) }}"
                                            id="mark-all">Ver notificacion</a>
                                     @else
                                         <button type="submit" class="mark-as-read btn btn-sm btn-dark"
