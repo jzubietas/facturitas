@@ -11,16 +11,18 @@ use App\Models\User;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
 use App\View\Components\dashboard\graficos\PedidosMesCountProgressBar;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use \Yajra\Datatables\Datatables;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         if (auth()->user()->rol == 'MOTORIZADO') {
-            return redirect()->route('envios.motorizados.index');//->with('info', 'registrado');
+            return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
         }
         $mytime = Carbon::now('America/Lima');
         $afecha = $mytime->year;
@@ -32,8 +34,8 @@ class DashboardController extends Controller
             ->select(
                 DB::raw("COUNT(u.identificador) AS total, u.identificador ")
             )
-            ->where('pedidos.codigo','not like',"%-C%")
-            ->where('u.identificador','<>','B')
+            ->where('pedidos.codigo', 'not like', "%-C%")
+            ->where('u.identificador', '<>', 'B')
             ->whereDate('pedidos.created_at', '=', now())
             ->groupBy('u.identificador');
         add_query_filtros_por_roles_pedidos($_pedidos, 'u.identificador');
@@ -52,8 +54,8 @@ class DashboardController extends Controller
 
         $_pedidos_totalpedidosdia = Pedido::activo()->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->where('pedidos.codigo','not like',"%-C%")
-            ->where('u.identificador','<>','B')
+            ->where('pedidos.codigo', 'not like', "%-C%")
+            ->where('u.identificador', '<>', 'B')
             ->whereDate('pedidos.created_at', '=', now());
 
         //add_query_filtros_por_roles_pedidos($_pedidos_totalpedidosdia, 'u.identificador');
@@ -112,15 +114,15 @@ class DashboardController extends Controller
 
 
         //DASHBOARD ADMINISTRADOR
-        $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total'))//META PEDIDOS
-        ->where('users.rol', "ENCARGADO")
+        $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total')) //META PEDIDOS
+            ->where('users.rol', "ENCARGADO")
             ->where('users.estado', '1')
             /* ->whereMonth('pedidos.created_at', $mfecha) */
             ->get();
 
 
-        $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
-        ->activo()
+        $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id') //CANTIDAD DE PEDIDOS DEL MES
+            ->activo()
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(DB::raw('count(dp.id) as pedidos'))
             ->wherein('u.rol', ['ASESOR'])
@@ -128,8 +130,8 @@ class DashboardController extends Controller
             ->get();
 
 
-        $pagoxmes_total_solo_asesor_b = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
-        ->activo()
+        $pagoxmes_total_solo_asesor_b = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id') //CANTIDAD DE PEDIDOS DEL MES
+            ->activo()
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(DB::raw('count(dp.id) as pedidos'))
             ->where('u.id', 51)
@@ -150,15 +152,15 @@ class DashboardController extends Controller
             ->get();
         //return $montopedidoxmes_total;
         if (Auth::user()->id == "33") {
-            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')//CANTIDAD DE PAGOS DEL MES
-            ->select(DB::raw('sum(dpa.monto) as total'))
+            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') //CANTIDAD DE PAGOS DEL MES
+                ->select(DB::raw('sum(dpa.monto) as total'))
                 ->where('pagos.estado', '1')
                 ->where('dpa.estado', '1')
                 ->whereBetween('dpa.created_at', [now()->startOfMonth(), now()->endOfMonth()])
                 ->get();
         } else {
-            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')//CANTIDAD DE PAGOS DEL MES
-            ->join('users as u', 'pagos.user_id', 'u.id')
+            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') //CANTIDAD DE PAGOS DEL MES
+                ->join('users as u', 'pagos.user_id', 'u.id')
                 ->select(DB::raw('sum(dpa.monto) as total'))
                 ->where('u.rol', 'ASESOR')
                 ->where('pagos.estado', '1')
@@ -172,7 +174,8 @@ class DashboardController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(
                 'u.identificador as usuarios',
-                DB::raw('((sum(dp.total)/count(dp.id))) as total'))
+                DB::raw('((sum(dp.total)/count(dp.id))) as total')
+            )
             //->whereIn('u.rol', ['ENCARGADO', 'Super asesor','ASESOR'])
             ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('u.identificador')
@@ -192,8 +195,8 @@ class DashboardController extends Controller
 
         //PEDIDOS X MES
 
-        $pedidos_mes_ = Pedido::select(DB::raw('count(*) as total'))//META PEDIDOS
-        ->activo()
+        $pedidos_mes_ = Pedido::select(DB::raw('count(*) as total')) //META PEDIDOS
+            ->activo()
             ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->get();
 
@@ -296,8 +299,8 @@ class DashboardController extends Controller
             ->whereBetween('pagos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('dpa.monto')];
 
-        $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
-        ->where('estado', '1')
+        $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id) //PAGOS OBSERVADOS
+            ->where('estado', '1')
             ->where('condicion', Pago::OBSERVADO)
             ->count();
         //HISTORIAL DE MIS PEDIDOS EN EL MES
@@ -336,7 +339,8 @@ class DashboardController extends Controller
                 'dp.codigo',
                 'dp.nombre_empresa',
                 'pedidos.condicion',
-                'pedidos.created_at')
+                'pedidos.created_at'
+            )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
         //DASHBOARD OPERACION
@@ -361,7 +365,10 @@ class DashboardController extends Controller
         $conteo = count(auth()->user()->unreadNotifications);
 
 
-        return view('dashboard.dashboard', compact('pedidoxmes_total',
+        return view(
+            'dashboard.dashboard',
+            compact(
+                'pedidoxmes_total',
                 'pedidos_mes_',
                 'pagoxmes_total',
                 'pagoxmes_total_solo_asesor_b',
@@ -402,22 +409,22 @@ class DashboardController extends Controller
         $widget3->renderData();
         return response()->json([
             "widgets" =>
+            [
                 [
-                    [
-                        "data" => [],
-                        "html" => \Blade::renderComponent($widget1)
-                    ],
-                    [
-                        "data" => $widget2->getData(),
-                        "html" => \Blade::renderComponent($widget2)
-                    ],
-                    [
-                        "chart" => true,
-                        "data" => $widget3->getData(),
-                        "html" => \Blade::renderComponent($widget3)
-                    ],
-                ]
-        ]);
+                    "data" => [],
+                    "html" => \Blade::renderComponent($widget1)
+                ],
+                [
+                    "data" => $widget2->getData(),
+                    "html" => \Blade::renderComponent($widget2)
+                ],
+                [
+                    "chart" => true,
+                    "data" => $widget3->getData(),
+                    "html" => \Blade::renderComponent($widget3)
+                ],
+            ]
+    ]);
     }
 
     public function searchCliente(Request $request)
@@ -454,4 +461,152 @@ class DashboardController extends Controller
             });
         return view('dashboard.searchs.search_rucs', compact('rucs'));
     }
+
+    public function graficoMetaTable(Request $request)
+    {
+        $metas = [];      
+        if (auth()->user()->rol == User::ROL_LLAMADAS) {
+            $asesores = User::query()->activo()->rolAsesor()->get();
+        } else if (auth()->user()->rol == User::ROL_FORMACION) {
+            $asesores = User::query()->activo()->rolAsesor()->get();
+        } else {
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
+            $asesores = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
+                return $query->where('supervisor', '=', $encargado);
+            })->get();
+        }
+        foreach ($asesores as $asesor) {
+            if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN])) {
+            } else {
+                if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/) {
+                    if (auth()->user()->rol != User::ROL_ENCARGADO) {
+                        if (auth()->user()->id != $asesor->id) {
+                            continue;
+                        }
+                    } else {
+                        if (auth()->user()->id != $asesor->supervisor) {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            $date_pagos = Carbon::parse(now())->subMonth();
+            $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
+                ->where('pedidos.codigo', 'not like', "%-C%")->whereDate('pedidos.created_at', now())->count();
+            $metatotal = (float)$asesor->meta_pedido;
+            $metatotal_2 = (float)$asesor->meta_pedido_2;
+            $metatotal_cobro = (float)$asesor->meta_cobro;
+            $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo', 'not like', "%-C%")->activo(), now(), 'created_at')
+                ->count();
+
+            $total_pedido_mespasado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo', 'not like', "%-C%")->activo(), $date_pagos, 'created_at')
+                ->count();
+
+            $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo', 'not like', "%-C%")->activo()->pagados(), $date_pagos, 'created_at')
+                ->count();
+
+            $item = [
+                "identificador" => $asesor->identificador,
+                "code" => "Asesor {$asesor->identificador}",
+                "pedidos_dia" => $asesor_pedido_dia,
+                "name" => $asesor->name,
+                "total_pedido" => $total_pedido,
+                "total_pedido_mespasado" => $total_pedido_mespasado,
+                "total_pagado" => $total_pagado,
+                "meta" => $metatotal,
+                "meta_2" => $metatotal_2,
+                "meta_cobro" => $metatotal_cobro,
+            ];
+            if ($asesor->excluir_meta) {
+                if ($metatotal_cobro > 0) {
+                    $p_pagos = round(($total_pedido_mespasado / $total_pagado) * 100, 2);
+                } else {
+                    $p_pagos = 0;
+                }
+
+                if ($metatotal > 0) {
+                    $p_pedidos = round(($total_pedido / $metatotal) * 100, 2);
+                } else {
+                    $p_pedidos = 0;
+                }
+
+                $item['progress_pagos'] = $p_pagos;
+                $item['progress_pedidos'] = $p_pedidos;
+            } else {
+                $progressData[] = $item;
+            }
+        }
+
+
+        $newData = [];
+            $union = collect($progressData)->groupBy('identificador');
+            foreach ($union as $identificador => $items) {
+                foreach ($items as $item) {
+                    if (!isset($newData[$identificador])) {
+                        $newData[$identificador] = $item;
+                    } else {
+                        $newData[$identificador]['total_pedido'] += data_get($item, 'total_pedido');
+                        $newData[$identificador]['total_pedido_pasado'] += data_get($item, 'total_pedido_mespasado');
+                        $newData[$identificador]['total_pagado'] += data_get($item, 'total_pagado');
+                        $newData[$identificador]['meta'] += data_get($item, 'meta');
+                        $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
+                        $newData[$identificador]['meta_cobro'] += data_get($item, 'meta_cobro');
+                    }
+                }
+                $newData[$identificador]['name'] = collect($items)->map(function ($item) {
+                    return explode(" ", data_get($item, 'name'))[0];
+                })->first();
+            }
+            $progressData = collect($newData)->values()->map(function ($item) {
+                $all = data_get($item, 'total_pedido');
+                $all_mespasado = data_get($item, 'total_pedido_mespasado');
+                $pay = data_get($item, 'total_pagado');
+                $allmeta = data_get($item, 'meta');
+                $allmeta_2 = data_get($item, 'meta_2');
+                $allmeta_cobro = data_get($item, 'meta_cobro');
+
+                if ($pay > 0) {
+                    $p_pagos = round(($pay / $all_mespasado) * 100, 2);
+                } else {
+                    $p_pagos = 0;
+                }
+
+                if ($allmeta > 0) {
+                    $p_pedidos = round(($all / $allmeta) * 100, 2);
+                } else {
+                    $p_pedidos = 0;
+                }
+
+                $item['progress_pagos'] = $p_pagos;
+                $item['progress_pedidos'] = $p_pedidos;
+                return $item;
+
+            })->sortBy('progress_pedidos', SORT_NUMERIC, true)->all();
+
+            return Datatables::of($progressData)
+            // ->editColumn('progress_pagos', function($row){
+            //     return $row->progress_pagos;
+            // })
+            ->rawColumns(['progress_pagos'])->make(true);
+        
+    }
+
+    public static function applyFilterCustom($query, CarbonInterface $date = null, $column = 'created_at')
+    {
+        if ($date == null) {
+            $date = now();
+        }
+        return $query->whereBetween($column, [
+            $date->clone()->startOfMonth(),
+            $date->clone()->endOfMonth()->endOfDay()
+        ]);
+    }
+
 }

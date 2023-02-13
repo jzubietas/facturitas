@@ -147,8 +147,8 @@
     </div>
 
 
-    <div class="@if(count($excludeNov)>0)col-md-12 @else col-md-12 @endif">
-        <div class="@if(count($excludeNov)==0)  justify-content-center @endif">
+    <div class="">
+        <div class="">
             <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
     <table id="metas" class="table table-striped table-bordered" style="width:100%">
         <thead>
@@ -167,21 +167,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($novResult as $key=>$data)
-            <tr>
-                <td>{{data_get($data,'name')}}</td>
-                <td>{{data_get($data,'code')}}</td>
 
-                <td>{{data_get($data,'pedidos_dia')}}</td>
-
-
-                <td>{{$novResult[$key]['progress_pagos']}}% </b> - {{$novResult[$key]['total_pagado']}}/{{$novResult[$key]['total_pedido_mespasado']}}</td>
-
-
-                <td>{{$novResult[$key]['progress_pedidos']}}% </b> - {{$novResult[$key]['total_pedido']}}/{{$novResult[$key]['meta']}}</td>
-                @endforeach
-
-            </tr>
         </tbody>
     </table>
     </div>
@@ -209,9 +195,60 @@
 <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
 <script>
-    var table = $(document).ready(function () {
-        $('#metas').DataTable().reload();
-    });
+  var meta = null
+    meta = $('#metas').DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                dom: "",
+                "order": [[0, "desc"]],
+                ajax: {
+                    url: "{{ route('dashboard.graficoMetaTable') }}",
+                },
+                columns: [
+                    {
+                        data: 'name',
+                        name: ' name',
+                    },
+                    {
+                        data: 'code'
+                        , name: 'code'
+                    },
+                    {data: 'total_pedido', name: 'total_pedido',},
+                    
+                    {data: 'progress_pagos', name: 'progress_pagos',},
+                    {data: 'progress_pedidos', name: 'progress_pedidos',},
+
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+
+            });
+</script>
+<script>
+// function refresh() {    
+//     setTimeout(function () {
+//         meta.DataTable().ajax.reload()
+//     }, 1000);
+// }
 </script>
 
 @endsection
