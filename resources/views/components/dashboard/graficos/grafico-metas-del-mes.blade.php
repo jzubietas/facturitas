@@ -184,8 +184,8 @@
         }
 
         .animated-progress {
-  width: 300px;
-  height: 30px;
+  /* width: 300px;
+  height: 30px; */
   border-radius: 5px;
   margin: 20px 10px;
   border: 1px solid rgb(189, 113, 113);

@@ -289,6 +289,34 @@
 
 @yield('js-datatables')
 
+@push('css')
+    <style>
+        .list-group .list-group-item {
+            background: #a5770f1a;
+        }
+
+        .animated-progress {
+  width: 300px;
+  height: 30px;
+  border-radius: 5px;
+  margin: 20px 10px;
+  border: 1px solid rgb(189, 113, 113);
+  overflow: hidden;
+  position: relative;
+}
+
+.animated-progress span {
+  height: 100%;
+  display: block;
+  width: 0;
+  color: rgb(255, 251, 251);
+  line-height: 30px;
+  text-align: end;
+  padding-right: 5px;
+}
+
+    </style>
+@endpush
 
 @section('css-datatables')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -332,21 +360,7 @@
                     },
                     {data: 'total_pedido', name: 'total_pedido',},
 
-                    {data: 'progress_pagos', name: 'progress_pagos', render: function ( data, type, row, meta ) {
-              if(data==null)
-              {
-                return "SIN PEDIDOS";
-              }else{
-
-
-                return `
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"> $this.$progress_pagos - total_pedido </div>
-                </div>`;
-                //return data;
-              }
-
-            }},
+                    {data: 'progress_pagos', name: 'progress_pagos'},
                     {data: 'progress_pedidos', name: 'progress_pedidos',},
 
                 ],
@@ -374,11 +388,10 @@
             });
 </script>
 <script>
-// function refresh() {
-//     setTimeout(function () {
-//         meta.DataTable().ajax.reload()
-//     }, 1000);
-// }
+setInterval(recargametasxmes, 100000000);
+function recargametasxmes(){
+    $("#metas").DataTable().ajax.reload();
+}
 </script>
 
 @endsection

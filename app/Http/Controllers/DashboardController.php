@@ -598,10 +598,27 @@ class DashboardController extends Controller
                  return 'asdsadds';
              })
              ->editColumn('code', function($row){
-                    return 'codigo';
+                    return '<span class="align-center"> '.$row["code"].' </span>';
             })
-             ->rawColumns(['identificador'])
+
+            ->editColumn('total_pedido', function($row){
+                return '<span class="px-4 pt-2 pb-2 bg-white text-center justify-content-center w-100"> '.$row["total_pedido"].' </span>';
+        })
+
+            // ->editColumn('progress_pagos', function($row){
+            // return '<div class="progress rounded border" style="background:#e9ecef;">
+            // <div class="progress-bar px-4 font-weight-bold text-dark" role="progressbar" style="width: 40%; background:#ffc107;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">'.$row["progress_pagos"].' </div>
+            // </div>';}
+            // )->rawColumns(['identificador', 'progress_pagos', 'total_pedido'])
+            // ->make(true);
+
+            ->editColumn('progress_pagos', function($row){
+                return '<div class="text-center">
+                            <span class="d-block bg-danger rounded"> '.$row["progress_pedidos"].' </span>
+                        </div>';} 
+                )->rawColumns(['identificador', 'code','progress_pagos', 'total_pedido'])
                 ->make(true);
+
 
     }
 
