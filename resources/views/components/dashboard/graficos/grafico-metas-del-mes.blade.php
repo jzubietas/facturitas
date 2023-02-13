@@ -25,7 +25,7 @@
                                     <div class="row">
                                         <div class="col-2">Asesor</div>
                                         <div class="col-1">Identificador</div>
-                                        <div class="col-1">Pedidos</div>
+                                        <div class="col-1">Pedidos del dia {{  \Carbon\Carbon::now()->format('d-m-Y') }}</div>
                                         <div class="col-4">
 
                                                 <x-bs-progressbar :progress="$data_noviembre->progress_pagos">
