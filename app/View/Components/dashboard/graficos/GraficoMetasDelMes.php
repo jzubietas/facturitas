@@ -107,7 +107,7 @@ class GraficoMetasDelMes extends Widgets
             }
 
             $asesor_pedido_dia=Pedido::query()->join('users as u','u.id','pedidos.user_id')->where('u.identificador',$asesor->identificador)
-                ->where('pedidos.codigo','not like',"%-C")->whereDate('pedidos.created_at',now())->count();
+                ->where('pedidos.codigo','not like',"%-C%")->whereDate('pedidos.created_at',now())->count();
             $metatotal = (float)$asesor->meta_pedido;
             $metatotal_2 = (float)$asesor->meta_pedido_2;
             $metatotal_cobro = (float)$asesor->meta_cobro;
