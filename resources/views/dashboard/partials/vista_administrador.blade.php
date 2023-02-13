@@ -123,9 +123,9 @@
                     {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}} --}}
                 <br>
                 {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
-                
+
             </th>
-                <th> 
+                <th>
                     {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
                 <br>
                 {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
@@ -137,7 +137,7 @@
         </tbody>
     </table>
     </div>
-</div>  
+</div>
 
     <div class="container-fluid">
         <div class="row">
@@ -311,12 +311,12 @@
 <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
 <script>
-  var meta = null
+  let meta = null
     meta = $('#metas').DataTable({
                 processing: true,
                 serverSide: true,
                 searching: false,
-                dom: "",
+                //dom: "",
                 "order": [[0, "desc"]],
                 ajax: {
                     url: "{{ route('dashboard.graficoMetaTable') }}",
@@ -331,13 +331,13 @@
                         , name: 'code'
                     },
                     {data: 'total_pedido', name: 'total_pedido',},
-                    
+
                     {data: 'progress_pagos', name: 'progress_pagos', render: function ( data, type, row, meta ) {
               if(data==null)
               {
                 return "SIN PEDIDOS";
               }else{
-                
+
 
                 return `
                 <div class="progress">
@@ -374,7 +374,7 @@
             });
 </script>
 <script>
-// function refresh() {    
+// function refresh() {
 //     setTimeout(function () {
 //         meta.DataTable().ajax.reload()
 //     }, 1000);

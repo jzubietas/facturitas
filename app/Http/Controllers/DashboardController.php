@@ -462,9 +462,12 @@ class DashboardController extends Controller
         return view('dashboard.searchs.search_rucs', compact('rucs'));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function graficoMetaTable(Request $request)
     {
-        $metas = [];      
+        $metas = [];
         if (auth()->user()->rol == User::ROL_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()->get();
         } else if (auth()->user()->rol == User::ROL_FORMACION) {
@@ -591,11 +594,15 @@ class DashboardController extends Controller
             })->sortBy('progress_pedidos', SORT_NUMERIC, true)->all();
 
             return Datatables::of($progressData)
-            // ->editColumn('progress_pagos', function($row){
-            //     return $row->progress_pagos;
-            // })
-            ->rawColumns(['progress_pagos'])->make(true);
-        
+             ->editColumn('identificador', function($row){
+                 return 'asdsadds';
+             })
+             ->editColumn('code', function($row){
+                    return 'codigo';
+            })
+             ->rawColumns(['identificador'])
+                ->make(true);
+
     }
 
     public static function applyFilterCustom($query, CarbonInterface $date = null, $column = 'created_at')
