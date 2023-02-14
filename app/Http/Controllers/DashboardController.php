@@ -591,7 +591,7 @@ class DashboardController extends Controller
             $item['progress_pedidos'] = $p_pedidos;
             return $item;
 
-        })->sortBy('progress_pedidos', SORT_NUMERIC, true)->all();
+        })->sortBy('progress_pedidos', SORT_NUMERIC, true)->all();;
 
         return Datatables::of($progressData)
             ->editColumn('identificador', function ($row) {
@@ -683,8 +683,6 @@ class DashboardController extends Controller
             }
             )->rawColumns(['identificador', 'code', 'progress_pagos', 'total_pedido', 'progress_pedidos'])
             ->make(true);
-
-
     }
 
     public static function applyFilterCustom($query, CarbonInterface $date = null, $column = 'created_at')
