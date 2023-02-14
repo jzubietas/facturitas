@@ -39,7 +39,7 @@ class User extends Authenticatable
     const ROL_APOYO_ADMINISTRATIVO = "Apoyo administrativo";
     const ROL_FORMACION = "FORMACIÓN";
     const ROL_MOTORIZADO = "MOTORIZADO";
-
+    const ROL_PRESENTACION = "PRESENTACION";
 
     /**
      * The attributes that are mass assignable.

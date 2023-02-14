@@ -67,6 +67,11 @@ class GraficoMetasDelMes extends Widgets
             $asesores = User::query()
                 ->activo()
                 ->rolAsesor()->get();
+        }else if (auth()->user()->rol == User::ROL_PRESENTACION)
+        {
+            $asesores = User::query()
+                ->activo()
+                ->rolAsesor()->get();
         }else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -89,7 +94,7 @@ class GraficoMetasDelMes extends Widgets
             'usuarios'=>$asesores
         ];*/
         foreach ($asesores as $asesor) {
-            if(in_array(auth()->user()->rol,[User::ROL_FORMACION,User::ROL_ADMIN]))
+            if(in_array(auth()->user()->rol,[User::ROL_FORMACION,User::ROL_ADMIN,User::ROL_PRESENTACION,User::ROL_JEFE_LLAMADAS,User::ROL_LLAMADAS]))
             {
 
             }else{
