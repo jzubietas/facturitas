@@ -291,6 +291,8 @@
     <div class="container-fluid">
         @if(Auth::user()->rol == 'Administrador')
             @include('dashboard.partials.vista_administrador')
+        @elseif(Auth::user()->rol == 'PRESENTACION')
+            @include('dashboard.partials.vista_presentacion')
         @elseif(Auth::user()->rol == 'Apoyo administrativo')
             @include('dashboard.partials.apoyo_administrativo')
         @elseif (Auth::user()->rol == 'Encargado')
