@@ -595,10 +595,10 @@ class DashboardController extends Controller
 
         return Datatables::of($progressData)
             ->editColumn('identificador', function ($row) {
-                return 'asdsadds';
+                return '';
             })
             ->editColumn('code', function ($row) {
-                return '<span class="align-center font-weight-bold justify-content-center"> ' . $row["code"] . ' </span>';
+                return '<span class="align-center font-weight-bold justify-content-center" style="font-weight: bold !important;"> ' . $row["code"] . ' </span>';
             })
             ->editColumn('total_pedido', function ($row) {
                 if ($row["total_pedido"] > 0) {
@@ -616,7 +616,7 @@ class DashboardController extends Controller
                                         <div class="rounded" role="progressbar" style="background: red !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -626,10 +626,10 @@ class DashboardController extends Controller
                     return '   <div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
-                                        <div class="rounded" role="progressbar" style="background: green !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="rounded" role="progressbar" style="background: #03af03 !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -639,10 +639,10 @@ class DashboardController extends Controller
                     return '    <div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
-                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(219,214,29,1) 0%, rgba(219,214,29,1) 27%, rgba(121,255,0,1) 100%) !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -655,7 +655,7 @@ class DashboardController extends Controller
                                         <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -665,10 +665,10 @@ class DashboardController extends Controller
                     return '    <div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
-                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(219,29,29,1) 0%, rgba(219,29,29,1) 14%, rgba(219,214,29,1) 100%) !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%) !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -682,7 +682,7 @@ class DashboardController extends Controller
                                     <div class="rounded" role="progressbar" style="background: #dc3545;width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                    <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                    <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                 </div>
                             </div>
                             <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -705,7 +705,7 @@ class DashboardController extends Controller
                                         <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -718,7 +718,7 @@ class DashboardController extends Controller
                                         <div class="rounded" role="progressbar" style="background: #8ec117 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -728,10 +728,10 @@ class DashboardController extends Controller
                    return '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
-                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(219,214,29,1) 0%, rgba(219,214,29,1) 27%, rgba(121,255,0,1) 100%) !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -744,7 +744,7 @@ class DashboardController extends Controller
                                         <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -754,10 +754,10 @@ class DashboardController extends Controller
                     return '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
-                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(219,29,29,1) 0%, rgba(219,29,29,1) 14%, rgba(219,214,29,1) 100%) !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%) !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                       </div>
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -770,7 +770,7 @@ class DashboardController extends Controller
                                     <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
-                                    <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                    <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
                                 </div>
                             </div>
                             <sub class="d-none">% -  Pagados/ Asignados</sub>
