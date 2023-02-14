@@ -118,7 +118,7 @@
               <tr class="font-weight-bold">
                 <th class="h6 font-weight-bold">Asesor</th>
                 <th class="h6 font-weight-bold">Identificador</th>
-                <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->isoFormat('D - M'))}} </th>
+                <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
                 <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
                   {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
                   {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
@@ -142,7 +142,7 @@
                 <tr class="font-weight-bold">
                     <th class="h6 font-weight-bold">Asesor</th>
                     <th class="h6 font-weight-bold">Identificador</th>
-                    <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->isoFormat('D - M'))}} </th>
+                    <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
                     <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
                         {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
                         {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
@@ -169,7 +169,7 @@
               <tr class="font-weight-bold">
                 <th class="h6 font-weight-bold">Asesor</th>
                 <th class="h6 font-weight-bold">Identificador</th>
-                <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->isoFormat('D - M'))}} </th>
+                <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
                 <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
                   {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
                   {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
