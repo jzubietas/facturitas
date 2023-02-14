@@ -113,9 +113,9 @@
     <div class="col-lg-12">
         <div class="">
             <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-    <table id="metas" class="table table-striped table-bordered" style="width:100%">
-        <thead>
-            <tr>
+    <table id="metas" class="table table-bordered border-2" style="width:100%">
+        <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
+            <tr class="font-weight-bold">
                 <th>Asesor</th>
                 <th>Identificador</th>
                 <th>Pedidos</th>
@@ -132,7 +132,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="background: #e4dbc6">
 
         </tbody>
     </table>
@@ -313,6 +313,15 @@
   line-height: 30px;
   text-align: end;
   padding-right: 5px;
+}
+
+td:nth-child(3){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.gradient-yellow-to-green{
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(219,214,29,1) 0%, rgba(144,209,3,1) 75%, rgba(121,255,0,1) 100%) !important;
 }
 
     </style>
