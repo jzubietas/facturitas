@@ -713,6 +713,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('agregardireccionjefeoperaciones', [SettingsController::class, 'agregardireccionjefeoperaciones'])->name('agregardireccionjefeoperaciones.post');
 
+    Route::post('getdireecionentrega', [SettingsController::class, 'getdireecionentrega'])->name('getdireecionentrega');
+
 
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);

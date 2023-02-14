@@ -369,13 +369,6 @@
         })
 
 
-
-
-
-
-
-
-
         @foreach($jefe_operaciones as $jefe_op)
 
         $(document).on("submit","#form_direccion_JFO{{$jefe_op->id}}",function(event) {
@@ -394,8 +387,6 @@
                 Swal.fire('Debe colocar el numero del jefe de operaciones', '', 'warning');
                 return false;
             }
-
-
 
             formData.append('direccion_jfo', direccion_Joperaciones);
             formData.append('sustento_jfo', numero_Joperaciones);
@@ -416,22 +407,12 @@
                     )
                 }
             });
-
-
-
-
         });
 
         $('#ingreso_telefonoA{{$jefe_op->id}}').on('input', function () {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
         @endforeach
-
-
-
-
-
-
 
     </script>
 @endsection

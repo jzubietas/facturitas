@@ -250,6 +250,7 @@
                 }
             },
         }
+
         $(document).ready(function () {
             //moment.updateLocale(moment.locale(), { invalidDate: "Invalid Date Example" });
             //$.fn.dataTable.moment('DD-MMM-Y HH:mm:ss');
@@ -356,11 +357,11 @@
 
             $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
+
                 $('#Cliente').val(button.data('pedidoid'))
                 $('#Id-Cliente').val(button.data('clienteid'))
                 $('#cod_Cliente').val(button.data('clientenombre'))
                 $('#cod_pedido').val(button.data('pedidocodigo'))
-                console.log(button.data('direccionreco'))
                 $('#direccion_recojo').val(button.data('direccionreco'))
                 $('#nombre_recojo').val(button.data('nombreresiv'))
                 $('#celular_recojo').val(button.data('telefonoresiv'))
@@ -368,9 +369,30 @@
                 $('#observacion_recojo').val(button.data('observacionreco'))
                 $('#gmlink_recojo').val(button.data('gmclink'))
 
+
+                var asesor = $('#cod_pedido').val();
+
+
+                var fd_asesor = new FormData();
+                fd_asesor.append('user_id', asesor);
+
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    data: fd_asesor,
+                    type: 'POST',
+                    url: "{{ route('getdireecionentrega') }}",
+                    success: function (data) {
+                        $("#modal-recojo-pedidos").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+
                 $('button:submit').prop("disabled",false)
                 ocultar_div_modal_correccion_pedidos();
             })
+
+
 
             $(document).on("submit", "#form-recojo", function (event) {
                 event.preventDefault();
@@ -413,6 +435,7 @@
                     return false;
                 }
 
+
                 var fd_courier = new FormData();
                 fd_courier.append('direccion_entrega', direccion_entrega);
                 fd_courier.append('sustento_recojo', sustento_recojo);
@@ -422,7 +445,6 @@
                 fd_courier.append('referencia_recojo', referencia_recojo);
                 fd_courier.append('observacion_recojo', observacion_recojo);
                 fd_courier.append('gm_link', gm_link);
-
 
 
                 $.ajax({

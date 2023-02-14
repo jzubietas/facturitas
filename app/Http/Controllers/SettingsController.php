@@ -151,11 +151,8 @@ class SettingsController extends Controller
 
 
         if ($validar > 0){
-
             DB::table('tabla_direccion_jefeop')->where('user_id', $id_user)->where('rol', $rol_user)->update($data);
-
         }else{
-
             DB::table('tabla_direccion_jefeop')->insert($data);
 
         }
@@ -163,5 +160,23 @@ class SettingsController extends Controller
         return $request->all();
 
     }
+
+
+    public function getdireecionentrega(Request $request)
+    {
+        $asesores= $request->user_id;//userid de asesor
+
+        $asesor=User::where('id',$asesores)->first();
+        $operario=$asesor->operario;
+        $jefeop=User::where('id',$operario)->first()->jefe;
+
+        $usuario_dr=User::where('id',$jefeop)->first()->direccion_recojo;
+
+
+
+        return $usuario_dr;
+
+    }
+
 
 }
