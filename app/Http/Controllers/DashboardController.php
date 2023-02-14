@@ -608,35 +608,85 @@ class DashboardController extends Controller
                 }
             })
             ->editColumn('progress_pedidos', function ($row) {
-                if ($row["progress_pagos"] ==100){
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: #008ffb; width: ' . $row["progress_pedidos"] . '%"> ' . $row["progress_pedidos"] . '% </span>
-                        </div>';
+              //return $row["progress_pedidos"];
+                if ($row["progress_pedidos"] >= 100){
+                    return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: red !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                 }
-                elseif ($row["progress_pagos"] >=80) {
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: #8ec117;  width: ' . $row["progress_pedidos"]  . '%"> ' . $row["progress_pedidos"]  . '% </span>
-                        </div>';
+                elseif ($row["progress_pedidos"] >=80) {
+                    return '   <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: green !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                 }
-                elseif ($row["progress_pagos"] >70){
-                    return '<div class="text-center bg-white rounded">
-                           <span class="gradient-yellow-to-green d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: linear-gradient(90deg, rgba(219,214,29,1) 0%, rgba(219,214,29,1) 27%, rgba(121,255,0,1) 100%) !important; width: ' . $row["progress_pagos"] . '%"> ' . $row["progress_pagos"] . '% </span>
-                     </div>';
+                elseif ($row["progress_pedidos"] >70){
+                    return '    <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(219,214,29,1) 0%, rgba(219,214,29,1) 27%, rgba(121,255,0,1) 100%) !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                 }
-                elseif ($row["progress_pagos"] >60){
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: #ffc107; width: ' . $row["progress_pedidos"]  . '%"> ' . $row["progress_pedidos"]  . '% </span>
-                        </div>';
+                elseif ($row["progress_pedidos"] >60){
+                    return '    <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                 }
-                elseif ($row["progress_pagos"] >50){
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: linear-gradient(90deg, rgba(219,29,29,1) 0%, rgba(219,29,29,1) 14%, rgba(219,214,29,1) 100%); !important !important; width: ' . $row["progress_pedidos"]  . '%"> ' . $row["progress_pedidos"] . '% </span>
-                        </div>';
+                elseif ($row["progress_pedidos"] >50){
+                    return '    <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(219,29,29,1) 0%, rgba(219,29,29,1) 14%, rgba(219,214,29,1) 100%) !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>
+                        ';
                 }
                 else{
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: #dc3545; width: ' . $row["progress_pedidos"] . '%"> ' . $row["progress_pedidos"] . '% </span>
-                        </div>';
+                  return '<div class="w-100 bg-white rounded">
+                            <div class="position-relative rounded">
+                                <div class="progress bg-white rounded">
+                                    <div class="rounded" role="progressbar" style="background: #dc3545;width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                    <span> <b>  ' . $row["progress_pedidos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                </div>
+                            </div>
+                            <sub class="d-none">% -  Pagados/ Asignados</sub>
+                          </div>';
                 }
             })
 
@@ -649,34 +699,82 @@ class DashboardController extends Controller
 
             ->editColumn('progress_pagos', function ($row) {
                 if($row["progress_pagos"] ==100){
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: #008ffb; width: ' . $row["progress_pagos"] . '%"> ' . $row["progress_pagos"] . '% </span>
-                        </div>';
+                    return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                 }
                 elseif ($row["progress_pagos"] >=80) {
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: #8ec117;  width: ' . $row["progress_pagos"] . '%"> ' . $row["progress_pagos"] . '% </span>
-                        </div>';
+                    return '    <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #8ec117 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                 }
                elseif ($row["progress_pagos"] >70){
-                   return '<div class="text-center bg-white rounded">
-                           <span class="gradient-yellow-to-green d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: linear-gradient(90deg, rgba(219,214,29,1) 0%, rgba(219,214,29,1) 27%, rgba(121,255,0,1) 100%) !important; width: ' . $row["progress_pagos"] . '%"> ' . $row["progress_pagos"] . '% </span>
-                     </div>';
+                   return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(219,214,29,1) 0%, rgba(219,214,29,1) 27%, rgba(121,255,0,1) 100%) !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                }
                 elseif ($row["progress_pagos"] >60){
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: #ffc107; width: ' . $row["progress_pagos"] . '%"> ' . $row["progress_pagos"] . '% </span>
-                        </div>';
+                    return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                 }
                 elseif ($row["progress_pagos"] >50){
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: linear-gradient(90deg, rgba(219,29,29,1) 0%, rgba(219,29,29,1) 14%, rgba(219,214,29,1) 100%); !important; width: ' . $row["progress_pagos"] . '%"> ' . $row["progress_pagos"] . '% </span>
-                        </div>';
+                    return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(219,29,29,1) 0%, rgba(219,29,29,1) 14%, rgba(219,214,29,1) 100%) !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
                 }
                 else{
-                    return '<div class="text-center bg-white rounded">
-                            <span class="d-block rounded font-weight-bolder text-dark" style="color: #0b0b0b !important; background: #dc3545; width: ' . $row["progress_pagos"] . '%"> ' . $row["progress_pagos"] . '% </span>
-                        </div>';
+                    return '    <div class="w-100 bg-white rounded">
+                            <div class="position-relative rounded">
+                                <div class="progress bg-white rounded">
+                                    <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                    <span> <b>  ' . $row["progress_pagos"]  . '% </b> - '.$row["meta_cobro"].' / '.$row["meta"].'</span>
+                                </div>
+                            </div>
+                            <sub class="d-none">% -  Pagados/ Asignados</sub>
+                          </div>';
                 }
 
 

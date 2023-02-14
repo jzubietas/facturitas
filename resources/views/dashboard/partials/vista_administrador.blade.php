@@ -375,7 +375,7 @@
 
         #meta_duplicat_tot{
             flex:100%;
-display: none !important;
+            display: none !important;
         }
 
         @media screen and (max-width:1486px){
@@ -468,7 +468,7 @@ display: none !important;
             serverSide: true,
             searching: false,
             dom: "",
-            lengthMenu: [8,15],
+            lengthMenu: [7,15],
             "order": [[0, "des"]],
             ajax: {
                 url: "{{ route('dashboard.graficoMetaTable') }}",
