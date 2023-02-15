@@ -583,25 +583,25 @@ class DashboardController extends Controller
         $p_pagos = 0;
       }
 
-      if ($allmeta_2 > 0) {
-        $p_pedidos_new = round(($all / $allmeta_2) * 100, 2);
-      } else {
-        $p_pedidos_new = 0;
-      }
-
       if ($allmeta > 0) {
         $p_pedidos = round(($all / $allmeta) * 100, 2);
       } else {
         $p_pedidos = 0;
       }
 
-      $item['meta_new'] = false;
-      if($p_pedidos >=100){
-        $item['progress_pedidos'] = $p_pedidos_new;
-        $item['meta_new'] = true;
+      if ($allmeta_2 > 0) {
+        $p_pedidos_new = round(($all / $allmeta_2) * 100, 2);
+      } else {
+        $p_pedidos_new = 0;
+      }
 
-      }else {
+      if ($p_pedidos >= 100) {
+        $item['progress_pedidos'] = $p_pedidos_new;
+        $item['meta_new'] = 0;
+
+      } else {
         $item['progress_pedidos'] = $p_pedidos;
+        $item['meta_new'] = 1;
       }
 
       $item['progress_pagos'] = $p_pagos;
@@ -632,7 +632,7 @@ class DashboardController extends Controller
       })
       ->editColumn('progress_pedidos', function ($row) {
         //PEDIDOS DEL MES
-        if ($row["meta_new"] = true) {
+        if ($row["meta_new"] = 0) {
           if ($row["progress_pedidos"] >= 100) {
             return '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
@@ -658,13 +658,12 @@ class DashboardController extends Controller
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                                 </div>';
           }
-        }
-        else {
-        if ($row["progress_pedidos"] >= 80) {
+        } else {
+          if ($row["progress_pedidos"] >= 80) {
             return '   <div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
-                                        <div class="rounded" role="progressbar" style="background: #03af03 !important; width: ' . $row["progress_pedidos"] . '%" ></div>
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(3,175,3,1) 0%, rgba(24,150,24,1) 60%, rgba(0,143,251,1) 100%) !important; width: ' . $row["progress_pedidos"] . '%" ></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
                                           <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"] . '% </b> - ' . $row["total_pedido"] . ' / ' . $row["meta"] . '</span>
@@ -684,8 +683,7 @@ class DashboardController extends Controller
                                   </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                                 </div>';
-          }
-          elseif ($row["progress_pedidos"] >= 60) {
+          } elseif ($row["progress_pedidos"] >= 60) {
             return '    <div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
@@ -710,8 +708,7 @@ class DashboardController extends Controller
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                                 </div>
                         ';
-          }
-          else {
+          } else {
             return '<div class="w-100 bg-white rounded">
                             <div class="position-relative rounded">
                                 <div class="progress bg-white rounded">

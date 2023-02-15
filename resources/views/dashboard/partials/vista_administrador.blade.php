@@ -561,11 +561,14 @@
     </script>
 
     <script>
-        setInterval(recargametasxmes, 100000000);
+        setInterval(recargametasxmes, 3000);
 
         function recargametasxmes() {
             $("#metas").DataTable().ajax.reload();
+              $("#metas_dp").DataTable().ajax.reload();
+          $("#meta_duplicat_tot").DataTable().ajax.reload();
         }
+
     </script>
 
 @endsection
