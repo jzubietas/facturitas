@@ -369,12 +369,10 @@
                 $('#observacion_recojo').val(button.data('observacionreco'))
                 $('#gmlink_recojo').val(button.data('gmclink'))
 
-
-                var asesor = $('#cod_pedido').val();
-
+                var cod_pedido = $('#cod_pedido').val();
 
                 var fd_asesor = new FormData();
-                fd_asesor.append('user_id', asesor);
+                fd_asesor.append('codigo_pedido', cod_pedido);
 
                 $.ajax({
                     processData: false,
@@ -383,8 +381,10 @@
                     type: 'POST',
                     url: "{{ route('getdireecionentrega') }}",
                     success: function (data) {
-                        $("#modal-recojo-pedidos").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        //console.log(data)
+                        $("#Direccion_de_entrega").val(data);
+                        //$("#modal-recojo-pedidos").modal("hide");
+                        //$('#tablaPrincipal').DataTable().ajax.reload();
                     }
                 });
 

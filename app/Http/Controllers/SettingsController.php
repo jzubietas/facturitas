@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\DireccionGrupo;
+use App\Models\Directions;
 use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -138,25 +139,19 @@ class SettingsController extends Controller
 
     public function agregardireccionjefeoperaciones(Request $request)
     {
-
         $distrito = "Los Olivos";
         $Distrito= $distrito;
         $direccion_JO = $request->direccion_jfo;
         $numero_JO = $request->numero_jfo;
         $id_user = $request->user_id;
         $rol_user = User::where( 'id', $id_user )->first()->rol;
-        $validar= DB::table('tabla_direccion_jefeop')->where('user_id', $id_user)->where('rol', $rol_user)->count();
-
+        $validar= Directions::query()->where('user_id', $id_user)->where('rol', $rol_user)->count();
         $data=array("rol"=> $rol_user , "user_id"=> $id_user, "distrito"=> $Distrito, "direccion_recojo"=>$direccion_JO,"numero_recojo"=>$numero_JO);
-
-
         if ($validar > 0){
-            DB::table('tabla_direccion_jefeop')->where('user_id', $id_user)->where('rol', $rol_user)->update($data);
+            Directions::query()->where('user_id', $id_user)->where('rol', $rol_user)->update($data);
         }else{
-            DB::table('tabla_direccion_jefeop')->insert($data);
-
+            Directions::query()->insert($data);
         }
-
         return $request->all();
 
     }
@@ -164,17 +159,18 @@ class SettingsController extends Controller
 
     public function getdireecionentrega(Request $request)
     {
-        $asesores= $request->user_id;//userid de asesor
+        $codigo_pedido= $request->codigo_pedido;//userid de asesor
+        $pedido=Pedido::where('codigo',$codigo_pedido)->first();
 
-        $asesor=User::where('id',$asesores)->first();
-        $operario=$asesor->operario;
+        $operario=User::where('id',$pedido->user_id)->first()->operario;
         $jefeop=User::where('id',$operario)->first()->jefe;
 
-        $usuario_dr=User::where('id',$jefeop)->first()->direccion_recojo;
+        //$result_direccion=User::where('id',$jefeop)->first()->id;
+        $result_direccion=Directions::query()->where('user_id',$jefeop)->first()->direccion_recojo;
 
 
 
-        return $usuario_dr;
+        return $result_direccion;
 
     }
 
