@@ -434,10 +434,10 @@
                     data: 'code'
                     , name: 'code'
                 },
-                {data: 'total_pedido', name: 'total_pedido',},
+                {data: 'pedidos_dia', name: 'pedidos_dia'},
 
                 {data: 'progress_pagos', name: 'progress_pagos'},
-                {data: 'progress_pedidos', name: 'progress_pedidos',},
+                {data: 'progress_pedidos', name: 'progress_pedidos'},
 
             ],
             language: {
