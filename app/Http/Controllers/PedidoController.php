@@ -361,9 +361,12 @@ class PedidoController extends Controller
 
                 }
                 if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
+
+                    $codigo_p = trim($pedido->codigos);
+
                     $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item"
                                 data-target="#modal-recojo-pedidos"
-                                data-pedidoid="' . $pedido->id . '" data-pedidocodigo="' . $pedido->codigos . '" data-toggle="modal"
+                                data-pedidoid="' . $pedido->id . '" data-pedidocodigo="' . $codigo_p. '" data-toggle="modal"
                                 data-clienteid="'. $pedido->cliente_id . '" data-clientenombre="' . $pedido->nombres . '"
                                 data-nombreResiv="'. $pedido->env_nombre_cliente_recibe . '" data-telefonoResiv="' . $pedido->env_celular_cliente_recibe . '"
                                 data-direccionReco="'. $pedido->env_direccion . '" data-referenciaReco="' . $pedido->env_referencia . '"

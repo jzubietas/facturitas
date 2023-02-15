@@ -964,15 +964,11 @@ class ClienteController extends Controller
                 ]
             )
             ->where('pedidos.cliente_id', $idrequest);
-        //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
-        //->get();
 
         return Datatables::query(DB::table($pedidos))
             ->addIndexColumn()
             ->make(true);
     }
-
-
 
 
     public function indexabandono()

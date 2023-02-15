@@ -81,9 +81,7 @@
                             </h6>
                             <textarea name="sustento-recojo" id="sustento-recojo" class="form-control w-100"
                                       rows="3" style=" color: red; font-weight: bold; background: white; "
-                                      placeholder="Colocar sustento">
-
-                            </textarea>
+                                      placeholder="Colocar sustento"></textarea>
                         </li>
                     </ul>
                     <hr class="mt-2 mb-3"/>

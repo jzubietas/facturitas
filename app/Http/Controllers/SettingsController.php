@@ -7,13 +7,20 @@ use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SettingsController extends Controller
 {
 
     public function settingAdmin(Request $request)
     {
-        $jefe_operaciones = User::where('rol', User::ROL_JEFE_OPERARIO)->get();
+        $jefe_operaciones = User::query()->leftJoin('tabla_direccion_jefeop as tpj', 'tpj.user_id' , 'users.id' )->where('users.rol', User::ROL_JEFE_OPERARIO)
+            ->select([
+                'users.*',
+                'tpj.direccion_recojo',
+                'tpj.numero_recojo'
+            ])->get();
+
         return view('settings.administration', compact('jefe_operaciones',));
 
     }
@@ -129,6 +136,47 @@ class SettingsController extends Controller
 
     }
 
+    public function agregardireccionjefeoperaciones(Request $request)
+    {
+
+        $distrito = "Los Olivos";
+        $Distrito= $distrito;
+        $direccion_JO = $request->direccion_jfo;
+        $numero_JO = $request->numero_jfo;
+        $id_user = $request->user_id;
+        $rol_user = User::where( 'id', $id_user )->first()->rol;
+        $validar= DB::table('tabla_direccion_jefeop')->where('user_id', $id_user)->where('rol', $rol_user)->count();
+
+        $data=array("rol"=> $rol_user , "user_id"=> $id_user, "distrito"=> $Distrito, "direccion_recojo"=>$direccion_JO,"numero_recojo"=>$numero_JO);
+
+
+        if ($validar > 0){
+            DB::table('tabla_direccion_jefeop')->where('user_id', $id_user)->where('rol', $rol_user)->update($data);
+        }else{
+            DB::table('tabla_direccion_jefeop')->insert($data);
+
+        }
+
+        return $request->all();
+
+    }
+
+
+    public function getdireecionentrega(Request $request)
+    {
+        $asesores= $request->user_id;//userid de asesor
+
+        $asesor=User::where('id',$asesores)->first();
+        $operario=$asesor->operario;
+        $jefeop=User::where('id',$operario)->first()->jefe;
+
+        $usuario_dr=User::where('id',$jefeop)->first()->direccion_recojo;
+
+
+
+        return $usuario_dr;
+
+    }
 
 
 }

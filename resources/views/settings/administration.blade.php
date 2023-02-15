@@ -43,7 +43,7 @@
         <div class="col-md-12">
             @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
                 @foreach($jefe_operaciones as $jefe_op)
-                    <form class="form-group" id="form_direccion_JFO{{$jefe_op->id}}}">
+                    <form class="form-group" id="form_direccion_JFO{{$jefe_op->id}}">
                         <div class="card">
                             <div class="card-header">
                                 <h3>Agregar dirección {{$jefe_op->name}}</h3>
@@ -53,9 +53,9 @@
                                     <label for="formGroupExampleInput">Distrito</label>
                                     <input type="text" class="form-control" id="ingreso_distrito_{{$jefe_op->id}}" placeholder="Lo Olivos" disabled>
                                     <label class="mt-2" for="formGroupExampleInput" >Ingresar direccion</label>
-                                    <input type="text" name="direccion_jfo" class="form-control" id="ingreso_adminD_{{$jefe_op->id}}" placeholder="Dirección">
+                                    <input type="text" value="{{$jefe_op->direccion_recojo}}" name="direccion_jfo" class="form-control" id="ingreso_adminD_{{$jefe_op->id}}" placeholder="Dirección" autocomplete="off">
                                     <label class="mt-2" for="formGroupExampleInput">Ingresar numero de celular</label>
-                                    <input type="text"   name="numero_jfo" class="form-control" id="ingreso_telefonoA{{$jefe_op->id}}" placeholder="Celular">
+                                    <input type="text" value="{{$jefe_op->numero_recojo}}"   name="numero_jfo" class="form-control" id="ingreso_telefonoA{{$jefe_op->id}}" autocomplete="off" placeholder="Celular">
                                 </div>
                             </div>
                             <button type="submit" id="btn_AgregarD{{$jefe_op->id}}" class="btn btn-primary">
@@ -350,28 +350,67 @@
             });
         });
 
+        $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            $('#Cliente').val(button.data('pedidoid'))
+            $('#Id-Cliente').val(button.data('clienteid'))
+            $('#cod_Cliente').val(button.data('clientenombre'))
+            $('#cod_pedido').val(button.data('pedidocodigo'))
+            console.log(button.data('direccionreco'))
+            $('#direccion_recojo').val(button.data('direccionreco'))
+            $('#nombre_recojo').val(button.data('nombreresiv'))
+            $('#celular_recojo').val(button.data('telefonoresiv'))
+            $('#referencia_recojo').val(button.data('referenciareco'))
+            $('#observacion_recojo').val(button.data('observacionreco'))
+            $('#gmlink_recojo').val(button.data('gmclink'))
+
+            $('button:submit').prop("disabled",false)
+            ocultar_div_modal_correccion_pedidos();
+        })
+
+
         @foreach($jefe_operaciones as $jefe_op)
-        $(document).on("submit","#form_direccion_JFO{{$jefe_op->id}}}",function(event) {
+
+        $(document).on("submit","#form_direccion_JFO{{$jefe_op->id}}",function(event) {
             event.preventDefault();
 
             var form= $(this)[0];
-
             var formData = new FormData(form);
+            let direccion_Joperaciones = $("#ingreso_adminD_{{$jefe_op->id}}").val();
+            let numero_Joperaciones= $("#ingreso_telefonoA{{$jefe_op->id}}").val();
 
+            //validaciones
+            if (direccion_Joperaciones == "") {
+                Swal.fire('Debe colocar una direccion de del jefe de operaciones', '', 'warning');
+                return false;
+            } else if (numero_Joperaciones == "") {
+                Swal.fire('Debe colocar el numero del jefe de operaciones', '', 'warning');
+                return false;
+            }
+
+            formData.append('direccion_jfo', direccion_Joperaciones);
+            formData.append('sustento_jfo', numero_Joperaciones);
             formData.append('user_id', {{$jefe_op->id}})
 
             $.ajax({
                 type: 'POST',
-                url: "{{ route('correccionconfirmacionRequest.post') }}",
+                url: "{{ route('agregardireccionjefeoperaciones.post') }}",
                 data: formData,
                 processData: false,
                 contentType: false,
-            }).done(function (data) {
-                $("#modalcorreccion-confirmacion").modal("hide");
-                $('#tablaPrincipal').DataTable().ajax.reload();
-            }).fail(function (err, error, errMsg) {
-                console.log(arguments, err, errMsg)
+                success: function (value) {
+                    console.log(value);
+                    Swal.fire(
+                        'Se envio correctamente los datos',
+                        '',
+                        'success'
+                    )
+                }
             });
+        });
+
+        $('#ingreso_telefonoA{{$jefe_op->id}}').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
         });
         @endforeach
 
