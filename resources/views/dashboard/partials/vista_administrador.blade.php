@@ -1,3 +1,5 @@
+@yield('css-datatables')
+
 <div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
     <h2>
         <p>
@@ -104,8 +106,89 @@
     <div class="col-lg-12">
         <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
     </div>
-    <div class="col-lg-12">
+    {{-- <div class="col-lg-12">
         <x-grafico-metas-mes></x-grafico-metas-mes>
+    </div> --}}
+
+    <div class="col-lg-12">
+        <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+        <div class="d-flex flex-wrap">
+            <table id="metas" class="table table-bordered border-2 col-lg-6 col-md-12 col-sm-12" style="width:100%">
+              <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
+              <tr class="font-weight-bold">
+                <th class="h6 font-weight-bold">Asesor</th>
+                <th class="h6 font-weight-bold">Identificador</th>
+                <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
+                <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
+                  {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
+                  {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
+                  <br>
+                  {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
+
+                </th>
+                <th class="h6 font-weight-bold text-uppercase">Pedidos
+                  {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
+                  <br>
+                  {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
+                </th>
+              </tr>
+              </thead>
+                <tbody style="background: #e4dbc6; font-weight: bold">
+
+                </tbody>
+            </table>
+            <table id="metas_dp" class="table table-bordered border-2 col-lg-6 col-md-12 col-sm-12" style="width:100%">
+                <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
+                <tr class="font-weight-bold">
+                    <th class="h6 font-weight-bold">Asesor</th>
+                    <th class="h6 font-weight-bold">Identificador</th>
+                    <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
+                    <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
+                        {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
+                        {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
+                        <br>
+                        {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
+
+                    </th>
+                    <th class="h6 font-weight-bold text-uppercase">Pedidos
+                        {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
+                        <br>
+                        {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
+                    </th>
+                </tr>
+                </thead>
+                <tbody style="background: #e4dbc6; font-weight: bold">
+
+                </tbody>
+            </table>
+        </div>
+        {{-- TABLA TOTAL --}}
+        <div class="">
+            <table id="meta_duplicat_tot" class="table table-bordered border-2 col-lg-12 col-md-12 col-sm-12" style="width:100%">
+              <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
+              <tr class="font-weight-bold">
+                <th class="h6 font-weight-bold">Asesor</th>
+                <th class="h6 font-weight-bold">Identificador</th>
+                <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
+                <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
+                  {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
+                  {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
+                  <br>
+                  {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
+
+                </th>
+                <th class="h6 font-weight-bold text-uppercase">Pedidos
+                  {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
+                  <br>
+                  {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
+                </th>
+              </tr>
+              </thead>
+                <tbody style="background: #e4dbc6; font-weight: bold">
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="container-fluid">
@@ -117,9 +200,9 @@
                             @php
                                 try {
                                      $currentDate=\Carbon\Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
-         }catch (Exception $ex){
+                                }catch (Exception $ex){
                                      $currentDate=\Carbon\Carbon::createFromFormat('m-Y',now()->format('m-Y'));
-         }
+                                }
 
                             @endphp
                             <div class="input-group">
@@ -255,3 +338,234 @@
 
 </div>
 {{-- @include('dashboard.modal.alerta') --}}
+
+@yield('js-datatables')
+
+@push('css')
+    <style>
+        .list-group .list-group-item {
+            background: #a5770f1a;
+        }
+
+        .animated-progress {
+            width: 300px;
+            height: 30px;
+            border-radius: 5px;
+            margin: 20px 10px;
+            border: 1px solid rgb(189, 113, 113);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .animated-progress span {
+            height: 100%;
+            display: block;
+            width: 0;
+            color: rgb(255, 251, 251);
+            line-height: 30px;
+            text-align: end;
+            padding-right: 5px;
+        }
+
+        td:nth-child(3) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #meta_duplicat_tot{
+            flex:100%;
+            display: none !important;
+        }
+
+        @media screen and (max-width:1486px){
+            #metas_dp{
+                display: none;
+            }
+            #metas{
+                display: none;
+            }
+            #meta_duplicat_tot{
+                display: initial !important;
+            }
+        }
+
+    </style>
+@endpush
+
+@section('css-datatables')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css">
+@endsection
+
+@section('js-datatables')
+    <script>
+        $(".animated-progress span").each(function () {
+            $(this).animate(
+                {
+                    width: $(this).attr("data-progress") + "%",
+                },
+                1000
+            );
+            $(this).text($(this).attr("data-progress") + "%");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        let meta = null
+        meta = $('#metas').DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            dom: "",
+            lengthMenu: [8,15],
+            "order": [[0, "asc"]],
+            ajax: {
+                url: "{{ route('dashboard.graficoMetaTable') }}",
+            },
+            columns: [
+                {
+                    data: 'name',
+                    name: ' name',
+                },
+                {
+                    data: 'code'
+                    , name: 'code'
+                },
+                {data: 'total_pedido', name: 'total_pedido',},
+
+                {data: 'progress_pagos', name: 'progress_pagos'},
+                {data: 'progress_pedidos', name: 'progress_pedidos',},
+
+            ],
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+
+        });
+        let meta_duplicat =  null;
+        meta_duplicat = $('#metas_dp').DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            dom: "",
+            lengthMenu: [7,15],
+            "order": [[0, "des"]],
+            ajax: {
+                url: "{{ route('dashboard.graficoMetaTable') }}",
+            },
+            columns: [
+                {
+                    data: 'name',
+                    name: ' name',
+                },
+                {
+                    data: 'code'
+                    , name: 'code'
+                },
+                {data: 'total_pedido', name: 'total_pedido',},
+
+                {data: 'progress_pagos', name: 'progress_pagos'},
+                {data: 'progress_pedidos', name: 'progress_pedidos',},
+
+            ],
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+
+        });
+        let meta_duplicat_tot =  null;
+        meta_duplicat = $('#meta_duplicat_tot').DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            dom: "",
+            lengthMenu: [15,20],
+            "order": [[0, "des"]],
+            ajax: {
+                url: "{{ route('dashboard.graficoMetaTable') }}",
+            },
+            columns: [
+                {
+                    data: 'name',
+                    name: ' name',
+                },
+                {
+                    data: 'code'
+                    , name: 'code'
+                },
+                {data: 'total_pedido', name: 'total_pedido',},
+
+                {data: 'progress_pagos', name: 'progress_pagos'},
+                {data: 'progress_pedidos', name: 'progress_pedidos',},
+
+            ],
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+
+        });
+    </script>
+
+    <script>
+        setInterval(recargametasxmes, 100000000);
+
+        function recargametasxmes() {
+            $("#metas").DataTable().ajax.reload();
+        }
+    </script>
+
+@endsection

@@ -18,6 +18,7 @@ class GraficoMetasDelMes extends Widgets
 
     public $excludeNov = [];
     public $excludeDic = [];
+    public $metas = [];
 
 
     /**
@@ -31,7 +32,7 @@ class GraficoMetasDelMes extends Widgets
         //$data_diciembre = $this->generarDataDiciembre();
 
         $now_submonth = $this->startDate->clone()->startOfMonth()->subMonth();
-        $data_noviembre = $this->generarDataNoviembre($this->startDate,$now_submonth);
+        $data_noviembre = $this->generarDataNoviembre($this->startDate, $now_submonth);
 
 
         if (\auth()->user()->rol == User::ROL_ASESOR) {
@@ -54,7 +55,7 @@ class GraficoMetasDelMes extends Widgets
         ]);
     }
 
-    public function generarDataNoviembre($date,$date_pagos)
+    public function generarDataNoviembre($date, $date_pagos)
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {
             //$asesores = [];
@@ -72,7 +73,7 @@ class GraficoMetasDelMes extends Widgets
             $asesores = User::query()
                 ->activo()
                 ->rolAsesor()->get();
-        }else {
+        } else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
                 $encargado = auth()->user()->id;
@@ -117,21 +118,21 @@ class GraficoMetasDelMes extends Widgets
             $metatotal_2 = (float)$asesor->meta_pedido_2;
             $metatotal_cobro = (float)$asesor->meta_cobro;
             $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-                ->where('codigo','not like',"%-C%")->activo(), $date, 'created_at')
+                ->where('codigo', 'not like', "%-C%")->activo(), $date, 'created_at')
                 ->count();
 
             $total_pedido_mespasado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-                ->where('codigo','not like',"%-C%")->activo(), $date_pagos, 'created_at')
+                ->where('codigo', 'not like', "%-C%")->activo(), $date_pagos, 'created_at')
                 ->count();
 
             $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-                ->where('codigo','not like',"%-C%")->activo()->pagados(), $date_pagos, 'created_at')
+                ->where('codigo', 'not like', "%-C%")->activo()->pagados(), $date_pagos, 'created_at')
                 ->count();
 
             $item = [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
-                "pedidos_dia"=>$asesor_pedido_dia,
+                "pedidos_dia" => $asesor_pedido_dia,
                 "name" => $asesor->name,
                 "total_pedido" => $total_pedido,
                 "total_pedido_mespasado" => $total_pedido_mespasado,
@@ -142,7 +143,7 @@ class GraficoMetasDelMes extends Widgets
             ];
             if ($asesor->excluir_meta) {
                 if ($metatotal_cobro > 0) {
-                    $p_pagos = round(($total_pedido_mespasado/$total_pagado) * 100, 2);
+                    $p_pagos = round(($total_pedido_mespasado / $total_pagado) * 100, 2);
                 } else {
                     $p_pagos = 0;
                 }
@@ -188,7 +189,7 @@ class GraficoMetasDelMes extends Widgets
             $allmeta_cobro = data_get($item, 'meta_cobro');
 
             if ($pay > 0) {
-                $p_pagos = round(($pay/$all_mespasado ) * 100, 2);
+                $p_pagos = round(($pay / $all_mespasado) * 100, 2);
             } else {
                 $p_pagos = 0;
             }
@@ -202,7 +203,7 @@ class GraficoMetasDelMes extends Widgets
             $item['progress_pagos'] = $p_pagos;
             $item['progress_pedidos'] = $p_pedidos;
             return $item;
-        })->sortBy('progress_pedidos',SORT_NUMERIC,true)->all();
+        })->sortBy('progress_pedidos', SORT_NUMERIC, true)->all();
 
         $this->novResult = $progressData;
 
@@ -220,12 +221,12 @@ class GraficoMetasDelMes extends Widgets
         }
 
         if ($pay > 0) {
-            $p_pagos = round(($pay/$all_mespasado) * 100, 2);
+            $p_pagos = round(($pay / $all_mespasado) * 100, 2);
         } else {
             $p_pagos = 0;
         }
 
-        $object=(object)[
+        $object = (object)[
             "progress_pedidos" => $p_pedidos,
             "progress_pagos" => $p_pagos,
             "total_pedido" => $all,
@@ -234,10 +235,9 @@ class GraficoMetasDelMes extends Widgets
             "meta" => $meta,
             "meta_2" => $meta_2,
             "meta_cobro" => $meta_cobro,
-            "pedidos_dia"=>$pedidos_dia
+            "pedidos_dia" => $pedidos_dia
         ];
 
         return $object;
     }
-
 }

@@ -11,16 +11,18 @@ use App\Models\User;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
 use App\View\Components\dashboard\graficos\PedidosMesCountProgressBar;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use \Yajra\Datatables\Datatables;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         if (auth()->user()->rol == 'MOTORIZADO') {
-            return redirect()->route('envios.motorizados.index');//->with('info', 'registrado');
+            return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
         }
         $mytime = Carbon::now('America/Lima');
         $afecha = $mytime->year;
@@ -32,8 +34,8 @@ class DashboardController extends Controller
             ->select(
                 DB::raw("COUNT(u.identificador) AS total, u.identificador ")
             )
-            ->where('pedidos.codigo','not like',"%-C%")
-            ->where('u.identificador','<>','B')
+            ->where('pedidos.codigo', 'not like', "%-C%")
+            ->where('u.identificador', '<>', 'B')
             ->whereDate('pedidos.created_at', '=', now())
             ->groupBy('u.identificador');
         add_query_filtros_por_roles_pedidos($_pedidos, 'u.identificador');
@@ -52,12 +54,12 @@ class DashboardController extends Controller
 
         $_pedidos_totalpedidosdia = Pedido::activo()->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->where('pedidos.codigo','not like',"%-C%")
-            ->where('u.identificador','<>','B')
+            ->where('pedidos.codigo', 'not like', "%-C%")
+            ->where('u.identificador', '<>', 'B')
             ->whereDate('pedidos.created_at', '=', now());
 
-        add_query_filtros_por_roles_pedidos($_pedidos_totalpedidosdia, 'u.identificador');
-        $_pedidos_totalpedidosdia = $_pedidos_totalpedidosdia->count();
+        //add_query_filtros_por_roles_pedidos($_pedidos_totalpedidosdia, 'u.identificador');
+        //$_pedidos_totalpedidosdia = $_pedidos_totalpedidosdia->count();
 
 
         /**
@@ -112,14 +114,14 @@ class DashboardController extends Controller
 
 
         //DASHBOARD ADMINISTRADOR
-        $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total'))//META PEDIDOS
+        $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total')) //META PEDIDOS
         ->where('users.rol', "ENCARGADO")
             ->where('users.estado', '1')
             /* ->whereMonth('pedidos.created_at', $mfecha) */
             ->get();
 
 
-        $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+        $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id') //CANTIDAD DE PEDIDOS DEL MES
         ->activo()
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(DB::raw('count(dp.id) as pedidos'))
@@ -128,7 +130,7 @@ class DashboardController extends Controller
             ->get();
 
 
-        $pagoxmes_total_solo_asesor_b = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+        $pagoxmes_total_solo_asesor_b = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id') //CANTIDAD DE PEDIDOS DEL MES
         ->activo()
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(DB::raw('count(dp.id) as pedidos'))
@@ -150,14 +152,14 @@ class DashboardController extends Controller
             ->get();
         //return $montopedidoxmes_total;
         if (Auth::user()->id == "33") {
-            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')//CANTIDAD DE PAGOS DEL MES
+            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') //CANTIDAD DE PAGOS DEL MES
             ->select(DB::raw('sum(dpa.monto) as total'))
                 ->where('pagos.estado', '1')
                 ->where('dpa.estado', '1')
                 ->whereBetween('dpa.created_at', [now()->startOfMonth(), now()->endOfMonth()])
                 ->get();
         } else {
-            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')//CANTIDAD DE PAGOS DEL MES
+            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') //CANTIDAD DE PAGOS DEL MES
             ->join('users as u', 'pagos.user_id', 'u.id')
                 ->select(DB::raw('sum(dpa.monto) as total'))
                 ->where('u.rol', 'ASESOR')
@@ -172,7 +174,8 @@ class DashboardController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(
                 'u.identificador as usuarios',
-                DB::raw('((sum(dp.total)/count(dp.id))) as total'))
+                DB::raw('((sum(dp.total)/count(dp.id))) as total')
+            )
             //->whereIn('u.rol', ['ENCARGADO', 'Super asesor','ASESOR'])
             ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('u.identificador')
@@ -192,7 +195,7 @@ class DashboardController extends Controller
 
         //PEDIDOS X MES
 
-        $pedidos_mes_ = Pedido::select(DB::raw('count(*) as total'))//META PEDIDOS
+        $pedidos_mes_ = Pedido::select(DB::raw('count(*) as total')) //META PEDIDOS
         ->activo()
             ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->get();
@@ -296,7 +299,7 @@ class DashboardController extends Controller
             ->whereBetween('pagos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('dpa.monto')];
 
-        $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
+        $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id) //PAGOS OBSERVADOS
         ->where('estado', '1')
             ->where('condicion', Pago::OBSERVADO)
             ->count();
@@ -336,7 +339,8 @@ class DashboardController extends Controller
                 'dp.codigo',
                 'dp.nombre_empresa',
                 'pedidos.condicion',
-                'pedidos.created_at')
+                'pedidos.created_at'
+            )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
         //DASHBOARD OPERACION
@@ -361,7 +365,10 @@ class DashboardController extends Controller
         $conteo = count(auth()->user()->unreadNotifications);
 
 
-        return view('dashboard.dashboard', compact('pedidoxmes_total',
+        return view(
+            'dashboard.dashboard',
+            compact(
+                'pedidoxmes_total',
                 'pedidos_mes_',
                 'pagoxmes_total',
                 'pagoxmes_total_solo_asesor_b',
@@ -454,4 +461,340 @@ class DashboardController extends Controller
             });
         return view('dashboard.searchs.search_rucs', compact('rucs'));
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function graficoMetaTable(Request $request)
+    {
+        $metas = [];
+        if (auth()->user()->rol == User::ROL_LLAMADAS) {
+            $asesores = User::query()->activo()->rolAsesor()->get();
+        } else if (auth()->user()->rol == User::ROL_FORMACION) {
+            $asesores = User::query()->activo()->rolAsesor()->get();
+        } else {
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
+            $asesores = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
+                return $query->where('supervisor', '=', $encargado);
+            })->get();
+        }
+        foreach ($asesores as $asesor) {
+            if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN])) {
+            } else {
+                if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/) {
+                    if (auth()->user()->rol != User::ROL_ENCARGADO) {
+                        if (auth()->user()->id != $asesor->id) {
+                            continue;
+                        }
+                    } else {
+                        if (auth()->user()->id != $asesor->supervisor) {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            $date_pagos = Carbon::parse(now())->subMonth();
+            $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
+                ->where('pedidos.codigo', 'not like', "%-C%")->whereDate('pedidos.created_at', now())->count();
+            $metatotal = (float)$asesor->meta_pedido;
+            $metatotal_2 = (float)$asesor->meta_pedido_2;
+            $metatotal_cobro = (float)$asesor->meta_cobro;
+            $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo', 'not like', "%-C%")->activo(), now(), 'created_at')
+                ->count();
+
+            $total_pedido_mespasado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo', 'not like', "%-C%")->activo(), $date_pagos, 'created_at')
+                ->count();
+
+            $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo', 'not like', "%-C%")->activo()->pagados(), $date_pagos, 'created_at')
+                ->count();
+
+            $item = [
+                "identificador" => $asesor->identificador,
+                "code" => "Asesor {$asesor->identificador}",
+                "pedidos_dia" => $asesor_pedido_dia,
+                "name" => $asesor->name,
+                "total_pedido" => $total_pedido,
+                "total_pedido_mespasado" => $total_pedido_mespasado,
+                "total_pagado" => $total_pagado,
+                "meta" => $metatotal,
+                "meta_2" => $metatotal_2,
+                "meta_cobro" => $metatotal_cobro,
+            ];
+            if ($asesor->excluir_meta) {
+                if ($metatotal_cobro > 0) {
+                    $p_pagos = round(($total_pedido_mespasado / $total_pagado) * 100, 2);
+                } else {
+                    $p_pagos = 0;
+                }
+
+                if ($metatotal > 0) {
+                    $p_pedidos = round(($total_pedido / $metatotal) * 100, 2);
+                } else {
+                    $p_pedidos = 0;
+                }
+
+                $item['progress_pagos'] = $p_pagos;
+                $item['progress_pedidos'] = $p_pedidos;
+            } else {
+                $progressData[] = $item;
+            }
+        }
+
+
+        $newData = [];
+        $union = collect($progressData)->groupBy('identificador');
+        foreach ($union as $identificador => $items) {
+            foreach ($items as $item) {
+                if (!isset($newData[$identificador])) {
+                    $newData[$identificador] = $item;
+                } else {
+                    $newData[$identificador]['total_pedido'] += data_get($item, 'total_pedido');
+                    $newData[$identificador]['total_pedido_pasado'] += data_get($item, 'total_pedido_mespasado');
+                    $newData[$identificador]['total_pagado'] += data_get($item, 'total_pagado');
+                    $newData[$identificador]['meta'] += data_get($item, 'meta');
+                    $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
+                    $newData[$identificador]['meta_cobro'] += data_get($item, 'meta_cobro');
+                }
+            }
+            $newData[$identificador]['name'] = collect($items)->map(function ($item) {
+                return explode(" ", data_get($item, 'name'))[0];
+            })->first();
+        }
+        $progressData = collect($newData)->values()->map(function ($item) {
+            $all = data_get($item, 'total_pedido');
+            $all_mespasado = data_get($item, 'total_pedido_mespasado');
+            $pay = data_get($item, 'total_pagado');
+            $allmeta = data_get($item, 'meta');
+            $allmeta_2 = data_get($item, 'meta_2');
+            $allmeta_cobro = data_get($item, 'meta_cobro');
+            $pedidos_dia = data_get($item, 'pedidos_dia');
+
+            if ($pay > 0) {
+                $p_pagos = round(($pay / $all_mespasado) * 100, 2);
+            } else {
+                $p_pagos = 0;
+            }
+
+            if ($allmeta > 0) {
+                $p_pedidos = round(($all / $allmeta) * 100, 2);
+            } else {
+                $p_pedidos = 0;
+            }
+
+            $item['progress_pagos'] = $p_pagos;
+            $item['progress_pedidos'] = $p_pedidos;
+            $item['total_pedido'] = $pedidos_dia;
+            return $item;
+
+        })->sortBy('progress_pedidos', SORT_NUMERIC, true)->all();;
+
+        return Datatables::of($progressData)
+            ->editColumn('identificador', function ($row) {
+                return '';
+            })
+            ->editColumn('code', function ($row) {
+                return '<span class="align-center font-weight-bold justify-content-center" style="font-weight: bold !important;"> ' . $row["code"] . ' </span>';
+            })
+            ->editColumn('total_pedido', function ($row) {
+                if ($row["total_pedido"] > 0) {
+                    return '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold"> ' . $row["total_pedido"] . ' </span>';
+                } else {
+                    return '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"> ' . $row["total_pedido"] . ' </span>';
+                }
+            })
+            ->editColumn('progress_pedidos', function ($row) {
+              //return $row["progress_pedidos"];
+                if ($row["progress_pedidos"] >= 100){
+                    return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: red !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["total_pedido_mespasado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+                }
+                elseif ($row["progress_pedidos"] >=80) {
+                    return '   <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #03af03 !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["total_pedido_mespasado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+                }
+                elseif ($row["progress_pedidos"] >70){
+                    return '    <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["total_pedido_mespasado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+                }
+                elseif ($row["progress_pedidos"] >60){
+                    return '    <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["total_pedido_mespasado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+                }
+                elseif ($row["progress_pedidos"] >50){
+                    return '    <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%) !important; width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["total_pedido_mespasado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>
+                        ';
+                }
+                else{
+                  return '<div class="w-100 bg-white rounded">
+                            <div class="position-relative rounded">
+                                <div class="progress bg-white rounded">
+                                    <div class="rounded" role="progressbar" style="background: #dc3545;width: ' . $row["progress_pedidos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                    <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"]  . '% </b> - '.$row["total_pedido_mespasado"].' / '.$row["meta"].'</span>
+                                </div>
+                            </div>
+                            <sub class="d-none">% -  Pagados/ Asignados</sub>
+                          </div>';
+                }
+            })
+
+            // ->editColumn('progress_pagos', function($row){
+            // return '<div class="progress rounded border" style="background:#e9ecef;">
+            // <div class="progress-bar px-4 font-weight-bold text-dark" role="progressbar" style="width: 40%; background:#ffc107;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">'.$row["progress_pagos"].' </div>
+            // </div>';}
+            // )->rawColumns(['identificador', 'progress_pagos', 'total_pedido'])
+            // ->make(true);
+
+            ->editColumn('progress_pagos', function ($row) {
+                if($row["progress_pagos"] ==100){
+                    return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["total_pagado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+                }
+                elseif ($row["progress_pagos"] >=80) {
+                    return '    <div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #8ec117 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["total_pagado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+                }
+               elseif ($row["progress_pagos"] >70){
+                   return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["total_pagado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+               }
+                elseif ($row["progress_pagos"] >60){
+                    return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["total_pagado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+                }
+                elseif ($row["progress_pagos"] >50){
+                    return '<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                    <div class="progress bg-white rounded">
+                                        <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%) !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                          <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["total_pagado"].' / '.$row["meta"].'</span>
+                                      </div>
+                                  </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                </div>';
+                }
+                else{
+                    return '    <div class="w-100 bg-white rounded">
+                            <div class="position-relative rounded">
+                                <div class="progress bg-white rounded">
+                                    <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $row["progress_pagos"]  . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
+                                    <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pagos"]  . '% </b> - '.$row["total_pagado"].' / '.$row["meta"].'</span>
+                                </div>
+                            </div>
+                            <sub class="d-none">% -  Pagados/ Asignados</sub>
+                          </div>';
+                }
+
+
+            }
+            )->rawColumns(['identificador', 'code', 'progress_pagos', 'total_pedido', 'progress_pedidos'])
+            ->make(true);
+    }
+
+    public static function applyFilterCustom($query, CarbonInterface $date = null, $column = 'created_at')
+
+    {
+        if ($date == null) {
+            $date = now();
+        }
+        return $query->whereBetween($column, [
+            $date->clone()->startOfMonth(),
+            $date->clone()->endOfMonth()->endOfDay()
+        ]);
+    }
+
 }
