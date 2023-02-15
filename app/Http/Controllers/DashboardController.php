@@ -499,7 +499,7 @@ class DashboardController extends Controller
 
             $date_pagos = Carbon::parse(now())->subMonth();
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
-                ->where('pedidos.codigo', 'not like', "%-C%")->whereDate('pedidos.created_at', now())->count();
+                ->where('pedidos.codigo', 'not like', "%-C%")->activo()->whereDate('pedidos.created_at', now())->count();
             $metatotal = (float)$asesor->meta_pedido;
             $metatotal_2 = (float)$asesor->meta_pedido_2;
             $metatotal_cobro = (float)$asesor->meta_cobro;
@@ -590,7 +590,13 @@ class DashboardController extends Controller
 
             $item['progress_pagos'] = $p_pagos;
             $item['progress_pedidos'] = $p_pedidos;
-            $item['total_pedido'] = $pedidos_dia;
+            $item['pedidos_dia'] = $pedidos_dia;
+            $item['total_pedido'] = $all;
+            $item['total_pedido_mespasado'] = $all_mespasado;
+            $item['total_pagado']=$pay;
+            $item['meta'] = $allmeta;
+            $item['meta_2'] = $allmeta_2;
+            $item['meta_cobro'] = $allmeta_cobro;
             return $item;
 
         })->sortBy('progress_pedidos', SORT_NUMERIC, true)->all();;
