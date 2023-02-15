@@ -12,6 +12,7 @@
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
+.
 
             <div class="progress-bar" role="progressbar"
                  style="width: {{$progress-70}}%;
