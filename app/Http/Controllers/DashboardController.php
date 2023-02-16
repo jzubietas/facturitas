@@ -632,12 +632,12 @@ class DashboardController extends Controller
       })
       ->editColumn('progress_pedidos', function ($row) {
         //PEDIDOS DEL MES
-        if ($row["meta_new"] = 0) {
+        if ($row["meta_new"] == 0) {
           if ($row["progress_pedidos"] == 100) {
             return '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
-                                        <div class="rounded" role="progressbar" style="background: #03af03 !important; width: ' . $row["progress_pedidos"] . '%" ></div>
+                                        <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $row["progress_pedidos"] . '%" ></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
                                           <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"] . '% </b> - ' . $row["total_pedido"] . ' / ' . $row["meta_2"] . '</span>
@@ -649,7 +649,7 @@ class DashboardController extends Controller
             return '    <div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
-                                        <div class="rounded" role="progressbar" style="background: #008ffb  !important; width: ' . $row["progress_pedidos"] . '%" ></div>
+                                        <div class="rounded" role="progressbar" style="background: #03af03 !important; width: ' . $row["progress_pedidos"] . '%" ></div>
                                         </div>
                                       <div class="position-absolute rounded w-100 text-center" style="top: 0;font-size: 12px;">
                                           <span style="font-weight: lighter"> <b style="font-weight: bold !important;">  ' . $row["progress_pedidos"] . '% </b> - ' . $row["total_pedido"] . ' / ' . $row["meta_2"] . '</span>
@@ -658,8 +658,8 @@ class DashboardController extends Controller
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                                 </div>';
           }
-        } if ($row["meta_new"] = 1){
-          if ($row["progress_pedidos"] >= 80) {
+        } if ($row["meta_new"] == 1){
+          if ($row["progress_pedidos"] >= 95) {
             return '   <div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
