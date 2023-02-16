@@ -633,7 +633,7 @@ class DashboardController extends Controller
       ->editColumn('progress_pedidos', function ($row) {
         //PEDIDOS DEL MES
         if ($row["meta_new"] = 0) {
-          if ($row["progress_pedidos"] >= 100) {
+          if ($row["progress_pedidos"] == 100) {
             return '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                     <div class="progress bg-white rounded">
@@ -658,7 +658,7 @@ class DashboardController extends Controller
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                                 </div>';
           }
-        } else {
+        } if ($row["meta_new"] = 1){
           if ($row["progress_pedidos"] >= 80) {
             return '   <div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
