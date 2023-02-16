@@ -15,15 +15,15 @@
             recuperado
             @elseif($key === '5')
             ABANDONO_PERMANENTE
-            
+
           @endif
-        
+
       </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      
+
       @if($key === '1')
         {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @elseif($key === '2')
@@ -38,11 +38,11 @@
         {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '7')
         {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
-        
+
       @endif
             <div class="card-body">
               <div class="form-row">
-                <div class="form-group col-lg-12" style="text-align: center; font-size:16px">                  
+                <div class="form-group col-lg-12" style="text-align: center; font-size:16px">
                   <div class="form-row">
                     <div class="col-lg-12">
                       {!! Form::label('anio', 'Elija el rango de fechas del reporte') !!} <br><br>
@@ -58,7 +58,7 @@
                           @elseif($key === '3')
                           <input type="hidden" id="situacion" name="situacion" value="NUEVO">
                           @elseif($key === '4')
-                          <input type="hidden" id="situacion" name="situacion" value="RECUPERADO">
+                          <input type="hidden" id="situacion" name="situacion" value="RECUPERADO RECIENTE">
                           @elseif($key === '5')
                           <input type="hidden" id="situacion" name="situacion" value="ABANDONO_PERMANENTE">
                           @elseif($key === '6')
@@ -71,7 +71,7 @@
                   </div>
                 </div>
               </div>
-            </div>    
+            </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
             </div>

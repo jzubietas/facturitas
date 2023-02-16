@@ -49,7 +49,10 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                             )
                     ->where('clientes.estado','1')
                     ->where('clientes.tipo','1')
-                    ->groupBy(
+                    ->whereNotNull('clientes.situacion')
+                    ->whereBetween('created_at', '2023-02-01 0:00:00', '2023-02-28 23:59:00');
+
+                    /*->groupBy(
                         'clientes.id',
                         'u.identificador',
                         'clientes.nombre',
@@ -64,7 +67,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                         'clientes.deuda',
                         'clientes.pidio',
                         'clientes.situacion',
-                    );
+                    );*/
                     //->get();
                 if($request->situacion=='ABANDONO')
                     $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO','ABANDONO RECIENTE']);
