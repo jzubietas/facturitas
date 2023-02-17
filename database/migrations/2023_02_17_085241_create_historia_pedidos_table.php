@@ -62,8 +62,13 @@ class CreateHistoriaPedidosTable extends Migration
             $table->string('ruc',12);
             $table->decimal('cantidad',18,2);
             $table->string('tipo_banca');
-            $table->string
-
+            $table->string('porcentaje');
+            $table->string('ft');
+            $table->string('courier');
+            $table->string('total');
+            $table->string('saldo');
+            $table->string('descripcion');
+            $table->string('nota');
 
             $table->timestamps();
         });
