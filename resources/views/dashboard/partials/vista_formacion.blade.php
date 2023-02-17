@@ -15,6 +15,7 @@
             @include('dashboard.widgets.buscar_cliente')
         </div>
         <div class="col-lg-12">
+
             <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
         </div>
 
