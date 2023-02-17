@@ -28,28 +28,28 @@
                         <li class="list-group-item text-wrap">
                             <div class="form-group">
 
-                                <div class="form-group">
+                                <div class="form-group col-md-6">
                                     <i class="fa fa-user text-red" aria-hidden="true"></i>
                                     <input type="hidden" name="nombre_id" id="Nombre_recibe">
                                     {!! Form::label('nombre_recojo', 'Nombre del contacto quien recibe') !!}
                                     {!! Form::text('nombre_recojo', null, ['class' => 'form-recojo', 'placeholder' => 'Nombre', 'autocomplete' => 'off']) !!}
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group col-md-6">
                                     <i class="fa fa-phone text-red" aria-hidden="true"></i>
                                     {!! Form::label('celular', 'Telefono del contacto quien recibe') !!}
                                     <span class="badge badge-pill badge-secondary">9 digitos</span>
                                     {!! Form::number('celular', null, ['class' => 'form-recojo', 'id' => 'celular_recojo', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group col-md-6">
                                     <i class="fa fa-street-view text-red" aria-hidden="true"></i>
 
                                     {!! Form::label('direccion_recojo', 'Direccion') !!}
                                     {!! Form::text('direccion_recojo', null, ['class' => 'form-recojo', 'placeholder' => 'Direccion_recojo' , 'autocomplete' => 'off']) !!}
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group col-md-6">
                                     <i class="fa fa-commenting-o text-red" aria-hidden="true"></i>
 
                                     {!! Form::label('referencia_recojo', 'Referencia') !!}
@@ -70,7 +70,7 @@
 
                             <div class="form-group">
                                 <label for="Direccion_de_entrega">Direccion de entrega</label>
-                                <input type="text" class="form-control" id="Direccion_de_entrega" placeholder="">
+                                <input type="text" class="form-control" id="Direccion_de_entrega" placeholder="" readonly>
                             </div>
 
                         </li>
