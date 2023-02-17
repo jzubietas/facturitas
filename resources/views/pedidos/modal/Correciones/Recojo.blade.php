@@ -32,19 +32,26 @@
 
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="form-group col-md-6">
-                        <i class="fa fa-user text-red" aria-hidden="true"></i>
-                        <input type="hidden" name="nombre_id" id="Nombre_recibe">
-                        {!! Form::label('nombre_recojo', 'Nombre del contacto quien recibe') !!}
-                        {!! Form::text('nombre_recojo', null, ['class' => 'form-recojo', 'placeholder' => 'Nombre', 'autocomplete' => 'off']) !!}
+
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <i class="fa fa-user text-red" aria-hidden="true"></i>
+                          <input type="hidden" name="nombre_id" id="Nombre_recibe">
+                          {!! Form::label('nombre_recojo', 'Nombre del contacto quien recibe') !!}
+                          {!! Form::text('nombre_recojo', null, ['class' => 'form-recojo', 'placeholder' => 'Nombre', 'autocomplete' => 'off']) !!}
+                        </div>
+                        <div class="form-group col-md-6">
+                          <i class="fa fa-phone text-red" aria-hidden="true"></i>
+                          {!! Form::label('celular', 'Telefono del contacto quien recibe') !!}
+                          <span class="badge badge-pill badge-secondary">9 digitos</span>
+                          {!! Form::number('celular', null, ['class' => 'form-recojo', 'id' => 'celular_recojo', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
+                        </div>
+
                       </div>
 
-                      <div class="form-group col-md-6">
-                        <i class="fa fa-phone text-red" aria-hidden="true"></i>
-                        {!! Form::label('celular', 'Telefono del contacto quien recibe') !!}
-                        <span class="badge badge-pill badge-secondary">9 digitos</span>
-                        {!! Form::number('celular', null, ['class' => 'form-recojo', 'id' => 'celular_recojo', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
-                      </div>
+
+
+
 
                       <div class="form-group col-md-6">
                         <i class="fa fa-street-view text-red" aria-hidden="true"></i>
