@@ -13,6 +13,8 @@ class CreateDirectionsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('directions');
+
         Schema::create('directions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->nullable();

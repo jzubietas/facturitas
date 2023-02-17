@@ -69,6 +69,9 @@ class CreateHistoriaPedidosTable extends Migration
             $table->string('saldo');
             $table->string('descripcion');
             $table->string('nota');
+            $table->string('cant_compro');
+            $table->string('atendido_por');
+            $table->string('atendido_por_id');
 
             $table->timestamps();
         });
