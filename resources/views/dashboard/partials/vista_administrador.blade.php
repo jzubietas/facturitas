@@ -162,74 +162,10 @@
       {{--TABLA DUAL--}}
       <div class="">
         <div class="d-flex flex-wrap">
-          <table id="metas" class="table table-bordered border-2 col-lg-6 col-md-12 col-sm-12" style="width:100%">
-            <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
-            <tr class="font-weight-bold">
-              <th class="h6 font-weight-bold" id="#asesor">Asesor</th>
-              <th class="h6 font-weight-bold" id="#identificador">Identificador</th>
-              <th class="h6 font-weight-bold" id="#pedido_dia">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
-              <th class="h6 font-weight-bold animated-progress text-uppercase" id="#cobranza_mes">Cobranza
-                {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-                {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
-                <br>
-                {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
-
-              </th>
-              <th class="h6 font-weight-bold text-uppercase" id="#pedidos_mes">Pedidos
-                {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-                <br>
-                {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
-              </th>
-            </tr>
-            </thead>
-            <tbody style="background: #e4dbc6; font-weight: bold">
-
-            </tbody>
-          </table>
-          <table id="metas_dp" class="table table-bordered border-2 col-lg-6 col-md-12 col-sm-12" style="width:100%">
-            <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
-            <tr class="font-weight-bold">
-              <th class="h6 font-weight-bold">Asesor</th>
-              <th class="h6 font-weight-bold">Identificador</th>
-              <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
-              <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
-                {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-                {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
-                <br>
-                {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
-
-              </th>
-              <th class="h6 font-weight-bold text-uppercase">Pedidos
-                {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-                <br>
-                {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
-              </th>
-            </tr>
-            </thead>
-            <tbody style="background: #e4dbc6; font-weight: bold">
-            </tbody>
-            <tfoot>
-            </tfoot>
-          </table>
-        </div>
-        <div>
-          <table id="total" class="table table-bordered border-2 col-lg-12 col-md-12 col-sm-12">
-            <thead>
-            <tr>
-              <th>Asesores</th>
-              <th>Identificadores</th>
-              <th>Pedidos Totales del {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}}  </th>
-              <th>Cobranza total {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}} </th>
-              <th>Pedidos totales
-                {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
+          <div id="meta"></div>
+          <div id="metas_dp"></div>
         </div>
       </div>
-
       {{--FIN-TABLA-DUAL--}}
 
         {{-- TABLA TOTAL --}}
@@ -373,22 +309,6 @@
                     </div>
                 </div>
             </div>
-            {{--
-            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="chart tab-pane active w-100" id="pedidosxasesor" style="height: 550px;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
-                <div class="card ">
-                    <div class="card-body">
-                        <div class="chart tab-pane active w-100" id="cobranzaxmes" style="height: 550px; "></div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </div>
     <div class="container-fluid">
@@ -406,9 +326,6 @@
         </div>
     </div>
 </div>
-
-
-{{-- @include('dashboard.modal.alerta') --}}
 
 @yield('js-datatables')
 
@@ -489,8 +406,19 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
-        let meta = ''
-        meta = $('#metas').DataTable({
+        window.cargaNueva = function () {
+          $.ajax({
+            url: '{{route('dashboard.viewMetaTable')}}',
+            method: 'POST',
+            success: function (resultado){
+              $('#meta').html(resultado);
+            }
+          })
+        }
+        cargaNueva();
+
+
+/*        $('#metas').DataTable({
             processing: true,
             serverSide: true,
             searching: false,
@@ -630,32 +558,6 @@
                     "previous": "Anterior"
                 }
             },
-          // footerCallback: function (row, data, start, end, display) {
-          //   var api = this.api();
-          //   nb_cols = 5;
-          //   api.columns().nodes().length;
-          //   var j = 2;
-          //
-          //   //para footer  monto
-          //   var pageTotal = api
-          //     .column(5, {page: 'current'})
-          //     .data()
-          //     .reduce(function (a, b) {
-          //       return Number(a) + Number(b);
-          //     }, 0);
-          //   // Update footer
-          //   $(api.column(5).footer('<p>Evento prueba</p>'));
-          //   $("#asesor");
-          //   $("#identificador");
-          //   $("#pedido_mes")
-          //   $("#pedidos_dia");
-          //   $("#cobranza_mes");
-          //   $("#pedido_mes")
-          //   let uncliente = $("#pcliente_id").val();
-          //   //calcular
-          //   diferenciaFaltante();
-          // },
-
 
         });
         let meta_duplicat_tot_modal =  '';
@@ -704,59 +606,15 @@
               "previous": "Anterior"
             }
           },
-        });
-        let total = ''
-        total = $('#total').DataTable({
-          processing: true,
-          serverSide: true,
-          searching: false,
-          dom: "",
-          lengthMenu: [8,15],
-          "order": [[0, "asc"]],
-          ajax: {
-            url: "{{ route('dashboard.graficoMetaTable') }}",
-          },
-          columns: [
-            {
-              data: 'asesores',
-              name: ' asesores',
-            },
-            {
-              data: 'identificador'
-              , name: 'identificador'
-            },
-            {data: 'pedidos_totales', name: 'pedidos_totales'},
-
-            {data: 'progress_pagos', name: 'progress_pagos'},
-            {data: 'progress_pedidos', name: 'progress_pedidos'},
-
-          ],
-          language: {
-            "decimal": "",
-            "emptyTable": "No hay información",
-            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-            "infoPostFix": "",
-            "thousands": ",",
-            "lengthMenu": "Mostrar _MENU_ Entradas",
-            "loadingRecords": "Cargando...",
-            "processing": "Procesando...",
-            "search": "Buscar:",
-            "zeroRecords": "Sin resultados encontrados",
-            "paginate": {
-              "first": "Primero",
-              "last": "Ultimo",
-              "next": "Siguiente",
-              "previous": "Anterior"
-            }
-          },
-        });
+        });*/
         $('a[href$="#myModal"]').on( "click", function() {
           $('#myModal').modal();
         });
       });
     </script>
+
+
+
 
 
 @endsection
