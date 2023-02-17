@@ -465,7 +465,6 @@
 @endpush
 
 @section('css-datatables')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css">
 @endsection
 
@@ -481,11 +480,16 @@
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
     <script>
-        let meta = null
+      $(document).ready(function () {
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        let meta = ''
         meta = $('#metas').DataTable({
             processing: true,
             serverSide: true,
@@ -532,7 +536,7 @@
                 }
             },
         });
-        let meta_duplicat =  null;
+        let meta_duplicat =  '';
         meta_duplicat = $('#metas_dp').DataTable({
             processing: true,
             serverSide: true,
@@ -580,7 +584,7 @@
             },
 
         });
-        let meta_duplicat_tot =  null;
+        let meta_duplicat_tot =  '';
         meta_duplicat = $('#meta_duplicat_tot').DataTable({
             processing: true,
             serverSide: true,
@@ -654,7 +658,7 @@
 
 
         });
-        let meta_duplicat_tot_modal =  null;
+        let meta_duplicat_tot_modal =  '';
         meta_duplicat = $('#meta_duplicat_tot_modal').DataTable({
           processing: true,
           serverSide: true,
@@ -700,35 +704,8 @@
               "previous": "Anterior"
             }
           },
-          // footerCallback: function (row, data, start, end, display) {
-          //   var api = this.api();
-          //   nb_cols = 5;
-          //   api.columns().nodes().length;
-          //   var j = 2;
-          //
-          //   //para footer  monto
-          //   var pageTotal = api
-          //     .column(5, {page: 'current'})
-          //     .data()
-          //     .reduce(function (a, b) {
-          //       return Number(a) + Number(b);
-          //     }, 0);
-          //   // Update footer
-          //   $(api.column(5).footer('<p>Evento prueba</p>'));
-          //   $("#asesor");
-          //   $("#identificador");
-          //   $("#pedido_mes")
-          //   $("#pedidos_dia");
-          //   $("#cobranza_mes");
-          //   $("#pedido_mes")
-          //   let uncliente = $("#pcliente_id").val();
-          //   //calcular
-          //   diferenciaFaltante();
-          // },
-
-
         });
-        let total = null
+        let total = ''
         total = $('#total').DataTable({
           processing: true,
           serverSide: true,
@@ -775,24 +752,11 @@
             }
           },
         });
+        $('a[href$="#myModal"]').on( "click", function() {
+          $('#myModal').modal();
+        });
+      });
     </script>
-
-    <script>
-        setInterval(function recargametasxmes() {
-          $("#metas").DataTable().ajax.reload();
-          $("#metas_dp").DataTable().ajax.reload();
-          $("#meta_duplicat_tot").DataTable().ajax.reload();
-          // $("#total").DataTable().ajax.reload();
-        }, 3000);
-    </script>
-
-<script>
-
-  $('a[href$="#myModal"]').on( "click", function() {
-    $('#myModal').modal();
-  });
-
-</script>
 
 
 @endsection
