@@ -1054,18 +1054,9 @@ class DashboardController extends Controller
             <tr>
                 <th>Asesor</th>
                 <th>Identificador</th>
-                <th>Pedidos del día
-                <br>
-
-                </th>
-                <th>Cobranza
-                <br>
-
-                </th>
-                <th>Pedididos
-                <br>
-
-                </th>
+                <th>Pedidos del día </th>
+                <th>Cobranza </th>
+                <th>Pedididos </th>
             </tr>
             </thead>
             <tbody>';
@@ -1159,8 +1150,8 @@ class DashboardController extends Controller
                             <sub class="d-none">% -  Pagados/ Asignados</sub>
                           </div>`;
         }
-      $html.=  `</td>
-           <td>`;
+      $html.=  `</td>`;
+      $html.=  `   <td>asdasd`;
                                         if ($data["meta_new"] == 0) {
           if ($data["progress_pedidos"] == 100) {
             $html.=  `<div class="w-100 bg-white rounded">
