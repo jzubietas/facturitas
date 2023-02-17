@@ -65,7 +65,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('/search/cliente', [DashboardController::class, 'searchCliente'])->name('dashboard.search-cliente');
     Route::get('/search/ruc', [DashboardController::class, 'searchRuc'])->name('dashboard.search-ruc');
-    Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
+
+  Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
+  Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
 
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
 //Route::post('upload-image', [PagoController::class, 'storeimage'])->name('upload-image');
