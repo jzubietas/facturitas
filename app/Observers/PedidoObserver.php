@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Jobs\PostCreatePedido;
+use App\Jobs\PostUpdatePedido;
 use App\Models\Cliente;
 use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,8 @@ class PedidoObserver
     public function updated(Pedido $pedido)
     {
         //
+      \Log::info("PostCreatePedido -> ".$pedido->cliente_id);
+      PostUpdatePedido::dispatchSync($pedido->cliente_id);
     }
 
     /**
