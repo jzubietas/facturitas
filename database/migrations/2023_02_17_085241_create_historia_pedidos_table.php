@@ -61,6 +61,8 @@ class CreateHistoriaPedidosTable extends Migration
             $table->integer('anio');
             $table->string('ruc',12);
             $table->decimal('cantidad',18,2);
+            $table->string('tipo_banca');
+            $table->string
 
 
             $table->timestamps();
