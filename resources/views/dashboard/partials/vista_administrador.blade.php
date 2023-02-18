@@ -9,7 +9,7 @@
     </h2>
 </div>
 
-<div class="row">
+<div class="row d-none">
     <div class="col-lg-3 col-6">
         <div class="small-box bg-info">
             <div class="inner">
@@ -25,7 +25,7 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-3 col-6 d-none">
         <div class="small-box bg-success">
             <div class="inner">
                 @foreach ($montopedidoxmes_total as $mcxm)
@@ -42,7 +42,7 @@
     </div>
 
 
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-3 col-6 d-none">
         <div class="small-box bg-warning">
             <div class="inner">
                 @foreach ($pagoxmes_total as $pxm)
@@ -59,7 +59,7 @@
     </div>
 
 
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-3 col-6 d-none">
         <div class="small-box bg-default">
             <div class="inner">
                 @foreach ($pagoxmes_total_solo_asesor_b as $pxm2)
@@ -76,7 +76,7 @@
     </div>
 
 
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-3 col-6 d-none">
         <div class="small-box bg-danger">
             <div class="inner">
                 @foreach ($montopagoxmes_total as $cxm)
@@ -93,7 +93,7 @@
     </div>
 
     <div class="col-lg-9 col-12">
-        @include('dashboard.widgets.pedidos_creados')
+        {{--@include('dashboard.widgets.pedidos_creados')--}}
     </div>
 </div>
 
