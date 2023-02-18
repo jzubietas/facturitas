@@ -647,7 +647,7 @@ class DashboardController extends Controller
       })
       //PEDIDOS DEL DIA
       ->editColumn('pedidos_dia', function ($row) {
-        if ($row["pedidos_dia"] > 0) {
+        if ($row["pedidos_dia"] < 0) {
           return '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold"> ' . $row["pedidos_dia"] . ' </span>';
         } else {
           return '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"> ' . $row["pedidos_dia"] . ' </span>';
@@ -884,8 +884,10 @@ class DashboardController extends Controller
     if (auth()->user()->rol == User::ROL_ASESOR){
       $asesores = User::query()->activo()->rolAsesor()
         ->where('identificador',auth()->user()->identificador)->get();
-    }
-    else if (auth()->user()->rol == User::ROL_LLAMADAS) {
+    }else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
+      $asesores = User::query()->activo()->rolAsesor()
+        ->get();
+    }else if (auth()->user()->rol == User::ROL_LLAMADAS) {
       $asesores = User::query()->activo()->rolAsesor()
         ->get();
     } else if (auth()->user()->rol == User::ROL_FORMACION) {
@@ -907,6 +909,9 @@ class DashboardController extends Controller
     if (auth()->user()->rol == User::ROL_ASESOR){
       $total_asesor = User::query()->activo()->rolAsesor()
         ->where('identificador',auth()->user()->identificador)->count();
+    }else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
+    $asesores = User::query()->activo()->rolAsesor()
+      ->count();
     }
     else if (auth()->user()->rol == User::ROL_LLAMADAS) {
       $total_asesor = User::query()->activo()->rolAsesor()
@@ -927,7 +932,7 @@ class DashboardController extends Controller
     })->count();
   }
     foreach ($asesores as $asesor) {
-      if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN, User::ROL_PRESENTACION, User::ROL_ASESOR])) {
+      if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN, User::ROL_PRESENTACION, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])) {
       } else {
         if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/) {
           if (auth()->user()->rol != User::ROL_ENCARGADO) {
@@ -1284,7 +1289,7 @@ class DashboardController extends Controller
              <td>' . $data["identificador"] . '</td>
              <td>' . $data["code"] . '</td>
              <td>';
-        if ($data["pedidos_dia"] > 0) {
+        if ($data["pedidos_dia"] < 0) {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
         } else {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"> ' . $data["pedidos_dia"] . ' </span> ';
