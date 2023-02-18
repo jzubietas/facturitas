@@ -106,9 +106,7 @@
   <div class="col-lg-12">
     <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
   </div>
-  <div class="col-lg-12">
-    <x-grafico-metas-mes></x-grafico-metas-mes>
-  </div>
+
 
   <div class="col-lg-12 " id="contenedor-fullscreen">
     <div class="d-flex justify-content-center">
@@ -202,53 +200,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-12">
-        <div class="row" id="widget-container">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="mb-4 pb-4">
-                  <ul class="list-group">
-                    <li class="list-group-item">
-                      <div class="row">
-                        <div class="col-md-9">
-                          {{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}
-                          <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
-                        </div>
-                        <div class="col-md-3">
-                          <x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-6">
-                <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
-              </div>
 
-              <div class="col-lg-12">
-                <x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <x-grafico-pedidos-por-dia rol="Administrador"
-                                       title="Cantidad de pedidos de los asesores por dia"
-                                       label-x="Asesores" label-y="Cant. Pedidos"
-                                       only-day></x-grafico-pedidos-por-dia>
-
-            <x-grafico-pedidos-por-dia rol="Administrador"
-                                       title="Cantidad de pedidos de los asesores por mes"
-                                       label-x="Asesores"
-                                       label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   <div class="container-fluid">
@@ -327,8 +279,6 @@
       $(this).text($(this).attr("data-progress") + "%");
     });
   </script>
-  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
   <script>
     $(document).ready(function () {
       $.ajaxSetup({
@@ -364,13 +314,6 @@
       cargaNueva(2);
       cargaNueva(3);
 
-      /*setInterval(myTimer, 5000);
-
-      function myTimer() {
-        cargaNueva(1);
-        cargaNueva(2);
-        cargaNueva(3);
-      }*/
 
       $('a[href$="#myModal"]').on( "click", function() {
         $('#myModal').modal();
