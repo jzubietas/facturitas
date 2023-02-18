@@ -161,9 +161,17 @@
 
       {{--TABLA DUAL--}}
       <div class="">
-        <div class="d-flex flex-wrap">
-          <div id="meta"></div>
-          <div id="metas_dp"></div>
+        <div class="d-flex flex-wrap w-100">
+          <div class="row">
+            <div class="col-6">
+              <div id="meta"></div>
+            </div>
+            <div class="col-6">
+              <div id="metas_dp"></div>
+            </div>
+          </div>
+
+
         </div>
       </div>
       {{--FIN-TABLA-DUAL--}}
@@ -361,6 +369,11 @@
             align-items: center;
         }
 
+        #meta .tabla-metas_pagos_pedidos
+        {
+          grid-template-rows: 1fr 2fr 1fr 3fr;
+        }
+
         #meta_duplicat_tot{
             flex:100%;
             display: none !important;
@@ -406,16 +419,28 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
-        window.cargaNueva = function () {
+        window.cargaNueva = function (entero) {
+          console.log(' '+entero)
+          var fd=new FormData();
+          fd.append('ii',entero);
           $.ajax({
-            url: '{{route('dashboard.viewMetaTable')}}',
+            data: fd,
+            processData: false,
+            contentType: false,
             method: 'POST',
+            url: "{{ route('dashboard.viewMetaTable') }}",
             success: function (resultado){
-              $('#meta').html(resultado);
+              if(entero==1)
+              {
+                $('#meta').html(resultado);
+              }else if(entero==2){
+                $('#metas_dp').html(resultado);
+              }
             }
           })
         }
-        cargaNueva();
+        cargaNueva(1);
+        cargaNueva(2);
 
 
 /*        $('#metas').DataTable({
