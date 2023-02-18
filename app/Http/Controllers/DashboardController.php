@@ -1122,8 +1122,28 @@ class DashboardController extends Controller
                   <th></th>
                   <th></th>
                   <th>'.$object_totales['pedidos_dia'].'</th>
-                  <th>Cobranza </th>
-                  <th>Pedidos </th>
+                  <th><x-bs-progressbar :progress="$data_noviembre->progress_pagos">
+                                                    <span> <b>  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
+                                                </x-bs-progressbar>'.' </th>
+                  <th>';
+      if($object_totales['progress_pedidos']<'100'){
+        $html.='<x-bs-progressbar :progress="$data_noviembre->progress_pedidos">
+                                                    <span> <b>  '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
+                                                </x-bs-progressbar>';
+      }else{
+        $html.='<div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar"
+                         style="width: '.$object_totales['progress_pedidos'].'%"
+                         aria-valuenow="'.$object_totales['progress_pedidos'].'"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>
+                </div>
+                <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
+                    <span> <b>  '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
+                </div>';
+      }
+
+      $html.='</th>
               </tr>
               </tbody>';
       $html .= '</table>';

@@ -106,9 +106,9 @@
     <div class="col-lg-12">
         <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
     </div>
-    {{-- <div class="col-lg-12">
+    <div class="col-lg-12">
         <x-grafico-metas-mes></x-grafico-metas-mes>
-    </div> --}}
+    </div>
 
   {{--MODAL--}}
   <div class="modal modal-fullscreen p-0" id="myModal"  role="dialog" aria-labelledby="myModal" aria-hidden="true">
