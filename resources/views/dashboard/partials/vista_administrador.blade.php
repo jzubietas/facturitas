@@ -151,7 +151,7 @@
   </div>
   {{--FIN-MODAL--}}
 
-    <div class="col-lg-12 contenedor-fullscreen">
+    <div class="col-lg-12 " id="contenedor-fullscreen">
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt"></i></button>
@@ -440,7 +440,7 @@
           $('#myModal').modal();
         });
 
-        var elem = document.getElementsByClassName("contenedor-fullscreen");
+        var elem = document.querySelector("#contenedor-fullscreen");
         window.openFullscreen =function () {
           console.log("openFullscreen();")
           if (elem.requestFullscreen) {
