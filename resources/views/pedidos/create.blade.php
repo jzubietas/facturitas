@@ -75,14 +75,13 @@
         $(document).ready(function () {
 
           $(document).on('paste','.bs-searchbox input.form-control',function(e){
-            console.log("sadsaad")
+            /*console.log("sadsaad")
             var variable = e.target.id;
             console.log("variable", variable)
             var pastedData = e.originalEvent.clipboardData.getData('text');
             pastedData=pastedData.replace(/ /g, "");
             $(this).val(pastedData)
-            console.log("sadsaad")
-            //998 920 048
+            console.log("sadsaad")*/
           })
 
             $(document).on('click', '[data-toggle=jqconfirm][data-type=previsualizar]', function () {
