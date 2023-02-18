@@ -885,13 +885,13 @@ class DashboardController extends Controller
       $asesores = User::query()->activo()->rolAsesor()
         ->where('identificador',auth()->user()->identificador)->get();
     }
-    elseif (auth()->user()->rol == User::ROL_LLAMADAS) {
+    else if (auth()->user()->rol == User::ROL_LLAMADAS) {
       $asesores = User::query()->activo()->rolAsesor()
         ->get();
     } else if (auth()->user()->rol == User::ROL_FORMACION) {
       $asesores = User::query()->activo()->rolAsesor()
         ->get();
-    } if (auth()->user()->rol == User::ROL_PRESENTACION) {
+    } else if (auth()->user()->rol == User::ROL_PRESENTACION) {
     $asesores = User::query()->activo()->rolAsesor()
       ->get();
   }else {
@@ -908,13 +908,13 @@ class DashboardController extends Controller
       $total_asesor = User::query()->activo()->rolAsesor()
         ->where('identificador',auth()->user()->identificador)->count();
     }
-    elseif (auth()->user()->rol == User::ROL_LLAMADAS) {
+    else if (auth()->user()->rol == User::ROL_LLAMADAS) {
       $total_asesor = User::query()->activo()->rolAsesor()
         ->count();
-    } else if (auth()->user()->rol == User::ROL_FORMACION) {
+    }else if (auth()->user()->rol == User::ROL_FORMACION) {
       $total_asesor = User::query()->activo()->rolAsesor()
         ->count();
-    } if (auth()->user()->rol == User::ROL_PRESENTACION) {
+    }else if (auth()->user()->rol == User::ROL_PRESENTACION) {
     $total_asesor = User::query()->activo()->rolAsesor()
       ->count();
   }else {
