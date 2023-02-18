@@ -6,7 +6,7 @@
                     donde cumples la función de <b>{{ Auth::user()->rol }}</b></p>
             </h2>
         </div>
-        <div class="col-lg-3 col-3">
+{{--        <div class="col-lg-3 col-3">
             <div class="small-box bg-danger">
                 <div class="inner">
                     <h3>{{ $pagosobservados_cantidad }}</h3>
@@ -18,12 +18,12 @@
                 <a href="{{ route('pagos.pagosobservados') }}" class="small-box-footer">Más info <i
                         class="fas fa-arrow-circle-right"></i></a>
             </div>
-        </div>
+        </div>--}}
     </div>
 </div>
 <br>
 <br>
-<div class="container-fluid">
+{{--<div class="container-fluid">
     <div class="row" style="color: #fff;">
         <div class="col-lg-1 col-1">
         </div>
@@ -86,12 +86,12 @@
         <div class="col-lg-1 col-1">
         </div>
     </div>
-</div>
+</div>--}}
 <div class="container-fluid">
     <div class="row">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
+               {{-- <div class="col-md-12">
                     <div class="card">
                         <div class="d-flex justify-content-end align-items-center">
                             <div class="card my-2 mx-2">
@@ -153,7 +153,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>--}}
 
 
               {{--DATATABLE--}}
