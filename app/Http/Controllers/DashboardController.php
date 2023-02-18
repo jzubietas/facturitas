@@ -1058,8 +1058,10 @@ class DashboardController extends Controller
         $skip=0;
         $take=intval($total_asesor/2)+1;
       }
-
-      $progressData->skip($skip)->take($take)->all();
+      //return json_encode(array('skip'=>$skip,'take'=>$take)); 0  8
+      $progressData->splice($skip,$take)->all();
+      //$progressData=array_slice($progressData, 2);
+      //return $progressData;
     }else if($request->ii==2)
     {
       if($total_asesor%2==0)
@@ -1070,7 +1072,10 @@ class DashboardController extends Controller
         $skip=intval($total_asesor/2)+1;
         $take=intval($total_asesor/2);
       }
-      $progressData->skip($skip)->take($take)->all();
+      //return json_encode(array('skip'=>$skip,'take'=>$take));  8   7
+      $progressData->splice($skip,$take)->all();
+      //$progressData=array_slice($progressData, 3);
+      //return $progressData;
     }else if($request->ii==3){
       $progressData->all();
     }

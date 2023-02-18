@@ -435,9 +435,9 @@
             success: function (resultado){
               if(entero==1)
               {
-                $('#meta').html(resultado);
-              }else if(entero==2){
                 $('#metas_dp').html(resultado);
+              }else if(entero==2){
+                $('#meta').html(resultado);
               }
               else if(entero==3){
                 $('#metas_total').html(resultado);
