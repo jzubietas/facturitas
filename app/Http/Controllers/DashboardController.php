@@ -1127,7 +1127,7 @@ class DashboardController extends Controller
                                                 </x-bs-progressbar>'.' </th>
                   <th>';
       if($object_totales['progress_pedidos']<'100'){
-        $html.='<x-bs-progressbar :progress="$data_noviembre->progress_pedidos">
+        $html.='<x-bs-progressbar :progress="'.$data_noviembre->progress_pedidos.'">
                                                     <span> <b>  '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
                                                 </x-bs-progressbar>';
       }else{

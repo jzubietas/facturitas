@@ -32,7 +32,6 @@
                                                     <span> <b>  {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}}</span>
                                                 </x-bs-progressbar>
 
-
                                             <sub class="d-none">% -  Pagados/ Asignados</sub>
                                         </div>
 
@@ -158,8 +157,8 @@
                 <th>Pedidos</th>
                 <th class="animated-progress">{{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
                 <br>
-                <span data-progress={{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}}> </span> 
-                
+                <span data-progress={{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}}> </span>
+
             </th>
                 <th> {{Str::upper($now->monthName)}} - {{$now->year}}
                 <br>
@@ -172,7 +171,7 @@
         </tbody>
     </table>
     </div>
-</div>    
+</div>
 
 
 </div>
@@ -247,7 +246,7 @@
                         , name: 'code'
                     },
                     {data: 'total_pedido', name: 'total_pedido',},
-                    
+
                     {data: 'progress_pagos', name: 'progress_pagos',},
                     {data: 'progress_pedidos', name: 'progress_pedidos',},
 
@@ -276,7 +275,7 @@
             });
 </script>
 <script>
-// function refresh() {    
+// function refresh() {
 //     setTimeout(function () {
 //         meta.DataTable().ajax.reload()
 //     }, 1000);
