@@ -1145,13 +1145,13 @@ class DashboardController extends Controller
                  aria-valuenow="'.($object_totales['progress_pagos']-70).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
-    else if($progress>50)
+    else if($object_totales['progress_pagos']>50)
         $html.='<div class="progress-bar bg-warning" role="progressbar"
                  style="width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
-    else if($progress>40)
+    else if($object_totales['progress_pagos']>40)
         $html.='<div class="progress-bar bg-danger" role="progressbar"
                  style="width: 40%"
                  aria-valuenow="70"
