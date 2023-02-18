@@ -163,13 +163,13 @@
       <div class="">
         <div class=" ">
           <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
               <div id="meta"></div>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
               <div id="metas_dp"></div>
             </div>
-            <div class="col-12">
+            <div class="col-md-12">
               <div id="metas_total"></div>
             </div>
           </div>
