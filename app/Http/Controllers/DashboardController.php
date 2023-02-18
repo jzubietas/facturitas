@@ -1135,7 +1135,7 @@ class DashboardController extends Controller
                 <tr>
                     <th>Asesor</th>
                     <th>Identificador</th>
-                    <th>Pedidos del día </th>
+                    <th><span style="font-size:10px;">Pedidos del día</span></th>
                     <th>Cobranza </th>
                     <th>Pedidos </th>
                 </tr>
