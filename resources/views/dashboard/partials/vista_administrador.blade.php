@@ -372,27 +372,7 @@
             align-items: center;
         }
 
-        #meta .tabla-metas_pagos_pedidos
-        {
-          grid-template-rows: 1fr 2fr 1fr 3fr;
-        }
-
-        #meta_duplicat_tot{
-            flex:100%;
-            display: none !important;
-        }
-
-        @media screen and (max-width:1486px){
-            #metas_dp{
-                display: none;
-            }
-            #metas{
-                display: none;
-            }
-            #meta_duplicat_tot{
-                display: initial !important;
-            }
-        }
+        
 
     </style>
 @endpush
