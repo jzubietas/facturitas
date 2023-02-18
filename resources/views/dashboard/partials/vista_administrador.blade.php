@@ -121,7 +121,7 @@
           </button>
         </div>
         <div class="modal-body" style="color: black">
-          <table id="meta_duplicat_tot_modal" class="table table-bordered border-2 col-lg-12 col-md-12 col-sm-12" style="width:100%">
+          <table id="meta_duplicat_tot_modal" class="table table-bordered border-2 col-lg-12 col-md-12 col-sm-12" style="width:100%; background: #e4dbc6; color: #0a0302">
             <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
             <tr class="font-weight-bold">
               <th class="h6 font-weight-bold">Asesor</th>
@@ -154,7 +154,7 @@
     <div class="col-lg-12 " id="contenedor-fullscreen">
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-        <button onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt"></i></button>
+        <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
       </div>
 
       {{--TABLA DUAL--}}
@@ -337,12 +337,17 @@
             text-align: end;
             padding-right: 5px;
         }
-
+        td:nth-child(1),
+        td:nth-child(2),
+        td:nth-child(3){
+          font-weight: bold;
+        }
         td:nth-child(3) {
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
 
 
 
