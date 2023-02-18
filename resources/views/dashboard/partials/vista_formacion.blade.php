@@ -1,27 +1,4 @@
-
 @yield('css-datatables')
-=======
-<div style="text-align: center; font-family:'Times New Roman', Times, serif">
-    <h2>
-        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste, donde
-            cumples la función de <b>{{ Auth::user()->rol }}</b></p>
-    </h2>
-</div>
-<br>
-<br>
-<div class="container-fluid mt-4">
-    <div class="row">
-        <div class="col-12">
-            @include('dashboard.widgets.pedidos_creados')
-        </div>
-        <div class="col-12">
-            @include('dashboard.widgets.buscar_cliente')
-        </div>
-        <div class="col-lg-12">
-
-            <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
-        </div>
->>>>>>> junior
 
 <div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
   <h2>
@@ -32,7 +9,7 @@
   </h2>
 </div>
 
-<div class="row">
+<div class="row d-none">
   <div class="col-lg-3 col-6">
     <div class="small-box bg-info">
       <div class="inner">
@@ -48,7 +25,7 @@
           class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
-  <div class="col-lg-3 col-6">
+  <div class="col-lg-3 col-6 d-none">
     <div class="small-box bg-success">
       <div class="inner">
         @foreach ($montopedidoxmes_total as $mcxm)
@@ -65,7 +42,7 @@
   </div>
 
 
-  <div class="col-lg-3 col-6">
+  <div class="col-lg-3 col-6 d-none">
     <div class="small-box bg-warning">
       <div class="inner">
         @foreach ($pagoxmes_total as $pxm)
@@ -82,7 +59,7 @@
   </div>
 
 
-  <div class="col-lg-3 col-6">
+  <div class="col-lg-3 col-6 d-none">
     <div class="small-box bg-default">
       <div class="inner">
         @foreach ($pagoxmes_total_solo_asesor_b as $pxm2)
@@ -99,7 +76,7 @@
   </div>
 
 
-  <div class="col-lg-3 col-6">
+  <div class="col-lg-3 col-6 d-none">
     <div class="small-box bg-danger">
       <div class="inner">
         @foreach ($montopagoxmes_total as $cxm)
@@ -116,7 +93,7 @@
   </div>
 
   <div class="col-lg-9 col-12">
-    @include('dashboard.widgets.pedidos_creados')
+    {{--@include('dashboard.widgets.pedidos_creados')--}}
   </div>
 </div>
 
@@ -133,85 +110,31 @@
       <x-grafico-metas-mes></x-grafico-metas-mes>
   </div> --}}
 
-  <div class="col-lg-12">
-    <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-    <div class="d-flex flex-wrap">
-      <table id="metas" class="table table-bordered border-2 col-lg-6 col-md-12 col-sm-12" style="width:100%">
-        <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
-        <tr class="font-weight-bold">
-          <th class="h6 font-weight-bold">Asesor</th>
-          <th class="h6 font-weight-bold">Identificador</th>
-          <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
-          <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
-            {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-            {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
-            <br>
-            {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
-
-          </th>
-          <th class="h6 font-weight-bold text-uppercase">Pedidos
-            {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-            <br>
-            {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
-          </th>
-        </tr>
-        </thead>
-        <tbody style="background: #e4dbc6; font-weight: bold">
-
-        </tbody>
-      </table>
-      <table id="metas_dp" class="table table-bordered border-2 col-lg-6 col-md-12 col-sm-12" style="width:100%">
-        <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
-        <tr class="font-weight-bold">
-          <th class="h6 font-weight-bold">Asesor</th>
-          <th class="h6 font-weight-bold">Identificador</th>
-          <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
-          <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
-            {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-            {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
-            <br>
-            {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
-
-          </th>
-          <th class="h6 font-weight-bold text-uppercase">Pedidos
-            {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-            <br>
-            {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
-          </th>
-        </tr>
-        </thead>
-        <tbody style="background: #e4dbc6; font-weight: bold">
-
-        </tbody>
-      </table>
+  <div class="col-lg-12 " id="contenedor-fullscreen">
+    <div class="d-flex justify-content-center">
+      <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+      <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
     </div>
-    {{-- TABLA TOTAL --}}
+
+    {{--TABLA DUAL--}}
     <div class="">
-      <table id="meta_duplicat_tot" class="table table-bordered border-2 col-lg-12 col-md-12 col-sm-12" style="width:100%">
-        <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
-        <tr class="font-weight-bold">
-          <th class="h6 font-weight-bold">Asesor</th>
-          <th class="h6 font-weight-bold">Identificador</th>
-          <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
-          <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
-            {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-            {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
-            <br>
-            {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
-
-          </th>
-          <th class="h6 font-weight-bold text-uppercase">Pedidos
-            {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-            <br>
-            {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
-          </th>
-        </tr>
-        </thead>
-        <tbody style="background: #e4dbc6; font-weight: bold">
-
-        </tbody>
-      </table>
+      <div class=" ">
+        <div class="row">
+          <div class="col-md-6">
+            <div id="meta"></div>
+          </div>
+          <div class="col-md-6">
+            <div id="metas_dp"></div>
+          </div>
+          <div class="col-md-12">
+            <div id="metas_total"></div>
+          </div>
+        </div>
+      </div>
     </div>
+    {{--FIN-TABLA-DUAL--}}
+
+
   </div>
 
   <div class="container-fluid">
@@ -288,7 +211,10 @@
                   <ul class="list-group">
                     <li class="list-group-item">
                       <div class="row">
-
+                        <div class="col-md-9">
+                          {{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}
+                          <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
+                        </div>
                         <div class="col-md-3">
                           <x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>
                         </div>
@@ -299,30 +225,37 @@
               </div>
             </div>
           </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
+              </div>
 
+              <div class="col-lg-12">
+                <x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <x-grafico-pedidos-por-dia rol="Administrador"
+                                       title="Cantidad de pedidos de los asesores por dia"
+                                       label-x="Asesores" label-y="Cant. Pedidos"
+                                       only-day></x-grafico-pedidos-por-dia>
+
+            <x-grafico-pedidos-por-dia rol="Administrador"
+                                       title="Cantidad de pedidos de los asesores por mes"
+                                       label-x="Asesores"
+                                       label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
+          </div>
         </div>
       </div>
-      {{--
-      <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-          <div class="card">
-              <div class="card-body">
-                  <div class="chart tab-pane active w-100" id="pedidosxasesor" style="height: 550px;"></div>
-              </div>
-          </div>
-      </div>
-
-      <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
-          <div class="card ">
-              <div class="card-body">
-                  <div class="chart tab-pane active w-100" id="cobranzaxmes" style="height: 550px; "></div>
-              </div>
-          </div>
-      </div> --}}
     </div>
   </div>
   <div class="container-fluid">
     <div class="row">
-
+      <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+        <x-grafico-top-clientes-pedidos top="10"></x-grafico-top-clientes-pedidos>
+      </div>
       <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
         <div class="card">
           <div class="card-body">
@@ -332,9 +265,7 @@
       </div>
     </div>
   </div>
-
 </div>
-{{-- @include('dashboard.modal.alerta') --}}
 
 @yield('js-datatables')
 
@@ -363,29 +294,19 @@
       text-align: end;
       padding-right: 5px;
     }
-
+    td:nth-child(1),
+    td:nth-child(2),
+    td:nth-child(3){
+      font-weight: bold;
+    }
     td:nth-child(3) {
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    #meta_duplicat_tot{
-      flex:100%;
-      display: none !important;
-    }
 
-    @media screen and (max-width:1486px){
-      #metas_dp{
-        display: none;
-      }
-      #metas{
-        display: none;
-      }
-      #meta_duplicat_tot{
-        display: initial !important;
-      }
-    }
+
 
   </style>
 @endpush
@@ -409,160 +330,69 @@
   <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
   <script>
-    let meta = null
-    meta = $('#metas').DataTable({
-      processing: true,
-      serverSide: true,
-      searching: false,
-      dom: "",
-      lengthMenu: [8,15],
-      "order": [[0, "asc"]],
-      ajax: {
-        url: "{{ route('dashboard.graficoMetaTable') }}",
-      },
-      columns: [
-        {
-          data: 'name',
-          name: ' name',
-        },
-        {
-          data: 'code'
-          , name: 'code'
-        },
-        {data: 'pedidos_dia', name: 'pedidos_dia'},
-
-        {data: 'progress_pagos', name: 'progress_pagos'},
-        {data: 'progress_pedidos', name: 'progress_pedidos'},
-
-      ],
-      language: {
-        "decimal": "",
-        "emptyTable": "No hay información",
-        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-        "infoPostFix": "",
-        "thousands": ",",
-        "lengthMenu": "Mostrar _MENU_ Entradas",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "Sin resultados encontrados",
-        "paginate": {
-          "first": "Primero",
-          "last": "Ultimo",
-          "next": "Siguiente",
-          "previous": "Anterior"
+    $(document).ready(function () {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-      },
+      });
+      window.cargaNueva = function (entero) {
+        console.log(' '+entero)
+        var fd=new FormData();
+        fd.append('ii',entero);
+        $.ajax({
+          data: fd,
+          processData: false,
+          contentType: false,
+          method: 'POST',
+          url: "{{ route('dashboard.viewMetaTable') }}",
+          success: function (resultado){
+            if(entero==1)
+            {
+              $('#metas_dp').html(resultado);
+            }else if(entero==2){
+              $('#meta').html(resultado);
+            }
+            else if(entero==3){
+              $('#metas_total').html(resultado);
+            }
+          }
+        })
+      }
 
-    });
-    let meta_duplicat =  null;
-    meta_duplicat = $('#metas_dp').DataTable({
-      processing: true,
-      serverSide: true,
-      searching: false,
-      dom: "",
-      lengthMenu: [7,15],
-      "order": [[0, "des"]],
-      ajax: {
-        url: "{{ route('dashboard.graficoMetaTable') }}",
-      },
-      columns: [
-        {
-          data: 'name',
-          name: ' name',
-        },
-        {
-          data: 'code'
-          , name: 'code'
-        },
-        {data: 'pedidos_dia', name: 'pedidos_dia',},
+      cargaNueva(1);
+      cargaNueva(2);
+      cargaNueva(3);
 
-        {data: 'progress_pagos', name: 'progress_pagos'},
-        {data: 'progress_pedidos', name: 'progress_pedidos',},
+      /*setInterval(myTimer, 5000);
 
-      ],
-      language: {
-        "decimal": "",
-        "emptyTable": "No hay información",
-        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-        "infoPostFix": "",
-        "thousands": ",",
-        "lengthMenu": "Mostrar _MENU_ Entradas",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "Sin resultados encontrados",
-        "paginate": {
-          "first": "Primero",
-          "last": "Ultimo",
-          "next": "Siguiente",
-          "previous": "Anterior"
+      function myTimer() {
+        cargaNueva(1);
+        cargaNueva(2);
+        cargaNueva(3);
+      }*/
+
+      $('a[href$="#myModal"]').on( "click", function() {
+        $('#myModal').modal();
+      });
+
+      var elem = document.querySelector("#contenedor-fullscreen");
+      window.openFullscreen =function () {
+        console.log("openFullscreen();")
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+          elem.msRequestFullscreen();
         }
-      },
-
-    });
-    let meta_duplicat_tot =  null;
-    meta_duplicat = $('#meta_duplicat_tot').DataTable({
-      processing: true,
-      serverSide: true,
-      searching: false,
-      dom: "",
-      lengthMenu: [15,20],
-      "order": [[0, "des"]],
-      ajax: {
-        url: "{{ route('dashboard.graficoMetaTable') }}",
-      },
-      columns: [
-        {
-          data: 'name',
-          name: ' name',
-        },
-        {
-          data: 'code'
-          , name: 'code'
-        },
-        {data: 'pedidos_dia', name: 'pedidos_dia',},
-
-        {data: 'progress_pagos', name: 'progress_pagos'},
-        {data: 'progress_pedidos', name: 'progress_pedidos',},
-
-      ],
-      language: {
-        "decimal": "",
-        "emptyTable": "No hay información",
-        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-        "infoPostFix": "",
-        "thousands": ",",
-        "lengthMenu": "Mostrar _MENU_ Entradas",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "Sin resultados encontrados",
-        "paginate": {
-          "first": "Primero",
-          "last": "Ultimo",
-          "next": "Siguiente",
-          "previous": "Anterior"
-        }
-      },
+      }
 
     });
   </script>
 
-  <script>
-    setInterval(function recargametasxmes() {
-      $("#metas").DataTable().ajax.reload();
-      $("#metas_dp").DataTable().ajax.reload();
-      $("#meta_duplicat_tot").DataTable().ajax.reload();
-    }, 3000);
 
 
-  </script>
+
 
 @endsection

@@ -110,47 +110,6 @@
         <x-grafico-metas-mes></x-grafico-metas-mes>
     </div> --}}
 
-  {{--MODAL--}}
-  <div class="modal modal-fullscreen p-0" id="myModal"  role="dialog" aria-labelledby="myModal" aria-hidden="true">
-    <div class="modal-fullscreen bg-blue" role="document">
-      <div class="modal-content">
-        <div class="modal-header" style="padding: 2px 16px;">
-          <h5 class="modal-title text-black" id="exampleModalLabel">METAS DEL MES</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" style="color: black">
-          <table id="meta_duplicat_tot_modal" class="table table-bordered border-2 col-lg-12 col-md-12 col-sm-12" style="width:100%; background: #e4dbc6; color: #0a0302">
-            <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
-            <tr class="font-weight-bold">
-              <th class="h6 font-weight-bold">Asesor</th>
-              <th class="h6 font-weight-bold">Identificador</th>
-              <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
-              <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
-                {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-                {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
-                <br>
-                {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
-
-              </th>
-              <th class="h6 font-weight-bold text-uppercase">Pedidos
-                {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-                <br>
-                {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
-              </th>
-            </tr>
-            </thead>
-            <tbody style="background: #e4dbc6; font-weight: bold">
-            </tbody>
-          </table>
-
-        </div>
-      </div>
-    </div>
-  </div>
-  {{--FIN-MODAL--}}
-
     <div class="col-lg-12 " id="contenedor-fullscreen">
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
@@ -171,8 +130,6 @@
               <div id="metas_total"></div>
             </div>
           </div>
-
-
         </div>
       </div>
       {{--FIN-TABLA-DUAL--}}

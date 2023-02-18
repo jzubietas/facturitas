@@ -881,14 +881,20 @@ class DashboardController extends Controller
   {
     $metas = [];
     $total_asesor= User::query()->activo()->rolAsesor()->count();
-
-    if (auth()->user()->rol == User::ROL_LLAMADAS) {
+    if (auth()->user()->rol == User::ROL_ASESOR){
+      $asesores = User::query()->activo()->rolAsesor()
+        ->where('identificador',auth()->user()->identificador)->get();
+    }
+    elseif (auth()->user()->rol == User::ROL_LLAMADAS) {
       $asesores = User::query()->activo()->rolAsesor()
         ->get();
     } else if (auth()->user()->rol == User::ROL_FORMACION) {
       $asesores = User::query()->activo()->rolAsesor()
         ->get();
-    } else {
+    } if (auth()->user()->rol == User::ROL_PRESENTACION) {
+    $asesores = User::query()->activo()->rolAsesor()
+      ->get();
+  }else {
       $encargado = null;
       if (auth()->user()->rol == User::ROL_ENCARGADO) {
         $encargado = auth()->user()->id;
@@ -897,8 +903,31 @@ class DashboardController extends Controller
         return $query->where('supervisor', '=', $encargado);
       })->get();
     }
+
+    if (auth()->user()->rol == User::ROL_ASESOR){
+      $total_asesor = User::query()->activo()->rolAsesor()
+        ->where('identificador',auth()->user()->identificador)->count();
+    }
+    elseif (auth()->user()->rol == User::ROL_LLAMADAS) {
+      $total_asesor = User::query()->activo()->rolAsesor()
+        ->count();
+    } else if (auth()->user()->rol == User::ROL_FORMACION) {
+      $total_asesor = User::query()->activo()->rolAsesor()
+        ->count();
+    } if (auth()->user()->rol == User::ROL_PRESENTACION) {
+    $total_asesor = User::query()->activo()->rolAsesor()
+      ->count();
+  }else {
+    $encargado = null;
+    if (auth()->user()->rol == User::ROL_ENCARGADO) {
+      $encargado = auth()->user()->id;
+    }
+    $total_asesor = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
+      return $query->where('supervisor', '=', $encargado);
+    })->count();
+  }
     foreach ($asesores as $asesor) {
-      if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN])) {
+      if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN, User::ROL_PRESENTACION, User::ROL_ASESOR])) {
       } else {
         if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/) {
           if (auth()->user()->rol != User::ROL_ENCARGADO) {
@@ -1122,7 +1151,7 @@ class DashboardController extends Controller
                   <th></th>
                   <th></th>
                   <th class="col-lg-4 col-md-4 col-sm-4">';
-      if($object_totales['progress_pagos']>=80){
+      if($object_totales['progress_pagos']<0){
         $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important;"> '.$object_totales['pedidos_dia'].' </span>';
       }else {
         $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important;"> '.$object_totales['pedidos_dia'].' </span>';
@@ -1178,7 +1207,7 @@ class DashboardController extends Controller
                  aria-valuemax="100"></div>';
       $html.='</div>
     <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-             <span> <b>  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
     </div>
 </div>';
 
@@ -1230,7 +1259,7 @@ class DashboardController extends Controller
                  aria-valuemax="100"></div>';
       $html.='</div>
     <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-             <span> <b>  '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  '.Carbon::now()->monthName .' : '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
     </div>';
       $html.='</th>
               </tr>
@@ -1244,9 +1273,9 @@ class DashboardController extends Controller
                 <tr>
                     <th width="10%">Asesor</th>
                     <th width="10%">Identificador</th>
-                    <th width="10%"><span style="font-size:10px;">Pedidos del día</span></th>
-                    <th width="35%">Cobranza </th>
-                    <th width="35%">Pedidos </th>
+                    <th width="10%"><span style="font-size:10px;">Pedidos del día '.Carbon::now()->subDay(1)->day .'  </span></th>
+                    <th width="35%">Cobranza  '.Carbon::now()->subMonths(1)->monthName .' </th>
+                    <th width="35%">Pedidos  '.Carbon::now()->monthName .' </th>
                 </tr>
                 </thead>
                 <tbody>';
