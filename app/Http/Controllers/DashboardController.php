@@ -1123,7 +1123,7 @@ class DashboardController extends Controller
                   <th></th>
                   <th>'.$object_totales['pedidos_dia'].'</th>
                   <th>Cobranza </th>
-                  <th>Pedididos </th>
+                  <th>Pedidos </th>
               </tr>
               </tbody>';
       $html .= '</table>';
@@ -1137,7 +1137,7 @@ class DashboardController extends Controller
                     <th>Identificador</th>
                     <th>Pedidos del día </th>
                     <th>Cobranza </th>
-                    <th>Pedididos </th>
+                    <th>Pedidos </th>
                 </tr>
                 </thead>
                 <tbody>';
