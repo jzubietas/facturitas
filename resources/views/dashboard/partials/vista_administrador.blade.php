@@ -450,6 +450,14 @@
         cargaNueva(2);
         cargaNueva(3);
 
+        setInterval(myTimer, 5000);
+
+        function myTimer() {
+          cargaNueva(1);
+          cargaNueva(2);
+          cargaNueva(3);
+        }
+
         $('a[href$="#myModal"]').on( "click", function() {
           $('#myModal').modal();
         });
