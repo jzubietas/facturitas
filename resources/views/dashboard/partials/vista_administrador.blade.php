@@ -442,6 +442,7 @@
 
         var elem = document.getElementsByClassName("contenedor-fullscreen");
         window.openFullscreen =function () {
+          console.log("openFullscreen();")
           if (elem.requestFullscreen) {
             elem.requestFullscreen();
           } else if (elem.webkitRequestFullscreen) { /* Safari */
