@@ -1273,7 +1273,7 @@ class DashboardController extends Controller
                 <tr>
                     <th width="10%">Asesor</th>
                     <th width="10%">Identificador</th>
-                    <th width="10%"><span style="font-size:10px;">Pedidos del día '.Carbon::now()->subDay(1)->day .'  </span></th>
+                    <th width="10%"><span style="font-size:10px;">Pedidos del día '.Carbon::now()->day .'  </span></th>
                     <th width="35%">Cobranza  '.Carbon::now()->subMonths(1)->monthName .' </th>
                     <th width="35%">Pedidos  '.Carbon::now()->monthName .' </th>
                 </tr>
