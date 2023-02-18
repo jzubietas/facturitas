@@ -177,33 +177,7 @@
       </div>
       {{--FIN-TABLA-DUAL--}}
 
-        {{-- TABLA TOTAL --}}
-        <div class="">
-            <table id="meta_duplicat_tot" class="table table-bordered border-2 col-lg-12 col-md-12 col-sm-12" style="width:100%">
-              <thead style="background: #e4dbc6; border: 1px solid red; justify-content: center">
-              <tr class="font-weight-bold">
-                <th class="h6 font-weight-bold">Asesor</th>
-                <th class="h6 font-weight-bold">Identificador</th>
-                <th class="h6 font-weight-bold">Pedidos del día {{Str::upper(\Carbon\Carbon::now()->add(1,'day')->sub('1 day')->isoFormat('D - M'))}} </th>
-                <th class="h6 font-weight-bold animated-progress text-uppercase">Cobranza
-                  {{Str::upper(\Carbon\Carbon::now()->subMonth()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-                  {{-- {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}
-                  <br>
-                  {{-- {{$data_noviembre->progress_pagos}}%</b> - {{$data_noviembre->total_pagado}}/{{$data_noviembre->total_pedido_mespasado}} --}}
-
-                </th>
-                <th class="h6 font-weight-bold text-uppercase">Pedidos
-                  {{Str::upper(\Carbon\Carbon::now()->monthName)}} - {{\Carbon\Carbon::now()->year}}
-                  <br>
-                  {{-- {{$data_noviembre->progress_pedidos}}%</b> - {{$data_noviembre->total_pedido}}/{{$data_noviembre->meta}} --}}
-                </th>
-              </tr>
-              </thead>
-                <tbody style="background: #e4dbc6; font-weight: bold">
-
-                </tbody>
-            </table>
-        </div >
+       
     </div>
 
     <div class="container-fluid">
