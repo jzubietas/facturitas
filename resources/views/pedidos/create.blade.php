@@ -74,12 +74,6 @@
     <script>
         $(document).ready(function () {
 
-          /*$("#cliente_id").bind("paste", function(e){
-            var pastedData = e.target.value;
-            $(this).val(pastedData.replace(/ /g, ""));
-            alert(pastedData);
-          } )*/
-
           $(document).on('paste','.bs-searchbox input.form-control',function(e){
             var pastedData = e.originalEvent.clipboardData.getData('text');
             pastedData=pastedData.replace(/ /g, "");
