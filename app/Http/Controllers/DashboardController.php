@@ -1151,7 +1151,7 @@ class DashboardController extends Controller
                   <th></th>
                   <th></th>
                   <th class="col-lg-4 col-md-4 col-sm-4">';
-      if($object_totales['progress_pagos']<0){
+      if($object_totales['progress_pagos']>0){
         $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important;"> '.$object_totales['pedidos_dia'].' </span>';
       }else {
         $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important;"> '.$object_totales['pedidos_dia'].' </span>';
