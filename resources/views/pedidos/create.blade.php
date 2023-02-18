@@ -73,6 +73,20 @@
 
     <script>
         $(document).ready(function () {
+
+          /*$("#cliente_id").bind("paste", function(e){
+            var pastedData = e.target.value;
+            $(this).val(pastedData.replace(/ /g, ""));
+            alert(pastedData);
+          } )*/
+
+          $(document).on('paste','.bs-searchbox input.form-control',function(e){
+            var pastedData = e.originalEvent.clipboardData.getData('text');
+            pastedData=pastedData.replace(/ /g, "");
+            $(this).val(pastedData);
+            console.log("sadsaad")
+          })
+
             $(document).on('click', '[data-toggle=jqconfirm][data-type=previsualizar]', function () {
                 let pruc = $('#pruc').val();
                 let pempresa = $('#pempresa').val();
