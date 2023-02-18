@@ -151,12 +151,10 @@
   </div>
   {{--FIN-MODAL--}}
 
-    <div class="col-lg-12">
+    <div class="col-lg-12 contenedor-fullscreen">
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-        <button type="button" class="btn" data-toggle="modal" data-target="#myModal" id="myModal">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </button>
+        <button onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt"></i></button>
       </div>
 
       {{--TABLA DUAL--}}
@@ -442,7 +440,7 @@
           $('#myModal').modal();
         });
 
-        var elem = document.getElementById("myvideo");
+        var elem = document.getElementsByClassName("contenedor-fullscreen");
         window.openFullscreen =function () {
           if (elem.requestFullscreen) {
             elem.requestFullscreen();
