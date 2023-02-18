@@ -297,7 +297,7 @@
             @include('dashboard.partials.apoyo_administrativo')
         @elseif (Auth::user()->rol == 'Encargado')
             @include('dashboard.partials.vista_encargado')
-        @elseif (Auth::user()->rol ==\App\Models\User::ROL_FORMACION)
+        @elseif (Auth::user()->rol =='FORMACIÓN')
             @include('dashboard.partials.vista_formacion')
         @elseif (Auth::user()->rol == 'Asesor')
             @include('dashboard.partials.vista_asesor')
