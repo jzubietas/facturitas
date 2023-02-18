@@ -169,6 +169,9 @@
             <div class="col-6">
               <div id="metas_dp"></div>
             </div>
+            <div class="col-12">
+              <div id="metas_total"></div>
+            </div>
           </div>
 
 
@@ -436,11 +439,16 @@
               }else if(entero==2){
                 $('#metas_dp').html(resultado);
               }
+              else if(entero==3){
+                $('#metas_total').html(resultado);
+              }
             }
           })
         }
+
         cargaNueva(1);
         cargaNueva(2);
+        cargaNueva(3);
 
 
 /*        $('#metas').DataTable({
