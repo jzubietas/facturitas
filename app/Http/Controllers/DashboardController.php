@@ -1122,10 +1122,61 @@ class DashboardController extends Controller
                   <th></th>
                   <th></th>
                   <th>'.$object_totales['pedidos_dia'].'</th>
-                  <th class="bg-white rounded"><x-bs-progressbar :progress="'.$object_totales['progress_pagos'].'">
-                                                    <span> <b>  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
-                                                </x-bs-progressbar>'.' </th>
-                  <th class="bg-white rounded">';
+                  <th>';
+
+
+      $html.='<div class="position-relative">
+                <div class="progress">';
+
+    if($object_totales['progress_pagos']>=80)
+            $html.='<div class="progress-bar bg-success" role="progressbar"
+                 style="width: '.$object_totales['progress_pagos'].'%;background: #03af03;"
+                 aria-valuenow="'.$object_totales['progress_pagos'].'"
+                 aria-valuemin="0" aria-valuemax="100"></div>';
+    else if($object_totales['progress_pagos']>70)
+        $html.='<div class="progress-bar bg-warning" role="progressbar"
+                 style="width: 70%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>
+            <div class="progress-bar" role="progressbar"
+                 style="width: '.($object_totales['progress_pagos']-70).'%;
+             background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
+                 aria-valuenow="'.($object_totales['progress_pagos']-70).'"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+    else if($progress>50)
+        $html.='<div class="progress-bar bg-warning" role="progressbar"
+                 style="width: 70%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+    else if($progress>40)
+        $html.='<div class="progress-bar bg-danger" role="progressbar"
+                 style="width: 40%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>
+            <div class="progress-bar" role="progressbar"
+                 style="width: '.($object_totales['progress_pagos']-40).'%;
+             background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
+                 aria-valuenow="'.($object_totales['progress_pagos']-40).'"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+    else
+           $html.='<div class="progress-bar bg-danger" role="progressbar"
+                 style="width: '.($object_totales['progress_pagos']).'%"
+                 aria-valuenow="'.($object_totales['progress_pagos']).'"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+    $html.='</div>
+    <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
+
+    </div>
+</div>';
+
+      $html.=' </th>
+                  <th>';
       if($object_totales['progress_pedidos']<'100'){
         $html.='<x-bs-progressbar :progress="'.$object_totales['progress_pedidos'].'">
                                                     <span> <b>  '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
