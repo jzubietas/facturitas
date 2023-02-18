@@ -297,7 +297,7 @@
             @include('dashboard.partials.apoyo_administrativo')
         @elseif (Auth::user()->rol == 'Encargado')
             @include('dashboard.partials.vista_encargado')
-        @elseif (Auth::user()->rol == 'FORMACIÓN')
+        @elseif (Auth::user()->rol ==\App\Models\User::ROL_FORMACION)
             @include('dashboard.partials.vista_formacion')
         @elseif (Auth::user()->rol == 'Asesor')
             @include('dashboard.partials.vista_asesor')
@@ -313,8 +313,6 @@
             @include('dashboard.partials.vista_llamadas')
         @elseif (Auth::user()->rol == 'Logística')
             @include('dashboard.partials.vista_logistica')
-        @elseif (Auth::user()->rol == \App\Models\User::ROL_FORMACION)
-            @include('dashboard.partials.formacion')
         @else
             @include('dashboard.partials.vista_otros')
         @endif
