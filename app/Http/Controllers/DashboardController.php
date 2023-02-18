@@ -881,46 +881,18 @@ class DashboardController extends Controller
   {
     $metas = [];
     $total_asesor= User::query()->activo()->rolAsesor()->count();
-    if($request->ii==1)
-    {
-      if($total_asesor%2==0)
-      {
-        $total_asesor_f_1=$total_asesor/2;
-        $total_asesor_f_2=$total_asesor/2;
-      }else{
-        $total_asesor_f_1=($total_asesor/2)+1;
-        $total_asesor_f_2=($total_asesor/2);
-      }
-      $skip=0;
-      $take=$total_asesor_f_1;
-    }else if($request->ii==2){
-      if($total_asesor%2==0)
-      {
-        $total_asesor_f_1=$total_asesor/2;
-        $total_asesor_f_2=$total_asesor/2;
-      }else{
-        $total_asesor_f_1=($total_asesor/2)+1;
-        $total_asesor_f_2=($total_asesor/2);
-      }
-      $skip=$total_asesor_f_1;
-      $take=$total_asesor_f_2;
-    }
 
     if (auth()->user()->rol == User::ROL_LLAMADAS) {
       $asesores = User::query()->activo()->rolAsesor()
-        //->skip($skip)->take($take)
         ->get();
     } else if (auth()->user()->rol == User::ROL_FORMACION) {
       $asesores = User::query()->activo()->rolAsesor()
-        //->skip($skip)->take($take)
         ->get();
     } else {
       $encargado = null;
       if (auth()->user()->rol == User::ROL_ENCARGADO) {
         $encargado = auth()->user()->id;
       }
-
-
       $asesores = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
         return $query->where('supervisor', '=', $encargado);
       })->get();
@@ -973,7 +945,6 @@ class DashboardController extends Controller
         ->where('codigo', 'not like', "%-C%")->activo(), now(), 'created_at')
         ->count();
 
-
       $item = [
         "identificador" => $asesor->identificador,
         "code" => "Asesor {$asesor->identificador}",
@@ -1005,7 +976,6 @@ class DashboardController extends Controller
         $progressData[] = $item;
       }
     }
-
 
     $newData = [];
     $union = collect($progressData)->groupBy('identificador');
@@ -1039,7 +1009,6 @@ class DashboardController extends Controller
       $pedidos_dia = data_get($item, 'pedidos_dia');
 
       $pedidos_totales = data_get($item, 'pedidos_totales');
-
 
       if ($pay > 0) {
         $p_pagos = round(($pay / $all_mespasado) * 100, 2);
@@ -1077,7 +1046,36 @@ class DashboardController extends Controller
       $item['pedidos_totales'] = $pedidos_totales;
       return $item;
 
-    })->sortBy('progress_pedidos', SORT_NUMERIC, true)->all();
+    })->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
+
+    if($request->ii==1)
+    {
+      if($total_asesor%2==0)
+      {
+        $skip=0;
+        $take=intval($total_asesor/2);
+      }else{
+        $skip=0;
+        $take=intval($total_asesor/2)+1;
+      }
+
+      $progressData->skip($skip)->take($take)->all();
+    }else if($request->ii==2)
+    {
+      if($total_asesor%2==0)
+      {
+        $skip=intval($total_asesor/2);
+        $take=intval($total_asesor/2);
+      }else{
+        $skip=intval($total_asesor/2)+1;
+        $take=intval($total_asesor/2);
+      }
+      $progressData->skip($skip)->take($take)->all();
+    }else if($request->ii==3){
+      $progressData->all();
+    }
+
+    //aqui la division de  1  o 2
 
     $all = collect($progressData)->pluck('total_pedido')->sum();
     $all_mespasado = collect($progressData)->pluck('total_pedido_mespasado')->sum();
