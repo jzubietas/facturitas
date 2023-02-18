@@ -1133,11 +1133,11 @@ class DashboardController extends Controller
       $html .= '<table class="table tabla-metas_pagos_pedidos table-dark">';
       $html .= '<thead>
                 <tr>
-                    <th style="width:5%;">Asesor</th>
-                    <th style="width:5%;">Identificador</th>
-                    <th style="width:5%;"><span style="font-size:10px;">Pedidos del día</span></th>
-                    <th style="width:5%;">Cobranza </th>
-                    <th style="width:5%;">Pedidos </th>
+                    <th width="10%">Asesor</th>
+                    <th width="10%">Identificador</th>
+                    <th width="10%"><span style="font-size:10px;">Pedidos del día</span></th>
+                    <th width="35%">Cobranza </th>
+                    <th width="35%">Pedidos </th>
                 </tr>
                 </thead>
                 <tbody>';

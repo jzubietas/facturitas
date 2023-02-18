@@ -372,7 +372,7 @@
             align-items: center;
         }
 
-        
+
 
     </style>
 @endpush
