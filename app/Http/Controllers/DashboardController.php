@@ -1122,10 +1122,10 @@ class DashboardController extends Controller
                   <th></th>
                   <th></th>
                   <th>'.$object_totales['pedidos_dia'].'</th>
-                  <th class="w-100 bg-white rounded"><x-bs-progressbar :progress="'.$object_totales['progress_pagos'].'">
+                  <th class="bg-white rounded"><x-bs-progressbar :progress="'.$object_totales['progress_pagos'].'">
                                                     <span> <b>  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
                                                 </x-bs-progressbar>'.' </th>
-                  <th class="w-100 bg-white rounded">';
+                  <th class="bg-white rounded">';
       if($object_totales['progress_pedidos']<'100'){
         $html.='<x-bs-progressbar :progress="'.$object_totales['progress_pedidos'].'">
                                                     <span> <b>  '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
