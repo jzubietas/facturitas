@@ -17,7 +17,7 @@
                       <div class="form-row">
                         <div class="form-group">
                           <input type="hidden" class="form-control" id="Cliente" >
-                          <input type="text" class="form-control" id="cod_Cliente"  >
+                          <input type="text" class="form-control" id="cod_Cliente" readonly >
                         </div>
                       </div>
 
@@ -26,7 +26,7 @@
                       <div class="form-row">
                         <div class="form-group">
                           <input type="hidden" class="form-control" id="Id-Cliente">
-                          <input type="text" class="form-control" id="cod_pedido"  >
+                          <input type="text" class="form-control" id="cod_pedido" readonly >
                         </div>
                       </div>
 
