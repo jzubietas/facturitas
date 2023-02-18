@@ -1152,7 +1152,7 @@ class DashboardController extends Controller
                   $html.=  '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"> ' . $data["pedidos_dia"] . ' </span> ';
                 }
         $html.=  '</td>';
-        $html.= '<td>';
+        $html.= '<td height="20px;">';
                   if ($data["progress_pagos"] == 100) {
                     $html.=  ' <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
