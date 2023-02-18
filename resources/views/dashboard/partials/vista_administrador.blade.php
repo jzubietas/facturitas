@@ -106,7 +106,7 @@
     <div class="col-lg-12">
         <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
     </div>
-  
+
 
     <div class="col-lg-12 " id="contenedor-fullscreen">
       <div class="d-flex justify-content-center">
@@ -362,13 +362,13 @@
         cargaNueva(2);
         cargaNueva(3);
 
-        /*setInterval(myTimer, 5000);
+        setInterval(myTimer, 5000);
 
         function myTimer() {
           cargaNueva(1);
           cargaNueva(2);
           cargaNueva(3);
-        }*/
+        }
 
         $('a[href$="#myModal"]').on( "click", function() {
           $('#myModal').modal();
