@@ -161,7 +161,7 @@
 
       {{--TABLA DUAL--}}
       <div class="">
-        <div class="d-flex flex-wrap w-100">
+        <div class=" ">
           <div class="row">
             <div class="col-6">
               <div id="meta"></div>
