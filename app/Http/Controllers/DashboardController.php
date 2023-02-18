@@ -1170,8 +1170,8 @@ class DashboardController extends Controller
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
     $html.='</div>
-    <div class="position-absolute w-100 text-center" style="top: 0;font-size: 12px;">
-             <span> <b>  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>                                              
+    <div class="position-absolute w-100 text-center rounded" style="top: 0;font-size: 12px;">
+             <span> <b>  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
     </div>
 </div>';
 
