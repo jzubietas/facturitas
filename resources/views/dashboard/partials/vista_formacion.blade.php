@@ -218,9 +218,6 @@
     </div>
   </div>
 </div>
-
-@yield('js-datatables')
-
 @push('css')
   <style>
     .list-group .list-group-item {
@@ -256,16 +253,8 @@
       justify-content: center;
       align-items: center;
     }
-
-
-
-
   </style>
 @endpush
-
-@section('css-datatables')
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css">
-@endsection
 
 @section('js-datatables')
   <script>
@@ -313,7 +302,7 @@
       cargaNueva(2);
       cargaNueva(3);
 
-      setInterval(myTimer, 3000);
+      setInterval(myTimer, 10000);
 
       function myTimer() {
         cargaNueva(1);

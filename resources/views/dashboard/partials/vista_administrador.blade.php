@@ -265,7 +265,6 @@
     </div>
 </div>
 
-@yield('js-datatables')
 
 @push('css')
     <style>
@@ -302,16 +301,9 @@
             justify-content: center;
             align-items: center;
         }
-
-
-
-
     </style>
 @endpush
 
-@section('css-datatables')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css">
-@endsection
 
 @section('js-datatables')
     <script>
@@ -325,8 +317,7 @@
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
-    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+
     <script>
       $(document).ready(function () {
         $.ajaxSetup({
@@ -362,7 +353,7 @@
         cargaNueva(2);
         cargaNueva(3);
 
-        setInterval(myTimer, 3000);
+        setInterval(myTimer, 10000);
 
         function myTimer() {
           cargaNueva(1);
