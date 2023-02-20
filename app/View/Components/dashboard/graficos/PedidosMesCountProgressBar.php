@@ -6,6 +6,7 @@ use App\Abstracts\Widgets;
 use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 class PedidosMesCountProgressBar extends Widgets
@@ -57,7 +58,7 @@ class PedidosMesCountProgressBar extends Widgets
             "code" => '',
             "name" => 'General',
             "progress" => $progress,
-            "meta" => 1600,
+            "meta" => 2000,
             "pagados" => $pagoxmes_total,
             "asignados" => $pagoxmes_total,
         ];
@@ -92,7 +93,7 @@ class PedidosMesCountProgressBar extends Widgets
             }
 
             $meta = (float)$asesor->meta_pedido;
-            $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo())->where('pedidos.codigo', 'not like', "%-C%")->count();
+            $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo()->where('pedidos.codigo', 'not like', "%-C%"))->count();
             $pay = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo()->pagados()->where('pedidos.codigo', 'not like', "%-C%"))->count();
 
             $progressData[] = [
