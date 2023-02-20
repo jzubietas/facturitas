@@ -113,8 +113,4 @@
     });
   </script>
 
-
-
-
-
 @endsection

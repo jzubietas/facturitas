@@ -265,7 +265,6 @@
     </div>
 </div>
 
-@yield('js-datatables')
 
 @push('css')
     <style>
@@ -302,16 +301,9 @@
             justify-content: center;
             align-items: center;
         }
-
-
-
-
     </style>
 @endpush
 
-@section('css-datatables')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css">
-@endsection
 
 @section('js-datatables')
     <script>
