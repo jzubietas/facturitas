@@ -281,7 +281,7 @@
           }
         })
       }
-      setInterval(myTimer, 3000);
+      setInterval(myTimer, 10000);
 
 
 
