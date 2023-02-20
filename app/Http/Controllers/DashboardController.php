@@ -1289,7 +1289,7 @@ class DashboardController extends Controller
              <td>' . $data["identificador"] . '</td>
              <td>' . $data["code"] . '</td>
              <td>';
-        if ($data["pedidos_dia"] < 0) {
+        if ($data["pedidos_dia"] > 0) {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
         } else {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"> ' . $data["pedidos_dia"] . ' </span> ';
