@@ -1802,8 +1802,9 @@ ${data.foto3 ? `
 
           $(document).on("click", ".btnrrellenar_recojo", function () {
             var recupeardo_check = tabla_pedidos.column(0).checkboxes.selected();
-            $('#direcciones_add').append('');
             seleccion = [];
+            seleccion.push($('#pedido_contatenado').val())
+            $('#direcciones_add').append('');
             $.each(recupeardo_check, function (index, rowId) {
               console.log("index " + index);
               console.log("ID PEDIDO  es " + rowId);
@@ -1816,13 +1817,14 @@ ${data.foto3 ? `
                 codigo : row.find('td:eq(1)').text(),
               });
             });
-            $seleccion = seleccion.join(',');
-            $('#pedido_contatenado').val($seleccion); //setear un valor
+            seleccion = seleccion.join(',');
+            $('#pedido_contatenado').val(seleccion); //setear un valor
             ids.forEach(function(pedido) {
               $('#direcciones_add ul').append(`
                     <li>`+pedido.codigo+`</li>
                 `);
             });
+
             console.log(seleccion);
           })
 

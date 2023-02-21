@@ -3200,6 +3200,7 @@ class PedidoController extends Controller
     if($request->pedidosNotIn){
       $pedidos = $pedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
     }
+
     return Datatables::of(DB::table($pedidos))
       ->addIndexColumn()
       ->make(true);
