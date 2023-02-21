@@ -16,8 +16,8 @@
                     <div class="col-md-6">
                       <div class="form-row">
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="Cliente" >
-                          <input type="text" class="form-control" id="cod_Cliente" readonly >
+                          <input type="hidden" class="form-control" id="clienteid" >
+                          <input type="text" class="form-control" id="clientenombre" readonly >
                         </div>
                       </div>
 
@@ -25,8 +25,8 @@
                     <div class="col-md-4">
                       <div class="form-row">
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="Id-Cliente">
-                          <input type="text" class="form-control" id="cod_pedido" readonly >
+                          <input type="hidden" class="form-control" id="pedidoid">
+                          <input type="text" class="form-control" id="pedidocodigo" readonly >
                         </div>
                       </div>
 

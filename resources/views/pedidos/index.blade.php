@@ -358,18 +358,21 @@
             $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
 
-                $('#Cliente').val(button.data('pedidoid'))
-                $('#Id-Cliente').val(button.data('clienteid'))
-                $('#cod_Cliente').val(button.data('clientenombre'))
-                $('#cod_pedido').val(button.data('pedidocodigo'))
-                $('#direccion_recojo').val(button.data('direccionreco'))
-                $('#nombre_recojo').val(button.data('nombreresiv'))
-                $('#celular_recojo').val(button.data('telefonoresiv'))
-                $('#referencia_recojo').val(button.data('referenciareco'))
-                $('#observacion_recojo').val(button.data('observacionreco'))
-                $('#gmlink_recojo').val(button.data('gmclink'))
+                console.table('Data', button.data());
 
-                var cod_pedido = $('#cod_pedido').val();
+              $('#clienteid').val(button.data('clienteid'))
+              $('#clientenombre').val(button.data('clientenombre'))
+              $('#pedidoid').val(button.data('pedidoid'))
+              $('#pedidocodigo').val(button.data('pedidocodigo'))
+
+              $('#direccion_recojo').val(button.data('direccionreco'))
+              $('#nombre_recojo').val(button.data('nombreresiv'))
+              $('#celular_recojo').val(button.data('telefonoresiv'))
+              $('#referencia_recojo').val(button.data('referenciareco'))
+              $('#observacion_recojo').val(button.data('observacionreco'))
+              $('#gmlink_recojo').val(button.data('gmclink'))
+
+                var cod_pedido = $('#pedidoid').val();
 
                 var fd_asesor = new FormData();
                 fd_asesor.append('codigo_pedido', cod_pedido);
@@ -446,7 +449,7 @@
                 fd_courier.append('observacion_recojo', observacion_recojo);
                 fd_courier.append('gm_link', gm_link);
 
-                
+
                 $.ajax({
                     data: fd_courier,
                     processData: false,
@@ -467,8 +470,8 @@
 
             $('#modal-listclientes').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
-                var cliente = $('#Id-Cliente').val()
-
+                var cliente = $('#clienteid').val()
+                var pedido = $('#pedidoid').val()
 
 
                 tabla_pedidos.destroy();
@@ -479,7 +482,7 @@
                     "bInfo": false,
                     'ajax': {
                         url: "{{ route('cargar.recojolistclientes') }}",
-                        'data': {"cliente_id": cliente},
+                        'data': {"cliente_id": cliente,"pedido": pedido},
                         "type": "get",
                     },
                     columnDefs: [{

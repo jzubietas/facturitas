@@ -14,6 +14,7 @@ use App\Models\DetallePedido;
 use App\Models\DireccionEnvio;
 use App\Models\DireccionGrupo;
 use App\Models\DireccionPedido;
+use App\Models\Directions;
 use App\Models\Distrito;
 use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
@@ -3167,7 +3168,6 @@ class PedidoController extends Controller
   {
     $pedidos = null;
 
-
     $idrequest = $request->cliente_id;
     $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
       ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -3185,5 +3185,21 @@ class PedidoController extends Controller
     return Datatables::query(DB::table($pedidos))
       ->addIndexColumn()
       ->make(true);
+  }
+
+  public function getdireecionentrega(Request $request)
+  {
+    $codigo_pedido= $request->codigo_pedido;//userid de asesor
+    $pedido=Pedido::where('codigo',$codigo_pedido)->first();
+
+    $operario=User::where('id',$pedido->user_id)->first()->operario;
+    $jefeop=User::where('id',$operario)->first()->jefe;
+
+    //$result_direccion=User::where('id',$jefeop)->first()->id;
+    $result_direccion=Directions::query()->where('user_id',$jefeop)->first()->direccion_recojo;
+
+
+    return $result_direccion;
+
   }
 }
