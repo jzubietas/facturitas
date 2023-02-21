@@ -1784,6 +1784,7 @@ ${data.foto3 ? `
 
           $(document).on("click", ".btnrrellenar_recojo", function () {
             console.log('Agregarrrrrrr')
+            $('#direcciones_add').append('');
             seleccion = [];
             $(".tabla-listar-clientes tr td input[type='checkbox']:checked").each(function(){
               row = $(this).closest('tr');
@@ -1792,31 +1793,25 @@ ${data.foto3 ? `
               });
             });
             seleccion.forEach(function(pedido) {
-              console.log(pedido.codigo);
-              $('#direcciones_add').append(`<div class="row">
-                      <div class="col-md-12">
+              $('#direcciones_add').append(`
+                      <div class="col-md-6">
                         <div class="form-row">
                           <div class="form-group">
                             <input type="hidden" class="form-control" id="" >
                             <input type="hidden" class="form-control" id="" readonly >
                           </div>
                         </div>
-
                       </div>
-                      <div class="col-md-12">
+
+                      <div class="col-md-6">
                         <div class="form-row">
                           <div class="form-group">
                             <input type="hidden" class="form-control" id="pedidoid">
                             <input type="text" class="form-control" id="pedidocodigo" readonly value="`+pedido.codigo+`" >
                           </div>
                         </div>
-
-                      </div>
-                    </div>`);
+                      </div>`);
             });
-
-
-
             console.log(seleccion);
           })
 
