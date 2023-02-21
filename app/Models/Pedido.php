@@ -152,6 +152,10 @@ class Pedido extends Model
         'condicion_envio_color'
     ];
 
+    protected $fillable = [
+      'estado_correccion',
+    ];
+
     /* public function user()
     {
         return $this->belongsTo('App\Models\User');

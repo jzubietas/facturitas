@@ -588,7 +588,7 @@ class SobreController extends Controller
         $recojo_pedido_direccion = $request->recojo_pedido_direccion;
         $recojo_pedido_referencia = $request->recojo_pedido_referencia;
         $recojo_pedido_observacion = $request->recojo_pedido_observacion;
-        $pedido = Pedido::where('estado_sobre', "1")->where("estado", 1)->where("id", $recojo_pedido)->where("cliente_id", $recojo_cliente)->first();
+        $pedido = Pedido::where('estado_sobre', "1")->activo()->where("id", $recojo_pedido)->where("cliente_id", $recojo_cliente)->first();
         if ($pedido) {
             //mandar a sobre con direccion
             $dg = $pedido->direcciongrupo;
