@@ -23,7 +23,7 @@
 
                             <div class="table-responsive">
 
-                                <table id="tabla-listar-clientes" class="table table-striped display"
+                                <table id="tabla-listar-clientes" class="table table-striped display tabla-listar-clientes"
                                        style="width:100%">
                                     <thead>
                                     <tr>
@@ -42,7 +42,7 @@
                 </div>
             </form>
                 <div class="modal-footer">
-                    <button id="btnrrellenar_recojo" type="button" class="btn btn-primary" data-dismiss="modal">Agregar</button>
+                    <button id="btnrrellenar_recojo" type="button" class="btn btn-primary btnrrellenar_recojo" data-dismiss="modal">Agregar</button>
                 </div>
             {{ Form::Close() }}
         </div>

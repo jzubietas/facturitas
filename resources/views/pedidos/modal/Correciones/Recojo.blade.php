@@ -35,6 +35,8 @@
                       <button type="button" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn-sm btn btn-primary" data-target="#modal-listclientes" >+</button>
                     </div>
                   </div>
+                  <div class="row" id="direcciones_add"></div>
+
 
                   <div class="row">
                     <div class="col-md-12">

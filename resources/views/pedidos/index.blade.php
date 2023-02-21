@@ -1781,6 +1781,45 @@ ${data.foto3 ? `
             $('#min, #max').change(function () {
                 table.draw();
             });
+
+          $(document).on("click", ".btnrrellenar_recojo", function () {
+            console.log('Agregarrrrrrr')
+            seleccion = [];
+            $(".tabla-listar-clientes tr td input[type='checkbox']:checked").each(function(){
+              row = $(this).closest('tr');
+              seleccion.push({
+                codigo : row.find('td:eq(1)').text()
+              });
+            });
+            seleccion.forEach(function(pedido) {
+              console.log(pedido.codigo);
+              $('#direcciones_add').append(`<div class="row">
+                      <div class="col-md-12">
+                        <div class="form-row">
+                          <div class="form-group">
+                            <input type="hidden" class="form-control" id="" >
+                            <input type="hidden" class="form-control" id="" readonly >
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-row">
+                          <div class="form-group">
+                            <input type="hidden" class="form-control" id="pedidoid">
+                            <input type="text" class="form-control" id="pedidocodigo" readonly value="`+pedido.codigo+`" >
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>`);
+            });
+
+
+
+            console.log(seleccion);
+          })
+
         });
     </script>
 @stop
