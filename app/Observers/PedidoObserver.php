@@ -32,7 +32,7 @@ class PedidoObserver
     {
         //
       //\Log::info("PostCreatePedido -> ".$pedido->codigo);
-      PostUpdatePedido::dispatchSync($pedido->codigo);
+      //PostUpdatePedido::dispatchSync($pedido->codigo);
     }
 
     /**
