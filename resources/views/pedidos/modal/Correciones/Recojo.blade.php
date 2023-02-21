@@ -35,7 +35,10 @@
                       <button type="button" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn-sm btn btn-primary" data-target="#modal-listclientes" >+</button>
                     </div>
                   </div>
-                  <div id="direcciones_add"></div>
+                  <div id="direcciones_add">
+                    <ul></ul>
+                    <input type="text" class="form-control" id="pedido_contatenado">
+                  </div>
 
 
                   <div class="row">

@@ -3197,6 +3197,9 @@ class PedidoController extends Controller
         ]
       )
       ->where('pedidos.cliente_id', $idrequest)->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito);
+    if($request->pedidosNotIn){
+      $pedidos = $pedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
+    }
     return Datatables::of(DB::table($pedidos))
       ->addIndexColumn()
       ->make(true);
