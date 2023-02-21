@@ -446,7 +446,7 @@
                 fd_courier.append('observacion_recojo', observacion_recojo);
                 fd_courier.append('gm_link', gm_link);
 
-
+                
                 $.ajax({
                     data: fd_courier,
                     processData: false,
