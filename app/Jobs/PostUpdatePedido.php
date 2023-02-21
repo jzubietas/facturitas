@@ -42,10 +42,11 @@ class PostUpdatePedido implements ShouldQueue
       $dpedido=DetallePedido::where('codigo',$this->codigo)->first();
 
       //crear historial
-
-
       $estado_correccion = $pedido->estado_correccion;
-      /*HistoriaPedidos::create([
+
+
+
+      HistoriaPedidos::create([
         'pedido_id' => $pedido->id,
         'correlativo' => $pedido->correlativo,
         'cliente_id' => $pedido->cliente_id,
@@ -102,7 +103,7 @@ class PostUpdatePedido implements ShouldQueue
         'descripcion' => $dpedido->descripcion,
         'nota' => $dpedido->nota,
         //campos de detalle
-      ]);*/
+      ]);
 
 
     }

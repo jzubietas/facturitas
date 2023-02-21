@@ -152,9 +152,9 @@ class Pedido extends Model
         'condicion_envio_color'
     ];
 
-    protected $fillable = [
+    /*protected $fillable = [
       'estado_correccion',
-    ];
+    ];*/
 
     /* public function user()
     {
