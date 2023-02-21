@@ -470,6 +470,7 @@
                 var cliente = $('#Id-Cliente').val()
 
 
+
                 tabla_pedidos.destroy();
                 tabla_pedidos = $('#tabla-listar-clientes').DataTable({
                     responsive: true,

@@ -3163,4 +3163,27 @@ class PedidoController extends Controller
     }
 
 
+  public function recojolistclientes(Request $request)
+  {
+    $pedidos = null;
+
+
+    $idrequest = $request->cliente_id;
+    $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+      ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+      ->select(
+        [
+          'pedidos.id as pedidoid',
+          'c.id',
+          'dp.codigo',
+          'dp.nombre_empresa',
+
+        ]
+      )
+      ->where('pedidos.cliente_id', $idrequest)->ConsultaRecojo('985258556');
+
+    return Datatables::query(DB::table($pedidos))
+      ->addIndexColumn()
+      ->make(true);
+  }
 }

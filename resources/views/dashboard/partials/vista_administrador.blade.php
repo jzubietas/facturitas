@@ -353,7 +353,7 @@
         cargaNueva(2);
         cargaNueva(3);
 
-        setInterval(myTimer, 10000);
+        setInterval(myTimer, 50000);
 
         function myTimer() {
           cargaNueva(1);

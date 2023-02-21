@@ -6,6 +6,7 @@ use App\Abstracts\Widgets;
 use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 class PedidosMesCountProgressBar extends Widgets
@@ -43,7 +44,7 @@ class PedidosMesCountProgressBar extends Widgets
          $pagoxmes_total = $this->applyFilter(
                 Pedido::activo()->whereIn('user_id',
                     User::query()->select('users.id')->rolAsesor()->whereNotIn('users.id',[51])
-                )
+                )->where('pedidos.codigo', 'not like', "%-C%")
                 , 'pedidos.created_at'
             )->count();
 
@@ -57,7 +58,7 @@ class PedidosMesCountProgressBar extends Widgets
             "code" => '',
             "name" => 'General',
             "progress" => $progress,
-            "meta" => 1600,
+            "meta" => 2000,
             "pagados" => $pagoxmes_total,
             "asignados" => $pagoxmes_total,
         ];
@@ -92,8 +93,8 @@ class PedidosMesCountProgressBar extends Widgets
             }
 
             $meta = (float)$asesor->meta_pedido;
-            $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo())->count();
-            $pay = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo()->pagados())->count();
+            $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo()->where('pedidos.codigo', 'not like', "%-C%"))->count();
+            $pay = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo()->pagados()->where('pedidos.codigo', 'not like', "%-C%"))->count();
 
             $progressData[] = [
                 "identificador" => $asesor->identificador,

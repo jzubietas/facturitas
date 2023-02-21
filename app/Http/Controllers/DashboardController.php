@@ -882,20 +882,20 @@ class DashboardController extends Controller
     $metas = [];
     $total_asesor= User::query()->activo()->rolAsesor()->count();
     if (auth()->user()->rol == User::ROL_ASESOR){
-      $asesores = User::query()->activo()->rolAsesor()
-        ->where('identificador',auth()->user()->identificador)->get();
+      $asesores = User::query()->activo()->rolAsesor()->where('identificador',auth()->user()->identificador)->get();
+      $total_asesor = User::query()->activo()->rolAsesor()->where('identificador',auth()->user()->identificador)->count();
     }else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
-      $asesores = User::query()->activo()->rolAsesor()
-        ->get();
+      $asesores = User::query()->activo()->rolAsesor()->get();
+      $total_asesor = User::query()->activo()->rolAsesor()->count();
     }else if (auth()->user()->rol == User::ROL_LLAMADAS) {
-      $asesores = User::query()->activo()->rolAsesor()
-        ->get();
+      $asesores = User::query()->activo()->rolAsesor()->get();
+      $total_asesor = User::query()->activo()->rolAsesor()->count();
     } else if (auth()->user()->rol == User::ROL_FORMACION) {
-      $asesores = User::query()->activo()->rolAsesor()
-        ->get();
+      $asesores = User::query()->activo()->rolAsesor()->get();
+      $total_asesor = User::query()->activo()->rolAsesor()->count();
     } else if (auth()->user()->rol == User::ROL_PRESENTACION) {
-    $asesores = User::query()->activo()->rolAsesor()
-      ->get();
+      $asesores = User::query()->activo()->rolAsesor()->get();
+      $total_asesor = User::query()->activo()->rolAsesor()->count();
   }else {
       $encargado = null;
       if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -904,37 +904,15 @@ class DashboardController extends Controller
       $asesores = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
         return $query->where('supervisor', '=', $encargado);
       })->get();
+      $total_asesor = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
+        return $query->where('supervisor', '=', $encargado);
+      })->count();
     }
 
-    if (auth()->user()->rol == User::ROL_ASESOR){
-      $total_asesor = User::query()->activo()->rolAsesor()
-        ->where('identificador',auth()->user()->identificador)->count();
-    }else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
-    $asesores = User::query()->activo()->rolAsesor()
-      ->count();
-    }
-    else if (auth()->user()->rol == User::ROL_LLAMADAS) {
-      $total_asesor = User::query()->activo()->rolAsesor()
-        ->count();
-    }else if (auth()->user()->rol == User::ROL_FORMACION) {
-      $total_asesor = User::query()->activo()->rolAsesor()
-        ->count();
-    }else if (auth()->user()->rol == User::ROL_PRESENTACION) {
-    $total_asesor = User::query()->activo()->rolAsesor()
-      ->count();
-  }else {
-    $encargado = null;
-    if (auth()->user()->rol == User::ROL_ENCARGADO) {
-      $encargado = auth()->user()->id;
-    }
-    $total_asesor = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
-      return $query->where('supervisor', '=', $encargado);
-    })->count();
-  }
     foreach ($asesores as $asesor) {
       if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN, User::ROL_PRESENTACION, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])) {
       } else {
-        if (auth()->user()->rol != User::ROL_ADMIN /*|| auth()->user()->rol!=User::ROL_FORMACION*/) {
+        if (auth()->user()->rol != User::ROL_ADMIN ) {
           if (auth()->user()->rol != User::ROL_ENCARGADO) {
             if (auth()->user()->id != $asesor->id) {
               continue;
@@ -967,17 +945,7 @@ class DashboardController extends Controller
       //PEDIDOS INDIVIDUALES
       $pedidos_totales = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
         ->where('pedidos.codigo', 'not like', "%-C%")->whereDate('pedidos.created_at', now())->count();
-      //COBRANZAS TOTALES
-      $total_pagado_cobranza = $this->applyFilterCustom(Pedido::query()
-        ->where('codigo', 'not like', "%-C%")->activo()->pagados(), $date_pagos, 'created_at')
-        ->count();
-      $total_pedido_mespasado_cobranza = $this->applyFilterCustom(Pedido::query()
-        ->where('codigo', 'not like', "%-C%")->activo(), $date_pagos, 'created_at')
-        ->count();
-      //PEDIDOS TOTALES
-      $total_pedido_general = $this->applyFilterCustom(Pedido::query()
-        ->where('codigo', 'not like', "%-C%")->activo(), now(), 'created_at')
-        ->count();
+
 
       $item = [
         "identificador" => $asesor->identificador,
@@ -1156,10 +1124,10 @@ class DashboardController extends Controller
                   <th></th>
                   <th></th>
                   <th class="col-lg-4 col-md-4 col-sm-4">';
-      if($object_totales['progress_pagos']<0){
-        $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important;"> '.$object_totales['pedidos_dia'].' </span>';
+      if($object_totales['progress_pagos']==0){
+        $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  TOTAL DE PEDIDOS DEL DIA: '.$object_totales['pedidos_dia'].' </span>';
       }else {
-        $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important;"> '.$object_totales['pedidos_dia'].' </span>';
+        $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  TOTAL DE PEDIDOS DEL DIA: '.$object_totales['pedidos_dia'].' </span>';
       }
       $html .= '
                   </th>
@@ -1289,7 +1257,7 @@ class DashboardController extends Controller
              <td>' . $data["identificador"] . '</td>
              <td>' . $data["code"] . '</td>
              <td>';
-        if ($data["pedidos_dia"] < 0) {
+        if ($data["pedidos_dia"] > 0) {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
         } else {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"> ' . $data["pedidos_dia"] . ' </span> ';
