@@ -298,6 +298,7 @@ class PedidoController extends Controller
                 if (can('pedidos.pedidosPDF')) {
                     $btn[] = '<a style="font-size:11px" href="' . route("pedidosPDF", $pedido->id) . '" class="m-0 p-2 btn-sm dropdown-item text-wrap" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                 }
+
                 if (can('pedidos.show')) {
                     $btn[] = '<a style="font-size:11px" href="' . route("pedidos.show", $pedido->id) . '" class="m-0 p-2 btn-sm dropdown-item text-wrap"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
                 }

@@ -15,7 +15,7 @@ class SettingsController extends Controller
 
     public function settingAdmin(Request $request)
     {
-        $jefe_operaciones = User::query()->leftJoin('tabla_direccion_jefeop as tpj', 'tpj.user_id' , 'users.id' )->where('users.rol', User::ROL_JEFE_OPERARIO)
+        $jefe_operaciones = User::query()->leftJoin('directions as tpj', 'tpj.user_id' , 'users.id' )->where('users.rol', User::ROL_JEFE_OPERARIO)
             ->select([
                 'users.*',
                 'tpj.direccion_recojo',

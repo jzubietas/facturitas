@@ -239,7 +239,7 @@
                 "thousands": ",",
                 "lengthMenu": "Mostrar _MENU_ Entradas",
                 "loadingRecords": "Cargando...",
-                "processing": ``,
+                "processing": "Procesando...",
                 "search": "Buscar:",
                 "zeroRecords": "Sin resultados encontrados",
                 "paginate": {
@@ -1433,7 +1433,6 @@ ${data.foto3 ? `
                     "infoPostFix": "",
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
-                    "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
@@ -1443,6 +1442,7 @@ ${data.foto3 ? `
                         "next": "Siguiente",
                         "previous": "Anterior"
                     }
+
                 },
                 buttons: [
                     {
