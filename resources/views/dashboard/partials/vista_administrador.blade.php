@@ -108,6 +108,7 @@
     </div>
 
 
+
     <div class="col-lg-12 " id="contenedor-fullscreen">
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>

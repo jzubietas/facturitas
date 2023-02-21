@@ -24,6 +24,8 @@
                     @endforeach
                 </ul>
             </div>
+
+{{--          PENDIENTE DE ANULACION--}}
             <div class="col-md-4">
                 <ul class="list-group">
                     <li class="list-group-item">
@@ -47,6 +49,31 @@
                     @endforeach
                 </ul>
             </div>
+
+          <div class="col-md-4">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h4>{{Str::upper('PEDIDOS PENDIENTES DE ANULACION')}}</h4>
+              </li>
+              @foreach(data_get($resultados,'anulado') as $item)
+                <li class="list-group-item">
+                  <div class="card" style="background: {{data_get($item,'bg')}};">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <div>
+                          <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
+                        </div>
+                        <div>
+                          <h3 class="text-{{data_get($item,'color')}}">{{data_get($item,'count')}}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              @endforeach
+            </ul>
+          </div>
+
         </div>
     </div>
 </div>

@@ -43,6 +43,7 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 ->where('id', '=', Auth::user()->id)->get();
             $dataFi = [];
             $dataEl = [];
+            $dataAn = [];
 
         } else {
 
@@ -70,6 +71,18 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 )
                 ->count();
 
+          $pedidosPendienteAnulacion = Pedido::query()
+            ->activo()
+            ->porAtenderEstatus()
+            ->whereIn(
+              'id',
+              DetallePedido::query()->select('pedido_id')
+                ->activo()
+                ->where('pendiente_anulacion', '=', '1')
+            )
+            ->count();
+
+
             $jefesOpe = User::activo()
                 ->where('rol', '=', User::ROL_JEFE_OPERARIO)->get();
             $dataFi = [
@@ -85,6 +98,12 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 "title" => "Total",
                 'bg' => '#e91e63',
                 'color' => 'white',
+            ]];
+            $dataAn = [[
+              "count" => $pedidosPendienteAnulacion,
+              "title" => "Total",
+              'bg' => '#8ec117',
+              'color' => 'white',
             ]];
 
         }
@@ -129,6 +148,11 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 )
                 ->count();
 
+          $an = Pedido::query()
+            ->activo()
+            ->whereIn('user_id', $asesores)
+            ->count();
+
 
             $dataFi[] = [
                 "title" => $user->name,
@@ -142,12 +166,19 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 'bg' => '#ff97ba',
                 'color' => 'black',
             ];
+          $dataAn[] = [
+            "title" => $user->name,
+            "count" => $an,
+            'bg' => '#C1D424',
+            'color' => 'black',
+          ];
         }
 
 
         return [
             "fisico" => $dataFi,
-            "electronic" => $dataEl
+            "electronic" => $dataEl,
+          "anulado" => $dataAn,
         ];
     }
 }
