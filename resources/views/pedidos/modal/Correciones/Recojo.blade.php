@@ -12,7 +12,7 @@
                   <input type="hidden" id="correccion_b" name="correccion_b">
                   <input type="hidden" name="opcion" value="4">
 
-                  <div class="row">
+                  <div class="row clase">
                     <div class="col-md-6">
                       <div class="form-row">
                         <div class="form-group">
@@ -35,7 +35,7 @@
                       <button type="button" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn-sm btn btn-primary" data-target="#modal-listclientes" >+</button>
                     </div>
                   </div>
-                  <div class="row" id="direcciones_add"></div>
+                  <div id="direcciones_add"></div>
 
 
                   <div class="row">

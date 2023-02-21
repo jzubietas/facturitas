@@ -3191,7 +3191,7 @@ class PedidoController extends Controller
       ->select(
         [
           'pedidos.id as pedidoid',
-          'c.id',
+          'c.id as clienteid',
           'dp.codigo',
           'dp.nombre_empresa',
         ]

@@ -532,13 +532,13 @@
             columns:
                 [
                     {
-                        data: 'id'
+                        data: 'pedidoid'
+                    },
+                    {
+                        nane : 'clienteid'
                     },
                     {
                         data: 'codigo'
-                    },
-                    {
-                        data: 'saldo'
                     }
                 ],
 
@@ -1784,16 +1784,20 @@ ${data.foto3 ? `
 
           $(document).on("click", ".btnrrellenar_recojo", function () {
             console.log('Agregarrrrrrr')
+            var recupeardo_check = tabla_pedidos.column(0).checkboxes.selected();
+            console.log('datos: ', recupeardo_check );
+            return false
             $('#direcciones_add').append('');
             seleccion = [];
             $(".tabla-listar-clientes tr td input[type='checkbox']:checked").each(function(){
               row = $(this).closest('tr');
               seleccion.push({
-                codigo : row.find('td:eq(1)').text()
+                codigo : row.find('td:eq(1)').text(),
               });
             });
             seleccion.forEach(function(pedido) {
               $('#direcciones_add').append(`
+                    <div class="row">
                       <div class="col-md-6">
                         <div class="form-row">
                           <div class="form-group">
@@ -1810,7 +1814,9 @@ ${data.foto3 ? `
                             <input type="text" class="form-control" id="pedidocodigo" readonly value="`+pedido.codigo+`" >
                           </div>
                         </div>
-                      </div>`);
+                      </div>
+                    <div class="row">
+`);
             });
             console.log(seleccion);
           })
