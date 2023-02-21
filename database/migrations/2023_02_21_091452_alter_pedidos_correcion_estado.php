@@ -11,18 +11,24 @@ class AlterPedidosCorrecionEstado extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        //
-    }
+  public function up()
+  {
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
-    }
+    Schema::table('pedidos', function (Blueprint $table) {
+      $table->dropColumn('estado_correccion');
+    });
+
+  }
+
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('pedidos', function (Blueprint $table) {
+      $table->integer('estado_correccion',11)->nullable()->comment('');
+    });
+  }
 }
