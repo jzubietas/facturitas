@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterPedidoAddEstadoCorreccion extends Migration
+class AlterPedidosCorrecionEstado extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,7 @@ class AlterPedidoAddEstadoCorreccion extends Migration
      */
     public function up()
     {
-
-      Schema::table('pedidos', function (Blueprint $table) {
-        $table->dropColumn('estado_correccion');
-      });
-
+        //
     }
 
     /**
@@ -27,8 +23,6 @@ class AlterPedidoAddEstadoCorreccion extends Migration
      */
     public function down()
     {
-      Schema::table('pedidos', function (Blueprint $table) {
-        $table->integer('estado_correccion',11)->nullable()->comment('');
-      });
+        //
     }
 }
