@@ -298,7 +298,8 @@ class UserController extends Controller
                     || $user->exidentificador == '22'
                     || $user->exidentificador == '21'
                     || $user->exidentificador == '23'
-                    || $user->exidentificador == '24') {
+                    || $user->exidentificador == '24'
+                    || $user->exidentificador == '25') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 }
                 else {
@@ -401,6 +402,7 @@ class UserController extends Controller
                     || $user->exidentificador == '21'
                     || $user->exidentificador == '23'
                     || $user->exidentificador == '24'
+                    || $user->exidentificador == '25'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
