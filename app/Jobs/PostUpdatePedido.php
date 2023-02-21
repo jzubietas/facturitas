@@ -38,7 +38,7 @@ class PostUpdatePedido implements ShouldQueue
         //
       \Log::info("PostUpdatePedido -> " . $this->codigo);
 
-      $pedido=Pedido::where('codigo',$this->codigo)->first()->estado;
+      $pedido=Pedido::where('codigo',$this->codigo)->first();
       $dpedido=DetallePedido::where('codigo',$this->codigo)->first();
 
       //crear historial
