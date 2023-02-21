@@ -3181,6 +3181,10 @@ class PedidoController extends Controller
     $gmLink=$consultaPedido->env_gmlink;
     $importe=$consultaPedido->env_importe;
     $zona=$consultaPedido->env_zona_asignada;
+    $destino=$consultaPedido->env_destino;
+    $direction=$consultaPedido->env_direccion;
+    $nombredecliente=$consultaPedido->env_nombre_cliente_recibe;
+    $distrito=$consultaPedido->env_distrito;
 
     $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
       ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -3192,7 +3196,7 @@ class PedidoController extends Controller
           'dp.nombre_empresa',
         ]
       )
-      ->where('pedidos.cliente_id', $idrequest)->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona);
+      ->where('pedidos.cliente_id', $idrequest)->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito);
     return Datatables::of(DB::table($pedidos))
       ->addIndexColumn()
       ->make(true);

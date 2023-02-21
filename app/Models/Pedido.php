@@ -317,8 +317,8 @@ class Pedido extends Model
     return $query->where($this->qualifyColumn('env_tracking'), '=', $tracking);
   }
 
-  public function scopeDireccion($query){
-    $query->where('env_direccion', '=', 'OLVA');
+  public function scopeDireccion($query, $direction){
+    $query->where('env_direccion', '=', $direction);
   }
 
   public function scopeCantidad($query, $cantidad){
@@ -329,20 +329,20 @@ class Pedido extends Model
     return $query->where($this->qualifyColumn('env_celular_cliente_recibe'), '=', $celularClienteRecibe);
   }
 
-  public function scopeNombreClienteRecibe($query){
-    $query->where('env_nombre_cliente_recibe', '=', 'OLVA CURRIER');
+  public function scopeNombreClienteRecibe($query, $nombredecliente){
+    $query->where('env_nombre_cliente_recibe', '=', $nombredecliente);
   }
 
   public function scopeZonaAsignada($query){
     $query->where('env_zona', '=', 'OLVA');
   }
 
-  public function scopeDistrito($query){
-    $query->where('env_zona', '=', 'LOS OLIVOS');
+  public function scopeDistrito($query, $distrito){
+    $query->where('env_distrito', '=', $distrito);
   }
 
-  public function scopeDestino($query){
-    $query->where('env_zona', '=', 'PROVINCIA');
+  public function scopeDestino($query, $destino){
+    $query->where('env_destino', '=', $destino);
   }
     public function scoperoladmin($query)
     {
@@ -478,15 +478,15 @@ class Pedido extends Model
         return $query;
     }
 
-  public function scopeConsultarecojo($query, $celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe,$zona){
+  public function scopeConsultarecojo($query, $celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe,$zona,$destino, $direction,$nombredecliente,$distrito){
     $query = $query
       ->zonaAsignadaEnvio($zona)
-      ->destino()
-      ->distrito()
-      ->nombreClienteRecibe()
+      ->destino($destino)
+      ->distrito($distrito)
+      ->nombreClienteRecibe($nombredecliente)
       ->celularClienteRecibe($celularClienteRecibe)
       ->cantidad($cantidad)
-      ->direccion()
+      ->direccion($direction)
       ->tracking($tracking)
       ->referencia($referencia)
       ->numregistro($numRegistro)
