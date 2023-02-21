@@ -289,6 +289,61 @@ class Pedido extends Model
         return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [self::POR_ATENDER_INT, self::EN_PROCESO_ATENCION_INT]);
     }
 
+    public function scopeImporte($query, $importe){
+      return $query->where($this->qualifyColumn('env_importe'), '=', $importe);
+    }
+
+  public function scopeGmlink($query, $gmLink){
+    return $query->where($this->qualifyColumn('env_gmlink'), '=', $gmLink);
+  }
+
+  public function scopeObservacion($query, $observacion){
+    return $query->where($this->qualifyColumn('env_observacio'), '=', $observacion);
+  }
+
+  public function scopeRotulo($query, $rotulo){
+    return $query->where($this->qualifyColumn('env_rotulo'), '=', $rotulo);
+  }
+
+  public function scopeNumregistro($query, $numRegistro){
+    return $query->where($this->qualifyColumn('env_numregistro'), '=', $numRegistro);
+  }
+
+  public function scopeReferencia($query, $referencia){
+    return $query->where($this->qualifyColumn('env_referencia'), '=', $referencia);
+  }
+
+  public function scopeTracking($query, $tracking){
+    return $query->where($this->qualifyColumn('env_tracking'), '=', $tracking);
+  }
+
+  public function scopeDireccion($query){
+    $query->where('env_direccion', '=', 'OLVA');
+  }
+
+  public function scopeCantidad($query, $cantidad){
+    return $query->where($this->qualifyColumn('env_cantidad'), '=', $cantidad);
+  }
+
+  public function scopeCelularClienteRecibe($query, $celularClienteRecibe){
+    return $query->where($this->qualifyColumn('env_celular_cliente_recibe'), '=', $celularClienteRecibe);
+  }
+
+  public function scopeNombreClienteRecibe($query){
+    $query->where('env_nombre_cliente_recibe', '=', 'OLVA CURRIER');
+  }
+
+  public function scopeZonaAsignada($query){
+    $query->where('env_zona', '=', 'OLVA');
+  }
+
+  public function scopeDistrito($query){
+    $query->where('env_zona', '=', 'LOS OLIVOS');
+  }
+
+  public function scopeDestino($query){
+    $query->where('env_zona', '=', 'PROVINCIA');
+  }
     public function scoperoladmin($query)
     {
         return $query;
@@ -422,6 +477,29 @@ class Pedido extends Model
 
         return $query;
     }
+
+  public function scopeConsultaRecojo($query, $celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe){
+    $query = Pedido::query()
+      ->ZonaAsignadaEnvio()
+      ->Destino()
+      ->Distrito()
+      ->ZonaAsignada()
+      ->NombreClienteRecibe()
+      ->CelularClienteRecibe($celularClienteRecibe)
+      ->Cantidad($cantidad)
+      ->Direccion()
+      ->Tracking($tracking)
+      ->Referencia($referencia)
+      ->Numregistro($numRegistro)
+      ->Rotulo($rotulo)
+      ->Observacion($observacion)
+      ->Gmlink($gmLink)
+      ->Importe($importe)
+      ->get();
+    foreach ($query as $pedido){
+      GrupoPedido::createGroupByPedido($pedido)->get();
+    }
+  }
 
     public static function getColorByCondicionEnvio($condicion_envio)
     {

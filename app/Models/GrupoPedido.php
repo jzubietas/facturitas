@@ -20,7 +20,6 @@ class GrupoPedido extends Model
             'codigo',
         ])->orderByPivot('razon_social', 'asc');
     }
-
     public static function createGroupByPedido(Pedido $pedido, $createAnother = false, $attach = false)
     {
         //return $pedido;
