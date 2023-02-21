@@ -927,24 +927,25 @@ class DashboardController extends Controller
 
       $date_pagos = Carbon::parse(now())->subMonth();
       $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
-        ->where('pedidos.codigo', 'not like', "%-C%")->activo()->whereDate('pedidos.created_at', now())->count();
+        ->where('pedidos.codigo', 'not like', "%-C%")->activo()->whereDate('pedidos.created_at', now())->where('pendiente_anulacion', '<>','1' )->count();
+
       $metatotal = (float)$asesor->meta_pedido;
       $metatotal_2 = (float)$asesor->meta_pedido_2;
       $metatotal_cobro = (float)$asesor->meta_cobro;
       $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-        ->where('codigo', 'not like', "%-C%")->activo(), now(), 'created_at')
+        ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>','1' ), now(), 'created_at')
         ->count();
       $total_pedido_mespasado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-        ->where('codigo', 'not like', "%-C%")->activo(), $date_pagos, 'created_at')
+        ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>','1' ), $date_pagos, 'created_at')
         ->count();
       $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-        ->where('codigo', 'not like', "%-C%")->activo()->pagados(), $date_pagos, 'created_at')
+        ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>','1' )->pagados(), $date_pagos, 'created_at')
         ->count();
 
       //TOTALES//
       //PEDIDOS INDIVIDUALES
       $pedidos_totales = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
-        ->where('pedidos.codigo', 'not like', "%-C%")->whereDate('pedidos.created_at', now())->count();
+        ->where('pedidos.codigo', 'not like', "%-C%")->where('pendiente_anulacion', '<>','1' )->whereDate('pedidos.created_at', now())->count();
 
 
       $item = [
