@@ -3171,7 +3171,8 @@ class PedidoController extends Controller
     $idrequest = $request->cliente_id;
     $idpedido = $request->pedido;
     $consultaPedido = Pedido::where('id', $idpedido)->first();
-    $celularClienteRecibe=$consultaPedido->env_celular_cliente_recibe;
+    $direccion_grupo=$consultaPedido->direccion_grupo;
+    /*$celularClienteRecibe=$consultaPedido->env_celular_cliente_recibe;
     $cantidad=$consultaPedido->env_cantidad;
     $tracking=$consultaPedido->env_tracking;
     $referencia=$consultaPedido->env_referencia;
@@ -3184,7 +3185,7 @@ class PedidoController extends Controller
     $destino=$consultaPedido->env_destino;
     $direction=$consultaPedido->env_direccion;
     $nombredecliente=$consultaPedido->env_nombre_cliente_recibe;
-    $distrito=$consultaPedido->env_distrito;
+    $distrito=$consultaPedido->env_distrito;*/
 
     $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
       ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -3196,10 +3197,14 @@ class PedidoController extends Controller
           'dp.nombre_empresa',
         ]
       )
-      ->where('pedidos.cliente_id', $idrequest)->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito);
-    if($request->pedidosNotIn){
+      ->where('pedidos.cliente_id', $idrequest)->where('direccion_grupo',$direccion_grupo);
+      //->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito)//;
+    if(!$request->pedidosNotIn){
+      //
+    }else{
       $pedidos = $pedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
     }
+
     return Datatables::of(DB::table($pedidos))
       ->addIndexColumn()
       ->make(true);
