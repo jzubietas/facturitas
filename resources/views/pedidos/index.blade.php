@@ -357,9 +357,6 @@
 
             $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
-
-                console.table('Data', button.data());
-
               $('#clienteid').val(button.data('clienteid'))
               $('#clientenombre').val(button.data('clientenombre'))
               $('#pedidoid').val(button.data('pedidoid'))

@@ -41,8 +41,8 @@ use Illuminate\Support\Js;
 use PDF;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
-use DataTables;
 use Storage;
+use Yajra\DataTables\DataTables;
 
 class PedidoController extends Controller
 {
@@ -3169,6 +3169,19 @@ class PedidoController extends Controller
     $pedidos = null;
 
     $idrequest = $request->cliente_id;
+    $idpedido = $request->pedido;
+    $consultaPedido = Pedido::where('id', $idpedido)->first();
+    $celularClienteRecibe=$consultaPedido->env_celular_cliente_recibe;
+    $cantidad=$consultaPedido->env_cantidad;
+    $tracking=$consultaPedido->env_tracking;
+    $referencia=$consultaPedido->env_referencia;
+    $numRegistro=$consultaPedido->env_numregistro;
+    $rotulo=$consultaPedido->env_rotulo;
+    $observacion=$consultaPedido->env_observacion;
+    $gmLink=$consultaPedido->env_gmlink;
+    $importe=$consultaPedido->env_importe;
+    $zona=$consultaPedido->env_zona_asignada;
+
     $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
       ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
       ->select(
@@ -3177,12 +3190,10 @@ class PedidoController extends Controller
           'c.id',
           'dp.codigo',
           'dp.nombre_empresa',
-
         ]
       )
-      ->where('pedidos.cliente_id', $idrequest)->ConsultaRecojo('985258556');
-
-    return Datatables::query(DB::table($pedidos))
+      ->where('pedidos.cliente_id', $idrequest)->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona);
+    return Datatables::of(DB::table($pedidos))
       ->addIndexColumn()
       ->make(true);
   }
@@ -3190,7 +3201,7 @@ class PedidoController extends Controller
   public function getdireecionentrega(Request $request)
   {
     $codigo_pedido= $request->codigo_pedido;//userid de asesor
-    $pedido=Pedido::where('codigo',$codigo_pedido)->first();
+    $pedido=Pedido::where('id',$codigo_pedido)->first();
 
     $operario=User::where('id',$pedido->user_id)->first()->operario;
     $jefeop=User::where('id',$operario)->first()->jefe;

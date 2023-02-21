@@ -298,7 +298,7 @@ class Pedido extends Model
   }
 
   public function scopeObservacion($query, $observacion){
-    return $query->where($this->qualifyColumn('env_observacio'), '=', $observacion);
+    return $query->where($this->qualifyColumn('env_observacion'), '=', $observacion);
   }
 
   public function scopeRotulo($query, $rotulo){
@@ -478,27 +478,23 @@ class Pedido extends Model
         return $query;
     }
 
-  public function scopeConsultaRecojo($query, $celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe){
-    $query = Pedido::query()
-      ->ZonaAsignadaEnvio()
-      ->Destino()
-      ->Distrito()
-      ->ZonaAsignada()
-      ->NombreClienteRecibe()
-      ->CelularClienteRecibe($celularClienteRecibe)
-      ->Cantidad($cantidad)
-      ->Direccion()
-      ->Tracking($tracking)
-      ->Referencia($referencia)
-      ->Numregistro($numRegistro)
-      ->Rotulo($rotulo)
-      ->Observacion($observacion)
-      ->Gmlink($gmLink)
-      ->Importe($importe)
-      ->get();
-    foreach ($query as $pedido){
-      GrupoPedido::createGroupByPedido($pedido)->get();
-    }
+  public function scopeConsultarecojo($query, $celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe,$zona){
+    $query = $query
+      ->zonaAsignadaEnvio($zona)
+      ->destino()
+      ->distrito()
+      ->nombreClienteRecibe()
+      ->celularClienteRecibe($celularClienteRecibe)
+      ->cantidad($cantidad)
+      ->direccion()
+      ->tracking($tracking)
+      ->referencia($referencia)
+      ->numregistro($numRegistro)
+      ->rotulo($rotulo)
+      ->observacion($observacion)
+      ->gmlink($gmLink)
+      ->importe($importe);
+    return $query;
   }
 
     public static function getColorByCondicionEnvio($condicion_envio)
