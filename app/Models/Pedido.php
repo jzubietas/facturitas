@@ -289,6 +289,10 @@ class Pedido extends Model
         return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [self::POR_ATENDER_INT, self::EN_PROCESO_ATENCION_INT]);
     }
 
+    public function scopePendienteAnulacion($query){
+      return $query->whereIn($this->qualifyColumn('condicion_code'), [self::POR_ATENDER_INT, self::ANULADO_INT]);
+    }
+
     public function scopeImporte($query, $importe){
       return $query->where($this->qualifyColumn('env_importe'), '=', $importe);
     }
