@@ -14,6 +14,7 @@ use App\Models\DetallePedido;
 use App\Models\DireccionEnvio;
 use App\Models\DireccionGrupo;
 use App\Models\DireccionPedido;
+use App\Models\Directions;
 use App\Models\Distrito;
 use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
@@ -40,8 +41,8 @@ use Illuminate\Support\Js;
 use PDF;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
-use DataTables;
 use Storage;
+use Yajra\DataTables\DataTables;
 
 class PedidoController extends Controller
 {
@@ -298,6 +299,7 @@ class PedidoController extends Controller
                 if (can('pedidos.pedidosPDF')) {
                     $btn[] = '<a style="font-size:11px" href="' . route("pedidosPDF", $pedido->id) . '" class="m-0 p-2 btn-sm dropdown-item text-wrap" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                 }
+
                 if (can('pedidos.show')) {
                     $btn[] = '<a style="font-size:11px" href="' . route("pedidos.show", $pedido->id) . '" class="m-0 p-2 btn-sm dropdown-item text-wrap"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
                 }
@@ -3162,4 +3164,65 @@ class PedidoController extends Controller
     }
 
 
+  public function recojolistclientes(Request $request)
+  {
+    $pedidos = null;
+
+    $idrequest = $request->cliente_id;
+    $idpedido = $request->pedido;
+    $consultaPedido = Pedido::where('id', $idpedido)->first();
+    $direccion_grupo=$consultaPedido->direccion_grupo;
+    /*$celularClienteRecibe=$consultaPedido->env_celular_cliente_recibe;
+    $cantidad=$consultaPedido->env_cantidad;
+    $tracking=$consultaPedido->env_tracking;
+    $referencia=$consultaPedido->env_referencia;
+    $numRegistro=$consultaPedido->env_numregistro;
+    $rotulo=$consultaPedido->env_rotulo;
+    $observacion=$consultaPedido->env_observacion;
+    $gmLink=$consultaPedido->env_gmlink;
+    $importe=$consultaPedido->env_importe;
+    $zona=$consultaPedido->env_zona_asignada;
+    $destino=$consultaPedido->env_destino;
+    $direction=$consultaPedido->env_direccion;
+    $nombredecliente=$consultaPedido->env_nombre_cliente_recibe;
+    $distrito=$consultaPedido->env_distrito;*/
+
+    $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+      ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+      ->select(
+        [
+          'pedidos.id as pedidoid',
+          'c.id as clienteid',
+          'dp.codigo',
+          'dp.nombre_empresa',
+        ]
+      )
+      ->where('pedidos.cliente_id', $idrequest)->where('direccion_grupo',$direccion_grupo);
+      //->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito)//;
+    if(!$request->pedidosNotIn){
+      //
+    }else{
+      $pedidos = $pedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
+    }
+
+    return Datatables::of(DB::table($pedidos))
+      ->addIndexColumn()
+      ->make(true);
+  }
+
+  public function getdireecionentrega(Request $request)
+  {
+    $codigo_pedido= $request->codigo_pedido;//userid de asesor
+    $pedido=Pedido::where('id',$codigo_pedido)->first();
+
+    $operario=User::where('id',$pedido->user_id)->first()->operario;
+    $jefeop=User::where('id',$operario)->first()->jefe;
+
+    //$result_direccion=User::where('id',$jefeop)->first()->id;
+    $result_direccion=Directions::query()->where('user_id',$jefeop)->first()->direccion_recojo;
+
+
+    return $result_direccion;
+
+  }
 }

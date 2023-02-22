@@ -43,8 +43,10 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 ->where('id', '=', Auth::user()->id)->get();
             $dataFi = [];
             $dataEl = [];
+            $dataAn = [];
 
-        } else {
+        }
+        else {
 
             $pedidosAtendidosFisicos = Pedido::query()
                 ->activo()
@@ -70,6 +72,11 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 )
                 ->count();
 
+          $pedidosPendienteAnulacion = Pedido::query()
+            ->activo(0)
+            ->pendienteAnulacion()
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->count();
             $jefesOpe = User::activo()
                 ->where('rol', '=', User::ROL_JEFE_OPERARIO)->get();
             $dataFi = [
@@ -86,23 +93,23 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 'bg' => '#e91e63',
                 'color' => 'white',
             ]];
-
+            $dataAn = [[
+              "count" => $pedidosPendienteAnulacion,
+              "title" => "Total",
+              'bg' => '#8ec117',
+              'color' => 'white',
+            ]];
         }
 
-
         foreach ($jefesOpe as $user) {
-
             $operario = User::activo()
                 ->where('rol', '=', User::ROL_OPERARIO)
                 ->where('jefe', $user->id)
                 ->pluck('id');
-
             $asesores = User::activo()
                 ->whereIn('rol', [User::ROL_ASESOR, User::ROL_ASESOR_ADMINISTRATIVO])
                 ->whereIn('operario', $operario)
                 ->pluck('id');
-
-
             $fi = Pedido::query()
                 ->activo()
                 ->porAtenderEstatus()
@@ -113,8 +120,7 @@ class QtyPedidoFisicoElectronicos extends Widgets
                         ->activo()
                         ->whereRaw('detalle_pedidos.pedido_id=pedidos.id')
                         ->where('detalle_pedidos.tipo_banca', 'like', '%FISICO%')
-                )
-                ->count();
+                )->count();
 
             $el = Pedido::query()
                 ->activo()
@@ -129,6 +135,15 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 )
                 ->count();
 
+          $an = Pedido::query()
+            ->activo(0)
+            ->whereIn('user_id', $asesores)
+            ->pendienteAnulacion()
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->count();
+
+
+
 
             $dataFi[] = [
                 "title" => $user->name,
@@ -142,12 +157,19 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 'bg' => '#ff97ba',
                 'color' => 'black',
             ];
+          $dataAn[] = [
+            "title" => $user->name,
+            "count" => $an,
+            'bg' => '#C1D424',
+            'color' => 'black',
+          ];
         }
 
 
         return [
             "fisico" => $dataFi,
-            "electronic" => $dataEl
+            "electronic" => $dataEl,
+            "anulado" => $dataAn,
         ];
     }
 }

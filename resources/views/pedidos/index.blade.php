@@ -239,7 +239,7 @@
                 "thousands": ",",
                 "lengthMenu": "Mostrar _MENU_ Entradas",
                 "loadingRecords": "Cargando...",
-                "processing": ``,
+                "processing": "Procesando...",
                 "search": "Buscar:",
                 "zeroRecords": "Sin resultados encontrados",
                 "paginate": {
@@ -356,20 +356,28 @@
 
 
             $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
+
                 var button = $(event.relatedTarget)
+              $('#clienteid').val(button.data('clienteid'))
+              $('#clientenombre').val(button.data('clientenombre'))
+              $('#pedidoid').val(button.data('pedidoid'))
+              $('#pedidocodigo').val(button.data('pedidocodigo'))
+              $('#direccion_recojo').val(button.data('direccionreco'))
+              $('#nombre_recojo').val(button.data('nombreresiv'))
+              $('#celular_recojo').val(button.data('telefonoresiv'))
+              $('#referencia_recojo').val(button.data('referenciareco'))
+              $('#observacion_recojo').val(button.data('observacionreco'))
+              $('#gmlink_recojo').val(button.data('gmclink'))
 
-                $('#Cliente').val(button.data('pedidoid'))
-                $('#Id-Cliente').val(button.data('clienteid'))
-                $('#cod_Cliente').val(button.data('clientenombre'))
-                $('#cod_pedido').val(button.data('pedidocodigo'))
-                $('#direccion_recojo').val(button.data('direccionreco'))
-                $('#nombre_recojo').val(button.data('nombreresiv'))
-                $('#celular_recojo').val(button.data('telefonoresiv'))
-                $('#referencia_recojo').val(button.data('referenciareco'))
-                $('#observacion_recojo').val(button.data('observacionreco'))
-                $('#gmlink_recojo').val(button.data('gmclink'))
+                var cod_pedido = $('#pedidoid').val();
 
-                var cod_pedido = $('#cod_pedido').val();
+              $('#pedido_contatenado').val(button.data('pedidoid'));
+
+              $('#direcciones_add ul').html('');
+              $('#pedidoid').val(button.data('pedidoid'));
+              $('#direcciones_add ul').append(`
+                    <li>`+button.data('pedidocodigo')+`</li>
+                `);
 
                 var fd_asesor = new FormData();
                 fd_asesor.append('codigo_pedido', cod_pedido);
@@ -467,7 +475,10 @@
 
             $('#modal-listclientes').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
-                var cliente = $('#Id-Cliente').val()
+                var cliente = $('#clienteid').val()
+                var pedido = $('#pedidoid').val()
+                var pedidosNotIn = $('#pedido_contatenado').val()
+              console.log('valores negados: ', pedidosNotIn);
 
 
                 tabla_pedidos.destroy();
@@ -478,7 +489,11 @@
                     "bInfo": false,
                     'ajax': {
                         url: "{{ route('cargar.recojolistclientes') }}",
-                        'data': {"cliente_id": cliente},
+                        'data': {
+                          "cliente_id": cliente,
+                          "pedido": pedido,
+                          "pedidosNotIn": pedidosNotIn,
+                        },
                         "type": "get",
                     },
                     columnDefs: [{
@@ -487,9 +502,13 @@
                         'targets': [0], /* column index */
                         'orderable': false, /* true or false */
                     }] ,
+                  ColumnDefs:[{
+                      'targets': [0],
+                    'orderable': false,
+                  }],
                     columns: [
                         {
-                            "data": "id",
+                            "data": "pedidoid",
                             'targets': 0,
                             'checkboxes': {
                                 'selectRow': false
@@ -531,13 +550,13 @@
             columns:
                 [
                     {
-                        data: 'id'
+                        data: 'pedidoid'
+                    },
+                    {
+                        nane : 'clienteid'
                     },
                     {
                         data: 'codigo'
-                    },
-                    {
-                        data: 'saldo'
                     }
                 ],
 
@@ -1433,7 +1452,6 @@ ${data.foto3 ? `
                     "infoPostFix": "",
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
-                    "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
@@ -1443,6 +1461,7 @@ ${data.foto3 ? `
                         "next": "Siguiente",
                         "previous": "Anterior"
                     }
+
                 },
                 buttons: [
                     {
@@ -1780,6 +1799,35 @@ ${data.foto3 ? `
             $('#min, #max').change(function () {
                 table.draw();
             });
+
+          $(document).on("click", ".btnrrellenar_recojo", function () {
+            var recupeardo_check = tabla_pedidos.column(0).checkboxes.selected();
+            seleccion = [];
+            seleccion.push($('#pedido_contatenado').val())
+            $('#direcciones_add').append('');
+            $.each(recupeardo_check, function (index, rowId) {
+              console.log("index " + index);
+              console.log("ID PEDIDO  es " + rowId);
+              seleccion.push(rowId);
+            });
+            var ids = [];
+            $(".tabla-listar-clientes tr td input[type='checkbox']:checked").each(function(){
+              row = $(this).closest('tr');
+              ids.push({
+                codigo : row.find('td:eq(1)').text(),
+              });
+            });
+            seleccion = seleccion.join(',');
+            $('#pedido_contatenado').val(seleccion); //setear un valor
+            ids.forEach(function(pedido) {
+              $('#direcciones_add ul').append(`
+                    <li>`+pedido.codigo+`</li>
+                `);
+            });
+
+            console.log(seleccion);
+          })
+
         });
     </script>
 @stop

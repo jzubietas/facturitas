@@ -12,12 +12,12 @@
                   <input type="hidden" id="correccion_b" name="correccion_b">
                   <input type="hidden" name="opcion" value="4">
 
-                  <div class="row">
+                  <div class="row clase">
                     <div class="col-md-6">
                       <div class="form-row">
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="Cliente" >
-                          <input type="text" class="form-control" id="cod_Cliente" readonly >
+                          <input type="hidden" class="form-control" id="clienteid" >
+                          <input type="text" class="form-control" id="clientenombre" readonly >
                         </div>
                       </div>
 
@@ -25,8 +25,8 @@
                     <div class="col-md-4">
                       <div class="form-row">
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="Id-Cliente">
-                          <input type="text" class="form-control" id="cod_pedido" readonly >
+                          <input type="hidden" class="form-control" id="pedidoid">
+                          <input type="text" class="form-control" id="pedidocodigo" readonly >
                         </div>
                       </div>
 
@@ -35,6 +35,11 @@
                       <button type="button" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn-sm btn btn-primary" data-target="#modal-listclientes" >+</button>
                     </div>
                   </div>
+                  <div id="direcciones_add">
+                    <ul></ul>
+                    <input type="text" class="form-control" id="pedido_contatenado">
+                  </div>
+
 
                   <div class="row">
                     <div class="col-md-12">
