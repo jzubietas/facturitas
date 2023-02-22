@@ -145,7 +145,7 @@ class PdfController extends Controller
                   </div>';
 
         $html[]='</div>';
-        $p_total_cruzado=$p_total_cruzado+intval($p_total);
+        //$p_total_cruzado=$p_total_cruzado+intval($p_total);
       }
       //totales
       $html[]='<div class="p-3 text-center d-flex align-items-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">TOTALES</h5></div>';
