@@ -1622,7 +1622,7 @@ class EnvioController extends Controller
 
             $count_gpi=DB::table('grupo_pedido_items')
                 ->where('pedido_id', $request->quitardireccion)->count();
-            if($count_gpi==1)
+            if($count_gpi>0)
             {
                 //destruyo
                 DB::table('grupo_pedido_items')
