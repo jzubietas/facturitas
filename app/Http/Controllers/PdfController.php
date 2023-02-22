@@ -97,7 +97,7 @@ class PdfController extends Controller
       $html=[];
       $html[]='<div class="row">';
         $html[]='<div class="col-md-12 ">';
-          $html[]='<div class="table_analisis">';
+          $html[]='<div class="table_analisis" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;">';
       foreach ($_pedidos_mes_pasado as $pedido)
       {
         //$p_total=0;
