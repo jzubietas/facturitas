@@ -78,6 +78,62 @@ class PdfController extends Controller
         return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes','anios','dateM','dateY'));
     }
 
+    public function Analisisgrafico()
+    {
+      $_pedidos_mes_pasado = User::select([
+        'users.id','users.name','users.email'
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO RECIENTE' ) recuperado_reciente")
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO ABANDONO' ) recuperado_abandono")
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='NUEVO' ) nuevo")
+      ])
+        ->whereIn('users.rol', ['Llamadas']);
+
+      $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
+      $p_recuperado_reciente=0;
+      $p_recuperado_abandono=0;
+      $p_recuperado_nuevo=0;
+      $p_total=0;
+      $html=[];
+      $html[]='<div class="row">';
+        $html[]='<div class="col-md-12 ">';
+          $html[]='<div class="table_analisis">';
+      foreach ($_pedidos_mes_pasado as $pedido)
+      {
+        $p_total=0;
+        $html[]='<div><h5> '.$pedido->name.'</h5></div>';
+        $html[]='<div><h5>RECUPERADO.RECIENTE</h5></div>';
+        $html[]='<div><h5>'.$pedido->recuperado_reciente.'</h5></div>';
+        $p_recuperado_reciente=$p_recuperado_reciente+intval($pedido->recuperado_reciente);
+        $html[]='<div><h5>RECUPERADO.ABANDONO</h5></div>';
+        $html[]='<div><h5>'.$pedido->recuperado_abandono.'</h5></div>';
+        $p_recuperado_abandono=$p_recuperado_abandono+intval($pedido->recuperado_abandono);
+        $html[]='<div><h5>NUEVO</h5></div>';
+        $html[]='<div><h5>'.$pedido->nuevo.'</h5></div>';
+        $p_recuperado_nuevo=$p_recuperado_nuevo+intval($pedido->nuevo);
+
+        $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
+        $html[]='<div>'.$p_total.'</div>';
+      }
+      //totales
+      $html[]='<div></div>';
+      $html[]='<div><h5>RECUPERADO.RECIENTE</h5></div>';
+      $html[]='<div><h5>'.$p_recuperado_reciente.'</h5></div>';
+      $html[]='<div><h5>RECUPERADO.ABANDONO</h5></div>';
+      $html[]='<div><h5>'.$p_recuperado_abandono.'</h5></div>';
+      $html[]='<div><h5>NUEVO</h5></div>';
+      $html[]='<div><h5>'.$p_recuperado_nuevo.'</h5></div>';
+      $html[]='<div>TOTALES</div>';
+
+          $html[]='</div>';
+        $html[]='</div>';
+      $html[]='</div>';
+
+      $html=join('', $html);
+      return $html;
+      //return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes','anios','dateM','dateY'));
+    }
+
+
     public function PedidosPorFechas(Request $request)
     {
         $fecha = Carbon::now('America/Lima')->format('d-m-Y');

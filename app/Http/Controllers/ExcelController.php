@@ -168,6 +168,7 @@ class ExcelController extends Controller
     {
         ini_set('memory_limit', '-1');
         set_time_limit(3000000);
+        //dd($request);
         return (new ClientesAbandonosExport)
             ->clientes($request)
             ->anioa($request)

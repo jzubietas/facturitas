@@ -69,6 +69,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
   Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
   Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
 
+  Route::any('dashboard.viewAnalisis', [PdfController::class, 'Analisisgrafico'])->name('dashboard.viewAnalisis');
+
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
 //Route::post('upload-image', [PagoController::class, 'storeimage'])->name('upload-image');
 //Route::resource('clientes.recurrentes', [ClienteController::class, 'Recurrentes'])->name('clientes.recurrentes');
