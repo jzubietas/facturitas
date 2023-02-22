@@ -101,30 +101,29 @@ class PdfController extends Controller
       foreach ($_pedidos_mes_pasado as $pedido)
       {
         $p_total=0;
-        $html[]='<div><h5> '.$pedido->name.'</h5></div>';
-        $html[]='<div><h5>RECUPERADO.RECIENTE</h5></div>';
-        $html[]='<div><h5>'.$pedido->recuperado_reciente.'</h5></div>';
+        $html[]='<div class="p-3" style="background: #e4dbc6"><h5> '.$pedido->name.'</h5></div>';
+        $html[]='<div  class="p-3 text-center" style="background: #e4dbc6"><h5>RECUPERADO.RECIENTE</h5></div>';
+        $html[]='<div  class="p-3 text-center" style="background: #e4dbc6"><h5 class="font-weight-bold">'.$pedido->recuperado_reciente.'</h5></div>';
         $p_recuperado_reciente=$p_recuperado_reciente+intval($pedido->recuperado_reciente);
-        $html[]='<div><h5>RECUPERADO.ABANDONO</h5></div>';
-        $html[]='<div><h5>'.$pedido->recuperado_abandono.'</h5></div>';
+        $html[]='<div  class="p-3 text-center" style="background: #e4dbc6"><h5>RECUPERADO.ABANDONO</h5></div>';
+        $html[]='<div  class="p-3 text-center" style="background: #e4dbc6"><h5 class="font-weight-bold">'.$pedido->recuperado_abandono.'</h5></div>';
         $p_recuperado_abandono=$p_recuperado_abandono+intval($pedido->recuperado_abandono);
-        $html[]='<div><h5>NUEVO</h5></div>';
-        $html[]='<div><h5>'.$pedido->nuevo.'</h5></div>';
+        $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>NUEVO</h5></div>';
+        $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5 class="font-weight-bold">'.$pedido->nuevo.'</h5></div>';
         $p_recuperado_nuevo=$p_recuperado_nuevo+intval($pedido->nuevo);
 
         $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
-        $html[]='<div>'.$p_total.'</div>';
-        $p_total_cruzado=$p_total_cruzado+intval($p_total);
+        $html[]='<div class="p-3 text-center" style="background: #e4dbc6">'.$p_total.'</div>';
       }
       //totales
       $html[]='<div></div>';
-      $html[]='<div><h5>RECUPERADO.RECIENTE</h5></div>';
-      $html[]='<div><h5>'.$p_recuperado_reciente.'</h5></div>';
-      $html[]='<div><h5>RECUPERADO.ABANDONO</h5></div>';
-      $html[]='<div><h5>'.$p_recuperado_abandono.'</h5></div>';
-      $html[]='<div><h5>NUEVO</h5></div>';
-      $html[]='<div><h5>'.$p_recuperado_nuevo.'</h5></div>';
-      $html[]='<div>'.$p_total_cruzado.'</div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>RECUPERADO.RECIENTE</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_reciente.'</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>RECUPERADO.ABANDONO</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_abandono.'</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>NUEVO</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_nuevo.'</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6">TOTALES</div>';
 
           $html[]='</div>';
         $html[]='</div>';
