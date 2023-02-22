@@ -12,7 +12,7 @@
         <div class="col-12">
 {{--            @include('dashboard.widgets.pedidos_creados')--}}
         </div>
-{{--        @include('dashboard.widgets.buscar_cliente')--}}
+        @include('dashboard.widgets.buscar_cliente')
 
         {{--<div class="col-md-12">
             <div class="card">

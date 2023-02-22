@@ -80,30 +80,6 @@ class PdfController extends Controller
 
     public function Analisisgrafico()
     {
-      $users = User::where('estado', '1')->pluck('name', 'id');
-
-      $anios = [
-        "2020" => '2020 - 2021',
-        "2021" => '2021 - 2022',
-        "2022" => '2022 - 2023',
-        "2023" => '2023 - 2024',
-        "2024" => '2024 - 2025',
-        "2025" => '2025 - 2026',
-        "2026" => '2026 - 2027',
-        "2027" => '2027 - 2028',
-        "2028" => '2028 - 2029',
-        "2029" => '2029 - 2030',
-        "2030" => '2030 - 2031',
-        "2031" => '2031 - 2032',
-      ];
-
-      $dateM = Carbon::now()->format('m');
-      $dateY = Carbon::now()->format('Y');
-
-      $mes_month=Carbon::now()->startOfMonth()->subMonth(1)->format('Y_m');
-      $mes_anio=Carbon::now()->startOfMonth()->subMonth()->format('Y');
-      $mes_mes=Carbon::now()->startOfMonth()->subMonth()->format('m');
-
       $_pedidos_mes_pasado = User::select([
         'users.id','users.name','users.email'
         ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO RECIENTE' ) recuperado_reciente")
@@ -115,6 +91,8 @@ class PdfController extends Controller
       $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
       $html=[];
       $html[]='<div class="row">';
+        $html[]='<div class="col-md-12 ">';
+          $html[]='<table>';
       foreach ($_pedidos_mes_pasado as $pedido)
       {
         $html[]='<div class="col-2 ">
@@ -143,6 +121,8 @@ class PdfController extends Controller
                   </div>
                 </div>';
       }
+          $html[]='</table>';
+        $html[]='</div>';
       $html[]='</div>';
 
       $html=join('', $html);
