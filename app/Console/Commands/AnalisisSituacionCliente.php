@@ -215,7 +215,9 @@ class AnalisisSituacionCliente extends Command
           if($i==($diff-1))
           {
             //update clientes
-            $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+            $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+            $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+            //Clientes
           }
 
         }
