@@ -114,6 +114,7 @@ class PdfController extends Controller
 
         $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
         $html[]='<div class="p-3 text-center" style="background: #e4dbc6">'.$p_total.'</div>';
+        $p_total_cruzado=$p_total_cruzado+intval($p_total);
       }
       //totales
       $html[]='<div></div>';
@@ -123,7 +124,7 @@ class PdfController extends Controller
       $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_abandono.'</h5></div>';
       $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>NUEVO</h5></div>';
       $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_nuevo.'</h5></div>';
-      $html[]='<div class="p-3 text-center" style="background: #e4dbc6">TOTALES</div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6">'.$p_total_cruzado.'</div>';
 
           $html[]='</div>';
         $html[]='</div>';
