@@ -103,7 +103,13 @@ class PdfController extends Controller
         $p_total=0;
         $html[]= '<div class="p-3 text-center d-flex align-items-center" style="border: black 1px solid; background: #e4dbc6"><h5  class="rounded p-2 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: rgb(94,94,94);"> ' .$pedido->name.'</h5></div>';
         $html[]= '<div class="p-3 text-center d-flex align-items-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style=" background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);" >RECUPERADO RECIENTE</h5></div>';
-        $html[]= '<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style=" background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);">' .$pedido->recuperado_reciente.'</h5></div>';
+        $html[]= '<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+
+        $html[]='<h5 class="rounded p-4 font-weight-bold" style=" background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);">' .$pedido->recuperado_reciente.'</h5>';
+
+
+
+        $html[]='</div>';
         $p_recuperado_reciente=$p_recuperado_reciente+intval($pedido->recuperado_reciente);
         $html[]= '<div  class="p-3 text-center d-flex align-items-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);">RECUPERADO ABANDONO</h5></div>';
         $html[]= '<div  class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);">' .$pedido->recuperado_abandono.'</h5></div>';
@@ -113,17 +119,84 @@ class PdfController extends Controller
         $p_recuperado_nuevo=$p_recuperado_nuevo+intval($pedido->nuevo);
 
         $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
-        $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">'.$p_total.'</h5></div>';
+        $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+
+        //$html[]='<h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">'.$p_total.'</h5>';
+
+        $html[]=  '<div class="w-100 bg-white rounded">
+                    <div class="position-relative rounded">
+                      <div class="progress bg-white rounded" style="height: 40px">
+                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . number_format(($p_total/$p_total_cruzado),2) . '%" ></div>
+                          </div>
+                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format(($p_total/$p_total_cruzado),2) . '% </b> - ' . $p_total. ' / ' . $p_total_cruzado . '</span>
+                        </div>
+                    </div>
+                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                  </div>';
+
+        $html[]='</div>';
         $p_total_cruzado=$p_total_cruzado+intval($p_total);
       }
       //totales
       $html[]='<div class="p-3 text-center d-flex align-items-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">TOTALES</h5></div>';
       $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">TOTAL RECIENTE</h5></div>';
-      $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">'.$p_recuperado_reciente.' - '.number_format(($p_recuperado_reciente/$p_total_cruzado),2).'% </h5></div>';
+      $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+
+      $html[]=  '<div class="w-100 bg-white rounded">
+                    <div class="position-relative rounded">
+                      <div class="progress bg-white rounded" style="height: 40px">
+                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . number_format(($p_recuperado_reciente/$p_total_cruzado),2) . '%" ></div>
+                          </div>
+                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format(($p_recuperado_reciente/$p_total_cruzado),2) . '% </b> - ' . $p_recuperado_reciente. ' / ' . $p_total_cruzado . '</span>
+                        </div>
+                    </div>
+                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                  </div>';
+
+      //$html[]='<h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">'.$p_recuperado_reciente.' - '.number_format(($p_recuperado_reciente/$p_total_cruzado),2).'% </h5>';
+
+      $html[]='</div>';
+
+
       $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.';color: #ffffff;">TOTAL ABANDONO</h5></div>';
-      $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.';color: #ffffff;">'.$p_recuperado_abandono.' - '.number_format(($p_recuperado_abandono/$p_total_cruzado),2).'%</h5></div>';
+      $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+
+      $html[]=  '<div class="w-100 bg-white rounded">
+                    <div class="position-relative rounded">
+                      <div class="progress bg-white rounded" style="height: 40px">
+                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . number_format(($p_recuperado_abandono/$p_total_cruzado),2) . '%" ></div>
+                          </div>
+                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format(($p_recuperado_abandono/$p_total_cruzado),2) . '% </b> - ' . $p_recuperado_abandono. ' / ' . $p_total_cruzado . '</span>
+                        </div>
+                    </div>
+                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                  </div>';
+
+
+      //$html[]='<h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.';color: #ffffff;">'.$p_recuperado_abandono.' - '.number_format(($p_recuperado_abandono/$p_total_cruzado),2).'%</h5>';
+
+      $html[]='</div>';
       $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">TOTAL NUEVO</h5></div>';
-      $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">'.$p_recuperado_nuevo.' - '.number_format(($p_recuperado_nuevo/$p_total_cruzado),2 ).'%</h5></div>';
+      $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+
+      $html[]=  '<div class="w-100 bg-white rounded">
+                    <div class="position-relative rounded">
+                      <div class="progress bg-white rounded" style="height: 40px">
+                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . number_format(($p_recuperado_nuevo/$p_total_cruzado),2) . '%" ></div>
+                          </div>
+                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format(($p_recuperado_nuevo/$p_total_cruzado),2) . '% </b> - ' . $p_recuperado_nuevo. ' / ' . $p_total_cruzado . '</span>
+                        </div>
+                    </div>
+                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                  </div>';
+
+      //$html[]='<h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">'.$p_recuperado_nuevo.' - '.number_format(($p_recuperado_nuevo/$p_total_cruzado),2 ).'%</h5>';
+
+      $html[]='</div>';
       $html[]='<div class="p-3 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">'.$p_total_cruzado.' - 100.00%</h5></div>';
 
           $html[]='</div>';
