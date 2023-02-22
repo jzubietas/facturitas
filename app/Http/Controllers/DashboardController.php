@@ -1255,7 +1255,7 @@ class DashboardController extends Controller
                 <tbody>';
       foreach ($progressData as $data) {
         $html.= '<tr>
-             <td>' . $data["code"] . '</td>
+             <td>' . $data["name"] . '</td>
              <td>' . $data["identificador"]  . '</td>
              <td>';
         if ($data["pedidos_dia"] > 0) {
