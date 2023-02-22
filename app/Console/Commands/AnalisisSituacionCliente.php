@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Cliente;
 use App\Models\Pedido;
+use App\Models\SituacionClientes;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -38,43 +39,199 @@ class AnalisisSituacionCliente extends Command
      *
      * @return int
      */
-    public function handle()
+  public function handle()
+  {
+
+    //$this->warn("Cargando primer pedido mes anio");
+    $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
+
+    $periodo_original=Carbon::parse($fp->created_at);//->format('Y_m');
+    $periodo_actual=Carbon::parse(now());//->format('Y_m');
+
+    $primer_periodo=Carbon::parse($fp->created_at);
+    $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
+    //$this->info("Diferencia de meses ".$diff);
+
+    $where_anio='';
+    $where_mes='';
+    $cont_mes=0;
+
+
+
+    $clientes=Cliente::whereIn('tipo',['0','1'])/*->where('id',826)*/->orderBy('id')->get();
+    $progress = $this->output->createProgressBar($clientes->count());
+    //$periodo_original=$primer_periodo;
+    foreach($clientes as $cliente)
     {
-      //obtener pedido mas antiguo para calcalcular primer pedido  periodo mes_anio
 
-      $this->warn("Cargando primer pedido mes anio");
-      $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
+      $idcliente=$cliente->id;
 
-      $this->info("Primer periodo del primer pedido es " .Carbon::parse($fp->created_at)->format('Y_m') );
-      $primer_periodo=Carbon::parse($fp->created_at);//->format('Y_m');
-      $periodo_actual=Carbon::parse(now());//->format('Y_m');
-
-      $diff = $primer_periodo->diffInMonths($periodo_actual);
-      $this->info("Diferencia de meses ".$diff);
-      return 0;
-
-
-      $clientes=Cliente::whereIn('tipo',['0','1'])->orderBy('id')->get();
-      foreach($clientes as $cliente)
+      //if($cliente->id==826)
       {
-        //analisis de sus pedidos
-        $idcliente=$cliente->id;
+        //$this->info($cliente->nombre);
+        $delete=SituacionClientes::where('cliente_id',$idcliente)->delete();
+        //$this->info("situacion en clientes ");
 
-        if($cliente->id==1)
+        $periodo_inicial=Carbon::parse($fp->created_at);
+        //$periodo_ejecucion=$periodo_inicial;
+        $periodo_ejecucion=null;
+
+        for($i=0;$i<$diff;$i++)
         {
-          $this->info($cliente->nombre);
-          break;
+          //->info("suma meses : ".$i." a ".$periodo_inicial);
+          $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
+
+          //$this->warn("periodo ejecucion: ".$periodo_ejecucion);
+
+          $where_anio=$periodo_ejecucion->format('Y');
+          $where_mes=$periodo_ejecucion->format('m');
+
+          //$this->info("where  ".$where_anio.' '.$where_mes);
+
+          //contadores
+          $cont_mes=Pedido::where('cliente_id',$idcliente)->whereYear('created_at',$where_anio)
+            ->whereMonth('created_at',$where_mes)->count();
+          $cont_mes_activo=Pedido::where('cliente_id',$idcliente)->whereYear('created_at',$where_anio)
+            ->whereMonth('created_at',$where_mes)->activo()->count();
+          $cont_mes_anulado=Pedido::where('cliente_id',$idcliente)->whereYear('created_at',$where_anio)
+            ->whereMonth('created_at',$where_mes)->activo('0')->count();
+
+          $situacion_create=SituacionClientes::create([
+            'cliente_id'=>$idcliente,
+            'situacion'=>'',
+            'cantidad_pedidos'=>$cont_mes,
+            'anulados'=>$cont_mes_anulado,
+            'activos'=>$cont_mes_activo,
+            'periodo'=>Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m')
+          ]);
+
+          $compara=Carbon::parse($fp->created_at);
+          $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+          if($cont_mes==0)
+          {
+            if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
+            {
+              //primer mes y contador 0
+              //$this->warn("es igual al primer periodo -".$cont_mes.' - SERA BASE FRIA ');
+              $situacion_create->update([
+                "situacion" => 'BASE FRIA'
+              ]);
+            }else{
+              //$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+              $situacion_antes=SituacionClientes::where('cliente_id',$idcliente)->where('periodo',$mes_antes->format('Y-m'))->first();
+              //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
+
+              switch($situacion_antes->situacion)
+              {
+                case 'BASE FRIA':
+                  $situacion_create->update([
+                    "situacion" => 'BASE FRIA'
+                  ]);
+                  break;
+                case 'RECUPERADO ABANDONO':
+                case 'RECUPERADO RECIENTE':
+                case 'NUEVO':
+                  $situacion_create->update([
+                    "situacion" => 'RECURRENTE'
+                  ]);
+                  break;
+                case 'ABANDONO RECIENTE':
+                case 'ABANDONO':
+                  $situacion_create->update([
+                    "situacion" => 'ABANDONO'
+                  ]);
+                  break;
+                case 'RECURRENTE':
+                  if($situacion_antes->activos==0)
+                  {
+                    $situacion_create->update([
+                      "situacion" => 'ABANDONO RECIENTE'
+                    ]);
+                  }else{
+                    $situacion_create->update([
+                      "situacion" => 'RECURRENTE'
+                    ]);
+                  }
+                  break;
+                default:break;
+              }
+            }
+          }else{
+            if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
+            {
+              //primer mes y contador >0
+              //$this->warn("es igual al primer periodo -".$cont_mes.' - SERA NUEVO ');
+              $situacion_create->update([
+                "situacion" => 'NUEVO'
+              ]);
+            }else{
+              //$this->warn('Mes antes '.$mes_antes->format('Y-m'));
+              $situacion_antes=SituacionClientes::where('cliente_id',$idcliente)->where('periodo',$mes_antes->format('Y-m'))->first();
+              //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
+
+              switch($situacion_antes->situacion)
+              {
+                case 'BASE FRIA':
+                  $situacion_create->update([
+                    "situacion" => 'NUEVO'
+                  ]);
+                  break;
+                case 'RECUPERADO RECIENTE':
+                case 'RECUPERADO ABANDONO':
+                case 'NUEVO':
+                  $situacion_create->update([
+                    "situacion" => 'RECURRENTE'
+                  ]);
+                  break;
+                case 'ABANDONO':
+                  $situacion_create->update([
+                    "situacion" => 'RECUPERADO ABANDONO'
+                  ]);
+                  break;
+                case 'ABANDONO RECIENTE':
+                  $situacion_create->update([
+                    "situacion" => 'RECUPERADO RECIENTE'
+                  ]);
+                  break;
+                case 'RECURRENTE':
+                  if($situacion_antes->activos==0)
+                  {
+                    $situacion_create->update([
+                      "situacion" => 'RECUPERADO ABANDONO'
+                    ]);
+                  }else{
+                    $situacion_create->update([
+                      "situacion" => 'RECURRENTE'
+                    ]);
+                  }
+                  break;
+                default:break;
+              }
+
+            }
+          }
+
+
+
         }
+        //continue;
+
+        //break;
       }
-      $this->info('FIN');
-      //
 
-
-      //select * from pedidos order by created_at  asc limit 1
-
-      //$date = Carbon::createFromDate(1970,19,12)->age; // 43
-
-
-        return 0;
+      $progress->advance();
     }
+    $this->info("Finish Cargando ");
+    $progress->finish();
+    $this->info('FIN');
+    //
+
+
+    //select * from pedidos order by created_at  asc limit 1
+
+    //$date = Carbon::createFromDate(1970,19,12)->age; // 43
+
+
+    return 0;
+  }
 }
