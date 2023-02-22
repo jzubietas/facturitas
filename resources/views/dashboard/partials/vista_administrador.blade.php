@@ -137,7 +137,6 @@
         <div class="col-md-12">
           <div id="reporteanalisis"></div>
         </div>
-
       </div>
 
 

@@ -105,6 +105,8 @@ class Pedido extends Model
     const color_skype_blue = '#abc4ff';
     const color_blue = '#031d44';
 
+    const colo_progress_bar= '#73d9bc';
+
     /**************
      * FIN CONSTANTES CONDICION ENVIO NUMERICO
      */
