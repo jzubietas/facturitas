@@ -100,4 +100,65 @@
             </div>
         </div>
     </div>
+  <div class="col-md-12">
+    <div id="reporteanalisis"></div>
+  </div>
+
 </div>
+
+@section('js-datatables')
+  <script>
+    $(".animated-progress span").each(function () {
+      $(this).animate(
+        {
+          width: $(this).attr("data-progress") + "%",
+        },
+        1000
+      );
+      $(this).text($(this).attr("data-progress") + "%");
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      window.cargReporteAnalisis = function () {
+        var fd=new FormData();
+        //fd.append('ii',entero);
+        $.ajax({
+          data: fd,
+          processData: false,
+          contentType: false,
+          method: 'POST',
+          url: "{{ route('dashboard.viewAnalisis') }}",
+          success: function (resultado){
+            $('#reporteanalisis').html(resultado);
+          }
+        })
+      }
+
+      cargReporteAnalisis();
+
+      $('a[href$="#myModal"]').on( "click", function() {
+        $('#myModal').modal();
+      });
+
+      var elem = document.querySelector("#contenedor-fullscreen");
+      window.openFullscreen =function () {
+        console.log("openFullscreen();")
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+          elem.msRequestFullscreen();
+        }
+      }
+
+    });
+  </script>
+
+@endsection
