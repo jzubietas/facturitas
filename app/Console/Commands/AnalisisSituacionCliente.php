@@ -58,7 +58,8 @@ class AnalisisSituacionCliente extends Command
 
 
 
-    $clientes=Cliente::whereIn('tipo',['0','1'])/*->where('id',826)*/->orderBy('id')->get();
+    $clientes=Cliente::whereIn('tipo',['0','1'])->orderBy('id','asc')->get();
+    //->where('id',1739)
     $progress = $this->output->createProgressBar($clientes->count());
     //$periodo_original=$primer_periodo;
     foreach($clientes as $cliente)
@@ -66,10 +67,10 @@ class AnalisisSituacionCliente extends Command
 
       $idcliente=$cliente->id;
 
-      //if($cliente->id==826)
+      //if($cliente->id==1739)
       {
-        //$this->info($cliente->nombre);
-        $delete=SituacionClientes::where('cliente_id',$idcliente)->delete();
+        $this->warn($cliente->id);
+        $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
         //$this->info("situacion en clientes ");
 
         $periodo_inicial=Carbon::parse($fp->created_at);
@@ -89,15 +90,15 @@ class AnalisisSituacionCliente extends Command
           //$this->info("where  ".$where_anio.' '.$where_mes);
 
           //contadores
-          $cont_mes=Pedido::where('cliente_id',$idcliente)->whereYear('created_at',$where_anio)
+          $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
             ->whereMonth('created_at',$where_mes)->count();
-          $cont_mes_activo=Pedido::where('cliente_id',$idcliente)->whereYear('created_at',$where_anio)
+          $cont_mes_activo=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
             ->whereMonth('created_at',$where_mes)->activo()->count();
-          $cont_mes_anulado=Pedido::where('cliente_id',$idcliente)->whereYear('created_at',$where_anio)
+          $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
             ->whereMonth('created_at',$where_mes)->activo('0')->count();
 
           $situacion_create=SituacionClientes::create([
-            'cliente_id'=>$idcliente,
+            'cliente_id'=>$cliente->id,
             'situacion'=>'',
             'cantidad_pedidos'=>$cont_mes,
             'anulados'=>$cont_mes_anulado,
@@ -118,7 +119,7 @@ class AnalisisSituacionCliente extends Command
               ]);
             }else{
               //$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
-              $situacion_antes=SituacionClientes::where('cliente_id',$idcliente)->where('periodo',$mes_antes->format('Y-m'))->first();
+              $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
               //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
 
               switch($situacion_antes->situacion)
@@ -166,7 +167,7 @@ class AnalisisSituacionCliente extends Command
               ]);
             }else{
               //$this->warn('Mes antes '.$mes_antes->format('Y-m'));
-              $situacion_antes=SituacionClientes::where('cliente_id',$idcliente)->where('periodo',$mes_antes->format('Y-m'))->first();
+              $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
               //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
 
               switch($situacion_antes->situacion)
@@ -211,7 +212,11 @@ class AnalisisSituacionCliente extends Command
             }
           }
 
-
+          if($i==($diff-1))
+          {
+            //update clientes
+            $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+          }
 
         }
         //continue;
