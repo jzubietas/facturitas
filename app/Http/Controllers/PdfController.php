@@ -100,6 +100,15 @@ class PdfController extends Controller
           $html[]='<div class="table_analisis">';
       foreach ($_pedidos_mes_pasado as $pedido)
       {
+        //$p_total=0;
+        //$p_recuperado_reciente=$p_recuperado_reciente+intval($pedido->recuperado_reciente);
+        //$p_recuperado_abandono=$p_recuperado_abandono+intval($pedido->recuperado_abandono);
+        //$p_recuperado_nuevo=$p_recuperado_nuevo+intval($pedido->nuevo);
+        $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
+        $p_total_cruzado=$p_total_cruzado+ $p_total;
+      }
+      foreach ($_pedidos_mes_pasado as $pedido)
+      {
         $p_total=0;
         $html[]= '<div class="p-3 text-center d-flex align-items-center" style="border: black 1px solid; background: #e4dbc6"><h5  class="rounded p-2 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: rgb(94,94,94);"> ' .$pedido->name.'</h5></div>';
         $html[]= '<div class="p-3 text-center d-flex align-items-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style=" background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);" >RECUPERADO RECIENTE</h5></div>';
