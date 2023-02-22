@@ -1,6 +1,6 @@
 <div class="modal fade" id="modal-recojo-pedidos" aria-labelledby="modal-correccion-pedidos" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 800px!important;">
-        <form id="form-recojo" name="form-recojo" class="correccion">
+        <form id="form-recojo" name="form-recojo" >
             <div class="modal-content">
                 <div class="modal-header bg-success">
                     <h5 class="modal-title" id="exampleModalLabel">Recojo pedidos</h5>
@@ -37,7 +37,7 @@
                   </div>
                   <div id="direcciones_add">
                     <ul></ul>
-                    <input type="text" class="form-control" id="pedido_contatenado">
+                    <input type="hidden" class="form-control" id="pedido_contatenado">
                   </div>
 
 
@@ -49,13 +49,13 @@
                           <i class="fa fa-user text-red" aria-hidden="true"></i>
                           <input type="hidden" name="nombre_id" id="Nombre_recibe">
                           {!! Form::label('nombre_recojo', 'Nombre del contacto quien recibe') !!}
-                          {!! Form::text('nombre_recojo', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'autocomplete' => 'off']) !!}
+                          {!! Form::text('nombre_recojo', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'autocomplete' => 'off','readonly']) !!}
                         </div>
                         <div class="form-group col-md-6">
                           <i class="fa fa-phone text-red" aria-hidden="true"></i>
                           {!! Form::label('celular', 'Telefono del contacto quien recibe') !!}
                           <span class="badge badge-pill badge-secondary">9 digitos</span>
-                          {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular_recojo', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
+                          {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular_recojo', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos','readonly']) !!}
                         </div>
 
                       </div>
@@ -64,7 +64,7 @@
                         <div class="form-group col-md-12">
                           <i class="fa fa-street-view text-red" aria-hidden="true"></i>
                           {!! Form::label('direccion_recojo', 'Direccion') !!}
-                          {!! Form::text('direccion_recojo', null, ['class' => 'form-control', 'placeholder' => 'Direccion_recojo' , 'autocomplete' => 'off']) !!}
+                          {!! Form::text('direccion_recojo', null, ['class' => 'form-control', 'placeholder' => 'Direccion_recojo' , 'autocomplete' => 'off','readonly']) !!}
                         </div>
                       </div>
 
@@ -72,21 +72,21 @@
                         <div class="form-group col-md-12">
                           <i class="fa fa-commenting-o text-red" aria-hidden="true"></i>
                           {!! Form::label('referencia_recojo', 'Referencia') !!}
-                          {!! Form::text('referencia_recojo', null, ['class' => 'form-control', 'placeholder' => 'Referencia_recojo' , 'autocomplete' => 'off']) !!}
+                          {!! Form::text('referencia_recojo', null, ['class' => 'form-control', 'placeholder' => 'Referencia_recojo' , 'autocomplete' => 'off','readonly']) !!}
                         </div>
                       </div>
 
                       <div class="form-row">
                         <div class="form-group col-md-12">
                           {!! Form::label('observacion_recojo', 'Observacion') !!}
-                          {!! Form::text('observacion_recojo', null, ['class' => 'form-control', 'placeholder' => 'Observacion_recojo' , 'autocomplete' => 'off']) !!}
+                          {!! Form::text('observacion_recojo', null, ['class' => 'form-control', 'placeholder' => 'Observacion_recojo' , 'autocomplete' => 'off','readonly']) !!}
                         </div>
                       </div>
 
                       <div class="form-row">
                         <div class="form-group col-md-12">
                           {!! Form::label('gmlink_recojo', 'Link Google Map') !!}
-                          {!! Form::text('gmlink_recojo', null, ['class' => 'form-control', 'placeholder' => 'Ejem: https://goo.gl/maps/*********' , 'autocomplete' => 'off']) !!}
+                          {!! Form::text('gmlink_recojo', null, ['class' => 'form-control', 'placeholder' => 'Ejem: https://goo.gl/maps/*********' , 'autocomplete' => 'off','readonly']) !!}
                         </div>
                       </div>
 

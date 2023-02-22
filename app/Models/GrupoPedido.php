@@ -44,14 +44,22 @@ class GrupoPedido extends Model
                         "razon_social" => $detalle->nombre_empresa,
                     ]
                 ]);
+              //ENTREGADO_NUEVO_DIR_INT
+              if ($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT) {
+                $pedido->update([
+                  'condicion_envio_at' => now(),
+                ]);
+              }else{
                 if ($pedido->condicion_envio_code != Pedido::RECEPCION_COURIER_INT) {
-                    $pedido->update([
-                        'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-                        'condicion_envio' => Pedido::RECEPCION_COURIER,
-                        'condicion_envio_at' => now(),
-                        //'estado_sobre' => 1,
-                    ]);
+                  $pedido->update([
+                    'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'condicion_envio' => Pedido::RECEPCION_COURIER,
+                    'condicion_envio_at' => now(),
+                    //'estado_sobre' => 1,
+                  ]);
                 }
+              }
+
             }
             return $grupo;
         }else{

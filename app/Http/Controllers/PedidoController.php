@@ -3199,9 +3199,7 @@ class PedidoController extends Controller
       )
       ->where('pedidos.cliente_id', $idrequest)->where('direccion_grupo',$direccion_grupo);
       //->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito)//;
-    if(!$request->pedidosNotIn){
-      //
-    }else{
+    if($request->pedidosNotIn){
       $pedidos = $pedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
     }
 

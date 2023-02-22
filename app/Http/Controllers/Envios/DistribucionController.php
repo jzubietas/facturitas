@@ -81,9 +81,10 @@ class DistribucionController extends Controller
                 'grupo_pedidos.cliente_recibe',
                 'grupo_pedidos.telefono',
                 'grupo_pedidos.created_at',
-                //'codigos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.codigo)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
+              DB::raw('( select p.condicion_envio_code from grupo_pedidos gp inner join grupo_pedido_items gpi on gp.id =gpi.grupo_pedido_id inner join pedidos p on p.id =gpi.pedido_id where  gp.id =grupo_pedidos.id) as condicion_envio_code'),
                 // 'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
             ])
+
             //->whereNull('grupo_pedidos.deleted_at')
             /*->groupBy([
                 'grupo_pedidos.id',
@@ -162,8 +163,15 @@ class DistribucionController extends Controller
             ->addColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio(Pedido::RECEPCION_COURIER);
+                $textoEstado=Pedido::RECEPCION_COURIER;
+                if ($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT) {
+                  $textoEstado=Pedido::ENTREGADO_NUEVO_DIR;
+                  $color = Pedido::getColorByCondicionEnvio(Pedido::ENTREGADO_NUEVO_DIR_INT);
+                }
                 $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>
-<span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . Pedido::RECEPCION_COURIER . '</span>';
+<span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . $textoEstado. '</span>';
+
+
                 return $badge_estado;
             })
             ->editColumn('zona', function ($pedido) {

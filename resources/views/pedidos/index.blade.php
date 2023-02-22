@@ -412,15 +412,16 @@
                 let gm_link= $("#gmlink_recojo").val();
                 let direccion_entrega = $("#Direccion_de_entrega").val();
                 let sustento_recojo = $("#sustento-recojo").val();
-
+                let pedido_contatenado = $("#pedido_contatenado").val();
 
 
                 //validaciones
                 //pedido
-                if (direccion_entrega == "") {
+                /*if (direccion_entrega == "") {
                     Swal.fire('Debe colocar una direccion de entrega', '', 'warning');
                     return false;
-                } else if (sustento_recojo == "") {
+                } */
+                if (sustento_recojo == "") {
                     Swal.fire('Debe colocar un sustento', '', 'warning');
                     return false;
                 } else if (direccion_recojo== "") {
@@ -453,12 +454,12 @@
                 fd_courier.append('referencia_recojo', referencia_recojo);
                 fd_courier.append('observacion_recojo', observacion_recojo);
                 fd_courier.append('gm_link', gm_link);
-
+                fd_courier.append('pedido_contatenado', pedido_contatenado);
 
                 $.ajax({
-                    data: fd_courier,
                     processData: false,
                     contentType: false,
+                    data: fd_courier,
                     type: 'POST',
                     url: "{{ route('registrar_recojer_pedido') }}",
                     success: function (data) {
@@ -468,6 +469,7 @@
 
 
                 });
+
             });
 
 
