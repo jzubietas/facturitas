@@ -118,16 +118,16 @@ class PdfController extends Controller
       {
         /*CUERPO*/
         $p_total=0;
-        $html[]= '<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5  class="rounded p-2 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: rgb(94,94,94);"> ' .explode(' ', $pedido->name)[0].'</h5></div>';
+        $html[]= '<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5  class="rounded p-2 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: black;"> ' .explode(' ', $pedido->name)[0].'</h5></div>';
 
         $html[]= '<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
-        $html[]='<h5 class="rounded p-4 font-weight-bold" style=" background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);">' .$pedido->recuperado_reciente.'</h5>';
+        $html[]='<h5 class="rounded p-4 font-weight-bold" style=" background: '.Pedido::color_skype_blue.'; color: black;">' .$pedido->recuperado_reciente.'</h5>';
         $html[]='</div>';
 
         $p_recuperado_reciente=$p_recuperado_reciente+intval($pedido->recuperado_reciente);
-        $html[]= '<div  class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);">' .$pedido->recuperado_abandono.'</h5></div>';
+        $html[]= '<div  class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: black;">' .$pedido->recuperado_abandono.'</h5></div>';
         $p_recuperado_abandono=$p_recuperado_abandono+intval($pedido->recuperado_abandono);
-        $html[]= '<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: rgba(94,94,94,0.89);">' .$pedido->nuevo.'</h5></div>';
+        $html[]= '<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: black;">' .$pedido->nuevo.'</h5></div>';
         $p_recuperado_nuevo=$p_recuperado_nuevo+intval($pedido->nuevo);
         $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
 
@@ -138,7 +138,7 @@ class PdfController extends Controller
                           <div class="rounded" role="progressbar" style="background: '.Pedido::colo_progress_bar.' !important; width: ' . number_format((($p_total/$p_total_cruzado)*100),2) . '%" ></div>
                           </div>
                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_total/$p_total_cruzado)*100),2) . '% </b> - ' . $p_total. ' / ' . $p_total_cruzado . '</span>
+                            <span style="font-weight: lighter; font-size: 16px"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_total/$p_total_cruzado)*100),2) . '% </b> - ' . $p_total. ' / ' . $p_total_cruzado . '</span>
                         </div>
                     </div>
                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -157,7 +157,7 @@ class PdfController extends Controller
                           <div class="rounded" role="progressbar" style="background: '.Pedido::colo_progress_bar.' !important; width: '. number_format((($p_recuperado_reciente/$p_total_cruzado)*100),2) . '%" ></div>
                           </div>
                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_reciente/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_reciente. ' / ' . $p_total_cruzado . '</span>
+                            <span style="font-weight: lighter; font-size: 16px"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_reciente/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_reciente. ' / ' . $p_total_cruzado . '</span>
                         </div>
                     </div>
                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -172,7 +172,7 @@ class PdfController extends Controller
                           <div class="rounded" role="progressbar" style="background: '.Pedido::colo_progress_bar.' !important; width: ' . number_format((($p_recuperado_abandono/$p_total_cruzado)*100),2) .'%" ></div>
                           </div>
                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_abandono/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_abandono. ' / ' . $p_total_cruzado . '</span>
+                            <span style="font-weight: lighter; font-size: 16px"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_abandono/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_abandono. ' / ' . $p_total_cruzado . '</span>
                         </div>
                     </div>
                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -186,7 +186,7 @@ class PdfController extends Controller
                           <div class="rounded" role="progressbar" style="background: '.Pedido::colo_progress_bar.' !important; width: ' . number_format((($p_recuperado_nuevo/$p_total_cruzado)*100),2) . '%" ></div>
                           </div>
                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_nuevo/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_nuevo. ' / ' . $p_total_cruzado . '</span>
+                            <span style="font-weight: lighter; font-size: 16px"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_nuevo/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_nuevo. ' / ' . $p_total_cruzado . '</span>
                         </div>
                     </div>
                     <sub class="d-none">% -  Pagados/ Asignados</sub>
