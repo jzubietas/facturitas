@@ -89,39 +89,42 @@ class PdfController extends Controller
         ->whereIn('users.rol', ['Llamadas']);
 
       $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
+      $p_recuperado_reciente=0;
+      $p_recuperado_abandono=0;
+      $p_recuperado_nuevo=0;
+      $p_total=0;
       $html=[];
       $html[]='<div class="row">';
         $html[]='<div class="col-md-12 ">';
-          $html[]='<table>';
+          $html[]='<div class="table_analisis">';
       foreach ($_pedidos_mes_pasado as $pedido)
       {
-        $html[]='<div class="col-2 ">
-                  <div class="card card-warning">
-                    <div class="card-header">
-                        <h5> '.$pedido->name.'</h5>
-                    </div>
-                    <div class="card-body">
-                      <div class="card">
-                        <ul class="list-group list-group-flush">
-                          <li class="list-group-item">
-                            <span class="badge badge-light">RECUPERADO.RECIENTE</span><br>
-                            <span class="badge badge-secondary">'.$pedido->recuperado_reciente.'</span>
-                          </li>
-                          <li class="list-group-item">
-                            <span class="badge badge-light">RECUPERADO.ABANDONO</span><br>
-                            <span class="badge badge-secondary">'.$pedido->recuperado_abandono.'</span>
-                          </li>
-                          <li class="list-group-item">
-                            <span class="badge badge-light">NUEVO</span><br>
-                            <span class="badge badge-secondary">'.$pedido->nuevo.'</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>';
+        $p_total=0;
+        $html[]='<div><h5> '.$pedido->name.'</h5></div>';
+        $html[]='<div><h5>RECUPERADO.RECIENTE</h5></div>';
+        $html[]='<div><h5>'.$pedido->recuperado_reciente.'</h5></div>';
+        $p_recuperado_reciente=$p_recuperado_reciente+intval($pedido->recuperado_reciente);
+        $html[]='<div><h5>RECUPERADO.ABANDONO</h5></div>';
+        $html[]='<div><h5>'.$pedido->recuperado_abandono.'</h5></div>';
+        $p_recuperado_abandono=$p_recuperado_abandono+intval($pedido->recuperado_abandono);
+        $html[]='<div><h5>NUEVO</h5></div>';
+        $html[]='<div><h5>'.$pedido->nuevo.'</h5></div>';
+        $p_recuperado_nuevo=$p_recuperado_nuevo+intval($pedido->nuevo);
+
+        $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
+        $html[]='<div>'.$p_total.'</div>';
       }
-          $html[]='</table>';
+      //totales
+      $html[]='<div></div>';
+      $html[]='<div><h5>RECUPERADO.RECIENTE</h5></div>';
+      $html[]='<div><h5>'.$p_recuperado_reciente.'</h5></div>';
+      $html[]='<div><h5>RECUPERADO.ABANDONO</h5></div>';
+      $html[]='<div><h5>'.$p_recuperado_abandono.'</h5></div>';
+      $html[]='<div><h5>NUEVO</h5></div>';
+      $html[]='<div><h5>'.$p_recuperado_nuevo.'</h5></div>';
+      $html[]='<div>TOTALES</div>';
+
+          $html[]='</div>';
         $html[]='</div>';
       $html[]='</div>';
 
