@@ -23,7 +23,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
             $clientes = Cliente::
                     join('users as u', 'clientes.user_id', 'u.id')
                     ->rightJoin('pedidos as p', 'clientes.id', 'p.cliente_id')
-                    ->select('clientes.id',
+                    ->select(['clientes.id',
                             'u.identificador as asesor',
                             'clientes.nombre',
                             'clientes.dni',
@@ -36,39 +36,16 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                             'clientes.estado',
                             'clientes.deuda',
                             'clientes.pidio',
-                            //DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
-                            //DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
-                            //DB::raw('DATE_FORMAT(MAX(p.created_at), "%m") as mes'),
-                            //DB::raw('DATE_FORMAT(MAX(p.created_at), "%Y") as anio'),
                             DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
                             DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id and dp2.estado=1 order by dp2.created_at desc limit 1) as mes"),
                             DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id and dp3.estado=1 order by dp3.created_at desc limit 1) as anio"),
-
                             DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id and dp.estado=1 order by dp.created_at desc limit 1) as codigo "),
                             'clientes.situacion',
-                            )
+                            ])
                     ->where('clientes.estado','1')
                     ->where('clientes.tipo','1')
                     ->whereNotNull('clientes.situacion');
-                   /* ->whereBetween('created_at', '2023-02-01 0:00:00', '2023-02-28 23:59:00');*/
 
-                    /*->groupBy(
-                        'clientes.id',
-                        'u.identificador',
-                        'clientes.nombre',
-                        'clientes.dni',
-                        'clientes.icelular',
-                        'clientes.celular',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        'clientes.referencia',
-                        'clientes.estado',
-                        'clientes.deuda',
-                        'clientes.pidio',
-                        'clientes.situacion',
-                    );*/
-                    //->get();
                 if($request->situacion=='ABANDONO')
                     $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO','ABANDONO RECIENTE']);
                 else if($request->situacion=='RECURENTE')

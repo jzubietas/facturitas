@@ -41,6 +41,9 @@ class User extends Authenticatable
     const ROL_MOTORIZADO = "MOTORIZADO";
     const ROL_PRESENTACION = "PRESENTACION";
 
+
+
+
     /**
      * The attributes that are mass assignable.
      *
