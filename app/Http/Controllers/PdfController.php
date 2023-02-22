@@ -138,7 +138,7 @@ class PdfController extends Controller
                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . number_format(($p_total/$p_total_cruzado),2) . '%" ></div>
                           </div>
                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format(($p_total/$p_total_cruzado),2) . '% </b> - ' . $p_total. ' / ' . $p_total_cruzado . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_total/$p_total_cruzado)*100),2) . '% </b> - ' . $p_total. ' / ' . $p_total_cruzado . '</span>
                         </div>
                     </div>
                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -158,7 +158,7 @@ class PdfController extends Controller
                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . number_format(($p_recuperado_reciente/$p_total_cruzado),2) . '%" ></div>
                           </div>
                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format(($p_recuperado_reciente/$p_total_cruzado),2) . '% </b> - ' . $p_recuperado_reciente. ' / ' . $p_total_cruzado . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_reciente/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_reciente. ' / ' . $p_total_cruzado . '</span>
                         </div>
                     </div>
                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -178,7 +178,7 @@ class PdfController extends Controller
                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . number_format(($p_recuperado_abandono/$p_total_cruzado),2) . '%" ></div>
                           </div>
                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format(($p_recuperado_abandono/$p_total_cruzado),2) . '% </b> - ' . $p_recuperado_abandono. ' / ' . $p_total_cruzado . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_abandono/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_abandono. ' / ' . $p_total_cruzado . '</span>
                         </div>
                     </div>
                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -197,7 +197,7 @@ class PdfController extends Controller
                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . number_format(($p_recuperado_nuevo/$p_total_cruzado),2) . '%" ></div>
                           </div>
                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format(($p_recuperado_nuevo/$p_total_cruzado),2) . '% </b> - ' . $p_recuperado_nuevo. ' / ' . $p_total_cruzado . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_nuevo/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_nuevo. ' / ' . $p_total_cruzado . '</span>
                         </div>
                     </div>
                     <sub class="d-none">% -  Pagados/ Asignados</sub>
