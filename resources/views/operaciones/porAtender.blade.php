@@ -47,8 +47,9 @@
                     <th scope="col">Item</th>
                     <th scope="col">Código</th>
                     <th scope="col">Razón social</th>
+                    <th scope="col">Mes</th>
                     <th scope="col">Asesor</th>
-                    <th scope="col">Fecha de registro</th>{{--fecha hora--}}
+                    <th scope="col">Fecha de registro</th>
                     <th scope="col">Tipo de Banca</th>
                     <th scope="col">Adjuntos</th>
                     <th scope="col">Estado</th>
@@ -540,6 +541,7 @@
                     },
                     {data: 'codigos', name: 'codigos',},
                     {data: 'empresas', name: 'empresas',},
+                  {data: 'mes', name: 'mes',},
                     {data: 'users', name: 'users',},
                     {
                         data: 'fecha',
