@@ -36,14 +36,17 @@ class PostUpdatePedido implements ShouldQueue
     public function handle()
     {
         //
-      \Log::info("PostUpdatePedido -> " . $this->codigo);
+      //\Log::info("PostUpdatePedido -> " . $this->codigo);
 
       $pedido=Pedido::where('codigo',$this->codigo)->first();
       $dpedido=DetallePedido::where('codigo',$this->codigo)->first();
 
       //crear historial
+      $estado_correccion = $pedido->estado_correccion;
+
+
+
       HistoriaPedidos::create([
-        //campos de pedido
         'pedido_id' => $pedido->id,
         'correlativo' => $pedido->correlativo,
         'cliente_id' => $pedido->cliente_id,
@@ -84,7 +87,7 @@ class PostUpdatePedido implements ShouldQueue
         'env_importe' => $pedido->env_importe,
         'estado_ruta' => $pedido->estado_ruta,
         'direccion_grupo' => $pedido->direccion_grupo,
-        'estado_correccion' => $pedido->estado_correccion,
+        'estado_correccion' => $estado_correccion,
         //columnas de
         'nombre_empresa' => $dpedido->nombre_empresa,
         'mes' => $dpedido->mes,

@@ -210,7 +210,7 @@ class PedidoStatusController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
                     'pedidos.*',
-                    'dp.mes',
+                    'dp.mes','dp.anio',
                     'pedidos.correlativo as id2',
                     'c.nombre as nombres',
                     'c.celular as celulares',
@@ -304,6 +304,9 @@ class PedidoStatusController extends Controller
                 ->addColumn('condicion_envio_color', function ($pedido) {
                     return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 })
+                ->editColumn('mes', function ($pedido) {
+                  return $pedido->mes.'-'.$pedido->anio;
+                })
                 ->editColumn('condicion_envio', function ($pedido) {
                     $badge_estado = '';
                     if ($pedido->pendiente_anulacion == '1') {
@@ -376,7 +379,7 @@ class PedidoStatusController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
                     'pedidos.id',
-                    'dp.mes', //se agrega campo mes
+                    'dp.mes','dp.anio', //se agrega campo mes
                     'pedidos.da_confirmar_descarga',
                     'pedidos.sustento_adjunto',
                     'pedidos.correlativo as id2',
@@ -487,6 +490,9 @@ class PedidoStatusController extends Controller
                 ->addColumn('condicion_envio_color', function ($pedido) {
                     return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 })
+              ->editColumn('mes', function ($pedido) {
+                return $pedido->mes.'-'.$pedido->anio;
+              })
                 ->editColumn('condicion_envio', function ($pedido) {
                     $badge_estado = '';
                     if ($pedido->pendiente_anulacion == '1') {
