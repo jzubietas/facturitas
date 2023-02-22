@@ -950,7 +950,7 @@ class DashboardController extends Controller
 
       $item = [
         "identificador" => $asesor->identificador,
-        "code" => "Asesor {$asesor->identificador}",
+        "code" => "{$asesor->name}",
         "pedidos_dia" => $asesor_pedido_dia,
         "name" => $asesor->name,
         "total_pedido" => $total_pedido,
@@ -1255,8 +1255,8 @@ class DashboardController extends Controller
                 <tbody>';
       foreach ($progressData as $data) {
         $html.= '<tr>
-             <td>' . $data["identificador"] . '</td>
              <td>' . $data["code"] . '</td>
+             <td>' . $data["identificador"]  . '</td>
              <td>';
         if ($data["pedidos_dia"] > 0) {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
