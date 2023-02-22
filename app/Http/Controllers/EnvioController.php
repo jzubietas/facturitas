@@ -1616,20 +1616,20 @@ class EnvioController extends Controller
             //desarmo el grupo
 
             //destruyo grupo pedido items y relacion
-            $gpi=DB::table('grupo_pedido_items')
-                ->where('pedido_id', $request->quitardireccion)->get();
-                //->update(['status' => '0']);
-
-            $count_gpi=DB::table('grupo_pedido_items')
-                ->where('pedido_id', $request->quitardireccion)->count();
-            if($count_gpi>0)
+            $gpi= DB::table('grupo_pedido_items')->where('pedido_id', $pedidos->id)->get();
+            $codigo=0;
+            if (!empty($gpi->grupo_pedido_id) ){
+              $codigo=$gpi->grupo_pedido_id;
+            }
+            if($gpi->count() > 0)
             {
                 //destruyo
-                DB::table('grupo_pedido_items')
-                    ->where('grupo_pedido_id', $gpi->grupo_pedido_id)->delete();
-                    //->update(['status' => '0']);
+                DB::table('grupo_pedido_items')->where('pedido_id', $pedidos->id)->delete();
+                //->update(['status' => '0']);
+              if ($codigo!=0){
                 DB::table('grupo_pedidos')
-                    ->where('id', $gpi->grupo_pedido_id)->delete();
+                  ->where('id', $codigo)->delete();
+              }
             }
 
             //$gp=GrupoPedidoItem::where()
@@ -1638,7 +1638,7 @@ class EnvioController extends Controller
                 DireccionGrupo::restructurarCodigos($direccion_g);
             }
 
-            return response()->json(['html' => $pedidos->id]);
+            return response()->json(['html' => $pedidos->id,'$gpi'=>$gpi ]);
         }
 
         return response()->json(['html' => '']);
