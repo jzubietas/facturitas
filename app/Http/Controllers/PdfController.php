@@ -119,12 +119,12 @@ class PdfController extends Controller
       //totales
       $html[]='<div></div>';
       $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>RECUPERADO.RECIENTE</h5></div>';
-      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_reciente.'</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_reciente.' '.number_format(($p_recuperado_reciente/$p_total_cruzado),2).'% </h5></div>';
       $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>RECUPERADO.ABANDONO</h5></div>';
-      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_abandono.'</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_abandono.' '.number_format(($p_recuperado_abandono/$p_total_cruzado),2).'%</h5></div>';
       $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>NUEVO</h5></div>';
-      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_nuevo.'</h5></div>';
-      $html[]='<div class="p-3 text-center" style="background: #e4dbc6">'.$p_total_cruzado.'</div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6"><h5>'.$p_recuperado_nuevo.' '.number_format(($p_recuperado_nuevo/$p_total_cruzado),2 ).'%</h5></div>';
+      $html[]='<div class="p-3 text-center" style="background: #e4dbc6">'.$p_total_cruzado.' 100.00%</div>';
 
           $html[]='</div>';
         $html[]='</div>';
