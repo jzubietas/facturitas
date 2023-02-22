@@ -100,6 +100,9 @@ class Pedido extends Model
     const ESTADO_MOTORIZADO_NO_RECIBIDO = 3;
     const ESTADO_MOTORIZADO_RE_RECIBIDO = 4;
 
+    const color_skype_blue = '#abc4ff';
+    const color_blue = '#031d44';
+
     /**************
      * FIN CONSTANTES CONDICION ENVIO NUMERICO
      */
