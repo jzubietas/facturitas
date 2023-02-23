@@ -371,7 +371,7 @@
 
                 var cod_pedido = $('#pedidoid').val();
 
-              $('#pedido_contatenado').val(button.data('pedidoid'));
+              $('#pedido_concatenado').val(button.data('pedidoid'));
 
               $('#direcciones_add ul').html('');
               $('#pedidoid').val(button.data('pedidoid'));
@@ -479,7 +479,7 @@
                 var button = $(event.relatedTarget)
                 var cliente = $('#clienteid').val()
                 var pedido = $('#pedidoid').val()
-                var pedidosNotIn = $('#pedido_contatenado').val()
+                var pedidosNotIn = $('#pedido_concatenado').val()
               console.log('valores negados: ', pedidosNotIn);
 
 
@@ -1805,7 +1805,7 @@ ${data.foto3 ? `
           $(document).on("click", ".btnrrellenar_recojo", function () {
             var recupeardo_check = tabla_pedidos.column(0).checkboxes.selected();
             seleccion = [];
-            seleccion.push($('#pedido_contatenado').val())
+            seleccion.push($('#pedido_concatenado').val())
             $('#direcciones_add').append('');
             $.each(recupeardo_check, function (index, rowId) {
               console.log("index " + index);
@@ -1820,7 +1820,7 @@ ${data.foto3 ? `
               });
             });
             seleccion = seleccion.join(',');
-            $('#pedido_contatenado').val(seleccion); //setear un valor
+            $('#pedido_concatenado').val(seleccion); //setear un valor
             ids.forEach(function(pedido) {
               $('#direcciones_add ul').append(`
                     <li>`+pedido.codigo+`</li>
