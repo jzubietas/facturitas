@@ -95,8 +95,8 @@ class PdfController extends Controller
       $p_total=0;
       $p_total_cruzado=0;
       $html=[];
-      $html[]='<div class="row">';
-        $html[]='<div class="col-md-12 ">';
+      $html[]='<div class="row table-total">';
+        $html[]='<div class="col-md-12 scrollbar-x">';
           $html[]='<div class="table_analisis" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">';
       foreach ($_pedidos_mes_pasado as $pedido)
       {
@@ -714,3 +714,6 @@ class PdfController extends Controller
     }
 
 }
+
+
+
