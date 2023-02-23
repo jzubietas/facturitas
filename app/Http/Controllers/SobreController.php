@@ -285,7 +285,7 @@ class SobreController extends Controller
                         return $btn;
                     })
                     ->editColumn('foto', function ($pedido) {
-                        $html = collect(explode(',', $pedido->tracking))->trim()->map(fn($f) => '<b>( '.Carbon::parse($pedido->created_at)->format('d-m-Y').' )' . $f . '</b>')->join('<br>') . '<br>';
+                        $html = collect(explode(',', $pedido->tracking))->trim()->map(fn($f) => '<b>( ' . Carbon::parse($pedido->created_at)->format('d-m-Y') . ' )' . $f . '</b>')->join('<br>') . '<br>';
 
 
                         $html .= collect(explode(',', $pedido->foto))->trim()->map(fn($f) => '<a target="_blank" href="' .
@@ -294,7 +294,7 @@ class SobreController extends Controller
                         $html .= '<p>';
                         return $html;
                     })
-                    ->rawColumns(['action','foto'])
+                    ->rawColumns(['action', 'foto'])
                     ->make(true);
 
             } else if ($request->provincialima == "LIMA") {
@@ -579,85 +579,106 @@ class SobreController extends Controller
     public function RegistrarRecojo(Request $request)
     {
 
-        $recojo_cliente = $request->recojo_cliente;
+        $Nombre_recibe = $request->Nombre_recibe;
+        $celular_id = $request->celular_id;
+        $direccion_recojo = $request->direccion_recojo;
+        $referencia_recojo = $request->referencia_recojo;
+        $observacion_recojo = $request->observacion_recojo;
+        $gm_link = $request->gm_link;
+        $direccion_entrega = $request->direccion_entrega;
+        $sustento_recojo = $request->sustento_recojo;
+        $pedido_concatenado = explode(",", $request->pedido_concatenado);
+
+        /*$recojo_cliente = $request->recojo_cliente;
         $recojo_pedido = $request->recojo_pedido;
         $recojo_fecha = $request->recojo_fecha;
-        $recojo_distrito = $request->recojo_distrito;
-        $sustento_recojo=$request->sustento_recojo;
-        $direccion_entrega=$request->direccion_entrega;
+        $recojo_distrito = $request->recojo_distrito;*/
 
-        $recojo_pedido_quienrecibe_nombre = $request->recojo_pedido_quienrecibe_nombre;
+        /*$recojo_pedido_quienrecibe_nombre = $request->recojo_pedido_quienrecibe_nombre;
         $recojo_pedido_quienrecibe_celular = $request->recojo_pedido_quienrecibe_celular;
         $recojo_pedido_direccion = $request->recojo_pedido_direccion;
         $recojo_pedido_referencia = $request->recojo_pedido_referencia;
         $recojo_pedido_observacion = $request->recojo_pedido_observacion;
-        $pedido_concatenado = explode(",", $request->pedido_contatenado);
+        $pedido_concatenado = explode(",", $request->pedido_contatenado);*/
 
         //return $request->all();
-        foreach ($pedido_concatenado  as $pedidoid){
-          $pedido = Pedido::where("id", $pedidoid)->first();
-          if ($pedido) {
-            $dg = $pedido->direcciongrupo;
-            if ($dg) {
-              PedidoMovimientoEstado::create([
-                'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_INT,
-                'fecha' => now(),
-                'pedido' => $pedido->id,
-                'json_envio' => json_encode(array(
-                  "recojo" => true,
-                  "recojo_cliente" => $recojo_cliente,
-                  "recojo_pedido" => $recojo_pedido,
-                  "recojo_grupo" => $pedido->direccion_grupo,
-                  "recojo_fecha" => $recojo_fecha,
-                  "recojo_distrito" => $recojo_distrito,
-                  "recojo_pedido_quienrecibe_nombre" => $recojo_pedido_quienrecibe_nombre,
-                  "recojo_pedido_quienrecibe_celular" => $recojo_pedido_quienrecibe_celular,
-                  "recojo_pedido_direccion" => $recojo_pedido_direccion,
-                  "recojo_pedido_referencia" => $recojo_pedido_referencia,
-                  "recojo_pedido_observacion" => $recojo_pedido_observacion,
-                ))
-              ]);
-              //$env_zona = Distrito::where('distrito', $recojo_distrito)->whereIn('provincia', ['LIMA', 'CALLAO'])->first()->zona;
+        foreach ($pedido_concatenado as $pedidoid) {
+            $pedido = Pedido::where("id", $pedidoid)->first();
+            if ($pedido) {
+                $dg = $pedido->direccion_grupo;
+                if ($dg) {
+                    PedidoMovimientoEstado::create([
+                        'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_INT,
+                        'fecha' => now(),
+                        'pedido' => $pedido->id,
+                        'json_envio' => json_encode(array(
+                            "recojo" => true,
+                            'direccion_grupo' => null,
+                            'destino' => 'LIMA',
+                            'env_destino' => 'LIMA',
+                            'env_zona_asignada' => null,
+                            'env_cantidad' => 0,
+                            'env_tracking' => '',
+                            'env_numregistro' => '',
+                            'env_rotulo' => '',
+                            'env_importe' => 0.00,
+                            'estado_ruta' => 0,
+                            'fecha_salida' => null,
+                            "env_nombre_cliente_recibe" => $Nombre_recibe,
+                            "env_celular_cliente_recibe" => $celular_id,
+                            "env_direccion" => $direccion_recojo,
+                            "env_referencia" => $referencia_recojo,
+                            "env_observacion" => $observacion_recojo,
+                            "gm_link" => $gm_link,
+                            "env_sustento" => $sustento_recojo,
+                            'condicion_envio' => Pedido::ENTREGADO_NUEVO_DIR,
+                            'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
+                        ))
+                    ]);
+                    //$env_zona = Distrito::where('distrito', $recojo_distrito)->whereIn('provincia', ['LIMA', 'CALLAO'])->first()->zona;
 
-                $pedido->update([
-                  'direccion_grupo' => null,
-                  'destino' => 'LIMA',
-                  'env_destino' => 'LIMA',
-                  'env_zona_asignada' => null,
-                  'env_cantidad' => 0,
-                  'env_tracking' => '',
-                  'env_numregistro' => '',
-                  'env_rotulo' => '',
-                  'env_gmlink' => '',
-                  'env_importe' => 0.00,
-                  'estado_ruta' => 0,
-                  'fecha_salida' => null,
-                  'condicion_envio' => Pedido::ENTREGADO_NUEVO_DIR,
-                  'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT,
-                  'env_sustento' => $sustento_recojo
-                ]);
+                    $pedido->update([
+                        'direccion_grupo' => null,
+                        'destino' => 'LIMA',
+                        'env_destino' => 'LIMA',
+                        'env_zona_asignada' => null,
+                        'env_cantidad' => 0,
+                        'env_tracking' => '',
+                        'env_numregistro' => '',
+                        'env_rotulo' => '',
+                        'env_importe' => 0.00,
+                        'estado_ruta' => 0,
+                        'fecha_salida' => null,
+                        "env_nombre_cliente_recibe" => $Nombre_recibe,
+                        "env_celular_cliente_recibe" => $celular_id,
+                        "env_direccion" => $direccion_recojo,
+                        "env_referencia" => $referencia_recojo,
+                        "env_observacion" => $observacion_recojo,
+                        "gm_link" => $gm_link,
+                        "env_sustento" => $sustento_recojo,
+                        'condicion_envio' => Pedido::ENTREGADO_NUEVO_DIR,
+                        'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
+                    ]);
 
-              DireccionGrupo::restructurarCodigos($dg);
-              GrupoPedido::createGroupByPedido($pedido, true, true);
+                    DireccionGrupo::restructurarCodigos($dg);
+                    GrupoPedido::createGroupByPedido($pedido, true, true);
 
 
+                }
             }
-          }
         }
-      return response()->json(['html' => 1]);
-      /*return $pedido;
-        $pedido = Pedido::where('estado_sobre', "1")->where("estado", 1)->where("id", $recojo_pedido)->where("cliente_id", $recojo_cliente)->first();
-        if ($pedido) {
-            //mandar a sobre con direccion
-             else {
-                return response()->json(['html' => 0]);
-            }
-        } else {
-            return response()->json(['html' => 0]);
-        }*/
+        return response()->json(['html' => 1]);
+        /*return $pedido;
+          $pedido = Pedido::where('estado_sobre', "1")->where("estado", 1)->where("id", $recojo_pedido)->where("cliente_id", $recojo_cliente)->first();
+          if ($pedido) {
+              //mandar a sobre con direccion
+               else {
+                  return response()->json(['html' => 0]);
+              }
+          } else {
+              return response()->json(['html' => 0]);
+          }*/
     }
-
-
 
 
 }
