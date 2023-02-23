@@ -204,13 +204,12 @@ class AnalisisSituacionCliente_Individual extends Command
                 //$this->warn('Mes antes '.$mes_antes->format('Y-m'));
                 $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
                 $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                $this->warn('MES ACTUAL -> '.$mes_actual);
+                $this->warn('MES ACTUAL -> '.$mes_actual->format('Y-m'). $cliente_id);
                 $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                 //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
                 $this->warn('MES ANTES -> ' .$mes_antes);
-
                 $this->info('SITUACION DEL MES ANTERIOR -> '.$situacion_antes->situacion);
-                $this->info('SITUACION actual -> '.$situacion_actual->situacion);
+                $this->info('SITUACION ACTUAL -> '.$situacion_actual->situacion);
                 switch($situacion_antes->situacion)
                 {
                   case 'BASE FRIA':
