@@ -3219,8 +3219,20 @@ class PedidoController extends Controller
     //$result_direccion=User::where('id',$jefeop)->first()->id;
     $result_direccion=Directions::query()->where('user_id',$jefeop)->first()->direccion_recojo;
 
+    $totalpedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+      ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+      ->select(
+        [
+          'pedidos.id as pedidoid',
+          'c.id as clienteid',
+          'dp.codigo',
+          'dp.nombre_empresa',
+        ]
+      )
+      ->where('pedidos.cliente_id', $request->codigo_cliente)->where('direccion_grupo',$pedido->direccion_grupo)
+      ->whereNotIn('pedidos.id',[$request->pedidosNotIn])->count();
 
-    return $result_direccion;
+    return $result_direccion .'|'.$totalpedidos;
 
   }
 }

@@ -81,7 +81,7 @@ class DistribucionController extends Controller
                 'grupo_pedidos.cliente_recibe',
                 'grupo_pedidos.telefono',
                 'grupo_pedidos.created_at',
-              DB::raw('( select p.condicion_envio_code from grupo_pedidos gp inner join grupo_pedido_items gpi on gp.id =gpi.grupo_pedido_id inner join pedidos p on p.id =gpi.pedido_id where  gp.id =grupo_pedidos.id limit 1) as condicion_envio_code'),
+              DB::raw('(select p.condicion_envio_code  from grupo_pedido_items gpi inner join pedidos p on p.id =gpi.pedido_id where  gpi.grupo_pedido_id =grupo_pedidos.id limit 1) as condicion_envio_code'),
                 // 'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
             ])
 
@@ -152,6 +152,7 @@ class DistribucionController extends Controller
         }*/
 
         $items = $query->get()->filter(fn(GrupoPedido $grupo) => $grupo->pedidos->count() > 0);
+
         return \DataTables::of($items)
             ->addColumn('codigos', function (GrupoPedido $grupo) {
                 return $grupo->pedidos->pluck('codigo')->sort()
