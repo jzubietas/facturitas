@@ -63,6 +63,7 @@ class AnalisisSituacionCliente_Individual extends Command
       //->where('id',1739) //->where('id',45)
       $progress = $this->output->createProgressBar($clientes->count());
       //$periodo_original=$primer_periodo;
+
       foreach($clientes as $cliente)
       {
 
@@ -211,7 +212,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     if($situacion_antes->activos==0)
                     {
                       $situacion_create->update([
-                        "situacion" => 'RECUPERADO ABANDONO',
+                        "situacion" => 'RECUPERADO RECIENTE',
                         "flag_fp" => '1'
                       ]);
                     }else{
@@ -249,6 +250,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
         $progress->advance();
       }
+
       $this->info("Finish Cargando ");
       $progress->finish();
       $this->info('FIN');
