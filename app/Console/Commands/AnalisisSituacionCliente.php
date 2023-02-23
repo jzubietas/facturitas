@@ -58,8 +58,8 @@ class AnalisisSituacionCliente extends Command
 
 
 
-    $clientes=Cliente::whereIn('tipo',['0','1'])->where('id',45)->orderBy('id','asc')->get();
-    //->where('id',1739)
+    $clientes=Cliente::whereIn('tipo',['0','1'])->orderBy('id','asc')->get();
+    //->where('id',1739) //->where('id',45)
     $progress = $this->output->createProgressBar($clientes->count());
     //$periodo_original=$primer_periodo;
     foreach($clientes as $cliente)
