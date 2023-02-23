@@ -202,7 +202,7 @@ class AnalisisSituacionCliente extends Command
                   break;
                 case 'ABANDONO RECIENTE':
                   $situacion_create->update([
-                    "situacion" => 'RECUPERADO RECIENTE',
+                    "situacion" => 'RECUPERADO ABANDONO',
                     "flag_fp" => '1'
                   ]);
                   break;

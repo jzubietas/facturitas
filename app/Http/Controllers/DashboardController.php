@@ -429,7 +429,7 @@ class DashboardController extends Controller
 
   public function searchCliente(Request $request)
   {
-    $q = $request->get("q");
+    $q = $request->get("q");//915722331
     $clientes = Cliente::query()
       ->with(['user', 'rucs', 'porcentajes'])
       ->where('celular', 'like', '%' . $q . '%')
