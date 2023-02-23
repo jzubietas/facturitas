@@ -23,7 +23,8 @@ class SituacionClientes extends Model implements HasMedia
     'cantidad_pedidos',
     'anulados',
     'activos',
-    'periodo'
+    'periodo',
+    'flag_fp'
   ];
 
 }
