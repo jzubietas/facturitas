@@ -210,7 +210,7 @@ class AnalisisSituacionCliente extends Command
                   if($situacion_antes->activos==0)
                   {
                     $situacion_create->update([
-                      "situacion" => 'RECUPERADO ABANDONO',
+                      "situacion" => 'RECUPERADO RECIENTE',
                       "flag_fp" => '1'
                     ]);
                   }else{
