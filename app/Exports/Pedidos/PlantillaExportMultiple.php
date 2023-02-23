@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Illuminate\Http\Request;
 
-class PlantillaExportMultiple implements WithMultipleSheets
+class PlantillaExportPedidoMultiple implements WithMultipleSheets
 {
     use Exportable;
     protected $anio;

@@ -6,6 +6,7 @@ use App\Exports\Clientes\ClientesSinPedido2MesesAtras;
 use App\Exports\Templates\PlantillaExportBasefriaMultiple;
 use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
+use App\Exports\Templates\PlantillaExportPedidoMultiple;
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
 use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
@@ -177,7 +178,7 @@ class ExcelController extends Controller
     }
     public function clientespedidosExcel(Request $request)
     {
-        return (new PlantillaExportMultiple($request->anio))
+        return (new PlantillaExportPedidoMultiple($request->anio))
             ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
     }
     public function clientesTwoMonthAgoExcel(Request $request)
