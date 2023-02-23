@@ -108,7 +108,7 @@ class PdfController extends Controller
         $p_total_cruzado=$p_total_cruzado+ $p_total;
       }
        /*CABECERA*/
-      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">ASESORES</h5></div>';
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">ASESORES DE LLAMADA</h5></div>';
       $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">RECUPERADO RECIENTE</h5></div>';
       $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">RECUPERADO ABANDONO</h5></div>';
       $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">NUEVO</h5></div>';
