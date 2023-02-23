@@ -381,6 +381,7 @@
 
                 var fd_asesor = new FormData();
                 fd_asesor.append('codigo_pedido', cod_pedido);
+                fd_asesor.append('codigo_cliente', button.data('clienteid'));
 
                 $.ajax({
                     processData: false,
@@ -389,8 +390,15 @@
                     type: 'POST',
                     url: "{{ route('getdireecionentrega') }}",
                     success: function (data) {
-                        //console.log(data)
-                        $("#Direccion_de_entrega").val(data);
+
+                        const datosdevueltos = data.split("|");
+                        console.log(datosdevueltos)
+                        let validadatosdevueltos = datosdevueltos[1];
+                        if (validadatosdevueltos==0){
+                          $("button.btnVerMasPedidos").attr("disabled", true);
+                        }
+                        $("#Direccion_de_entrega").val(datosdevueltos[0]);
+                        //BLOQUEAR ACA
                         //$("#modal-recojo-pedidos").modal("hide");
                         //$('#tablaPrincipal').DataTable().ajax.reload();
                     }
@@ -463,6 +471,7 @@
                     type: 'POST',
                     url: "{{ route('registrar_recojer_pedido') }}",
                     success: function (data) {
+                      console.log(data);
                         $("#modal-recojo-pedidos").modal("hide");
                         $('#tablaPrincipal').DataTable().ajax.reload();
                     }

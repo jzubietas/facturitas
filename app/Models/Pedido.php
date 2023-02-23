@@ -63,7 +63,7 @@ class Pedido extends Model
 
     const ENTREGADO_SIN_ENVIO_CLIENTE = 'ENTREGADO SIN ENVIO - CLIENTE'; // 25
     const ENTREGADO_RECOJO = 'ENTREGADO - RECOJO';//26
-    const ENTREGADO_NUEVO_DIR = 'ENTREGADO NUEVO - COURIER';//28
+    const ENTREGADO_NUEVO_DIR = 'RECOJO CLIENTE - COURIER';//28
 
 
     /**************
