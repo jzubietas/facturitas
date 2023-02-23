@@ -659,13 +659,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
-                [
+                /*[
                     'text' => 'CASI ABANDONO',
                     'route' => 'clientes.abandonos.recientes.abandono',
                     'can' => 'clientes.abandonos.reciente.abandono',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['clientes'],
-                ],
+                ],*/
                 [
                     'text' => 'Abandono',
                     'route' => 'clientes.abandonos',
