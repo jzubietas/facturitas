@@ -15,7 +15,7 @@ class AnalisisSituacionCliente_Individual extends Command
      *
      * @var string
      */
-    protected $signature = 'show:analisis:situacion {cliente_id}';
+    protected $signature = 'show:analisis:situacion {celular}';
 
     /**
      * The console command description.
@@ -41,7 +41,8 @@ class AnalisisSituacionCliente_Individual extends Command
      */
     public function handle()
     {
-      $cliente_id=$this->argument('cliente_id');
+      //$cliente_id=$this->argument('celular');
+      $cliente_id=Cliente::where('celular',$this->argument('celular'))->first()->id;
       //$this->warn("Cargando primer pedido mes anio");
       $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
 
