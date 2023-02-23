@@ -1317,8 +1317,8 @@ margin: 2px;
 
 @media screen and (max-width: 992px){
   .responsive-table{
-    display: flex;
-    flex-wrap: wrap;
+    display: flex !important;
+    flex-wrap: wrap !important;
   }
   .h-50-res{
     height: 50px !important;
@@ -1326,10 +1326,10 @@ margin: 2px;
 }
 @media screen and (max-width: 767px){
   .table-total{
-    overflow: hidden;
+    overflow: hidden !important;
   }
   .scrollbar-x{
-    overflow-x: scroll;
+    overflow-x: scroll !important;
   }
 }
 @media screen and (max-width: 575px){
