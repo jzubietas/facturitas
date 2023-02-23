@@ -133,14 +133,19 @@
       </div>
       {{--FIN-TABLA-DUAL--}}
 
-      <div class="row">
-        <div class="col-md-12">
-          <div id="reporteanalisis"></div>
-        </div>
-      </div>
+
 
 
     </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div id="reporteanalisis"></div>
+      </div>
+    </div>
+  </div>
+
 
     <div class="container-fluid">
         <div class="row">
