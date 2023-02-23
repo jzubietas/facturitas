@@ -17,4 +17,14 @@ class SituacionClientes extends Model implements HasMedia
 
     protected $guarded = ['id'];
 
+  protected $fillable = [
+    'cliente_id',
+    'situacion',
+    'cantidad_pedidos',
+    'anulados',
+    'activos',
+    'periodo',
+    'flag_fp'
+  ];
+
 }

@@ -100,10 +100,38 @@
             </div>
         </div>
     </div>
-  <div class="col-md-12">
-    <div id="reporteanalisis"></div>
-  </div>
 
+  <div class="col-lg-12 " id="contenedor-fullscreen">
+    <div class="d-flex justify-content-center">
+      <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+      <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
+    </div>
+    {{--TABLA DUAL--}}
+    <div class="">
+      <div class=" ">
+        <div class="row">
+          <div class="col-md-6">
+            <div id="meta"></div>
+          </div>
+          <div class="col-md-6">
+            <div id="metas_dp"></div>
+          </div>
+          <div class="col-md-12">
+            <div id="metas_total"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{--FIN-TABLA-DUAL--}}
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div id="reporteanalisis"></div>
+    </div>
+  </div>
 </div>
 
 @section('js-datatables')
@@ -125,6 +153,29 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+      window.cargaNueva = function (entero) {
+        console.log(' '+entero)
+        var fd=new FormData();
+        fd.append('ii',entero);
+        $.ajax({
+          data: fd,
+          processData: false,
+          contentType: false,
+          method: 'POST',
+          url: "{{ route('dashboard.viewMetaTable') }}",
+          success: function (resultado){
+            if(entero==1)
+            {
+              $('#metas_dp').html(resultado);
+            }else if(entero==2){
+              $('#meta').html(resultado);
+            }
+            else if(entero==3){
+              $('#metas_total').html(resultado);
+            }
+          }
+        })
+      }
       window.cargReporteAnalisis = function () {
         var fd=new FormData();
         //fd.append('ii',entero);
@@ -140,8 +191,21 @@
         })
       }
 
+
+      cargaNueva(1);
+      cargaNueva(2);
+      cargaNueva(3);
+
       cargReporteAnalisis();
 
+      setInterval(myTimer, 50000);
+
+
+      function myTimer() {
+        cargaNueva(1);
+        cargaNueva(2);
+        cargaNueva(3);
+      }
       $('a[href$="#myModal"]').on( "click", function() {
         $('#myModal').modal();
       });
