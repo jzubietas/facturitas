@@ -15,7 +15,7 @@ class AnalisisSituacionCliente_Individual extends Command
      *
      * @var string
      */
-    protected $signature = 'show:analisis:situacion {celular}';
+    protected $signature = 'show:analisis:situacion_individual {celular}';
 
     /**
      * The console command description.
