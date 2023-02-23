@@ -58,7 +58,7 @@ class AnalisisSituacionCliente extends Command
 
 
 
-    $clientes=Cliente::whereIn('tipo',['0','1'])->where('id',1739)->orderBy('id','asc')->get();
+    $clientes=Cliente::whereIn('tipo',['0','1'])->where('id',45)->orderBy('id','asc')->get();
     //->where('id',1739)
     $progress = $this->output->createProgressBar($clientes->count());
     //$periodo_original=$primer_periodo;
@@ -171,7 +171,7 @@ class AnalisisSituacionCliente extends Command
               //$this->warn("es igual al primer periodo -".$cont_mes.' - SERA NUEVO ');
               $situacion_create->update([
                 "situacion" => 'NUEVO',
-                "flag_fp" => '1'
+                "flag_fp" => '0'
               ]);
             }else{
               //$this->warn('Mes antes '.$mes_antes->format('Y-m'));
@@ -183,7 +183,7 @@ class AnalisisSituacionCliente extends Command
                 case 'BASE FRIA':
                   $situacion_create->update([
                     "situacion" => 'NUEVO',
-                    "flag_fp" => '1'
+                    "flag_fp" => '0'
                   ]);
                   break;
                 case 'RECUPERADO RECIENTE':
@@ -225,12 +225,15 @@ class AnalisisSituacionCliente extends Command
 
             }
           }
-
+          $this->warn('i '.$i);
+          $this->warn('diff '.$diff);
           if($i==($diff-1))
           {
+            $this->warn('ultimo mes ');
             //update clientes
             $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-            $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+            $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+            $this->warn($situacion_actual->situacion);
             Cliente::where('id',$cliente->id)->update([
               'situacion'=>$situacion_actual->situacion
             ]);
