@@ -589,24 +589,12 @@ class SobreController extends Controller
         $sustento_recojo = $request->sustento_recojo;
         $pedido_concatenado = explode(",", $request->pedido_concatenado);
 
-        /*$recojo_cliente = $request->recojo_cliente;
-        $recojo_pedido = $request->recojo_pedido;
-        $recojo_fecha = $request->recojo_fecha;
-        $recojo_distrito = $request->recojo_distrito;*/
-
-        /*$recojo_pedido_quienrecibe_nombre = $request->recojo_pedido_quienrecibe_nombre;
-        $recojo_pedido_quienrecibe_celular = $request->recojo_pedido_quienrecibe_celular;
-        $recojo_pedido_direccion = $request->recojo_pedido_direccion;
-        $recojo_pedido_referencia = $request->recojo_pedido_referencia;
-        $recojo_pedido_observacion = $request->recojo_pedido_observacion;
-        $pedido_concatenado = explode(",", $request->pedido_contatenado);*/
-
-        //return $request->all();
+        $contar=0;
         foreach ($pedido_concatenado as $pedidoid) {
             $pedido = Pedido::where("id", $pedidoid)->first();
-            if ($pedido) {
-                $dg = $pedido->direccion_grupo;
-                if ($dg) {
+            if ($pedido) {$contar++;
+                $dirgrupo = $pedido->direccion_grupo;
+                if ($dirgrupo) {$contar++;
                     PedidoMovimientoEstado::create([
                         'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_INT,
                         'fecha' => now(),
@@ -635,8 +623,6 @@ class SobreController extends Controller
                             'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
                         ))
                     ]);
-                    //$env_zona = Distrito::where('distrito', $recojo_distrito)->whereIn('provincia', ['LIMA', 'CALLAO'])->first()->zona;
-
                     $pedido->update([
                         'direccion_grupo' => null,
                         'destino' => 'LIMA',
@@ -660,24 +646,13 @@ class SobreController extends Controller
                         'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
                     ]);
 
-                    DireccionGrupo::restructurarCodigos($dg);
                     GrupoPedido::createGroupByPedido($pedido, true, true);
 
 
                 }
             }
         }
-        return response()->json(['html' => 1]);
-        /*return $pedido;
-          $pedido = Pedido::where('estado_sobre', "1")->where("estado", 1)->where("id", $recojo_pedido)->where("cliente_id", $recojo_cliente)->first();
-          if ($pedido) {
-              //mandar a sobre con direccion
-               else {
-                  return response()->json(['html' => 0]);
-              }
-          } else {
-              return response()->json(['html' => 0]);
-          }*/
+        return response()->json(['html' => 1,'direccion_grupo' => $dirgrupo,'contador'=>$contar]);
     }
 
 

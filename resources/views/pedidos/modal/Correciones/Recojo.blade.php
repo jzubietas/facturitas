@@ -32,7 +32,7 @@
 
                     </div>
                     <div class="col-md-2">
-                      <button type="button" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn-sm btn btn-primary" data-target="#modal-listclientes" >+</button>
+                      <button type="button" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn-sm btn btn-primary btnVerMasPedidos" data-target="#modal-listclientes" >+</button>
                     </div>
                   </div>
                   <div id="direcciones_add">
