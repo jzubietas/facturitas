@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Jobs\PostCreatePedido;
 use App\Jobs\PostUpdatePedido;
+use App\Jobs\PostUpdateSituacion;
 use App\Models\Cliente;
 use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class PedidoObserver
     {
         \Log::info("PostCreatePedido -> ".$pedido->cliente_id);
         PostCreatePedido::dispatchSync($pedido->cliente_id);
+        PostUpdateSituacion::dispatchSync($pedido->cliente_id);
     }
 
     /**
