@@ -404,15 +404,15 @@
 
             $(document).on("submit", "#form-recojo", function (event) {
                 event.preventDefault();
-                let direccion_recojo = $("#direccion_recojo").val();
                 let Nombre_recibe = $("#nombre_recojo").val();
                 let celular_id = $("#celular_recojo").val();
+                let direccion_recojo = $("#direccion_recojo").val();
                 let referencia_recojo = $("#referencia_recojo").val();
                 let observacion_recojo= $("#observacion_recojo").val();
                 let gm_link= $("#gmlink_recojo").val();
                 let direccion_entrega = $("#Direccion_de_entrega").val();
                 let sustento_recojo = $("#sustento-recojo").val();
-                let pedido_contatenado = $("#pedido_contatenado").val();
+                let pedido_concatenado = $("#pedido_concatenado").val();
 
 
                 //validaciones
@@ -446,15 +446,15 @@
 
 
                 var fd_courier = new FormData();
-                fd_courier.append('direccion_entrega', direccion_entrega);
-                fd_courier.append('sustento_recojo', sustento_recojo);
-                fd_courier.append('direccion_recojo', direccion_recojo);
                 fd_courier.append('Nombre_recibe', Nombre_recibe);
                 fd_courier.append('celular_id', celular_id);
+                fd_courier.append('direccion_recojo', direccion_recojo);
                 fd_courier.append('referencia_recojo', referencia_recojo);
                 fd_courier.append('observacion_recojo', observacion_recojo);
                 fd_courier.append('gm_link', gm_link);
-                fd_courier.append('pedido_contatenado', pedido_contatenado);
+                fd_courier.append('direccion_entrega', direccion_entrega);
+                fd_courier.append('sustento_recojo', sustento_recojo);
+                fd_courier.append('pedido_concatenado', pedido_concatenado);
 
                 $.ajax({
                     processData: false,
