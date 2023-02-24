@@ -3198,7 +3198,8 @@ class PedidoController extends Controller
           'dp.nombre_empresa',
         ]
       )
-      ->where('pedidos.cliente_id', $idrequest)->where('direccion_grupo',$direccion_grupo);
+      ->where('pedidos.cliente_id', $idrequest)->where('pedidos.condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);
+        //->where('pedidos.cliente_id', $idrequest)->where('direccion_grupo',$direccion_grupo);
       //->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito)//;
     if($request->pedidosNotIn){
       $pedidos = $pedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
@@ -3230,8 +3231,12 @@ class PedidoController extends Controller
           'dp.nombre_empresa',
         ]
       )
-      ->where('pedidos.cliente_id', $request->codigo_cliente)->where('direccion_grupo',$pedido->direccion_grupo)
-      ->whereNotIn('pedidos.id',[$request->pedidosNotIn])->count();
+      //->where('pedidos.cliente_id', $request->codigo_cliente)->where('direccion_grupo',$pedido->direccion_grupo)
+      ->where('pedidos.cliente_id', $request->codigo_cliente)
+      ->where('condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);
+    if (!!$request->pedidosNotIn)
+      $totalpedidos =  $totalpedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
+      $totalpedidos =  $totalpedidos->count();
 
     return $result_direccion .'|'.$totalpedidos;
 

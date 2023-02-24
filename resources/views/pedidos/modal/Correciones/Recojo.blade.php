@@ -13,24 +13,25 @@
                   <input type="hidden" name="opcion" value="4">
 
                   <div class="row clase">
-                    <div class="col-md-6">
+                    <div class="col-md-10">
                       <div class="form-row">
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="clienteid" >
+                          <input type="hidden" class="form-control col-md-10" id="clienteid" >
                           <input type="text" class="form-control" id="clientenombre" readonly >
                         </div>
                       </div>
 
                     </div>
-                    <div class="col-md-4">
+
+                    <div class="col-0">
                       <div class="form-row">
                         <div class="form-group">
                           <input type="hidden" class="form-control" id="pedidoid">
-                          <input type="text" class="form-control" id="pedidocodigo" readonly >
+                          <input type="hidden" class="form-control" id="pedidocodigo" readonly >
                         </div>
                       </div>
-
                     </div>
+
                     <div class="col-md-2">
                       <button type="button" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn-sm btn btn-primary btnVerMasPedidos" data-target="#modal-listclientes" >+</button>
                     </div>

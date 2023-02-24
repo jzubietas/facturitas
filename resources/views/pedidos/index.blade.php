@@ -495,8 +495,8 @@
                 tabla_pedidos.destroy();
                 tabla_pedidos = $('#tabla-listar-clientes').DataTable({
                     responsive: true,
-                    "bPaginate": false,
-                    "bFilter": false,
+                    "bPaginate": true,
+                    "bFilter": true,
                     "bInfo": false,
                     'ajax': {
                         url: "{{ route('cargar.recojolistclientes') }}",
@@ -1769,7 +1769,7 @@ ${data.foto3 ? `
         /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
 
-            $.fn.dataTable.ext.search.push(
+/*            $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
                     var max = $('#max').datepicker("getDate");
@@ -1791,7 +1791,7 @@ ${data.foto3 ? `
                     }
                     return false;
                 }
-            );
+            );*/
 
 
             $("#min").datepicker({
