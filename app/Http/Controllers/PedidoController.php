@@ -164,8 +164,8 @@ class PedidoController extends Controller
                     'dp.saldo as diferencia',
                     'direccion_grupos.motorizado_status'
                 ]
-            );
-        //->where('pedidos.condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);//solo para testeo de recojo
+            )
+        ->where('pedidos.condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);//solo para testeo de recojo
 
 
         if (Auth::user()->rol == "Llamadas") {
