@@ -242,6 +242,24 @@ class AnalisisSituacionCliente_Individual extends Command
                       "situacion" => 'RECURRENTE',
                       "flag_fp" => '1'
                     ]);
+
+                    $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                    $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                    $this->warn($situacion_antes);
+
+                    if($situacion_antes->flag_fp==0)
+                    {
+                      $situacion_create->update([
+                        "situacion" => 'RECUPERADO ABANDONO',
+                        "flag_fp" => '1'
+                      ]);
+                    }
+                    else if($situacion_antes->flag_fp==1)
+                    {
+                      $situacion_create->update([
+                        "situacion" => 'ABANDONO',
+                      ]);
+                    }
                     break;
                   case 'ABANDONO':
                     $this->info('SITUACION ANTES NUEVO');
@@ -270,14 +288,20 @@ class AnalisisSituacionCliente_Individual extends Command
                     $this->info('contador anulados '.$situacion_periodo->anulados);
                     $this->info('contador activos '.$situacion_periodo->activos);
 
-                    if ($situacion_periodo->cantidad_pedidos > 0 && $situacion_periodo->activos == 0 ) {
-                      $situacion_antes_recuperado_abandono=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-                      if ($situacion_antes_recuperado_abandono->situacion == 'ABANDONO RECIENTE' && $situacion_antes_recuperado_abandono->activos == 0){
-                        $situacion_create->update([
-                          "situacion" => 'ABANDONO',
-                        ]);
-                      }
+                    if($situacion_antes->flag_fp==0)
+                    {
+                      $situacion_create->update([
+                        "situacion" => 'RECUPERADO ABANDONO',
+                        "flag_fp" => '1'
+                      ]);
                     }
+                    else if($situacion_antes->flag_fp==1)
+                    {
+                      $situacion_create->update([
+                        "situacion" => 'ABANDONO',
+                      ]);
+                    }
+
                     break;
                   case 'RECURRENTE':
                     $this->info('SITUACION ANTES RECURRENTE');
@@ -295,24 +319,21 @@ class AnalisisSituacionCliente_Individual extends Command
                     $this->info('contador anulados '.$situacion_periodo->anulados);
                     $this->info('contador activos '.$situacion_periodo->activos);
 
-                    if($situacion_antes->activos==0)
+                    if($situacion_antes->flag_fp==0)
                     {
-                      if ($situacion_periodo->cantidad_pedidos > 0 && $situacion_periodo->activos == 0 ) {
-                        $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-                        if ($situacion_antes->situacion == 'RECURRENTE' && $situacion_antes->activos == 0){
-                          $situacion_create->update([
-                            "situacion" => 'ABANDONO RECIENTE',
-                          ]);
-                        }
-                      }
-
-                    }else{
-                      $this->warn('aquiiiiii: '.$situacion_antes->activos);
+                      //tomar cantidad_pedidos
                       $situacion_create->update([
                         "situacion" => 'RECURRENTE',
                         "flag_fp" => '1'
                       ]);
+                    }else if($situacion_antes->flag_fp==1)
+                    {
+                      //tomar activos
+                      $situacion_create->update([
+                        "situacion" => 'ABANDONO RECIENTE',
+                      ]);
                     }
+
                     break;
                   default:
                     $this->info('SITUACION ANTES DEFAULT');
