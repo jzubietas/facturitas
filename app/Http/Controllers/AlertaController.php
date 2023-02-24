@@ -39,12 +39,39 @@ class AlertaController extends Controller
         return response();
     }
     public function listtablecontactos(Request $request){
-      $detallecontactos = DetalleContactos::orderBy('created_at', 'DESC');
+      if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
+        $detallecontactos = DetalleContactos::whereIn('guardado',[0,1])
+          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC");
+      }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
+        $detallecontactos = DetalleContactos::where('guardado',0)
+          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC");
+      }
+
+
       return Datatables::of(DB::table($detallecontactos))
         ->addIndexColumn()
         ->addColumn('action', function ($detallecontactos) {
-          $btn = '';
-          return $btn;
+          $btn = [];
+          $deshabilitar_guardado="";
+          $deshabilitar_confirmado="";
+          if ($detallecontactos->guardado==0){
+            $deshabilitar_guardado="enabled ";
+            $deshabilitar_confirmado="disabled";
+          }else if ($detallecontactos->guardado==1 && $detallecontactos->confirmado==0){
+            $deshabilitar_guardado="disabled";
+            $deshabilitar_confirmado="enabled";
+          }
+          $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton" style="display: flex; grid-gap: 2px;">';
+          if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
+            $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
+            $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnConfirmado" '.$deshabilitar_confirmado.'><i class="fa fa-check danger mr-8"></i></button>';
+          }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
+            $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
+          }
+
+
+          $btn[] = '</ul></div>';
+          return join('', $btn);
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -53,35 +80,36 @@ class AlertaController extends Controller
     public function store(Request $request)
     {
        //return $request->all();
-      /*$tipo = $request->tipo;
-      if (!in_array($tipo, ['notice', 'success', 'info', 'error'])) {
-          $tipo = 'notice';
-      }
-      $users = [auth()->id()];
-      if ($request->user_add_role) {
-          $users = User::rol($request->user_add_role)->activo()->pluck('id');
-      }
-      $alertas = [];
-      foreach ($users as $id) {
-          $alertas [] = Alerta::create([
-              'user_id' => $id,
-              'tipo' => $tipo,
-              'subject' => $request->title,
-              'message' => $request->nota,
-              'date_at' => $request->fecha,
-              'date_at' => $request->fecha,
-          ]);
-      }*/
       $cliente=Cliente::where('id',$request->cliente_id)->first();
       $asesor=User::where('id',$request->asesor_id)->first();
       $detallecontactos=DetalleContactos::create([
         'codigo_asesor' => $request->asesor_id,
-        'nombre_asesor' => $asesor->name,
-        'celular' => $cliente->celular,
+        'nombre_asesor' => $asesor->identificador,
+        'celular' => $cliente->celular."-". $cliente->icelular,
         'codigo_cliente' => $cliente->id,
         'nombres_cliente' => $cliente->nombre,
         'nombre_contacto' => $request->contacto_nombre,
       ]);
         return $detallecontactos;
     }
+
+  public function guardado(Request $request)
+  {
+    //return $request->all();
+    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
+      'guardado' => true,
+      'confirmado' => false,
+    ]);
+    return $detallecontactos;
+  }
+
+  public function confirmado(Request $request)
+  {
+    //return $request->all();
+    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
+      'guardado' => true,
+      'confirmado' => true,
+    ]);
+    return $detallecontactos;
+  }
 }
