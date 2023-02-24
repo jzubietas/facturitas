@@ -19,15 +19,6 @@
             </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Nombre Asesor</td>
-                <td>999999</td>
-                <td>Nombres del Cliente</td>
-                <td>
-                  <button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Guardado</button>
-                  <button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Confirmar</button>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
