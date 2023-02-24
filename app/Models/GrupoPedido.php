@@ -118,16 +118,21 @@ class GrupoPedido extends Model
                 ->where('distrito', '=', data_get($array, 'distrito'))
                 ->whereIn('provincia', ['LIMA', 'CALLAO'])
                 ->first();
+            /*PEDIDO*/
             $data = [
                 "zona" => data_get($array, 'zona') ?? 'n/a',
                 "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
                 'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
                 'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
                 'cliente_recibe' => data_get($array, 'cliente_recibe') ?? 'n/a',//olva
+              'cod_recojo' => '5',
+              'env_sustento_recojo' => '6'
+
             ];
             $data2 = [
                 'referencia' => data_get($array, 'referencia') ?: 'n/a',//olva
                 'telefono' => data_get($array, 'telefono') ?? 'n/a',//n/a
+
             ];
             if ($createAnother) {
                 return GrupoPedido::create(array_merge($data, $data2));
