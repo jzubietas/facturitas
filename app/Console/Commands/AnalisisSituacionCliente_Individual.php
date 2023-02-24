@@ -126,10 +126,13 @@ class AnalisisSituacionCliente_Individual extends Command
                 ]);
               }
               else{
-                //$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
                 $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-                //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
+                $this->warn($situacion_antes);
+
+                $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
                 $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                $this->info($situacion_periodo);
 
                 switch($situacion_antes->situacion)
                 {
@@ -195,21 +198,21 @@ class AnalisisSituacionCliente_Individual extends Command
                   "situacion" => 'NUEVO',
                   "flag_fp" => '0'
                 ]);
-
               }
-
               else{
-                $this->warn('año: '.$where_anio);
-                $this->warn('mes: '.$where_mes);
-                //$this->warn('Mes antes '.$mes_antes->format('Y-m'));
+                $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
                 $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                $this->warn($situacion_antes);
+
+
                 $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                $this->warn('MES ACTUAL -> '.$mes_actual->format('Y-m'). $cliente_id);
+                $this->info($mes_actual);
+
+                $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
                 $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
-                $this->warn('MES ANTES -> ' .$mes_antes);
-                $this->info('SITUACION DEL MES ANTERIOR -> '.$situacion_antes->situacion);
-                $this->info('SITUACION ACTUAL -> '.$situacion_actual->situacion);
+                $this->info($situacion_actual);
+
+
                 switch($situacion_antes->situacion)
                 {
                   case 'BASE FRIA':

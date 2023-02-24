@@ -119,7 +119,9 @@ class AnalisisSituacionCliente extends Command
                 "situacion" => 'BASE FRIA',
                 "flag_fp" => '0'
               ]);
-            }else{
+            }
+            else
+            {
               //$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
               $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
               //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
@@ -164,7 +166,8 @@ class AnalisisSituacionCliente extends Command
                 default:break;
               }
             }
-          }else{
+          }
+          else{
             if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
             {
               //primer mes y contador >0
@@ -173,7 +176,8 @@ class AnalisisSituacionCliente extends Command
                 "situacion" => 'NUEVO',
                 "flag_fp" => '0'
               ]);
-            }else{
+            }
+            else{
               //$this->warn('Mes antes '.$mes_antes->format('Y-m'));
               $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
               //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
