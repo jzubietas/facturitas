@@ -22,7 +22,7 @@ class PlantillaExportPedidoMultiple implements WithMultipleSheets
     {
         return [
             new PageclienteSituacion(),
-           new PageclienteinfoNoviembre(),
+            new PageclienteinfoNoviembre(),
             new PageclienteinfoDiciembre(),
             new PageclienteinfoEnero2023(),
             new PageclienteinfoFebrero2023(),

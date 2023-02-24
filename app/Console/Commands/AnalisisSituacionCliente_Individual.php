@@ -101,7 +101,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
             $situacion_create=SituacionClientes::create([
               'cliente_id'=>$cliente->id,
-              'situacion'=>'',
+              'situacion'=>'5',
               'cantidad_pedidos'=>$cont_mes,
               'anulados'=>$cont_mes_anulado,
               'activos'=>$cont_mes_activo,
@@ -200,57 +200,76 @@ class AnalisisSituacionCliente_Individual extends Command
                 ]);
               }
               else{
-                $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
-                $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-                $this->warn($situacion_antes);
-
-
-                $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                $this->info($mes_actual);
-
-                $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
-                $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                $this->info($situacion_actual);
-
-
                 switch($situacion_antes->situacion)
                 {
                   case 'BASE FRIA':
+                    $this->info('SITUACION ANTES BASE FRIA');
                     $situacion_create->update([
                       "situacion" => 'NUEVO',
                       "flag_fp" => '0'
                     ]);
+
+                    $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                    $this->info($mes_actual);
+
+                    $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+                    $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                    $this->info($situacion_periodo);
+
+                    //pintar contador  anulados y activos
+                    $this->info('contador total '.$situacion_periodo->cantidad_pedidos);
+                    $this->info('contador anulados '.$situacion_periodo->anulados);
+                    $this->info('contador activos '.$situacion_periodo->activos);
+
                     break;
                   case 'RECUPERADO RECIENTE':
+                    $this->info('SITUACION ANTES RECUPERADO RECIENTE');
                     $situacion_create->update([
                       "situacion" => 'RECURRENTE',
                       "flag_fp" => '1'
                     ]);
                     break;
-                  case 'RECUPERADO ABANDONO': $this->warn('MENSAJE RECUPERADO');
+                  case 'RECUPERADO ABANDONO':
+                    $this->info('SITUACION ANTES RECUPERADO ABANDONO');
                     $situacion_create->update([
                       "situacion" => 'RECURRENTE',
                       "flag_fp" => '1'
                     ]);
                     break;
                   case 'NUEVO':
+                    $this->info('SITUACION ANTES NUEVO');
                     $situacion_create->update([
                       "situacion" => 'RECURRENTE',
                       "flag_fp" => '1'
                     ]);
                     break;
                   case 'ABANDONO':
+                    $this->info('SITUACION ANTES NUEVO');
                     $situacion_create->update([
                       "situacion" => 'RECUPERADO ABANDONO',
                       "flag_fp" => '1'
                     ]);
                     break;
                   case 'ABANDONO RECIENTE':
-
+                    $this->info('SITUACION ANTES ABANDONO RECIENTE');
                     $situacion_create->update([
                       "situacion" => 'RECUPERADO ABANDONO',
                       "flag_fp" => '1'
                     ]);
+
+                    $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                    $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                    $this->warn($situacion_antes);
+
+                    $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+                    $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                    $this->info($situacion_periodo);
+
+                    //pintar contador  anulados y activos
+                    $this->info('contador total '.$situacion_periodo->cantidad_pedidos);
+                    $this->info('contador anulados '.$situacion_periodo->anulados);
+                    $this->info('contador activos '.$situacion_periodo->activos);
+
                     if ($situacion_periodo->cantidad_pedidos > 0 && $situacion_periodo->activos == 0 ) {
                       $situacion_antes_recuperado_abandono=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
                       if ($situacion_antes_recuperado_abandono->situacion == 'ABANDONO RECIENTE' && $situacion_antes_recuperado_abandono->activos == 0){
@@ -261,12 +280,26 @@ class AnalisisSituacionCliente_Individual extends Command
                     }
                     break;
                   case 'RECURRENTE':
-                    $this->warn('aquiiiiii: '.$situacion_antes->activos);
+                    $this->info('SITUACION ANTES RECURRENTE');
+
+                    $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                    $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                    $this->warn($situacion_antes);
+
+                    $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+                    $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                    $this->info($situacion_periodo);
+
+                    //pintar contador  anulados y activos
+                    $this->info('contador total '.$situacion_periodo->cantidad_pedidos);
+                    $this->info('contador anulados '.$situacion_periodo->anulados);
+                    $this->info('contador activos '.$situacion_periodo->activos);
+
                     if($situacion_antes->activos==0)
                     {
                       if ($situacion_periodo->cantidad_pedidos > 0 && $situacion_periodo->activos == 0 ) {
-                        $situacion_antes_recuperado_abandono=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-                        if ($situacion_antes_recuperado_abandono->situacion == 'RECURRENTE' && $situacion_antes_recuperado_abandono->activos == 0){
+                        $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                        if ($situacion_antes->situacion == 'RECURRENTE' && $situacion_antes->activos == 0){
                           $situacion_create->update([
                             "situacion" => 'ABANDONO RECIENTE',
                           ]);
@@ -281,7 +314,9 @@ class AnalisisSituacionCliente_Individual extends Command
                       ]);
                     }
                     break;
-                  default:break;
+                  default:
+                    $this->info('SITUACION ANTES DEFAULT');
+                    break;
                 }
 
               }
