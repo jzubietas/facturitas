@@ -78,7 +78,7 @@ class RoleSeeder extends Seeder
 
         //MODULO ADMINISTRACION
         Permission::create(['name' => 'administracion.modulo', 'description' => 'MODULO ADMINISTRACION', 'modulo' => 'moduloAdministracion'])->assignRole($admin);
-        
+
         //ADMINISTRACIONES
         Permission::create(['name' => 'administracion.porrevisar', 'description' => 'Ver Pagos Por Revisar', 'modulo' => 'Administracion'])->assignRole($admin);
         Permission::create(['name' => 'administracion.aprobados', 'description' => 'Ver Pagos Aprobados', 'modulo' => 'Administracion'])->assignRole($admin);
@@ -102,8 +102,8 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'base_fria.create', 'description' => 'Crear Base fria', 'modulo' => 'Basefria'])->assignRole($admin);
         Permission::create(['name' => 'base_fria.edit', 'description' => 'Editar Base fria', 'modulo' => 'Basefria'])->assignRole($admin);
         Permission::create(['name' => 'base_fria.destroy', 'description' => 'Eliminar Base fria', 'modulo' => 'Basefria'])->assignRole($admin);
-        Permission::create(['name' => 'base_fria.updatebf', 'description' => 'Convertir Base fria', 'modulo' => 'Basefria'])->assignRole($admin);        
-        Permission::create(['name' => 'base_fria.exportar', 'description' => 'Exportar Base fria', 'modulo' => 'Basefria'])->assignRole($admin);        
+        Permission::create(['name' => 'base_fria.updatebf', 'description' => 'Convertir Base fria', 'modulo' => 'Basefria'])->assignRole($admin);
+        Permission::create(['name' => 'base_fria.exportar', 'description' => 'Exportar Base fria', 'modulo' => 'Basefria'])->assignRole($admin);
 
         //MODULO REPORTES
         Permission::create(['name' => 'reporte.modulo', 'description' => 'MODULO REPORTES', 'modulo' => 'moduloReportes'])->assignRole($admin);
