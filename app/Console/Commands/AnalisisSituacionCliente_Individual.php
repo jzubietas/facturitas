@@ -258,6 +258,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     {
                       $situacion_create->update([
                         "situacion" => 'ABANDONO',
+                        "flag_fp" => '1'
                       ]);
                     }
                     break;
