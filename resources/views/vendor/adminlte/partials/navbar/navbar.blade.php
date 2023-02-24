@@ -20,7 +20,7 @@
         <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
           <button class="nav-link btn btn-outline-info btn-sm  font-18 border-0 font-weight-bold btnLlamadas"
                   data-toggle="modal" data-target="#modal-llamadas-1" type="button">
-            <i class="fas fa-users text-blue" aria-hidden="true" ></i>
+            <i class="fas fa-users text-blue btnLlamadasCont" aria-hidden="true" ></i>
           </button>
         </li>
       @endif

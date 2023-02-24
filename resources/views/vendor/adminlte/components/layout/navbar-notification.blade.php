@@ -173,7 +173,7 @@
                             insertIconMenu("i.dot_contador_sobres_devueltos", '.dot-notify.noti-side', data.contador_sobres_devueltos)
 
                             insertDotMenu("i.dot_encargado_tienda_agente_count", '.dot-notify.noti-side', data.contador_encargado_tienda_agente)
-
+                            insertDotMenu("i.btnLlamadasCont", '.dot-notify.noti-side', data.contador_contactos_registrados)
                             $("#alert-authorization").html(data.authorization_courier)
 
                             showAlerts(data)
