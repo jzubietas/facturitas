@@ -932,11 +932,6 @@ Enviar</button>
             });
             datatableentregado = $('#tablaEntregado').DataTable({
                 dom: '<"top"i>rt<"bottom"lp><"clear">',
-                responsive: {
-                    details: {
-                        renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
-                    }
-                },
                 lengthChange: false,
                 processing: true,
                 stateSave: false,
@@ -1067,11 +1062,6 @@ Enviar</button>
             });
             datatablenocontesto = $('#tablaNocontesto').DataTable({
                 dom: '<"top"i>rt<"bottom"lp><"clear">',
-                responsive: {
-                    details: {
-                        renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
-                    }
-                },
                 lengthChange: false,
                 processing: true,
                 stateSave: false,
@@ -1202,11 +1192,6 @@ Enviar</button>
             });
             datatableobservado = $('#tablaObservado').DataTable({
                 dom: '<"top"i>rt<"bottom"lp><"clear">',
-                responsive: {
-                    details: {
-                        renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
-                    }
-                },
                 lengthChange: false,
                 processing: true,
                 stateSave: false,
