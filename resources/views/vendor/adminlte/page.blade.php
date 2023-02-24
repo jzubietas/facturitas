@@ -95,53 +95,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            window.ocultar_div_modal1 = function () {
-                console.log("ocultar div")
-                $("#op-1-row").hide();
-                $("#form-op-1-row input").val("");
-                $("#op-2-row").hide();
-                $("#form-op-2-row input").val("");
-                $("#op-3-row").hide();
-                $("#form-op-3-row input").val("");
-                $("#op-4-row").hide();
-                $("#form-op-4-row input").val("");
-            }
 
-            //btn_componente-1
-            $('#modal-annuncient-1').on('show.bs.modal', function (event) {
-                ocultar_div_modal1();
-                $("#opciones_modal1")
-                    .html("")
-                    .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
-                    .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
-                    .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
-                    //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
-                    .selectpicker("refresh")
-            })
-
-
-          $('#btn_llamadas-1').on('show.bs.modal', function (event) {
-            ocultar_div_modal1();
-            tblListadoLlamadas.destroy();
-            tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
-              responsive: true,
-              "bPaginate": false,
-              "bFilter": false,
-              "bInfo": false,
-              'ajax': {
-                url: "{{ route('alertas.listtablecontactos') }}",
-                "type": "get",
-              },
-              columns: [
-                {data: 'nombre_asesor', name: 'nombre_asesor',sWidth: '40%',},
-                {data: 'celular', name: 'celular',sWidth: '10%',},
-                {data: 'nombres_cliente', name: 'nombre_cliente',sWidth: '10%',},
-                {data: 'action', name: 'action',sWidth: '10%',},
-              ],
-              order: [[ 1, 'asc' ]]
-            });
-
-          })
           tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
             responsive: true,
             "bPaginate": false,
@@ -185,6 +139,57 @@
               }
             }
           });
+
+            window.ocultar_div_modal1 = function () {
+                console.log("ocultar div")
+                $("#op-1-row").hide();
+                $("#form-op-1-row input").val("");
+                $("#op-2-row").hide();
+                $("#form-op-2-row input").val("");
+                $("#op-3-row").hide();
+                $("#form-op-3-row input").val("");
+                $("#op-4-row").hide();
+                $("#form-op-4-row input").val("");
+            }
+
+            //btn_componente-1
+            $('#modal-annuncient-1').on('show.bs.modal', function (event) {
+                ocultar_div_modal1();
+                $("#opciones_modal1")
+                    .html("")
+                    .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
+                    .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
+                    .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
+                    //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
+                    .selectpicker("refresh")
+            })
+
+
+          $('#modal-llamadas-1').on('show.bs.modal', function (event) {
+            //ocultar_div_modal1();
+            tblListadoLlamadas.destroy();
+            console.log("adssd")
+            tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
+              responsive: true,
+              "bPaginate": false,
+              "bFilter": false,
+              "bInfo": false,
+              'ajax': {
+                url: "{{ route('alertas.listtablecontactos') }}",
+                "type": "get",
+              },
+              columns: [
+                {data: 'nombre_asesor', name: 'nombre_asesor',sWidth: '40%',},
+                {data: 'celular', name: 'celular',sWidth: '10%',},
+                {data: 'nombres_cliente', name: 'nombre_cliente',sWidth: '10%',},
+                {data: 'action', name: 'action',sWidth: '10%',},
+              ],
+              //order: [[ 1, 'asc' ]]
+            });
+            console.log("paso 2")
+
+          })
+
             $(document).on("change", "#opciones_modal1", function () {
                 let value = $(this).val();
                 ocultar_div_modal1();
