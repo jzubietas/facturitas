@@ -517,7 +517,7 @@ class NotificationsController extends Controller
         }
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
         $contador_encargado_tienda_agente =$pedidos_provincia->count();
-
+      $detallescontactos =0;
       if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
         $detallescontactos = DetalleContactos::whereIn('guardado',[0,1])
           ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
