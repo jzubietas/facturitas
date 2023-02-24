@@ -28,6 +28,7 @@
 @section('body')
 
     @include("layouts.modal.modal1")
+    @include("layouts.modal.modal2")
     <div class="wrapper">
 
         {{-- Preloader Animation --}}
@@ -111,6 +112,73 @@
                     //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
                     .selectpicker("refresh")
             })
+
+
+          $('#btn_llamadas-1').on('show.bs.modal', function (event) {
+            ocultar_div_modal1();
+            /*$("#opciones_modal1")
+              .html("")
+              .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
+              .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
+              .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
+              //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
+              .selectpicker("refresh")*/
+            $('#tablaListadoLlamadas').DataTable().clear().destroy();
+
+            $('#tablaListadoLlamadas').DataTable({
+              processing: true,
+              serverSide: true,
+              searching: true,
+              "order": [
+                [0, "desc"]
+              ],
+
+              "createdRow": function (row, data, dataIndex) {
+
+              },
+              "autoWidth": false,
+              rowCallback: function (row, data, index) {
+              },
+              columns: [
+                {
+                  //data: 'id',
+                  name: 'id',
+                  sWidth: '10%'
+                },
+                {
+                  //data: 'a_2021_11',
+                  name: 'a_2021_11',
+                  sWidth: '20%',
+                },
+                {
+                  //data: 's_2021_11',
+                  name: 's_2021_11',
+                  sWidth: '20%',
+                },
+                {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+              ],
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay informaciÃ³n",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+                }
+              },
+            });
+          })
 
             $(document).on("change", "#opciones_modal1", function () {
                 let value = $(this).val();
@@ -502,7 +570,7 @@
                             self.setContent(`<form class="p-2" style="height: 35vh">
 <div class="row">
 <div class="form-group col-10">
-<label>Cliente</label>
+<label>Cliente </label>
 <select type="text" class="form-control" name="client_id">${data.html}</select>
 </div>
 <div class="form-group col-12">
