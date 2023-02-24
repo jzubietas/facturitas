@@ -25,7 +25,7 @@ class PageclienteinfoFebrero2023 extends Export implements WithColumnFormatting,
                 ,'clientes.dni'
                 ,'clientes.icelular'
                 ,'clientes.celular'
-                ,DB::raw(" (select a.s_2023_02 from listado_resultados a where a.id=clientes.id ) as situacion ")
+                ,'clientes.situacion'
                 ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and  dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
             )
             ->where('clientes.estado', '1')
