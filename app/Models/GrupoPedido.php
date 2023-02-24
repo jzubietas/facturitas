@@ -13,6 +13,22 @@ class GrupoPedido extends Model
 
     protected $guarded = ['id'];
 
+  protected $fillable = [
+    'id',
+    'zona',
+    'provincia',
+    'distrito',
+    'direccion',
+    'referencia',
+    'cliente_recibe',
+    'telefono',
+    'created_at',
+    'updated_at',
+    'deleted_at',
+    'cod_recojo',
+    'env_sustento_recojo',
+  ];
+
     public function pedidos()
     {
         return $this->belongsToMany(Pedido::class, 'grupo_pedido_items')->withPivot([

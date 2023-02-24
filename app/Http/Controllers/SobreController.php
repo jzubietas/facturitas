@@ -590,6 +590,7 @@ class SobreController extends Controller
         $pedido_concatenado = explode(",", $request->pedido_concatenado);
 
         $contar=0;
+        $dirgrupo=0;
         foreach ($pedido_concatenado as $pedidoid) {
             $pedido = Pedido::where("id", $pedidoid)->first();
             if ($pedido) {$contar++;
