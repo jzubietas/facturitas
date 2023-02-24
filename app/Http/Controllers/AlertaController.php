@@ -40,24 +40,76 @@ class AlertaController extends Controller
     }
     public function listtablecontactos(Request $request){
       if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
-        $detallecontactos = DetalleContactos::whereIn('guardado',[0,1])
-          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC");
+        $data = DetalleContactos::whereIn('guardado',[0,1])
+          ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+          ->join('users as u', 'c.user_id', 'u.id')
+          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
+          ->select(['detalle_contactos.*']);
       }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
-        $detallecontactos = DetalleContactos::where('guardado',0)
-          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC");
+        $data = DetalleContactos::where('guardado',0)
+          ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+          ->join('users as u', 'c.user_id', 'u.id')
+          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
+          ->select(['detalle_contactos.*']);
+      }
+      if (Auth::user()->rol == "Llamadas") {
+
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.llamada', Auth::user()->id)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+        //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
+        $data = $data->WhereIn("u.identificador", $usersasesores);
+
+
+      } else if (Auth::user()->rol == "Jefe de llamadas") {
+        /*$usersasesores = User::where('users.rol', 'Asesor')
+            ->where('users.estado', '1')
+            ->where('users.llamada', Auth::user()->id)
+            ->select(
+                DB::raw("users.identificador as identificador")
+            )
+            ->pluck('users.identificador');
+
+        $data = $data->WhereIn("u.identificador", $usersasesores);*/
+      } elseif (Auth::user()->rol == "Asesor") {
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.identificador', Auth::user()->identificador)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+        $data = $data->WhereIn("u.identificador", $usersasesores);
+
+      } else if (Auth::user()->rol == "Encargado") {
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.supervisor', Auth::user()->id)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+
+        $data = $data->WhereIn("u.identificador", $usersasesores);
+      } elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+        //$asesorB=User::activo()->where('identificador','=','B')->pluck('id')
+        $data = $data->Where("u.identificador", '=', 'B');
       }
 
-
-      return Datatables::of(DB::table($detallecontactos))
+      return Datatables::of(DB::table($data))
         ->addIndexColumn()
-        ->addColumn('action', function ($detallecontactos) {
+        ->addColumn('action', function ($data) {
           $btn = [];
           $deshabilitar_guardado="";
           $deshabilitar_confirmado="";
-          if ($detallecontactos->guardado==0){
+          if ($data->guardado==0){
             $deshabilitar_guardado="enabled ";
             $deshabilitar_confirmado="disabled";
-          }else if ($detallecontactos->guardado==1 && $detallecontactos->confirmado==0){
+          }else if ($data->guardado==1 && $data->confirmado==0){
             $deshabilitar_guardado="disabled";
             $deshabilitar_confirmado="enabled";
           }
@@ -81,14 +133,17 @@ class AlertaController extends Controller
     {
        //return $request->all();
       $cliente=Cliente::where('id',$request->cliente_id)->first();
-      $asesor=User::where('id',$request->asesor_id)->first();
+      $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+      $asesor=User::where('id',$user_id)->first();
+
       $detallecontactos=DetalleContactos::create([
-        'codigo_asesor' => $request->asesor_id,
-        'nombre_asesor' => $asesor->identificador,
+        'codigo_asesor' => $asesor->identificador,
+        'nombre_asesor' => $asesor->name,
         'celular' => $cliente->celular."-". $cliente->icelular,
         'codigo_cliente' => $cliente->id,
         'nombres_cliente' => $cliente->nombre,
         'nombre_contacto' => $request->contacto_nombre,
+        'codigo_registra' => $request->id_usuario,
       ]);
         return $detallecontactos;
     }

@@ -178,7 +178,7 @@
                 "type": "get",
               },
               columns: [
-                {data: 'nombre_asesor', name: 'nombre_asesor'},
+                {data: 'codigo_asesor', name: 'codigo_asesor'},
                 {data: 'celular', name: 'celular',},
                 {data: 'nombres_cliente', name: 'nombre_cliente',},
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
@@ -670,7 +670,7 @@
                                     title:'Agregar Contacto',
                                     nota:`El asesor "{{user()->identificador}}" solicita agregar un contacto del cliente "${cliente}" con el nombre "${form[0].contact_name.value}" `,
                                     user_add_role:['{{\App\Models\User::ROL_LLAMADAS}}',/**Agregar mas roles aca**/],
-                                    asesor_id:{{user()->id}},
+                                    id_usuario:{{user()->id}},
                                     cliente_id:form[0].client_id.value,
                                     contacto_nombre:form[0].contact_name.value,
                                 }).always(function () {

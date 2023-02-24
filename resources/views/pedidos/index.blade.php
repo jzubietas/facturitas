@@ -1769,30 +1769,6 @@ ${data.foto3 ? `
         /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
 
-            $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    var min = $('#min').datepicker("getDate");
-                    var max = $('#max').datepicker("getDate");
-                    // need to change str order before making  date obect since it uses a new Date("mm/dd/yyyy") format for short date.
-                    var d = data[5].split("/");
-                    var startDate = new Date(d[1] + "/" + d[0] + "/" + d[2]);
-
-                    if (min == null && max == null) {
-                        return true;
-                    }
-                    if (min == null && startDate <= max) {
-                        return true;
-                    }
-                    if (max == null && startDate >= min) {
-                        return true;
-                    }
-                    if (startDate <= max && startDate >= min) {
-                        return true;
-                    }
-                    return false;
-                }
-            );
-
 
             $("#min").datepicker({
                 onSelect: function () {
