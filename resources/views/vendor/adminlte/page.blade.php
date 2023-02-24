@@ -96,6 +96,7 @@
                 }
             });
 
+
           tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
             responsive: true,
             "bPaginate": false,
@@ -116,10 +117,7 @@
                 {
                   data: 'action'
                 }
-
               ],
-
-
           });
 
             window.ocultar_div_modal1 = function () {

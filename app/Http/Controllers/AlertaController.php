@@ -51,6 +51,12 @@ class AlertaController extends Controller
           ->join('users as u', 'c.user_id', 'u.id')
           ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
           ->select(['detalle_contactos.*']);
+      }else{
+        $data = DetalleContactos::whereIn('guardado',[0,1])
+          ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+          ->join('users as u', 'c.user_id', 'u.id')
+          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
+          ->select(['detalle_contactos.*']);
       }
       if (Auth::user()->rol == "Llamadas") {
 
