@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Illuminate\Http\Request;
 
-class PlantillaExportMultiple implements WithMultipleSheets
+class PlantillaExportPedidoMultiple implements WithMultipleSheets
 {
     use Exportable;
     protected $anio;
@@ -22,7 +22,7 @@ class PlantillaExportMultiple implements WithMultipleSheets
     {
         return [
             new PageclienteSituacion(),
-            new PageclienteinfoNoviembre(),
+           new PageclienteinfoNoviembre(),
             new PageclienteinfoDiciembre(),
             new PageclienteinfoEnero2023(),
             new PageclienteinfoFebrero2023(),

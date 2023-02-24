@@ -14,7 +14,6 @@ use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
 use App\Exports\ClientesAbandonosExport;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
-use App\Exports\Templates\PlantillaExportMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
 use App\Exports\Templates\PlantillaRecepcionMotorizadoMultiple;
 use App\Exports\PedidosPorEnviarPorFechasExport;
