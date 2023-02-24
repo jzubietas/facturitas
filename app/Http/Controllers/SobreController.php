@@ -728,7 +728,8 @@ class SobreController extends Controller
             'condicion_envio_code' => Pedido::ENTREGADO_JEFE_CURRIER_INT
           ]);
 
-          GrupoPedido::createGroupByPedido($pedido, true, true);
+          //GrupoPedido::createGroupByPedido($pedido, true, true);
+          DireccionGrupo::createByPedido($pedido);
 
 
         }

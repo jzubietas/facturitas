@@ -101,9 +101,9 @@ class DistribucionController extends Controller
 
         $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
         $color_zones = [];
-        $color_zones['NORTE'] = 'warning';
-        $color_zones['CENTRO'] = 'info';
-        $color_zones['SUR'] = 'dark';
+      $color_zones['NORTE'] = 'warning';
+      $color_zones['CENTRO'] = 'info';
+      $color_zones['SUR'] = 'dark';
         if (is_array($request->exclude_ids) && count($request->exclude_ids) > 0) {
             $query->whereNotIn('grupo_pedidos.id', $request->exclude_ids);
         }
