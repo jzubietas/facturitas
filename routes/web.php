@@ -46,6 +46,8 @@ Route::middleware(['guest'])->get('/', function () {
 Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
     Route::get('alertas/listtablecontactos', [AlertaController::class,'listtablecontactos'])->name('alertas.listtablecontactos');
     Route::post('alertas/confirmar', [AlertaController::class,'confirmar'])->name('alertas.confirmar');
+    Route::post('alertas/guardado', [AlertaController::class,'guardado'])->name('alertas.guardado');
+    Route::post('alertas/confirmado', [AlertaController::class,'confirmado'])->name('alertas.confirmado');
     Route::resource('alertas', AlertaController::class);
 
 
