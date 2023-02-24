@@ -221,6 +221,30 @@ class AnalisisSituacionCliente_Individual extends Command
                     $this->info('contador anulados '.$situacion_periodo->anulados);
                     $this->info('contador activos '.$situacion_periodo->activos);
 
+
+                    //
+
+                    $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                    $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                    $this->warn($situacion_antes);
+
+                    if($situacion_antes->flag_fp==0)
+                    {
+                      $situacion_create->update([
+                        "situacion" => 'RECUPERADO ABANDONO',
+                        "flag_fp" => '1'
+                      ]);
+                    }
+                    else if($situacion_antes->flag_fp==1)
+                    {
+                      $situacion_create->update([
+                        "situacion" => 'ABANDONO',
+                        "flag_fp" => '1'
+                      ]);
+                    }
+
+
+
                     break;
                   case 'RECUPERADO RECIENTE':
                     $this->info('SITUACION ANTES RECUPERADO RECIENTE');

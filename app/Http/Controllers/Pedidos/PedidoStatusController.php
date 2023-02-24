@@ -358,7 +358,7 @@ class PedidoStatusController extends Controller
             //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
-            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
+            ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
             ->count();
         //$pedidos_atendidos_total = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->atendidos()->noPendingAnulation()->count();
 
@@ -367,7 +367,7 @@ class PedidoStatusController extends Controller
             ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
-            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
+            ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
             ->count();
 
         $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])->porAtender()->noPendingAnulation()->count();
@@ -482,7 +482,7 @@ class PedidoStatusController extends Controller
             }
 
             $pedidos->where('pedidos.da_confirmar_descarga', '0')
-                ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
+                ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
 
 
             return datatables()->query(DB::table($pedidos))
