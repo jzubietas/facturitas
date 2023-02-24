@@ -821,11 +821,11 @@ Enviar</button>
 
             datatableenmotorizado = $('#tablaEnmotorizado').DataTable({
                 dom: '<"top"i>rt<"bottom"lp><"clear">',
-                responsive: {
+/*                responsive: {
                     details: {
                         renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
                     }
-                },
+                },*/
                 lengthChange: false,
                 processing: true,
                 stateSave: false,
