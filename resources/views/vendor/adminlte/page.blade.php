@@ -80,7 +80,14 @@
 @section('adminlte_js')
     @stack('js')
     @yield('js')
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script>
+        let tblListadoLlamadas=null;
         $(document).ready(function () {
 
             $.ajaxSetup({
@@ -88,7 +95,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
             window.ocultar_div_modal1 = function () {
                 console.log("ocultar div")
                 $("#op-1-row").hide();
@@ -116,70 +122,69 @@
 
           $('#btn_llamadas-1').on('show.bs.modal', function (event) {
             ocultar_div_modal1();
-            /*$("#opciones_modal1")
-              .html("")
-              .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
-              .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
-              .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
-              //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
-              .selectpicker("refresh")*/
-            $('#tablaListadoLlamadas').DataTable().clear().destroy();
-
-            $('#tablaListadoLlamadas').DataTable({
-              processing: true,
-              serverSide: true,
-              searching: true,
-              "order": [
-                [0, "desc"]
-              ],
-
-              "createdRow": function (row, data, dataIndex) {
-
-              },
-              "autoWidth": false,
-              rowCallback: function (row, data, index) {
+            tblListadoLlamadas.destroy();
+            tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
+              responsive: true,
+              "bPaginate": false,
+              "bFilter": false,
+              "bInfo": false,
+              'ajax': {
+                url: "{{ route('alertas.listtablecontactos') }}",
+                "type": "get",
               },
               columns: [
-                {
-                  //data: 'id',
-                  name: 'id',
-                  sWidth: '10%'
-                },
-                {
-                  //data: 'a_2021_11',
-                  name: 'a_2021_11',
-                  sWidth: '20%',
-                },
-                {
-                  //data: 's_2021_11',
-                  name: 's_2021_11',
-                  sWidth: '20%',
-                },
-                {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+                {data: 'nombre_asesor', name: 'nombre_asesor',sWidth: '40%',},
+                {data: 'celular', name: 'celular',sWidth: '10%',},
+                {data: 'nombres_cliente', name: 'nombre_cliente',sWidth: '10%',},
+                {data: 'action', name: 'action',sWidth: '10%',},
               ],
-              language: {
-                "decimal": "",
-                "emptyTable": "No hay informaciÃ³n",
-                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                "infoPostFix": "",
-                "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Entradas",
-                "loadingRecords": "Cargando...",
-                "processing": "Procesando...",
-                "search": "Buscar:",
-                "zeroRecords": "Sin resultados encontrados",
-                "paginate": {
-                  "first": "Primero",
-                  "last": "Ultimo",
-                  "next": "Siguiente",
-                  "previous": "Anterior"
-                }
-              },
+              order: [[ 1, 'asc' ]]
             });
-          })
 
+          })
+          tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {
+                  data: 'action'
+                }
+
+              ],
+
+            language: {
+              "decimal": "",
+              "emptyTable": "No hay información",
+              "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+              "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+              "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_ Entradas",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscar:",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+              }
+            }
+          });
             $(document).on("change", "#opciones_modal1", function () {
                 let value = $(this).val();
                 ocultar_div_modal1();
@@ -612,6 +617,9 @@
                                     title:'Agregar Contacto',
                                     nota:`El asesor "{{user()->identificador}}" solicita agregar un contacto del cliente "${cliente}" con el nombre "${form[0].contact_name.value}" `,
                                     user_add_role:['{{\App\Models\User::ROL_LLAMADAS}}',/**Agregar mas roles aca**/],
+                                    asesor_id:{{user()->id}},
+                                    cliente_id:form[0].client_id.value,
+                                    contacto_nombre:form[0].contact_name.value,
                                 }).always(function () {
                                     self.hideLoading(true)
                                 })
