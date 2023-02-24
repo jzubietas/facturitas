@@ -9,12 +9,13 @@
       <div class="modal-body">
 
         <div id="op-1-row" class="op-1-row"><!---->
-          <table id="tablaListadoLlamadas" class="table table-striped" style="text-align: center">
+          <table id="tablaListadoLlamadas" class="table table-striped w-100" style="text-align: center">
             <thead><h4 style="text-align: center"><strong>Listado Clientes</strong></h4>
             <tr>
               <th scope="col">Asesor</th>
               <th scope="col">Celular</th>
               <th scope="col">Nombre Cliente</th>
+              <th scope="col">Contacto</th>
               <th scope="col">Accion</th>
             </tr>
             </thead>
