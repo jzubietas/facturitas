@@ -8,7 +8,7 @@
                     <button class="float-right btn btn-danger" data-dismiss="modal">Cerrar</button>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body pt-3 pr-3 pl-3 pb-0">
                   <input type="hidden" id="correccion_b" name="correccion_b">
                   <input type="hidden" name="opcion" value="4">
 

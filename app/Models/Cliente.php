@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\CommonModel;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -87,5 +88,179 @@ class Cliente extends Model
             Clientes::where('id',$cliente->id)->update(['situacion'=>'BASE FRIA']);
         }
     }
+
+  public static function createSituacionByCliente($cliente_id){
+    $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
+
+    $periodo_original=Carbon::parse($fp->created_at);
+    $periodo_actual=Carbon::parse(now());
+    $primer_periodo=Carbon::parse($fp->created_at);
+    $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
+    $where_anio='';
+    $where_mes='';
+    $cont_mes=0;
+    $clientes=Cliente::whereIn('tipo',['0','1'])->where('id',$cliente_id)->orderBy('id','asc')->get();
+
+    foreach($clientes as $cliente)
+    {
+      $idcliente=$cliente->id;
+      {
+        $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
+
+        $periodo_inicial=Carbon::parse($fp->created_at);
+        $periodo_ejecucion=null;
+
+        for($i=0;$i<$diff;$i++)
+        {
+          $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
+          $where_anio=$periodo_ejecucion->format('Y');
+          $where_mes=$periodo_ejecucion->format('m');
+
+          //contadores
+          $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
+            ->whereMonth('created_at',$where_mes)->count();
+          $cont_mes_activo=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
+            ->whereMonth('created_at',$where_mes)->activo()->count();
+          $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
+            ->whereMonth('created_at',$where_mes)->activo('0')->count();
+
+          $situacion_create=SituacionClientes::create([
+            'cliente_id'=>$cliente->id,
+            'situacion'=>'',
+            'cantidad_pedidos'=>$cont_mes,
+            'anulados'=>$cont_mes_anulado,
+            'activos'=>$cont_mes_activo,
+            'periodo'=>Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m'),
+            'flag_fp'=>'0'
+          ]);
+
+          $compara=Carbon::parse($fp->created_at);
+          $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+          if($cont_mes==0)
+          {
+            if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
+            {
+              $situacion_create->update([
+                "situacion" => 'BASE FRIA',
+                "flag_fp" => '0'
+              ]);
+            }else{
+              $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+              switch($situacion_antes->situacion)
+              {
+                case 'BASE FRIA':
+                  $situacion_create->update([
+                    "situacion" => 'BASE FRIA',
+                    "flag_fp" => '0'
+                  ]);
+                  break;
+                case 'RECUPERADO ABANDONO':
+                case 'RECUPERADO RECIENTE':
+                case 'NUEVO':
+                  $situacion_create->update([
+                    "situacion" => 'RECURRENTE',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
+                case 'ABANDONO RECIENTE':
+                case 'ABANDONO':
+                  $situacion_create->update([
+                    "situacion" => 'ABANDONO',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
+                case 'RECURRENTE':
+                  if($situacion_antes->activos==0)
+                  {
+                    $situacion_create->update([
+                      "situacion" => 'ABANDONO RECIENTE',
+                      "flag_fp" => '1'
+                    ]);
+                  }else{
+                    $situacion_create->update([
+                      "situacion" => 'RECURRENTE',
+                      "flag_fp" => '1'
+                    ]);
+                  }
+                  break;
+                default:break;
+              }
+            }
+          }else{
+            if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
+            {
+              $situacion_create->update([
+                "situacion" => 'NUEVO',
+                "flag_fp" => '0'
+              ]);
+            }else{
+              $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+              switch($situacion_antes->situacion)
+              {
+                case 'BASE FRIA':
+                  $situacion_create->update([
+                    "situacion" => 'NUEVO',
+                    "flag_fp" => '0'
+                  ]);
+                  break;
+                case 'RECUPERADO RECIENTE':
+                case 'RECUPERADO ABANDONO':
+                case 'NUEVO':
+                  $situacion_create->update([
+                    "situacion" => 'RECURRENTE',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
+                case 'ABANDONO':
+                  $situacion_create->update([
+                    "situacion" => 'RECUPERADO ABANDONO',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
+                case 'ABANDONO RECIENTE':
+                  $situacion_create->update([
+                    "situacion" => 'RECUPERADO ABANDONO',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
+                case 'RECURRENTE':
+                  if($situacion_antes->activos==0)
+                  {
+                    $situacion_create->update([
+                      "situacion" => 'RECUPERADO RECIENTE',
+                      "flag_fp" => '1'
+                    ]);
+                  }else{
+                    $situacion_create->update([
+                      "situacion" => 'RECURRENTE',
+                      "flag_fp" => '1'
+                    ]);
+                  }
+                  break;
+                default:break;
+              }
+
+            }
+          }
+          if($i==($diff-1))
+          {
+            $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+            $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+            Cliente::where('id',$cliente->id)->update([
+              'situacion'=>$situacion_actual->situacion
+            ]);
+
+          }
+
+        }
+
+      }
+
+    }
+
+    return null;
+  }
 
 }

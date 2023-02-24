@@ -454,17 +454,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],*/
-
-
-
-
-                [
+                /*[
                     'text' => 'Sobres en reparto',
                     'route' => 'envios.enreparto',
                     'can' => 'envios.index',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
-                ],
+                ],*/
                 /*[
                     'text' => 'Motorizado',
                     'route' => 'envios.motorizados.index',

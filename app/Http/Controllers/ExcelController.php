@@ -2,48 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\Clientes\ClientesSinPedido2MesesAtras;
-use App\Exports\Templates\PlantillaExportBasefriaMultiple;
-use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
-use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
-use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
 use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
+use App\Exports\ClientesAbandonosExport;
 use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
-use App\Exports\ClientesAbandonosExport;
-use App\Exports\Templates\PlantillaExportMultipleLlamada;
-use App\Exports\Templates\PlantillaExportMultiple;
-use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
-use App\Exports\Templates\PlantillaRecepcionMotorizadoMultiple;
-use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\EntregadosPorFechasExport;
+use App\Exports\EstadoSobresExport;
 use App\Exports\MisPagosExport;
 use App\Exports\MisPedidosExport;
+use App\Exports\MovimientosExport;
+use App\Exports\PagosAbonadosExport;
 use App\Exports\PagosAprobadosExport;
 use App\Exports\PagosExport;
 use App\Exports\PagosIncompletosExport;
 use App\Exports\PagosObservadosExport;
-use App\Exports\PagosAbonadosExport;
 use App\Exports\PagosPorAsesoresExport;
 use App\Exports\PagosPorAsesorExport;
+use App\Exports\PagosPorRevisarExport;
 use App\Exports\PedidosAtendidosExport;
-use App\Exports\PedidosEntregadosExport;
 use App\Exports\PedidosEnAtencionExport;
+use App\Exports\PedidosEntregadosExport;
 use App\Exports\PedidosExport;
 use App\Exports\PedidosOperacionesExport;
-use App\Exports\PedidosPagosGeneralExport;
 use App\Exports\PedidosPagadosExport;
+use App\Exports\PedidosPagosGeneralExport;
 use App\Exports\PedidosPorAsesorExport;
 use App\Exports\PedidosPorAtenderExport;
 use App\Exports\PedidosPorEnviarExport;
+use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\PedidosSinPagosExport;
-use App\Exports\PagosPorRevisarExport;
-use App\Exports\UsuariosExport;
-use App\Exports\MovimientosExport;
 use App\Exports\SobresRutaEnvioExport;
-use App\Exports\EstadoSobresExport;
-
+use App\Exports\Templates\PlantillaExportBasefriaMultiple;
+use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
+use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
+use App\Exports\Templates\PlantillaExportMultipleLlamada;
+use App\Exports\Templates\PlantillaExportPedidoMultiple;
+use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
+use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
+use App\Exports\Templates\PlantillaRecepcionMotorizadoMultiple;
+use App\Exports\UsuariosExport;
 use App\Models\Pedido;
 use Illuminate\Http\Request;
 
@@ -177,7 +175,7 @@ class ExcelController extends Controller
     }
     public function clientespedidosExcel(Request $request)
     {
-        return (new PlantillaExportMultiple($request->anio))
+        return (new PlantillaExportPedidoMultiple($request->anio))
             ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
     }
     public function clientesTwoMonthAgoExcel(Request $request)

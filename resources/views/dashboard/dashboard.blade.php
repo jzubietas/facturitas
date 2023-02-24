@@ -7,6 +7,36 @@
         .card {
             background: rgb(241 241 241 / 80%);
         }
+        .h-40{
+          height: 40px !important;
+        }
+
+        .h-60{
+          height: 60px !important;
+        }
+
+        @media screen and (max-width: 992px){
+          .responsive-table{
+            display: flex !important;
+            flex-wrap: wrap !important;
+          }
+          .h-50-res{
+            height: 50px !important;
+          }
+        }
+        @media screen and (max-width: 767px){
+          .table-total{
+            overflow: hidden !important;
+          }
+          .scrollbar-x{
+            overflow-x: scroll !important;
+          }
+        }
+        @media screen and (max-width: 575px){
+          .h-60-res{
+            height: 60px !important;
+          }
+        }
     </style>
 @endpush
 @section('content_header')

@@ -1301,3 +1301,41 @@ margin: 2px;
 .tpl-snow > div:nth-of-type(46){left:88%;-webkit-animation-duration:9.5s;-moz-animation-duration:9.5s;animation-duration:9.5s;-webkit-animation-delay:.5s;-moz-animation-delay:.5s;animation-delay:.5s;}
 .tpl-snow > div:nth-of-type(47){left:94%;-webkit-animation-duration:7.6s;-moz-animation-duration:7.6s;animation-duration:7.6s;}
 .tpl-snow > div:nth-of-type(48){left:96%;-webkit-animation-duration:8.2s;-moz-animation-duration:8.2s;animation-duration:8.2s;-webkit-animation-delay:.3s;-moz-animation-delay:.3s;animation-delay:.3s;}
+
+
+
+
+/*ESTILOS RESPONSIVOS*/
+
+.h-40{
+  height: 40px !important;
+}
+
+.h-60{
+  height: 60px !important;
+}
+
+@media screen and (max-width: 992px){
+  .responsive-table{
+    display: flex !important;
+    flex-wrap: wrap !important;
+  }
+  .h-50-res{
+    height: 50px !important;
+  }
+}
+@media screen and (max-width: 767px){
+  .table-total{
+    overflow: hidden !important;
+  }
+  .scrollbar-x{
+    overflow-x: scroll !important;
+  }
+}
+@media screen and (max-width: 575px){
+  .h-60-res{
+    height: 60px !important;
+  }
+}
+
+
