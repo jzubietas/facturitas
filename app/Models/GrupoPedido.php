@@ -23,7 +23,7 @@ class GrupoPedido extends Model
     public static function createGroupByPedido(Pedido $pedido, $createAnother = false, $attach = false)
     {
         //return $pedido;
-        if ($pedido->estado_sobre = 1) {
+        if ($pedido->estado_sobre == 1) {
             $grupo = self::createGroupByArray([
                 "zona" => $pedido->env_zona,
                 "provincia" => $pedido->env_destino,
@@ -34,6 +34,8 @@ class GrupoPedido extends Model
                 'referencia' => (($pedido->env_destino == 'PROVINCIA') ? $pedido->tracking : $pedido->env_referencia),
                 'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
                 'telefono' => $pedido->env_celular_cliente_recibe,
+                'cod_recojo' => (($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT)? '1' : '0'),
+                'env_sustento_recojo' => (($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT)? $pedido->env_sustento : '')
             ], $createAnother);
             if ($attach) {
                 $detalle = $pedido->detallePedidos()->activo()->orderBy('detalle_pedidos.created_at')->first();
@@ -62,13 +64,15 @@ class GrupoPedido extends Model
 
             }
             return $grupo;
-        }else{
+        }
+        else{
             if ($pedido->condicion_envio_code != Pedido::RECEPCION_COURIER_INT) {
                 $pedido->update([
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
                     'condicion_envio' => Pedido::RECEPCION_COURIER,
                     'condicion_envio_at' => now(),
                     //'estado_sobre' => 1,
+
                 ]);
             }
         }
