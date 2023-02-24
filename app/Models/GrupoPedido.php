@@ -126,8 +126,8 @@ class GrupoPedido extends Model
                 'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
                 'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
                 'cliente_recibe' => data_get($array, 'cliente_recibe') ?? 'n/a',//olva
-                'cod_recojo' => data_get($array,'cod_recojo'),
-                'env_sustento_recojo' => data_get($array,'env_sustento_recojo'),
+                'cod_recojo' => data_get($array,'cod_recojo') ?? 'n/a',
+                'env_sustento_recojo' => data_get($array,'env_sustento_recojo') ?? 'n/a',
             ];
             $data2 = [
                 'referencia' => data_get($array, 'referencia') ?: 'n/a',//olva
