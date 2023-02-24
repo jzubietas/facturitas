@@ -482,7 +482,7 @@ class PedidoStatusController extends Controller
             }
 
             $pedidos->where('pedidos.da_confirmar_descarga', '0')
-                ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
+                ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
 
 
             return datatables()->query(DB::table($pedidos))
