@@ -21,10 +21,50 @@ class DashboardController extends Controller
 {
   public function index()
   {
+    if (auth()->user()->rol == 'MOTORIZADO') {
+      return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
+    }
 
+    if (in_array(auth()->user()->rol, [User::ROL_ASESOR,User::ROL_ENCARGADO,User::ROL_LLAMADAS])) {
+      return redirect()->route('pedidos.index'); //->with('info', 'registrado');
+    }
+
+    $pedidossinpagos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+      ->activo()
+      ->join('users as u', 'pedidos.user_id', 'u.id')
+      ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+      ->select(
+        ['pedidos.id',
+        'c.nombre as nombres',
+        'c.celular as celulares',
+        'u.name as users',
+        'dp.codigo as codigos',
+        'dp.nombre_empresa as empresas',
+        DB::raw('sum(dp.total) as total'),
+        'pedidos.condicion as condiciones',
+        'pedidos.created_at as fecha'
+       ])
+      ->where('dp.estado', '1')
+      ->where('u.id', Auth::user()->id)
+      ->where('pedidos.pago', '0')
+      ->groupBy(
+        'pedidos.id',
+        'c.nombre',
+        'c.celular',
+        'u.name',
+        'dp.codigo',
+        'dp.nombre_empresa',
+        'pedidos.condicion',
+        'pedidos.created_at'
+      )
+      ->orderBy('pedidos.created_at', 'DESC')
+      ->get();
 
     return view(
       'dashboard.dashboard',
+      compact(
+        'pedidossinpagos',
+      )
     );
   }
 
