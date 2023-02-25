@@ -186,6 +186,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('users.asesorestabla/{user}', [UserController::class, 'AsesoresTablaMeta'])->name('users.asesorestabla.updatemeta');////asesores
     Route::post('lstusuariosvidas', [UserController::class, 'lstusuariosvidas'])->name('lstusuariosvidas');
     Route::post('quitarvidasusuario', [UserController::class, 'quitarvidasusuario'])->name('quitarvidasusuario');
+    Route::get('getvidasusuario', [UserController::class, 'getvidasusuario'])->name('getvidasusuario');
 
     Route::get('users.llamadas', [UserController::class, 'Llamadas'])->name('users.llamadas');////llamadas
     Route::get('users.llamadastabla', [UserController::class, 'Llamadastabla'])->name('users.llamadastabla');////llamadas
@@ -269,7 +270,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('clientedeasesordeuda', [PedidoController::class, 'clientedeasesordeuda'])->name('cargar.clientedeasesordeuda');
     Route::get('clientedeudaparaactivar', [PedidoController::class, 'clientedeudaparaactivar'])->name('cargar.clientedeudaparaactivar');
-    Route::get('clientemodal1', [PedidoController::class, 'clientemodal1'])->name('cargar.clientemodal1');
 
     Route::get('tipobanca', [PedidoController::class, 'tipobanca'])->name('cargar.tipobanca');
     Route::post('pedidos.agregarruc', [PedidoController::class, 'AgregarRuc'])->name('pedidos.agregarruc');

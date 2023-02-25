@@ -517,29 +517,6 @@ class NotificationsController extends Controller
         }
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
         $contador_encargado_tienda_agente =$pedidos_provincia->count();
-      $detallescontactos =0;
-      if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
-        $detallescontactos = DetalleContactos::whereIn('guardado',[0,1])
-          ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
-          ->join('users as u', 'c.user_id', 'u.id')
-          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
-          ->select(['detalle_contactos.*'])->count();
-      }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
-        $detallescontactos = DetalleContactos::where('guardado',0)
-          ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
-          ->join('users as u', 'c.user_id', 'u.id')
-          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
-          ->select(['detalle_contactos.*']);
-        $usersasesores = User::where('users.rol', 'Asesor')
-          ->where('users.estado', '1')
-          ->where('users.llamada', Auth::user()->id)
-          ->select(
-            DB::raw("users.identificador as identificador")
-          )
-          ->pluck('users.identificador');
-        //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
-        $detallescontactos = $detallescontactos->WhereIn("u.identificador", $usersasesores)->count();
-      }
 
         $alertas=Alerta::noFinalize()
             ->noReadTime(now()->subMinutes(10))
@@ -565,7 +542,6 @@ class NotificationsController extends Controller
             'contador_encargado_tienda_agente' => $contador_encargado_tienda_agente,
             'authorization_courier' => \Blade::renderComponent(new AutorizarRutaMotorizado()),
             'alertas' => $alertas,
-            'contador_contactos_registrados' => $detallescontactos,
         ];
     }
 

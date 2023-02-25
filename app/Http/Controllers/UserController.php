@@ -333,11 +333,7 @@ class UserController extends Controller
     } else if ($mirol == 'Asesor') {
       $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
     } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
-
-      //$usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
       $users = User::where("rol", "ASESOR ADMINISTRATIVO");
-      //$users = $usersB->union($users);
-
     } else {
 
       $usersB = User::whereIn("rol", [User::ROL_ASESOR_ADMINISTRATIVO]);
@@ -349,10 +345,6 @@ class UserController extends Controller
     $users = $users->orderBy('exidentificador', 'ASC')->get();
     $html = "";
 
-
-    //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
-
-
     foreach ($users as $user) {
       if ($user->rol == 'Administrador') {
         $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
@@ -362,8 +354,6 @@ class UserController extends Controller
     }
 
     return response()->json(['html' => $html]);
-
-    //return response()->json($users);
   }
     public function AsesorcomboModal(Request $request)
     {
@@ -582,6 +572,17 @@ class UserController extends Controller
     }
 
 
+    return response()->json($user);
+
+  }
+
+  public function getvidasusuario(Request $request)
+  {
+    $user=User::where('estado', '1')
+      ->where('id', Auth::user()->id)
+      ->select(
+        'vidas_total'
+      )->first();
     return response()->json($user);
 
   }

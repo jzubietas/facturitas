@@ -849,7 +849,7 @@ class EnvioController extends Controller
         $motorizados = User::select([
             'id',
             'zona',
-            DB::raw(" (select count(*) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
+            DB::raw(" (select count(p.id) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
         ])->where('rol', '=', User::ROL_MOTORIZADO)
             ->whereNotNull('zona')
             ->activo()
@@ -893,14 +893,14 @@ class EnvioController extends Controller
             ->pluck('distrito', 'distrito');
 
         $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
-            ->select('direccion_envios.id',
+            ->select(['direccion_envios.id',
                 'direccion_envios.distrito',
                 'direccion_envios.direccion',
                 'direccion_envios.referencia',
                 'direccion_envios.nombre',
                 'direccion_envios.celular',
                 'dp.pedido_id as pedido_id',
-            )
+            ])
             ->where('direccion_envios.estado', '1')
             ->where('dp.estado', '1')
             ->get();
