@@ -318,7 +318,53 @@ class UserController extends Controller
 
         //return response()->json($users);
     }
+  public function lstusuariosvidas(Request $request)
+  {
+    $mirol = Auth::user()->rol;
+    $users = null;
+    $users = User::where('estado', '1');
 
+    if ($mirol == 'Llamadas') {
+      $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+    } else if ($mirol == 'Jefe de llamadas') {
+      $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+    } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
+      $users = $users->where('identificador', '<>', 'B');
+    } else if ($mirol == 'Asesor') {
+      $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
+    } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
+
+      //$usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
+      $users = User::where("rol", "ASESOR ADMINISTRATIVO");
+      //$users = $usersB->union($users);
+
+    } else {
+
+      $usersB = User::whereIn("rol", [User::ROL_ASESOR_ADMINISTRATIVO]);
+      $users = $usersB->union($users);
+
+    }
+
+
+    $users = $users->orderBy('exidentificador', 'ASC')->get();
+    $html = "";
+
+
+    //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
+
+
+    foreach ($users as $user) {
+      if ($user->rol == 'Administrador') {
+        $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
+      } else {
+          $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
+      }
+    }
+
+    return response()->json(['html' => $html]);
+
+    //return response()->json($users);
+  }
     public function AsesorcomboModal(Request $request)
     {
         $mirol = Auth::user()->rol;
@@ -523,6 +569,22 @@ class UserController extends Controller
         return response()->json($user);
 
     }
+
+  public function quitarvidasusuario(Request $request)
+  {
+    $user=User::where('id',$request->user_id)->first();
+    if (intval($user->vidas_restantes)>0){
+      $contadorquitavidas=intval($user->vidas_restantes)-1;
+      $user->update([
+        'vidas_restantes' => $contadorquitavidas
+      ]);
+
+    }
+
+
+    return response()->json($user);
+
+  }
 
     public function AsignarSupervisor(Request $request, User $user)
     {
