@@ -25,36 +25,6 @@ class DashboardController extends Controller
 
     return view(
       'dashboard.dashboard',
-      compact(
-        'pedidoxmes_total',
-        'pedidos_mes_',
-        'pagoxmes_total',
-        'pagoxmes_total_solo_asesor_b',
-        'montopedidoxmes_total',
-        'montopagoxmes_total',
-        'pedidossinpagos',
-        'pedidosxasesor',
-        'pagosxmes',
-        'pedidosxasesorxdia',
-        'meta_pedidoencargado',
-        'meta_pagoencargado',
-        'pedidosxasesor_encargado',
-        'pedidosxasesor_3meses_encargado',
-        'pagosxmes_encargado',
-        'pedidosxasesorxdia_encargado',
-        'meta_pedidoasesor',
-        'meta_pagoasesor',
-        'pagosobservados_cantidad',
-        'pedidosxasesorxdia_asesor',
-        'pedidoxatender',
-        'pedidoenatencion',
-        'pagosxrevisar_administracion',
-        'pagosobservados_administracion',
-        'conteo',
-        'cobranzaxmes',
-        '_pedidos',
-        '_pedidos_totalpedidosdia'
-      )
     );
   }
 
