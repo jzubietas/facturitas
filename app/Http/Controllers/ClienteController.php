@@ -728,10 +728,7 @@ class ClienteController extends Controller
 
     public function clientedeasesor(Request $request)
     {
-        $mirol = Auth::user()->rol;
-
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-
         $usersasesores = User::query()
             //->where('users.estado', '1')
             ->whereIdentificador($request->user_id)
@@ -749,16 +746,14 @@ class ClienteController extends Controller
             })*/
             ->orderBy('clientes.id')
             ->get();
-        //return $request->user_id;
 
-        //return $clientes;
 
         foreach ($clientes as $cliente) {
             $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])->count();
             $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('pedidos.created_at', '<=', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay())->count();
 
-            //Auth::user()->rol=='Administrador'
-            if ($mirol == 'Administrador' || $mirol == 'Asistente de Administración' || Auth::user()->identificador == 'B') {
+            //auth::user()->rol=='Administrador'
+            if (auth::user()->rol == 'Administrador' || auth::user()->rol == 'Asistente de Administración' || auth::user()->identificador == 'B') {
 
                 $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
             } else {
@@ -785,7 +780,7 @@ class ClienteController extends Controller
 
                     //aca evalua primero si tiene deuda el mes anterior y si tiene pedidos cond deuda mayor a 5
                     if ($deuda_anterior > 0 || $deuda_pedidos_5 > 5) {
-                        if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
+                        if (auth::user()->rol == User::ROL_APOYO_ADMINISTRATIVO) {
                             $html .= '<option style="color:red" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo > 0 ? 'Con Deuda' : '') . ')</option>';
                         } else {
                             $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo > 0 ? 'Con Deuda' : '') . ')</option>';
@@ -795,7 +790,7 @@ class ClienteController extends Controller
                         if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes == 0) {
                             $html .= '<option style="color:' . ($saldo == 0 ? 'green' : 'lightblue') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda ' : 'Con Deuda') . ')</option>';
                         } else if (($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes > 0) || ($cliente->pedidos_mes_deuda == 0 && $cliente->pedidos_mes_deuda_antes > 0)) {
-                            if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
+                            if (auth::user()->rol == User::ROL_APOYO_ADMINISTRATIVO) {
                                 $html .= '<option style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                             } else {
                                 $html .= '<option ' . ($saldo == 0 ? '' : 'disabled') . ' style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
