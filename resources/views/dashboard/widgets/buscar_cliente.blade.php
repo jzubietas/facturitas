@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-      {{--<div class="col-lg-6">
+      <div class="col-lg-6">
         <div class="alert alert-default-success alert-dismissible" >
           <div class="card-header">Quitar vida</div>
           <div class="card-header">
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-      </div>--}}
+      </div>
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">

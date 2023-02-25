@@ -335,12 +335,9 @@ class UserController extends Controller
     } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
       $users = User::where("rol", "ASESOR ADMINISTRATIVO");
     } else {
-
       $usersB = User::whereIn("rol", [User::ROL_ASESOR_ADMINISTRATIVO]);
       $users = $usersB->union($users);
-
     }
-
 
     $users = $users->orderBy('exidentificador', 'ASC')->get();
     $html = "";
@@ -349,10 +346,9 @@ class UserController extends Controller
       if ($user->rol == 'Administrador') {
         $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
       } else {
-          $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
+        $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
       }
     }
-
     return response()->json(['html' => $html]);
   }
     public function AsesorcomboModal(Request $request)
