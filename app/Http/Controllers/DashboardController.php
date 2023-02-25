@@ -395,7 +395,6 @@ class DashboardController extends Controller
         'conteo',
         'cobranzaxmes',
         '_pedidos',
-        '_pedidos_totalpedidosdia'
       )
     );
   }
