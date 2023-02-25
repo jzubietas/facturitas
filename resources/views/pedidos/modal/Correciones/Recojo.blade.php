@@ -2,8 +2,8 @@
     <div class="modal-dialog" style="max-width: 800px!important;">
         <form id="form-recojo" name="form-recojo" >
             <div class="modal-content">
-                <div class="modal-header bg-success p-2">
-                    <h5 class="modal-title " id="exampleModalLabel">Recojo pedidos</h5>
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title" id="exampleModalLabel">Recojo pedidos</h5>
 
                     <button class="float-right btn btn-danger" data-dismiss="modal">Cerrar</button>
                 </div>
@@ -37,8 +37,13 @@
                     </div>
                   </div>
                   <div id="direcciones_add">
+<<<<<<< HEAD
                     <ul class="d-flex " style="grid-gap: 40px;"></ul>
                     <input type="hidden" class="form-control" id="pedido_concatenado">
+=======
+                    <ul></ul>
+                    <input type="hidden" class="form-control" id="pedido_contatenado">
+>>>>>>> parent of 29257249 (diseño recojo)
                   </div>
 
 
@@ -102,9 +107,9 @@
                   </div>
 
 
-                    <ul class="list-group" style="border: 1px solid #ced4da;">
+                    <ul class="list-group">
 
-                        <li class="list-group-item text-wrap d-none">
+                        <li class="list-group-item text-wrap">
 
 
 
@@ -120,7 +125,7 @@
                                       placeholder="Colocar sustento"></textarea>
                         </li>
                     </ul>
-                    <hr class="mt-1 mb-1 d-none"/>
+                    <hr class="mt-2 mb-3"/>
                     <div class="modal-footer">
                         <div class="form-group col-lg-12">
                             <button type="submit" class="float-right btn btn-success">Enviar</button>
