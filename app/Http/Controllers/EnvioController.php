@@ -3564,7 +3564,9 @@ class EnvioController extends Controller
         if ($envio->distribucion == 'OLVA') {
             DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::RECEPCIONADO_OLVA_INT);
         } else {
-            DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_CLIENTE_INT);
+
+          DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_CLIENTE_INT);
+
         }
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenMotorizadoEntregarConfirm,
@@ -3827,7 +3829,6 @@ class EnvioController extends Controller
                 }
                 break;
         }
-
     }
 
     public function registrosasesor(Request $request)
@@ -3857,8 +3858,5 @@ class EnvioController extends Controller
             })
             ->rawColumns(['action', 'estado'])
             ->toJson();
-
     }
-
-
 }
