@@ -1077,7 +1077,7 @@ ${files.map(function (file) {
                 data: clientedeasesor,
                 processData: false,
                 contentType: false,
-                type: 'GET',
+                type: 'POST',
                 url: "{{ route('cargar.clientedeasesor') }}",
                 success: function (data) {
                   $('#cliente_id').html(data.html);

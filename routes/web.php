@@ -116,7 +116,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('correccionrechazoRequest', [OperacionController::class, 'correccionrechazo'])->name('correccionrechazoRequest.post');
 
     //Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
-    Route::get('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
+    Route::any('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
     Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
 
     Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
