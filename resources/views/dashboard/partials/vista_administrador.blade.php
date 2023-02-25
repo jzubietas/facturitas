@@ -382,19 +382,19 @@
           })
         }
 
-       /*cargaNueva(1);
+       cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
 
-        cargReporteAnalisis();*/
+        cargReporteAnalisis();
 
-/*        setInterval(myTimer, 50000);
+        setInterval(myTimer, 50000);
 
         function myTimer() {
           cargaNueva(1);
           cargaNueva(2);
           cargaNueva(3);
-        }*/
+        }
 
         $('a[href$="#myModal"]').on( "click", function() {
           $('#myModal').modal();
