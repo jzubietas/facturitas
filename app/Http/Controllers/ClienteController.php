@@ -730,15 +730,24 @@ class ClienteController extends Controller
     {
         $mirol = Auth::user()->rol;
 
-
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+
+        $usersasesores = User::query()
+            //->where('users.estado', '1')
+            ->whereIdentificador($request->user_id)
+            ->select(
+              DB::raw("users.identificador as identificador")
+            )
+            ->pluck('users.identificador');
 
         $clientes = Cliente::query()
             ->where('clientes.estado', '=', '1')
             ->where('clientes.tipo', '=', '1')
-            ->when($request->user_id, function ($query) use ($request) {
+            ->whereIn('clientes.user_id',$usersasesores)
+            /*->when($request->user_id, function ($query) use ($request) {
                 return $query->whereIn('clientes.user_id', User::query()->select('users.id')->whereIdentificador($request->user_id));
-            })->orderBy('clientes.id')
+            })*/
+            ->orderBy('clientes.id')
             ->get();
         //return $request->user_id;
 
@@ -750,6 +759,7 @@ class ClienteController extends Controller
 
             //Auth::user()->rol=='Administrador'
             if ($mirol == 'Administrador' || $mirol == 'Asistente de Administración' || Auth::user()->identificador == 'B') {
+              
                 $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
             } else {
                 if ($cliente->crea_temporal == 1) {
