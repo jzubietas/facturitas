@@ -143,11 +143,10 @@
           $("#buttom_quita_vida_cliente").click(function () {
             $("#buttom_quita_vida_cliente").attr('disabled', 'disabled');
             var data = {}
-            data.user_id = $("#cbx_user_id_vidas").val(); console.log(data);
+            data.user_id = $("#cbx_user_id_vidas").val(); 
             $.post('{{route('quitarvidasusuario')}}', data)
               .done(function (data) {
-                console.log(data)
-                if (data.vidas_restantes>0) {
+                if (data.vidas_anteriores>0) {
                   Swal.fire(
                     '',
                     'Vida quitada correctamente',

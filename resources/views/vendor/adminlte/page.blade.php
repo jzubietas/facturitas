@@ -706,6 +706,20 @@
               }
             })
           })
+
+          $.get('{{route('getvidasusuario')}}',)
+            .done(function (data) {
+              //console.log(arguments)
+              console.log(data.vidas_restantes)
+              //$("#modal_clientes_deudas_content").html(data.html)
+            })
+            .fail(function () {
+              //console.log(arguments)
+            })
+            .always(function () {
+              //$("#modal_clientes_deudas_content_loading").hide()
+              //console.log(arguments)
+            });
         })
 
     </script>
