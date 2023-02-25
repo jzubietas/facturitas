@@ -132,67 +132,9 @@
                 $("#form-op-4-row input").val("");
             }
 
-            //btn_componente-1
-            $('#modal-annuncient-1').on('show.bs.modal', function (event) {
-                ocultar_div_modal1();
-                $("#opciones_modal1")
-                    .html("")
-                    .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
-                    .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
-                    .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
-                    //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
-                    .selectpicker("refresh")
-            })
 
 
-          $('#modal-llamadas-1').on('show.bs.modal', function (event) {
-            tblListadoLlamadas.destroy();
-            tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
-              responsive: true,
-              "bPaginate": true,
-              "bFilter": true,
-              "bInfo": false,
-              'ajax': {
-                url: "{{ route('alertas.listtablecontactos') }}",
-                "type": "get",
-              },
-              columns: [
-                {data: 'codigo_asesor', name: 'codigo_asesor'},
-                {data: 'celular', name: 'celular',},
-                {data: 'nombres_cliente', name: 'nombre_cliente',},
-                {data: 'nombre_contacto', name: 'nombre_contacto',},
-                {data: 'action', name: 'action',},
-              ],
-              "createdRow": function (row, data, dataIndex) {
-                if(data["guardado"]==1)
-                {
-                  $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
-                }
-              },
-              order: false,
-              language: {
-                "decimal": "",
-                "emptyTable": "No hay información",
-                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                "infoPostFix": "",
-                "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Entradas",
-                "loadingRecords": "Cargando...",
-                "processing": "Procesando...",
-                "search": "Buscar:",
-                "zeroRecords": "Sin resultados encontrados",
-                "paginate": {
-                  "first": "Primero",
-                  "last": "Ultimo",
-                  "next": "Siguiente",
-                  "previous": "Anterior"
-                }
-              }
-            });
 
-          })
           $('#tablaListadoLlamadas tbody').on('click', 'button.btnGuardado', function () {
             var data = tblListadoLlamadas.row($(this).parents('tr')).data();
             console.log('datos table',data);
@@ -613,114 +555,8 @@
                     }
                 })
             })
-            $('[data-toggle=contactoalert]').click(function () {
-                $.confirm({
-                   theme: 'material',
-                    draggable: true,
-                    type: 'dark',
-                    icon: 'fa fa-plus',
-                    title: 'Agregar Contacto',
-                    columnClass:'large',
-                    content: function () {
-                        const self = this
-                        return $.get('{!! route('cargar.clientemodal1',['user_id'=>user()->identificador,'rol'=>user_rol()]) !!}').done(function (data) {
-                            self.setContent(`<form class="p-2" style="height: 35vh">
-<div class="row">
-<div class="form-group col-10">
-<label>Cliente </label>
-<select type="text" class="form-control" name="client_id">${data.html}</select>
-</div>
-<div class="form-group col-12">
-<label>Nombre q quiere q tenga su contacto</label>
-<input type="text" class="form-control"  name="contact_name">
-</div>
-</div></form>`)
-                        })
-                    },
-                    buttons: {
-                        cancelar: {
-                            btnClass: 'btn-ligth'
-                        },
-                        agregar: {
-                            btnClass: 'btn-dark',
-                            action: function () {
-                                const self = this
-                                const form = self.$content.find('form')
-                                if (!form[0].client_id.value) {
-                                    $.confirm({
-                                        type: 'red',
-                                        title: 'Advertencia',
-                                        content: `Es necesario seleccionar un cliente`
-                                    })
-                                    return false
-                                }
-                                if (!form[0].contact_name.value) {
-                                    $.confirm({
-                                        type: 'red',
-                                        title: 'Advertencia',
-                                        content: `Es necesario ingresar el nombre q quiere q tenga su contacto`
-                                    })
-                                    return false
-                                }
-                                self.showLoading(true)
-                                const cliente= self.$content.find( "select option:selected" ).text();
-                                $.post('{{route('cargarstore')}}', {
-                                    tipo:'info',
-                                    title:'Agregar Contacto',
-                                    nota:`El asesor "{{user()->identificador}}" solicita agregar un contacto del cliente "${cliente}" con el nombre "${form[0].contact_name.value}" `,
-                                    user_add_role:['{{\App\Models\User::ROL_LLAMADAS}}',/**Agregar mas roles aca**/],
-                                    id_usuario:{{user()->id}},
-                                    cliente_id:form[0].client_id.value,
-                                    contacto_nombre:form[0].contact_name.value,
-                                }).always(function () {
-                                    self.hideLoading(true)
-                                })
-                            }
-                        },
-                    },
-                    onContentReady:function () {
-                        this.$content.find('select').select2({
-                            dropdownParent:this.$content,
-                            matcher: function matchCustom(params, data) {
-                                // If there are no search terms, return all of the data
-                                if ($.trim(params.term) === '') {
-                                    return data;
-                                }
 
-                                // Do not display the item if there is no 'text' property
-                                if (typeof data.text === 'undefined') {
-                                    return null;
-                                }
-
-                                // `params.term` should be the term that is used for searching
-                                // `data.text` is the text that is displayed for the data object
-                                if (data.text.includes((params.term||'').trim())) {
-                                    return $.extend({}, data, true);
-                                }
-
-                                // Return `null` if the term should not be displayed
-                                return null;
-                            }
-                        })
-                    }
-                })
-            })
         })
-        /*$(document).ready(function () {
-            $(document).on("paste", "input[type=text],input[type=search]", function (e) {
-                // access the clipboard using the api
-                var pastedData = e.originalEvent.clipboardData.getData('text');
-                const valuetrim = (pastedData || '').trim()
-                setTimeout(function () {
-                    if ($(e.target).parent('.bs-searchbox').length > 0) {
-                        setTimeout(function () {
-                            $(e.target).val(valuetrim);
-                        }, 1);
-                    } else {
-                        e.target.value = valuetrim
-                    }
-                }, 1);
-            });
-        });*/
+
     </script>
 @stop
