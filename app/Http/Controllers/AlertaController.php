@@ -51,7 +51,7 @@ class AlertaController extends Controller
           ->join('users as u', 'c.user_id', 'u.id')
           ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
           ->select(['detalle_contactos.*']);
-      }else{
+      }else if (in_array(auth()->user()->rol, [User::ROL_MOTORIZADO])) {
         $data = DetalleContactos::whereIn('guardado',[0,1])
           ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
           ->join('users as u', 'c.user_id', 'u.id')
@@ -106,7 +106,7 @@ class AlertaController extends Controller
         $data = $data->Where("u.identificador", '=', 'B');
       }
 
-      return Datatables::of(DB::table($data))
+      return Datatables::of(($data))
         ->addIndexColumn()
         ->addColumn('action', function ($data) {
           $btn = [];
@@ -120,6 +120,7 @@ class AlertaController extends Controller
             $deshabilitar_confirmado="enabled";
           }
           $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton" style="display: flex; grid-gap: 2px;">';
+
           if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
             $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
             $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnConfirmado" '.$deshabilitar_confirmado.'><i class="fa fa-check danger mr-8"></i></button>';
