@@ -1068,27 +1068,26 @@ ${files.map(function (file) {
             });
 
             $(document).on("change", "#user_id", function () {
-                //console.log("link asesor "+$(this).val())
                 var uid = $(this).val();
-                //if($(this).val()!='')
-                $.ajax({
-                    url: "{{ route('cargar.clientedeasesor') }}?user_id=" + uid,
-                    method: 'GET',
-                    success: function (data) {
-                        //console.log(data.html);
-                        $('#cliente_id').html(data.html);
-                        $("#cliente_id").selectpicker(
-                            "refresh"); //addClass("your-custom-class")
+                console.log('uid '+ uid)
 
-                        $('#cliente_id_ruc').html(data.html);
-                        let c_cliente_id = $('#cliente_id').val();
-                        //console.log(c_cliente_id);
-
-                        $('#cliente_id_ruc').selectpicker('refresh');
-                        $('#cliente_id_ruc').val(c_cliente_id);
-
-                    }
-                });
+              var clientedeasesor = new FormData();
+              clientedeasesor.append('user_id', uid);
+              $.ajax({
+                data: clientedeasesor,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url: "{{ route('cargar.clientedeasesor') }}",
+                success: function (data) {
+                  $('#cliente_id').html(data.html);
+                  $("#cliente_id").selectpicker("refresh");
+                  $('#cliente_id_ruc').html(data.html);
+                  let c_cliente_id = $('#cliente_id').val();
+                  $('#cliente_id_ruc').selectpicker('refresh');
+                  $('#cliente_id_ruc').val(c_cliente_id);
+                }
+              });
 
             });
 

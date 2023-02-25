@@ -849,7 +849,7 @@ class EnvioController extends Controller
         $motorizados = User::select([
             'id',
             'zona',
-            DB::raw(" (select count(p.id) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
+            DB::raw(" (select count(p.id) from pedidos p inner join direccion_grupos b on p.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
         ])->where('rol', '=', User::ROL_MOTORIZADO)
             ->whereNotNull('zona')
             ->activo()
