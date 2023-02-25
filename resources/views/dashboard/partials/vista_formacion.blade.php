@@ -12,12 +12,7 @@
 <div class="row d-none">
   <div class="col-lg-3 col-6">
     <div class="small-box bg-info">
-      <div class="inner">
-        @foreach ($pedidoxmes_total as $mpxm)
-          <h3>{{ $mpxm->total  }}</h3>
-        @endforeach
-        <p>META DE PEDIDOS DEL MES</p>
-      </div>
+
       <div class="icon">
         <i class="ion ion-bag"></i>
       </div>
@@ -27,12 +22,7 @@
   </div>
   <div class="col-lg-3 col-6 d-none">
     <div class="small-box bg-success">
-      <div class="inner">
-        @foreach ($montopedidoxmes_total as $mcxm)
-          <h3>{{number_format( ($mcxm->total)/10 ,2)}} %</h3>
-        @endforeach
-        <p>META DE COBRANZAS DEL MES</p>
-      </div>
+
       <div class="icon">
         <i class="ion ion-stats-bars"></i>
       </div>
@@ -44,12 +34,7 @@
 
   <div class="col-lg-3 col-6 d-none">
     <div class="small-box bg-warning">
-      <div class="inner">
-        @foreach ($pagoxmes_total as $pxm)
-          <h3>{{ $pxm->pedidos }}</h3>
-        @endforeach
-        <p>PEDIDOS DEL MES</p>
-      </div>
+
       <div class="icon">
         <i class="ion ion-person-add"></i>
       </div>
@@ -61,12 +46,6 @@
 
   <div class="col-lg-3 col-6 d-none">
     <div class="small-box bg-default">
-      <div class="inner">
-        @foreach ($pagoxmes_total_solo_asesor_b as $pxm2)
-          <h3>{{ $pxm2->pedidos }}</h3>
-        @endforeach
-        <p>PEDIDOS DEL MES ASESOR B</p>
-      </div>
       <div class="icon">
         <i class="ion ion-person-add"></i>
       </div>
@@ -78,12 +57,7 @@
 
   <div class="col-lg-3 col-6 d-none">
     <div class="small-box bg-danger">
-      <div class="inner">
-        @foreach ($montopagoxmes_total as $cxm)
-          <h3>S/@php echo number_format( ($cxm->total)/1000 ,2) @endphp </h3>
-        @endforeach
-        <p>COBRANZAS DEL MES</p>
-      </div>
+
       <div class="icon">
         <i class="ion ion-pie-graph"></i>
       </div>
