@@ -728,6 +728,7 @@ class ClienteController extends Controller
 
     public function clientedeasesor(Request $request)
     {
+       return $request->all();
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         $usersasesores = User::query()
             //->where('users.estado', '1')
