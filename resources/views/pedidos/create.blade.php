@@ -1069,6 +1069,7 @@ ${files.map(function (file) {
 
             $(document).on("change", "#user_id", function () {
                 var uid = $(this).val();
+                console.log('uid '+ uid)
 
               var clientedeasesor = new FormData();
               clientedeasesor.append('user_id', uid);
