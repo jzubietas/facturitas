@@ -334,14 +334,14 @@
                         type: 'green',
                         columnClass: 'xlarge',
                         content: `<div>
-    <form enctype="multipart/form-data" class="card">
-        <div class="card-body p-0">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <h5>Sobre de pedido:</h5>
-                    <div class="d-flex" style=" flex-wrap: wrap; column-gap: 2rem; ">${data.codigos.split('<br>').join('')}</div>
-                </div>
-            </div>
+                  <form enctype="multipart/form-data" class="card">
+                      <div class="card-body p-0">
+                          <div class="row">
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                  <h5>Sobre de pedido:</h5>
+                                  <div class="d-flex" style=" flex-wrap: wrap; column-gap: 2rem; ">${data.codigos.split('<br>').join('')}</div>
+                              </div>
+                          </div>
                         <div class="row mt-2">
                             <div class="col-12 col-md-4">
                                 <div class="input-group w-80">
@@ -388,40 +388,40 @@
                                             src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
                                             data-src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
                                 alt="Imagen del pago" class="img-fluid w-100" style="display: block;" width="300" height="300">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-4 mt-12">
-                    <div class="form-group">
-                        <div class="image-wrapper">
-                            <img id="picture2"
-                            src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
-                            data-src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
-                                 alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
+                    <div class="col-4 mt-12">
+                        <div class="form-group">
+                            <div class="image-wrapper">
+                                <img id="picture2"
+                                src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
+                                data-src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
+                                     alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-4 mt-12">
-                    <div class="form-group">
-                        <div class="image-wrapper">
-                            <img id="picture3"
-                            src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
-                            data-src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
-                                 alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
+                    <div class="col-4 mt-12">
+                        <div class="form-group">
+                            <div class="image-wrapper">
+                                <img id="picture3"
+                                src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
+                                data-src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
+                                     alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-12">
-                                <h6>Observacion (Opcional):</h6>
-                                <textarea class="form-control mb-20" rowspan="3" id="observacion" name="observacion" placeholder="Si tiene una observación, ingresela aquí"></textarea>
-                                </div>
-            </div>
-        </div>
-        <div class="card-footer text-center">
-            <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
-        </div>
-    </form>
-</div>`,
+                    <div class="col-lg-12">
+                                    <h6>Observacion (Opcional):</h6>
+                                    <textarea class="form-control mb-20" rowspan="3" id="observacion" name="observacion" placeholder="Si tiene una observación, ingresela aquí"></textarea>
+                                    </div>
+                          </div>
+                      </div>
+                      <div class="card-footer text-center">
+                          <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
+                      </div>
+                  </form>
+              </div>`,
                         onContentReady: function () {
                             const self = this
                             self.$content.find("#adjunto1").change(function (e) {
@@ -506,7 +506,7 @@
                                     url: "{{ route('operaciones.confirmarmotorizado') }}"
                                 }).done(function () {
                                     self.close()
-                                    $('.table').DataTable().ajax.reload();
+                                    $('#tablaEnmotorizado').DataTable().ajax.reload();
                                 }).always(function () {
                                     self.hideLoading(true)
                                 });
