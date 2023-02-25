@@ -232,6 +232,8 @@ class DireccionGrupo extends Model implements HasMedia
   'courier_estado',
   'courier_data',
   'add_screenshot_at',
+    'cod_recojo',
+    'env_sustento_recojo'
   ];
 
     public function getFechaSalidaFormatAttribute()
