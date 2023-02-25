@@ -664,7 +664,7 @@
                                 }
                                 self.showLoading(true)
                                 const cliente= self.$content.find( "select option:selected" ).text();
-                                $.post('{{route('alertas.cargarstore')}}', {
+                                $.post('{{route('cargarstore')}}', {
                                     tipo:'info',
                                     title:'Agregar Contacto',
                                     nota:`El asesor "{{user()->identificador}}" solicita agregar un contacto del cliente "${cliente}" con el nombre "${form[0].contact_name.value}" `,
