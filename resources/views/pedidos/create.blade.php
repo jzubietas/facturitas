@@ -1069,6 +1069,7 @@ ${files.map(function (file) {
 
             $(document).on("change", "#user_id", function () {
                 var uid = $(this).val();
+                console.log('uid '+ uid)
 
               var clientedeasesor = new FormData();
               clientedeasesor.append('user_id', uid);
@@ -1076,7 +1077,7 @@ ${files.map(function (file) {
                 data: clientedeasesor,
                 processData: false,
                 contentType: false,
-                type: 'GET',
+                type: 'POST',
                 url: "{{ route('cargar.clientedeasesor') }}",
                 success: function (data) {
                   $('#cliente_id').html(data.html);
