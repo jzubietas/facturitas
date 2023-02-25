@@ -130,7 +130,7 @@ class NotificationsController extends Controller
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
             ->poratenderestatus();
 
         if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
@@ -220,7 +220,7 @@ class NotificationsController extends Controller
             //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
-            ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT]);
+            ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
 
         if (Auth::user()->rol == User::ROL_ASESOR) {
 
