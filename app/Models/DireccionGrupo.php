@@ -170,7 +170,6 @@ class DireccionGrupo extends Model implements HasMedia
         return $this->reprogramacion_at != null && $this->reprogramacion_accept_at == null;
     }
 
-<<<<<<< HEAD
   protected $fillable = [
     'id',
     'correlativo',
@@ -237,8 +236,6 @@ class DireccionGrupo extends Model implements HasMedia
     'env_sustento_recojo'
   ];
 
-=======
->>>>>>> parent of 28d0900b (a)
     public function getFechaSalidaFormatAttribute()
     {
         return optional($this->fecha_salida)->format('d-m-Y');
