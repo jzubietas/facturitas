@@ -298,7 +298,8 @@ class UserController extends Controller
                     || $user->exidentificador == '22'
                     || $user->exidentificador == '21'
                     || $user->exidentificador == '23'
-                    || $user->exidentificador == '24') {
+                    || $user->exidentificador == '24'
+                    || $user->exidentificador == '25') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 }
                 else {
@@ -317,7 +318,43 @@ class UserController extends Controller
 
         //return response()->json($users);
     }
+  public function lstusuariosvidas(Request $request)
+  {
+    $mirol = Auth::user()->rol;
+    $users = null;
+    $users = User::where('estado', '1');
 
+    if ($mirol == 'Llamadas') {
+      $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+    } else if ($mirol == 'Jefe de llamadas') {
+      $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+    } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
+      $users = $users->where('identificador', '<>', 'B');
+    } else if ($mirol == 'Asesor') {
+      $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
+    } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
+      $users = User::where("rol", "ASESOR ADMINISTRATIVO");
+    } else {
+
+      $usersB = User::whereIn("rol", [User::ROL_ASESOR_ADMINISTRATIVO]);
+      $users = $usersB->union($users);
+
+    }
+
+
+    $users = $users->orderBy('exidentificador', 'ASC')->get();
+    $html = "";
+
+    foreach ($users as $user) {
+      if ($user->rol == 'Administrador') {
+        $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
+      } else {
+          $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
+      }
+    }
+
+    return response()->json(['html' => $html]);
+  }
     public function AsesorcomboModal(Request $request)
     {
         $mirol = Auth::user()->rol;
@@ -401,6 +438,7 @@ class UserController extends Controller
                     || $user->exidentificador == '21'
                     || $user->exidentificador == '23'
                     || $user->exidentificador == '24'
+                    || $user->exidentificador == '25'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
@@ -521,6 +559,33 @@ class UserController extends Controller
         return response()->json($user);
 
     }
+
+  public function quitarvidasusuario(Request $request)
+  {
+    $user=User::where('id',$request->user_id)->first();
+    if (intval($user->vidas_restantes)>0){
+      $contadorquitavidas=intval($user->vidas_restantes)-1;
+      $user->update([
+        'vidas_restantes' => $contadorquitavidas
+      ]);
+
+    }
+
+
+    return response()->json($user);
+
+  }
+
+  public function getvidasusuario(Request $request)
+  {
+    $user=User::where('estado', '1')
+      ->where('id', Auth::user()->id)
+      ->select(
+        'vidas_total'
+      )->first();
+    return response()->json($user);
+
+  }
 
     public function AsignarSupervisor(Request $request, User $user)
     {

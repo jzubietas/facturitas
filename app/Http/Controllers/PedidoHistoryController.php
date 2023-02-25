@@ -51,8 +51,11 @@ class PedidoHistoryController extends Controller
         $data = $request->all();
         foreach ($data as $key => $value) {
             $data[$key] = trim($value);
+            //if()
         }
         $data['user_id'] = \auth()->id();
+        //return $data;
+        //$data['tipo_banca']=explode('_',$data['tipo_banca'])[0];
         return PedidoHistory::query()->updateOrCreate($data);
     }
 

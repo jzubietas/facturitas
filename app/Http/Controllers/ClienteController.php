@@ -512,10 +512,10 @@ class ClienteController extends Controller
                     $porcentaje_retorno=1.5;
                 }
             }else{
-                if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion<'2022-10-01'){
+                if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion<'2022-11-01'){
                     $porcentaje_retorno=1.8;
                 }
-                else if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion>='2022-10-01'){
+                else if($situacion=='ABANDONO' && $ultimopedido_fecha_comparacion>='2022-11-01'){
                     $porcentaje_retorno=2.0;
                 }
             }

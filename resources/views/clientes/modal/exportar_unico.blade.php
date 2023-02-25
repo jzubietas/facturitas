@@ -14,7 +14,7 @@
             @elseif($key === '4')
             recuperado
             @elseif($key === '5')
-            ABANDONO_PERMANENTE
+            ABANDONO
 
           @endif
 
@@ -60,7 +60,7 @@
                           @elseif($key === '4')
                           <input type="hidden" id="situacion" name="situacion" value="RECUPERADO RECIENTE">
                           @elseif($key === '5')
-                          <input type="hidden" id="situacion" name="situacion" value="ABANDONO_PERMANENTE">
+                          <input type="hidden" id="situacion" name="situacion" value="ABANDONO">
                           @elseif($key === '6')
                           <input type="hidden" id="situacion" name="situacion" value="RECUPERADO_ABANDONO">
                           @elseif($key === '7')

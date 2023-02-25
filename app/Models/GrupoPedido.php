@@ -13,6 +13,22 @@ class GrupoPedido extends Model
 
     protected $guarded = ['id'];
 
+  protected $fillable = [
+    'id',
+    'zona',
+    'provincia',
+    'distrito',
+    'direccion',
+    'referencia',
+    'cliente_recibe',
+    'telefono',
+    'created_at',
+    'updated_at',
+    'deleted_at',
+    'cod_recojo',
+    'env_sustento_recojo',
+  ];
+
     public function pedidos()
     {
         return $this->belongsToMany(Pedido::class, 'grupo_pedido_items')->withPivot([
@@ -20,11 +36,10 @@ class GrupoPedido extends Model
             'codigo',
         ])->orderByPivot('razon_social', 'asc');
     }
-
     public static function createGroupByPedido(Pedido $pedido, $createAnother = false, $attach = false)
     {
         //return $pedido;
-        if ($pedido->estado_sobre = 1) {
+        if ($pedido->estado_sobre == 1) {
             $grupo = self::createGroupByArray([
                 "zona" => $pedido->env_zona,
                 "provincia" => $pedido->env_destino,
@@ -35,6 +50,8 @@ class GrupoPedido extends Model
                 'referencia' => (($pedido->env_destino == 'PROVINCIA') ? $pedido->tracking : $pedido->env_referencia),
                 'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
                 'telefono' => $pedido->env_celular_cliente_recibe,
+                'cod_recojo' => (($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT)? '1' : '0'),
+                'env_sustento_recojo' => (($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT)? $pedido->env_sustento : '')
             ], $createAnother);
             if ($attach) {
                 $detalle = $pedido->detallePedidos()->activo()->orderBy('detalle_pedidos.created_at')->first();
@@ -45,23 +62,33 @@ class GrupoPedido extends Model
                         "razon_social" => $detalle->nombre_empresa,
                     ]
                 ]);
+              //ENTREGADO_NUEVO_DIR_INT
+              if ($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT) {
+                $pedido->update([
+                  'condicion_envio_at' => now(),
+                ]);
+              }else{
                 if ($pedido->condicion_envio_code != Pedido::RECEPCION_COURIER_INT) {
-                    $pedido->update([
-                        'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-                        'condicion_envio' => Pedido::RECEPCION_COURIER,
-                        'condicion_envio_at' => now(),
-                        //'estado_sobre' => 1,
-                    ]);
+                  $pedido->update([
+                    'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'condicion_envio' => Pedido::RECEPCION_COURIER,
+                    'condicion_envio_at' => now(),
+                    //'estado_sobre' => 1,
+                  ]);
                 }
+              }
+
             }
             return $grupo;
-        }else{
+        }
+        else{
             if ($pedido->condicion_envio_code != Pedido::RECEPCION_COURIER_INT) {
                 $pedido->update([
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
                     'condicion_envio' => Pedido::RECEPCION_COURIER,
                     'condicion_envio_at' => now(),
                     //'estado_sobre' => 1,
+
                 ]);
             }
         }
@@ -86,17 +113,21 @@ class GrupoPedido extends Model
             /*if ($createAnother) {
                 return GrupoPedido::create(array_merge($data, $data2));
             }*/
-        } else {
+        }
+        else {
             $distrito = Distrito::query()
                 ->where('distrito', '=', data_get($array, 'distrito'))
                 ->whereIn('provincia', ['LIMA', 'CALLAO'])
                 ->first();
+            /*PEDIDO*/
             $data = [
                 "zona" => data_get($array, 'zona') ?? 'n/a',
                 "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
                 'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
                 'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
                 'cliente_recibe' => data_get($array, 'cliente_recibe') ?? 'n/a',//olva
+                'cod_recojo' => data_get($array, 'cod_recojo') ?? 'n/a',
+                'env_sustento_recojo' => data_get($array,'env_sustento_recojo') ?? 'n/a',
             ];
             $data2 = [
                 'referencia' => data_get($array, 'referencia') ?: 'n/a',//olva

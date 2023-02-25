@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterPedidoAddEstadoCorreccion extends Migration
+class AddColumnDetallecontactosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class AlterPedidoAddEstadoCorreccion extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('detalle_contactos', function (Blueprint $table) {
+            $table->string('nombre_contacto');
+        });
     }
 
     /**
@@ -23,11 +25,8 @@ class AlterPedidoAddEstadoCorreccion extends Migration
      */
     public function down()
     {
-        Schema::table('pedidos',function (Blueprint $table){
-            if(!Schema::hasColumn('pedidos','estado_correccion'))
-            {
-                $table->integer('agenda',11)->nullable()->comment('');
-            }
+        Schema::table('detalle_contactos', function (Blueprint $table) {
+            //
         });
     }
 }

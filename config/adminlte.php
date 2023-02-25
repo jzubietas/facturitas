@@ -454,17 +454,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],*/
-
-
-
-
-                [
+                /*[
                     'text' => 'Sobres en reparto',
                     'route' => 'envios.enreparto',
                     'can' => 'envios.index',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
-                ],
+                ],*/
                 /*[
                     'text' => 'Motorizado',
                     'route' => 'envios.motorizados.index',
@@ -659,13 +655,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
-                [
+                /*[
                     'text' => 'CASI ABANDONO',
                     'route' => 'clientes.abandonos.recientes.abandono',
                     'can' => 'clientes.abandonos.reciente.abandono',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['clientes'],
-                ],
+                ],*/
                 [
                     'text' => 'Abandono',
                     'route' => 'clientes.abandonos',

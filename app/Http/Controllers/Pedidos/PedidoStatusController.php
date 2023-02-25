@@ -210,7 +210,7 @@ class PedidoStatusController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
                     'pedidos.*',
-                    'dp.mes',
+                    'dp.mes','dp.anio',
                     'pedidos.correlativo as id2',
                     'c.nombre as nombres',
                     'c.celular as celulares',
@@ -304,6 +304,9 @@ class PedidoStatusController extends Controller
                 ->addColumn('condicion_envio_color', function ($pedido) {
                     return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 })
+                ->editColumn('mes', function ($pedido) {
+                  return $pedido->mes.'-'.$pedido->anio;
+                })
                 ->editColumn('condicion_envio', function ($pedido) {
                     $badge_estado = '';
                     if ($pedido->pendiente_anulacion == '1') {
@@ -355,7 +358,7 @@ class PedidoStatusController extends Controller
             //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
-            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
+            ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
             ->count();
         //$pedidos_atendidos_total = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->atendidos()->noPendingAnulation()->count();
 
@@ -364,7 +367,7 @@ class PedidoStatusController extends Controller
             ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
-            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
+            ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT,Pedido::CORRECCION_OPE_INT])
             ->count();
 
         $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])->porAtender()->noPendingAnulation()->count();
@@ -376,7 +379,7 @@ class PedidoStatusController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
                     'pedidos.id',
-                    'dp.mes', //se agrega campo mes
+                    'dp.mes','dp.anio', //se agrega campo mes
                     'pedidos.da_confirmar_descarga',
                     'pedidos.sustento_adjunto',
                     'pedidos.correlativo as id2',
@@ -479,7 +482,7 @@ class PedidoStatusController extends Controller
             }
 
             $pedidos->where('pedidos.da_confirmar_descarga', '0')
-                ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
+                ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
 
 
             return datatables()->query(DB::table($pedidos))
@@ -487,6 +490,9 @@ class PedidoStatusController extends Controller
                 ->addColumn('condicion_envio_color', function ($pedido) {
                     return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 })
+              ->editColumn('mes', function ($pedido) {
+                return $pedido->mes.'-'.$pedido->anio;
+              })
                 ->editColumn('condicion_envio', function ($pedido) {
                     $badge_estado = '';
                     if ($pedido->pendiente_anulacion == '1') {

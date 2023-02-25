@@ -78,6 +78,133 @@ class PdfController extends Controller
         return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes','anios','dateM','dateY'));
     }
 
+    public function Analisisgrafico()
+    {
+      $_pedidos_mes_pasado = User::select([
+        'users.id','users.name','users.email'
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO RECIENTE' ) recuperado_reciente")
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO ABANDONO' ) recuperado_abandono")
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='NUEVO' ) nuevo")
+      ])
+        ->whereIn('users.rol', ['Llamadas']);
+
+      $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
+      $p_recuperado_reciente=0;
+      $p_recuperado_abandono=0;
+      $p_recuperado_nuevo=0;
+      $p_total=0;
+      $p_total_cruzado=0;
+      $html=[];
+      $html[]='<div class="row table-total">';
+        $html[]='<div class="col-md-12 scrollbar-x">';
+          $html[]='<div class="table_analisis" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">';
+      foreach ($_pedidos_mes_pasado as $pedido)
+      {
+        //$p_total=0;
+        //$p_recuperado_reciente=$p_recuperado_reciente+intval($pedido->recuperado_reciente);
+        //$p_recuperado_abandono=$p_recuperado_abandono+intval($pedido->recuperado_abandono);
+        //$p_recuperado_nuevo=$p_recuperado_nuevo+intval($pedido->nuevo);
+        $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
+        $p_total_cruzado=$p_total_cruzado+ $p_total;
+      }
+       /*CABECERA*/
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">ASESORES DE LLAMADA</h5></div>';
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">RECUPERADO RECIENTE</h5></div>';
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">RECUPERADO ABANDONO</h5></div>';
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">NUEVO</h5></div>';
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">TOTAL</h5></div>';
+
+      foreach ($_pedidos_mes_pasado as $pedido)
+      {
+        /*CUERPO*/
+        $p_total=0;
+        $html[]= '<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5  class="rounded p-2 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: black;"> ' .explode(' ', $pedido->name)[0].'</h5></div>';
+
+        $html[]= '<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+        $html[]='<h5 class="rounded p-4 font-weight-bold" style=" background: '.Pedido::color_skype_blue.'; color: black;">' .$pedido->recuperado_reciente.'</h5>';
+        $html[]='</div>';
+
+        $p_recuperado_reciente=$p_recuperado_reciente+intval($pedido->recuperado_reciente);
+        $html[]= '<div  class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: black;">' .$pedido->recuperado_abandono.'</h5></div>';
+        $p_recuperado_abandono=$p_recuperado_abandono+intval($pedido->recuperado_abandono);
+        $html[]= '<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-4 font-weight-bold" style="background: '.Pedido::color_skype_blue.'; color: black;">' .$pedido->nuevo.'</h5></div>';
+        $p_recuperado_nuevo=$p_recuperado_nuevo+intval($pedido->nuevo);
+        $p_total=intval($pedido->recuperado_reciente)+intval($pedido->recuperado_abandono)+intval($pedido->nuevo);
+
+        $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+        $html[]=  '<div class="w-100 bg-white rounded">
+                    <div class="position-relative rounded">
+                      <div class="progress bg-white rounded" style="height: 40px">
+                          <div class="rounded" role="progressbar" style="background: '.Pedido::colo_progress_bar.' !important; width: ' . number_format((($p_total/$p_total_cruzado)*100),2) . '%" ></div>
+                          </div>
+                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                            <span style="font-weight: lighter; font-size: 16px"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_total/$p_total_cruzado)*100),2) . '% </b> - ' . $p_total. ' / ' . $p_total_cruzado . '</span>
+                        </div>
+                    </div>
+                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                  </div>';
+        $html[]='</div>';
+        //$p_total_cruzado=$p_total_cruzado+intval($p_total);
+      }
+
+      //totales
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">TOTALES</h5></div>';
+
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+      $html[]=  '<div class="w-100 bg-white rounded">
+                    <div class="position-relative rounded">
+                      <div class="progress bg-white rounded" style="height: 40px">
+                          <div class="rounded" role="progressbar" style="background: '.Pedido::colo_progress_bar.' !important; width: '. number_format((($p_recuperado_reciente/$p_total_cruzado)*100),2) . '%" ></div>
+                          </div>
+                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                            <span style="font-weight: lighter; font-size: 16px"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_reciente/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_reciente. ' / ' . $p_total_cruzado . '</span>
+                        </div>
+                    </div>
+                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                  </div>';
+      $html[]='</div>';
+
+
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+      $html[]=  '<div class="w-100 bg-white rounded">
+                    <div class="position-relative rounded">
+                      <div class="progress bg-white rounded" style="height: 40px">
+                          <div class="rounded" role="progressbar" style="background: '.Pedido::colo_progress_bar.' !important; width: ' . number_format((($p_recuperado_abandono/$p_total_cruzado)*100),2) .'%" ></div>
+                          </div>
+                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                            <span style="font-weight: lighter; font-size: 16px"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_abandono/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_abandono. ' / ' . $p_total_cruzado . '</span>
+                        </div>
+                    </div>
+                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                  </div>';
+      $html[]='</div>';
+
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6">';
+      $html[]=  '<div class="w-100 bg-white rounded">
+                    <div class="position-relative rounded">
+                      <div class="progress bg-white rounded" style="height: 40px">
+                          <div class="rounded" role="progressbar" style="background: '.Pedido::colo_progress_bar.' !important; width: ' . number_format((($p_recuperado_nuevo/$p_total_cruzado)*100),2) . '%" ></div>
+                          </div>
+                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                            <span style="font-weight: lighter; font-size: 16px"> <b style="font-weight: bold !important; font-size: 18px">  ' . number_format((($p_recuperado_nuevo/$p_total_cruzado)*100),2) . '% </b> - ' . $p_recuperado_nuevo. ' / ' . $p_total_cruzado . '</span>
+                        </div>
+                    </div>
+                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                  </div>';
+      $html[]='</div>';
+
+      $html[]='<div class="p-2 text-center d-flex align-items-center justify-content-center" style="border: black 1px solid; background: #e4dbc6"><h5 class="rounded p-3 font-weight-bold" style="background: '.Pedido::color_blue.'; color: #ffffff;">'.$p_total_cruzado.' - 100.00%</h5></div>';
+
+          $html[]='</div>';
+        $html[]='</div>';
+      $html[]='</div>';
+
+      $html=join('', $html);
+      return $html;
+      //return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes','anios','dateM','dateY'));
+    }
+
+
     public function PedidosPorFechas(Request $request)
     {
         $fecha = Carbon::now('America/Lima')->format('d-m-Y');
@@ -587,3 +714,6 @@ class PdfController extends Controller
     }
 
 }
+
+
+

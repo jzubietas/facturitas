@@ -49,20 +49,19 @@ class Pedido extends Model
     const ENTREGADO_CLIENTE = 'ENTREGADO - CLIENTE'; // 10
     const ENTREGADO_SIN_SOBRE_OPE = 'ATENDIDO: ENTREGADO SIN SOBRE - OPE'; // 13
     const ENTREGADO_SIN_SOBRE_CLIENTE = 'ENTREGADO SIN SOBRE - CLIENTE'; // 14
-
     const CONFIRM_MOTORIZADO = 'PRE* ENTREGADO A CLIENTE - MOTORIZADO'; // 16/PRE ENTREGADO A CLIENTE - MOTORIZADO  //CONFIRMACION - MOTORIZADO
     const CONFIRM_VALIDADA_CLIENTE = 'CONFIRMACION VALIDADA - CLIENTE'; // 17
     const RECEPCION_MOTORIZADO = 'RECEPCION - MOTORIZADO'; // 18
     const ENVIO_MOTORIZADO_COURIER = 'ENVIO A MOTORIZADO - COURIER'; // 19
-
     const RECEPCIONADO_OLVA = 'RECEPCIONADO - OLVA'; // 9
     const EN_CAMINO_OLVA = 'EN CAMINO - OLVA'; // 22
     const EN_TIENDA_AGENTE_OLVA = 'EN TIENDA/AGENTE - OLVA';//23
     const NO_ENTREGADO_OLVA = 'NO ENTREGADO - OLVA';//24
     const ENTREGADO_PROVINCIA = 'ENTREGADO - PROVINCIA'; // 21
-
     const ENTREGADO_SIN_ENVIO_CLIENTE = 'ENTREGADO SIN ENVIO - CLIENTE'; // 25
     const ENTREGADO_RECOJO = 'ENTREGADO - RECOJO';//26
+    const ENTREGADO_NUEVO_DIR = 'RECOJO CLIENTE - COURIER';//28
+     const ENTREGADO_JEFE_CURRIER = 'ENTREGADO JEFE - CURRIER'; //29
 
 
     /**************
@@ -82,23 +81,25 @@ class Pedido extends Model
     const ENTREGADO_CLIENTE_INT = 10;
     const ENTREGADO_SIN_SOBRE_OPE_INT = 13;
     const ENTREGADO_SIN_SOBRE_CLIENTE_INT = 14;
-
     const CONFIRM_MOTORIZADO_INT = 16;
     const CONFIRM_VALIDADA_CLIENTE_INT = 17;
     const RECEPCION_MOTORIZADO_INT = 18;
     const ENVIO_MOTORIZADO_COURIER_INT = 19; // 19
     const ENTREGADO_PROVINCIA_INT = 21; // 19
-
     const EN_CAMINO_OLVA_INT = 22;
     const EN_TIENDA_AGENTE_OLVA_INT = 23;
     const NO_ENTREGADO_OLVA_INT = 24;
     const ENTREGADO_SIN_ENVIO_CLIENTE_INT = 25;
     const ENTREGADO_RECOJO_INT = 26;
-
+    const ENTREGADO_NUEVO_DIR_INT = 28;
+    const ENTREGADO_JEFE_CURRIER_INT = 29;
     const ESTADO_MOTORIZADO_OBSERVADO = 1;
     const ESTADO_MOTORIZADO_NO_CONTESTO = 2;
     const ESTADO_MOTORIZADO_NO_RECIBIDO = 3;
     const ESTADO_MOTORIZADO_RE_RECIBIDO = 4;
+    const color_skype_blue = '#abc4ff';
+    const color_blue = '#031d44';
+    const colo_progress_bar= '#73d9bc';
 
     /**************
      * FIN CONSTANTES CONDICION ENVIO NUMERICO
@@ -150,6 +151,99 @@ class Pedido extends Model
     ];
     protected $appends = [
         'condicion_envio_color'
+    ];
+
+    protected $fillable = [
+      'id',
+      'correlativo',
+      'cliente_id',
+      'identificador',
+      'zona',
+      'provincia',
+      'distrito',
+      'direccion',
+      'referencia',
+      'cliente_recibe',
+      'user_id',
+      'exidentificador',
+      'icelular_asesor',
+      'icelular_cliente',
+      'celular_cliente',
+      'icelular-cliente',
+      'creador',
+      'pago',
+      'pagado',
+      'destino',
+      'trecking',
+      'direccion',
+      'condicion_envio',
+      'condicion_envio_code',
+      'condicion_envio_at',
+      'condicion',
+      'codigo',
+      'codigos_confirmados',
+      'notificacion',
+      'motivo',
+      'responsable',
+      'modificador',
+      'devuelto',
+      'cant_devuelto',
+      'observacion_devuelto',
+      'estado',
+      'da_confirmar_descarga',
+      'sustento_adjunto',
+      'path_adjunto_anular',
+      'path_adjunto_anular_disk',
+      'pendiente_anulacion',
+      'user_anulacion_id',
+      'fecha_anulacion',
+      'fecha_anulacion_confirm',
+      'fecha_anulacion_denegada',
+      'created_at',
+      'updated_at',
+      'returned_at',
+      'cambio_direccion_at',
+      'envio',
+      'estado_condicion_envio',
+      'estado_condicion_pedido',
+      'estado_sobre',
+      'estado_consinsobre',
+      'env_destino',
+      'env_distrito',
+      'env_zona',
+      'env_zona_asignada',
+      'env_nombre_cliente_recibe',
+      'env_celular_cliente_recibe',
+      'env_cantidad',
+      'env_direccion',
+      'env_tracking',
+      'env_referencia',
+      'env_numregistro',
+      'env_rotulo',
+      'env_observacion',
+      'env_gmlink',
+      'env_importe',
+      'estado_ruta',
+      'direccion_grupo',
+      'fecha_salida',
+      'cambio_direccion_sustento',
+      'fecha_recepcion_courier',
+      'fecha_envio_op_courier',
+      'fecha_envio_atendido_op',
+      'pedido_scaneo',
+      'codigo_regularizado',
+      'courier_sync_at',
+      'courier_failed_sync_at',
+      'courier_sync_finalized',
+      'courier_estado',
+      'courier_data',
+      'estado_correcion',
+      'condicion_envio_anterior',
+      'condicion_envio_code_anterior',
+      'codigo_anterior',
+      'pedidoid_anterior',
+      'resultado_correccion',
+      'env_sustento',
     ];
 
     /* public function user()
@@ -289,6 +383,65 @@ class Pedido extends Model
         return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [self::POR_ATENDER_INT, self::EN_PROCESO_ATENCION_INT]);
     }
 
+    public function scopePendienteAnulacion($query){
+      return $query->whereIn($this->qualifyColumn('condicion_code'), [self::POR_ATENDER_INT, self::ANULADO_INT]);
+    }
+
+    public function scopeImporte($query, $importe){
+      return $query->where($this->qualifyColumn('env_importe'), '=', $importe);
+    }
+
+  public function scopeGmlink($query, $gmLink){
+    return $query->where($this->qualifyColumn('env_gmlink'), '=', $gmLink);
+  }
+
+  public function scopeObservacion($query, $observacion){
+    return $query->where($this->qualifyColumn('env_observacion'), '=', $observacion);
+  }
+
+  public function scopeRotulo($query, $rotulo){
+    return $query->where($this->qualifyColumn('env_rotulo'), '=', $rotulo);
+  }
+
+  public function scopeNumregistro($query, $numRegistro){
+    return $query->where($this->qualifyColumn('env_numregistro'), '=', $numRegistro);
+  }
+
+  public function scopeReferencia($query, $referencia){
+    return $query->where($this->qualifyColumn('env_referencia'), '=', $referencia);
+  }
+
+  public function scopeTracking($query, $tracking){
+    return $query->where($this->qualifyColumn('env_tracking'), '=', $tracking);
+  }
+
+  public function scopeDireccion($query, $direction){
+    $query->where('env_direccion', '=', $direction);
+  }
+
+  public function scopeCantidad($query, $cantidad){
+    return $query->where($this->qualifyColumn('env_cantidad'), '=', $cantidad);
+  }
+
+  public function scopeCelularClienteRecibe($query, $celularClienteRecibe){
+    return $query->where($this->qualifyColumn('env_celular_cliente_recibe'), '=', $celularClienteRecibe);
+  }
+
+  public function scopeNombreClienteRecibe($query, $nombredecliente){
+    $query->where('env_nombre_cliente_recibe', '=', $nombredecliente);
+  }
+
+  public function scopeZonaAsignada($query){
+    $query->where('env_zona', '=', 'OLVA');
+  }
+
+  public function scopeDistrito($query, $distrito){
+    $query->where('env_distrito', '=', $distrito);
+  }
+
+  public function scopeDestino($query, $destino){
+    $query->where('env_destino', '=', $destino);
+  }
     public function scoperoladmin($query)
     {
         return $query;
@@ -422,6 +575,25 @@ class Pedido extends Model
 
         return $query;
     }
+
+  public function scopeConsultarecojo($query, $celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe,$zona,$destino, $direction,$nombredecliente,$distrito){
+    $query = $query
+      ->zonaAsignadaEnvio($zona)
+      ->destino($destino)
+      ->distrito($distrito)
+      ->nombreClienteRecibe($nombredecliente)
+      ->celularClienteRecibe($celularClienteRecibe)
+      ->cantidad($cantidad)
+      ->direccion($direction)
+      ->tracking($tracking)
+      ->referencia($referencia)
+      ->numregistro($numRegistro)
+      ->rotulo($rotulo)
+      ->observacion($observacion)
+      ->gmlink($gmLink)
+      ->importe($importe);
+    return $query;
+  }
 
     public static function getColorByCondicionEnvio($condicion_envio)
     {

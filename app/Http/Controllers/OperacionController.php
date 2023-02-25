@@ -94,6 +94,7 @@ class OperacionController extends Controller
                 'u.identificador as users',
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
+                'dp.mes','dp.anio',
                 'dp.total as total',
                 DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s")) as fecha'),
                 'dp.envio_doc',
@@ -181,6 +182,9 @@ class OperacionController extends Controller
                 $badge_estado.= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
+          ->editColumn('mes', function ($pedido) {
+            return $pedido->mes.'-'.$pedido->anio;
+          })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 return $btn;
@@ -225,6 +229,7 @@ class OperacionController extends Controller
                 'u.identificador as users',
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
+                'dp.mes','dp.anio',
                 'pedidos.condicion',
                 'pedidos.condicion_code',
                 'pedidos.da_confirmar_descarga',
@@ -317,6 +322,9 @@ class OperacionController extends Controller
 
                 return $badge_estado;
             })
+          ->editColumn('mes', function ($pedido) {
+            return $pedido->mes.'-'.$pedido->anio;
+          })
             ->addColumn('action', function ($pedido) {
                 $btn = [];
                 $btn[] = '<div class="row">';

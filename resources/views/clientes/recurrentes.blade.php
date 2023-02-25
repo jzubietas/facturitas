@@ -17,11 +17,12 @@
               Exportar
             </button>
             <div class="dropdown-menu">
-            <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
+            <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_">
+              <img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
             </div>
         </div>
         @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECURRENTES', 'key' => '2'])
-            
+
         @endcan
     </h1>
     @if($superasesor > 0)
@@ -179,7 +180,7 @@
                 serverSide: true,
                 ajax: "{{ route('clientesrecurrentetabla') }}",
                 initComplete:function(settings,json){
-                   
+
                 },
                 columns: [
                     {

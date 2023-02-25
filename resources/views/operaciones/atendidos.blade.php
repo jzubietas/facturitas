@@ -699,6 +699,7 @@
                     },
                     {data: 'codigos', name: 'codigos',},
                     {data: 'empresas', name: 'empresas',},
+                  {data: 'mes', name: 'mes',},
                     {data: 'users', name: 'users',},
                     //{data: 'fecha', name: 'fecha', },
                     {

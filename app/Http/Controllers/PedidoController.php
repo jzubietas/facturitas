@@ -14,6 +14,7 @@ use App\Models\DetallePedido;
 use App\Models\DireccionEnvio;
 use App\Models\DireccionGrupo;
 use App\Models\DireccionPedido;
+use App\Models\Directions;
 use App\Models\Distrito;
 use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
@@ -40,8 +41,8 @@ use Illuminate\Support\Js;
 use PDF;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
-use DataTables;
 use Storage;
+use Yajra\DataTables\DataTables;
 
 class PedidoController extends Controller
 {
@@ -164,6 +165,7 @@ class PedidoController extends Controller
                     'direccion_grupos.motorizado_status'
                 ]
             );
+        //->where('pedidos.condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);//solo para testeo de recojo
 
 
         if (Auth::user()->rol == "Llamadas") {
@@ -916,39 +918,6 @@ class PedidoController extends Controller
         }
         return response()->json(['html' => $html]);
     }
-
-    public function clientemodal1(Request $request)
-    {
-        $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-        if (!empty($request->user_id)) {
-            $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')
-                ->where('clientes.tipo', '1')
-                ->where('clientes.estado', '1');
-            if ($request->rol != User::ROL_ADMIN) {
-                $clientes->where('u.identificador', $request->user_id);
-            }
-
-            $clientes = $clientes->get([
-                'clientes.id',
-                'clientes.celular',
-                'clientes.icelular',
-                'clientes.nombre',
-                'clientes.crea_temporal',
-                'clientes.activado_tiempo',
-                'clientes.activado_pedido',
-                'clientes.temporal_update',
-                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d H:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format("Y-m-d H:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-            ]);
-            foreach ($clientes as $cliente) {
-                //if ($cliente->pedidos_mes_deuda > 0 || $cliente->pedidos_mes_deuda_antes > 0) {
-                $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
-                //}
-            }
-        }
-        return response()->json(['html' => $html]);
-    }
-
 
     public function clientedeudaparaactivar(Request $request)//clientes
     {
@@ -3163,4 +3132,80 @@ class PedidoController extends Controller
     }
 
 
+  public function recojolistclientes(Request $request)
+  {
+    $pedidos = null;
+
+    $idrequest = $request->cliente_id;
+    $idpedido = $request->pedido;
+    $consultaPedido = Pedido::where('id', $idpedido)->first();
+    $direccion_grupo=$consultaPedido->direccion_grupo;
+    /*$celularClienteRecibe=$consultaPedido->env_celular_cliente_recibe;
+    $cantidad=$consultaPedido->env_cantidad;
+    $tracking=$consultaPedido->env_tracking;
+    $referencia=$consultaPedido->env_referencia;
+    $numRegistro=$consultaPedido->env_numregistro;
+    $rotulo=$consultaPedido->env_rotulo;
+    $observacion=$consultaPedido->env_observacion;
+    $gmLink=$consultaPedido->env_gmlink;
+    $importe=$consultaPedido->env_importe;
+    $zona=$consultaPedido->env_zona_asignada;
+    $destino=$consultaPedido->env_destino;
+    $direction=$consultaPedido->env_direccion;
+    $nombredecliente=$consultaPedido->env_nombre_cliente_recibe;
+    $distrito=$consultaPedido->env_distrito;*/
+
+    $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+      ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+      ->select(
+        [
+          'pedidos.id as pedidoid',
+          'c.id as clienteid',
+          'dp.codigo',
+          'dp.nombre_empresa',
+        ]
+      )
+      ->where('pedidos.cliente_id', $idrequest)->where('pedidos.condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);
+        //->where('pedidos.cliente_id', $idrequest)->where('direccion_grupo',$direccion_grupo);
+      //->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito)//;
+    if($request->pedidosNotIn){
+      $pedidos = $pedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
+    }
+
+    return Datatables::of(DB::table($pedidos))
+      ->addIndexColumn()
+      ->make(true);
+  }
+
+  public function getdireecionentrega(Request $request)
+  {
+    $codigo_pedido= $request->codigo_pedido;//userid de asesor
+    $pedido=Pedido::where('id',$codigo_pedido)->first();
+
+    $operario=User::where('id',$pedido->user_id)->first()->operario;
+    $jefeop=User::where('id',$operario)->first()->jefe;
+
+    //$result_direccion=User::where('id',$jefeop)->first()->id;
+    $result_direccion=Directions::query()->where('user_id',$jefeop)->first()->direccion_recojo;
+
+    $totalpedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+      ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+      ->select(
+        [
+          'pedidos.id as pedidoid',
+          'c.id as clienteid',
+          'dp.codigo',
+          'dp.nombre_empresa',
+        ]
+      )
+      //->where('pedidos.cliente_id', $request->codigo_cliente)->where('direccion_grupo',$pedido->direccion_grupo)
+      ->where('pedidos.cliente_id', $request->codigo_cliente)
+      ->where('condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);
+    if (!!$request->pedidosNotIn)
+      $totalpedidos =  $totalpedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
+      $totalpedidos =  $totalpedidos->count();
+
+    return $result_direccion .'|'.$totalpedidos;
+
+  }
 }

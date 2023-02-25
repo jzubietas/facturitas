@@ -1,120 +1,93 @@
 <?php
 
-namespace App\Models;
+namespace App\Console\Commands;
 
-use App\Traits\CommonModel;
+use App\Models\Cliente;
+use App\Models\Pedido;
+use App\Models\SituacionClientes;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Console\Command;
 
-class Cliente extends Model
+class AnalisisSituacionCliente extends Command
 {
-    use HasFactory;
-    use CommonModel;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'show:analisis:situacion';
 
-    const RECUPERADO_RECIENTE = "RECUPERADO RECIENTE";
-    const RECUPERADO_PERMANENTE = "RECUPERADO ABANDONO";
-    const RECUPERADO_ABANDONO = "RECUPERADO ABANDONO";
-    const ABANDONO_RECIENTE = "ABANDONO RECIENTE";
-    const ABANDONO_PERMANENTE = "ABANDONO PERMANENTE";
-    const ABANDONO = "ABANDONO";
-    const RECURRENTE = "RECURRENTE";
-    const NUEVO = "NUEVO";
-    const RECUPERADO = "RECUPERADO";
-    const CASI_ABANDONO = "CASI ABANDONO";
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
 
-    const ANULADO='ANULADO';
-
-
-    protected $guarded = ['id'];
-    protected $dates=[
-        'temporal_update'
-    ];
-    protected $casts=[
-        'activado_pedido'=>'integer'
-    ];
-
-    public function user()
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        return $this->belongsTo(User::class);
+        parent::__construct();
     }
 
-    public function rucs()
-    {
-        return $this->hasMany(Ruc::class, 'cliente_id');
-    }
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+  public function handle()
+  {
 
-    public function porcentajes()
-    {
-        return $this->hasMany(Porcentaje::class, 'cliente_id');
-    }
-
-    public function pedidos()
-    {
-        //SELECT SUM(saldo) FROM detalle_pedidos WHERE pedido_id=4;
-        return $this->hasMany(Pedido::class, 'cliente_id');
-    }
-
-    public function direccion_grupos(){
-        return $this->hasMany(DireccionGrupo::class,'cliente_id');
-    }
-
-    public function adjuntosFiles()
-    {
-        $data = setting("pedido." . $this->id . ".adjuntos_file");
-        if (is_array($data)) {
-            return $data;
-        }
-        return [];
-    }
-
-    public static function restructurarCodigos($anio,$mes,self $cliente)
-    {
-        $analisis=SituacionClientes::where('id',$cliente->id)->orderBy('periodo')->get();
-        if($analisis)
-        {
-            $anio='2021';
-            for($i=11;$i<=12;$i++)
-            {
-                switch ($i)
-                {
-                    case '11':
-                        break;
-                    case '12':
-                        break;
-                }
-            }
-        }else{
-            Clientes::where('id',$cliente->id)->update(['situacion'=>'BASE FRIA']);
-        }
-    }
-
-  public static function createSituacionByCliente($cliente_id){
+    //$this->warn("Cargando primer pedido mes anio");
     $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
 
-    $periodo_original=Carbon::parse($fp->created_at);
-    $periodo_actual=Carbon::parse(now());
+    $periodo_original=Carbon::parse($fp->created_at);//->format('Y_m');
+    $periodo_actual=Carbon::parse(now());//->format('Y_m');
+
     $primer_periodo=Carbon::parse($fp->created_at);
     $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
+    //$this->info("Diferencia de meses ".$diff);
+
     $where_anio='';
     $where_mes='';
     $cont_mes=0;
-    $clientes=Cliente::whereIn('tipo',['0','1'])->where('id',$cliente_id)->orderBy('id','asc')->get();
 
+
+
+    $clientes=Cliente::whereIn('tipo',['0','1'])->orderBy('id','asc')->get();
+    //->where('id',1739) //->where('id',45)
+    $progress = $this->output->createProgressBar($clientes->count());
+    //$periodo_original=$primer_periodo;
     foreach($clientes as $cliente)
     {
+
       $idcliente=$cliente->id;
+
+      //if($cliente->id==1739)
       {
+        $this->warn($cliente->id);
         $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
+        //$this->info("situacion en clientes ");
 
         $periodo_inicial=Carbon::parse($fp->created_at);
+        //$periodo_ejecucion=$periodo_inicial;
         $periodo_ejecucion=null;
 
         for($i=0;$i<$diff;$i++)
         {
+          //->info("suma meses : ".$i." a ".$periodo_inicial);
           $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
+
+          //$this->warn("periodo ejecucion: ".$periodo_ejecucion);
+
           $where_anio=$periodo_ejecucion->format('Y');
           $where_mes=$periodo_ejecucion->format('m');
+
+          //$this->info("where  ".$where_anio.' '.$where_mes);
 
           //contadores
           $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
@@ -140,12 +113,18 @@ class Cliente extends Model
           {
             if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
             {
+              //primer mes y contador 0
+              //$this->warn("es igual al primer periodo -".$cont_mes.' - SERA BASE FRIA ');
               $situacion_create->update([
                 "situacion" => 'BASE FRIA',
                 "flag_fp" => '0'
               ]);
-            }else{
+            }
+            else
+            {
+              //$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
               $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+              //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
 
               switch($situacion_antes->situacion)
               {
@@ -187,15 +166,21 @@ class Cliente extends Model
                 default:break;
               }
             }
-          }else{
+          }
+          else{
             if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
             {
+              //primer mes y contador >0
+              //$this->warn("es igual al primer periodo -".$cont_mes.' - SERA NUEVO ');
               $situacion_create->update([
                 "situacion" => 'NUEVO',
                 "flag_fp" => '0'
               ]);
-            }else{
+            }
+            else{
+              //$this->warn('Mes antes '.$mes_antes->format('Y-m'));
               $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+              //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
 
               switch($situacion_antes->situacion)
               {
@@ -244,23 +229,40 @@ class Cliente extends Model
 
             }
           }
+          //$this->warn('i '.$i);
+          //$this->warn('diff '.$diff);
           if($i==($diff-1))
           {
+            //$this->warn('ultimo mes ');
+            //update clientes
             $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
             $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+            //$this->warn($situacion_actual->situacion);
             Cliente::where('id',$cliente->id)->update([
               'situacion'=>$situacion_actual->situacion
             ]);
-
+            //Clientes
           }
 
         }
+        //continue;
 
+        //break;
       }
 
+      $progress->advance();
     }
+    $this->info("Finish Cargando ");
+    $progress->finish();
+    $this->info('FIN');
+    //
 
-    return null;
+
+    //select * from pedidos order by created_at  asc limit 1
+
+    //$date = Carbon::createFromDate(1970,19,12)->age; // 43
+
+
+    return 0;
   }
-
 }

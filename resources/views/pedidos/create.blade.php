@@ -90,7 +90,7 @@
                 let pmes = $('#pmes').val();
                 let panio = $('#panio').val();
                 let pcantidad = $('#pcantidad').val();
-                let ptipo_banca = $('#ptipo_banca').val();
+                let ptipo_banca = $('#ptipo_banca').val().split('_')[0];
                 let pdescripcion = $('#pdescripcion').val();
                 let pnota = $('#pnota').val();
                 let pcourier = $('#pcourier').val();

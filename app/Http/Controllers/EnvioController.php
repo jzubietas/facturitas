@@ -849,7 +849,7 @@ class EnvioController extends Controller
         $motorizados = User::select([
             'id',
             'zona',
-            DB::raw(" (select count(*) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
+            DB::raw(" (select count(p.id) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
         ])->where('rol', '=', User::ROL_MOTORIZADO)
             ->whereNotNull('zona')
             ->activo()
@@ -893,14 +893,14 @@ class EnvioController extends Controller
             ->pluck('distrito', 'distrito');
 
         $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
-            ->select('direccion_envios.id',
+            ->select(['direccion_envios.id',
                 'direccion_envios.distrito',
                 'direccion_envios.direccion',
                 'direccion_envios.referencia',
                 'direccion_envios.nombre',
                 'direccion_envios.celular',
                 'dp.pedido_id as pedido_id',
-            )
+            ])
             ->where('direccion_envios.estado', '1')
             ->where('dp.estado', '1')
             ->get();
@@ -1616,20 +1616,20 @@ class EnvioController extends Controller
             //desarmo el grupo
 
             //destruyo grupo pedido items y relacion
-            $gpi=DB::table('grupo_pedido_items')
-                ->where('pedido_id', $request->quitardireccion)->get();
-                //->update(['status' => '0']);
-
-            $count_gpi=DB::table('grupo_pedido_items')
-                ->where('pedido_id', $request->quitardireccion)->count();
-            if($count_gpi==1)
+            $gpi= DB::table('grupo_pedido_items')->where('pedido_id', $pedidos->id)->get();
+            $codigo=0;
+            if (!empty($gpi->grupo_pedido_id) ){
+              $codigo=$gpi->grupo_pedido_id;
+            }
+            if($gpi->count() > 0)
             {
                 //destruyo
-                DB::table('grupo_pedido_items')
-                    ->where('grupo_pedido_id', $gpi->grupo_pedido_id)->delete();
-                    //->update(['status' => '0']);
+                DB::table('grupo_pedido_items')->where('pedido_id', $pedidos->id)->delete();
+                //->update(['status' => '0']);
+              if ($codigo!=0){
                 DB::table('grupo_pedidos')
-                    ->where('id', $gpi->grupo_pedido_id)->delete();
+                  ->where('id', $codigo)->delete();
+              }
             }
 
             //$gp=GrupoPedidoItem::where()
@@ -1638,7 +1638,7 @@ class EnvioController extends Controller
                 DireccionGrupo::restructurarCodigos($direccion_g);
             }
 
-            return response()->json(['html' => $pedidos->id]);
+            return response()->json(['html' => $pedidos->id,'$gpi'=>$gpi ]);
         }
 
         return response()->json(['html' => '']);

@@ -40,6 +40,14 @@
   {{--FIN-TABLA-DUAL--}}
 </div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div id="reporteanalisis"></div>
+    </div>
+  </div>
+</div>
+
 @section('js-datatables')
   <script>
     $(".animated-progress span").each(function () {
@@ -82,12 +90,30 @@
           }
         })
       }
+      window.cargReporteAnalisis = function () {
+        var fd=new FormData();
+        //fd.append('ii',entero);
+        $.ajax({
+          data: fd,
+          processData: false,
+          contentType: false,
+          method: 'POST',
+          url: "{{ route('dashboard.viewAnalisis') }}",
+          success: function (resultado){
+            $('#reporteanalisis').html(resultado);
+          }
+        })
+      }
+
 
       cargaNueva(1);
       cargaNueva(2);
       cargaNueva(3);
 
-      setInterval(myTimer, 3000);
+      cargReporteAnalisis();
+
+      setInterval(myTimer, 50000);
+
 
       function myTimer() {
         cargaNueva(1);
