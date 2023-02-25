@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('alertas/guardado', [AlertaController::class,'guardado'])->name('alertas.guardado');
     Route::post('alertas/confirmado', [AlertaController::class,'confirmado'])->name('alertas.confirmado');
     Route::resource('alertas', AlertaController::class);
+    Route::any('alertas/cargarstore',[AlertaController::class,'cargarstore'])->name('cargarstore');
 
 
     Route::post('escaneo/envio.escaneoqr/{id}', [EscaneoController::class, 'EscaneoQR'])->name('escaneo/envio.escaneoqr');
@@ -69,7 +70,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('/search/cliente', [DashboardController::class, 'searchCliente'])->name('dashboard.search-cliente');
     Route::get('/search/ruc', [DashboardController::class, 'searchRuc'])->name('dashboard.search-ruc');
 
-  Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
+  //Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
   Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
 
   Route::any('dashboard.viewAnalisis', [PdfController::class, 'Analisisgrafico'])->name('dashboard.viewAnalisis');
