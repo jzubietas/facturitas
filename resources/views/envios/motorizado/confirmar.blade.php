@@ -126,7 +126,7 @@
                             type: 'green',
                             columnClass: 'xlarge',
                             content: `<div class="p-4">
-                    <div class="row">
+<div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
                             <p class="font-weight-bold">Foto de los sobres</p>
                             ${imagen1 ? `<img class="foto1 w-100" src="${imagen1}" alt="FOTO 1">` : ''}
@@ -148,8 +148,8 @@
                             </div>
                         </div>
 
-                        </div>
-                    </div>`,
+                    </div>
+</div>`,
                             buttons: {
                                 Cerrar: {
                                     btnClass: 'btn-secondary'
@@ -295,7 +295,6 @@
                         $('#tablaPrincipal').DataTable().ajax.reload();
 
                     }
-
                 });
             });
 
