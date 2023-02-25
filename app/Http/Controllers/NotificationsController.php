@@ -67,7 +67,7 @@ class NotificationsController extends Controller
         $dropdownHtml = '';
         $devoluciones = [];
         if (\Auth::check()) {
-            if (\Auth::user()->rol == \App\Models\User::ROL_ADMIN) {
+            if (\Auth::user()->rol == User::ROL_ADMIN) {
                 $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->orderByDesc('created_at')->get();
                 foreach ($devoluciones as $key => $devolucion) {
                     $icon = "<i class='mr-2 fas fa-fw fa-envelope'></i>";
@@ -146,7 +146,7 @@ class NotificationsController extends Controller
             $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
 
         }
-        if (Auth::user()->rol == User::ROL_ASESOR) {
+        else if (Auth::user()->rol == User::ROL_ASESOR) {
 
             $asesores = User::whereIn('users.rol', [User::ROL_ASESOR])
                 ->where('users.estado', '1')
@@ -292,7 +292,7 @@ class NotificationsController extends Controller
         $contador_pedidos_atendidos_operacion = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
-                'pedidos.id',
+                ['pedidos.id',
                 'pedidos.correlativo as id2',
                 'u.identificador as users',
                 'dp.codigo as codigos',
@@ -313,7 +313,7 @@ class NotificationsController extends Controller
                 DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                 'dp.fecha_recepcion',
                 DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos ")
-            )
+            ])
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion_envio_code', Pedido::ATENDIDO_OPE_INT);
@@ -460,7 +460,6 @@ class NotificationsController extends Controller
             ->count();
 
         $contador_sobres_confirmar_recepcion = Pedido::where('estado', 1)
-            //->join('users as u', 'u.id', 'c.user_id')
             ->where('condicion_envio_code', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
             ->count();
 
@@ -487,8 +486,6 @@ class NotificationsController extends Controller
                 'direccion_grupos.motorizado_sustento_foto',
             ])
             ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO, Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO])
-            //->where('direccion_grupos.estado', '1')
-            //->activo()
             ->whereNotNull('direccion_grupos.fecha_salida')
             ->count();
         if ($sobres_devueltos > 0) {
@@ -550,7 +547,7 @@ class NotificationsController extends Controller
         $postNotifications = auth()->user()->unreadNotifications;
         $devoluciones = [];
         if (\Auth::check()) {
-            if (\Auth::user()->rol == \App\Models\User::ROL_ADMIN) {
+            if (\Auth::user()->rol == User::ROL_ADMIN) {
                 $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->get();
             }
         }
