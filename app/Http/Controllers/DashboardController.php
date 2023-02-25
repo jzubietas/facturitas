@@ -318,7 +318,7 @@ class DashboardController extends Controller
       ->join('users as u', 'pedidos.user_id', 'u.id')
       ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
       ->select(
-        'pedidos.id',
+        ['pedidos.id',
         'c.nombre as nombres',
         'c.celular as celulares',
         'u.name as users',
@@ -327,7 +327,7 @@ class DashboardController extends Controller
         DB::raw('sum(dp.total) as total'),
         'pedidos.condicion as condiciones',
         'pedidos.created_at as fecha'
-      )
+       ])
       ->where('dp.estado', '1')
       ->where('u.id', Auth::user()->id)
       ->where('pedidos.pago', '0')
@@ -357,9 +357,6 @@ class DashboardController extends Controller
     $pagosobservados_administracion = Pago::where('estado', '1')
       ->where('condicion', Pago::OBSERVADO)
       ->count();
-    //DASHBOARD Logística
-    //sobres por enviar
-    //sobres por recibir
 
 
     $conteo = count(auth()->user()->unreadNotifications);
@@ -465,7 +462,7 @@ class DashboardController extends Controller
   /**
    * @throws \Exception
    */
-  
+
 
   public function viewMetaTable(Request $request)
   {
