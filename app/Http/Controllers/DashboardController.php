@@ -25,9 +25,9 @@ class DashboardController extends Controller
       return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
     }
 
-    if (in_array(auth()->user()->rol, [User::ROL_ASESOR,User::ROL_ENCARGADO,User::ROL_LLAMADAS])) {
+/*    if (in_array(auth()->user()->rol, [User::ROL_ASESOR,User::ROL_ENCARGADO,User::ROL_LLAMADAS])) {
       return redirect()->route('pedidos.index'); //->with('info', 'registrado');
-    }
+    }*/
 
     $pedidossinpagos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
       ->activo()
