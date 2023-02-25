@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\normalizar;
 
-use App\Models\Cliente;
 use App\Models\DireccionGrupo;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -51,8 +50,7 @@ class RestructurarDireccionGrupo extends Command
         $this->progress = $this->output->createProgressBar($clientes->count());
         $clientes->chunk(1000, function ($_clientes) {
             foreach ($_clientes as $cliente) {
-                /*DireccionGrupo::restructurarCodigos('2021','11',$cliente);*/
-
+                DireccionGrupo::restructurarCodigos('2021','11',$cliente);
                 if ($cliente->estado = 1) {
                     $cliente->pedidos()->activo()->update([
                         'condicion_envio' => $cliente->condicion_envio,
