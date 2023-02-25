@@ -783,7 +783,7 @@ class MotorizadoController extends Controller
                 'direccion_grupos.*',
                 'direccion_grupos.fecha_recepcion_motorizado as fecha_salida_recepcion_motorizado',
                 'u.identificador as user_identificador',
-                DB::raw("(select ped.env_sustento from pedidos ped where ped.direccion_grupo=direccion_grupos.id limit 1 ) as condicion_envio_recojo "),
+                //DB::raw(" (select 'LIMA') as destino "),
                 DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
             ])
                 //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
@@ -825,14 +825,7 @@ class MotorizadoController extends Controller
                     font-size: 8px;
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
-                    if ($grupo->condicion_envio_recojo){
-                      $badge_estado .= '<span class="badge badge-danger" style="
-                      padding: 4px 8px !important;
-                      font-size: 10px;
-                      margin-bottom: -4px;
-                      color: black !important;"> Recojo</span>';
-                    }
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio .' - '.  '</span>';
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
                     return $badge_estado;
                 })
                 ->addColumn('action', function ($direcciongrupo) use ($fecha_consulta, $fecha_actual) {
