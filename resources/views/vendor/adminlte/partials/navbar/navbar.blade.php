@@ -41,8 +41,7 @@
                 <i class="fa fa-barcode" aria-hidden="true"></i> Buscar
             </button>
         </li>
-<!--=============================================================== LOGICA DE VIDAS ======================================================== -->
-        <div id="id_div_vidas" class="navbar-nav ml-auto">
+
         <li class="nav-item dropdown show" id="my-annuncements-1">
             <span class="nav-link p-1 m-0" aria-expanded="true">
                 <a class="font-36 border-0 font-weight-bold btnVidas1 ml-2"
@@ -67,9 +66,8 @@
                 </a>
             </span>
         </li>
-        </div>
         {{-- Custom right links --}}
-<!--=============================================================== END LOGICA DE VIDAS ======================================================== -->
+
 
 
         @yield('content_top_nav_right')
