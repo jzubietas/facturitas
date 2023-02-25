@@ -736,9 +736,9 @@ class ClienteController extends Controller
             //->where('users.estado', '1')
             ->whereIdentificador($request->user_id)
             ->select(
-              DB::raw("users.identificador as identificador")
+              DB::raw("users.id as id")
             )
-            ->pluck('users.identificador');
+            ->pluck('users.id');
 
         $clientes = Cliente::query()
             ->where('clientes.estado', '=', '1')
@@ -759,7 +759,7 @@ class ClienteController extends Controller
 
             //Auth::user()->rol=='Administrador'
             if ($mirol == 'Administrador' || $mirol == 'Asistente de Administración' || Auth::user()->identificador == 'B') {
-              
+
                 $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
             } else {
                 if ($cliente->crea_temporal == 1) {
