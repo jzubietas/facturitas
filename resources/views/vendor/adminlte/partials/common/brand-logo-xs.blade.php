@@ -27,5 +27,5 @@
         {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
 
     </span>
-        <img src="{{asset('imagenes/globo.png')}}" id="santa_navidad">
+        {{--<img src="{{asset('imagenes/globo.png')}}" id="santa_navidad">--}}
 </a>
