@@ -59,14 +59,7 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
           });
-            $.ajax({
-                url: "{{ route('lstusuariosvidas') }}",
-                method: 'POST',
-                success: function (data) {
-                    $('#cbx_user_id_vidas').html(data.html);
-                    $("#cbx_user_id_vidas").selectpicker("refresh").trigger("change");
-                }
-            });
+
 
             $.ajax({
               url: "{{ route('asesorcombo') }}",
