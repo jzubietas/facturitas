@@ -117,11 +117,9 @@
 @stop
 
 @section('css')
-    {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="//scdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
-
+    
     <style>
 
         .yellow {
