@@ -46,6 +46,7 @@
                 <tr>
                     <th scope="col">Item</th>
                     <th scope="col">Código</th>
+                    <th scope="col">Sobre</th>
                     <th scope="col">Razón social</th>
                     <th scope="col">Mes</th>
                     <th scope="col">Asesor</th>
@@ -540,6 +541,7 @@
                         }
                     },
                     {data: 'codigos', name: 'codigos',},
+                    {data: 'sobrevalida', name: 'sobrevalida',},
                     {data: 'empresas', name: 'empresas',},
                   {data: 'mes', name: 'mes',},
                     {data: 'users', name: 'users',},
@@ -555,7 +557,7 @@
                         name: 'imagenes',
                         orderable: false,
                         searchable: false,
-                        sWidth: '20%',
+                        sWidth: '5%',
                         render: function (data, type, row, meta) {
                             if (data == null) {
                                 return '';
@@ -573,13 +575,14 @@
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
+                        sWidth: '8%',
                     },
                     {
                         data: 'action2',
                         name: 'action2',
                         orderable: false,
                         searchable: false,
-                        sWidth: '20%',
+                        sWidth: '10%',
                         render: function (data, type, row, meta) {
                             console.log(arguments)
                             var urlpdf = '{{ route("pedidosPDF", ":id") }}';
