@@ -109,6 +109,12 @@
             <div class="col-md-12">
               <div id="supervisor_total" ></div>
             </div>
+            <div class="col-md-12">
+              <div id="supervisor_A" ></div>
+            </div>
+            <div class="col-md-12">
+              <div id="supervisor_B" ></div>
+            </div>
           </div>
         </div>
       </div>
@@ -345,6 +351,10 @@
                 $('#metas_total').html(resultado);
               }else if(entero==4){
                 $('#supervisor_total').html(resultado);
+              }else if(entero==5){
+                $('#supervisor_A').html(resultado);
+              }else if(entero==6){
+                $('#supervisor_B').html(resultado);
               }
             }
           })
@@ -365,10 +375,12 @@
           })
         }
 
-       cargaNueva(1);
+        cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
         cargaNueva(4);
+        cargaNueva(5);
+        cargaNueva(6);
 
         cargReporteAnalisis();
 
@@ -379,6 +391,8 @@
           cargaNueva(2);
           cargaNueva(3);
           cargaNueva(4);
+          cargaNueva(5);
+          cargaNueva(6);
         }
 
         $('a[href$="#myModal"]').on( "click", function() {

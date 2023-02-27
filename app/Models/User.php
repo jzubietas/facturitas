@@ -185,6 +185,10 @@ class User extends Authenticatable
     {
         return $query->where($this->qualifyColumn('rol'), '=', self::ROL_ASESOR);
     }
+  public function scopeRolSupervisor($query)
+  {
+    return $query->where($this->qualifyColumn('rol'), '=', self::ROL_ENCARGADO);
+  }
 
     public function scopeRolAllAsesor($query)
     {
