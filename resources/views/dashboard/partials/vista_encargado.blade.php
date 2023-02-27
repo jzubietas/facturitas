@@ -14,71 +14,6 @@
         </div>
         @include('dashboard.widgets.buscar_cliente')
       @include('dashboard.partials.vista_quitar_vidas')
-        {{--<div class="col-md-12">
-            <div class="card">
-                <div class="d-flex justify-content-end align-items-center">
-                    <div class="card my-2 mx-2">
-                        @php
-                            try {
-                                 $currentDate=\Carbon\Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
-                            } catch (Exception $ex){
-                                 $currentDate=\Carbon\Carbon::createFromFormat('m-Y',now()->format('m-Y'));
-                            }
-                        @endphp
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"> Seleccionar Mes</span>
-                            </div>
-                            <div class="input-group-prepend">
-                                <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subYear()->format('m-Y')])}}"
-                                   class="btn m-0 p-0"
-                                   data-toggle="tooltip" data-placement="top" title="Un año atras">
-                            <span class="input-group-text">
-                                <
-                            </span>
-                                </a>
-                                <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subMonth()->format('m-Y')])}}"
-                                   class="btn m-0 p-0"
-                                   data-toggle="tooltip" data-placement="top" title="Un mes atras">
-                                    <span class="input-group-text"><</span>
-                                </a>
-                            </div>
-                            <select class="form-control" id="datepickerDashborad"
-                                    aria-describedby="basic-addon3">
-
-                                @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
-                                    @php
-                                        $currentMonth=$currentDate->clone()->startOfYear()->addMonths($month-1);
-                                    @endphp
-                                    <option
-                                        {{$currentMonth->format('m-Y')==request('selected_date',now()->format('m-Y'))?'selected':''}}
-                                        value="{{$currentMonth->format('m-Y')}}"
-                                    >{{Str::ucfirst($currentMonth->monthName)}} {{$currentMonth->year}}</option>
-                                @endforeach
-                            </select>
-
-                            <div class="input-group-append">
-                                <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addMonths()->format('m-Y')])}}"
-                                   class="btn m-0 p-0"
-                                   data-toggle="tooltip" data-placement="top" title="Un mes adelante">
-                                    <span class="input-group-text">></span>
-                                </a>
-                            </div>
-                            <div class="input-group-append">
-                                <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addYear()->format('m-Y')])}}"
-                                   class="btn m-0 p-0"
-                                   data-toggle="tooltip" data-placement="top" title="Un año adelante">
-                                    <span class="input-group-text">></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>--}}
-{{--        <div class="col-lg-12">
-            <x-grafico-metas-mes></x-grafico-metas-mes>
-        </div>--}}
 
 {{--      DATATABLE--}}
       <div class="col-lg-12 " id="contenedor-fullscreen">
@@ -106,7 +41,6 @@
       </div>
       {{--FIN-DATATABLE--}}
 
-
         <div class="col-md-12">
             <div class="row" id="widget-container">
                 <div class="col-md-12">
@@ -132,11 +66,6 @@
                         </div>
                     </div>
                 </div>
-                {{--
-                <div class="col-md-12">
-                    <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
-                </div>
-                --}}
                 <div class="col-md-12">
                     <x-grafico-pedidos-por-dia rol="Encargado" title="CANTIDAD DE PEDIDOS DE LOS ASESORES POR DIA"
                                                label-x="Asesores" label-y="Cant. Pedidos"
@@ -146,63 +75,8 @@
                 </div>
             </div>
         </div>
-        {{--
-        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-condensed table-hover"><br><h4>
-                        PEDIDOS DEL DIA POR ASESOR</h4>
-                    <div id="pedidosxasesorxdia_encargado" style="width: 100%; height: 500px;"></div>
-                </table>
-            </div>
-        </div>
-        --}}
     </div>
 </div>
-{{--
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-condensed table-hover">
-                    <div class="chart tab-pane active" id="pedidosxasesor_encargado"
-                         style="width: 100%; height: 550px;">
-                    </div>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-condensed table-hover">
-                    <div class="chart tab-pane active" id="pedidosxasesor_3meses_encargado"
-                         style="width: 100%; height: 550px;">
-                    </div>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-condensed table-hover">
-                    <div id="pagosxmes_encargado" style="width: 100%; height: 550px;">
-                    </div>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
---}}
 
 @section('js-datatables')
   <script>
