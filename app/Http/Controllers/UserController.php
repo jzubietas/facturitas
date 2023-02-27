@@ -325,31 +325,26 @@ class UserController extends Controller
     $users = null;
     $users = User::where('estado', '1');
 
-    if ($mirol == 'Llamadas') {
-      $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
-    } else if ($mirol == 'Jefe de llamadas') {
-      $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
-    } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
-      $users = $users->where('identificador', '<>', 'B');
-    } else if ($mirol == 'Asesor') {
-      $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
-    } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
-      $users = User::where("rol", "ASESOR ADMINISTRATIVO");
-    } else {
-      $usersB = User::whereIn("rol", [User::ROL_ASESOR_ADMINISTRATIVO]);
-      $users = $usersB->union($users);
+    if ($mirol == User::ROL_JEFE_LLAMADAS) {
+      $users = $users->where('jefe', Auth::user()->id)->where("rol", User::ROL_LLAMADAS);
+      $users = $users->orderBy('name', 'ASC')->get();
+    } else if ($mirol == User::ROL_JEFE_OPERARIO) {
+      $users = $users->where('jefe', Auth::user()->id)->where("rol", User::ROL_OPERARIO);
+      $users = $users->orderBy('name', 'ASC')->get();
+    } else if ($mirol == User::ROL_ENCARGADO) {
+      $users = $users->where('supervisor', Auth::user()->id)->where("rol", User::ROL_ASESOR);
+      $users = $users->orderBy('exidentificador', 'ASC')->get();
+    }else{
+      $users = $users->orderBy('name', 'ASC')->get();
     }
 
-    $users = $users->orderBy('exidentificador', 'ASC')->get();
     $html = "";
 
-    foreach ($users as $user) {
-      if ($user->rol == 'Administrador') {
+    foreach ($users as $user)
+    {
         $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
-      } else {
-        $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
-      }
     }
+
     return response()->json(['html' => $html]);
   }
     public function AsesorcomboModal(Request $request)

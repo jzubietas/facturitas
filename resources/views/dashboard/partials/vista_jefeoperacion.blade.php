@@ -9,7 +9,7 @@
 <br>
 <br>
 
-
+@include('dashboard.partials.vista_quitar_vidas')
 <div class="col-lg-12">
     <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
 </div>
