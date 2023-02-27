@@ -236,8 +236,8 @@ class DistribucionController extends Controller
         Pedido::whereIn('id', $pedidosIds)->update([
             'env_zona_asignada' => null,
             'estado_ruta' => '1',
-            'condicion_envio' => Pedido::REPARTO_COURIER,//reparto recojo courier
-            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+            'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,//reparto recojo courier
+            'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
             'condicion_envio_at' => now(),
             'direccion_grupo' => $direcciongrupo->id,
         ]);
