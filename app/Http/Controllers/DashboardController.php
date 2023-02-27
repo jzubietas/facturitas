@@ -469,7 +469,6 @@ class DashboardController extends Controller
   public function viewMetaTable(Request $request)
   {
     $supervisores_array = User::query()->activo()->rolSupervisor()->get();
-    //$contador_supervisor = count(supervisores_array);
     $count_asesor = [];
 
     foreach ($supervisores_array as $supervisor){
@@ -749,11 +748,8 @@ class DashboardController extends Controller
       $html .= '
                   </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
-
-
       $html.='<div class="position-relative rounded">
                 <div class="progress rounded h-40 h-60-res">';
-
       if($object_totales['progress_pagos']>=80)
         $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
                  style="width: '.$object_totales['progress_pagos'].'%;background: #03af03;"
@@ -856,7 +852,7 @@ class DashboardController extends Controller
               </tbody>';
       $html .= '</table>';
     }
-    /*PAOLA*/
+    /*LUIS*/
     if($request->ii==4)
     {
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
@@ -975,7 +971,7 @@ class DashboardController extends Controller
               </tbody>';
       $html .= '</table>';
     }
-    /*LUIS*/
+    /*PAOLA*/
     else if($request->ii==3)
     {
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
@@ -983,10 +979,10 @@ class DashboardController extends Controller
                     <tr class="responsive-table">
                         <th class="col-lg-4 col-md-12 col-sm-12">';
       if($object_totales['progress_pagos']==0){
-                $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLA: '.$count_asesor[24].' </span>';
+                $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLAAAAA: '.$count_asesor[24].' </span>';
       }
       else {
-                $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLA: '.$count_asesor[24].' </span>';
+                $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLAAAAA: '.$count_asesor[24].' </span>';
       }
       $html .= '        </th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
