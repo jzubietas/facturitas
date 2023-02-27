@@ -185,7 +185,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('users.asesores', [UserController::class, 'Asesores'])->name('users.asesores');
     Route::get('users.asesorestabla', [UserController::class, 'Asesorestabla'])->name('users.asesorestabla');////asesores
     Route::post('users.asesorestabla/{user}', [UserController::class, 'AsesoresTablaMeta'])->name('users.asesorestabla.updatemeta');////asesores
-    Route::post('lstusuariosvidas', [UserController::class, 'lstusuariosvidas'])->name('lstusuariosvidas');
+    Route::any('lstusuariosvidas', [UserController::class, 'lstusuariosvidas'])->name('lstusuariosvidas');
     Route::post('quitarvidasusuario', [UserController::class, 'quitarvidasusuario'])->name('quitarvidasusuario');
     Route::get('getvidasusuario', [UserController::class, 'getvidasusuario'])->name('getvidasusuario');
     Route::get('resetllamadaatencionsusuario', [UserController::class, 'resetllamadaatencionsusuario'])->name('resetllamadaatencionsusuario');
