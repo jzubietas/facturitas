@@ -930,7 +930,7 @@ class DashboardController extends Controller
         $html.=  '</td>';
         $html.=  '   <td>';
         if ($data["meta_new"] == 0) {
-          if ($data["progress_pedidos"] == 100) {
+          if ($data["progress_pedidos"] <= 100) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -942,7 +942,8 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-          } else {
+          }
+/*          else {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -954,7 +955,7 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-          }
+          }*/
         } if ($data["meta_new"] == 1){
           if ($data["progress_pedidos"] >= 95) {
             $html.=  '<div class="w-100 bg-white rounded">
