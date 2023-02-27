@@ -529,6 +529,7 @@ class DashboardController extends Controller
       $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
         ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>','1' )->pagados(), $date_pagos, 'created_at')
         ->count();
+      $supervisor = User::where('rol', User::ROL_ASESOR)->where('identificador', $asesor->identificador)->activo()->first()->supervisor;
 
       //TOTALES//
       //PEDIDOS INDIVIDUALES
@@ -548,6 +549,7 @@ class DashboardController extends Controller
         "meta_2" => $metatotal_2,
         "meta_cobro" => $metatotal_cobro,
         "pedidos_totales" => $pedidos_totales,
+        "supervisor" =>  $supervisor,
       ];
 
       if ($asesor->excluir_meta) {
@@ -582,6 +584,7 @@ class DashboardController extends Controller
           $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
           $newData[$identificador]['meta_cobro'] += data_get($item, 'meta_cobro');
           $newData[$identificador]['pedidos_dia'] += data_get($item, 'pedidos_dia');
+          $newData[$identificador]['supervisor'] += data_get($item, 'supervisor');
 
           $newData[$identificador]['pedidos_totales'] += data_get($item, 'pedidos_totales');
         }
@@ -844,7 +847,15 @@ class DashboardController extends Controller
       foreach ($progressData as $data) {
         $html.= '<tr>
              <td>' . $data["name"] . '</td>
-             <td>' . $data["identificador"]  . '</td>
+             <td>' . $data["identificador"]  . ' ';
+
+             if($data["supervisor"] == 46){
+              $html.=  '- A';
+             }else {
+              $html.=  '- B';
+             }
+        $html.=  '
+             </td>
              <td>';
         if ($data["pedidos_dia"] > 0) {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
