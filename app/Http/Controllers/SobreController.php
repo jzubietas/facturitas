@@ -596,7 +596,7 @@ class SobreController extends Controller
                 $dirgrupo = $pedido->direccion_grupo;
                 if ($dirgrupo) {$contar++;
                     PedidoMovimientoEstado::create([
-                        'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_INT,
+                        'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,
                         'fecha' => now(),
                         'pedido' => $pedido->id,
                         'json_envio' => json_encode(array(
@@ -619,8 +619,8 @@ class SobreController extends Controller
                             "env_observacion" => $observacion_recojo,
                             "gm_link" => $gm_link,
                             "env_sustento" => $sustento_recojo,
-                            'condicion_envio' => Pedido::ENTREGADO_NUEVO_DIR,
-                            'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
+                            'condicion_envio' => Pedido::RECOJO_COURIER,
+                            'condicion_envio_code' => Pedido::RECOJO_COURIER_INT
                         ))
                     ]);
                     $pedido->update([
@@ -642,25 +642,11 @@ class SobreController extends Controller
                         "env_observacion" => $observacion_recojo,
                         "gm_link" => $gm_link,
                         "env_sustento" => $sustento_recojo,
-                        'condicion_envio' => Pedido::ENTREGADO_NUEVO_DIR,
-                        'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
+                        'condicion_envio' => Pedido::RECOJO_COURIER,
+                        'condicion_envio_code' => Pedido::RECOJO_COURIER_INT
                     ]);
 
                   $grupoCreatePedido = GrupoPedido::createGroupByPedido($pedido, true, true);
-
-/*                  GrupoPedido::createGroupByPedido($pedido, true, true);
-                  return $grupoCreatePedido;*/
-
-/*                  $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupoCreatePedido->id )->get();
-
-                  foreach ($pedidosGruposPedidos as $pedidoGrupoPed){
-                    $pedidoUpdate = Pedido::where('id', $pedidoGrupoPed->id)->first();
-                    $pedidoUpdate->update([
-                      'condicion_envio' => Pedido::ENTREGADO_NUEVO_DIR,
-                      'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
-                    ]);
-                  }*/
-
 
                 }
             }

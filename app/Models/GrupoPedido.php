@@ -50,8 +50,8 @@ class GrupoPedido extends Model
                 'referencia' => (($pedido->env_destino == 'PROVINCIA') ? $pedido->tracking : $pedido->env_referencia),
                 'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
                 'telefono' => $pedido->env_celular_cliente_recibe,
-                'cod_recojo' => (($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT)? '1' : '0'),
-                'env_sustento_recojo' => (($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT)? $pedido->env_sustento : '')
+                'cod_recojo' => (($pedido->condicion_envio_code == Pedido::RECOJO_COURIER)? '1' : '0'),
+                'env_sustento_recojo' => (($pedido->condicion_envio_code == Pedido::RECOJO_COURIER)? $pedido->env_sustento : '')
             ], $createAnother);
             if ($attach) {
                 $detalle = $pedido->detallePedidos()->activo()->orderBy('detalle_pedidos.created_at')->first();
@@ -62,8 +62,8 @@ class GrupoPedido extends Model
                         "razon_social" => $detalle->nombre_empresa,
                     ]
                 ]);
-              //ENTREGADO_NUEVO_DIR_INT
-              if ($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT) {
+              //RECOJO_COURIER
+              if ($pedido->condicion_envio_code == Pedido::RECOJO_COURIER) {
                 $pedido->update([
                   'condicion_envio_at' => now(),
                 ]);
