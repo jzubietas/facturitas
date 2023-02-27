@@ -42,6 +42,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('olva:sync')
             ->dailyAt('20:00');
+        
 /*
         $schedule->command('olva:move-tienda-agente')
             ->dailyAt('00:00');

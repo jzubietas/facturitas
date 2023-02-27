@@ -75,6 +75,7 @@ class User extends Authenticatable
         'excluir_meta',
         'vidas_total',
         'vidas_restantes',
+        'cant_vidas_cero',
     ];
 
     /**

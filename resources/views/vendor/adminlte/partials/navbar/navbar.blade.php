@@ -42,7 +42,8 @@
             </button>
         </li>
 
-        <li class="nav-item dropdown show" id="my-annuncements-1">
+        <div id="divListadoVidas" style="display: flex;"></div>
+        {{--<li class="nav-item dropdown show" id="my-annuncements-1">
             <span class="nav-link p-1 m-0" aria-expanded="true">
                 <a class="font-36 border-0 font-weight-bold btnVidas1 ml-2"
                     data-toggle="modal" data-target="#modal-vidas-1" type="button">
@@ -65,7 +66,7 @@
                   <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
                 </a>
             </span>
-        </li>
+        </li>--}}
         {{-- Custom right links --}}
 
 
