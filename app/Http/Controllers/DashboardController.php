@@ -1116,7 +1116,20 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-          } elseif ($data["progress_pedidos"] >= 70) {
+          }
+          elseif ($data["progress_pedidos"] >= 80) {
+            $html.=  '<div class="w-100 bg-white rounded">
+                                    <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                          <div class="rounded" role="progressbar" style="background: #8ec117 ; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                          </div>
+                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '</span>
+                                        </div>
+                                    </div>
+                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                  </div>';
+          }elseif ($data["progress_pedidos"] >= 70) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
