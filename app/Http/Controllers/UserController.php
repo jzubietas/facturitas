@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alerta;
 use App\Models\User;
 //use App\Models\Meta;
 use Carbon\Carbon;
@@ -566,6 +567,36 @@ class UserController extends Controller
       $user->update([
         'vidas_restantes' => $contadorquitavidas
       ]);
+      $tipomensaje="";
+      $titulo="";
+      $mensaje="";
+      if ($contadorquitavidas==2){
+        $tipomensaje="success";
+        $titulo="TE QUEDAN ".$contadorquitavidas." VIDAS";
+        $mensaje="Se te ha quitado una vida por un error cometido. Recuerda estar mas pendiente en tu gestión.";
+      }
+      if ($contadorquitavidas==1){
+        $tipomensaje="warning";
+        $titulo="TE QUEDA ".$contadorquitavidas." VIDA";
+        $mensaje="Solo te queda una vida. Ten mucho cuidado y revisa tu gestion correctamente. Evita un llamado de atención.";
+      }
+      if ($contadorquitavidas==0){
+        $tipomensaje="error";
+        $titulo="TIENES UN LLAMADO DE ATENCIÓN";
+        $mensaje="Evita cometer o acumular errores para un próximo llamado de atención.";
+        $cant_vidas_cero=$user->cant_vidas_cero+1;
+        $user->update([
+          'vidas_restantes' => 3,
+          'cant_vidas_cero'=>$cant_vidas_cero
+        ]);
+      }
+      Alerta::create([
+        'user_id' => $request->user_id,
+        'tipo' => $tipomensaje,
+        'subject' => $titulo,
+        'message' => $mensaje,
+        'date_at' => now(),
+      ]);
 
     }
 
@@ -574,14 +605,77 @@ class UserController extends Controller
 
   }
 
+  public function resetllamadaatencionsusuario(Request $request)
+  {
+    $user=User::where('id',$request->user_id)->first();
+    $user->update([
+      'cant_vidas_cero' => 0
+    ]);
+    return response()->json(['user'=>$user]);
+
+  }
   public function getvidasusuario(Request $request)
   {
+    $html = "";
     $user=User::where('estado', '1')
-      ->where('id', Auth::user()->id)
-      ->select(
-        'vidas_restantes'
-      )->first();
-    return response()->json($user);
+      ->where('id', Auth::user()->id)->first();
+    if ($user->vidas_restantes==1){
+      $html='<li class="nav-item dropdown show" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-3" type="button">
+                  <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>';
+    } elseif ($user->vidas_restantes==2){
+      $html='<li class="nav-item dropdown show" id="my-annuncements-2">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-2" type="button">
+                  <i class="fas fa-male text-warning btnVidasCont2" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>
+        <li class="nav-item dropdown show" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-3" type="button">
+                  <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>';
+    }elseif ($user->vidas_restantes==3){
+      $html='<li class="nav-item dropdown show" id="my-annuncements-1">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class="font-36 border-0 font-weight-bold btnVidas1 ml-2"
+                    data-toggle="modal" data-target="#modal-vidas-1" type="button">
+                  <i class="fas fa-male text-success btnVidasCont" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>
+        <li class="nav-item dropdown show" id="my-annuncements-2">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-2" type="button">
+                  <i class="fas fa-male text-warning btnVidasCont2" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>
+        <li class="nav-item dropdown show" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-3" type="button">
+                  <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>';
+    }
+
+
+    return response()->json(['html' => $html,'user'=>$user]);
+
+    /*return response()->json($user);*/
 
   }
 

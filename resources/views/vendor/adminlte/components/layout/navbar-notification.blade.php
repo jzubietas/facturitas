@@ -101,13 +101,14 @@
                                     hide: false,
                                     closer: false,
                                     sticker: false,
+                                    icon:'fa fa-frown',
                                     modules: new Map([
                                         ...PNotify.defaultModules,
                                         [PNotifyConfirm, {
                                             confirm: true,
                                             buttons: [
                                                 {
-                                                    text: 'Terminado',
+                                                    text: 'Aceptar',
                                                     primary: true,
                                                     promptTrigger: true,
                                                     click: function (notice, value) {
@@ -119,11 +120,12 @@
                                                                 notice.fire('pnotify:confirm', {notice, value});
                                                             })
                                                     },
-                                                },
+                                                }/*,
                                                 {
                                                     text: 'Aceptar',
+                                                    primary: true,
                                                     click: function (notice) {
-                                                        $.post('{{route('alertas.confirmar',['action'=>'cancelar'])}}',{
+                                                        $.post('{{route('alertas.confirmar',['action'=>'aceptar'])}}',{
                                                             alerta_id:alerta.id
                                                         })
                                                             .always(function () {
@@ -131,7 +133,7 @@
                                                                 notice.fire('pnotify:cancel', {notice});
                                                             })
                                                     },
-                                                },
+                                                },*/
                                             ]
                                         }]
                                     ]),
