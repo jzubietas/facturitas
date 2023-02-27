@@ -91,8 +91,8 @@
       </div>
 
       {{--TABLA DUAL--}}
-      <div class="">
-        <div class=" ">
+      <div class="" style=" overflow: hidden !important;">
+        <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
           <div class="row">
             <div class="col-md-6">
               <div id="meta"></div>
