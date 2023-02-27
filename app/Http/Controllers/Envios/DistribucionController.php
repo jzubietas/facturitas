@@ -344,6 +344,17 @@ class DistribucionController extends Controller
                     $grupos[] = $groupData;
                 } else {
                     $grupos[] = $this->createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
+                  if($grupo->cod_recojo == 1)
+                  {
+                    $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
+                    foreach ($pedidos as $pedidosFila){
+                      $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
+                      $pedidoUpdate->update([
+                        'condicion_envio' => Pedido::ENTREGADO_RECOJO_JEFE_OPE,
+                        'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+                      ]);
+                    }
+                  }
                 }
             } else {
               //OLVA
@@ -415,6 +426,17 @@ class DistribucionController extends Controller
                         $grupos[] = $groupData;
                     } else {
                         $grupos[] = $this->createDireccionGrupo($grupo, $groupData, $pedidos)->refresh();
+                      if($grupo->cod_recojo == 1)
+                      {
+                        $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
+                        foreach ($pedidos as $pedidosFila){
+                          $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
+                          $pedidoUpdate->update([
+                            'condicion_envio' => Pedido::ENTREGADO_RECOJO_JEFE_OPE,
+                            'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+                          ]);
+                        }
+                      }
                     }
                 }
             }

@@ -1104,8 +1104,8 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
-                stateSave: true,
-                order: [[1, "desc"]],
+                //stateSave: true,
+                order: [[8, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
@@ -1270,7 +1270,6 @@ ${data.foto3 ? `
                     })
                 },
                 initComplete: function (settings, json) {
-
                 },
                 columns: [
                     {

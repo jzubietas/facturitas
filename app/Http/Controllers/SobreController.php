@@ -646,7 +646,20 @@ class SobreController extends Controller
                         'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
                     ]);
 
-                    GrupoPedido::createGroupByPedido($pedido, true, true);
+                  $grupoCreatePedido = GrupoPedido::createGroupByPedido($pedido, true, true);
+
+/*                  GrupoPedido::createGroupByPedido($pedido, true, true);
+                  return $grupoCreatePedido;*/
+
+/*                  $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupoCreatePedido->id )->get();
+
+                  foreach ($pedidosGruposPedidos as $pedidoGrupoPed){
+                    $pedidoUpdate = Pedido::where('id', $pedidoGrupoPed->id)->first();
+                    $pedidoUpdate->update([
+                      'condicion_envio' => Pedido::ENTREGADO_NUEVO_DIR,
+                      'condicion_envio_code' => Pedido::ENTREGADO_NUEVO_DIR_INT
+                    ]);
+                  }*/
 
 
                 }
