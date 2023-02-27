@@ -559,7 +559,9 @@ class UserController extends Controller
   public function quitarvidasusuario(Request $request)
   {
     $user=User::where('id',$request->user_id)->first();
+    $ingresa=0;
     if (intval($user->vidas_restantes)>0){
+      $ingresa=1;
       $contadorquitavidas=intval($user->vidas_restantes)-1;
       $user->update([
         'vidas_restantes' => $contadorquitavidas
@@ -568,7 +570,7 @@ class UserController extends Controller
     }
 
 
-    return response()->json($user);
+    return response()->json(['vidas_anteriores'=>$ingresa,'user'=>$user]);
 
   }
 
@@ -577,7 +579,7 @@ class UserController extends Controller
     $user=User::where('estado', '1')
       ->where('id', Auth::user()->id)
       ->select(
-        'vidas_total'
+        'vidas_restantes'
       )->first();
     return response()->json($user);
 
