@@ -10,6 +10,7 @@ use App\Models\Distrito;
 use App\Models\GrupoPedido;
 use App\Models\Pedido;
 use App\Models\PedidoMotorizadoHistory;
+use App\Models\SituacionClientes;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
@@ -348,6 +349,7 @@ class DistribucionController extends Controller
                       ]);
                     }
                   }
+                  $delete=GrupoPedido::where('id',$grupo->id)->delete();
                 }
             } else {
               //OLVA
@@ -430,6 +432,7 @@ class DistribucionController extends Controller
                           ]);
                         }
                       }
+                      $delete=GrupoPedido::where('id',$grupo->id)->delete();
                     }
                 }
             }

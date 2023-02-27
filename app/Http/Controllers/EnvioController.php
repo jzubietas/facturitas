@@ -419,7 +419,9 @@ class EnvioController extends Controller
             //->join('users as u', 'u.id', 'c.user_id')
             ->LeftJoin('users as u', 'u.id', 'direccion_grupos.user_id')
             ->LeftJoin('users as um', 'um.id', 'direccion_grupos.motorizado_id')
-            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->whereIn('direccion_grupos.condicion_envio_code',
+              [Pedido::REPARTO_COURIER_INT,Pedido::REPARTO_RECOJO_COURIER_INT]
+            )
             ->where('motorizado_id', $motorizado)
             //->whereIn('direccion_grupos.distribucion', $lazona)
             ->activo();
@@ -3333,8 +3335,8 @@ class EnvioController extends Controller
     {
         $envio = DireccionGrupo::query()->findOrFail($request->hiddenCodigo);
         $envio->update([
-            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER : Pedido::ENVIO_MOTORIZADO_COURIER),
+            'condicion_envio_code' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT : Pedido::ENVIO_MOTORIZADO_COURIER_INT),
             'condicion_envio_at' => now(),
             'fecha_salida' => $request->fecha_salida,
             'cambio_direccion_at' => null,
@@ -3344,9 +3346,9 @@ class EnvioController extends Controller
             return trim($cod);
         })->all();*/
         $envio->pedidos()->activo()->update([
-            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio_code' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT : Pedido::ENVIO_MOTORIZADO_COURIER_INT),
             'condicion_envio_at' => now(),
-            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+            'condicion_envio' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER : Pedido::ENVIO_MOTORIZADO_COURIER),
             'fecha_salida' => $request->fecha_salida,
             'cambio_direccion_at' => null
         ]);
@@ -3361,7 +3363,7 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
-            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio_code' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT : Pedido::ENVIO_MOTORIZADO_COURIER_INT),
             'notificado' => 0
         ]);
 
