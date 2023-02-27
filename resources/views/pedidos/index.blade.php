@@ -1270,7 +1270,6 @@ ${data.foto3 ? `
                     })
                 },
                 initComplete: function (settings, json) {
-
                 },
                 columns: [
                     {
