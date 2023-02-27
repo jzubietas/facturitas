@@ -59,14 +59,7 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
           });
-            $.ajax({
-                url: "{{ route('lstusuariosvidas') }}",
-                method: 'POST',
-                success: function (data) {
-                    $('#cbx_user_id_vidas').html(data.html);
-                    $("#cbx_user_id_vidas").selectpicker("refresh").trigger("change");
-                }
-            });
+
 
             $.ajax({
               url: "{{ route('asesorcombo') }}",
@@ -140,49 +133,7 @@
                     })
             })
 
-          $("#buttom_quita_vida_cliente").click(function () {
-            $("#buttom_quita_vida_cliente").attr('disabled', 'disabled');
-            var data = {}
-            data.user_id = $("#cbx_user_id_vidas").val(); 
-            $.post('{{route('quitarvidasusuario')}}', data)
-              .done(function (data) {
-                if (data.vidas_anteriores>0) {
-                  Swal.fire(
-                    '',
-                    'Vida quitada correctamente',
-                    'success'
-                  )
-                  $("#cbx_user_id_vidas").selectpicker("refresh").trigger("change");
-                } else {
-                  Swal.fire(
-                    '',
-                    'Ya no tiene vidas',
-                    'warning'
-                  )
-                }
-              })
-              .fail(function (data) {
-                console.log(data)
-                if (data.responseJSON.errors) {
-                  Swal.fire(
-                    '',
-                    Object.keys(data.responseJSON.errors).map(function (key) {
-                      return `<b>${data.responseJSON.errors[key][0]}</b>`
-                    }).join('<hr class="my-1"><br>'),
-                    'error'
-                  )
-                } else {
-                  Swal.fire(
-                    '',
-                    'Ocurrio un error al intentar guardar la información',
-                    'error'
-                  )
-                }
-              })
-              .always(function () {
-                $("#buttom_quita_vida_cliente").removeAttr('disabled')
-              })
-          })
+
         })
     </script>
 @endpush
