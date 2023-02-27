@@ -734,7 +734,7 @@ class DashboardController extends Controller
     $html='';
 
     /*TOTAL*/
-    if($request->ii==5)
+    if($request->ii==3)
     {
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
       $html .= '<tbody>
@@ -972,7 +972,7 @@ class DashboardController extends Controller
       $html .= '</table>';
     }
     /*PAOLA*/
-    else if($request->ii==3)
+    else if($request->ii==5)
     {
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
       $html .= '<tbody>
