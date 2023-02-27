@@ -402,8 +402,6 @@
                 ocultar_div_modal_correccion_pedidos();
             })
 
-
-
             $(document).on("submit", "#form-recojo", function (event) {
                 event.preventDefault();
                 let Nombre_recibe = $("#nombre_recojo").val();

@@ -165,9 +165,9 @@ class DistribucionController extends Controller
                 $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio(Pedido::RECEPCION_COURIER);
                 $textoEstado=Pedido::RECEPCION_COURIER;
-                if ($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT) {
-                  $textoEstado=Pedido::ENTREGADO_NUEVO_DIR;
-                  $color = Pedido::getColorByCondicionEnvio(Pedido::ENTREGADO_NUEVO_DIR_INT);
+                if ($pedido->condicion_envio_code == Pedido::RECOJO_COURIER) {
+                  $textoEstado=Pedido::RECOJO_COURIER;
+                  $color = Pedido::getColorByCondicionEnvio(Pedido::RECOJO_COURIER);
                 }
                 $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>
 <span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . $textoEstado. '</span>';
