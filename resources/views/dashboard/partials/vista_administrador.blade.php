@@ -103,6 +103,9 @@
             <div class="col-md-12">
               <div id="metas_total" ></div>
             </div>
+            <div class="col-md-12">
+              <div id="supervisor_total" ></div>
+            </div>
           </div>
         </div>
       </div>
@@ -337,6 +340,8 @@
               }
               else if(entero==3){
                 $('#metas_total').html(resultado);
+              }else if(entero==4){
+                $('#supervisor_total').html(resultado);
               }
             }
           })
@@ -360,15 +365,17 @@
        cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
+        cargaNueva(4);
 
         cargReporteAnalisis();
 
-        setInterval(myTimer, 50000);
+        setInterval(myTimer, 5000000);
 
         function myTimer() {
           cargaNueva(1);
           cargaNueva(2);
           cargaNueva(3);
+          cargaNueva(4);
         }
 
         $('a[href$="#myModal"]').on( "click", function() {
