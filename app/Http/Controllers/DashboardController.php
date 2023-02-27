@@ -1074,6 +1074,7 @@ class DashboardController extends Controller
         }
         $html.=  '</td>';
         $html.=  '   <td>';
+        /*META-2*/
         if ($data["meta_new"] == 0) {
           if ($data["progress_pedidos"] <= 100) {
             $html.=  '<div class="w-100 bg-white rounded">
@@ -1087,21 +1088,22 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-          }
-/*          else {
+          }else{
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
-                                          <div class="rounded" role="progressbar" style="background: #03af03 !important; font-size: 18px; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                          <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px"">  ' . $data["progress_pedidos"] .'% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_2"] . '</span>
+                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '</span>
                                         </div>
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-          }*/
-        } if ($data["meta_new"] == 1){
+          }
+        }
+        /*META-1*/
+        if ($data["meta_new"] == 1){
           if ($data["progress_pedidos"] >= 90) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
