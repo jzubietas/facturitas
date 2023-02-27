@@ -9,6 +9,7 @@
 <div class="row">
 
     @include('dashboard.widgets.buscar_cliente')
+    @include('dashboard.partials.vista_quitar_vidas')
 {{--
     <div class="col-lg-12">
         <x-grafico-metas-mes></x-grafico-metas-mes>
@@ -153,6 +154,7 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
       window.cargaNueva = function (entero) {
         console.log(' '+entero)
         var fd=new FormData();
@@ -221,6 +223,8 @@
           elem.msRequestFullscreen();
         }
       }
+
+
 
     });
   </script>

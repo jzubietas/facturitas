@@ -13,7 +13,7 @@
 {{--            @include('dashboard.widgets.pedidos_creados')--}}
         </div>
         @include('dashboard.widgets.buscar_cliente')
-
+      @include('dashboard.partials.vista_quitar_vidas')
         {{--<div class="col-md-12">
             <div class="card">
                 <div class="d-flex justify-content-end align-items-center">

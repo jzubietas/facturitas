@@ -47,7 +47,7 @@ class SobreController extends Controller
      */
     public function index()
     {
-
+      return '';
     }
 
     public function cargadistritos()
@@ -96,7 +96,6 @@ class SobreController extends Controller
         $user_id = User::where('estado', '1')->whereIn("rol", [User::ROL_ASESOR, User::ROL_ASESOR_ADMINISTRATIVO]);
         if (auth()->user()->rol == 'Llamadas') {
             $user_id = $user_id->where('llamada', Auth::user()->id);
-        } else if (auth()->user()->rol == 'Jefe de llamadas') {
         } else if (auth()->user()->rol == 'Asesor') {
             $user_id = $user_id->where('identificador', Auth::user()->identificador);
         }
@@ -592,9 +591,11 @@ class SobreController extends Controller
         $dirgrupo=0;
         foreach ($pedido_concatenado as $pedidoid) {
             $pedido = Pedido::where("id", $pedidoid)->first();
-            if ($pedido) {$contar++;
+            if ($pedido) {
+                $contar++;
                 $dirgrupo = $pedido->direccion_grupo;
-                if ($dirgrupo) {$contar++;
+                if ($dirgrupo) {
+                    $contar++;
                     PedidoMovimientoEstado::create([
                         'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,
                         'fecha' => now(),
@@ -642,11 +643,11 @@ class SobreController extends Controller
                         "env_observacion" => $observacion_recojo,
                         "gm_link" => $gm_link,
                         "env_sustento" => $sustento_recojo,
-                        'condicion_envio' => Pedido::RECOJO_COURIER,
-                        'condicion_envio_code' => Pedido::RECOJO_COURIER_INT
+                        "condicion_envio" => Pedido::RECOJO_COURIER,
+                        "condicion_envio_code" => Pedido::RECOJO_COURIER_INT
                     ]);
 
-                  $grupoCreatePedido = GrupoPedido::createGroupByPedido($pedido, true, true);
+                    $grupoCreatePedido = GrupoPedido::createGroupByPedido($pedido, true, true);
 
                 }
             }
@@ -658,7 +659,7 @@ class SobreController extends Controller
   public function RetornoRecojo(Request $request)
   {
     $direccion_grupo = DireccionGrupo::where('id', $request->direccion_grupo)->first();
-    $pedidos = Pedidos::where('direccion_grupo', $request->direccion_grupo)->activo()->get();
+    $pedidos = Pedido::where('direccion_grupo', $request->direccion_grupo)->activo()->get();
     $sustento_recojo = $request->sustento_recojo;
     $pedido_concatenado = explode(",", $request->pedido_concatenado);
 
@@ -684,7 +685,7 @@ class SobreController extends Controller
 
 
           PedidoMovimientoEstado::create([
-            'condicion_envio_code' => Pedido::ENTREGADO_JEFE_CURRIER_INT,
+            'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,
             'fecha' => now(),
             'pedido' => $pedido->id,
             'json_envio' => json_encode(array(
@@ -701,8 +702,8 @@ class SobreController extends Controller
               'estado_ruta' => 0,
               'fecha_salida' => null,
               "env_sustento" => $sustento_recojo,
-              'condicion_envio' => Pedido::ENTREGADO_JEFE_CURRIER,
-              'condicion_envio_code' => Pedido::ENTREGADO_JEFE_CURRIER_INT
+              'condicion_envio' => Pedido::RECOJO_COURIER,
+              'condicion_envio_code' => Pedido::RECOJO_MOTORIZADO_INT
             ))
           ]);
           $pedido->update([
@@ -723,8 +724,8 @@ class SobreController extends Controller
             "env_referencia" => $direccionJefeOperaciones->referencia,
             "env_observacion" => $direccionJefeOperaciones->direccion,
             /*"env_sustento" => $pedido->env_sustento,*/
-            'condicion_envio' => Pedido::ENTREGADO_JEFE_CURRIER,
-            'condicion_envio_code' => Pedido::ENTREGADO_JEFE_CURRIER_INT
+            'condicion_envio' => Pedido::RECOJO_COURIER,
+            'condicion_envio_code' => Pedido::RECOJO_COURIER_INT
           ]);
 
           //GrupoPedido::createGroupByPedido($pedido, true, true);

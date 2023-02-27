@@ -44,8 +44,6 @@ class PostUpdatePedido implements ShouldQueue
       //crear historial
       $estado_correccion = $pedido->estado_correccion;
 
-
-
       HistoriaPedidos::create([
         'pedido_id' => $pedido->id,
         'correlativo' => $pedido->correlativo,

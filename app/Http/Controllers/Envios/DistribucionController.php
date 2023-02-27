@@ -165,7 +165,7 @@ class DistribucionController extends Controller
                 $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio(Pedido::RECEPCION_COURIER);
                 $textoEstado=Pedido::RECEPCION_COURIER;
-                if ($pedido->condicion_envio_code == Pedido::RECOJO_COURIER) {
+                if ($pedido->condicion_envio_code == Pedido::RECOJO_COURIER_INT) {
                   $textoEstado=Pedido::RECOJO_COURIER;
                   $color = Pedido::getColorByCondicionEnvio(Pedido::RECOJO_COURIER);
                 }
@@ -236,8 +236,8 @@ class DistribucionController extends Controller
         Pedido::whereIn('id', $pedidosIds)->update([
             'env_zona_asignada' => null,
             'estado_ruta' => '1',
-            'condicion_envio' => Pedido::REPARTO_COURIER,
-            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+            'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,//reparto recojo courier
+            'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
             'condicion_envio_at' => now(),
             'direccion_grupo' => $direcciongrupo->id,
         ]);
@@ -264,7 +264,6 @@ class DistribucionController extends Controller
 
         $zona = $request->get('zona');
 
-
         $grupos = [];
         foreach ($groups as $grupo) {
             $pedidos = $grupo->pedidos()
@@ -289,23 +288,17 @@ class DistribucionController extends Controller
                     'distribucion' => $grupo->zona,
                     'destino' => $firstProduct->env_destino,
                     'direccion' => $firstProduct->env_direccion,//nro treking
-
                     'estado' => '1',
-
                     'codigos' => $lista_codigos,
                     'producto' => $lista_productos,
-
                     'cliente_id' => $cliente->id,
                     'user_id' => $firstProduct->user_id,
-
                     'nombre' => $firstProduct->env_nombre_cliente_recibe,
                     'celular' => $firstProduct->env_celular_cliente_recibe,
                     'gmlink' => $firstProduct->env_gmlink,
-
                     'nombre_cliente' => $cliente->nombre,
                     'celular_cliente' => $cliente->celular,
                     'icelular_cliente' => $cliente->icelular,
-
                     'distrito' => $firstProduct->env_distrito,
                     'referencia' => $firstProduct->env_referencia,//nro registro
                     'observacion' => $firstProduct->env_observacion,//rotulo
@@ -314,9 +307,9 @@ class DistribucionController extends Controller
                   ];
                 } else if($grupo->cod_recojo == 1){
                   $groupData = [
-                    'condicion_envio_code' => Pedido::ENTREGADO_JEFE_CURRIER_INT,//ENTREGADO JEFE CURRIER
+                    'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,//ENTREGADO JEFE CURRIER
                     'condicion_envio_at' => now(),
-                    'condicion_envio' => Pedido::ENTREGADO_JEFE_CURRIER,//ENTREGADO JEFE CURRIER
+                    'condicion_envio' => Pedido::RECOJO_COURIER,//ENTREGADO JEFE CURRIER
                     'distribucion' => $grupo->zona,
                     'destino' => $firstProduct->env_destino,
                     'direccion' => $firstProduct->env_direccion,//nro treking
