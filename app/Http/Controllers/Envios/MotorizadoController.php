@@ -777,7 +777,8 @@ class MotorizadoController extends Controller
         } else if ($tipo_consulta == "paquete") {
 
             $pedidos = null;
-            $filtros_code = [12];
+            $filtros_code = explode(",", $url_tabla);
+            array_push($filtros_code,Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT);
 
             $grupos = DireccionGrupo::select([
                 'direccion_grupos.*',
@@ -791,7 +792,7 @@ class MotorizadoController extends Controller
                 ->join('users as u', 'u.id', 'c.user_id')
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
-                ->whereIn('direccion_grupos.condicion_envio_code', explode(",", $url_tabla))
+                ->whereIn('direccion_grupos.condicion_envio_code', $filtros_code)
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
                     $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
                 })
@@ -833,7 +834,8 @@ class MotorizadoController extends Controller
 
                     $btn .= '<ul class="list-unstyled pl-0">';
 
-                    if ($direcciongrupo->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
+                    if ( in_array($direcciongrupo->condicion_envio_code,[Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT]) )
+                    {
 
                         if ($fecha_actual == $fecha_consulta) {
                             $count = Pedido::query()->where('direccion_grupo', $direcciongrupo->id)->count();
@@ -849,7 +851,9 @@ class MotorizadoController extends Controller
                                             data-toggle="jqconfirm" class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                                         </li>';
 
-                            if ($count == 1) {
+                            if( in_array($direcciongrupo->condicion_envio_code,[Pedido::ENVIO_MOTORIZADO_COURIER_INT]) )
+                            {
+                              if ($count == 1) {
                                 $btn .= ' <li>
                                             <button
                                             data-recibido="0"
@@ -860,7 +864,7 @@ class MotorizadoController extends Controller
                                             data-count="' . $count . '"
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                                         </li>';
-                            } else {
+                              } else {
                                 $btn .= ' <li>
                                             <button
                                             data-recibido="0"
@@ -871,7 +875,10 @@ class MotorizadoController extends Controller
                                             data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'rechazar']) . '"
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                                         </li>';
+                              }
                             }
+
+
 
                         } else {
                             $btn .= '<li>
@@ -882,7 +889,7 @@ class MotorizadoController extends Controller
                     </li>';
                         }
 
-                    } else if ($direcciongrupo->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
+                    } else if ( in_array($direcciongrupo->condicion_envio_code,[Pedido::RECEPCION_MOTORIZADO_INT,Pedido::RECEPCION_RECOJO_MOTORIZADO_INT]) ) {
                         if ($fecha_actual == $fecha_consulta) {
                             if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
                                 if (count(DireccionGrupo::getSolicitudAuthorization($direcciongrupo->motorizado_id)) == 0) {
@@ -936,7 +943,6 @@ class MotorizadoController extends Controller
                 ->select([
                     'pedidos.id',
                     'pedidos.cliente_id',
-
                     'u.identificador as users',
                     'u.id as user_id',
                     'dp.codigo as codigos',
@@ -968,7 +974,10 @@ class MotorizadoController extends Controller
                 ->where('dp.estado', '1');
         } else if ($tipo_consulta == "paquete") {
             $pedidos = null;
-            $filtros_code = [12];
+            $filtros_code = explode(",", $request->vista);
+            array_push($filtros_code,Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT);
+            //return $filtros_code;
+
 
             $grupos = DireccionGrupo::select([
                 'direccion_grupos.*',
@@ -978,7 +987,7 @@ class MotorizadoController extends Controller
             ])
                 ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
-                ->whereIn('direccion_grupos.condicion_envio_code', explode(",", $request->vista))
+                ->whereIn('direccion_grupos.condicion_envio_code', $filtros_code)
                 ->whereDate('direccion_grupos.fecha_salida', $request->fechaconsulta)
                 ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
                 ->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->ZONA . '%')

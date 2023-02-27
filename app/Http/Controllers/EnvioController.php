@@ -1687,7 +1687,7 @@ class EnvioController extends Controller
                     }
                     DireccionGrupo::cambiarCondicionEnvio(
                         $grupo,
-                        Pedido::RECEPCION_MOTORIZADO_INT,
+                        (($grupo->cod_recojo==1)? Pedido::RECEPCION_RECOJO_MOTORIZADO_INT:Pedido::RECEPCION_MOTORIZADO_INT),
                         [
                             'fecha_recepcion_motorizado' => Carbon::now(),
                         ]
@@ -1697,7 +1697,7 @@ class EnvioController extends Controller
             } else {
                 $grupo = DireccionGrupo::cambiarCondicionEnvio(
                     $grupo,
-                    Pedido::RECEPCION_MOTORIZADO_INT,
+                    (($grupo->cod_recojo==1)? Pedido::RECEPCION_RECOJO_MOTORIZADO_INT:Pedido::RECEPCION_MOTORIZADO_INT),
                     [
                         'fecha_recepcion_motorizado' => Carbon::now(),
                     ]
@@ -1709,7 +1709,7 @@ class EnvioController extends Controller
             ]);
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
-                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                'condicion_envio_code' => (($grupo->cod_recojo==1)? Pedido::RECEPCION_RECOJO_MOTORIZADO_INT:Pedido::RECEPCION_MOTORIZADO_INT),
                 'notificado' => 0,
             ]);
 
