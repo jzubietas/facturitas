@@ -1104,7 +1104,7 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
-                stateSave: true,
+                //stateSave: true,
                 order: [[1, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
