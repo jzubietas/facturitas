@@ -16,6 +16,8 @@
 @section('content')
 
     @include('envios.motorizado.modal.entregado')
+    @include('envios.motorizado.modal.entregar_recojo')
+    @include('envios.motorizado.modal.recojo_enviarcourier')
 
     <div class="card p-0">
 
@@ -226,15 +228,23 @@
                 box-shadow: 0 0 1px white !important;
             }
         }
+
+        .yellow_color_table {
+          background-color: #ffd60a !important;
+        }
+        .blue_color_table {
+          background-color: #3A98B9 !important;
+        }
     </style>
     @include('partials.css.time_line_css')
 @endpush
 
 @section('js')
+
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
 
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
@@ -453,10 +463,7 @@
                                 self.$content.find("#picture2").attr('src', self.$content.find("#picture2").data('src'))
                                 self.$content.find("#adjunto2").val(null)
                             })
-                            self.$content.find("#trash_adjunto3").click(function (e) {
-                                self.$content.find("#picture3").attr('src', self.$content.find("#picture2").data('src'))
-                                self.$content.find("#adjunto3").val(null)
-                            })
+                            1
 
                             self.$content.find("form").on('submit', function (e) {
                                 e.preventDefault()
@@ -838,7 +845,14 @@ Enviar</button>
 
                 },
                 createdRow: function (row, data, dataIndex) {
-
+                  console.log(data["cod_recojo"])
+                  if(data["condicion_envio_code"]==31)
+                  {
+                    $(row).addClass('yellow_color_table');
+                  }else if(data["condicion_envio_code"]==32)
+                  {
+                    $(row).addClass('blue_color_table');
+                  }
                 },
                 drawCallback: function (settings) {
                     console.log(settings.json);
@@ -1364,6 +1378,158 @@ Enviar</button>
                 }
             });
 
+          $(document).on("submit", "#form_recojo_motorizado", function (evento) {
+            evento.preventDefault();
+
+            //validacion
+
+            var fd2 = new FormData();
+            //let files = $('input[name="pimagen')
+            //var fileitem = $("#DPitem").val();
+
+            fd2.append('entrega_motorizado_recojo', $('#input_recojomotorizado').val());
+            //fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val());
+            //fd2.append('fecha_recepcion', $('#fecha_recepcion').val());
+            fd2.append('foto1', $('input[type=file][id="pimagen1_recojo"]')[0].files[0]);
+            fd2.append('foto2', $('input[type=file][id="pimagen2_recojo"]')[0].files[0]);
+            fd2.append('foto3', $('input[type=file][id="pimagen3_recojo"]')[0].files[0]);
+            //fd2.append('condicion', $('#condicion').val());
+
+            $.ajax({
+              data: fd2,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('motorizado.recojo') }}",
+              success: function (data) {
+                $("#modal_recojomotorizado").modal("hide");
+                $('#tablaEnmotorizado').DataTable().ajax.reload();
+
+              }
+            });
+
+          });
+
+          $(document).on("change", "#foto1", function (event) {
+            console.log("cambe image")
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              //$("#picture").attr("src",event.target.result);
+              document.getElementById("picture1").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+
+          });
+
+          $(document).on("change", "#foto2", function (event) {
+            console.log("cambe image")
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              //$("#picture").attr("src",event.target.result);
+              document.getElementById("picture2").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+
+          });
+
+          $(document).on("change", "#foto3", function (event) {
+            console.log("cambe image")
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              //$("#picture").attr("src",event.target.result);
+              document.getElementById("picture3").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+
+          });
+
+          $('#modal_recojomotorizado').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            $("#input_recojomotorizado").val(button.data('direccion_grupo'));
+            //limpiar campos para cargar nuevas fotos
+            $("#pimagen1_recojo").val("");
+            $("#pimagen2_recojo").val("");
+            $("#pimagen3_recojo").val("");
+            $("#picture1_recojo").attr('src','');
+            $("#picture2_recojo").attr('src','');
+            $("#picture3_recojo").attr('src','');
+          });
+
+          $('#modal_recojoenviarcourier').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            $("#input_recojoenviarcourier").val(button.data('direccion_grupo'));
+
+            let foto1 = button.data('imagen1');
+            let foto2 = button.data('imagen2');
+            let foto3 = button.data('imagen3');
+            $(".foto1").attr("src", foto1);
+            $(".foto2").attr("src", foto2);
+            $(".foto3").attr("src", foto3);
+          });
+
+
+          $(document).on("change", "#pimagen1_recojo", function (event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              document.getElementById("picture1_recojo").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+          });
+
+          $(document).on("change", "#pimagen2_recojo", function (event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              document.getElementById("picture2_recojo").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+          });
+
+          $(document).on("change", "#pimagen3_recojo", function (event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              document.getElementById("picture3_recojo").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+          });
+
+          $(document).on("click","#trash_adjunto1",function (e) {
+            $("#picture1_recojo").attr('src', $("#picture1_recojo").data('src'))
+            $("#pimagen1_recojo").val(null)
+          })
+
+          $(document).on("click","#trash_adjunto2",function (e) {
+            $("#picture2_recojo").attr('src', $("#picture2_recojo").data('src'))
+            $("#pimagen2_recojo").val(null)
+          })
+
+          $(document).on("click","#trash_adjunto3",function (e) {
+            $("#picture3_recojo").attr('src', $("#picture3_recojo").data('src'))
+            $("#pimagen3_recojo").val(null)
+          })
+
+          $(document).on("submit", "#form_recojo_enviarcourier", function (evento) {
+            evento.preventDefault();
+            var drecojoenviarcourier = new FormData();
+            drecojoenviarcourier.append('input_recojoenviarcourier', $('#input_recojoenviarcourier').val());
+            $.ajax({
+              data: drecojoenviarcourier,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('motorizado.recojoenviarcourier') }}",
+              success: function (data) {
+                $("#modal_recojoenviarcourier").modal("hide");
+                $('#tablaEnmotorizado').DataTable().ajax.reload();
+              }
+            });
+
+          });
         });
     </script>
 

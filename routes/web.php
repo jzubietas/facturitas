@@ -14,6 +14,7 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PedidoHistoryController;
 use App\Http\Controllers\Pedidos\PedidoStatusController;
+use App\Http\Controllers\RecojoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
@@ -293,7 +294,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.direccion', [EnvioController::class, 'DireccionEnvio'])->name('envios.direccion');
     Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
 
-    Route::post('registrar_recojer_pedido', [SobreController::class, 'RegistrarRecojo'])->name('registrar_recojer_pedido');
+    Route::post('registrar_recojer_pedido', [RecojoController::class, 'RegistrarRecojo'])->name('registrar_recojer_pedido');
 
     Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');
     Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
@@ -359,6 +360,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('envio.escaneoqr/{id}', [EnvioController::class, 'EscaneoQR'])->name('envio.escaneoqr');
     Route::post('envio.recibirpedidomotorizado', [EnvioController::class, 'RecibirPedidoMotorizado'])->name('envio.recibirpedidomotorizado');
+
+
+    Route::get('operaciones/recojos', [RecojoController::class, 'index'])->name('operaciones.recojos.index');
 
 
     Route::get('envios/motorizados', [MotorizadoController::class, 'index'])->name('envios.motorizados.index');
@@ -508,6 +512,11 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.quitardireccion', [EnvioController::class, 'actionQuitarDireccion'])->name('envios.quitardireccion');
     Route::post('envios.recepcionarmotorizado', [EnvioController::class, 'RecibirMotorizado'])->name('envios.recepcionarmotorizado');
     Route::post('envios.enviarid', [EnvioController::class, 'EnviarPedidoid'])->name('envios.enviarid');
+
+    Route::post('motorizado.recojo', [MotorizadoController::class, 'MotorizadoRecojo'])->name('motorizado.recojo');
+
+
+
     Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
     Route::post('envios.changeImg', [EnvioController::class, 'changeImg'])->name('envios.changeImg');
 
@@ -719,6 +728,14 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmarmotorizadoconfirm', [EnvioController::class, 'confirmarEstadoConfirmConfirm'])->name('operaciones.confirmarmotorizadoconfirm');
     Route::post('operaciones.confirmarmotorizadoconfirmdismiss', [EnvioController::class, 'confirmarEstadoConfirmConfirmDismiss'])->name('operaciones.confirmarmotorizadoconfirmdismiss');
     Route::post('operaciones.confirmarcliente', [EnvioController::class, 'confirmarEstadoConfirmValidada'])->name('operaciones.confirmarcliente');
+
+
+    Route::post('motorizado.recojoenviarcourier', [MotorizadoController::class, 'motorizadoRecojoenviarcourier'])->name('motorizado.recojoenviarcourier');
+    Route::post('motorizado.confirmrecojo', [RecojoController::class, 'motorizadoConfirmRecojo'])->name('motorizado.confirmrecojo');
+
+    Route::post('courier.recojoenviarope', [RecojoController::class, 'courierRecojoenviarope'])->name('courier.recojoenviarope');
+
+
 
     Route::get('direcciongrupo/{grupo}/no_contesto/get_sustentos_adjuntos', [DireccionGrupoController::class, 'get_sustentos_adjuntos'])->name('direcciongrupo.no-contesto.get-sustentos-adjuntos');
 

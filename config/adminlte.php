@@ -359,6 +359,13 @@ return [
                     'active' => [' correcciones'],
                 ],
                 [
+                  'text' => 'Bandeja de recojo',
+                  'route' => 'operaciones.recojos.index',
+                  'can' => 'operacion.correccion',
+                  'icon' => 'fas fa-check-circle dot_correcciones_count',
+                  'active' => [' bandeja de recojo'],
+                ],
+                [
                     'text' => 'Pedidos por atender',
                     'route' => 'operaciones.poratender',
                     'can' => 'operacion.poratender',
