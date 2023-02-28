@@ -1122,6 +1122,7 @@
                                 url: "{{ route('envios.recepcionmotorizado.iniciar_ruta_masiva') }}",
                             }).always(function (data) {
                                 console.log(data);
+                                
                                 if(data.html=='1')
                                 {
                                   $('#tablaPrincipal').DataTable().ajax.reload();
@@ -1132,6 +1133,7 @@
                                       'error'
                                   )
                                 }
+
                                 //self.close()
                                 //self.hideLoading(true)
 
