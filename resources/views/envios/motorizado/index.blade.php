@@ -17,6 +17,8 @@
 
     @include('envios.motorizado.modal.entregado')
 
+    @include('envios.motorizado.modal.entregar_recojo')
+
     <div class="card p-0">
 
         <table cellspacing="5" cellpadding="5" class="table-responsive">
@@ -1363,6 +1365,81 @@ Enviar</button>
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
             });
+
+          $(document).on("submit", "#form_recojo_motorizado", function (evento) {
+            evento.preventDefault();
+            console.log("form enviarid")
+            //validacion
+
+            var fd2 = new FormData();
+            let files = $('input[name="pimagen')
+            var fileitem = $("#DPitem").val();
+
+            fd2.append('hiddenEnviar', $('#hiddenEnviar').val());
+            fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val());
+            fd2.append('fecha_recepcion', $('#fecha_recepcion').val());
+            fd2.append('foto1', $('input[type=file][id="foto1"]')[0].files[0]);
+            fd2.append('foto2', $('input[type=file][id="foto2"]')[0].files[0]);
+            fd2.append('foto3', $('input[type=file][id="foto3"]')[0].files[0]);
+            fd2.append('condicion', $('#condicion').val());
+
+            $.ajax({
+              data: fd2,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('envios.enviarid') }}",
+              success: function (data) {
+                $("#modal-enviar").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+
+              }
+            });
+
+          });
+
+          $(document).on("change", "#foto1", function (event) {
+            console.log("cambe image")
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              //$("#picture").attr("src",event.target.result);
+              document.getElementById("picture1").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+
+          });
+
+          $(document).on("change", "#foto2", function (event) {
+            console.log("cambe image")
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              //$("#picture").attr("src",event.target.result);
+              document.getElementById("picture2").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+
+          });
+
+          $(document).on("change", "#foto3", function (event) {
+            console.log("cambe image")
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              //$("#picture").attr("src",event.target.result);
+              document.getElementById("picture3").setAttribute('src', event.target.result);
+            };
+            reader.readAsDataURL(file);
+
+          });
+
+          $('#modal_recojomotorizado').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var idunico = button.data('enviar')
+
+
+          });
 
         });
     </script>
