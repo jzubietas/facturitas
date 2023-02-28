@@ -193,10 +193,10 @@ __________________________________
                                 self.$ajaxdata = data;
                                 if (data.length > 0) {
                                     self.setContent(`<div class="">
-<table class="table table-striped">
+<table class="table table-striped table-bordered table-sm" cellspacing="0"
+  width="100%" id="tblListadoHistorial">
 <thead>
 <tr>
-<th>ASESOR</th>
 <th>CLIENTE</th>
 <th>RUC - EMPRESA</th>
 <th>MES/AÑO</th>
@@ -211,8 +211,7 @@ __________________________________
 <tbody>
 ${data.map(function (data, index) {
                                         return `<tr>
-<td>${data.identificador}</td>
-<td>${data.cliente_id}</td>
+<td>${data.celular}</td>
 <td>${data.ruc} - ${data.empresa}</td>
 <td>${data.mes}/${data.year}</td>
 <td>${data.cantidad}</td>
@@ -534,8 +533,8 @@ ${data.map(function (data, index) {
 <td><input type="hidden" name="tipo_banca[]" value="${tipo_banca}">${tipo_banca}</td>
 <td><input type="hidden" name="porcentaje[]" value="${porcentaje}">${porcentaje}</td>
 <td><input type="hidden" name="courier[]" value="${courier}">${courier}</td>
-<td><textarea class="d-none" name="descripcion[]">${descripcion}</textarea>${descripcion}</td>
-<td><textarea class="d-none" name="nota[]" >${nota}</textarea>${nota}</td>
+<td style=''width: 93px;'' ><textarea class="d-none" name="descripcion[]">${descripcion}</textarea>${descripcion}</td>
+<td ><textarea class="d-none" name="nota[]" >${nota}</textarea>${nota}</td>
 <td><input type="hidden" name="validasobres[]" value="${validasobre}">${validasobre}</td>
 <td>
 <div class="list-group">
@@ -843,7 +842,9 @@ ${files.map(function (file) {
 
             $(document).on("change", "#panio", function () {
                 //obtengo banca
-                let ptipo_banca = $.trim($("#ptipo_banca").val().split('-')[0]);
+
+                let ptipo_banca = $("#ptipo_banca").val().split('-')[0];
+
                 //obtengo anio
                 console.log("banca " + ptipo_banca)
                 let anno_filter = parseInt($(this).val());
@@ -1235,22 +1236,10 @@ ${files.map(function (file) {
                         'Agregue descripción del pedido',
                         'warning'
                     )
-                } else if ($('#pdescripcion').val().length > 250) { //
-                    Swal.fire(
-                        'Error',
-                        'Se acepta máximo 200 caracteres',
-                        'warning'
-                    )
                 } else if ($('#pnota').val() == '') {
                     Swal.fire(
                         'Error',
                         'Agregue nota del pedido',
-                        'warning'
-                    )
-                } else if ($('#pnota').val().length > 250) {
-                    Swal.fire(
-                        'Error',
-                        'Se acepta máximo 200 caracteres',
                         'warning'
                     )
                 } else {
@@ -1716,6 +1705,9 @@ ${files.map(function (file) {
                 $("#user_id").html(data.html);
                 $("#user_id").selectpicker("refresh").trigger("change");
             });
+
         });
+
+
     </script>
 @stop

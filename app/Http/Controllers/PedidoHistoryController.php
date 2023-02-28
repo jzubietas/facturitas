@@ -14,7 +14,10 @@ class PedidoHistoryController extends Controller
      */
     public function index()
     {
-        return response()->json(PedidoHistory::query()->where('user_id', auth()->id())->get());
+        return response()->json(
+          PedidoHistory::join('clientes as c', 'pedido_histories.cliente_id', 'c.id')
+          ->where('pedido_histories.user_id', auth()->id())->get()
+        );
     }
 
     /**
