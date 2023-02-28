@@ -14,6 +14,7 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PedidoHistoryController;
 use App\Http\Controllers\Pedidos\PedidoStatusController;
+use App\Http\Controllers\RecojoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
@@ -359,6 +360,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('envio.escaneoqr/{id}', [EnvioController::class, 'EscaneoQR'])->name('envio.escaneoqr');
     Route::post('envio.recibirpedidomotorizado', [EnvioController::class, 'RecibirPedidoMotorizado'])->name('envio.recibirpedidomotorizado');
+
+
+    Route::get('operaciones/recojos', [RecojoController::class, 'index'])->name('operaciones.recojos.index');
 
 
     Route::get('envios/motorizados', [MotorizadoController::class, 'index'])->name('envios.motorizados.index');
