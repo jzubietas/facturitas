@@ -10,6 +10,7 @@ use App\Models\Distrito;
 use App\Models\GrupoPedido;
 use App\Models\Pedido;
 use App\Models\PedidoMotorizadoHistory;
+use App\Models\SituacionClientes;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
@@ -307,9 +308,9 @@ class DistribucionController extends Controller
                   ];
                 } else if($grupo->cod_recojo == 1){
                   $groupData = [
-                    'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,//ENTREGADO JEFE CURRIER
+                    'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,//ENTREGADO JEFE CURRIER
                     'condicion_envio_at' => now(),
-                    'condicion_envio' => Pedido::RECOJO_COURIER,//ENTREGADO JEFE CURRIER
+                    'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,//ENTREGADO JEFE CURRIER
                     'distribucion' => $grupo->zona,
                     'destino' => $firstProduct->env_destino,
                     'direccion' => $firstProduct->env_direccion,//nro treking
@@ -343,11 +344,12 @@ class DistribucionController extends Controller
                     foreach ($pedidos as $pedidosFila){
                       $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
                       $pedidoUpdate->update([
-                        'condicion_envio' => Pedido::ENTREGADO_RECOJO_JEFE_OPE,
-                        'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+                        'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
+                        'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
                       ]);
                     }
                   }
+                  $delete=GrupoPedido::where('id',$grupo->id)->delete();
                 }
             } else {
               //OLVA
@@ -381,9 +383,9 @@ class DistribucionController extends Controller
                     ];
                   }else{
                       return [
-                        'condicion_envio_code' => Pedido::ENTREGADO_JEFE_CURRIER_INT,//ENTREGADO JEFE CURRIER
+                        'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,//ENTREGADO JEFE CURRIER
                         'condicion_envio_at' => now(),
-                        'condicion_envio' => Pedido::ENTREGADO_JEFE_CURRIER,//ENTREGADO JEFE CURRIER
+                        'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,//ENTREGADO JEFE CURRIER
                         'distribucion' => $grupo->zona,
                         'destino' => $pedido->env_destino,
                         'direccion' => $pedido->env_tracking,//nro treking
@@ -425,11 +427,12 @@ class DistribucionController extends Controller
                         foreach ($pedidos as $pedidosFila){
                           $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
                           $pedidoUpdate->update([
-                            'condicion_envio' => Pedido::ENTREGADO_RECOJO_JEFE_OPE,
-                            'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+                            'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
+                            'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
                           ]);
                         }
                       }
+                      $delete=GrupoPedido::where('id',$grupo->id)->delete();
                     }
                 }
             }

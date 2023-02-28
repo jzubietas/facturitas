@@ -613,7 +613,7 @@ class PdfController extends Controller
                 'dp.nota',
                 'dp.total',
                 'pedidos.condicion as condiciones',
-                'pedidos.created_at as fecha'
+                'pedidos.created_at as fecha',
             )
             //->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)

@@ -561,19 +561,19 @@ class DireccionGrupo extends Model implements HasMedia
     {
         if ($grupo->distribucion == 'OLVA') {
             $data = [
-                'condicion_envio' => Pedido::$estadosCondicionEnvioCode[Pedido::MOTORIZADO_INT],
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+                'condicion_envio' => ( ($grupo->cod_recojo==1)?  Pedido::$estadosCondicionEnvioCode[Pedido::RECOJO_MOTORIZADO_INT]:Pedido::$estadosCondicionEnvioCode[Pedido::MOTORIZADO_INT])  ,
+                'condicion_envio_code' => ( ($grupo->cod_recojo==1)? Pedido::RECOJO_MOTORIZADO_INT:Pedido::MOTORIZADO_INT),
                 'condicion_envio_at' => now(),
                 'cambio_direccion_at' => null,
             ];
             $grupoolva = DireccionGrupo::query()->activo()
-                ->where('condicion_envio_code', Pedido::MOTORIZADO_INT)
+                ->where('condicion_envio_code', ( ($grupo->cod_recojo==1)? Pedido::RECOJO_MOTORIZADO_INT:Pedido::MOTORIZADO_INT))
                 ->where('distribucion', 'OLVA')
                 ->orderBy('created_at')
                 ->first();
             if ($grupoolva == null) {
                 $grupoolva = $grupo;
-                self::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT);
+                self::cambiarCondicionEnvio($grupo, ( ($grupo->cod_recojo==1)? Pedido::RECOJO_MOTORIZADO_INT:Pedido::MOTORIZADO_INT));
             } else {
                 $data['direccion_grupo'] = $grupoolva->id;
                 $grupo->pedidos()->update($data);
@@ -582,7 +582,7 @@ class DireccionGrupo extends Model implements HasMedia
             }
             return $grupoolva;
         } else {
-            self::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT);
+            self::cambiarCondicionEnvio($grupo, ( ($grupo->cod_recojo==1)? Pedido::RECOJO_MOTORIZADO_INT:Pedido::MOTORIZADO_INT));
         }
         return $grupo;
     }
