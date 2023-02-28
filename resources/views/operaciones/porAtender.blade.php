@@ -543,7 +543,7 @@
                     {data: 'codigos', name: 'codigos',},
                     {data: 'sobrevalida', name: 'sobrevalida',},
                     {data: 'empresas', name: 'empresas',},
-                  {data: 'mes', name: 'mes',},
+                    {data: 'mes', name: 'mes',},
                     {data: 'users', name: 'users',},
                     {
                         data: 'fecha',
@@ -600,6 +600,12 @@
                         }
                     },
                 ],
+                "createdRow": function (row, data, dataIndex) {
+                  if(data["sobrevalida"]=='No')
+                  {
+                    $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
+                  }
+                },
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
