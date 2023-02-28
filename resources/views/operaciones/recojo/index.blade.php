@@ -11,6 +11,8 @@
 
 @section('content')
 
+  @include('envios.motorizado.modal.recojo_enviarope')
+
   <div class="card p-0">
 
     <ul class="nav nav-pills nav-justified nav-tabs mb-24 mt-24" id="myTab" role="tablist">
@@ -215,8 +217,7 @@
         $("#input_recojomotorizado").val(button.data('direccion_grupo'));
       });
 
-
-      $(document).on("submit", "#form_recojo_enviarope", function (evento) {
+      /*$(document).on("submit", "#form_recojo_enviarope", function (evento) {
         evento.preventDefault();
         var drecojoenviarope = new FormData();
         drecojoenviarope.append('input_recojoenviarope', $('#input_recojoenviarope').val());
@@ -225,14 +226,14 @@
           processData: false,
           contentType: false,
           type: 'POST',
-          url: "{{ route('motorizado.recojoenviarope') }}",
+          url: "{{ route('courier.recojoenviarope') }}",
           success: function (data) {
             $("#modal_recojoenviarope").modal("hide");
             $('#tablaPrincipal').DataTable().ajax.reload();
           }
         });
 
-      });
+      });*/
     });
   </script>
 

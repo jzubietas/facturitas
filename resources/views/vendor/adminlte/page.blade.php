@@ -709,10 +709,7 @@
 
           $.get('{{route('getvidasusuario')}}',)
             .done(function (data) {
-              //console.log(arguments)
-              console.log(data.user)
               $('#divListadoVidas').html(data.html);
-              //$("#modal_clientes_deudas_content").html(data.html)
             })
             .fail(function () {
               //console.log(arguments)

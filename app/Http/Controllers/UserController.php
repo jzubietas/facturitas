@@ -875,7 +875,8 @@ class UserController extends Controller
         //return $request;
         $meta_pedido_1=(($request->meta_pedido_1)? $request->meta_pedido_1:0);
         $meta_pedido_2=(($request->meta_pedido_2)? $request->meta_pedido_2:0);
-        $meta_cobro=(($request->meta_cobro)? $request->meta_cobro:0);
+        $meta_quincena=(($request->meta_quincena)? $request->meta_quincena:0);
+        $meta_cobro=0;
         $fecha_created=Carbon::now();
         $yy=$fecha_created->format('Y');
         $mm=$fecha_created->format('m');
@@ -888,6 +889,7 @@ class UserController extends Controller
                     'meta_pedido' => $meta_pedido_1,
                     'meta_pedido_2' => $meta_pedido_2,
                     'meta_cobro' => $meta_cobro,
+                    'meta_quincena' => $meta_quincena,
                 ]);
             $user=User::where('id',$request->asesor)->first();
             //encontro registro
@@ -895,7 +897,24 @@ class UserController extends Controller
                 'meta_pedido' => $meta_pedido_1,
                 'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
+                'meta_quincena' => $meta_quincena,
             ]);
+
+          $encargado=User::where('id',$user->supervisor)->first();
+          DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+            ->where('user_id',$encargado->id)->update([
+              'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+              'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+              'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+              'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+            ]);
+          //encontro registro
+          $encargado->update([
+            'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+            'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+            'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+            'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+          ]);
         }else{
             $user=User::where('id',$request->asesor)->first();
             DB::table('metas')->insert([
@@ -907,6 +926,7 @@ class UserController extends Controller
                 'meta_pedido' => $meta_pedido_1,
                 'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
+                'meta_quincena' => $meta_quincena,
                 'status'=>1,
                 'created_at'=>now(),
             ]);
@@ -914,7 +934,24 @@ class UserController extends Controller
                 'meta_pedido' => $meta_pedido_1,
                 'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
+                'meta_quincena' => $meta_quincena,
             ]);
+
+          $encargado=User::where('id',$user->supervisor)->first();
+          DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+            ->where('user_id',$encargado->id)->update([
+              'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+              'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+              'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+              'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+            ]);
+          //encontro registro
+          $encargado->update([
+            'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+            'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+            'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+            'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+          ]);
         }
         return redirect()->route('users.asesores')->with('info', 'asignado');
     }

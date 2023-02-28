@@ -14,6 +14,10 @@
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group col-lg-3">
+              {!! Form::label('meta_quincena', 'META QUINCENA') !!}
+              {!! Form::number('meta_quincena', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 1 de la quincena']) !!}
+            </div>
+            <div class="form-group col-lg-3">
               {!! Form::label('meta_pedido_1', 'META DE PEDIDOS 1') !!}
               {!! Form::number('meta_pedido_1', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 1 del mes']) !!}
             </div>
@@ -21,10 +25,7 @@
                   {!! Form::label('meta_pedido_2', 'META DE PEDIDOS 2') !!}
                   {!! Form::number('meta_pedido_2', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 2 del mes']) !!}
               </div>
-            <div class="form-group col-lg-6">
-              {!! Form::label('meta_cobro', 'META DE PAGOS') !!}
-              <input type="text" name="meta_cobro" id="meta_cobro" class="form-control number" placeholder="Ingrese meta del mes...">
-            </div>
+
           </div>
         </div>
         <div class="modal-footer">

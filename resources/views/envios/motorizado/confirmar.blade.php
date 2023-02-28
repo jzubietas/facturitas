@@ -26,6 +26,7 @@
 
     @include('envios.motorizado.modal.entregadoconfirm')
     @include('envios.motorizado.modal.entregar_confirm_recojo')
+    @include('envios.motorizado.modal.recojo_enviarope')
 
     <div class="card">
         <div class="card-body">
@@ -304,7 +305,7 @@
               processData: false,
               contentType: false,
               type: 'POST',
-              url: "{{ route('courier.confirmrecojo') }}",
+              url: "{{ route('motorizado.confirmrecojo') }}",
               success: function (data) {
                 $("#modal_confirmrecojomotorizado").modal("hide");
                 $('#tablaPrincipal').DataTable().ajax.reload();
@@ -352,6 +353,37 @@
                     }
                 });
             });
+
+          $(document).on("submit", "#form_recojo_enviarope", function (evento) {
+            evento.preventDefault();
+            var drecojoenviarope = new FormData();
+            drecojoenviarope.append('input_recojoenviarope', $('#input_recojoenviarope').val());
+            $.ajax({
+              data: drecojoenviarope,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('courier.recojoenviarope') }}",
+              success: function (data) {
+                $("#modal_recojoenviarope").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+              }
+            });
+
+          });
+
+          $('#modal_recojoenviarope').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            $("#input_recojoenviarope").val(button.data('direccion_grupo'));
+
+            let foto1 = button.data('imagen1');
+            let foto2 = button.data('imagen2');
+            let foto3 = button.data('imagen3');
+            $(".foto1").attr("src", foto1);
+            $(".foto2").attr("src", foto2);
+            $(".foto3").attr("src", foto3);
+          });
+
         });
     </script>
 
