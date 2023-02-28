@@ -421,31 +421,32 @@
                     Swal.fire('Debe colocar una direccion de entrega', '', 'warning');
                     return false;
                 } */
-                if (sustento_recojo == "") {
-                    Swal.fire('Debe colocar un sustento', '', 'warning');
-                    return false;
-                } else if (direccion_recojo== "") {
-                    Swal.fire('Debe colocar una direccion de recojo', '', 'warning');
-                    return false;
-                } else if (Nombre_recibe == "") {
+                if (Nombre_recibe == "") {
                     Swal.fire('Debe colocar el nombre del que recive', '', 'warning');
                     return false;
                 } else if (celular_id== "") {
                     Swal.fire('Debe colocar el celular del quien recibe', '', 'warning');
                     return false;
+                } else if (direccion_recojo== "") {
+                Swal.fire('Debe colocar una direccion de recojo', '', 'warning');
+                return false;
                 } else if (referencia_recojo == "") {
                     Swal.fire('debe colocar un referencia', '', 'warning');
                     return false;
                 } else if (observacion_recojo == "") {
                     Swal.fire('Debe colocar una observacion', '', 'warning');
                     return false;
-                } else if (gm_link == "") {
+                } /*else if (gm_link == "") {
                     Swal.fire('Debe colocar el link de Google Maps', '', 'warning');
                     return false;
+                }*/
+                else if (sustento_recojo == "") {
+                  Swal.fire('Debe colocar un sustento', '', 'warning');
+                  return false;
                 }
 
 
-                var fd_courier = new FormData();
+              var fd_courier = new FormData();
                 fd_courier.append('Nombre_recibe', Nombre_recibe);
                 fd_courier.append('celular_id', celular_id);
                 fd_courier.append('direccion_recojo', direccion_recojo);
