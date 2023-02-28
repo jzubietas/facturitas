@@ -72,7 +72,7 @@ class PedidosMesCountProgressBar extends Widgets
         }
         $asesores = User::query()
             ->activo()
-            ->rolAsesor()
+            ->rolAllAsesor()
             ->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })
@@ -92,7 +92,12 @@ class PedidosMesCountProgressBar extends Widgets
                 }
             }
 
-            $meta = (float)$asesor->meta_pedido;
+            if ($asesor->rol!= User::ROL_ASESOR_ADMINISTRATIVO){
+              $meta = (float)$asesor->meta_pedido;
+            }else{
+              $meta=100;
+            }
+
             $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo()->where('pedidos.codigo', 'not like', "%-C%"))->count();
             $pay = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo()->pagados()->where('pedidos.codigo', 'not like', "%-C%"))->count();
 
@@ -103,6 +108,7 @@ class PedidosMesCountProgressBar extends Widgets
                 "meta" => $meta,
                 "asignados" => $asignados,
                 "pagados" => $pay,
+                "rol" => $asesor->rol,
             ];
 
         }
@@ -117,6 +123,7 @@ class PedidosMesCountProgressBar extends Widgets
                     $newData[$identificador]['meta'] += data_get($item, 'meta');
                     $newData[$identificador]['asignados'] += data_get($item, 'asignados');
                     $newData[$identificador]['pagados'] += data_get($item, 'pagados');
+                    $newData[$identificador]['rol'] += data_get($item, 'rol');
                 }
             }
             $newData[$identificador]['name'] = collect($items)->map(function ($item) {
@@ -126,11 +133,16 @@ class PedidosMesCountProgressBar extends Widgets
         $this->progressData = collect($newData)->values()->map(function ($item) {
             $all = data_get($item, 'meta');
             $asignados = data_get($item, 'asignados');
+          if (data_get($item, 'rol')!= User::ROL_ASESOR_ADMINISTRATIVO){
             if ($all > 0) {
-                $p = intval(($asignados / $all) * 100);
+              $p = intval(($asignados / $all) * 100);
             } else {
-                $p = 0;
+              $p = 0;
             }
+          }else{
+            $p = intval(($asignados / 100) * 100);
+          }
+
             $item['progress'] = $p;
             return $item;
         })->sortBy('identificador')->all();
@@ -139,10 +151,14 @@ class PedidosMesCountProgressBar extends Widgets
         $metaTotal = collect($this->progressData)->pluck('meta')->sum();
         $asignados = collect($this->progressData)->pluck('asignados')->sum();
         $pagados = collect($this->progressData)->pluck('pagados')->sum();
-        if ($metaTotal > 0) {
+        if (data_get($item, 'rol')!= User::ROL_ASESOR_ADMINISTRATIVO) {
+          if ($metaTotal > 0) {
             $p = intval(($asignados / $metaTotal) * 100);
-        } else {
+          } else {
             $p = 0;
+          }
+        }else{
+          $p = intval(($asignados / 100) * 100);
         }
         $this->generalDataSupervisor = [
             "code" => '',

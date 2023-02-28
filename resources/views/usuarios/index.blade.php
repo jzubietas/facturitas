@@ -18,7 +18,7 @@
             <a href="" data-target="#modal-exportar-2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Usuarios</a>
           </div>
         </div>
-        @include('usuarios.modal.exportar2', ['title' => 'Exportar Lista de Usuarios', 'key' => '1'])  
+        @include('usuarios.modal.exportar2', ['title' => 'Exportar Lista de Usuarios', 'key' => '1'])
       @endcan
     @endif
 
@@ -67,6 +67,7 @@
               <td>
                 @can('users.reset')
                   <a href="" data-target="#modal-reset-{{ $user->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Resetear</button></a>
+                  {{--<a href="" id="btn_resetear_clave" data-target="#modal-resetclave-usuario" data-toggle="modal" data-userid="{{ $user->id }}" ><button class="btn btn-info btn-sm"><i class="fas fa-researchgate"></i> Resetear</button></a>--}}
                 @endcan
                 @can('users.edit')
                   <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
@@ -147,4 +148,33 @@
       )
     </script>
   @endif
+  <script>
+    $(document).on("click", "#btn_resetear_clave", function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('data-userid')
+      console.log('reseteClave',button,'idunico',idunico);
+    });
+
+    /*$(document).ready(function(){
+      $('#modal-resetclave-usuario').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        console.log('reseteClave',button);
+        var button = $(event.relatedTarget)
+        var idunico = button.data('jefellamadas')
+        $("#hiddenIdjefellamadas").val(idunico);
+        if(idunico<10){
+          idunico='USER000'+idunico;
+        }else if(idunico<100){
+          idunico= 'USER00'+idunico;
+        }else if(idunico<1000){
+          idunico='USERG0'+idunico;
+        }else{
+          idunico='USER'+idunico;
+        }
+        $(".textcode").html(idunico);
+      });
+    });*/
+
+
+  </script>
 @stop

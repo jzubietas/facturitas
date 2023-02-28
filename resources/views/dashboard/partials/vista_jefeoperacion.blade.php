@@ -9,7 +9,10 @@
 <br>
 <br>
 
-
+@include('dashboard.partials.vista_quitar_vidas')
+<div class="col-md-12">
+  <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
+</div>
 <div class="col-lg-12">
     <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
 </div>
@@ -54,3 +57,4 @@
 <div class="col-md-5">
     <x-tabla-jef-operaciones-fis-elect></x-tabla-jef-operaciones-fis-elect>
 </div>
+

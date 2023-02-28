@@ -5,7 +5,7 @@
             <div class="modal-header bg-success">
                 <h5 class="modal-title" id="exampleModalLabel">Entregas de motorizado</h5>
             </div>
-            
+
             <form id="formulariomotorizadoentregar" name="formulariomotorizadoentregar" enctype="multipart/form-data">
                 <input type="hidden" id="hiddenMotorizadoEntregar" name="hiddenMotorizadoEntregar">
                 <div class="modal-body">
@@ -21,12 +21,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
-                                            {!! Form::label('fecha_envio_doc_fis', 'Fecha de Envio') !!}                                            
+                                            {!! Form::label('fecha_envio_doc_fis', 'Fecha de Envio') !!}
                                             {!! Form::date('fecha_envio_doc_fis', '', ['class' => 'form-control', 'id' => 'fecha_envio_doc_fis', 'disabled']) !!}
                                         </div>
                                         <div class="col-6">
                                             {!! Form::label('fecha_recepcion', 'Fecha de Entrega') !!}
-                                            {!! Form::date('fecha_recepcion', '', ['class' => 'form-control', 'id' => 'fecha_recepcion']) !!}                                            
+                                            {!! Form::date('fecha_recepcion', '', ['class' => 'form-control', 'id' => 'fecha_recepcion']) !!}
                                         </div>
                                     </div>
                                     <div class="row">
@@ -56,6 +56,8 @@
                                         </div>
 
                                     </div>
+
+
 
                                     <div class="row">
                                         <div class="col-6">
@@ -91,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-               
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cerrarmodalatender">Cerrar</button>
                     <button type="submit" class="btn btn-info" id="atender">Confirmar</button>

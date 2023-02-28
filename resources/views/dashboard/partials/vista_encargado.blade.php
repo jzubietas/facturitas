@@ -13,7 +13,10 @@
 {{--            @include('dashboard.widgets.pedidos_creados')--}}
         </div>
         @include('dashboard.widgets.buscar_cliente')
-
+        @include('dashboard.partials.vista_quitar_vidas')
+      <div class="col-md-12">
+        <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
+      </div>
         {{--<div class="col-md-12">
             <div class="card">
                 <div class="d-flex justify-content-end align-items-center">
@@ -106,7 +109,6 @@
       </div>
       {{--FIN-DATATABLE--}}
 
-
         <div class="col-md-12">
             <div class="row" id="widget-container">
                 <div class="col-md-12">
@@ -132,11 +134,6 @@
                         </div>
                     </div>
                 </div>
-                {{--
-                <div class="col-md-12">
-                    <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
-                </div>
-                --}}
                 <div class="col-md-12">
                     <x-grafico-pedidos-por-dia rol="Encargado" title="CANTIDAD DE PEDIDOS DE LOS ASESORES POR DIA"
                                                label-x="Asesores" label-y="Cant. Pedidos"
@@ -146,63 +143,8 @@
                 </div>
             </div>
         </div>
-        {{--
-        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-condensed table-hover"><br><h4>
-                        PEDIDOS DEL DIA POR ASESOR</h4>
-                    <div id="pedidosxasesorxdia_encargado" style="width: 100%; height: 500px;"></div>
-                </table>
-            </div>
-        </div>
-        --}}
     </div>
 </div>
-{{--
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-condensed table-hover">
-                    <div class="chart tab-pane active" id="pedidosxasesor_encargado"
-                         style="width: 100%; height: 550px;">
-                    </div>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-condensed table-hover">
-                    <div class="chart tab-pane active" id="pedidosxasesor_3meses_encargado"
-                         style="width: 100%; height: 550px;">
-                    </div>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-condensed table-hover">
-                    <div id="pagosxmes_encargado" style="width: 100%; height: 550px;">
-                    </div>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
---}}
 
 @section('js-datatables')
   <script>

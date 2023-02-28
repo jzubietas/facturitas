@@ -87,7 +87,6 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th scope="col">Item</th>
                     <th scope="col">Código</th>
                     <th scope="col">Cliente</th>
                     <th scope="col">Razón social</th>
@@ -118,10 +117,8 @@
 @stop
 
 @section('css')
-    {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="//scdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
 
     <style>
 
@@ -223,7 +220,7 @@
     </script>
     <script>
         //import objects from "lodash/_SetCache";
-
+        let tablaPrincipal=null;
         let dataForm_pc={};
         let dataForm_f={};
         let dataForm_g={};
@@ -398,17 +395,12 @@
                           $("button.btnVerMasPedidos").attr("disabled", true);
                         }
                         $("#Direccion_de_entrega").val(datosdevueltos[0]);
-                        //BLOQUEAR ACA
-                        //$("#modal-recojo-pedidos").modal("hide");
-                        //$('#tablaPrincipal').DataTable().ajax.reload();
                     }
                 });
 
                 $('button:submit').prop("disabled",false)
                 ocultar_div_modal_correccion_pedidos();
             })
-
-
 
             $(document).on("submit", "#form-recojo", function (event) {
                 event.preventDefault();
@@ -475,8 +467,6 @@
                         $("#modal-recojo-pedidos").modal("hide");
                         $('#tablaPrincipal').DataTable().ajax.reload();
                     }
-
-
                 });
 
             });
@@ -1107,13 +1097,13 @@
             }
             var detailRows = [];
 
-            var tablaPrincipal = $('#tablaPrincipal').DataTable({
+            tablaPrincipal = $('#tablaPrincipal').DataTable({
                 dom: 'Blfrtip',
                 processing: true,
                 serverSide: true,
                 searching: true,
-                stateSave: true,
-                order: [[1, "desc"]],
+                //stateSave: true,
+                order: [[8, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
@@ -1278,7 +1268,6 @@ ${data.foto3 ? `
                     })
                 },
                 initComplete: function (settings, json) {
-
                 },
                 columns: [
                     {
@@ -1287,22 +1276,6 @@ ${data.foto3 ? `
                         data: null,
                         defaultContent: '',
                         "searchable": false
-                    },
-                    {
-                        data: 'id',
-                        name: 'id',
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                return 'PED000' + row.id;
-                            } else if (row.id < 100) {
-                                return 'PED00' + row.id;
-                            } else if (row.id < 1000) {
-                                return 'PED0' + row.id;
-                            } else {
-                                return 'PED' + row.id;
-                            }
-                        },
-                        "visible": false,
                     },
                     // CODIGO
                     {data: 'codigos', name: 'codigos',},
@@ -1572,21 +1545,8 @@ ${data.foto3 ? `
                 localStorage.setItem("search_tabla", pasteData);
             });
 
-
-            //$('#myInput').val( ... ).change();
-
-
-            /*$.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-              console.log("data" +data);
-            });*/
-
-            /* $(document).on("change","search.dt",function(){
-               console.log("aaaaa")
-             });
-         */
-
             /*$("").on( 'search.dt', function () {
-            $('#filterInfo').html( 'Currently applied global search: '+table.search() );
+        $('#filterInfo').html( 'Currently applied global search: '+table.search() );
         } );*/
 
             $(document).on("submit", "#formdelete", function (evento) {
@@ -1618,13 +1578,6 @@ ${data.foto3 ? `
                     //this.submit();
                     clickformdelete();
                 }
-
-                /*var oForm = $(this);
-                var formId = oForm.attr("id");
-                var firstValue = oForm.find("input").first().val();
-                alert("Form '" + formId + " is being submitted, value of first input is: " + firstValue);
-                // Do stuff
-                return false;*/
             })
 
             $(document).on("submit", "#formrestaurar", function (evento) {
@@ -1696,10 +1649,6 @@ ${data.foto3 ? `
             });
         }
 
-        /*function clickformdelete(){
-          $("#modal-delete").modal("show");
-        }*/
-
     </script>
 
     @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado' || session('info') == 'restaurado')
@@ -1711,14 +1660,6 @@ ${data.foto3 ? `
             )
         </script>
     @endif
-
-    <script>
-        //VALIDAR ANTES DE ENVIAR
-        /*document.addEventListener("DOMContentLoaded", function() {
-          document.getElementById("formdelete").addEventListener('submit', validarFormularioDelete);
-        });*/
-
-    </script>
 
     <script>
         //VALIDAR CAMPO RUC
@@ -1760,15 +1701,8 @@ ${data.foto3 ? `
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
     <script>
-        /*window.onload = function () {
-          $('#tablaPrincipal').DataTable().draw();
-        }*/
-    </script>
-
-    <script>
         /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
-
 
             $("#min").datepicker({
                 onSelect: function () {

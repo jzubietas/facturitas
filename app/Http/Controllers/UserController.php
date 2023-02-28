@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alerta;
 use App\Models\User;
 //use App\Models\Meta;
 use Carbon\Carbon;
@@ -324,33 +325,24 @@ class UserController extends Controller
     $users = null;
     $users = User::where('estado', '1');
 
-    if ($mirol == 'Llamadas') {
-      $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
-    } else if ($mirol == 'Jefe de llamadas') {
-      $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
-    } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
-      $users = $users->where('identificador', '<>', 'B');
-    } else if ($mirol == 'Asesor') {
-      $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
-    } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
-      $users = User::where("rol", "ASESOR ADMINISTRATIVO");
-    } else {
-
-      $usersB = User::whereIn("rol", [User::ROL_ASESOR_ADMINISTRATIVO]);
-      $users = $usersB->union($users);
-
+    if ($mirol == User::ROL_JEFE_LLAMADAS) {
+      $users = $users->where('jefe', Auth::user()->id)->where("rol", User::ROL_LLAMADAS);
+      $users = $users->orderBy('name', 'ASC')->get();
+    } else if ($mirol == User::ROL_JEFE_OPERARIO) {
+      $users = $users->where('jefe', Auth::user()->id)->where("rol", User::ROL_OPERARIO);
+      $users = $users->orderBy('name', 'ASC')->get();
+    } else if ($mirol == User::ROL_ENCARGADO) {
+      $users = $users->where('supervisor', Auth::user()->id)->where("rol", User::ROL_ASESOR);
+      $users = $users->orderBy('exidentificador', 'ASC')->get();
+    }else{
+      $users = $users->orderBy('name', 'ASC')->get();
     }
 
-
-    $users = $users->orderBy('exidentificador', 'ASC')->get();
     $html = "";
 
-    foreach ($users as $user) {
-      if ($user->rol == 'Administrador') {
+    foreach ($users as $user)
+    {
         $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
-      } else {
-          $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
-      }
     }
 
     return response()->json(['html' => $html]);
@@ -563,27 +555,122 @@ class UserController extends Controller
   public function quitarvidasusuario(Request $request)
   {
     $user=User::where('id',$request->user_id)->first();
+    $ingresa=0;
     if (intval($user->vidas_restantes)>0){
+      $ingresa=1;
       $contadorquitavidas=intval($user->vidas_restantes)-1;
       $user->update([
         'vidas_restantes' => $contadorquitavidas
+      ]);
+      $tipomensaje="";
+      $titulo="";
+      $mensaje="";
+      if ($contadorquitavidas==2){
+        $tipomensaje="success";
+        $titulo="TE QUEDAN ".$contadorquitavidas." VIDAS";
+        $mensaje="Se te ha quitado una vida por un error cometido. Recuerda estar mas pendiente en tu gestión.";
+      }
+      if ($contadorquitavidas==1){
+        $tipomensaje="warning";
+        $titulo="TE QUEDA ".$contadorquitavidas." VIDA";
+        $mensaje="Solo te queda una vida. Ten mucho cuidado y revisa tu gestion correctamente. Evita un llamado de atención.";
+      }
+      if ($contadorquitavidas==0){
+        $tipomensaje="error";
+        $titulo="TIENES UN LLAMADO DE ATENCIÓN";
+        $mensaje="Evita cometer o acumular errores para un próximo llamado de atención.";
+        $cant_vidas_cero=$user->cant_vidas_cero+1;
+        $user->update([
+          'vidas_restantes' => 3,
+          'cant_vidas_cero'=>$cant_vidas_cero
+        ]);
+      }
+      Alerta::create([
+        'user_id' => $request->user_id,
+        'tipo' => $tipomensaje,
+        'subject' => $titulo,
+        'message' => $mensaje,
+        'date_at' => now(),
       ]);
 
     }
 
 
-    return response()->json($user);
+    return response()->json(['vidas_anteriores'=>$ingresa,'user'=>$user]);
 
   }
 
+  public function resetllamadaatencionsusuario(Request $request)
+  {
+    $user=User::where('id',$request->user_id)->first();
+    $user->update([
+      'cant_vidas_cero' => 0
+    ]);
+    return response()->json(['user'=>$user]);
+
+  }
   public function getvidasusuario(Request $request)
   {
+    $html = "";
     $user=User::where('estado', '1')
-      ->where('id', Auth::user()->id)
-      ->select(
-        'vidas_total'
-      )->first();
-    return response()->json($user);
+      ->where('id', Auth::user()->id)->first();
+    if ($user->vidas_restantes==1){
+      $html='<li class="nav-item dropdown show" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-3" type="button">
+                  <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>';
+    } elseif ($user->vidas_restantes==2){
+      $html='<li class="nav-item dropdown show" id="my-annuncements-2">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-2" type="button">
+                  <i class="fas fa-male text-warning btnVidasCont2" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>
+        <li class="nav-item dropdown show" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-3" type="button">
+                  <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>';
+    }elseif ($user->vidas_restantes==3){
+      $html='<li class="nav-item dropdown show" id="my-annuncements-1">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class="font-36 border-0 font-weight-bold btnVidas1 ml-2"
+                    data-toggle="modal" data-target="#modal-vidas-1" type="button">
+                  <i class="fas fa-male text-success btnVidasCont" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>
+        <li class="nav-item dropdown show" id="my-annuncements-2">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-2" type="button">
+                  <i class="fas fa-male text-warning btnVidasCont2" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>
+        <li class="nav-item dropdown show" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+                   data-toggle="modal" data-target="#modal-vidas-3" type="button">
+                  <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
+                </a>
+            </span>
+        </li>';
+    }
+
+
+    return response()->json(['html' => $html,'user'=>$user]);
+
+    /*return response()->json($user);*/
 
   }
 
@@ -788,7 +875,8 @@ class UserController extends Controller
         //return $request;
         $meta_pedido_1=(($request->meta_pedido_1)? $request->meta_pedido_1:0);
         $meta_pedido_2=(($request->meta_pedido_2)? $request->meta_pedido_2:0);
-        $meta_cobro=(($request->meta_cobro)? $request->meta_cobro:0);
+        $meta_quincena=(($request->meta_quincena)? $request->meta_quincena:0);
+        $meta_cobro=0;
         $fecha_created=Carbon::now();
         $yy=$fecha_created->format('Y');
         $mm=$fecha_created->format('m');
@@ -801,6 +889,7 @@ class UserController extends Controller
                     'meta_pedido' => $meta_pedido_1,
                     'meta_pedido_2' => $meta_pedido_2,
                     'meta_cobro' => $meta_cobro,
+                    'meta_quincena' => $meta_quincena,
                 ]);
             $user=User::where('id',$request->asesor)->first();
             //encontro registro
@@ -808,7 +897,24 @@ class UserController extends Controller
                 'meta_pedido' => $meta_pedido_1,
                 'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
+                'meta_quincena' => $meta_quincena,
             ]);
+
+          $encargado=User::where('id',$user->supervisor)->first();
+          DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+            ->where('user_id',$encargado->id)->update([
+              'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+              'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+              'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+              'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+            ]);
+          //encontro registro
+          $encargado->update([
+            'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+            'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+            'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+            'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+          ]);
         }else{
             $user=User::where('id',$request->asesor)->first();
             DB::table('metas')->insert([
@@ -820,6 +926,7 @@ class UserController extends Controller
                 'meta_pedido' => $meta_pedido_1,
                 'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
+                'meta_quincena' => $meta_quincena,
                 'status'=>1,
                 'created_at'=>now(),
             ]);
@@ -827,7 +934,24 @@ class UserController extends Controller
                 'meta_pedido' => $meta_pedido_1,
                 'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
+                'meta_quincena' => $meta_quincena,
             ]);
+
+          $encargado=User::where('id',$user->supervisor)->first();
+          DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+            ->where('user_id',$encargado->id)->update([
+              'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+              'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+              'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+              'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+            ]);
+          //encontro registro
+          $encargado->update([
+            'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+            'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+            'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+            'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+          ]);
         }
         return redirect()->route('users.asesores')->with('info', 'asignado');
     }

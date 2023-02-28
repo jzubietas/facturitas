@@ -419,7 +419,9 @@ class EnvioController extends Controller
             //->join('users as u', 'u.id', 'c.user_id')
             ->LeftJoin('users as u', 'u.id', 'direccion_grupos.user_id')
             ->LeftJoin('users as um', 'um.id', 'direccion_grupos.motorizado_id')
-            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->whereIn('direccion_grupos.condicion_envio_code',
+              [Pedido::REPARTO_COURIER_INT,Pedido::REPARTO_RECOJO_COURIER_INT]
+            )
             ->where('motorizado_id', $motorizado)
             //->whereIn('direccion_grupos.distribucion', $lazona)
             ->activo();
@@ -849,7 +851,7 @@ class EnvioController extends Controller
         $motorizados = User::select([
             'id',
             'zona',
-            DB::raw(" (select count(p.id) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
+            DB::raw(" (select count(p.id) from pedidos p inner join direccion_grupos b on p.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
         ])->where('rol', '=', User::ROL_MOTORIZADO)
             ->whereNotNull('zona')
             ->activo()
@@ -1685,7 +1687,7 @@ class EnvioController extends Controller
                     }
                     DireccionGrupo::cambiarCondicionEnvio(
                         $grupo,
-                        Pedido::RECEPCION_MOTORIZADO_INT,
+                        (($grupo->cod_recojo==1)? Pedido::RECEPCION_RECOJO_MOTORIZADO_INT:Pedido::RECEPCION_MOTORIZADO_INT),
                         [
                             'fecha_recepcion_motorizado' => Carbon::now(),
                         ]
@@ -1695,7 +1697,7 @@ class EnvioController extends Controller
             } else {
                 $grupo = DireccionGrupo::cambiarCondicionEnvio(
                     $grupo,
-                    Pedido::RECEPCION_MOTORIZADO_INT,
+                    (($grupo->cod_recojo==1)? Pedido::RECEPCION_RECOJO_MOTORIZADO_INT:Pedido::RECEPCION_MOTORIZADO_INT),
                     [
                         'fecha_recepcion_motorizado' => Carbon::now(),
                     ]
@@ -1707,7 +1709,7 @@ class EnvioController extends Controller
             ]);
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
-                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                'condicion_envio_code' => (($grupo->cod_recojo==1)? Pedido::RECEPCION_RECOJO_MOTORIZADO_INT:Pedido::RECEPCION_MOTORIZADO_INT),
                 'notificado' => 0,
             ]);
 
@@ -3333,8 +3335,8 @@ class EnvioController extends Controller
     {
         $envio = DireccionGrupo::query()->findOrFail($request->hiddenCodigo);
         $envio->update([
-            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER : Pedido::ENVIO_MOTORIZADO_COURIER),
+            'condicion_envio_code' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT : Pedido::ENVIO_MOTORIZADO_COURIER_INT),
             'condicion_envio_at' => now(),
             'fecha_salida' => $request->fecha_salida,
             'cambio_direccion_at' => null,
@@ -3344,9 +3346,9 @@ class EnvioController extends Controller
             return trim($cod);
         })->all();*/
         $envio->pedidos()->activo()->update([
-            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio_code' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT : Pedido::ENVIO_MOTORIZADO_COURIER_INT),
             'condicion_envio_at' => now(),
-            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+            'condicion_envio' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER : Pedido::ENVIO_MOTORIZADO_COURIER),
             'fecha_salida' => $request->fecha_salida,
             'cambio_direccion_at' => null
         ]);
@@ -3361,7 +3363,7 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
-            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio_code' => ( ($envio->cod_recojo==1)? Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT : Pedido::ENVIO_MOTORIZADO_COURIER_INT),
             'notificado' => 0
         ]);
 
@@ -3859,6 +3861,21 @@ class EnvioController extends Controller
             ->toJson();
 
     }
+
+  public function courierConfirmRecojo(Request $request)
+  {
+    $envio = DireccionGrupo::where("id", $request->input_confirmrecojomotorizado)->first();
+
+    DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT);
+    PedidoMovimientoEstado::create([
+      'pedido' => $request->input_confirmrecojomotorizado,
+      'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+      //'fecha_salida'=>now(),
+      'notificado' => 0
+    ]);
+
+    return response()->json(['html' => $envio->id]);
+  }
 
 
 }

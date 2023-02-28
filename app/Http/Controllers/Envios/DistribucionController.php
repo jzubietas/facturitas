@@ -10,6 +10,7 @@ use App\Models\Distrito;
 use App\Models\GrupoPedido;
 use App\Models\Pedido;
 use App\Models\PedidoMotorizadoHistory;
+use App\Models\SituacionClientes;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
@@ -165,9 +166,9 @@ class DistribucionController extends Controller
                 $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio(Pedido::RECEPCION_COURIER);
                 $textoEstado=Pedido::RECEPCION_COURIER;
-                if ($pedido->condicion_envio_code == Pedido::ENTREGADO_NUEVO_DIR_INT) {
-                  $textoEstado=Pedido::ENTREGADO_NUEVO_DIR;
-                  $color = Pedido::getColorByCondicionEnvio(Pedido::ENTREGADO_NUEVO_DIR_INT);
+                if ($pedido->condicion_envio_code == Pedido::RECOJO_COURIER_INT) {
+                  $textoEstado=Pedido::RECOJO_COURIER;
+                  $color = Pedido::getColorByCondicionEnvio(Pedido::RECOJO_COURIER);
                 }
                 $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>
 <span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . $textoEstado. '</span>';
@@ -236,8 +237,8 @@ class DistribucionController extends Controller
         Pedido::whereIn('id', $pedidosIds)->update([
             'env_zona_asignada' => null,
             'estado_ruta' => '1',
-            'condicion_envio' => Pedido::REPARTO_COURIER,
-            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+            'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,//reparto recojo courier
+            'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
             'condicion_envio_at' => now(),
             'direccion_grupo' => $direcciongrupo->id,
         ]);
@@ -264,7 +265,6 @@ class DistribucionController extends Controller
 
         $zona = $request->get('zona');
 
-
         $grupos = [];
         foreach ($groups as $grupo) {
             $pedidos = $grupo->pedidos()
@@ -281,74 +281,133 @@ class DistribucionController extends Controller
                 $cliente = $firstProduct->cliente;
                 $lista_codigos = $pedidos->pluck('codigo')->join(',');
                 $lista_productos = $pedidos->pluck('nombre_empresa')->join(',');;
-                $groupData = [
+                if (!($grupo->cod_recojo == 1)) {
+                  $groupData = [
                     'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
                     'condicion_envio_at' => now(),
                     'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
                     'distribucion' => $grupo->zona,
                     'destino' => $firstProduct->env_destino,
                     'direccion' => $firstProduct->env_direccion,//nro treking
-
                     'estado' => '1',
-
                     'codigos' => $lista_codigos,
                     'producto' => $lista_productos,
-
                     'cliente_id' => $cliente->id,
                     'user_id' => $firstProduct->user_id,
-
                     'nombre' => $firstProduct->env_nombre_cliente_recibe,
                     'celular' => $firstProduct->env_celular_cliente_recibe,
                     'gmlink' => $firstProduct->env_gmlink,
-
                     'nombre_cliente' => $cliente->nombre,
                     'celular_cliente' => $cliente->celular,
                     'icelular_cliente' => $cliente->icelular,
-
                     'distrito' => $firstProduct->env_distrito,
                     'referencia' => $firstProduct->env_referencia,//nro registro
                     'observacion' => $firstProduct->env_observacion,//rotulo
                     'motorizado_id' => $request->motorizado_id,
                     'identificador' => $cliente->user->identificador,
-                ];
+                  ];
+                } else if($grupo->cod_recojo == 1){
+                  $groupData = [
+                    'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,//ENTREGADO JEFE CURRIER
+                    'condicion_envio_at' => now(),
+                    'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,//ENTREGADO JEFE CURRIER
+                    'distribucion' => $grupo->zona,
+                    'destino' => $firstProduct->env_destino,
+                    'direccion' => $firstProduct->env_direccion,//nro treking
+                    'estado' => '1',
+                    'codigos' => $lista_codigos,
+                    'producto' => $lista_productos,
+                    'cliente_id' => $cliente->id,
+                    'user_id' => $firstProduct->user_id,
+                    'nombre' => $firstProduct->env_nombre_cliente_recibe,
+                    'celular' => $firstProduct->env_celular_cliente_recibe,
+                    'gmlink' => $firstProduct->env_gmlink,
+                    'nombre_cliente' => $cliente->nombre,
+                    'celular_cliente' => $cliente->celular,
+                    'icelular_cliente' => $cliente->icelular,
+                    'distrito' => $firstProduct->env_distrito,
+                    'referencia' => $firstProduct->env_referencia,//nro registro
+                    'observacion' => $firstProduct->env_observacion,//rotulo
+                    'motorizado_id' => $request->motorizado_id,
+                    'identificador' => $cliente->user->identificador,
+                    'cod_recojo' => $grupo->cod_recojo,
+                    'env_sustento_recojo' => $grupo->env_sustento_recojo,
+                  ];
+                }
                 if ($request->get("visualizar") == '1') {
                     $grupos[] = $groupData;
                 } else {
                     $grupos[] = $this->createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
+                  if($grupo->cod_recojo == 1)
+                  {
+                    $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
+                    foreach ($pedidos as $pedidosFila){
+                      $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
+                      $pedidoUpdate->update([
+                        'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
+                        'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
+                      ]);
+                    }
+                  }
+                  $delete=GrupoPedido::where('id',$grupo->id)->delete();
                 }
             } else {
+              //OLVA
                 $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request, $zona) {
                     $cliente = $pedido->cliente;
-                    return [
-                        'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
+                    if(!($grupo->cod_recojo == 1)){
+                      return [
+                      'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
+                      'condicion_envio_at' => now(),
+                      'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
+                      'distribucion' => $grupo->zona,
+                      'destino' => $pedido->env_destino,
+                      'direccion' => $pedido->env_tracking,//nro treking
+                      //'fecha_recepcion' => now(),
+                      'estado' => '1',
+                      'cliente_id' => $cliente->id,
+                      'user_id' => $pedido->user_id,
+                      'pedido_id' => $pedido->id,
+                      'pedido_codigo' => $pedido->codigo,
+                      'pedido_nombre_empresa' => $pedido->nombre_empresa,
+                      'nombre' => $pedido->env_nombre_cliente_recibe,
+                      'celular' => $pedido->env_celular_cliente_recibe,
+                      'nombre_cliente' => $cliente->nombre,
+                      'celular_cliente' => $cliente->celular,
+                      'icelular_cliente' => $cliente->icelular,
+                      'distrito' => $pedido->env_distrito,
+                      'referencia' => $pedido->env_numregistro,//nro registro
+                      'observacion' => $pedido->env_rotulo,//rotulo
+                      'motorizado_id' => $request->motorizado_id,
+                      'identificador' => $cliente->user->identificador,
+                    ];
+                  }else{
+                      return [
+                        'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,//ENTREGADO JEFE CURRIER
                         'condicion_envio_at' => now(),
-                        'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
+                        'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,//ENTREGADO JEFE CURRIER
                         'distribucion' => $grupo->zona,
                         'destino' => $pedido->env_destino,
                         'direccion' => $pedido->env_tracking,//nro treking
                         //'fecha_recepcion' => now(),
-
                         'estado' => '1',
-
                         'cliente_id' => $cliente->id,
                         'user_id' => $pedido->user_id,
                         'pedido_id' => $pedido->id,
                         'pedido_codigo' => $pedido->codigo,
                         'pedido_nombre_empresa' => $pedido->nombre_empresa,
-
                         'nombre' => $pedido->env_nombre_cliente_recibe,
                         'celular' => $pedido->env_celular_cliente_recibe,
-
                         'nombre_cliente' => $cliente->nombre,
                         'celular_cliente' => $cliente->celular,
                         'icelular_cliente' => $cliente->icelular,
-
                         'distrito' => $pedido->env_distrito,
                         'referencia' => $pedido->env_numregistro,//nro registro
                         'observacion' => $pedido->env_rotulo,//rotulo
                         'motorizado_id' => $request->motorizado_id,
                         'identificador' => $cliente->user->identificador,
-                    ];
+                      ];
+                    }
                 })
                     ->groupBy(fn($data) => join('_', [$data['distribucion'], $data['direccion']]))
                     ->values();
@@ -362,6 +421,18 @@ class DistribucionController extends Controller
                         $grupos[] = $groupData;
                     } else {
                         $grupos[] = $this->createDireccionGrupo($grupo, $groupData, $pedidos)->refresh();
+                      if($grupo->cod_recojo == 1)
+                      {
+                        $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
+                        foreach ($pedidos as $pedidosFila){
+                          $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
+                          $pedidoUpdate->update([
+                            'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
+                            'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
+                          ]);
+                        }
+                      }
+                      $delete=GrupoPedido::where('id',$grupo->id)->delete();
                     }
                 }
             }

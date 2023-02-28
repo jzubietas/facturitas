@@ -74,7 +74,12 @@
 
 
 <div class="row">
+
     @include('dashboard.widgets.buscar_cliente')
+    @include('dashboard.partials.vista_quitar_vidas')
+    <div class="col-md-12">
+      <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
+    </div>
     <div class="col-lg-12">
         <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
     </div>
@@ -88,11 +93,17 @@
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
+        <div class="d-flex justify-content-center align-items-center ml-5">
+          {{--
+          <label class="p-0 m-0" for="ingresar">Fecha: </label>
+          <input type="date" id="calendario" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}">
+--}}
+        </div>
       </div>
 
       {{--TABLA DUAL--}}
-      <div class="">
-        <div class=" ">
+      <div class="" style=" overflow: hidden !important;">
+        <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
           <div class="row">
             <div class="col-md-6">
               <div id="meta"></div>
@@ -103,24 +114,28 @@
             <div class="col-md-12">
               <div id="metas_total" ></div>
             </div>
+            <div class="col-md-12">
+              <div id="supervisor_total" ></div>
+            </div>
+            <div class="col-md-12">
+              <div id="supervisor_A" ></div>
+            </div>
+            <div class="col-md-12">
+              <div id="supervisor_B" ></div>
+            </div>
           </div>
         </div>
       </div>
       {{--FIN-TABLA-DUAL--}}
-
-
-
-
     </div>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div id="reporteanalisis"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="reporteanalisis"></div>
+        </div>
       </div>
     </div>
-  </div>
-
 
     <div class="container-fluid">
         <div class="row">
@@ -321,6 +336,7 @@
         window.cargaNueva = function (entero) {
           console.log(' '+entero)
           var fd=new FormData();
+          /*fd.append('fecha',$('#calendario').val("{{\Carbon\Carbon::now()->format('Y-m-d')}}"));*/
           fd.append('ii',entero);
           $.ajax({
             data: fd,
@@ -337,6 +353,12 @@
               }
               else if(entero==3){
                 $('#metas_total').html(resultado);
+              }else if(entero==4){
+                $('#supervisor_total').html(resultado);
+              }else if(entero==5){
+                $('#supervisor_A').html(resultado);
+              }else if(entero==6){
+                $('#supervisor_B').html(resultado);
               }
             }
           })
@@ -344,7 +366,6 @@
 
         window.cargReporteAnalisis = function () {
           var fd=new FormData();
-          //fd.append('ii',entero);
           $.ajax({
             data: fd,
             processData: false,
@@ -357,18 +378,23 @@
           })
         }
 
-       cargaNueva(1);
+        cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
-
+        cargaNueva(4);
+        cargaNueva(5);
+        cargaNueva(6);
         cargReporteAnalisis();
 
-        setInterval(myTimer, 50000);
+        setInterval(myTimer, 5000);
 
         function myTimer() {
           cargaNueva(1);
           cargaNueva(2);
           cargaNueva(3);
+          cargaNueva(4);
+          cargaNueva(5);
+          cargaNueva(6);
         }
 
         $('a[href$="#myModal"]').on( "click", function() {
@@ -377,7 +403,6 @@
 
         var elem = document.querySelector("#contenedor-fullscreen");
         window.openFullscreen =function () {
-          console.log("openFullscreen();")
           if (elem.requestFullscreen) {
             elem.requestFullscreen();
           } else if (elem.webkitRequestFullscreen) { /* Safari */
@@ -386,12 +411,6 @@
             elem.msRequestFullscreen();
           }
         }
-
       });
     </script>
-
-
-
-
-
 @endsection

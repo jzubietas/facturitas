@@ -27,6 +27,7 @@
                         <div class="border rounded card-body border-secondary">
                             <div class="card-body">
                                 <div class="form-row">
+                                  <input type="hidden" id="txtValidaSobre" name="txtValidaSobre" value="Si">
                                     @foreach ($pedidos as $pedido)
                                         <div class="form-group col-lg-6">
                                             {!! Form::label('user_id', 'Asesor') !!}
