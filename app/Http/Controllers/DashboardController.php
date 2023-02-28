@@ -909,9 +909,9 @@ class DashboardController extends Controller
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
                     <div class="progress-bar rounded h-60-res" role="progressbar"
-                         style="width: '.( round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],0)-70).'%;
+                         style="width: '.( round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-70).'%;
                      background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                         aria-valuenow="'.(  round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],0)-70).'"
+                         aria-valuenow="'.(  round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-70).'"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
       else if( round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']) *100, 0)>50)
@@ -927,9 +927,9 @@ class DashboardController extends Controller
                        aria-valuemin="0"
                        aria-valuemax="100"></div>
                       <div class="progress-bar h-60-res" role="progressbar"
-                           style="width: '.(( round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],0)-40)).'%;
+                           style="width: '.(( round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-40)).'%;
                        background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                           aria-valuenow="'.(  round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],0)-40).'"
+                           aria-valuenow="'.(  round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-40).'"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
       else
@@ -952,7 +952,7 @@ class DashboardController extends Controller
 
       if( round(( $count_asesor[46]['total_pedido']/$count_asesor[46]['meta'])*100,0)>=80)
         $html.='<div class="progress-bar bg-success rounded" role="progressbar"
-                 style="height:40px; width: '. round(( $count_asesor[46]['total_pedido']/$count_asesor[46]['meta']),2).'%;background: #03af03;"
+                 style="height:40px; width: '.round(( $count_asesor[46]['total_pedido']/$count_asesor[46]['meta']),2).'%;background: #03af03;"
                  aria-valuenow="'.round(( $count_asesor[46]['total_pedido']/$count_asesor[46]['meta']),2).'"
                  aria-valuemin="0" aria-valuemax="100"></div>';
       else if( round(( $count_asesor[46]['total_pedido']/$count_asesor[46]['meta'])*100,0)>70)
