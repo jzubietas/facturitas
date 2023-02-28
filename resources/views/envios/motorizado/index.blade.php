@@ -1449,6 +1449,13 @@ Enviar</button>
           $('#modal_recojomotorizado').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
             $("#input_recojomotorizado").val(button.data('direccion_grupo'));
+            //limpiar campos para cargar nuevas fotos
+            $("#pimagen1_recojo").val("");
+            $("#pimagen2_recojo").val("");
+            $("#pimagen3_recojo").val("");
+            $("#picture1_recojo").attr('src','');
+            $("#picture2_recojo").attr('src','');
+            $("#picture3_recojo").attr('src','');
           });
 
           $('#modal_recojoenviarcourier').on('show.bs.modal', function (event) {
