@@ -182,14 +182,14 @@
         }
       });
 
-      $.ajax({
+/*      $.ajax({
         url: "{{ route('lstusuariosvidas') }}",
         method: 'POST',
         success: function (data) {
           $('#cbx_user_id_vidas').html(data.html);
           $("#cbx_user_id_vidas").selectpicker("refresh").trigger("change");
         }
-      });
+      });*/
 
       $("#buttom_quita_vida_cliente").click(function () {
         $("#buttom_quita_vida_cliente").attr('disabled', 'disabled');
