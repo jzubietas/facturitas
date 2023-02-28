@@ -200,6 +200,7 @@ class NotificationsController extends Controller
             'contador_en_motorizados_confirmar_count' => 0,
             'contador_sobres_devueltos' => 0,
             'contador_encargado_tienda_agente' => 0,
+            'contador_contactos_registrados' => 0,
             'authorization_courier' => \Blade::renderComponent(new AutorizarRutaMotorizado()),
             'alertas' => $alertas,
         ];
