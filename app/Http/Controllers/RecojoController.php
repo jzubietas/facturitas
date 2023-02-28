@@ -234,6 +234,7 @@ class RecojoController extends Controller
             "env_nombre_cliente_recibe" => $Nombre_recibe,
             "env_celular_cliente_recibe" => $celular_id,
             "env_direccion" => $direccion_recojo,
+            "direccion" => $direccion_recojo,
             "env_referencia" => $referencia_recojo,
             "env_observacion" => $observacion_recojo,
             "gm_link" => $gm_link,
