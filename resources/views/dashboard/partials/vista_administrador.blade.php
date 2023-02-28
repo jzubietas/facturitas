@@ -93,7 +93,10 @@
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
-        <input type="date" id="datepicker" class="border-0 ml-3">
+        <div class="d-flex flex-column justify-content-center align-items-center ml-5">
+          <label for="ingresar">Seleccione una fecha</label>
+          <input type="date" id="calendario" class="border-0 ml-3">
+        </div>
       </div>
 
       {{--TABLA DUAL--}}
@@ -331,6 +334,7 @@
         window.cargaNueva = function (entero) {
           console.log(' '+entero)
           var fd=new FormData();
+          fd.append('fecha',$('#calendario').val("{{\Carbon\Carbon::now()}}"));
           fd.append('ii',entero);
           $.ajax({
             data: fd,
@@ -360,7 +364,6 @@
 
         window.cargReporteAnalisis = function () {
           var fd=new FormData();
-          //fd.append('ii',entero);
           $.ajax({
             data: fd,
             processData: false,
@@ -382,7 +385,7 @@
 
         cargReporteAnalisis();
 
-        setInterval(myTimer, 500000000);
+        setInterval(myTimer, 5000);
 
         function myTimer() {
           cargaNueva(1);
@@ -399,7 +402,6 @@
 
         var elem = document.querySelector("#contenedor-fullscreen");
         window.openFullscreen =function () {
-          console.log("openFullscreen();")
           if (elem.requestFullscreen) {
             elem.requestFullscreen();
           } else if (elem.webkitRequestFullscreen) { /* Safari */
@@ -408,7 +410,13 @@
             elem.msRequestFullscreen();
           }
         }
-
       });
     </script>
+
+  <script>
+    $("#calendario").click(function(e){
+        var data = $('#calendario').val();
+        console.log(data)
+    });
+  </script>
 @endsection
