@@ -21,5 +21,4 @@
             <span>% - Asignados / Meta</span>
         </li>
     @endforeach
-
 </ul>
