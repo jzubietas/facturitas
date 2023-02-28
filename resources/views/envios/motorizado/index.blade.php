@@ -497,7 +497,7 @@
                                     $.confirm({
                                         theme:'material',
                                         title: '¡Advertencia!',
-                                        content: '<b>Adjunta la Foto de quien recibe</b>',
+                                        content: '<b>Adjunta la Foto de qun recibe</b>',
                                         type: 'orange'
                                     })
                                     return false;
