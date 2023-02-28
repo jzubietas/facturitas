@@ -25,6 +25,7 @@
 @section('content')
 
     @include('envios.motorizado.modal.entregadoconfirm')
+    @include('envios.motorizado.modal.entregar_confirm_recojo')
 
     <div class="card">
         <div class="card-body">
@@ -261,22 +262,38 @@
             $('#modal-motorizado-entregar-confirm').on('show.bs.modal', function (event) {
                 //adjunta dos fotos
                 var button = $(event.relatedTarget)
-                var idunico = button.data('entregar-confirm')//
-
-                var idcodigo = button.data('codigos')//
-                $(".textcode").html(idcodigo);
-                $("#hiddenMotorizadoEntregarConfirm").val(idunico)
+                var idunico = button.data('direccion_grupo')
+                //var idcodigo = button.data('codigos')
+                //$(".textcode").html(idcodigo);
+                $("#input_confirmrecojomotorizado").val(idunico)
 
                 let foto1 = button.data('imagen1');
-                console.log(foto1);
+                console.log("foto 1");
+                console.log(foto1)
                 let foto2 = button.data('imagen2');
                 let foto3 = button.data('imagen3');
                 $(".foto1").attr("src", foto1);
-
                 $(".foto2").attr("src", foto2);
-
                 $(".foto3").attr("src", foto3);
             })
+
+          $('#modal_confirmrecojomotorizado').on('show.bs.modal', function (event) {
+            //adjunta dos fotos
+            var button = $(event.relatedTarget)
+            var idunico = button.data('direccion_grupo')
+            //var idcodigo = button.data('codigos')
+            //$(".textcode").html(idcodigo);
+            $("#input_confirmrecojomotorizado").val(idunico)
+
+            let foto1 = button.data('imagen1');
+            console.log("foto 1");
+            console.log(foto1)
+            let foto2 = button.data('imagen2');
+            let foto3 = button.data('imagen3');
+            $(".foto1").attr("src", foto1);
+            $(".foto2").attr("src", foto2);
+            $(".foto3").attr("src", foto3);
+          })
 
             $(document).on("submit", "#formulariomotorizadoentregarconfirm", function (evento) {
                 evento.preventDefault();

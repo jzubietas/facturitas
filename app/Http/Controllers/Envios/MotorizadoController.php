@@ -70,7 +70,7 @@ class MotorizadoController extends Controller
                 default:
                     $query
                         ->where('direccion_grupos.estado', '1')
-                        ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::MOTORIZADO_INT,Pedido::RECOJO_MOTORIZADO_INT] )
+                        ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::MOTORIZADO_INT,Pedido::RECOJO_MOTORIZADO_INT,Pedido::RECIBIDO_RECOJO_CLIENTE_INT] )
                         ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
             }
             //add_query_filtros_por_roles($query, 'u');
@@ -211,9 +211,16 @@ class MotorizadoController extends Controller
                             </li>';
                           }else if($pedido->condicion_envio_code==Pedido::RECOJO_MOTORIZADO_INT){
                             $btn.='<li class="pt-8">';
-                              $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal" data-target="#modal_recojomotorizado">';
+                              $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal" data-target="#modal_recojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
                               $btn.='ENTREGAR';
                               $btn.='</button>';
+                            $btn.='</li>';
+
+                          }else if($pedido->condicion_envio_code==Pedido::RECIBIDO_RECOJO_CLIENTE_INT){
+                            $btn.='<li class="pt-8">';
+                            $btn.='<button class="btn btn-sm text-white btn-success" type="button" data-toggle="modal" data-target="#modal_recojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
+                            $btn.='ENTREGAR';
+                            $btn.='</button>';
                             $btn.='</li>';
 
                           }
@@ -239,7 +246,7 @@ class MotorizadoController extends Controller
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
-                ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT)
+                ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::CONFIRM_MOTORIZADO_INT,Pedido::RECIBIDO_RECOJO_CLIENTE_INT])
                 ->where('direccion_grupos.estado', '1')
                 ->select([
                     'direccion_grupos.id',
@@ -299,7 +306,20 @@ class MotorizadoController extends Controller
                 ->addColumn('action', function ($pedido) {
                     $btn = '<ul class="list-unstyled pl-0">';
 
-                    $btn .= '<li><button href="" class="btn btn-sm text-secondary text-left"
+                    if($pedido->condicion_envio==Pedido::RECIBIDO_RECOJO_CLIENTE)
+                    {
+                      $btn.='<li class="pt-8">';
+                      $btn.='<button class="btn btn-xs text-white btn-success" type="button" data-toggle="modal"
+                              data-imagen1="'.\Storage::disk('pstorage')->url($pedido->foto1)  .'"
+                              data-imagen2="'.\Storage::disk('pstorage')->url($pedido->foto2)  .'"
+                              data-imagen3="'.\Storage::disk('pstorage')->url($pedido->foto3)  .'"
+                              data-target="#modal_confirmrecojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
+                      $btn.='Confirmar fotos';
+                      $btn.='</button>';
+                      $btn.='</li>';
+
+                    }else{
+                      $btn .= '<li><button href="" class="btn btn-sm text-secondary text-left"
  data-target="' . route('operaciones.confirmarmotorizadoconfirm', ['hiddenMotorizadoEntregarConfirm' => $pedido->id]) . '"
   data-toggle="jqConfirm"
    data-entregar-confirm="' . $pedido->id . '"
@@ -311,8 +331,8 @@ class MotorizadoController extends Controller
       data-imagen3="' . \Storage::disk('pstorage')->url($pedido->foto3) . '">
                                         <i class="fas fa-camera text-success"></i> Confirmar fotos
                                     </button></li>';
-
-                    $btn .= '<li><button class="btn btn-sm text-danger  text-left" data-jqconfirm="' . $pedido->id . '" data-jqconfirm-type="revertir"><i class="fas fa-arrow-left text-danger"></i> Revertir</button></li>';
+                      $btn .= '<li><button class="btn btn-sm text-danger  text-left" data-jqconfirm="' . $pedido->id . '" data-jqconfirm-type="revertir"><i class="fas fa-arrow-left text-danger"></i> Revertir</button></li>';
+                    }
 
                     $btn .= '</ul>';
 
@@ -1115,4 +1135,56 @@ Ver Rotulo</a>')
             ]);
         }
     }
+
+  public function MotorizadoRecojo(Request $request)
+  {
+    $envio = DireccionGrupo::where("id", $request->entrega_motorizado_recojo)->first();
+    $envio->update([
+      'modificador' => 'USER' . Auth::user()->id,
+      'condicion_envio' => Pedido::RECIBIDO_RECOJO_CLIENTE,
+      'condicion_envio_code' => Pedido::RECIBIDO_RECOJO_CLIENTE_INT,
+      'condicion_envio_at' => now(),
+    ]);
+
+    $envio->pedidos()->activo()->update([
+      'condicion_envio_code' => Pedido::RECIBIDO_RECOJO_CLIENTE_INT,
+      'condicion_envio_at' => now(),
+      'condicion_envio' => Pedido::RECIBIDO_RECOJO_CLIENTE,
+      'fecha_salida' => $request->fecha_salida,
+      'cambio_direccion_at' => null
+    ]);
+
+    //$files1 = $request->file('foto1');
+    //$files2 = $request->file('foto2');
+    //$files3 = $request->file('foto3');
+
+    //$destinationPath = base_path('public/storage/entregas/');
+
+    // Carbon::now()->second . $files1->getClientOriginalName();
+    if ($request->hasFile('foto1'))
+    {
+      $file_name_1 = $request->file('foto1')->store('motorizado_recojo', 'pstorage');
+      $envio->update([
+        'foto1' => $file_name_1,
+      ]);
+    }
+    if ($request->hasFile('foto2'))
+    {
+      $file_name_2 = $request->file('foto2')->store('motorizado_recojo', 'pstorage');
+      $envio->update([
+        'foto2' => $file_name_2,
+      ]);
+    }
+    if ($request->hasFile('foto3'))
+    {
+      $file_name_3 = $request->file('foto3')->store('motorizado_recojo', 'pstorage');
+      $envio->update([
+        'foto3' => $file_name_3,
+      ]);
+    }
+
+
+    return response()->json(['html' => $request->entrega_motorizado_recojo]);
+
+  }
 }

@@ -112,7 +112,6 @@ __________________________________
     ${pnota}
 __________________________________
 `;
-
                 const tpl = `<div class="">
                 <button type="button" onclick="copyElement('#pedido_visualizar_content')" class="btn btn-outline-dark">
                     <i class="fa fa-copy"></i> Copiar
@@ -194,10 +193,10 @@ __________________________________
                                 self.$ajaxdata = data;
                                 if (data.length > 0) {
                                     self.setContent(`<div class="">
-<table class="table table-striped">
+<table class="table table-striped table-bordered table-sm" cellspacing="0"
+  width="100%" id="tblListadoHistorial">
 <thead>
 <tr>
-<th>ASESOR</th>
 <th>CLIENTE</th>
 <th>RUC - EMPRESA</th>
 <th>MES/AÑO</th>
@@ -212,8 +211,7 @@ __________________________________
 <tbody>
 ${data.map(function (data, index) {
                                         return `<tr>
-<td>${data.identificador}</td>
-<td>${data.cliente_id}</td>
+<td>${data.celular}</td>
 <td>${data.ruc} - ${data.empresa}</td>
 <td>${data.mes}/${data.year}</td>
 <td>${data.cantidad}</td>
@@ -520,7 +518,7 @@ ${data.map(function (data, index) {
                     }
                 })
 
-
+            validasobre=$("#txtValidaSobre").val(); //
             if (nombre_empresa != "" && mes != "") {
                 subtotal[cont] = (cantidad * porcentaje) / 100;
                 total = Number(courier) + subtotal[cont];
@@ -535,8 +533,9 @@ ${data.map(function (data, index) {
 <td><input type="hidden" name="tipo_banca[]" value="${tipo_banca}">${tipo_banca}</td>
 <td><input type="hidden" name="porcentaje[]" value="${porcentaje}">${porcentaje}</td>
 <td><input type="hidden" name="courier[]" value="${courier}">${courier}</td>
-<td><textarea class="d-none" name="descripcion[]">${descripcion}</textarea>${descripcion}</td>
-<td><textarea class="d-none" name="nota[]" >${nota}</textarea>${nota}</td>
+<td style=''width: 93px;'' ><textarea class="d-none" name="descripcion[]">${descripcion}</textarea>${descripcion}</td>
+<td ><textarea class="d-none" name="nota[]" >${nota}</textarea>${nota}</td>
+<td><input type="hidden" name="validasobres[]" value="${validasobre}">${validasobre}</td>
 <td>
 <div class="list-group">
 ${files.map(function (file) {
@@ -843,7 +842,9 @@ ${files.map(function (file) {
 
             $(document).on("change", "#panio", function () {
                 //obtengo banca
-                let ptipo_banca = $.trim($("#ptipo_banca").val().split('-')[0]);
+
+                let ptipo_banca = $("#ptipo_banca").val().split('-')[0];
+
                 //obtengo anio
                 console.log("banca " + ptipo_banca)
                 let anno_filter = parseInt($(this).val());
@@ -983,13 +984,15 @@ ${files.map(function (file) {
                 $('[name="nota[]"]').each(function () {
                     fd.append("nota[]", this.value);
                 });
+                $('[name="validasobres[]"]').each(function () {
+                  fd.append("validasobres[]", this.value);
+                });
                 let files = $('[name="adjunto[]');
                 if (files[0].files.length > 0) {
                     for (let i in files[0].files) {
                         fd.append('adjunto[]', files[0].files[i]);
                     }
                 }
-
                 $("#btnImprimir").prop("disabled", true);
                 fd.append('user_id', $("#user_id").val());
                 fd.append('cliente_id', $("#cliente_id").val());
@@ -1130,62 +1133,13 @@ ${files.map(function (file) {
             });
 
             $(document).on("click", "#bt_add", function () {
-              let valida_sobre='No';
-              /*const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                  confirmButton: 'btn btn-success',
-                  cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-              })
-
-              swalWithBootstrapButtons.fire({
-                title: 'Estas seguro (a)?',
-                text: "Estas creando un pedido sin sobre!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Si, estoy seguro (a)',
-                cancelButtonText: 'No, gracias!',
-                reverseButtons: true
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  swalWithBootstrapButtons.fire({
-                    title: 'Pero, Estás seguro (a)?',
-                    text: "Recuerda que estás creando un pedido sin sobre!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si, estoy seguro (a)',
-                    cancelButtonText: 'No, gracias!',
-                    reverseButtons: true
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      swalWithBootstrapButtons.fire(
-                        'Confirmado',
-                        'Escogiste tu destino',
-                        'success'
-                      )
-
-                    } else if (
-                      result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                      swalWithBootstrapButtons.fire(
-                        'No',
-                        'Hiciste lo correcto',
-                        'success'
-                      )
-                    }
-                  })
-                } else if (
-                  result.dismiss === Swal.DismissReason.cancel
-                ) {
-                  swalWithBootstrapButtons.fire(
-                    'No',
-                    'Vuelve a seleccionar el comprobante',
-                    'success'
-                  )
-                }
-              })
-              return false;*/
+                const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                  },
+                  buttonsStyling: false
+                })
                 if ($('#pcliente_id').val() == '') {
                     Swal.fire(
                         'Error',
@@ -1282,27 +1236,74 @@ ${files.map(function (file) {
                         'Agregue descripción del pedido',
                         'warning'
                     )
-                } else if ($('#pdescripcion').val().length > 250) { //
-                    Swal.fire(
-                        'Error',
-                        'Se acepta máximo 200 caracteres',
-                        'warning'
-                    )
                 } else if ($('#pnota').val() == '') {
                     Swal.fire(
                         'Error',
                         'Agregue nota del pedido',
                         'warning'
                     )
-                } else if ($('#pnota').val().length > 250) {
-                    Swal.fire(
-                        'Error',
-                        'Se acepta máximo 200 caracteres',
-                        'warning'
-                    )
                 } else {
+                  const arrayCombo = ['{{\App\Models\DetallePedido::ELECTRONICA_SIN_BANCA_DESC}}'];
+                  const valorTipoBanca=$('#ptipo_banca').val().split('_')[0];
+                  if (arrayCombo.includes(valorTipoBanca)) {
+                    swalWithBootstrapButtons.fire({
+                      title: 'Estas seguro (a)?',
+                      text: "Estas creando un pedido sin sobre!",
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Si, con sobre',
+                      cancelButtonText: 'No, sin sobre',
+                      reverseButtons: true
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        swalWithBootstrapButtons.fire({
+                          title: 'Pero, Estás seguro (a)?',
+                          text: "Recuerda que estás creando un pedido sin sobre! Revisa antes de Continuar.",
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonText: 'Si, con sobre',
+                          cancelButtonText: 'No, sin sobre',
+                          reverseButtons: true
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            $("#txtValidaSobre").val('Si');
+                            swalWithBootstrapButtons.fire(
+                              'Confirmado',
+                              'Pedido agregado correctamente',
+                              'success'
+                            )
+                            cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                            ValidarDatosPedido();
+                          } else if (
+                            result.dismiss === Swal.DismissReason.cancel
+                          ) {
+                            $("#txtValidaSobre").val('No');
+                            swalWithBootstrapButtons.fire(
+                              'No',
+                              'Hiciste lo correcto, al revisar.',
+                              'success'
+                            )
+                            cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                            ValidarDatosPedido();
+                          }
+                        })
+                      } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                      ) {
+                        $("#txtValidaSobre").val('No');
+                        swalWithBootstrapButtons.fire(
+                          'No',
+                          'Se agrega pedido sin sobre.',
+                          'success'
+                        )
+                        cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                        ValidarDatosPedido();
+                      }
+                    })
+                  }else {
                     cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
                     ValidarDatosPedido();
+                  }
                 }
             });
 
@@ -1704,6 +1705,9 @@ ${files.map(function (file) {
                 $("#user_id").html(data.html);
                 $("#user_id").selectpicker("refresh").trigger("change");
             });
+
         });
+
+
     </script>
 @stop
