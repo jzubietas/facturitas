@@ -378,16 +378,16 @@
           })
         }
 
-        cargaNueva(1);
+/*        cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
         cargaNueva(4);
         cargaNueva(5);
-        cargaNueva(6);
+        cargaNueva(6);*/
+/*
+        cargReporteAnalisis();*/
 
-        cargReporteAnalisis();
-
-        setInterval(myTimer, 5000);
+    /*    setInterval(myTimer, 5000);*/
 
         function myTimer() {
           cargaNueva(1);
