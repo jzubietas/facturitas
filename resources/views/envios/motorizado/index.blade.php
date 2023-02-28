@@ -1445,8 +1445,6 @@ Enviar</button>
           $('#modal_recojomotorizado').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
             $("#input_recojomotorizado").val(button.data('direccion_grupo'));
-
-
           });
 
 
