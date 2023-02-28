@@ -226,19 +226,8 @@ class MotorizadoController extends Controller
                               $btn.='</button>';
                             $btn.='</li>';
 
-                          }/*else if($pedido->condicion_envio_code==Pedido::RECIBIDO_RECOJO_CLIENTE_INT){
-                            $btn.='<li class="pt-8">';
-                            $btn.='<button class="btn btn-sm text-white btn-success" type="button" data-toggle="modal" data-target="#modal_recojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
-                            $btn.='ENTREGAR';
-                            $btn.='</button>';
-                            $btn.='</li>';
-                          }*/else if($pedido->condicion_envio_code==Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT){
-                            $btn.='<li class="pt-8">';
-                            $btn.='<button class="btn btn-sm text-white btn-success" type="button" data-toggle="modal"
-                                    data-target="#modal_recojoenviarope" data-direccion_grupo="' . $pedido->id . '">';
-                            $btn.='ENTREGAR';
-                            $btn.='</button>';
-                            $btn.='</li>';
+                          }else if($pedido->condicion_envio_code==Pedido::RECIBIDO_RECOJO_CLIENTE_INT){
+
                           }
 
                             break;
@@ -262,7 +251,12 @@ class MotorizadoController extends Controller
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
-                ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::CONFIRM_MOTORIZADO_INT,Pedido::RECIBIDO_RECOJO_CLIENTE_INT])
+                ->whereIn('direccion_grupos.condicion_envio_code',
+                  [
+                    Pedido::CONFIRM_MOTORIZADO_INT
+                    ,Pedido::RECIBIDO_RECOJO_CLIENTE_INT
+                    ,Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT
+                  ])
                 ->where('direccion_grupos.estado', '1')
                 ->select([
                     'direccion_grupos.id',
@@ -322,7 +316,25 @@ class MotorizadoController extends Controller
                 ->addColumn('action', function ($pedido) {
                     $btn = '<ul class="list-unstyled pl-0">';
 
-                    if($pedido->condicion_envio==Pedido::RECIBIDO_RECOJO_CLIENTE)
+                    if($pedido->condicion_envio==Pedido::CONFIRMAR_RECOJO_MOTORIZADO){
+                      $btn.='<li class="pt-8">';
+                      $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal"
+                                      data-target="#modal_recojoenviarope" data-direccion_grupo="' . $pedido->id . '">';
+                      $btn.='ENVIAR A OPE';
+                      $btn.='</button>';
+                      $btn.='</li>';
+                    }
+                    else if($pedido->condicion_envio==Pedido::CONFIRMAR_RECOJO_MOTORIZADO)
+                    {
+                      $btn.='<li class="pt-8">';
+                      $btn.='<button class="btn btn-sm text-white btn-success" type="button" data-toggle="modal"
+                                    data-target="#modal_recojoenviarope" data-direccion_grupo="' . $pedido->id . '">';
+                      $btn.='ENVIAR A OPE';
+                      $btn.='</button>';
+                      $btn.='</li>';
+
+                    }
+                    else if($pedido->condicion_envio==Pedido::RECIBIDO_RECOJO_CLIENTE)
                     {
                       $btn.='<li class="pt-8">';
                       $btn.='<button class="btn btn-xs text-white btn-success" type="button" data-toggle="modal"

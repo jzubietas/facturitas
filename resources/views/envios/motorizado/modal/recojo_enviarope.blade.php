@@ -38,7 +38,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="cerrarmodal_motorizadorecojoenviarope" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-info" id="motorizado_recojoenviarope">Confirmar</button>
         </div>
       </form>>

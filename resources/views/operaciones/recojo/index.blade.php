@@ -217,7 +217,7 @@
         $("#input_recojomotorizado").val(button.data('direccion_grupo'));
       });
 
-      $(document).on("submit", "#form_recojo_enviarope", function (evento) {
+      /*$(document).on("submit", "#form_recojo_enviarope", function (evento) {
         evento.preventDefault();
         var drecojoenviarope = new FormData();
         drecojoenviarope.append('input_recojoenviarope', $('#input_recojoenviarope').val());
@@ -233,7 +233,7 @@
           }
         });
 
-      });
+      });*/
     });
   </script>
 

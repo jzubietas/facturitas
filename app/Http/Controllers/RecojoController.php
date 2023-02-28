@@ -139,10 +139,24 @@ class RecojoController extends Controller
         //
     }
 
+  public function motorizadoConfirmRecojo(Request $request)
+  {
+    $envio = DireccionGrupo::where("id", $request->input_confirmrecojomotorizado)->first();
+
+    DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT);
+    PedidoMovimientoEstado::create([
+      'pedido' => $request->input_confirmrecojomotorizado,
+      'condicion_envio_code' => Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT,
+      'fecha_salida'=>now(),
+      'notificado' => 0
+    ]);
+
+    return response()->json(['html' => $envio->id]);
+  }
+
   public function courierRecojoenviarope(Request $request)
   {
     $envio = DireccionGrupo::where("id", $request->input_recojoenviarope)->first();
-
     DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_RECOJO_COURIER_INT);
     PedidoMovimientoEstado::create([
       'pedido' => $request->input_recojoenviarope,

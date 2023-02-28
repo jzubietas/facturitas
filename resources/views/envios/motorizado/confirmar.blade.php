@@ -26,6 +26,7 @@
 
     @include('envios.motorizado.modal.entregadoconfirm')
     @include('envios.motorizado.modal.entregar_confirm_recojo')
+    @include('envios.motorizado.modal.recojo_enviarope')
 
     <div class="card">
         <div class="card-body">
@@ -304,7 +305,7 @@
               processData: false,
               contentType: false,
               type: 'POST',
-              url: "{{ route('courier.confirmrecojo') }}",
+              url: "{{ route('motorizado.confirmrecojo') }}",
               success: function (data) {
                 $("#modal_confirmrecojomotorizado").modal("hide");
                 $('#tablaPrincipal').DataTable().ajax.reload();
@@ -352,6 +353,24 @@
                     }
                 });
             });
+
+          $(document).on("submit", "#form_recojo_enviarope", function (evento) {
+            evento.preventDefault();
+            var drecojoenviarope = new FormData();
+            drecojoenviarope.append('input_recojoenviarope', $('#input_recojoenviarope').val());
+            $.ajax({
+              data: drecojoenviarope,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('courier.recojoenviarope') }}",
+              success: function (data) {
+                $("#modal_recojoenviarcourier").modal("hide");
+                $('#tablaEnmotorizado').DataTable().ajax.reload();
+              }
+            });
+
+          });
         });
     </script>
 

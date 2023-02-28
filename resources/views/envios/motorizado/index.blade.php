@@ -1451,9 +1451,9 @@ Enviar</button>
             $("#input_recojomotorizado").val(button.data('direccion_grupo'));
           });
 
-          $('#modal_recojoenviarope').on('show.bs.modal', function (event) {
+          $('#modal_recojoenviarcourier').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
-            $("#input_recojoenviarope").val(button.data('direccion_grupo'));
+            $("#input_recojoenviarcourier").val(button.data('direccion_grupo'));
 
             let foto1 = button.data('imagen1');
             let foto2 = button.data('imagen2');
