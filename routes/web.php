@@ -508,6 +508,11 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.quitardireccion', [EnvioController::class, 'actionQuitarDireccion'])->name('envios.quitardireccion');
     Route::post('envios.recepcionarmotorizado', [EnvioController::class, 'RecibirMotorizado'])->name('envios.recepcionarmotorizado');
     Route::post('envios.enviarid', [EnvioController::class, 'EnviarPedidoid'])->name('envios.enviarid');
+
+    Route::post('motorizado.recojo', [MotorizadoController::class, 'MotorizadoRecojo'])->name('motorizado.recojo');
+
+
+
     Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
     Route::post('envios.changeImg', [EnvioController::class, 'changeImg'])->name('envios.changeImg');
 

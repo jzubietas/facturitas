@@ -70,7 +70,7 @@ class MotorizadoController extends Controller
                 default:
                     $query
                         ->where('direccion_grupos.estado', '1')
-                        ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::MOTORIZADO_INT,Pedido::RECOJO_MOTORIZADO_INT] )
+                        ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::MOTORIZADO_INT,Pedido::RECOJO_MOTORIZADO_INT,Pedido::RECIBIDO_RECOJO_CLIENTE_INT] )
                         ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
             }
             //add_query_filtros_por_roles($query, 'u');
@@ -211,9 +211,16 @@ class MotorizadoController extends Controller
                             </li>';
                           }else if($pedido->condicion_envio_code==Pedido::RECOJO_MOTORIZADO_INT){
                             $btn.='<li class="pt-8">';
-                              $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal" data-target="#modal_recojomotorizado">';
+                              $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal" data-target="#modal_recojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
                               $btn.='ENTREGAR';
                               $btn.='</button>';
+                            $btn.='</li>';
+
+                          }else if($pedido->condicion_envio_code==Pedido::RECIBIDO_RECOJO_CLIENTE_INT){
+                            $btn.='<li class="pt-8">';
+                            $btn.='<button class="btn btn-sm text-white btn-success" type="button" data-toggle="modal" data-target="#modal_recojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
+                            $btn.='ENTREGAR';
+                            $btn.='</button>';
                             $btn.='</li>';
 
                           }
@@ -1115,4 +1122,56 @@ Ver Rotulo</a>')
             ]);
         }
     }
+
+  public function MotorizadoRecojo(Request $request)
+  {
+    $envio = DireccionGrupo::where("id", $request->entrega_motorizado_recojo)->first();
+    $envio->update([
+      'modificador' => 'USER' . Auth::user()->id,
+      'condicion_envio' => Pedido::RECIBIDO_RECOJO_CLIENTE,
+      'condicion_envio_code' => Pedido::RECIBIDO_RECOJO_CLIENTE_INT,
+      'condicion_envio_at' => now(),
+    ]);
+
+    $envio->pedidos()->activo()->update([
+      'condicion_envio_code' => Pedido::RECIBIDO_RECOJO_CLIENTE_INT,
+      'condicion_envio_at' => now(),
+      'condicion_envio' => Pedido::RECIBIDO_RECOJO_CLIENTE,
+      'fecha_salida' => $request->fecha_salida,
+      'cambio_direccion_at' => null
+    ]);
+
+    //$files1 = $request->file('foto1');
+    //$files2 = $request->file('foto2');
+    //$files3 = $request->file('foto3');
+
+    //$destinationPath = base_path('public/storage/entregas/');
+
+    // Carbon::now()->second . $files1->getClientOriginalName();
+    if ($request->hasFile('foto1'))
+    {
+      $file_name_1 = $request->file('foto1')->store('motorizado_recojo', 'pstorage');
+      $envio->update([
+        'foto1' => $file_name_1,
+      ]);
+    }
+    if ($request->hasFile('foto2'))
+    {
+      $file_name_2 = $request->file('foto2')->store('motorizado_recojo', 'pstorage');
+      $envio->update([
+        'foto2' => $file_name_2,
+      ]);
+    }
+    if ($request->hasFile('foto3'))
+    {
+      $file_name_3 = $request->file('foto3')->store('motorizado_recojo', 'pstorage');
+      $envio->update([
+        'foto3' => $file_name_3,
+      ]);
+    }
+
+
+    return response()->json(['html' => $request->entrega_motorizado_recojo]);
+
+  }
 }
