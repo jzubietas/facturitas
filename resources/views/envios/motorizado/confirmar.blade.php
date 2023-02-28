@@ -295,6 +295,25 @@
             $(".foto3").attr("src", foto3);
           })
 
+          $(document).on("submit", "#form_confirmrecojo_motorizado", function (evento) {
+            evento.preventDefault();
+            var dconfirmrecojo = new FormData();
+            dconfirmrecojo.append('input_confirmrecojomotorizado', $('#input_confirmrecojomotorizado').val());
+            $.ajax({
+              data: dconfirmrecojo,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('courier.confirmrecojo') }}",
+              success: function (data) {
+                $("#modal_confirmrecojomotorizado").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+
+              }
+            });
+
+          })
+
             $(document).on("submit", "#formulariomotorizadoentregarconfirm", function (evento) {
                 evento.preventDefault();
                 var fd2 = new FormData();

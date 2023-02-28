@@ -725,6 +725,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmarmotorizadoconfirmdismiss', [EnvioController::class, 'confirmarEstadoConfirmConfirmDismiss'])->name('operaciones.confirmarmotorizadoconfirmdismiss');
     Route::post('operaciones.confirmarcliente', [EnvioController::class, 'confirmarEstadoConfirmValidada'])->name('operaciones.confirmarcliente');
 
+    Route::post('courier.confirmrecojo', [EnvioController::class, 'courierConfirmRecojo'])->name('courier.confirmrecojo');
+
+    Route::post('motorizado.recojoenviarope', [MotorizadoController::class, 'motorizadoRecojoenviarope'])->name('motorizado.recojoenviarope');
+
     Route::get('direcciongrupo/{grupo}/no_contesto/get_sustentos_adjuntos', [DireccionGrupoController::class, 'get_sustentos_adjuntos'])->name('direcciongrupo.no-contesto.get-sustentos-adjuntos');
 
 

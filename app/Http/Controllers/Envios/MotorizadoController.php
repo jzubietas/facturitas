@@ -9,6 +9,7 @@ use App\Models\DireccionGrupo;
 use App\Models\Distrito;
 use App\Models\GrupoPedido;
 use App\Models\Pedido;
+use App\Models\PedidoMovimientoEstado;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -68,10 +69,17 @@ class MotorizadoController extends Controller
                     $query->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_OBSERVADO);
                     break;
                 default:
+                  //return $tab;
                     $query
                         ->where('direccion_grupos.estado', '1')
-                        ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::MOTORIZADO_INT,Pedido::RECOJO_MOTORIZADO_INT,Pedido::RECIBIDO_RECOJO_CLIENTE_INT] )
-                        ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
+                        ->whereIn('direccion_grupos.condicion_envio_code',
+                          [
+                            Pedido::MOTORIZADO_INT
+                            ,Pedido::RECOJO_MOTORIZADO_INT
+                            ,Pedido::RECIBIDO_RECOJO_CLIENTE_INT
+                            ,Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT
+                          ] );
+                        //->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
             }
             //add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
@@ -222,7 +230,13 @@ class MotorizadoController extends Controller
                             $btn.='ENTREGAR';
                             $btn.='</button>';
                             $btn.='</li>';
-
+                          }else if($pedido->condicion_envio_code==Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT){
+                            $btn.='<li class="pt-8">';
+                            $btn.='<button class="btn btn-sm text-white btn-success" type="button" data-toggle="modal"
+                                    data-target="#modal_recojoenviarope" data-direccion_grupo="' . $pedido->id . '">';
+                            $btn.='ENTREGAR';
+                            $btn.='</button>';
+                            $btn.='</li>';
                           }
 
                             break;
@@ -1186,5 +1200,20 @@ Ver Rotulo</a>')
 
     return response()->json(['html' => $request->entrega_motorizado_recojo]);
 
+  }
+
+  public function motorizadoRecojoenviarope(Request $request)
+  {
+    $envio = DireccionGrupo::where("id", $request->input_recojoenviarope)->first();
+
+    DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT);
+    PedidoMovimientoEstado::create([
+      'pedido' => $request->input_confirmrecojomotorizado,
+      'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+      'fecha_salida'=>now(),
+      'notificado' => 0
+    ]);
+
+    return response()->json(['html' => $envio->id]);
   }
 }

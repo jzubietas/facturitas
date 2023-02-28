@@ -3862,5 +3862,20 @@ class EnvioController extends Controller
 
     }
 
+  public function courierConfirmRecojo(Request $request)
+  {
+    $envio = DireccionGrupo::where("id", $request->input_confirmrecojomotorizado)->first();
+
+    DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT);
+    PedidoMovimientoEstado::create([
+      'pedido' => $request->input_confirmrecojomotorizado,
+      'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+      //'fecha_salida'=>now(),
+      'notificado' => 0
+    ]);
+
+    return response()->json(['html' => $envio->id]);
+  }
+
 
 }

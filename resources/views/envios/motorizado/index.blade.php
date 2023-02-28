@@ -16,8 +16,8 @@
 @section('content')
 
     @include('envios.motorizado.modal.entregado')
-
     @include('envios.motorizado.modal.entregar_recojo')
+    @include('envios.motorizado.modal.recojo_enviarope')
 
     <div class="card p-0">
 
@@ -227,12 +227,13 @@
             .card {
                 box-shadow: 0 0 1px white !important;
             }
-
-
         }
 
         .yellow_color_table {
           background-color: #ffd60a !important;
+        }
+        .blue_color_table {
+          background-color: #3A98B9 !important;
         }
     </style>
     @include('partials.css.time_line_css')
@@ -848,6 +849,9 @@ Enviar</button>
                   if(data["condicion_envio_code"]==31)
                   {
                     $(row).addClass('yellow_color_table');
+                  }else if(data["condicion_envio_code"]==32)
+                  {
+                    $(row).addClass('blue_color_table');
                   }
                 },
                 drawCallback: function (settings) {
@@ -1447,6 +1451,18 @@ Enviar</button>
             $("#input_recojomotorizado").val(button.data('direccion_grupo'));
           });
 
+          $('#modal_recojoenviarope').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            $("#input_recojoenviarope").val(button.data('direccion_grupo'));
+
+            let foto1 = button.data('imagen1');
+            let foto2 = button.data('imagen2');
+            let foto3 = button.data('imagen3');
+            $(".foto1").attr("src", foto1);
+            $(".foto2").attr("src", foto2);
+            $(".foto3").attr("src", foto3);
+          });
+
 
           $(document).on("change", "#pimagen1_recojo", function (event) {
             var file = event.target.files[0];
@@ -1490,6 +1506,23 @@ Enviar</button>
             $("#pimagen3_recojo").val(null)
           })
 
+          $(document).on("submit", "#form_recojo_enviarope", function (evento) {
+            evento.preventDefault();
+            var drecojoenviarope = new FormData();
+            drecojoenviarope.append('input_recojoenviarope', $('#input_recojoenviarope').val());
+            $.ajax({
+              data: drecojoenviarope,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('motorizado.recojoenviarope') }}",
+              success: function (data) {
+                $("#modal_recojoenviarope").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+              }
+            });
+
+          });
         });
     </script>
 
