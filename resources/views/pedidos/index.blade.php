@@ -366,6 +366,8 @@
               $('#observacion_recojo').val(button.data('observacionreco'))
               $('#gmlink_recojo').val(button.data('gmclink'))
 
+              $("#sustento-recojo").val("");
+
                 var cod_pedido = $('#pedidoid').val();
 
               $('#pedido_concatenado').val(button.data('pedidoid'));
