@@ -13,6 +13,9 @@
                   <input type="hidden" name="opcion" value="4">
 
                   <div class="row clase">
+
+
+
                     <div class="col-md-10">
                       <div class="form-row">
                         <div class="form-group">
@@ -46,6 +49,24 @@
 
 
                   <div class="row">
+
+                    <div id="cnt-distritos" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                      {!! Form::label('distrito_recojo', 'Distrito') !!}<br>
+
+                      <select name="distrito_recojo" id="distrito_recojo" class="distrito form-control"
+                              data-show-subtext="true" data-live-search="true"
+                              data-live-search-placeholder="Seleccione distrito">
+                        @foreach($distritos as $distrito)
+                          <option data-subtext="{{$distrito->zona}}"
+                                  value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
+                        @endforeach
+                      </select>
+
+
+                    </div>
+
+
                     <div class="col-md-12">
 
                       <div class="form-row">

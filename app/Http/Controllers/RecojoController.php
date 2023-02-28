@@ -179,6 +179,7 @@ class RecojoController extends Controller
     $direccion_entrega = $request->direccion_entrega;
     $sustento_recojo = $request->sustento_recojo;
     $pedido_concatenado = explode(",", $request->pedido_concatenado);
+    $distrito_recojo=$request->distrito_recojo;
 
     $contar=0;
     $dirgrupo=0;
@@ -221,6 +222,7 @@ class RecojoController extends Controller
             'direccion_grupo' => null,
             'destino' => 'LIMA',
             'env_destino' => 'LIMA',
+            'env_distrito'=>$distrito_recojo,
             'env_zona_asignada' => null,
             'env_cantidad' => 0,
             'env_tracking' => '',
