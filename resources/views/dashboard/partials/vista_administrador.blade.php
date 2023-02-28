@@ -379,7 +379,7 @@
 
         cargReporteAnalisis();
 
-        setInterval(myTimer, 5000000);
+        setInterval(myTimer, 50000);
 
         function myTimer() {
           cargaNueva(1);
