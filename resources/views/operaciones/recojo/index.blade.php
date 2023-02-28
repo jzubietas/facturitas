@@ -15,33 +15,15 @@
 
   <div class="card p-0">
 
-    <ul class="nav nav-pills nav-justified nav-tabs mb-24 mt-24" id="myTab" role="tablist">
-      <li class="nav-item text-center">
-        <a class="condicion-tabla nav-link activo active font-weight-bold"
-           id="enmotorizado-tab"
-           data-toggle="tab"
-           data-url="11"
-           data-action="enmotorizado"
-           data-consulta="tablaEnmotorizado"
-           href="#enmotorizado"
-           role="tab"
-           aria-controls="enmotorizado"
-           aria-selected="true">
-          <i class="fa fa-inbox" aria-hidden="true"></i> EN RECOJO
-          <sup><span class="badge badge-light count_motorizados_enmotorizado">0</span></sup>
-        </a>
-      </li>
-    </ul>
-
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="enmotorizado" role="tabpanel" aria-labelledby="enmotorizado-tab">
         <table id="tablaRecojo" class="table table-striped w-100">
           <thead>
           <tr>
-            <th scope="col">Cliente</th>
-            <th scope="col">Fecha de Salida</th>
-            <th scope="col">Fecha de Entrega</th>
-            <th scope="col">Condicion</th>
+            <th scope="col">Item</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Razon social</th>
+            <th scope="col">Estado Envio</th>
             <th scope="col">Acciones</th>
           </tr>
           </thead>
@@ -157,19 +139,16 @@
         },
         columns: [
           {
-            data: 'celular',
-            name: 'celular',
-            render: function (data, type, row, meta) {
-              return '<a href="tel:' + row.celular + '">' + row.celular + '</a><br>' + row.nombre
-            },
+            data: 'correlativo',
+            name: 'correlativo',
           },
           {
-            data: 'fecha_salida',
-            name: 'fecha_salida',
+            data: 'codigos',
+            name: 'codigos',
           },
           {
-            data: 'fecha_recepcion',
-            name: 'fecha_recepcion',
+            data: 'producto',
+            name: 'producto',
           },
           {data: 'condicion_envio', name: 'condicion_envio',},
           {
