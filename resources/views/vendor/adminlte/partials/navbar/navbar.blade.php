@@ -20,7 +20,7 @@
         <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
           <button class="nav-link btn btn-outline-info btn-sm  font-18 border-0 font-weight-bold btnLlamadas"
                   data-toggle="modal" data-target="#modal-llamadas-1" type="button">
-            <i class="fas fa-users text-blue btnLlamadasCont" aria-hidden="true" ></i>
+                <i class="fas fa-users text-blue btnLlamadasCont" aria-hidden="true" ></i>
           </button>
         </li>
       @endif
@@ -43,33 +43,6 @@
         </li>
 
         <div id="divListadoVidas" style="display: flex;"></div>
-        {{--<li class="nav-item dropdown show" id="my-annuncements-1">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class="font-36 border-0 font-weight-bold btnVidas1 ml-2"
-                    data-toggle="modal" data-target="#modal-vidas-1" type="button">
-                  <i class="fas fa-male text-success btnVidasCont" aria-hidden="true" ></i>
-                </a>
-            </span>
-        </li>
-        <li class="nav-item dropdown show" id="my-annuncements-2">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2"
-                   data-toggle="modal" data-target="#modal-vidas-2" type="button">
-                  <i class="fas fa-male text-warning btnVidasCont2" aria-hidden="true" ></i>
-                </a>
-            </span>
-        </li>
-        <li class="nav-item dropdown show" id="my-annuncements-3">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
-                   data-toggle="modal" data-target="#modal-vidas-3" type="button">
-                  <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
-                </a>
-            </span>
-        </li>--}}
-        {{-- Custom right links --}}
-
-
 
         @yield('content_top_nav_right')
 
