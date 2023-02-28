@@ -53,6 +53,7 @@ class DetallePedido extends Model
     'created_at',
     'updated_at',
     'atendido_por_id',
+    'sobre_valida',
   ];
 
 }
