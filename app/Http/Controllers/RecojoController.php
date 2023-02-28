@@ -240,7 +240,8 @@ class RecojoController extends Controller
             "gm_link" => $gm_link,
             "env_sustento" => $sustento_recojo,
             "condicion_envio" => Pedido::RECOJO_COURIER,
-            "condicion_envio_code" => Pedido::RECOJO_COURIER_INT
+            "condicion_envio_code" => Pedido::RECOJO_COURIER_INT,
+            "estado_sobre"=>1
           ]);
 
           $grupoCreatePedido = GrupoPedido::createGroupByPedido($pedido, true, true);

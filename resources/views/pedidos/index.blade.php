@@ -427,6 +427,8 @@
                 let pedido_concatenado = $("#pedido_concatenado").val();
                 let distrito_recojo = $("#distrito_recojo").val();
 
+                console.log(distrito_recojo)
+
                 if (distrito_recojo== "" || distrito_recojo == null) {
                   Swal.fire('Debe seleccionar un distrito', '', 'warning');
                   return false;
