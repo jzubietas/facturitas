@@ -182,12 +182,14 @@
                                 <th>Courier</th>
                                 <th>Descripción</th>
                                 <th>Nota</th>
+                                <th>Validasobres</th>
                                 <th>Adjunto</th>
                                 <th>FT</th>
                                 </thead>
                                 <tfoot>
                                 <th style="text-align: center">TOTAL</th>
                                 {{--<th></th>--}}
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
