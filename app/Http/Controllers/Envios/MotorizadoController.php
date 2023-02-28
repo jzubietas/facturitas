@@ -36,7 +36,7 @@ class MotorizadoController extends Controller
 
         if ($request->has('datatable')) {
             //request tab  //enmotorizado//
-            $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+            $query = DireccionGrupo::
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
@@ -70,7 +70,7 @@ class MotorizadoController extends Controller
                 default:
                     $query
                         ->where('direccion_grupos.estado', '1')
-                        ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
+                        ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::MOTORIZADO_INT,Pedido::RECOJO_MOTORIZADO_INT] )
                         ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
             }
             //add_query_filtros_por_roles($query, 'u');
@@ -160,12 +160,11 @@ class MotorizadoController extends Controller
                                 }
                             }
                             break;
-                        default:
+                        default:break;
 
                     }
                     switch ($tab) {
                         case 'entregado':
-
                             break;
                         case 'nocontesto':
                             $btn .= '<li class="pt-8">
@@ -190,6 +189,8 @@ class MotorizadoController extends Controller
                             }
                             break;
                         default:
+                          if($pedido->condicion_envio_code==Pedido::MOTORIZADO_INT)
+                          {
                             $btn .= '<li class="pt-8">
                                     <button class="btn btn-sm text-white bg-success" data-jqconfirm="general" data-jqconfirm-id="' . $pedido->id . '">
                                         <i class="fa fa-motorcycle text-white" aria-hidden="true"></i>
@@ -208,6 +209,16 @@ class MotorizadoController extends Controller
                                     Observado
                                 </button>
                             </li>';
+                          }else if($pedido->condicion_envio_code==Pedido::RECOJO_MOTORIZADO_INT){
+                            $btn.='<li class="pt-8">';
+                              $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal" data-target="#modal_recojomotorizado">';
+                              $btn.='ENTREGAR';
+                              $btn.='</button>';
+                            $btn.='</li>';
+
+                          }
+
+                            break;
 
                     }
                     $btn .= '</ul>';
@@ -777,8 +788,19 @@ class MotorizadoController extends Controller
         } else if ($tipo_consulta == "paquete") {
 
             $pedidos = null;
+            $filtros_code = null;
             $filtros_code = explode(",", $url_tabla);
-            array_push($filtros_code,Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT);
+            //return  $filtros_code;
+            if( in_array('19',$filtros_code) )
+            {
+              $filtros_code = explode(",", $url_tabla.','.Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT);
+              //array_push($filtros_code,);
+            }else if( in_array('18',$filtros_code) )
+            {
+              $filtros_code = explode(",", $url_tabla.','.Pedido::RECEPCION_RECOJO_MOTORIZADO_INT);
+              //array_push($filtros_code,);
+              //return $filtros_code;
+            }
 
             $grupos = DireccionGrupo::select([
                 'direccion_grupos.*',
@@ -787,7 +809,6 @@ class MotorizadoController extends Controller
                 //DB::raw(" (select 'LIMA') as destino "),
                 DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
             ])
-                //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
                 ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
