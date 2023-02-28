@@ -365,12 +365,25 @@
               type: 'POST',
               url: "{{ route('courier.recojoenviarope') }}",
               success: function (data) {
-                $("#modal_recojoenviarcourier").modal("hide");
-                $('#tablaEnmotorizado').DataTable().ajax.reload();
+                $("#modal_recojoenviarope").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
               }
             });
 
           });
+
+          $('#modal_recojoenviarope').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            $("#input_recojoenviarope").val(button.data('direccion_grupo'));
+
+            let foto1 = button.data('imagen1');
+            let foto2 = button.data('imagen2');
+            let foto3 = button.data('imagen3');
+            $(".foto1").attr("src", foto1);
+            $(".foto2").attr("src", foto2);
+            $(".foto3").attr("src", foto3);
+          });
+
         });
     </script>
 

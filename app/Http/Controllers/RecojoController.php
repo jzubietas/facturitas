@@ -157,10 +157,10 @@ class RecojoController extends Controller
   public function courierRecojoenviarope(Request $request)
   {
     $envio = DireccionGrupo::where("id", $request->input_recojoenviarope)->first();
-    DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_RECOJO_COURIER_INT);
+    DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT);
     PedidoMovimientoEstado::create([
       'pedido' => $request->input_recojoenviarope,
-      'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_COURIER_INT,
+      'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
       'fecha_salida'=>now(),
       'notificado' => 0
     ]);
