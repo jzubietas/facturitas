@@ -7,7 +7,7 @@
       </div>
 
       <form id="form_recojo_enviarope" name="form_recojo_enviarope" enctype="multipart/form-data">
-        <input type="text" id="input_recojoenviarope" name="input_recojoenviarope">
+        <input type="hidden" id="input_recojoenviarope" name="input_recojoenviarope">
         <div class="modal-body">
           <div class="row">
 

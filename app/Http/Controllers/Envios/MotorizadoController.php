@@ -221,7 +221,9 @@ class MotorizadoController extends Controller
                             </li>';
                           }else if($pedido->condicion_envio_code==Pedido::RECOJO_MOTORIZADO_INT){
                             $btn.='<li class="pt-8">';
-                              $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal" data-target="#modal_recojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
+                              $btn.='<button class="btn btn-sm text-white btn-info" type="button"
+                                      data-backdrop="static" data-keyboard="false"
+                                      data-toggle="modal" data-target="#modal_recojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
                               $btn.='ENTREGAR';
                               $btn.='</button>';
                             $btn.='</li>';

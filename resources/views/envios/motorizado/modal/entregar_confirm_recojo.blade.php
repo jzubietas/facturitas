@@ -8,7 +8,7 @@
 
 
       <form id="form_confirmrecojo_motorizado" name="form_confirmrecojo_motorizado" enctype="multipart/form-data">
-        <input type="text" id="input_confirmrecojomotorizado" name="input_confirmrecojomotorizado">
+        <input type="hidden" id="input_confirmrecojomotorizado" name="input_confirmrecojomotorizado">
         <div class="modal-body">
           <div class="row">
 

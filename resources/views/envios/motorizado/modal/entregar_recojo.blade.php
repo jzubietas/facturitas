@@ -7,7 +7,7 @@
       </div>
       <form id="form_recojo_motorizado" name="form_recojo_motorizado" class="card" enctype="multipart/form-data">
         <div class="modal-body">
-          <input type="text" id="input_recojomotorizado" name="input_recojomotorizado">
+          <input type="hidden" id="input_recojomotorizado" name="input_recojomotorizado">
 
           <div class="form-row">
 
@@ -91,7 +91,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="cerrarmodal_motorizadorecojo">Cerrar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-info" id="motorizado_recojo">Confirmar</button>
         </div>
       </form>
