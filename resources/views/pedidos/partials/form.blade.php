@@ -9,7 +9,7 @@
                         {{--<input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
                         <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>--}}
 
-
+                        <input type="hidden" id="txtValidaSobre" name="txtValidaSobre" value="Si">
                         <select name="user_id" class="border form-control  border-secondary selectpicker" id="user_id"
                                 data-live-search="true">
                             <option value="0" class="ob" data-type="select" data-msj="Seleccione un Asesor">----

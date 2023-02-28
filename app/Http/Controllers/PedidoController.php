@@ -1287,6 +1287,7 @@ class PedidoController extends Controller
             $courier = $request->courier;
             $descripcion = $request->descripcion;
             $nota = $request->nota;
+            $validasobres = $request->validasobres;
 
             $files = $request->file('adjunto');
 
@@ -1327,6 +1328,7 @@ class PedidoController extends Controller
                     'saldo' => (($cantidad[$contP] * $porcentaje[$contP]) / 100) + $courier[$contP],
                     'descripcion' => $descripcion[$contP],
                     'nota' => $nota[$contP],
+                    'sobre_valida' => $validasobres[$contP],
                     'estado' => '1',//,
                 ]);
 
