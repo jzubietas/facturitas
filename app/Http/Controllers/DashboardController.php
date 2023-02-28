@@ -468,13 +468,6 @@ class DashboardController extends Controller
 
   public function viewMetaTable(Request $request)
   {
-    $supervisores_array = User::query()->activo()->rolSupervisor()->get();
-    $count_asesor = [];
-
-    foreach ($supervisores_array as $supervisor){
-      $count_asesor[$supervisor->id] = 0;
-    }
-
 
 
     $metas = [];
@@ -507,6 +500,22 @@ class DashboardController extends Controller
       })->count();
     }
 
+    $supervisores_array = User::query()->activo()->rolSupervisor()->get();
+    $count_asesor = [];
+    foreach ($supervisores_array as $supervisor){
+      $count_asesor[$supervisor->id] =
+        ['pedidos_totales' => 0,
+          'total_pedido_mespasado' => 0,
+          'meta' => 0,
+          'total_pagado' => 0,
+          'progress_pagos' => 0,
+          'progress_pedidos' => 0,
+          'total_pedido' => 0,
+          'pedidos_dia' => 0,
+        ]
+      ;
+    }
+
     foreach ($asesores as $asesor) {
       if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN, User::ROL_PRESENTACION, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])) {
       } else {
@@ -526,7 +535,6 @@ class DashboardController extends Controller
       $date_pagos = Carbon::parse(now())->subMonth();
       $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
         ->where('pedidos.codigo', 'not like', "%-C%")->activo()->whereDate('pedidos.created_at', now())->where('pendiente_anulacion', '<>','1' )->count();
-
       $metatotal = (float)$asesor->meta_pedido;
       $metatotal_2 = (float)$asesor->meta_pedido_2;
       $metatotal_cobro = (float)$asesor->meta_cobro;
@@ -540,24 +548,45 @@ class DashboardController extends Controller
         ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>','1' )->pagados(), $date_pagos, 'created_at')
         ->count();
       $supervisor = User::where('rol', User::ROL_ASESOR)->where('identificador', $asesor->identificador)->activo()->first()->supervisor;
-
-      //TOTALES//
-      //PEDIDOS INDIVIDUALES
       $pedidos_totales = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
         ->where('pedidos.codigo', 'not like', "%-C%")->where('pendiente_anulacion', '<>','1' )->whereDate('pedidos.created_at', now())->count();
-
       $encargado_asesor = $asesor->supervisor;
 
       if (array_key_exists($encargado_asesor, $count_asesor)){
         if ($encargado_asesor == 46){
-          $count_asesor[$encargado_asesor] = $asesor_pedido_dia+$count_asesor[$encargado_asesor];
+          $count_asesor[$encargado_asesor]['pedidos_totales'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['pedidos_totales'];
+          $count_asesor[$encargado_asesor]['total_pagado'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pagado'];
+          $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pedido_mespasado'];
+          $count_asesor[$encargado_asesor]['meta'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['meta'];
+          $count_asesor[$encargado_asesor]['progress_pagos'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['progress_pagos'];
+          $count_asesor[$encargado_asesor]['progress_pedidos'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['progress_pedidos'];
+          $count_asesor[$encargado_asesor]['total_pedido'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pedido'];
+          $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['pedidos_dia'];
         }else if ($encargado_asesor == 24){
-          $count_asesor[$encargado_asesor] =$asesor_pedido_dia+$count_asesor[$encargado_asesor];
+          $count_asesor[$encargado_asesor]['pedidos_totales'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['pedidos_totales'];
+          $count_asesor[$encargado_asesor]['total_pagado'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pagado'];
+          $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pedido_mespasado'];
+          $count_asesor[$encargado_asesor]['meta'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['meta'];
+          $count_asesor[$encargado_asesor]['progress_pagos'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['progress_pagos'];
+          $count_asesor[$encargado_asesor]['progress_pedidos'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['progress_pedidos'];
+          $count_asesor[$encargado_asesor]['total_pedido'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pedido'];
+          $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['pedidos_dia'];
         }else{
-          $count_asesor[$encargado_asesor] = 0;
+          $count_asesor[$encargado_asesor]['pedidos_totales'] = 0;
+          $count_asesor[$encargado_asesor]['total_pagado'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pagado'];
+          $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pedido_mespasado'];
+          $count_asesor[$encargado_asesor]['meta'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['meta'];
+          $count_asesor[$encargado_asesor]['progress_pagos'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['progress_pagos'];
+          $count_asesor[$encargado_asesor]['progress_pedidos'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['progress_pedidos'];
+          $count_asesor[$encargado_asesor]['total_pedido'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['total_pedido'];
+          $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia+$count_asesor[$encargado_asesor]['pedidos_dia'];
         }
       }
 
+
+
+
+/*123456*/
       $item = [
         "identificador" => $asesor->identificador,
         "code" => "{$asesor->name}",
@@ -677,7 +706,8 @@ class DashboardController extends Controller
       $progressData->splice($skip,$take)->all();
       //$progressData=array_slice($progressData, 2);
       //return $progressData;
-    }else if($request->ii==2)
+    }
+    else if($request->ii==2)
     {
       if($total_asesor%2==0)
       {
@@ -691,7 +721,8 @@ class DashboardController extends Controller
       $progressData->splice($skip,$take)->all();
       //$progressData=array_slice($progressData, 3);
       //return $progressData;
-    }else if($request->ii==3){
+    }
+    else if($request->ii==3){
       $progressData->all();
     }
 
@@ -708,16 +739,16 @@ class DashboardController extends Controller
 
     if ($meta > 0) {
       $p_pedidos = round(($all / $meta) * 100, 2);
-    } else {
+    }
+    else {
       $p_pedidos = 0;
     }
-
     if ($pay > 0) {
       $p_pagos = round(($pay / $all_mespasado) * 100, 2);
-    } else {
+    }
+    else {
       $p_pagos = 0;
     }
-
 
     $object_totales = [
       "progress_pedidos" => $p_pedidos,
@@ -852,67 +883,69 @@ class DashboardController extends Controller
               </tbody>';
       $html .= '</table>';
     }
-    /*LUIS*/
-    if($request->ii==4)
+
+    /*LUISSSSSSSSSSSSSSSSSSSSSSSSSSSSS ----- 46   */
+    else if($request->ii==4)
     {
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
       $html .= '<tbody>
                     <tr class="responsive-table">
                         <th class="col-lg-4 col-md-12 col-sm-12">';
-      if($object_totales['progress_pagos']==0){
-        $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO LUIS: '.$count_asesor[46].' </span>';
+      if($count_asesor[46]['progress_pagos']==0){
+        $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO LUIS: '.$count_asesor[46]['pedidos_dia'].' </span>';
       }
       else {
-        $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO LUIS: '.$count_asesor[46].' </span>';
+        $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO LUIS: '.$count_asesor[46]['pedidos_dia'].' </span>';
       }
       $html .= '        </th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
       $html.='<div class="position-relative rounded">
                          <div class="progress rounded h-40 h-60-res">';
-      if($object_totales['progress_pagos']>=80)
+      if($count_asesor[46]['progress_pagos']>=80)
         $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
-                         style="width: '.$object_totales['progress_pagos'].'%;background: #03af03;"
-                         aria-valuenow="'.$object_totales['progress_pagos'].'"
+                         style="width: '. $count_asesor[46]['progress_pagos'].'%;background: #03af03;"
+                         aria-valuenow="'. $count_asesor[46]['progress_pagos'].'"
                          aria-valuemin="0" aria-valuemax="100"></div>';
-      else if($object_totales['progress_pagos']>70)
+      else if($count_asesor[46]['progress_pagos']>70)
         $html.='<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
                          style="height:40px; width: 70%"
                          aria-valuenow="70"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
                     <div class="progress-bar rounded h-60-res" role="progressbar"
-                         style="width: '.($object_totales['progress_pagos']-70).'%;
+                         style="width: '.($count_asesor[46]['progress_pagos']-70).'%;
                      background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                         aria-valuenow="'.($object_totales['progress_pagos']-70).'"
+                         aria-valuenow="'.( $count_asesor[46]['progress_pagos']-70).'"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
-      else if($object_totales['progress_pagos']>50)
+      else if($count_asesor[46]['progress_pagos']>50)
         $html.='<div class="progress-bar bg-warning" role="progressbar"
                        style="width: 70%"
                        aria-valuenow="70"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
-      else if($object_totales['progress_pagos']>40)
+      else if($count_asesor[46]['progress_pagos']>40)
         $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
                        style="width: 40%"
                        aria-valuenow="70"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>
                       <div class="progress-bar h-60-res" role="progressbar"
-                           style="width: '.($object_totales['progress_pagos']-40).'%;
+                           style="width: '.($count_asesor[46]['progress_pagos']-40).'%;
                        background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                           aria-valuenow="'.($object_totales['progress_pagos']-40).'"
+                           aria-valuenow="'.( $count_asesor[46]['progress_pagos']-40).'"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
       else
         $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
-                       style="width: '.($object_totales['progress_pagos']).'%"
-                       aria-valuenow="'.($object_totales['progress_pagos']).'"
+                       style="width: '.( $count_asesor[46]['progress_pagos']).'%"
+                       aria-valuenow="'.( $count_asesor[46]['progress_pagos']).'"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
       $html.='</div>
                       <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.  (($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'])*100)
+        .'% </b> - '. $count_asesor[46]['total_pagado'].'/'.$count_asesor[46]['total_pedido_mespasado'].'</span>
                       </div>
                     </div>';
 
@@ -921,57 +954,59 @@ class DashboardController extends Controller
       $html.='<div class="position-relative rounded">
                 <div class="progress rounded" style="height: 40px !important;">';
 
-      if($object_totales['progress_pedidos']>=80)
+      if($count_asesor[46]['progress_pedidos']>=80)
         $html.='<div class="progress-bar bg-success rounded" role="progressbar"
-                 style="height:40px; width: '.$object_totales['progress_pagos'].'%;background: #03af03;"
-                 aria-valuenow="'.$object_totales['progress_pagos'].'"
+                 style="height:40px; width: '.$count_asesor[46]['progress_pagos'].'%;background: #03af03;"
+                 aria-valuenow="'.$count_asesor[46]['progress_pagos'].'"
                  aria-valuemin="0" aria-valuemax="100"></div>';
-      else if($object_totales['progress_pedidos']>70)
+      else if($count_asesor[46]['progress_pedidos']>70)
         $html.='<div class="progress-bar bg-warning rounded" role="progressbar"
                  style="height:40px; width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
             <div class="progress-bar rounded" role="progressbar"
-                 style="height:40px !important; width: '.($object_totales['progress_pedidos']-70).'%;
+                 style="height:40px !important; width: '.($count_asesor[46]['progress_pedidos']-70).'%;
              background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                 aria-valuenow="'.($object_totales['progress_pedidos']-70).'"
+                 aria-valuenow="'.($count_asesor[46]['progress_pedidos']-70).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
-      else if($object_totales['progress_pedidos']>50)
+      else if($count_asesor[24]['progress_pedidos']>50)
         $html.='<div class="progress-bar bg-warning" role="progressbar"
                  style="height:40px;width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
-      else if($object_totales['progress_pedidos']>40)
+      else if($count_asesor[24]['progress_pedidos']>40)
         $html.='<div class="progress-bar bg-danger" role="progressbar"
                  style="width: 40%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
             <div class="progress-bar" role="progressbar"
-                 style="width: '.($object_totales['progress_pedidos']-40).'%;
+                 style="width: '.($count_asesor[46]['progress_pedidos']-40).'%;
              background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                 aria-valuenow="'.($object_totales['progress_pedidos']-40).'"
+                 aria-valuenow="'.($count_asesor[46]['progress_pedidos']-40).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
       else
         $html.='<div class="progress-bar bg-danger" role="progressbar"
-                 style="width: '.($object_totales['progress_pedidos']).'%"
-                 aria-valuenow="'.($object_totales['progress_pedidos']).'"
+                 style="width: '.($count_asesor[46]['progress_pedidos']).'%"
+                 aria-valuenow="'.($count_asesor[46]['progress_pedidos']).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
       $html.='</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res" style="top: 10px;font-size: 12px;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  '.Carbon::now()->monthName .' : '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  '.Carbon::now()->monthName .' : '.(( $count_asesor[46]['total_pedido']/$count_asesor[46]['meta'])*100).'%</b> - '.$count_asesor[46]['pedidos_totales'].'/'.$count_asesor[46]['meta'].'</span>
     </div>';
       $html.='</th>
               </tr>
               </tbody>';
       $html .= '</table>';
     }
-    /*PAOLA*/
+
+
+    /*PAOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----- 24*/
     else if($request->ii==5)
     {
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
@@ -979,59 +1014,60 @@ class DashboardController extends Controller
                     <tr class="responsive-table">
                         <th class="col-lg-4 col-md-12 col-sm-12">';
       if($object_totales['progress_pagos']==0){
-                $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLAAAAA: '.$count_asesor[24].' </span>';
+                $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLA: '.$count_asesor[24]['pedidos_dia'].' </span>';
       }
       else {
-                $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLAAAAA: '.$count_asesor[24].' </span>';
+                $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLA: '.$count_asesor[24]['pedidos_dia'].' </span>';
       }
       $html .= '        </th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
                  $html.='<div class="position-relative rounded">
                          <div class="progress rounded h-40 h-60-res">';
-      if($object_totales['progress_pagos']>=80)
+      if($count_asesor[24]['progress_pagos']>=80)
                 $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
-                         style="width: '.$object_totales['progress_pagos'].'%;background: #03af03;"
-                         aria-valuenow="'.$object_totales['progress_pagos'].'"
+                         style="width: '.$count_asesor[24]['progress_pagos'].'%;background: #03af03;"
+                         aria-valuenow="'.$count_asesor[24]['progress_pagos'].'"
                          aria-valuemin="0" aria-valuemax="100"></div>';
-      else if($object_totales['progress_pagos']>70)
+      else if($count_asesor[24]['progress_pagos']>70)
                 $html.='<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
                          style="height:40px; width: 70%"
                          aria-valuenow="70"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
                     <div class="progress-bar rounded h-60-res" role="progressbar"
-                         style="width: '.($object_totales['progress_pagos']-70).'%;
+                         style="width: '.($count_asesor[24]['progress_pagos']-70).'%;
                      background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                         aria-valuenow="'.($object_totales['progress_pagos']-70).'"
+                         aria-valuenow="'.($count_asesor[24]['progress_pagos']-70).'"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
-      else if($object_totales['progress_pagos']>50)
+      else if($count_asesor[24]['progress_pagos']>50)
               $html.='<div class="progress-bar bg-warning" role="progressbar"
                        style="width: 70%"
                        aria-valuenow="70"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
-      else if($object_totales['progress_pagos']>40)
+      else if($count_asesor[24]['progress_pagos']>40)
               $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
                        style="width: 40%"
                        aria-valuenow="70"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>
                       <div class="progress-bar h-60-res" role="progressbar"
-                           style="width: '.($object_totales['progress_pagos']-40).'%;
+                           style="width: '.($count_asesor[24]['progress_pagos']-40).'%;
                        background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                           aria-valuenow="'.($object_totales['progress_pagos']-40).'"
+                           aria-valuenow="'.($count_asesor[24]['progress_pagos']-40).'"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
       else
               $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
-                       style="width: '.($object_totales['progress_pagos']).'%"
-                       aria-valuenow="'.($object_totales['progress_pagos']).'"
+                       style="width: '.($count_asesor[24]['progress_pagos']).'%"
+                       aria-valuenow="'.($count_asesor[24]['progress_pagos']).'"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
               $html.='</div>
                       <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.(( $count_asesor[24]['total_pedido_mespasado']/$count_asesor[24]['total_pagado']
+                  )*100).'%</b> - '.$count_asesor[24]['total_pagado'].'/'.$count_asesor[24]['total_pedido_mespasado'].'</span>
                       </div>
                     </div>';
 
@@ -1040,50 +1076,50 @@ class DashboardController extends Controller
       $html.='<div class="position-relative rounded">
                 <div class="progress rounded" style="height: 40px !important;">';
 
-      if($object_totales['progress_pedidos']>=80)
+      if($count_asesor[24]['progress_pedidos']>=80)
         $html.='<div class="progress-bar bg-success rounded" role="progressbar"
-                 style="height:40px; width: '.$object_totales['progress_pagos'].'%;background: #03af03;"
-                 aria-valuenow="'.$object_totales['progress_pagos'].'"
+                 style="height:40px; width: '. $count_asesor[24]['progress_pagos'].'%;background: #03af03;"
+                 aria-valuenow="'. $count_asesor[24]['progress_pagos'].'"
                  aria-valuemin="0" aria-valuemax="100"></div>';
-      else if($object_totales['progress_pedidos']>70)
+      else if($count_asesor[24]['progress_pedidos']>70)
         $html.='<div class="progress-bar bg-warning rounded" role="progressbar"
                  style="height:40px; width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
             <div class="progress-bar rounded" role="progressbar"
-                 style="height:40px !important; width: '.($object_totales['progress_pedidos']-70).'%;
+                 style="height:40px !important; width: '.($count_asesor[24]['progress_pedidos']-70).'%;
              background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                 aria-valuenow="'.($object_totales['progress_pedidos']-70).'"
+                 aria-valuenow="'.($count_asesor[24]['progress_pedidos']-70).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
-      else if($object_totales['progress_pedidos']>50)
+      else if($count_asesor[24]['progress_pedidos']>50)
         $html.='<div class="progress-bar bg-warning" role="progressbar"
                  style="height:40px;width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
-      else if($object_totales['progress_pedidos']>40)
+      else if($count_asesor[24]['progress_pedidos']>40)
         $html.='<div class="progress-bar bg-danger" role="progressbar"
                  style="width: 40%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
             <div class="progress-bar" role="progressbar"
-                 style="width: '.($object_totales['progress_pedidos']-40).'%;
+                 style="width: '.($count_asesor[24]['progress_pedidos']-40).'%;
              background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                 aria-valuenow="'.($object_totales['progress_pedidos']-40).'"
+                 aria-valuenow="'.($count_asesor[24]['progress_pedidos']-40).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
       else
         $html.='<div class="progress-bar bg-danger" role="progressbar"
-                 style="width: '.($object_totales['progress_pedidos']).'%"
-                 aria-valuenow="'.($object_totales['progress_pedidos']).'"
+                 style="width: '.($count_asesor[24]['progress_pedidos']).'%"
+                 aria-valuenow="'.($count_asesor[24]['progress_pedidos']).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
       $html.='</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res" style="top: 10px;font-size: 12px;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  '.Carbon::now()->monthName .' : '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  '.Carbon::now()->monthName .' : '.(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100).'%</b> - '.$count_asesor[24]['total_pedido'].'/'.$count_asesor[24]['meta'].'</span>
     </div>';
       $html.='</th>
               </tr>
