@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Recojo')
+@section('title', 'RECOJO')
 
 @section('content_header')
   <h1 class="text-center">
@@ -39,6 +39,8 @@
             <th scope="col">Cliente</th>
             <th scope="col">Fecha de Salida</th>
             <th scope="col">Fecha de Entrega</th>
+            <th scope="col">Condicion</th>
+            <th scope="col">Acciones</th>
           </tr>
           </thead>
           <tbody>
@@ -47,6 +49,7 @@
       </div>
 
     </div>
+
 
   </div>
 
@@ -113,7 +116,7 @@
       }
 
       datatablerecojo = $('#tablaRecojo').DataTable({
-        dom: '<"top"i>rt<"bottom"lp><"clear">',
+        //dom: '<"top"i>rt<"bottom"lp><"clear">',
         lengthChange: false,
         processing: true,
         stateSave: false,
@@ -152,16 +155,6 @@
         },
         columns: [
           {
-            data: 'correlativo',
-            name: 'correlativo',
-          },
-          {
-            data: 'codigos',
-            name: 'codigos',
-          },
-          {data: 'distrito', name: 'distrito',},
-          {data: 'destino', name: 'destino',},
-          {
             data: 'celular',
             name: 'celular',
             render: function (data, type, row, meta) {
@@ -175,27 +168,6 @@
           {
             data: 'fecha_recepcion',
             name: 'fecha_recepcion',
-          },
-          {
-            data: 'producto',
-            name: 'producto',
-          },
-          {data: 'gmlink', name: 'gmlink',},
-          {
-            data: 'direccion',
-            name: 'direccion',
-            render: function (data, type, row, meta) {
-              if (data != null) {
-                return data;
-              } else {
-                return '<span class="badge badge-info">REGISTRE DIRECCION</span>';
-              }
-            },
-          },
-          {
-            data: 'referencia',
-            name: 'referencia',
-            sWidth: '10%'
           },
           {data: 'condicion_envio', name: 'condicion_envio',},
           {
