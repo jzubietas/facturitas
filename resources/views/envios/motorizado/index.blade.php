@@ -17,7 +17,7 @@
 
     @include('envios.motorizado.modal.entregado')
     @include('envios.motorizado.modal.entregar_recojo')
-    @include('envios.motorizado.modal.recojo_enviarope')
+    @include('envios.motorizado.modal.recojo_enviarcourier')
 
     <div class="card p-0">
 
@@ -1506,19 +1506,19 @@ Enviar</button>
             $("#pimagen3_recojo").val(null)
           })
 
-          $(document).on("submit", "#form_recojo_enviarope", function (evento) {
+          $(document).on("submit", "#form_recojo_enviarcourier", function (evento) {
             evento.preventDefault();
-            var drecojoenviarope = new FormData();
-            drecojoenviarope.append('input_recojoenviarope', $('#input_recojoenviarope').val());
+            var drecojoenviarcourier = new FormData();
+            drecojoenviarcourier.append('input_recojoenviarcourier', $('#input_recojoenviarcourier').val());
             $.ajax({
-              data: drecojoenviarope,
+              data: drecojoenviarcourier,
               processData: false,
               contentType: false,
               type: 'POST',
-              url: "{{ route('motorizado.recojoenviarope') }}",
+              url: "{{ route('motorizado.recojoenviarcourier') }}",
               success: function (data) {
-                $("#modal_recojoenviarope").modal("hide");
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                $("#modal_recojoenviarcourier").modal("hide");
+                $('#tablaEnmotorizado').DataTable().ajax.reload();
               }
             });
 

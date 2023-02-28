@@ -294,7 +294,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.direccion', [EnvioController::class, 'DireccionEnvio'])->name('envios.direccion');
     Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
 
-    Route::post('registrar_recojer_pedido', [SobreController::class, 'RegistrarRecojo'])->name('registrar_recojer_pedido');
+    Route::post('registrar_recojer_pedido', [RecojoController::class, 'RegistrarRecojo'])->name('registrar_recojer_pedido');
 
     Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');
     Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
@@ -729,9 +729,13 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmarmotorizadoconfirmdismiss', [EnvioController::class, 'confirmarEstadoConfirmConfirmDismiss'])->name('operaciones.confirmarmotorizadoconfirmdismiss');
     Route::post('operaciones.confirmarcliente', [EnvioController::class, 'confirmarEstadoConfirmValidada'])->name('operaciones.confirmarcliente');
 
-    Route::post('courier.confirmrecojo', [EnvioController::class, 'courierConfirmRecojo'])->name('courier.confirmrecojo');
 
-    Route::post('motorizado.recojoenviarope', [MotorizadoController::class, 'motorizadoRecojoenviarope'])->name('motorizado.recojoenviarope');
+    Route::post('motorizado.recojoenviarcourier', [MotorizadoController::class, 'motorizadoRecojoenviarcourier'])->name('motorizado.recojoenviarcourier');
+    Route::post('courier.confirmrecojo', [RecojoController::class, 'courierConfirmRecojo'])->name('courier.confirmrecojo');
+
+    Route::post('courier.recojoenviarope', [RecojoController::class, 'courierRecojoenviarope'])->name('courier.recojoenviarope');
+
+
 
     Route::get('direcciongrupo/{grupo}/no_contesto/get_sustentos_adjuntos', [DireccionGrupoController::class, 'get_sustentos_adjuntos'])->name('direcciongrupo.no-contesto.get-sustentos-adjuntos');
 

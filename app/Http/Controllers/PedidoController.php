@@ -354,7 +354,7 @@ class PedidoController extends Controller
                     if ($pedido->estado_correccion == "0") {
                         if (\Str::contains(\Str::lower($pedido->codigo), '-c')) {
                         } else {
-                            $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item"
+                            $btn[] = '<a href="#" data-backdrop="static" data-keyboard="fa1lse" class="btn-sm dropdown-item"
                             data-target="#modal-correccion-pedidos"
                             data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" >
                                 <i class="fa fa-check-circle text-warning"></i>

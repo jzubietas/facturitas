@@ -78,6 +78,8 @@ class MotorizadoController extends Controller
                             ,Pedido::RECOJO_MOTORIZADO_INT
                             ,Pedido::RECIBIDO_RECOJO_CLIENTE_INT
                             ,Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT
+                            ,Pedido::ENTREGADO_RECOJO_COURIER_INT
+                            ,Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT
                           ] );
                         //->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
             }
@@ -224,13 +226,13 @@ class MotorizadoController extends Controller
                               $btn.='</button>';
                             $btn.='</li>';
 
-                          }else if($pedido->condicion_envio_code==Pedido::RECIBIDO_RECOJO_CLIENTE_INT){
+                          }/*else if($pedido->condicion_envio_code==Pedido::RECIBIDO_RECOJO_CLIENTE_INT){
                             $btn.='<li class="pt-8">';
                             $btn.='<button class="btn btn-sm text-white btn-success" type="button" data-toggle="modal" data-target="#modal_recojomotorizado" data-direccion_grupo="' . $pedido->id . '">';
                             $btn.='ENTREGAR';
                             $btn.='</button>';
                             $btn.='</li>';
-                          }else if($pedido->condicion_envio_code==Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT){
+                          }*/else if($pedido->condicion_envio_code==Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT){
                             $btn.='<li class="pt-8">';
                             $btn.='<button class="btn btn-sm text-white btn-success" type="button" data-toggle="modal"
                                     data-target="#modal_recojoenviarope" data-direccion_grupo="' . $pedido->id . '">';
@@ -1202,18 +1204,20 @@ Ver Rotulo</a>')
 
   }
 
-  public function motorizadoRecojoenviarope(Request $request)
+  public function motorizadoRecojoenviarcourier(Request $request)
   {
-    $envio = DireccionGrupo::where("id", $request->input_recojoenviarope)->first();
+    $envio = DireccionGrupo::where("id", $request->input_recojoenviarcourier)->first();
 
-    DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT);
+    DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_RECOJO_COURIER_INT);
     PedidoMovimientoEstado::create([
-      'pedido' => $request->input_confirmrecojomotorizado,
-      'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+      'pedido' => $request->input_recojoenviarope,
+      'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_COURIER_INT,
       'fecha_salida'=>now(),
       'notificado' => 0
     ]);
 
     return response()->json(['html' => $envio->id]);
   }
+
+
 }
