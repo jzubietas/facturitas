@@ -768,13 +768,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['asesores'],
                 ],
-                [
+                /*[
                     'text' => 'Mis asesores',
                     'route' => 'users.misasesores',
                     'can' => 'users.misasesores',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['mis asesores'],
-                ],
+                ],*/
                 [
                     'text' => 'Jefes de operaciones',
                     'route' => 'users.jefes',

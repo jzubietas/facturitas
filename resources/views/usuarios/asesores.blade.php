@@ -25,11 +25,11 @@
             <table id="tablaPrincipal" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">CODIGO</th>
-                    <th scope="col">NOMBRES Y APELLIDOS</th>
-                    <th scope="col">CORREO</th>
-                    <th scope="col">IDENTIFICADOR</th>
+                    <th scope="col">COD</th>
                     <th scope="col">ENCARGADO</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">ASESOR</th>
+                    <th scope="col">CORREO</th>
                     <th scope="col">OPERARIO</th>
                     <th scope="col">LLAMADA</th>
                     <th scope="col">ESTADO</th>
@@ -107,7 +107,7 @@
                 var idunico = button.data('asesor')
                 $("#meta_pedido_1").val(0);
                 $("#meta_pedido_2").val(0);
-                $("#meta_cobro").val(0);
+                $("#meta_quincena").val(0);
 
                 $("#asesor").val(idunico);
                 if (idunico < 10) {
@@ -277,32 +277,21 @@
                     {
                         data: 'id',
                         name: 'id',
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                return 'USER000' + row.id;
-                            } else if (row.id < 100) {
-                                return 'USER00' + row.id;
-                            } else if (row.id < 1000) {
-                                return 'USER0' + row.id;
-                            } else {
-                                return 'USER' + row.id;
-                            }
-                        }
                     },
+                    {
+                      data: 'encargado',
+                      name: 'encargado',
+                      render: function (data, type, row, meta) {
+                        if (data == null) {
+                          return 'SIN ASIGNAR';
+                        } else {
+                          return data;
+                        }
+                      }
+                    },
+                    {data: 'identificador', name: 'identificador',},
                     {data: 'name', name: 'name',},
                     {data: 'email', name: 'email',},
-                    {data: 'identificador', name: 'identificador',},
-                    {
-                        data: 'encargado',
-                        name: 'encargado',
-                        render: function (data, type, row, meta) {
-                            if (data == null) {
-                                return 'SIN ASIGNAR';
-                            } else {
-                                return data;
-                            }
-                        }
-                    },
                     {
                         data: 'operario',
                         name: 'operario',
