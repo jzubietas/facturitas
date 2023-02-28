@@ -1130,7 +1130,62 @@ ${files.map(function (file) {
             });
 
             $(document).on("click", "#bt_add", function () {
+              let valida_sobre='No';
+              /*const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+              })
 
+              swalWithBootstrapButtons.fire({
+                title: 'Estas seguro (a)?',
+                text: "Estas creando un pedido sin sobre!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, estoy seguro (a)',
+                cancelButtonText: 'No, gracias!',
+                reverseButtons: true
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  swalWithBootstrapButtons.fire({
+                    title: 'Pero, Estás seguro (a)?',
+                    text: "Recuerda que estás creando un pedido sin sobre!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, estoy seguro (a)',
+                    cancelButtonText: 'No, gracias!',
+                    reverseButtons: true
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      swalWithBootstrapButtons.fire(
+                        'Confirmado',
+                        'Escogiste tu destino',
+                        'success'
+                      )
+
+                    } else if (
+                      result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                      swalWithBootstrapButtons.fire(
+                        'No',
+                        'Hiciste lo correcto',
+                        'success'
+                      )
+                    }
+                  })
+                } else if (
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire(
+                    'No',
+                    'Vuelve a seleccionar el comprobante',
+                    'success'
+                  )
+                }
+              })
+              return false;*/
                 if ($('#pcliente_id').val() == '') {
                     Swal.fire(
                         'Error',

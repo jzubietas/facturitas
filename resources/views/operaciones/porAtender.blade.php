@@ -606,6 +606,12 @@
                     $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
                   }
                 },
+                'columnDefs': [
+                  {
+                    "targets": [2,5], // posicion de la columna a agregar clase
+                    "className": "text-center", //clase a agregar
+                  }
+                ],
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
