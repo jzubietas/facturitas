@@ -93,9 +93,9 @@
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
-        <div class="d-flex flex-column justify-content-center align-items-center ml-5">
-          <label for="ingresar">Seleccione una fecha</label>
-          <input type="date" id="calendario" class="border-0 ml-3">
+        <div class="d-flex justify-content-center align-items-center ml-5">
+          <label class="p-0 m-0" for="ingresar">Fecha: </label>
+          <input type="date" id="calendario" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}">
         </div>
       </div>
 
@@ -334,7 +334,7 @@
         window.cargaNueva = function (entero) {
           console.log(' '+entero)
           var fd=new FormData();
-          fd.append('fecha',$('#calendario').val("{{\Carbon\Carbon::now()}}"));
+          fd.append('fecha',$('#calendario').val("{{\Carbon\Carbon::now()->format('Y-m-d')}}"));
           fd.append('ii',entero);
           $.ajax({
             data: fd,
@@ -385,7 +385,7 @@
 
         cargReporteAnalisis();
 
-        setInterval(myTimer, 500000);
+        setInterval(myTimer, 5000);
 
         function myTimer() {
           cargaNueva(1);
