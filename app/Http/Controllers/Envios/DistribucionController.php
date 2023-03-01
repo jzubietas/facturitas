@@ -276,12 +276,14 @@ class DistribucionController extends Controller
                 ])
                 ->activo()
                 ->get();
-            if ($grupo->zona != 'OLVA') {
+            if ($grupo->zona != 'OLVA')
+            {
                 $firstProduct = collect($pedidos)->first();
                 $cliente = $firstProduct->cliente;
                 $lista_codigos = $pedidos->pluck('codigo')->join(',');
                 $lista_productos = $pedidos->pluck('nombre_empresa')->join(',');;
-                if (!($grupo->cod_recojo == 1)) {
+                if (!($grupo->cod_recojo == 1))
+                {
                   $groupData = [
                     'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
                     'condicion_envio_at' => now(),
@@ -306,7 +308,9 @@ class DistribucionController extends Controller
                     'motorizado_id' => $request->motorizado_id,
                     'identificador' => $cliente->user->identificador,
                   ];
-                } else if($grupo->cod_recojo == 1){
+                }
+                else if($grupo->cod_recojo == 1)
+                {
                   $groupData = [
                     'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,//ENTREGADO JEFE CURRIER
                     'condicion_envio_at' => now(),
@@ -334,24 +338,28 @@ class DistribucionController extends Controller
                     'env_sustento_recojo' => $grupo->env_sustento_recojo,
                   ];
                 }
-                if ($request->get("visualizar") == '1') {
+
+                if ($request->get("visualizar") == '1')
+                {
                     $grupos[] = $groupData;
-                } else {
-                    $grupos[] = $this->createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
-                  if($grupo->cod_recojo == 1)
-                  {
-                    $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
-                    foreach ($pedidos as $pedidosFila){
-                      $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
-                      $pedidoUpdate->update([
-                        'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
-                        'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
-                      ]);
-                    }
-                  }
-                  $delete=GrupoPedido::where('id',$grupo->id)->delete();
                 }
-            } else {
+                else {
+                    $grupos[] = $this->createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
+                    if($grupo->cod_recojo == 1)
+                    {
+                      $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
+                      foreach ($pedidos as $pedidosFila){
+                        $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
+                        $pedidoUpdate->update([
+                          'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
+                          'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
+                        ]);
+                      }
+                    }
+                    $delete=GrupoPedido::where('id',$grupo->id)->delete();
+                }
+            }
+            else {
               //OLVA
                 $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request, $zona) {
                     $cliente = $pedido->cliente;
