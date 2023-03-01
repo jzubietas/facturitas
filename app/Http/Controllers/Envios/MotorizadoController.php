@@ -266,6 +266,7 @@ class MotorizadoController extends Controller
                     ,Pedido::RECIBIDO_RECOJO_CLIENTE_INT
                     ,Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT
                   ])
+                ->whereNotIn('direccion_grupos.condicion_envio_code',[ Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT])
                 ->where('direccion_grupos.estado', '1')
                 ->select([
                     'direccion_grupos.id',
