@@ -212,7 +212,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     //$this->info('SITUACION ANTES BASE FRIA');
                     $situacion_create->update([
                       "situacion" => 'NUEVO',
-                      "flag_fp" => '0'
+                      "flag_fp" => '1'
                     ]);
 
                     $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();//diciembre 2022
