@@ -1471,6 +1471,17 @@ Enviar</button>
             $(".foto3").attr("src", foto3);
           });
 
+          $('#modal_recojoenviarope').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            $("#input_recojoenviarope").val(button.data('direccion_grupo'));
+
+            let foto1 = button.data('imagen1');
+            let foto2 = button.data('imagen2');
+            let foto3 = button.data('imagen3');
+            $(".foto1").attr("src", foto1);
+            $(".foto2").attr("src", foto2);
+            $(".foto3").attr("src", foto3);
+          });
 
           $(document).on("change", "#pimagen1_recojo", function (event) {
             var file = event.target.files[0];
@@ -1531,6 +1542,27 @@ Enviar</button>
             });
 
           });
+
+
+          $(document).on("submit", "#form_recojo_enviarope", function (evento) {
+            evento.preventDefault();
+            var data = new FormData();
+            data.append('input_recojoenviarope', $('#input_recojoenviarope').val());
+
+            $.ajax({
+              data: data,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('courier.recojoenviarope') }}",
+              success: function (data) {
+                $("#modal_recojoenviarope").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+              }
+            });
+
+          });
+
         });
     </script>
 
