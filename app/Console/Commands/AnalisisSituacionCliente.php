@@ -80,10 +80,10 @@ class AnalisisSituacionCliente extends Command
         for($i=0;$i<$diff;$i++)
         {
           //->info("suma meses : ".$i." a ".$periodo_inicial);
-          $this->info('recorrido for es '.$i);
-          $this->info('inicia en '.Carbon::parse($fp->created_at)->format('Y-m'));
+          //$this->info('recorrido for es '.$i);
+          //$this->info('inicia en '.Carbon::parse($fp->created_at)->format('Y-m'));
           $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
-          $this->info('el hacer for cambia a '.$periodo_ejecucion->format('Y-m')  );
+          //$this->info('el hacer for cambia a '.$periodo_ejecucion->format('Y-m')  );
 
           $where_anio=$periodo_ejecucion->format('Y');
           $where_mes=$periodo_ejecucion->format('m');
@@ -106,7 +106,7 @@ class AnalisisSituacionCliente extends Command
             'flag_fp'=>'0'
           ]);
 
-          $this->info('periodo '.Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m'));
+          //$this->info('periodo '.Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m'));
 
           $compara=Carbon::parse($fp->created_at);
 
@@ -149,7 +149,8 @@ class AnalisisSituacionCliente extends Command
                   ]);
                   break;
 
-                case 'RECUPERADO ABANDONO': $this->warn('Situacion anterior recuperada');
+                case 'RECUPERADO ABANDONO':
+                  //$this->warn('Situacion anterior recuperada');
                   $situacion_create->update([
                     "situacion" => 'RECURRENTE',
                     "flag_fp" => '1'
@@ -201,7 +202,7 @@ class AnalisisSituacionCliente extends Command
             }
             else{
               //contador mes=1  y no es el primer periodo de primer pedido
-              $this->warn('periodo antes ');
+              //$this->warn('periodo antes ');
               $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
               switch($situacion_antes->situacion)
               {
@@ -462,13 +463,13 @@ class AnalisisSituacionCliente extends Command
 
             }
           }
-          $this->warn('i '.$i);
-          $this->warn('diff '.$diff);
+          //$this->warn('i '.$i);
+          //$this->warn('diff '.$diff);
 
           if($i==($diff-1))
           {
             $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-            $this->warn('actual '.$mes_actual->format('Y-m'));
+            //$this->warn('actual '.$mes_actual->format('Y-m'));
             //$this->warn('ultimo mes ');
             //update clientes
 
