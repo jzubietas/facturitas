@@ -19,7 +19,10 @@ class SettingsController extends Controller
             ->select([
                 'users.*',
                 'tpj.direccion_recojo',
-                'tpj.numero_recojo'
+                'tpj.numero_recojo',
+                'tpj.destino',
+                'tpj.referencia',
+
             ])->get();
 
         return view('settings.administration', compact('jefe_operaciones_courier',));
@@ -139,10 +142,12 @@ class SettingsController extends Controller
 
     public function agregardireccionjefeoperaciones(Request $request)
     {
-      return $request->all();
+      /*return $request->all();*/
         $distrito = "Los Olivos";
         $Distrito= $distrito;
 
+        $referencia_JO= $request->referencia_jfo;
+        $destino_JO= $request->destino_jfo;
 
         $direccion_JO = $request->direccion_jfo;
         $numero_JO = $request->numero_jfo;
@@ -150,14 +155,14 @@ class SettingsController extends Controller
         $rol_user = User::where( 'id', $id_user )->first()->rol;
 
         $validar= Directions::query()->where('user_id', $id_user)->where('rol', $rol_user)->count();
-        $data=array("rol"=> $rol_user , "user_id"=> $id_user, "distrito"=> $Distrito, "direccion_recojo"=>$direccion_JO,"numero_recojo"=>$numero_JO);
+        $data=array("rol"=> $rol_user , "user_id"=> $id_user, "distrito"=> $Distrito, "direccion_recojo"=>$direccion_JO,"numero_recojo"=>$numero_JO, "referencia"=>$referencia_JO, "destino"=>$destino_JO);
         if ($validar > 0){
             Directions::query()->where('user_id', $id_user)->where('rol', $rol_user)->update($data);
         }else{
             Directions::query()->insert($data);
         }
-        return $request->all();
-/*      return response()->json(['html' => $request->all()]);*/
+        /*return $request->all();*/
+      return response()->json(['html' => $data]);
 
     }
 

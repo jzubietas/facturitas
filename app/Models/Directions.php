@@ -12,12 +12,18 @@ class Directions extends Model
     use CommonModel;
     protected $guarded = ['id'];
 
-    protected $fillable = [
-        'user_id',
-        'rol',
-        'distrito',
-        'direccion_recojo',
-        'numero_recojo',
-    ];
+  protected $fillable = [
+    'id',
+    'user_id',
+    'rol',
+    'distrito',
+    'direccion_recojo',
+    'numero_recojo', //celular
+    'created_at',
+    'update_at',
+    //NUEVOS CAMPOS
+    'destino',
+    'referencia',
+  ];
 
 }
