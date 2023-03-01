@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DetallePedido;
 use App\Models\DireccionGrupo;
+use App\Models\Directions;
 use App\Models\Distrito;
 use App\Models\GrupoPedido;
 use App\Models\Pedido;
@@ -139,11 +140,41 @@ class RecojoController extends Controller
         //
     }
 
-  public function motorizadoConfirmRecojo(Request $request)
+  public function courierConfirmRecojo(Request $request)
   {
     $envio = DireccionGrupo::where("id", $request->input_confirmrecojomotorizado)->first();
 
     DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT);
+
+      $pedidos = $envio->pedidos()
+          ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
+          ->where('detalle_pedidos.estado', '1')
+          ->select([
+              'pedidos.*',
+              'detalle_pedidos.nombre_empresa'
+          ])
+          ->activo()
+          ->get();
+
+      $firstProduct = collect($pedidos)->first();
+      $asesor=Pedido::where('id',$firstProduct->id)->activo()->first();
+      $operario=User::where('rol',User::ROL_OPERARIO)->where('id',$asesor->user_id)->activo()->first();
+      $jefeope=User::where('rol',User::ROL_JEFE_OPERARIO)->where('id',$operario->id)->activo()->first()->id;
+
+      $direccion_nueva=Directions::where('rol',User::ROL_JEFE_OPERARIO)->where('user_id',$jefeope)->first();
+
+
+      foreach ($pedidos as $pedidosFila){
+          $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
+          $pedidoUpdate->update([
+              'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
+              'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
+          ]);
+
+    /*Cambiar la direccion de los pedidos
+
+     * */
+
     PedidoMovimientoEstado::create([
       'pedido' => $request->input_confirmrecojomotorizado,
       'condicion_envio_code' => Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT,

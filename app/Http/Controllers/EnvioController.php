@@ -3812,13 +3812,15 @@ class EnvioController extends Controller
             $usuario = User::where('id', Auth::user()->id)->first();
             $zona = $usuario->zona;
             $motorizadoid = $usuario->id;
-            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)->get();
+            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)
+              ->whereIn('condicion_envio_code', [Pedido::RECEPCION_MOTORIZADO_INT,Pedido::RECEPCION_RECOJO_MOTORIZADO_INT])->get();
             foreach ($direcciones as $grupo) {
                 DireccionGrupo::moverAMotorizadoOlva($grupo);
             }
-
         } else if ($rol == User::ROL_ADMIN) {
-            $direcciones = DireccionGrupo::where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)->get();
+            $direcciones = DireccionGrupo::whereIn('condicion_envio_code',
+              [Pedido::RECEPCION_MOTORIZADO_INT,Pedido::RECEPCION_RECOJO_MOTORIZADO_INT]
+            )->get();
             foreach ($direcciones as $grupo) {
                 DireccionGrupo::moverAMotorizadoOlva($grupo);
             }

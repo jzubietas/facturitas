@@ -305,7 +305,7 @@
               processData: false,
               contentType: false,
               type: 'POST',
-              url: "{{ route('motorizado.confirmrecojo') }}",
+              url: "{{ route('courier.confirmrecojo') }}",
               success: function (data) {
                 $("#modal_confirmrecojomotorizado").modal("hide");
                 $('#tablaPrincipal').DataTable().ajax.reload();

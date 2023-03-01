@@ -731,7 +731,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
 
     Route::post('motorizado.recojoenviarcourier', [MotorizadoController::class, 'motorizadoRecojoenviarcourier'])->name('motorizado.recojoenviarcourier');
-    Route::post('motorizado.confirmrecojo', [RecojoController::class, 'motorizadoConfirmRecojo'])->name('motorizado.confirmrecojo');
+    Route::post('courier.confirmrecojo', [RecojoController::class, 'courierConfirmRecojo'])->name('courier.confirmrecojo');
 
     Route::post('courier.recojoenviarope', [RecojoController::class, 'courierRecojoenviarope'])->name('courier.recojoenviarope');
 
