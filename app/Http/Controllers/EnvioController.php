@@ -1671,6 +1671,33 @@ class EnvioController extends Controller
         return response()->json(['html' => $pedido->id]);
     }
 
+  public function ConfirmarRecepcionRecojo(Request $request)
+  {
+
+    $pedido = Pedido::where("direccion_grupo", $request->hiddenIdGrupoPedido)->first();
+    $direccionpedido = DireccionGrupo::where("id", $request->hiddenIdGrupoPedido)->first();
+    $mensaje="";
+    if ($pedido->direccion_grupo) {
+      $pedido->update([
+        'estado_ruta' => "0",
+        'estado_sobre' => "0",
+        'direccion_grupo' => "0",
+        'condicion_envio' => Pedido::ATENDIDO_OPE,
+        'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
+      ]);
+      $direccionpedido->update([
+        'estado' => "0",
+        'condicion_envio' => Pedido::ATENDIDO_OPE,
+        'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
+      ]);
+      $mensaje="Recibido exitosamente";
+    }else{
+      $mensaje="No tiene grupo direccion, verificar";
+    }
+
+    return response()->json(['html' => $request->all(),'mensaje'=>$mensaje]);
+  }
+
     public function RecibirMotorizado(Request $request)
     {
         $accion = $request->hiddenAccion;

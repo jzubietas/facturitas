@@ -18,6 +18,7 @@
     @include('envios.motorizado.modal.entregado')
     @include('envios.motorizado.modal.entregar_recojo')
     @include('envios.motorizado.modal.recojo_enviarcourier')
+    @include('envios.motorizado.modal.recojo_enviarope')
 
     <div class="card p-0">
 
