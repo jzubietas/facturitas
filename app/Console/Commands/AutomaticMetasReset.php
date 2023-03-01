@@ -67,14 +67,14 @@ class AutomaticMetasReset extends Command
           if($meta_create_validar>0)
           {
             //
-            User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
+            /*User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
               [
                 'meta_pedido'=>0,
                 'meta_pedido_2'=>0,
                 'meta_cobro'=>0,
                 'meta_quincena'=>0
               ]
-            );
+            );*/
           }
           else{
             Meta::create(
