@@ -472,6 +472,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
             if($i==($diff-1))
             {
+              $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
               $this->warn('actual '.$mes_actual->format('Y-m'));
               //$this->warn('ultimo mes ');
               //update clientes
