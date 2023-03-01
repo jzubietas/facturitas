@@ -322,12 +322,6 @@ class MotorizadoController extends Controller
 
                     if($pedido->condicion_envio==Pedido::CONFIRMAR_RECOJO_MOTORIZADO)
                     {
-                      $btn.='<li class="pt-8">';
-                      $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal"
-                                        data-target="#modal_recojoenviarope" data-direccion_grupo="' . $pedido->id . '">';
-                      $btn.='ENVIAR A OPE';
-                      $btn.='</button>';
-                      $btn.='</li>';
                     }
                     else if($pedido->condicion_envio==Pedido::RECIBIDO_RECOJO_CLIENTE)
                     {
