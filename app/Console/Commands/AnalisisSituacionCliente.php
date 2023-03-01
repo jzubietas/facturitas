@@ -272,7 +272,7 @@ class AnalisisSituacionCliente extends Command
                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
 
-                  $this->info('SITUACION ANTES RECUPERADO RECIENTE');
+                  //$this->info('SITUACION ANTES RECUPERADO RECIENTE');
 
                   if($situacion_periodo->activos>0)
                   {
@@ -300,7 +300,7 @@ class AnalisisSituacionCliente extends Command
 
                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
-                  $this->info('SITUACION ANTES RECUPERADO ABANDONO');
+                  //$this->info('SITUACION ANTES RECUPERADO ABANDONO');
 
                   if($situacion_periodo->activos>0)
                   {
@@ -329,7 +329,7 @@ class AnalisisSituacionCliente extends Command
                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
 
-                  $this->info('SITUACION ANTES NUEVO');
+                  //$this->info('SITUACION ANTES NUEVO');
 
                   if($situacion_periodo->activos>0)
                   {
@@ -448,7 +448,7 @@ class AnalisisSituacionCliente extends Command
 
                   break;
                 default:
-                  $this->info('SITUACION ANTES DEFAULT');
+                  //$this->info('SITUACION ANTES DEFAULT');
                   break;
               }
 
