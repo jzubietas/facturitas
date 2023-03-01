@@ -77,7 +77,6 @@ class OlvaController extends Controller
         return view('envios.olva.index', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'distribuir'));
     }
 
-
     public function table()
     {
         $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
