@@ -501,28 +501,30 @@ class EnvioController extends Controller
                 }
                 return $pedido->referencia;
             })
-            ->addColumn('action', function ($grupo) {
+            ->addColumn('action', function ($pedido) {
                 $btn = '';
                 $btn .= '<ul class="list-unstyled pl-0">';
                 //if (auth()->user()->can('envios.enviar')):
 
                 $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="jqconfirm" data-ide="' . $grupo->id . '" data-entregar-confirm="' . $grupo->id . '" data-destino="' . $grupo->destino . '" data-fechaenvio="' . $grupo->fecha . '" data-codigos="' . $grupo->codigos . '"
-                                            data-distribucion="' . $grupo->distribucion . '" >
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="jqconfirm" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
+                                            data-distribucion="' . $pedido->distribucion . '" >
                                             <i class="fa fa-motorcycle text-success" aria-hidden="true"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
 
                 //endif;
 
-              if (!(\Str::contains($grupo->condicion_envio, "recojo"))) {
+              if (!(\Str::contains($pedido->condicion_envio, "RECOJO"))) {
                 $btn .= '<li>
-                            <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $grupo->id . '">
+                            <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $pedido->id . '">
 
                                             <i class="fa fa-undo text-danger" aria-hidden="true"></i> Retornar a sobres con dirección
                                 </a>
                             </li>';
               }
+
+
 
                 return $btn;
             })
