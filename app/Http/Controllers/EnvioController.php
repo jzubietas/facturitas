@@ -2982,7 +2982,7 @@ class EnvioController extends Controller
             $grupo = $pedido->direccion_grupo;
 
             if ($grupo == null) {
-                return response()->json(['html' => "Este pedido No esta preparado para reparto", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
+                return response()->json(['html' => "Este pedido No esta preparado para reparto ", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
             }
 
             /**************
