@@ -71,7 +71,7 @@ class AutomaticMetasReset extends Command
               [
                 'meta_pedido'=>0,
                 'meta_pedido_2'=>0,
-                'meta_pedido_cobro'=>0,
+                'meta_cobro'=>0,
                 'meta_quincena'=>0
               ]
             );
@@ -86,7 +86,7 @@ class AutomaticMetasReset extends Command
                 'mes'=>$where_mes,
                 'meta_pedido'=>0,
                 'meta_pedido_2'=>0,
-                'meta_pedido_cobro'=>0,
+                'meta_cobro'=>0,
                 'status'=>1,
                 'created_at'=>now(),
                 'meta_quincena'=>0
