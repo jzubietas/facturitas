@@ -514,7 +514,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.enviarid', [EnvioController::class, 'EnviarPedidoid'])->name('envios.enviarid');
 
     Route::post('motorizado.recojo', [MotorizadoController::class, 'MotorizadoRecojo'])->name('motorizado.recojo');
-
+    Route::post('envios.confirmar-recepcion-recojo', [EnvioController::class, 'ConfirmarRecepcionRecojo'])->name('envios.confirmar-recepcion-recojo');
 
 
     Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');

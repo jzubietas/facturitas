@@ -30,6 +30,7 @@
           <tbody>
           </tbody>
         </table>
+        @include('operaciones.modal.confirmarRecepcionRecojo')
       </div>
 
     </div>
@@ -182,6 +183,37 @@
         "fnDrawCallback": function () {
           //$('.count_motorizados_enmotorizado').html(this.fnSettings().fnRecordsDisplay());
         }
+      });
+
+      $('#modal-envio-recojo').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var grupopedido = button.data('grupopedido')
+        var codigos = button.data('codigos')
+
+        $(".textcode").html(codigos);
+        $("#hiddenIdGrupoPedido").val(grupopedido);
+      });
+
+      $(document).on("submit", "#modal-envio-recojo", function (evento) {
+        evento.preventDefault();
+
+        var data = new FormData();
+        data.append('hiddenIdGrupoPedido', $("#hiddenIdGrupoPedido").val());
+
+        $.ajax({
+          data: data,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          url: "{{ route('envios.confirmar-recepcion-recojo') }}",
+          success: function (data) {
+            console.log(data);
+            $("#modal-envio-recojo .textcode").text('');
+            $("#modal-envio-recojo").modal("hide");
+            Swal.fire(data.mensaje, '', 'success')
+            $('#tablaRecojo').DataTable().ajax.reload();
+          }
+        });
       });
 
       datatablerecojo.on('responsive-display', function (e, datatable, row, showHide, update) {

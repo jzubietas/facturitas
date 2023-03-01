@@ -16,7 +16,7 @@ class RecojoController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
   public function index(Request $request)
   {
@@ -61,11 +61,9 @@ class RecojoController extends Controller
                     color: black !important;">Con ruta</span><span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
         })
         ->addColumn('action', function ($pedido)  {
-
-          $btn = '<ul class="list-unstyled mt-sm-20">';
-          $btn = '</ul>';
-
-          return $btn;
+          $btn = [];
+          $btn []='<button type="button" class="btn btn-warning btn-sm" data-target="#modal-envio-recojo" data-toggle="modal" data-grupopedido="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><i class="fas fa-check-circle"></i> Recibir</a>';
+          return join('', $btn);
         })
         ->rawColumns(['action', 'condicion_envio'])
         ->toJson();
