@@ -85,7 +85,10 @@ class AnalisisSituacionCliente_Individual extends Command
           for($i=0;$i<$diff;$i++)
           {
             //->info("suma meses : ".$i." a ".$periodo_inicial);
+            $this->info('recorrido for es '.$i);
+            $this->info('inicia en '.Carbon::parse($fp->created_at)->format('Y-m'));
             $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
+            $this->info('el hacer for cambia a '.$periodo_ejecucion->format('Y-m')  );
 
             //$this->warn("periodo ejecucion: ".$periodo_ejecucion);
 
