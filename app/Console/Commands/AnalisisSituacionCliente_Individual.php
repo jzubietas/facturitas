@@ -334,7 +334,9 @@ class AnalisisSituacionCliente_Individual extends Command
                     $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
 
-                    //$this->info('SITUACION ANTES NUEVO');
+                    $this->info('SITUACION ANTES NUEVO');
+                    $this->info('situacion_antes flag_fp => '.$situacion_antes->flag_fp);
+                    $this->info('situacion_periodo activos => '.$situacion_periodo->activos);
                     if($situacion_antes->flag_fp==1)
                     {
                       if($situacion_periodo->activos>0)
