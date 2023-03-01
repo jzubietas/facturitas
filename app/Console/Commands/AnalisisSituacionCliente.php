@@ -462,10 +462,13 @@ class AnalisisSituacionCliente extends Command
 
             }
           }
-          //$this->warn('i '.$i);
-          //$this->warn('diff '.$diff);
+          $this->warn('i '.$i);
+          $this->warn('diff '.$diff);
+
           if($i==($diff-1))
           {
+            $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+            $this->warn('actual '.$mes_actual->format('Y-m'));
             //$this->warn('ultimo mes ');
             //update clientes
 
