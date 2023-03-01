@@ -49,7 +49,7 @@ class AnalisisSituacionCliente extends Command
     $periodo_actual=Carbon::parse(now());//->format('Y_m');
 
     $primer_periodo=Carbon::parse($fp->created_at);
-    $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
+    $diff = ($periodo_original->diffInMonths($periodo_actual))+2;
     //$this->info("Diferencia de meses ".$diff);
 
     $where_anio='';
@@ -87,7 +87,7 @@ class AnalisisSituacionCliente extends Command
           $where_anio=$periodo_ejecucion->format('Y');
           $where_mes=$periodo_ejecucion->format('m');
 
-          //$this->info("where  ".$where_anio.' '.$where_mes);
+          //$this->info("where  ".$where_anio.' '.$where_mes);|
 
           //contadores
           $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
@@ -108,9 +108,12 @@ class AnalisisSituacionCliente extends Command
           ]);
 
           $compara=Carbon::parse($fp->created_at);
+
           $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+          $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
           if($cont_mes==0)
           {
+            //primer periodo del sistema
             if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
             {
               //primer mes y contador 0
@@ -120,11 +123,14 @@ class AnalisisSituacionCliente extends Command
                 "flag_fp" => '0'
               ]);
             }
-            else
-            {
-              //$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+            else{
+              $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
               $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-              //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
+              $this->warn($situacion_antes);
+
+              $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+              $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+              $this->info($situacion_periodo);
 
               switch($situacion_antes->situacion)
               {
@@ -134,14 +140,28 @@ class AnalisisSituacionCliente extends Command
                     "flag_fp" => '0'
                   ]);
                   break;
-                case 'RECUPERADO ABANDONO':
+
                 case 'RECUPERADO RECIENTE':
+                  $situacion_create->update([
+                    "situacion" => 'RECURRENTE',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
+
+                case 'RECUPERADO ABANDONO': $this->warn('Situacion anterior recuperada');
+                  $situacion_create->update([
+                    "situacion" => 'RECURRENTE',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
+
                 case 'NUEVO':
                   $situacion_create->update([
                     "situacion" => 'RECURRENTE',
                     "flag_fp" => '1'
                   ]);
                   break;
+
                 case 'ABANDONO RECIENTE':
                 case 'ABANDONO':
                   $situacion_create->update([
@@ -168,6 +188,7 @@ class AnalisisSituacionCliente extends Command
             }
           }
           else{
+            //contador mes > 0    1
             if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
             {
               //primer mes y contador >0
@@ -178,53 +199,165 @@ class AnalisisSituacionCliente extends Command
               ]);
             }
             else{
-              //$this->warn('Mes antes '.$mes_antes->format('Y-m'));
-              $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-              //$this->warn('Situacion en '.$mes_antes->format('Y-m').' fue '.$situacion_antes);
-
+              //contador mes=1  y no es el primer periodo de primer pedido
               switch($situacion_antes->situacion)
               {
                 case 'BASE FRIA':
+                  $this->info('SITUACION ANTES BASE FRIA');
                   $situacion_create->update([
                     "situacion" => 'NUEVO',
                     "flag_fp" => '0'
                   ]);
+
+                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();//diciembre 2022
+                  $this->info($mes_actual);//2022-12
+
+                  $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                  $this->info($situacion_periodo);
+
+                  //pintar contador  anulados y activos
+                  $this->info('contador total '.$situacion_periodo->cantidad_pedidos);
+                  $this->info('contador anulados '.$situacion_periodo->anulados);
+                  $this->info('contador activos '.$situacion_periodo->activos);
+
+
+                  //
+
+                  $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                  $this->warn($situacion_antes);
+
+                  if($situacion_antes->flag_fp==0)
+                  {
+                    //flag antes 0  pasa a cliente  test
+                    if($situacion_periodo->activos>0)
+                    {
+                      //actual activos >0
+                      $situacion_create->update([
+                        "situacion" => 'NUEVO',
+                        "flag_fp" => '1'
+                      ]);
+                    }else{
+                      //actual activos 0
+                      $situacion_create->update([
+                        "situacion" => 'NUEVO',
+                        "flag_fp" => '0'
+                      ]);
+                    }
+
+                  }
+                  else if($situacion_antes->flag_fp==1)
+                  {
+                    //aca ya no es base fria
+                    /*if($situacion_periodo->activos>0)
+                    {
+
+                    }
+                    else{
+
+                    }*/
+                    /*$situacion_create->update([
+                      "situacion" => 'ABANDONO',
+                      "flag_fp" => '1'
+                    ]);*/
+                  }
                   break;
                 case 'RECUPERADO RECIENTE':
+                  $this->info('SITUACION ANTES RECUPERADO RECIENTE');
+                  $situacion_create->update([
+                    "situacion" => 'RECURRENTE',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
                 case 'RECUPERADO ABANDONO':
+                  $this->info('SITUACION ANTES RECUPERADO ABANDONO');
+                  $situacion_create->update([
+                    "situacion" => 'RECURRENTE',
+                    "flag_fp" => '1'
+                  ]);
+                  break;
                 case 'NUEVO':
+                  $this->info('SITUACION ANTES NUEVO');
                   $situacion_create->update([
                     "situacion" => 'RECURRENTE',
                     "flag_fp" => '1'
                   ]);
                   break;
                 case 'ABANDONO':
+                  $this->info('SITUACION ANTES NUEVO');
                   $situacion_create->update([
                     "situacion" => 'RECUPERADO ABANDONO',
                     "flag_fp" => '1'
                   ]);
                   break;
                 case 'ABANDONO RECIENTE':
+                  $this->info('SITUACION ANTES ABANDONO RECIENTE');
                   $situacion_create->update([
                     "situacion" => 'RECUPERADO ABANDONO',
                     "flag_fp" => '1'
                   ]);
+
+                  $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                  $this->warn($situacion_antes);
+
+                  $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                  $this->info($situacion_periodo);
+
+                  //pintar contador  anulados y activos
+                  $this->info('contador total '.$situacion_periodo->cantidad_pedidos);
+                  $this->info('contador anulados '.$situacion_periodo->anulados);
+                  $this->info('contador activos '.$situacion_periodo->activos);
+
+                  if ($situacion_periodo->cantidad_pedidos > 0 && $situacion_periodo->activos == 0 ) {
+                    $situacion_antes_recuperado_abandono=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                    if ($situacion_antes_recuperado_abandono->situacion == 'ABANDONO RECIENTE' && $situacion_antes_recuperado_abandono->activos == 0){
+                      $situacion_create->update([
+                        "situacion" => 'ABANDONO',
+                      ]);
+                    }
+                  }
                   break;
                 case 'RECURRENTE':
+                  $this->info('SITUACION ANTES RECURRENTE');
+
+                  $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                  $this->warn($situacion_antes);
+
+                  $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                  $this->info($situacion_periodo);
+
+                  //pintar contador  anulados y activos
+                  $this->info('contador total '.$situacion_periodo->cantidad_pedidos);
+                  $this->info('contador anulados '.$situacion_periodo->anulados);
+                  $this->info('contador activos '.$situacion_periodo->activos);
+
                   if($situacion_antes->activos==0)
                   {
-                    $situacion_create->update([
-                      "situacion" => 'RECUPERADO RECIENTE',
-                      "flag_fp" => '1'
-                    ]);
+                    if ($situacion_periodo->cantidad_pedidos > 0 && $situacion_periodo->activos == 0 ) {
+                      $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                      if ($situacion_antes->situacion == 'RECURRENTE' && $situacion_antes->activos == 0){
+                        $situacion_create->update([
+                          "situacion" => 'ABANDONO RECIENTE',
+                        ]);
+                      }
+                    }
+
                   }else{
+                    $this->warn('aquiiiiii: '.$situacion_antes->activos);
                     $situacion_create->update([
                       "situacion" => 'RECURRENTE',
                       "flag_fp" => '1'
                     ]);
                   }
                   break;
-                default:break;
+                default:
+                  $this->info('SITUACION ANTES DEFAULT');
+                  break;
               }
 
             }
@@ -235,7 +368,7 @@ class AnalisisSituacionCliente extends Command
           {
             //$this->warn('ultimo mes ');
             //update clientes
-            $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+
             $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
             //$this->warn($situacion_actual->situacion);
             Cliente::where('id',$cliente->id)->update([
@@ -252,6 +385,8 @@ class AnalisisSituacionCliente extends Command
 
       $progress->advance();
     }
+
+
     $this->info("Finish Cargando ");
     $progress->finish();
     $this->info('FIN');

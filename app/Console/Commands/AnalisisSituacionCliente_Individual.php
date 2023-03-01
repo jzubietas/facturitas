@@ -50,7 +50,7 @@ class AnalisisSituacionCliente_Individual extends Command
       $periodo_actual=Carbon::parse(now());//->format('Y_m');
 
       $primer_periodo=Carbon::parse($fp->created_at);
-      $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
+      $diff = ($periodo_original->diffInMonths($periodo_actual))+2;
       //$this->info("Diferencia de meses ".$diff);
 
       $where_anio='';
@@ -63,6 +63,9 @@ class AnalisisSituacionCliente_Individual extends Command
       //->where('id',1739) //->where('id',45)
       $progress = $this->output->createProgressBar($clientes->count());
       //$periodo_original=$primer_periodo;
+
+      //$this->info($diff);
+      //return 0;
 
       foreach($clientes as $cliente)
       {
@@ -101,7 +104,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
             $situacion_create=SituacionClientes::create([
               'cliente_id'=>$cliente->id,
-              'situacion'=>'5',
+              'situacion'=>'',
               'cantidad_pedidos'=>$cont_mes,
               'anulados'=>$cont_mes_anulado,
               'activos'=>$cont_mes_activo,
@@ -190,6 +193,7 @@ class AnalisisSituacionCliente_Individual extends Command
               }
             }
             else{
+              //contador mes > 0    1
               if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
               {
                 //primer mes y contador >0
@@ -200,6 +204,7 @@ class AnalisisSituacionCliente_Individual extends Command
                 ]);
               }
               else{
+                //contador mes=1  y no es el primer periodo de primer pedido
                 switch($situacion_antes->situacion)
                 {
                   case 'BASE FRIA':
@@ -209,8 +214,8 @@ class AnalisisSituacionCliente_Individual extends Command
                       "flag_fp" => '0'
                     ]);
 
-                    $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                    $this->info($mes_actual);
+                    $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();//diciembre 2022
+                    $this->info($mes_actual);//2022-12
 
                     $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
                     $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
@@ -230,21 +235,38 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     if($situacion_antes->flag_fp==0)
                     {
-                      $situacion_create->update([
-                        "situacion" => 'RECUPERADO ABANDONO',
-                        "flag_fp" => '1'
-                      ]);
+                      //flag antes 0  pasa a cliente  test
+                      if($situacion_periodo->activos>0)
+                      {
+                        //actual activos >0
+                        $situacion_create->update([
+                          "situacion" => 'NUEVO',
+                          "flag_fp" => '1'
+                        ]);
+                      }else{
+                        //actual activos 0
+                        $situacion_create->update([
+                          "situacion" => 'NUEVO',
+                          "flag_fp" => '0'
+                        ]);
+                      }
+
                     }
                     else if($situacion_antes->flag_fp==1)
                     {
-                      $situacion_create->update([
+                      //aca ya no es base fria
+                      /*if($situacion_periodo->activos>0)
+                      {
+
+                      }
+                      else{
+
+                      }*/
+                      /*$situacion_create->update([
                         "situacion" => 'ABANDONO',
                         "flag_fp" => '1'
-                      ]);
+                      ]);*/
                     }
-
-
-
                     break;
                   case 'RECUPERADO RECIENTE':
                     $this->info('SITUACION ANTES RECUPERADO RECIENTE');
