@@ -267,6 +267,8 @@ class RecojoController extends Controller
         'referencia' => $referencia_recojo,
         'cliente_recibe' => $Nombre_recibe,
         'telefono' => $celular_id,
+         'cod_recojo'=>'1',
+         'env_sustento_recojo'=>$sustento_recojo
       ]);
       $grupoPedido->pedidos()->syncWithoutDetaching($attach_pedidos_data);
     }
