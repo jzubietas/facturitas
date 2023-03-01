@@ -208,7 +208,8 @@ class NotificationsController extends Controller
 
     public function index()
     {
-        $postNotifications = auth()->user()->unreadNotifications;
+        //$postNotifications = auth()->user()->unreadNotifications;
+        $postNotifications=[];
         $devoluciones = [];
         if (\Auth::check()) {
             if (\Auth::user()->rol == User::ROL_ADMIN) {
