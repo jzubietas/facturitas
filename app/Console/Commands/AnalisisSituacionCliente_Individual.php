@@ -117,7 +117,7 @@ class AnalisisSituacionCliente_Individual extends Command
             $compara=Carbon::parse($fp->created_at);
 
             $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
-            $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+
             if($cont_mes==0)
             {
               //primer periodo del sistema
@@ -136,7 +136,7 @@ class AnalisisSituacionCliente_Individual extends Command
                 //$this->warn($situacion_antes);
 
                 //$this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
-                $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                //$situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                 //$this->info($situacion_periodo);
 
                 switch($situacion_antes->situacion)
@@ -331,6 +331,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     break;
                   case 'NUEVO':
                     $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                    $this->info('mes actual '.$mes_actual->format('Y-m'));
                     $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 
                     $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
