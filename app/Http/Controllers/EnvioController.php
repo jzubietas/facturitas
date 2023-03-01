@@ -514,13 +514,15 @@ class EnvioController extends Controller
                                     </li>';
 
                 //endif;
+
+              if (!(\Str::contains($grupo->condicion_envio, "recojo"))) {
                 $btn .= '<li>
                             <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $grupo->id . '">
 
                                             <i class="fa fa-undo text-danger" aria-hidden="true"></i> Retornar a sobres con dirección
                                 </a>
                             </li>';
-                $btn .= '</ul>';
+              }
 
                 return $btn;
             })
