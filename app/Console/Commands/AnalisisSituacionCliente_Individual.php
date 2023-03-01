@@ -101,7 +101,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
             $situacion_create=SituacionClientes::create([
               'cliente_id'=>$cliente->id,
-              'situacion'=>'5',
+              'situacion'=>'',
               'cantidad_pedidos'=>$cont_mes,
               'anulados'=>$cont_mes_anulado,
               'activos'=>$cont_mes_activo,
