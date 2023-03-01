@@ -80,7 +80,7 @@
                           <i class="fa fa-phone text-red" aria-hidden="true"></i>
                           {!! Form::label('celular', 'Telefono del contacto quien recibe') !!}
                           <span class="badge badge-pill badge-secondary">9 digitos</span>
-                          {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular_recojo', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
+                          {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular_recojo', 'min' =>'100000000', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
                         </div>
 
                       </div>
