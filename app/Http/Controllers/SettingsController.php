@@ -141,10 +141,15 @@ class SettingsController extends Controller
     {
         $distrito = "Los Olivos";
         $Distrito= $distrito;
+        $destino = "Lima";
+        $referencia = "";
+        $cliente = "";
+
         $direccion_JO = $request->direccion_jfo;
         $numero_JO = $request->numero_jfo;
         $id_user = $request->user_id;
         $rol_user = User::where( 'id', $id_user )->first()->rol;
+
         $validar= Directions::query()->where('user_id', $id_user)->where('rol', $rol_user)->count();
         $data=array("rol"=> $rol_user , "user_id"=> $id_user, "distrito"=> $Distrito, "direccion_recojo"=>$direccion_JO,"numero_recojo"=>$numero_JO);
         if ($validar > 0){

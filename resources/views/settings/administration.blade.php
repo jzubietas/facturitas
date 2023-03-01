@@ -50,12 +50,25 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
+
                                     <label for="formGroupExampleInput">Distrito</label>
-                                    <input type="text" class="form-control" id="ingreso_distrito_{{$jefe_op->id}}" placeholder="Lo Olivos" disabled>
+                                    <input type="text" class="form-control" id="ingreso_distrito_{{$jefe_op->id}}" name="{{$jefe_op->distrito}}" value="{{$jefe_op->distrito}}" placeholder="Los Olivos" disabled>
+
                                     <label class="mt-2" for="formGroupExampleInput" >Ingresar direccion</label>
                                     <input type="text" value="{{$jefe_op->direccion_recojo}}" name="direccion_jfo" class="form-control" id="ingreso_adminD_{{$jefe_op->id}}" placeholder="Dirección" autocomplete="off">
-                                    <label class="mt-2" for="formGroupExampleInput">Ingresar numero de celular</label>
-                                    <input type="text" value="{{$jefe_op->numero_recojo}}"   name="numero_jfo" class="form-control" id="ingreso_telefonoA{{$jefe_op->id}}" autocomplete="off" placeholder="Celular">
+
+                                    <label class="mt-2" for="formGroupExampleInput">Celular</label>
+                                    <input type="text" value="{{$jefe_op->numero_recojo}}" name="{{$jefe_op->numero_recojo}}" class="form-control" id="ingreso_telefonoA{{$jefe_op->id}}" autocomplete="off" placeholder="Celular">
+
+                                    <label class="mt-2" for="formGroupExampleInput">Destino</label>
+                                    <input type="text" value="Lima" name="destino" class="form-control" id="destino" autocomplete="off" placeholder="Destino" disabled>
+
+                                    <label class="mt-2" for="formGroupExampleInput">Referencia</label>
+                                    <input type="text" value="" name="referencia" class="form-control" id="referencia" autocomplete="off" placeholder="Referencia">
+
+                                    <label class="mt-2" for="formGroupExampleInput">Cliente</label>
+                                    <input type="text" value="" name="cliente" class="form-control" id="cliente" autocomplete="off" placeholder="Cliente">
+
                                 </div>
                             </div>
                             <button type="submit" id="btn_AgregarD{{$jefe_op->id}}" class="btn btn-primary">
@@ -378,6 +391,9 @@
             var formData = new FormData(form);
             let direccion_Joperaciones = $("#ingreso_adminD_{{$jefe_op->id}}").val();
             let numero_Joperaciones= $("#ingreso_telefonoA{{$jefe_op->id}}").val();
+            let destino = $(#destino).val('destino');
+            let referencia = $(#referencia).val('rellenar');
+            let distrito = $(#cliente).val('distrito');
 
             //validaciones
             if (direccion_Joperaciones == "") {
@@ -390,10 +406,13 @@
 
             formData.append('direccion_jfo', direccion_Joperaciones);
             formData.append('sustento_jfo', numero_Joperaciones);
-            formData.append('user_id', {{$jefe_op->id}})
+            formData.append('user_id', {{$jefe_op->id}});
+            formData.append('destino');
+            formData.append('referencia');
+            formData.append('cliente');
 
             $.ajax({
-                type: 'POST',
+                // type: 'POST',
                 url: "{{ route('agregardireccionjefeoperaciones.post') }}",
                 data: formData,
                 processData: false,
