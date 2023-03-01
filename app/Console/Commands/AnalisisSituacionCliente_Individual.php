@@ -112,6 +112,8 @@ class AnalisisSituacionCliente_Individual extends Command
               'flag_fp'=>'0'
             ]);
 
+            $this->info('periodo '.Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m'));
+
             $compara=Carbon::parse($fp->created_at);
 
             $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
