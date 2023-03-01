@@ -170,6 +170,7 @@ class RecojoController extends Controller
               'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
               'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
           ]);
+      }
 
     /*Cambiar la direccion de los pedidos
 
