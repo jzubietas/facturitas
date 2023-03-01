@@ -157,9 +157,9 @@ class RecojoController extends Controller
           ->get();
 
       $firstProduct = collect($pedidos)->first();
-      $asesor=Pedido::where('id',$firstProduct->id)->activo()->first();
-      $operario=User::where('rol',User::ROL_OPERARIO)->where('id',$asesor->user_id)->activo()->first();
-      $jefeope=User::where('rol',User::ROL_JEFE_OPERARIO)->where('id',$operario->id)->activo()->first()->id;
+      $asesor=Pedido::where('id',$firstProduct->id)->first();
+      $operario=User::where('rol',User::ROL_OPERARIO)->where('id',$asesor->user_id)->first();
+      $jefeope=User::where('rol',User::ROL_JEFE_OPERARIO)->where('id',$operario->id)->first()->id;
 
       $direccion_nueva=Directions::where('rol',User::ROL_JEFE_OPERARIO)->where('user_id',$jefeope)->first();
 
@@ -174,8 +174,8 @@ class RecojoController extends Controller
               'distrito'=>$direccion_nueva->distrito,
               'env_destino'=>$direccion_nueva->destino,
               'env_referencia'=>$direccion_nueva->referencia,
-              'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
-              'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
+              'condicion_envio' => Pedido::CONFIRMAR_RECOJO_MOTORIZADO,
+              'condicion_envio_code' => Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT,
           ]);
       }
 

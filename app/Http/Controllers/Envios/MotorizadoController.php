@@ -231,12 +231,7 @@ class MotorizadoController extends Controller
                           }else if($pedido->condicion_envio_code==Pedido::RECIBIDO_RECOJO_CLIENTE_INT){
 
                           }elseif($pedido->condicion_envio==Pedido::CONFIRMAR_RECOJO_MOTORIZADO){
-                            $btn.='<li class="pt-8">';
-                            $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal"
-                                        data-target="#modal_recojoenviarope" data-direccion_grupo="' . $pedido->id . '">';
-                            $btn.='ENVIAR A OPE';
-                            $btn.='</button>';
-                            $btn.='</li>';
+
                           }
 
                           break;
@@ -325,7 +320,16 @@ class MotorizadoController extends Controller
                 ->addColumn('action', function ($pedido) {
                     $btn = '<ul class="list-unstyled pl-0">';
 
-                    if($pedido->condicion_envio==Pedido::RECIBIDO_RECOJO_CLIENTE)
+                    if($pedido->condicion_envio==Pedido::CONFIRMAR_RECOJO_MOTORIZADO)
+                    {
+                      $btn.='<li class="pt-8">';
+                      $btn.='<button class="btn btn-sm text-white btn-info" type="button" data-toggle="modal"
+                                        data-target="#modal_recojoenviarope" data-direccion_grupo="' . $pedido->id . '">';
+                      $btn.='ENVIAR A OPE';
+                      $btn.='</button>';
+                      $btn.='</li>';
+                    }
+                    else if($pedido->condicion_envio==Pedido::RECIBIDO_RECOJO_CLIENTE)
                     {
                       $btn.='<li class="pt-8">';
                       $btn.='<button class="btn btn-xs text-white btn-success" type="button" data-toggle="modal"
