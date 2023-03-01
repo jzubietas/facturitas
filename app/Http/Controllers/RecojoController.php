@@ -167,6 +167,13 @@ class RecojoController extends Controller
       foreach ($pedidos as $pedidosFila){
           $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
           $pedidoUpdate->update([
+              'env_direccion'=>$direccion_nueva->direccion_recojo,
+              'env_celular_cliente_recibe'=>$direccion_nueva->numero_recojo,
+              'env_nombre_cliente_recibe'=>$direccion_nueva->cliente,
+              'env_distrito'=>$direccion_nueva->distrito,
+              'distrito'=>$direccion_nueva->distrito,
+              'env_destino'=>$direccion_nueva->destino,
+              'env_referencia'=>$direccion_nueva->referencia,
               'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,
               'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
           ]);
