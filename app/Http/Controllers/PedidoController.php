@@ -62,7 +62,16 @@ class PedidoController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor', 'mirol', 'miidentificador'));
+        $distritos = Distrito::whereIn('provincia', ['LIMA'])
+          ->where('estado', '1')
+          //->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+          ->select([
+            'distrito',
+            DB::raw("concat(distrito,' - ',zona) as distritonam"),
+            'zona'
+          ])->orderBy('distrito')->get();
+
+        return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor', 'mirol', 'miidentificador','distritos'));
     }
 
     public function indexperdonarcurrier()

@@ -202,7 +202,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+{{--            <div class="col-md-12">
                 <div class="row" id="widget-container">
                     <div class="col-md-12">
                         <div class="card">
@@ -212,7 +212,7 @@
                                         <li class="list-group-item">
                                             <div class="row">
                                                 <div class="col-md-9">
-                                                    {{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}
+                                                    --}}{{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}{{--
                                                     <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
                                                 </div>
                                                 <div class="col-md-3">
@@ -248,7 +248,7 @@
                                                    label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
                     </div>
                 </div>
-            </div>
+            </div>--}}
         </div>
     </div>
     <div class="container-fluid">
@@ -384,7 +384,6 @@
         cargaNueva(4);
         cargaNueva(5);
         cargaNueva(6);
-
         cargReporteAnalisis();
 
         setInterval(myTimer, 5000);

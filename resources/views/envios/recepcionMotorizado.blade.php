@@ -1122,8 +1122,8 @@
                                 url: "{{ route('envios.recepcionmotorizado.iniciar_ruta_masiva') }}",
                             }).always(function (data) {
                                 console.log(data);
-                                $('#tablaPrincipal').DataTable().ajax.reload();
-                                /*if(data.html=='1')
+                                
+                                if(data.html=='1')
                                 {
                                   $('#tablaPrincipal').DataTable().ajax.reload();
                                 }else{
@@ -1132,13 +1132,14 @@
                                       'No tiene el rol suficiente para esta operacion',
                                       'error'
                                   )
-                                }*/
+                                }
+
                                 //self.close()
                                 //self.hideLoading(true)
 
                             });
 
-                        })
+                        });
 
                         /************
                          * ESCANEAR PEDIDO

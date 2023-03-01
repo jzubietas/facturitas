@@ -14,6 +14,21 @@
             font-family: 'Poppins', sans-serif;
             font-weight: bold;
         }
+        .bootstrap-select.btn-group .btn .filter-option {
+          text-align: right
+        }
+
+        .bootstrap-select .dropdown-toggle .filter-option {
+          text-align: right !important;
+        }
+
+        .bootstrap-select .dropdown-menu.inner {
+          text-align: right !important;
+        }
+
+        .btn.dropdown-toggle.bs-placeholder{
+          background-color:black !important;
+        }
     </style>
 
     <h1>Lista de pedidos
@@ -353,7 +368,7 @@
 
 
             $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
-
+              $("#distrito_recojo").val("").selectpicker("refresh")
                 var button = $(event.relatedTarget)
               $('#clienteid').val(button.data('clienteid'))
               $('#clientenombre').val(button.data('clientenombre'))
@@ -365,6 +380,7 @@
               $('#referencia_recojo').val(button.data('referenciareco'))
               $('#observacion_recojo').val(button.data('observacionreco'))
               $('#gmlink_recojo').val(button.data('gmclink'))
+              $("#sustento-recojo").val("");
 
                 var cod_pedido = $('#pedidoid').val();
 
@@ -413,18 +429,15 @@
                 let direccion_entrega = $("#Direccion_de_entrega").val();
                 let sustento_recojo = $("#sustento-recojo").val();
                 let pedido_concatenado = $("#pedido_concatenado").val();
+                let distrito_recojo = $("#distrito_recojo").val();
 
+                console.log(distrito_recojo)
 
-                //validaciones
-                //pedido
-                /*if (direccion_entrega == "") {
-                    Swal.fire('Debe colocar una direccion de entrega', '', 'warning');
-                    return false;
-                } */
-                if (sustento_recojo == "") {
-                    Swal.fire('Debe colocar un sustento', '', 'warning');
-                    return false;
-                } else if (direccion_recojo== "") {
+                if (distrito_recojo== "" || distrito_recojo == null) {
+                  Swal.fire('Debe seleccionar un distrito', '', 'warning');
+                  return false;
+                }
+                else if (direccion_recojo== "") {
                     Swal.fire('Debe colocar una direccion de recojo', '', 'warning');
                     return false;
                 } else if (Nombre_recibe == "") {
@@ -439,10 +452,14 @@
                 } else if (observacion_recojo == "") {
                     Swal.fire('Debe colocar una observacion', '', 'warning');
                     return false;
-                } else if (gm_link == "") {
+                } /*else if (gm_link == "") {
                     Swal.fire('Debe colocar el link de Google Maps', '', 'warning');
                     return false;
-                }
+                }*/
+                else if (sustento_recojo == "") {
+                  Swal.fire('Debe colocar un sustento', '', 'warning');
+                  return false;
+                } else
 
 
                 var fd_courier = new FormData();
@@ -455,6 +472,7 @@
                 fd_courier.append('direccion_entrega', direccion_entrega);
                 fd_courier.append('sustento_recojo', sustento_recojo);
                 fd_courier.append('pedido_concatenado', pedido_concatenado);
+                fd_courier.append('distrito_recojo', distrito_recojo);
 
                 $.ajax({
                     processData: false,

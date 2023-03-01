@@ -825,7 +825,7 @@
                                 $.confirm({
                                     theme:'material',
                                     type: 'green',
-                                    title: 'Enviar sobre a Motorizado 2',
+                                    title: 'Enviar sobre a Motorizado',
                                     columnClass: 'large',
                                     content: `<div>
                 <div class="row">
@@ -878,7 +878,11 @@
                                                     url: "{{ route('operaciones.confirmar') }}",
                                                 }).done(function () {
                                                     self.close()
-                                                    $('#tablaPrincipal_norte').DataTable().draw(false);
+                                                    //$('#tablaPrincipal_norte').DataTable().ajax.reload();
+                                                    //$('#tablaPrincipal_norte').DataTable().draw();
+                                                    $('#tablaPrincipal_norte').DataTable().draw();
+                                                    $('#tablaPrincipal_centro').DataTable().draw();
+                                                    $('#tablaPrincipal_sur').DataTable().draw();
                                                 }).always(function () {
                                                     self.hideLoading(true)
                                                 });
@@ -1068,26 +1072,26 @@
                                     title: 'Enviar sobre a Motorizado 3',
                                     columnClass: 'large',
                                     content: `<div>
-                <div class="row">
-                  <div class="col-12">
-                    <p>Esta seguro que desea enviar el sobre <strong>${data.codigos}</strong> a Motorizados del <strong class="textzone">${data.distribucion}</strong></p>
-                  </div>
-                  ${data.cambio_direccion_at != null?`<div class="col-12">
-                    <p class="alert alert-warning"><b>Datos de la dirección fueron modificados, ¿desea continuar?.</b><br> En caso contrario cierre esta ventana y haga click en el boton <b>Retornar a sobres con dirección</b></p>
-                  </div>`:''}
-                </div>
+                                              <div class="row">
+                                                <div class="col-12">
+                                                  <p>Esta seguro que desea enviar el sobre <strong>${data.codigos}</strong> a Motorizados del <strong class="textzone">${data.distribucion}</strong></p>
+                                                </div>
+                                                ${data.cambio_direccion_at != null?`<div class="col-12">
+                                                  <p class="alert alert-warning"><b>Datos de la dirección fueron modificados, ¿desea continuar?.</b><br> En caso contrario cierre esta ventana y haga click en el boton <b>Retornar a sobres con dirección</b></p>
+                                                </div>`:''}
+                                              </div>
 
-                <div class="row">
-                  <div class="col">
-                      <label for="fecha_salida">Fecha de ruta</label>
-                      <input class="form-control fecha_salida" id="fecha_salida" name="fecha_salida" type="date" value="{{now()->format('Y-m-d')}}">
-                      <p class="mensaje_fecha_salida">
+                                              <div class="row">
+                                                <div class="col">
+                                                    <label for="fecha_salida">Fecha de ruta</label>
+                                                    <input class="form-control fecha_salida" id="fecha_salida" name="fecha_salida" type="date" value="{{now()->format('Y-m-d')}}">
+                                                    <p class="mensaje_fecha_salida">
 
-                      </p>
-                  </div>
-                </div>
+                                                    </p>
+                                                </div>
+                                              </div>
 
-              </div>`,
+                                            </div>`,
                                     buttons: {
                                         cerrar: {
                                             btnClass:'btn-dark'

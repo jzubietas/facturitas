@@ -45,7 +45,7 @@ class GrupoPedido extends Model
                 "provincia" => $pedido->env_destino,
                 'distrito' => $pedido->env_distrito,
                 //'direccion' => $pedido->env_direccion,
-                //'referencia' => $pedido->env_referencia,
+                //'referencia' => $pedido->env_referencia,//
                 'direccion' => (($pedido->env_destino == 'PROVINCIA') ? 'OLVA' : $pedido->env_direccion),
                 'referencia' => (($pedido->env_destino == 'PROVINCIA') ? $pedido->tracking : $pedido->env_referencia),
                 'cliente_recibe' => $pedido->env_nombre_cliente_recibe,

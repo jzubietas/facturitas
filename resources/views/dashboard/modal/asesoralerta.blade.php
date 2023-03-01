@@ -22,16 +22,7 @@
              </tr>
            </thead>
            <tbody>
-             @if ($pedidossinpagos != '')
-               @foreach ($pedidossinpagos as $key)
-                 <tr>
-                   <td>PED000{{ $key->id }}</td>
-                   <td>{{ $key->codigos }}</td>
-                   <td>{{ $key->celulares }} - {{ $key->nombres }}</td>
-                   {{-- <td>{{ $key->condiciones }}</td> --}}
-                 </tr>
-               @endforeach
-             @endif
+
            </tbody>
          </table>
        </div>

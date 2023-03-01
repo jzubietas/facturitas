@@ -13,6 +13,9 @@
                   <input type="hidden" name="opcion" value="4">
 
                   <div class="row clase">
+
+
+
                     <div class="col-md-10">
                       <div class="form-row">
                         <div class="form-group">
@@ -46,6 +49,24 @@
 
 
                   <div class="row">
+
+                    <div id="cnt-distritos" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                      {!! Form::label('distrito_recojo', 'Distrito') !!}<br>
+
+                      <select name="distrito_recojo" id="distrito_recojo" class="distrito form-control bg-dark"
+                              data-show-subtext="true" data-live-search="true"
+                              data-live-search-placeholder="Seleccione distrito" title="Ningun distrito seleccionado">
+                        @foreach($distritos as $distrito)
+                          <option data-subtext="{{$distrito->zona}}"
+                                  value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
+                        @endforeach
+                      </select>
+
+
+                    </div>
+
+
                     <div class="col-md-12">
 
                       <div class="form-row">
@@ -65,30 +86,25 @@
                       </div>
 
                       <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                           <i class="fa fa-street-view text-red" aria-hidden="true"></i>
                           {!! Form::label('direccion_recojo', 'Direccion') !!}
                           {!! Form::text('direccion_recojo', null, ['class' => 'form-control', 'id' => 'direccion_recojo', 'placeholder' => 'Direccion_recojo' , 'autocomplete' => 'off']) !!}
                         </div>
-                      </div>
-
-                      <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                           <i class="fa fa-commenting-o text-red" aria-hidden="true"></i>
                           {!! Form::label('referencia_recojo', 'Referencia') !!}
                           {!! Form::text('referencia_recojo', null, ['class' => 'form-control', 'id' => 'referencia_recojo', 'placeholder' => 'Referencia_recojo' , 'autocomplete' => 'off']) !!}
                         </div>
                       </div>
 
+
                       <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                           {!! Form::label('observacion_recojo', 'Observacion') !!}
                           {!! Form::text('observacion_recojo', null, ['class' => 'form-control', 'id' => 'observacion_recojo', 'placeholder' => 'Observacion_recojo' , 'autocomplete' => 'off']) !!}
                         </div>
-                      </div>
-
-                      <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                           {!! Form::label('gmlink_recojo', 'Link Google Map') !!}
                           {!! Form::text('gmlink_recojo', null, ['class' => 'form-control', 'id' => 'gmlink_recojo', 'placeholder' => 'Ejem: https://goo.gl/maps/*********' , 'autocomplete' => 'off']) !!}
                         </div>
