@@ -55,11 +55,37 @@ class AutomaticMetasReset extends Command
         //crear metas este mes para usuarios
 
         $usuarios=User::whereIn('rol',[User::ROL_ASESOR])->orderBy('id','asc')->get();
+
+        $where_anio=$periodo_actual->format('Y');
+        $where_mes=$periodo_actual->format('m');
         foreach($usuarios as $usuario)
         {
           //recorro usuarios
           //solo para el nuevo periodo
-          //$meta_create=Meta::where('');
+
+          $meta_create_validar=Meta::where('user_id',$usuario->id)->where('anio',$where_anio)->where('mes',$where_mes)->count();
+          if($meta_create_validar>0)
+          {
+            //
+          }
+          else{
+            Meta::create(
+              [
+                'rol'=>User::ROL_ASESOR,
+                'user_id'=>$usuario->id,
+                'email'=>$usuario->email,
+                'anio'=>$where_anio,
+                'mes'=>$where_mes,
+                'meta_pedido'=>0,
+                'meta_pedido_2'=>0,
+                'meta_pedido_cobro'=>0,
+                'status'=>1,
+                'created_at'=>now(),
+                'meta_quincena'=>0
+              ]
+            );
+
+          }
 
         }
 
