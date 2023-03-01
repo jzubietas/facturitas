@@ -50,7 +50,7 @@ class AnalisisSituacionCliente_Individual extends Command
       $periodo_actual=Carbon::parse(now());//->format('Y_m');
 
       $primer_periodo=Carbon::parse($fp->created_at);
-      $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
+      $diff = ($periodo_original->diffInMonths($periodo_actual))+2;
       //$this->info("Diferencia de meses ".$diff);
 
       $where_anio='';
@@ -63,6 +63,9 @@ class AnalisisSituacionCliente_Individual extends Command
       //->where('id',1739) //->where('id',45)
       $progress = $this->output->createProgressBar($clientes->count());
       //$periodo_original=$primer_periodo;
+
+      //$this->info($diff);
+      //return 0;
 
       foreach($clientes as $cliente)
       {
@@ -101,7 +104,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
             $situacion_create=SituacionClientes::create([
               'cliente_id'=>$cliente->id,
-              'situacion'=>'5',
+              'situacion'=>'',
               'cantidad_pedidos'=>$cont_mes,
               'anulados'=>$cont_mes_anulado,
               'activos'=>$cont_mes_activo,
