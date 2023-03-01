@@ -62,7 +62,7 @@ class PedidoController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        $distritos = Distrito::whereIn('provincia', ['LIMA'])
+        $distritos = Distrito::whereIn('provincia', ['LIMA','CALLAO'])
           ->where('estado', '1')
           //->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
           ->select([
