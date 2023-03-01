@@ -357,8 +357,6 @@
                 $('#supervisor_total').html(resultado);
               }else if(entero==5){
                 $('#supervisor_A').html(resultado);
-              }else if(entero==6){
-                $('#supervisor_B').html(resultado);
               }
             }
           })
@@ -383,7 +381,6 @@
         cargaNueva(3);
         cargaNueva(4);
         cargaNueva(5);
-        cargaNueva(6);
         cargReporteAnalisis();
 
         setInterval(myTimer, 5000);
@@ -394,7 +391,6 @@
           cargaNueva(3);
           cargaNueva(4);
           cargaNueva(5);
-          cargaNueva(6);
         }
 
         $('a[href$="#myModal"]').on( "click", function() {
