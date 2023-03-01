@@ -67,6 +67,14 @@ class AutomaticMetasReset extends Command
           if($meta_create_validar>0)
           {
             //
+            User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
+              [
+                'meta_pedido'=>0,
+                'meta_pedido_2'=>0,
+                'meta_pedido_cobro'=>0,
+                'meta_quincena'=>0
+              ]
+            );
           }
           else{
             Meta::create(
@@ -81,6 +89,14 @@ class AutomaticMetasReset extends Command
                 'meta_pedido_cobro'=>0,
                 'status'=>1,
                 'created_at'=>now(),
+                'meta_quincena'=>0
+              ]
+            );
+            User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
+              [
+                'meta_pedido'=>0,
+                'meta_pedido_2'=>0,
+                'meta_pedido_cobro'=>0,
                 'meta_quincena'=>0
               ]
             );
