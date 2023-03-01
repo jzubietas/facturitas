@@ -825,7 +825,7 @@
                                 $.confirm({
                                     theme:'material',
                                     type: 'green',
-                                    title: 'Enviar sobre a Motorizado 2',
+                                    title: 'Enviar sobre a Motorizado',
                                     columnClass: 'large',
                                     content: `<div>
                 <div class="row">
@@ -878,7 +878,11 @@
                                                     url: "{{ route('operaciones.confirmar') }}",
                                                 }).done(function () {
                                                     self.close()
-                                                    $('#tablaPrincipal_norte').DataTable().draw(false);
+                                                    //$('#tablaPrincipal_norte').DataTable().ajax.reload();
+                                                    //$('#tablaPrincipal_norte').DataTable().draw();
+                                                    $('#tablaPrincipal_norte').DataTable().draw();
+                                                    $('#tablaPrincipal_centro').DataTable().draw();
+                                                    $('#tablaPrincipal_sur').DataTable().draw();
                                                 }).always(function () {
                                                     self.hideLoading(true)
                                                 });

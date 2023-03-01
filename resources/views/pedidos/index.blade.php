@@ -25,6 +25,10 @@
         .bootstrap-select .dropdown-menu.inner {
           text-align: right !important;
         }
+
+        .btn.dropdown-toggle.bs-placeholder{
+          background-color:black !important;
+        }
     </style>
 
     <h1>Lista de pedidos
@@ -376,6 +380,7 @@
               $('#referencia_recojo').val(button.data('referenciareco'))
               $('#observacion_recojo').val(button.data('observacionreco'))
               $('#gmlink_recojo').val(button.data('gmclink'))
+              $("#sustento-recojo").val("");
 
                 var cod_pedido = $('#pedidoid').val();
 
@@ -426,7 +431,9 @@
                 let pedido_concatenado = $("#pedido_concatenado").val();
                 let distrito_recojo = $("#distrito_recojo").val();
 
-                if (distrito_recojo== "") {
+                console.log(distrito_recojo)
+
+                if (distrito_recojo== "" || distrito_recojo == null) {
                   Swal.fire('Debe seleccionar un distrito', '', 'warning');
                   return false;
                 }

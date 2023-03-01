@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetallePedido;
 use App\Models\DireccionGrupo;
+use App\Models\Distrito;
 use App\Models\GrupoPedido;
 use App\Models\Pedido;
 use App\Models\PedidoMovimientoEstado;
@@ -170,6 +172,7 @@ class RecojoController extends Controller
 
   public function RegistrarRecojo(Request $request)
   {
+    $attach_pedidos_data = [];
     $Nombre_recibe = $request->Nombre_recibe;
     $celular_id = $request->celular_id;
     $direccion_recojo = $request->direccion_recojo;
@@ -181,72 +184,93 @@ class RecojoController extends Controller
     $pedido_concatenado = explode(",", $request->pedido_concatenado);
     $distrito_recojo=$request->distrito_recojo;
 
+    //$array_pedidos = collect(explode(",", $pedido_concatenado))->filter()->map(fn($id) => intval($id))->all();
+    //$count_pedidos = count((array)$array_pedidos);
+
     $contar=0;
     $dirgrupo=0;
     foreach ($pedido_concatenado as $pedidoid) {
-      $pedido = Pedido::where("id", $pedidoid)->first();
-      if ($pedido) {
-        $contar++;
-        $dirgrupo = $pedido->direccion_grupo;
-        if ($dirgrupo) {
-          $contar++;
-          PedidoMovimientoEstado::create([
-            'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,
-            'fecha' => now(),
-            'pedido' => $pedido->id,
-            'json_envio' => json_encode(array(
-              "recojo" => true,
-              'direccion_grupo' => null,
-              'destino' => 'LIMA',
-              'env_destino' => 'LIMA',
-              'env_zona_asignada' => null,
-              'env_cantidad' => 0,
-              'env_tracking' => '',
-              'env_numregistro' => '',
-              'env_rotulo' => '',
-              'env_importe' => 0.00,
-              'estado_ruta' => 0,
-              'fecha_salida' => null,
-              "env_nombre_cliente_recibe" => $Nombre_recibe,
-              "env_celular_cliente_recibe" => $celular_id,
-              "env_direccion" => $direccion_recojo,
-              "env_referencia" => $referencia_recojo,
-              "env_observacion" => $observacion_recojo,
-              "gm_link" => $gm_link,
-              "env_sustento" => $sustento_recojo,
-              'condicion_envio' => Pedido::RECOJO_COURIER,
-              'condicion_envio_code' => Pedido::RECOJO_COURIER_INT
-            ))
-          ]);
-          $pedido->update([
-            'direccion_grupo' => null,
-            'destino' => 'LIMA',
-            'env_destino' => 'LIMA',
-            'env_distrito'=>$distrito_recojo,
-            'env_zona_asignada' => null,
-            'env_cantidad' => 0,
-            'env_tracking' => '',
-            'env_numregistro' => '',
-            'env_rotulo' => '',
-            'env_importe' => 0.00,
-            'estado_ruta' => 0,
-            'fecha_salida' => null,
-            "env_nombre_cliente_recibe" => $Nombre_recibe,
-            "env_celular_cliente_recibe" => $celular_id,
-            "env_direccion" => $direccion_recojo,
-            "env_referencia" => $referencia_recojo,
-            "env_observacion" => $observacion_recojo,
-            "gm_link" => $gm_link,
-            "env_sustento" => $sustento_recojo,
-            "condicion_envio" => Pedido::RECOJO_COURIER,
-            "condicion_envio_code" => Pedido::RECOJO_COURIER_INT
-          ]);
+      $pedido = Pedido::find($pedidoid);
 
-          $grupoCreatePedido = GrupoPedido::createGroupByPedido($pedido, true, true);
-
-        }
+      PedidoMovimientoEstado::create([
+        'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,
+        'fecha' => now(),
+        'pedido' => $pedido->id,
+        'json_envio' => json_encode(array(
+          "recojo" => true,
+          'direccion_grupo' => null,
+          'destino' => 'LIMA',
+          'env_destino' => 'LIMA',
+          'env_zona_asignada' => null,
+          'env_cantidad' => 0,
+          'env_tracking' => '',
+          'env_numregistro' => '',
+          'env_rotulo' => '',
+          'env_importe' => 0.00,
+          'estado_ruta' => 0,
+          'fecha_salida' => null,
+          "env_nombre_cliente_recibe" => $Nombre_recibe,
+          "env_celular_cliente_recibe" => $celular_id,
+          "env_direccion" => $direccion_recojo,
+          "env_referencia" => $referencia_recojo,
+          "env_observacion" => $observacion_recojo,
+          "gm_link" => $gm_link,
+          "env_sustento" => $sustento_recojo,
+          'condicion_envio' => Pedido::RECOJO_COURIER,
+          'condicion_envio_code' => Pedido::RECOJO_COURIER_INT
+        ))
+      ]);
+      $pedido->update([
+        'direccion_grupo' => null,
+        'destino' => 'LIMA',
+        'env_destino' => 'LIMA',
+        'env_distrito'=>$distrito_recojo,
+        'env_zona_asignada' => null,
+        'env_cantidad' => 0,
+        'env_tracking' => '',
+        'env_numregistro' => '',
+        'env_rotulo' => '',
+        'env_importe' => 0.00,
+        'estado_ruta' => 0,
+        'fecha_salida' => null,
+        "env_nombre_cliente_recibe" => $Nombre_recibe,
+        "env_celular_cliente_recibe" => $celular_id,
+        "env_direccion" => $direccion_recojo,
+        "direccion" => $direccion_recojo,
+        "env_referencia" => $referencia_recojo,
+        "env_observacion" => $observacion_recojo,
+        "gm_link" => $gm_link,
+        "env_sustento" => $sustento_recojo,
+        "condicion_envio" => Pedido::RECOJO_COURIER,
+        "condicion_envio_code" => Pedido::RECOJO_COURIER_INT,
+        "estado_sobre"=>1
+      ]);
+      $dp_empresa = DetallePedido::activo()->where("pedido_id", $pedidoid)->first();
+      if ( in_array($pedido->condicion_envio_code ,[Pedido::RECEPCION_COURIER_INT,Pedido::RECOJO_COURIER_INT] )) {
+        $attach_pedidos_data[$pedido->id] = [
+          'razon_social' => $dp_empresa->nombre_empresa,
+          'codigo' => $dp_empresa->codigo,
+        ];
       }
+
+      //$grupoCreatePedido = GrupoPedido::createGroupByPedido($pedido, true, true);
+
     }
+    $zona_distrito = Distrito::where('distrito', $distrito_recojo)->first();
+    if (count($attach_pedidos_data) > 0)
+    {
+      $grupoPedido = GrupoPedido::createGroupByArray([
+        "zona" => $zona_distrito->zona,
+        "provincia" => $zona_distrito->provincia,
+        'distrito' => $zona_distrito->distrito,
+        'direccion' => $direccion_recojo,
+        'referencia' => $referencia_recojo,
+        'cliente_recibe' => $Nombre_recibe,
+        'telefono' => $celular_id,
+      ]);
+      $grupoPedido->pedidos()->syncWithoutDetaching($attach_pedidos_data);
+    }
+
     return response()->json(['html' => 1,'direccion_grupo' => $dirgrupo,'contador'=>$contar]);
   }
 }
