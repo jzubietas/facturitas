@@ -39,7 +39,6 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'pedidos.pagados', 'description' => 'Ver Pedidos Pagados', 'modulo' => 'Pedidos'])->assignRole($admin);
         Permission::create(['name' => 'pedidos.sinpagos', 'description' => 'Ver Pedidos Sin Pagos', 'modulo' => 'Pedidos'])->assignRole($admin);
         Permission::create(['name' => 'pedidos.exportar', 'description' => 'Exportar Pagos', 'modulo' => 'Pedidos'])->assignRole($admin);
-        Permission::create(['name' => 'pedidos.recojo', 'description' => 'Bandeja de recojo', 'modulo' => 'Bandeja de recojo'])->assignRole($admin);
 
         //MODULO OPERACION
         Permission::create(['name' => 'operacion.modulo', 'description' => 'MODULO OPERACION', 'modulo' => 'moduloOperacion'])->assignRole($admin);
