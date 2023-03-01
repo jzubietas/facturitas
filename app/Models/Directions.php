@@ -24,6 +24,7 @@ class Directions extends Model
     //NUEVOS CAMPOS
     'destino',
     'referencia',
+    'cliente',
   ];
 
 }

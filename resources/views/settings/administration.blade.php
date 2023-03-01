@@ -67,7 +67,7 @@
                                     <input type="text" value="{{$jefe_op->referencia}}" name="{{$jefe_op->referencia}}" class="form-control" id="referencia{{$jefe_op->id}}" autocomplete="off" placeholder="Referencia">
 
                                     <label class="mt-2" for="formGroupExampleInput">Cliente</label>
-                                    <input type="text" value="{{$jefe_op->name}}" name="cliente" class="form-control" id="cliente{{$jefe_op->id}}" autocomplete="off" placeholder="Cliente">
+                                    <input type="text" value="{{$jefe_op->cliente}}" name="cliente" class="form-control" id="cliente{{$jefe_op->id}}" autocomplete="off" placeholder="Cliente">
 
                                 </div>
                             </div>
@@ -411,11 +411,11 @@
             }
 
             formData.append('direccion_jfo', direccion_Joperaciones);
-            formData.append('user_id', {{$jefe_op->id}});
+            formData.append('user_id', "{{$jefe_op->id}}");
             formData.append('referencia_jfo', referencia);
             formData.append('destino_jfo', destino);
             formData.append('distrito', distrito);
-            formData.append('cliente', cliente);
+            formData.append('cliente_jfo', cliente);
 
            /* // console.log(formData);
             return false;*/
