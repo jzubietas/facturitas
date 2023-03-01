@@ -79,7 +79,6 @@ class MotorizadoController extends Controller
                             ,Pedido::RECIBIDO_RECOJO_CLIENTE_INT
                             ,Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT
                             ,Pedido::ENTREGADO_RECOJO_COURIER_INT
-                            ,Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT
                           ] );
                         //->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
             }

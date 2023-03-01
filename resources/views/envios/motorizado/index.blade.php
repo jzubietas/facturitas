@@ -1557,7 +1557,7 @@ Enviar</button>
               url: "{{ route('courier.recojoenviarope') }}",
               success: function (data) {
                 $("#modal_recojoenviarope").modal("hide");
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                $('#tablaEnmotorizado').DataTable().ajax.reload();
               }
             });
 
