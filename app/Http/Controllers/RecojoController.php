@@ -157,38 +157,28 @@ class RecojoController extends Controller
           ->get();
 
       $firstProduct = collect($pedidos)->first();
-      $asesor=Pedido::where('id',$firstProduct->id)->first();
-      $operario=User::where('rol',User::ROL_OPERARIO)->where('id',$asesor->user_id)->first();
-      $jefeope=User::where('rol',User::ROL_JEFE_OPERARIO)->where('id',$operario->id)->first()->id;
+      //return $firstProduct;
+      $asesor=Pedido::where('id',$firstProduct->id)->first()->user_id;//3
+      $operario=User::where('rol',User::ROL_ASESOR)->where('id',$asesor)->first()->operario;
+      $jefeope=User::where('rol',User::ROL_OPERARIO)->where('id',$operario)->first()->jefe;
 
-      $direccion_nueva=Directions::where('rol',User::ROL_JEFE_OPERARIO)->where('user_id',$jefeope)->first();
+      $direccion_nueva=Directions::whereIn('rol',[User::ROL_JEFE_OPERARIO,User::ROL_JEFE_COURIER])->where('user_id',$jefeope)->first();
 
 
       foreach ($pedidos as $pedidosFila){
           $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
           $pedidoUpdate->update([
               'env_direccion'=>$direccion_nueva->direccion_recojo,
+              'direccion'=>$direccion_nueva->direccion_recojo,
               'env_celular_cliente_recibe'=>$direccion_nueva->numero_recojo,
               'env_nombre_cliente_recibe'=>$direccion_nueva->cliente,
               'env_distrito'=>$direccion_nueva->distrito,
-              'distrito'=>$direccion_nueva->distrito,
               'env_destino'=>$direccion_nueva->destino,
               'env_referencia'=>$direccion_nueva->referencia,
               'condicion_envio' => Pedido::CONFIRMAR_RECOJO_MOTORIZADO,
               'condicion_envio_code' => Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT,
           ]);
       }
-
-    /*Cambiar la direccion de los pedidos
-
-     * */
-
-    PedidoMovimientoEstado::create([
-      'pedido' => $request->input_confirmrecojomotorizado,
-      'condicion_envio_code' => Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT,
-      'fecha_salida'=>now(),
-      'notificado' => 0
-    ]);
 
     return response()->json(['html' => $envio->id]);
   }
