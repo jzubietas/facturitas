@@ -277,7 +277,7 @@ class RecojoController extends Controller
             "condicion_envio_code" => Pedido::RECOJO_COURIER_INT,
             "estado_sobre"=>1
           ]);
-          
+
       PedidoMovimientoEstado::create([
         'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,
         'fecha' => now(),
@@ -360,5 +360,7 @@ class RecojoController extends Controller
     }
 
     return response()->json(['html' => 1,'direccion_grupo' => $dirgrupo,'contador'=>$contar]);
+  }
+    }
   }
 }

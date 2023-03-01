@@ -631,7 +631,9 @@ cosnt RECOJO CLIENTE CONFIRMAR MOTORIZADO*/
             return '#f97100';
         } elseif (\Str::contains($condicion_envio, "cliente")) {
             return '#b0deb3';
-        } else {
+        } elseif (\Str::contains($condicion_envio, "RECOJO")) {
+          return '#E7C6FF';
+        }else {
             return '#b0deb3';
         }
     }

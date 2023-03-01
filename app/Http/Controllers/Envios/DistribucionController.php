@@ -237,8 +237,8 @@ class DistribucionController extends Controller
         Pedido::whereIn('id', $pedidosIds)->update([
             'env_zona_asignada' => null,
             'estado_ruta' => '1',
-            'condicion_envio' => Pedido::REPARTO_RECOJO_COURIER,//reparto recojo courier
-            'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,
+            'condicion_envio' => (($groupData['cod_recojo']==1)? Pedido::REPARTO_RECOJO_COURIER : Pedido::REPARTO_COURIER),//reparto recojo courier
+            'condicion_envio_code' => (($groupData['cod_recojo']==1)? Pedido::REPARTO_RECOJO_COURIER_INT : Pedido::REPARTO_COURIER_INT),
             'condicion_envio_at' => now(),
             'direccion_grupo' => $direcciongrupo->id,
         ]);
@@ -276,13 +276,15 @@ class DistribucionController extends Controller
                 ])
                 ->activo()
                 ->get();
+            $vcod_recojo=intval($grupo->cod_recojo);
             if ($grupo->zona != 'OLVA')
             {
                 $firstProduct = collect($pedidos)->first();
                 $cliente = $firstProduct->cliente;
                 $lista_codigos = $pedidos->pluck('codigo')->join(',');
                 $lista_productos = $pedidos->pluck('nombre_empresa')->join(',');;
-                if (!($grupo->cod_recojo == 1))
+
+                if (  $vcod_recojo ==0)
                 {
                   $groupData = [
                     'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
@@ -307,9 +309,11 @@ class DistribucionController extends Controller
                     'observacion' => $firstProduct->env_observacion,//rotulo
                     'motorizado_id' => $request->motorizado_id,
                     'identificador' => $cliente->user->identificador,
+                    'cod_recojo' => $grupo->cod_recojo,
+                    'env_sustento_recojo' => $grupo->env_sustento_recojo,
                   ];
                 }
-                else if($grupo->cod_recojo == 1)
+                else if($vcod_recojo == 1)
                 {
                   $groupData = [
                     'condicion_envio_code' => Pedido::REPARTO_RECOJO_COURIER_INT,//ENTREGADO JEFE CURRIER
@@ -345,7 +349,7 @@ class DistribucionController extends Controller
                 }
                 else {
                     $grupos[] = $this->createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
-                    if($grupo->cod_recojo == 1)
+                    if($vcod_recojo  == 1)
                     {
                       $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
                       foreach ($pedidos as $pedidosFila){
@@ -362,8 +366,9 @@ class DistribucionController extends Controller
             else {
               //OLVA
                 $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request, $zona) {
+                  $valcod_recojo=intval($grupo->cod_recojo);
                     $cliente = $pedido->cliente;
-                    if(!($grupo->cod_recojo == 1)){
+                    if($valcod_recojo  == 1){
                       return [
                       'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
                       'condicion_envio_at' => now(),
