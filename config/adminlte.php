@@ -243,7 +243,7 @@ return [
             'dropdown_flabel' => 'Todas las notificaciones',
             'update_cfg' => [
                 'route' => 'notifications.get',
-                'period' => 10,
+                'period' => 100000000000000,
             ],
         ],
 

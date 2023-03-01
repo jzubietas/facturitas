@@ -330,21 +330,30 @@ class AnalisisSituacionCliente extends Command
 
 
                   //$this->info('SITUACION ANTES NUEVO');
-
-                  if($situacion_periodo->activos>0)
+                  if($situacion_antes->flag_fp==1)
                   {
-                    //actual activos >0
-                    $situacion_create->update([
-                      "situacion" => 'RECURRENTE',
-                      "flag_fp" => '1'
-                    ]);
+                    if($situacion_periodo->activos>0)
+                    {
+                      //actual activos >0
+                      $situacion_create->update([
+                        "situacion" => 'RECURRENTE',
+                        "flag_fp" => '1'
+                      ]);
+                    }else{
+                      //actual activos 0
+                      $situacion_create->update([
+                        "situacion" => 'RECURRENTE',
+                        "flag_fp" => '1'
+                      ]);
+                    }
                   }else{
-                    //actual activos 0
                     $situacion_create->update([
                       "situacion" => 'RECURRENTE',
                       "flag_fp" => '1'
                     ]);
                   }
+
+
 
                   /*$situacion_create->update([
                     "situacion" => 'RECURRENTE',
