@@ -467,8 +467,8 @@ class AnalisisSituacionCliente_Individual extends Command
 
               }
             }
-            //$this->warn('i '.$i);
-            //$this->warn('diff '.$diff);
+            $this->warn('i '.$i);
+            $this->warn('diff '.$diff);
             if($i==($diff-1))
             {
               //$this->warn('ultimo mes ');
