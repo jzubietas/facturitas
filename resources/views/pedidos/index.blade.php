@@ -382,6 +382,8 @@
               $('#gmlink_recojo').val(button.data('gmclink'))
               $("#sustento-recojo").val("");
 
+              $("#sustento-recojo").val("");
+
                 var cod_pedido = $('#pedidoid').val();
 
               $('#pedido_concatenado').val(button.data('pedidoid'));
@@ -433,6 +435,7 @@
 
                 console.log(distrito_recojo)
 
+
                 if (distrito_recojo== "" || distrito_recojo == null) {
                   Swal.fire('Debe seleccionar un distrito', '', 'warning');
                   return false;
@@ -441,11 +444,23 @@
                     Swal.fire('Debe colocar una direccion de recojo', '', 'warning');
                     return false;
                 } else if (Nombre_recibe == "") {
+
+                //validaciones
+                //pedido
+                /*if (direccion_entrega == "") {
+                    Swal.fire('Debe colocar una direccion de entrega', '', 'warning');
+                    return false;
+                } */
+                if (Nombre_recibe == "") {
+
                     Swal.fire('Debe colocar el nombre del que recive', '', 'warning');
                     return false;
                 } else if (celular_id== "") {
                     Swal.fire('Debe colocar el celular del quien recibe', '', 'warning');
                     return false;
+                } else if (direccion_recojo== "") {
+                Swal.fire('Debe colocar una direccion de recojo', '', 'warning');
+                return false;
                 } else if (referencia_recojo == "") {
                     Swal.fire('debe colocar un referencia', '', 'warning');
                     return false;
@@ -459,10 +474,14 @@
                 else if (sustento_recojo == "") {
                   Swal.fire('Debe colocar un sustento', '', 'warning');
                   return false;
+
                 } else
 
+                }
 
-                var fd_courier = new FormData();
+
+
+              var fd_courier = new FormData();
                 fd_courier.append('Nombre_recibe', Nombre_recibe);
                 fd_courier.append('celular_id', celular_id);
                 fd_courier.append('direccion_recojo', direccion_recojo);
