@@ -56,7 +56,7 @@
 
                       <select name="distrito_recojo" id="distrito_recojo" class="distrito form-control bg-dark"
                               data-show-subtext="true" data-live-search="true"
-                              data-live-search-placeholder="Seleccione distrito">
+                              data-live-search-placeholder="Seleccione distrito" title="Ningun distrito seleccionado">
                         @foreach($distritos as $distrito)
                           <option data-subtext="{{$distrito->zona}}"
                                   value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>

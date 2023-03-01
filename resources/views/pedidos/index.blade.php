@@ -25,6 +25,10 @@
         .bootstrap-select .dropdown-menu.inner {
           text-align: right !important;
         }
+
+        .btn.dropdown-toggle.bs-placeholder{
+          background-color:black !important;
+        }
     </style>
 
     <h1>Lista de pedidos
