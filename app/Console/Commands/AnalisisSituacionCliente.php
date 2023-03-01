@@ -69,7 +69,7 @@ class AnalisisSituacionCliente extends Command
 
       //if($cliente->id==1739)
       {
-        $this->warn($cliente->id);
+        //$this->warn($cliente->id);
         $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
         //$this->info("situacion en clientes ");
 
@@ -124,13 +124,13 @@ class AnalisisSituacionCliente extends Command
               ]);
             }
             else{
-              $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+              ///$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
               $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-              $this->warn($situacion_antes);
+              //$this->warn($situacion_antes);
 
-              $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+              //$this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
               $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-              $this->info($situacion_periodo);
+              //$this->info($situacion_periodo);
 
               switch($situacion_antes->situacion)
               {
@@ -298,18 +298,18 @@ class AnalisisSituacionCliente extends Command
                     "flag_fp" => '1'
                   ]);
 
-                  $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                  //$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-                  $this->warn($situacion_antes);
+                  //$this->warn($situacion_antes);
 
-                  $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+                  //$this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                  $this->info($situacion_periodo);
+                  //$this->info($situacion_periodo);
 
                   //pintar contador  anulados y activos
-                  $this->info('contador total '.$situacion_periodo->cantidad_pedidos);
-                  $this->info('contador anulados '.$situacion_periodo->anulados);
-                  $this->info('contador activos '.$situacion_periodo->activos);
+                  //$this->info('contador total '.$situacion_periodo->cantidad_pedidos);
+                  //$this->info('contador anulados '.$situacion_periodo->anulados);
+                  //$this->info('contador activos '.$situacion_periodo->activos);
 
                   if ($situacion_periodo->cantidad_pedidos > 0 && $situacion_periodo->activos == 0 ) {
                     $situacion_antes_recuperado_abandono=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
@@ -321,20 +321,20 @@ class AnalisisSituacionCliente extends Command
                   }
                   break;
                 case 'RECURRENTE':
-                  $this->info('SITUACION ANTES RECURRENTE');
+                  //$this->info('SITUACION ANTES RECURRENTE');
 
-                  $this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
+                  //$this->warn('Mes antes '.$mes_antes->format('Y-m').' cliente '.$idcliente);
                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-                  $this->warn($situacion_antes);
+                  //$this->warn($situacion_antes);
 
-                  $this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
+                  //$this->info('Mes periodo '.$mes_actual->format('Y-m').' cliente '.$idcliente);
                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                  $this->info($situacion_periodo);
+                  //$this->info($situacion_periodo);
 
                   //pintar contador  anulados y activos
-                  $this->info('contador total '.$situacion_periodo->cantidad_pedidos);
-                  $this->info('contador anulados '.$situacion_periodo->anulados);
-                  $this->info('contador activos '.$situacion_periodo->activos);
+                  //$this->info('contador total '.$situacion_periodo->cantidad_pedidos);
+                  //$this->info('contador anulados '.$situacion_periodo->anulados);
+                  //$this->info('contador activos '.$situacion_periodo->activos);
 
                   if($situacion_antes->activos==0)
                   {
@@ -348,7 +348,7 @@ class AnalisisSituacionCliente extends Command
                     }
 
                   }else{
-                    $this->warn('aquiiiiii: '.$situacion_antes->activos);
+                    //$this->warn('aquiiiiii: '.$situacion_antes->activos);
                     $situacion_create->update([
                       "situacion" => 'RECURRENTE',
                       "flag_fp" => '1'
@@ -356,7 +356,7 @@ class AnalisisSituacionCliente extends Command
                   }
                   break;
                 default:
-                  $this->info('SITUACION ANTES DEFAULT');
+                  //$this->info('SITUACION ANTES DEFAULT');
                   break;
               }
 
