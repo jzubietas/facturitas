@@ -90,12 +90,8 @@ class AnalisisSituacionCliente_Individual extends Command
             $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
             $this->info('el hacer for cambia a '.$periodo_ejecucion->format('Y-m')  );
 
-            //$this->warn("periodo ejecucion: ".$periodo_ejecucion);
-
             $where_anio=$periodo_ejecucion->format('Y');
             $where_mes=$periodo_ejecucion->format('m');
-
-            //$this->info("where  ".$where_anio.' '.$where_mes);|
 
             //contadores
             $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
