@@ -61,13 +61,13 @@
                                     <input type="text" value="{{$jefe_op->numero_recojo}}"   name="numero_jfo" class="form-control" id="ingreso_telefonoA{{$jefe_op->id}}" autocomplete="off" placeholder="Celular">
 
                                     <label class="mt-2" for="formGroupExampleInput">Destino</label>
-                                    <input type="text" value="Lima" name="destino" class="form-control" id="destino{{$jefe_op->id}}" autocomplete="off" placeholder="Destino" disabled>
+                                    <input type="text" value="{{$jefe_op->destino}}" name="destino" class="form-control" id="destino{{$jefe_op->id}}" autocomplete="off" placeholder="Destino" disabled>
 
                                     <label class="mt-2" for="formGroupExampleInput">Referencia</label>
-                                    <input type="text" value="" name="referencia" class="form-control" id="referencia{{$jefe_op->id}}" autocomplete="off" placeholder="Referencia">
+                                    <input type="text" value="{{$jefe_op->referencia}}" name="{{$jefe_op->referencia}}" class="form-control" id="referencia{{$jefe_op->id}}" autocomplete="off" placeholder="Referencia">
 
                                     <label class="mt-2" for="formGroupExampleInput">Cliente</label>
-                                    <input type="text" value="{{$jefe_op->name}}" name="cliente" class="form-control" id="cliente{{$jefe_op->id}}" autocomplete="off" placeholder="Cliente">
+                                    <input type="text" value="{{$jefe_op->cliente}}" name="cliente" class="form-control" id="cliente{{$jefe_op->id}}" autocomplete="off" placeholder="Cliente">
 
                                 </div>
                             </div>
@@ -401,10 +401,6 @@
             let destino = $("#destino{{$jefe_op->id}}").val();
             $("#destino{{$jefe_op->id}}").prop('disableb', false)
 
-
-
-
-
             //validaciones
             if (direccion_Joperaciones == "") {
               Swal.fire('Debe colocar una direccion de del jefe de operaciones', '', 'warning');
@@ -415,12 +411,11 @@
             }
 
             formData.append('direccion_jfo', direccion_Joperaciones);
-            formData.append('sustento_jfo', numero_Joperaciones);
-            formData.append('user_id', {{$jefe_op->id}});
-            formData.append('referencia', referencia);
-            formData.append('destino', destino);
+            formData.append('user_id', "{{$jefe_op->id}}");
+            formData.append('referencia_jfo', referencia);
+            formData.append('destino_jfo', destino);
             formData.append('distrito', distrito);
-            formData.append('cliente', cliente);
+            formData.append('cliente_jfo', cliente);
 
            /* // console.log(formData);
             return false;*/
