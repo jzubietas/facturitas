@@ -206,6 +206,8 @@ class AnalisisSituacionCliente_Individual extends Command
               }
               else{
                 //contador mes=1  y no es el primer periodo de primer pedido
+                $this->warn('periodo antes ');
+                $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
                 switch($situacion_antes->situacion)
                 {
                   case 'BASE FRIA':
