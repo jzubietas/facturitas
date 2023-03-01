@@ -195,6 +195,7 @@ class RecojoController extends Controller
     ]);
 
     return response()->json(['html' => $envio->id]);
+    /*return response()->json(['html' => $request->all()]);*/
   }
 
   public function RegistrarRecojo(Request $request)
