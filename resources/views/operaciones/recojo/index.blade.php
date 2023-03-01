@@ -210,7 +210,7 @@
             console.log(data);
             $("#modal-envio-recojo .textcode").text('');
             $("#modal-envio-recojo").modal("hide");
-            Swal.fire(data.mensaje, '', 'success')
+            Swal.fire('Mensaje', data.mensaje, 'success')
             $('#tablaRecojo').DataTable().ajax.reload();
           }
         });
