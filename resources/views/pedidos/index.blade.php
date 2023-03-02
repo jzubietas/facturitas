@@ -46,7 +46,7 @@
       </div>
     </div>
     @endcan --}}
-    <div class="float-right btn-group dropleft">
+    <div class="float-right btn-group dropleft" style="display: contents">
 
       <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
         <i class="fa fa-download"></i>
@@ -83,8 +83,8 @@
 @stop
 
 @section('content')
-  <div class="card">
-    <div class="card-body">
+  <div class="card" style="overflow: hidden !important;">
+    <div class="card-body pl-1 pr-1" style="overflow-x: scroll !important;">
       <!--
             <table cellspacing="5" cellpadding="5" class="table-responsive">
                 <tbody>
@@ -106,7 +106,7 @@
           <th style="vertical-align: middle" scope="col">Cliente</th>
           <th style="vertical-align: middle" scope="col">Razón social</th>
           <th style="vertical-align: middle" scope="col">Cantidad</th>
-          <th style="vertical-align: middle" scope="col">Asesor</th>
+          <th style="vertical-align: middle" scope="col">Id</th>
           <th style="vertical-align: middle" scope="col">RUC</th>
           <th style="vertical-align: middle" scope="col">F. Registro</th>
           <th style="vertical-align: middle" scope="col">F. Actualizacion</th>
@@ -114,7 +114,7 @@
           <th style="vertical-align: middle" scope="col">Est. pago</th>
           <th style="vertical-align: middle" scope="col">Con. pago</th>
           <th style="vertical-align: middle" scope="col">Est. Sobre</th>
-          <th style="vertical-align: middle" scope="col">Diferencia</th>
+          <th style="vertical-align: middle" scope="col">Dif.</th>
           <th style="vertical-align: middle" scope="col">Acciones</th>
         </tr>
         </thead>
@@ -200,8 +200,77 @@
       background: url('/images/details_close.png') no-repeat center center;
     }
 
+    #tablaPrincipal{
+      width: 100% !important;
+    }
 
 
+
+    @media screen and (max-width: 2249px){
+      .dis-grid{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: center;
+        flex-direction: column;
+      }
+      .btn-fontsize{
+        font-size: 15px;
+      }
+      .etiquetas_asignacion{
+        background-color: #b0deb3 !important;
+        font-size: 12px;
+        padding: 4px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #4a604b !important;
+        margin-left: 2px;
+      }
+    }
+
+    @media screen and (max-width: 2144px){
+      thead,
+      tr,
+      td{
+        vertical-align: middle !important;
+      }
+
+      .btn-fontsize{
+        font-size: 11px;
+        min-width: 85px;
+        max-width: 130px;
+      }
+
+      .dis-grid{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 2fr));
+        gap:0.7rem
+      }
+    }
+
+    @media screen and (max-width: 2039px){
+      .dis-grid{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: center;
+        flex-direction: column;
+      }
+      .btn-fontsize{
+        min-width: 75px;
+        width: 100px;
+      }
+    }
+
+    @media screen and (max-width: 1440px){
+      .etiquetas_asignacion{
+        font-size: 9px;
+        padding: 2px;
+        white-space: pre-line !important;
+      }
+    }
   </style>
 @stop
 
@@ -562,7 +631,6 @@
 
 
       tabla_pedidos = $('#tabla-listar-clientes').DataTable({
-        responsive: true,
         "bPaginate": false,
         "bFilter": false,
         "bInfo": false,
@@ -1070,7 +1138,7 @@
             return $.ajax({
               url: action,
               dataType: 'json',
-              method: 'get'
+              method: 'get',
             }).done(function (response) {
               var html = `<div class="list-group">`
               // html += `<li class="list-group-item bg-dark">Codigo: ${codigo}</li>`
@@ -1114,7 +1182,6 @@
         });
       }
       var detailRows = [];
-
       tablaPrincipal = $('#tablaPrincipal').DataTable({
         dom: 'Blfrtip',
         processing: true,
@@ -1465,7 +1532,7 @@ ${data.foto3 ? `
           }
 
         },
-        buttons: [
+/*        buttons: [
           {
             text: 'RECOGER',
             className: 'btn btn-danger visible_button_recoger mb-4',
@@ -1473,7 +1540,7 @@ ${data.foto3 ? `
               $('#modal-recoger-sobre').modal("show");
             }
           }
-        ],
+        ],*/
       });
 
       function charge_corrections(pedido_id) {
