@@ -210,11 +210,11 @@
                                         <li class="list-group-item">
                                             <div class="row">
                                                 <div class="col-md-9">
-                                                     <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
-                                                    <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
+                                                     {{--<x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}
+                                                    {{--<x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>--}}
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>
+                                                    {{--<x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>--}}
                                                 </div>
                                             </div>
                                         </li>
