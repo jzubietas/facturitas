@@ -705,7 +705,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
-
+                [
+                  'text' => 'Nulos',
+                  'route' => 'clientes.nulos',
+                  'can' => 'clientes.recuperados',
+                  'icon' => 'fas fa-check-circle',
+                  'active' => ['Nulos'],
+                ],
 
                 [
                     'text' => 'Base fría',

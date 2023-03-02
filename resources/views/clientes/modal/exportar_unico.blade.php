@@ -15,6 +15,8 @@
             recuperado
             @elseif($key === '5')
             ABANDONO
+          @elseif($key === '8')
+            NULOS
 
           @endif
 
@@ -37,6 +39,8 @@
         @elseif($key === '6')
         {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '7')
+        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '8')
         {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
 
       @endif
