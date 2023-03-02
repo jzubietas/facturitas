@@ -97,7 +97,7 @@ class Cliente extends Model
     $periodo_original=Carbon::parse($fp->created_at);
     $periodo_actual=Carbon::parse(now());
     $primer_periodo=Carbon::parse($fp->created_at);
-    $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
+    $diff = ($periodo_original->diffInMonths($periodo_actual))+2;
     $where_anio='';
     $where_mes='';
     $cont_mes=0;
