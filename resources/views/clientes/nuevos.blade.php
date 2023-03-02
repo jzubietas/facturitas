@@ -67,8 +67,12 @@
 @stop
 
 @section('css')
-  <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
+
   <style>
+
+    .perla {
+      background-color: #faedcd !important;
+    }
 
   .red {
     background-color: red !important;
@@ -229,17 +233,27 @@ $(document).ready(function () {
         },
         ],
         "createdRow": function( row, data, dataIndex){
-            if(data["pedidos_mes_deuda"] >0 && data["pedidos_mes_deuda_antes"] == 0 )
+          if(data["situacion"]=='BLOQUEADO')
+          {
+            $(row).addClass('textred');
+
+          }else{
+            if(data["pedidos_mes_deuda_antes"]==0)
             {
-              $(row).addClass('lighblue');
+              if(data["pedidos_mes_deuda"]==0)
+              {
+              }else if(data["pedidos_mes_deuda"]==1)
+              {
+                $(row).addClass('perla');
+              }else{
+                $(row).addClass('lighblue');
+              }
             }
-            else if(data["pedidos_mes_deuda"] >0 && data["pedidos_mes_deuda_antes"]  >0 )
-            {
-              $(row).addClass('red');
-            }else if(data["pedidos_mes_deuda"] == 0 && data["pedidos_mes_deuda_antes"] >0 )
-            {
+            else{
               $(row).addClass('red');
             }
+
+          }
 
         },
         language: {
