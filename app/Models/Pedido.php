@@ -626,12 +626,32 @@ cosnt RECOJO CLIENTE CONFIRMAR MOTORIZADO*/
         if (\Str::contains($condicion_envio, "olva")||$condicion_envio==\Str::lower(Pedido::ENTREGADO_PROVINCIA)) {
             return '#ffe007';
         } elseif (\Str::contains($condicion_envio, "ope")) {
-            return '#23cafd';
-        } elseif (\Str::contains($condicion_envio, "courier") || \Str::contains($condicion_envio, "motorizado")) {
+            if (\Str::contains($condicion_envio, "recojo")){
+              return '#E7C6FF';
+            }else{
+              return '#23cafd';
+            }
+        } elseif (\Str::contains($condicion_envio, "courier")) {
+          if (\Str::contains($condicion_envio, "recojo")){
+            return '#E7C6FF';
+          }else{
             return '#f97100';
+          }
+
+        }elseif ( \Str::contains($condicion_envio, "motorizado")) {
+          if (\Str::contains($condicion_envio, "recojo")){
+            return '#E7C6FF';
+          }else{
+            return '#f97100';
+          }
+
         } elseif (\Str::contains($condicion_envio, "cliente")) {
+          if (\Str::contains($condicion_envio, "recojo")){
+            return '#E7C6FF';
+          }else{
             return '#b0deb3';
-        } elseif (\Str::contains($condicion_envio, "RECOJO")) {
+          }
+        } elseif (\Str::contains($condicion_envio, "recojo")) {
           return '#E7C6FF';
         }else {
             return '#b0deb3';
