@@ -37,7 +37,7 @@
 @section('content')
 
   <div class="card">
-    <div class="card-body">
+    <div class="card-body pl-0">
       {{-- <table cellspacing="5" cellpadding="5">
         <tbody>
           <tr>
@@ -303,15 +303,15 @@
           {
               data: 'condicion_envio',
               name: 'condicion_envio',
-           
+
           },
           {
             data: 'envio',
             name: 'envio',
             render: function ( data, type, row, meta ) {
-             
+
                 return '<span class="badge badge-danger">Enviar a Courier</span>';
-             
+
               /*
               El estado del sobre cambia a 1 y luego cambia el estado del pedido
               else if (row.envio=='1' && row.estado_sobre=='1'){
@@ -319,7 +319,7 @@
               }
               */
 
-           
+
             },"visible":false,
           },
           {

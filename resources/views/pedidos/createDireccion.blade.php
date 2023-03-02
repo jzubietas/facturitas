@@ -9,7 +9,7 @@
 @section('content')
   <div class="card">
     {!! Form::open(['route' => 'envios.direccion','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
-    <div class="card-header">      
+    <div class="card-header">
       <div class="border rounded card-body border-secondary">
         <div class="form-row">
           <div class="form-group col-lg-4">
@@ -37,23 +37,23 @@
               <h2>PEDIDOS A ENVIAR</h2>
             </div>
             <div class="form-group col-lg-6">
-              <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a>  
+              <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a>
             </div>
           </div>
           <div class="table-responsive">
             <table id="tabla_pedidos" class="table table-striped">
               <thead class="bg-info">
                 <tr>
-                  <th scope="col">ITEM</th>
-                  <th scope="col">PEDIDO</th>
-                  <th scope="col">CODIGO</th>
-                  <th scope="col">ACCIÓN</th>
+                  <th scope="col" style="vertical-align: middle">ITEM</th>
+                  <th scope="col" style="vertical-align: middle">PEDIDO</th>
+                  <th scope="col" style="vertical-align: middle">CODIGO</th>
+                  <th scope="col" style="vertical-align: middle">ACCIÓN</th>
                 </tr>
               </thead>
               <tbody>
               </tbody>
-              <tfoot>            
-              </tfoot>              
+              <tfoot>
+              </tfoot>
             </table>
           </div>
         </div>
@@ -65,23 +65,23 @@
                   <p>Ingrese la dirección de envío - LIMA</p>
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  {!! Form::label('nombre', 'Nombre de quien recibe el sobre') !!}                   
+                  {!! Form::label('nombre', 'Nombre de quien recibe el sobre') !!}
                   {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre']) !!}
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  {!! Form::label('celular', 'Número de contacto') !!}                     
+                  {!! Form::label('celular', 'Número de contacto') !!}
                   {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  {!! Form::label('distrito', 'Distrito') !!}                      
+                  {!! Form::label('distrito', 'Distrito') !!}
                   {!! Form::select('distrito', $distritos , null, ['class' => 'form-control border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  {!! Form::label('direccion', 'Dirección') !!}                      
+                  {!! Form::label('direccion', 'Dirección') !!}
                   {!! Form::text('direccion', null, ['class' => 'form-control', 'placeholder' => 'Dirección']) !!}
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  {!! Form::label('referencia', 'Referencia') !!}                      
+                  {!! Form::label('referencia', 'Referencia') !!}
                   {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia']) !!}
                 </div>
               </div>
@@ -96,16 +96,16 @@
                   <p>Ingrese datos del envío - PROVINCIA</p>
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  {!! Form::label('tracking', 'Número de tracking') !!}                   
+                  {!! Form::label('tracking', 'Número de tracking') !!}
                   {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'tracking']) !!}
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  {!! Form::label('registro', 'Número de registro') !!}                     
+                  {!! Form::label('registro', 'Número de registro') !!}
                   {!! Form::number('registro', null, ['class' => 'form-control', 'placeholder' => 'Número de registro', 'id' => 'registro', 'min' =>'0', 'max' => '999999999999999', 'maxlength' => '15', 'oninput' => 'maxLengthCheck(this)']) !!}
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                  {!! Form::label('foto', 'Foto') !!}     
-                  @csrf                
+                  {!! Form::label('foto', 'Foto') !!}
+                  @csrf
                   {!! Form::file('foto', ['class' => 'form-control-file', 'accept' => 'image/*']) !!}
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -142,7 +142,7 @@
 
 @section('js')
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>  
+  <script>
 
     $("#guardar").hide();
     $("#addpedido").hide();
@@ -162,8 +162,8 @@
         $("#provincia").show();
         $("#lima").hide();
       }
-    }  
-    
+    }
+
     //VALIDAR CAMPO CELULAR
     function maxLengthCheck(object)
     {
@@ -213,8 +213,8 @@
           'Error al agregar el pedido',
           'warning')
       }
-    }    
-    
+    }
+
     function limpiarPe() {
       $("#ppedido_id").val("");
       $("#total_pedido").val("");
@@ -235,7 +235,7 @@
       $("#filasPe" + index).remove();
       evaluarPe();
     }
-    
+
     //CAMBIAR IMAGEN
     document.getElementById("foto").addEventListener('change', cambiarImagen);
 
@@ -251,7 +251,7 @@
     }
 
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
+
     $('input.number').keyup(function(event) {
 
     if(event.which >= 37 && event.which <= 40){
@@ -261,7 +261,7 @@
     $(this).val(function(index, value) {
       return value
         .replace(/\D/g, "")
-        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')
         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
       ;
     });

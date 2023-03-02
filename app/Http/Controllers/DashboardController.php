@@ -19,15 +19,47 @@ use \Yajra\Datatables\Datatables;
 
 class DashboardController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
     if (auth()->user()->rol == 'MOTORIZADO') {
       return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
     }
 
-    return view(
-      'dashboard.dashboard',
-    );
+    $fecha = null;
+    if (!request()->has("fecha")) {
+      $fecha = Carbon::now();
+    } else {
+      $fecha = $request->fecha;
+    }
+
+
+    $mirol = Auth::user()->rol;
+    $lst_users_vida = null;
+    $lst_users_vida = User::where('estado', '1');
+
+    if ($mirol == User::ROL_JEFE_LLAMADAS) {
+      $lst_users_vida = $lst_users_vida->where('jefe', Auth::user()->id)->where("rol", User::ROL_LLAMADAS);
+      $lst_users_vida = $lst_users_vida->orderBy('name', 'ASC');
+    } else if ($mirol == User::ROL_JEFE_OPERARIO) {
+      $lst_users_vida = $lst_users_vida->where('jefe', Auth::user()->id)->where("rol", User::ROL_OPERARIO);
+      $lst_users_vida = $lst_users_vida->orderBy('name', 'ASC');
+    } else if ($mirol == User::ROL_ENCARGADO) {
+      $lst_users_vida = $lst_users_vida->where('supervisor', Auth::user()->id)->where("rol", User::ROL_ASESOR);
+      $lst_users_vida = $lst_users_vida->orderBy('exidentificador', 'ASC');
+    }else{
+      $lst_users_vida = $lst_users_vida->orderBy('name', 'ASC');
+    }
+    $lst_users_vida=$lst_users_vida->get();
+    /*$html = "";
+
+    foreach ($lst_users_vida as $user)
+    {
+      $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
+    }*/
+
+
+    return view('dashboard.dashboard', compact('fecha','lst_users_vida'));
+
   }
 
   public function widgets(Request $request)
@@ -97,12 +129,8 @@ class DashboardController extends Controller
    * @throws \Exception
    */
 
-
-
   public function viewMetaTable(Request $request)
   {
-
-
     $metas = [];
     $total_asesor= User::query()->activo()->rolAsesor()->count();
     if (auth()->user()->rol == User::ROL_ASESOR){
@@ -164,7 +192,7 @@ class DashboardController extends Controller
           }
         }
       }
-
+      /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
       $date_pagos = Carbon::parse(now())->subMonth();
       $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
         ->where('pedidos.codigo', 'not like', "%-C%")->activo()->whereDate('pedidos.created_at', now())->where('pendiente_anulacion', '<>','1' )->count();
@@ -533,7 +561,7 @@ class DashboardController extends Controller
       if(($count_asesor[46]['progress_pagos'])>=80)
         $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
                          style="width: '.round(( $count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado'])*100,2).'%;background: #03af03;"
-                         aria-valuenow="'.round(( $count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado'])*100,2).'"
+                         aria-valuenow="'.round(( $count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']),2).'"
                          aria-valuemin="0" aria-valuemax="100"></div>';
 
       else if( round(($count_asesor[46]['total_pagado']/(($count_asesor[46]['total_pedido_mespasado']>0) ? $count_asesor[46]['total_pedido_mespasado']: '')) *100, 0)>70)
@@ -543,7 +571,7 @@ class DashboardController extends Controller
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
                     <div class="progress-bar rounded h-60-res" role="progressbar"
-                         style="width: '.(round(( $count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']),2)-70).'%;
+                         style="width: '.(round(( $count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']*100),2)-70).'%;
                      background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
                          aria-valuenow="'.(  round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-70).'"
                          aria-valuemin="0"
@@ -561,14 +589,14 @@ class DashboardController extends Controller
                        aria-valuemin="0"
                        aria-valuemax="100"></div>
                       <div class="progress-bar h-60-res" role="progressbar"
-                           style="width: '.( round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-40).'%;
+                           style="width: '.( round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado']*100,2)-40).'%;
                        background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
                            aria-valuenow="'.(  round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-40).'"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
       else
         $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
-                       style="width: '.(round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']) , 2)).'%"
+                       style="width: '.(round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']*100) , 2)).'%"
                        aria-valuenow="'.(round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']) , 2)).'"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
@@ -679,7 +707,7 @@ class DashboardController extends Controller
                          <div class="progress rounded h-40 h-60-res">';
       if(($count_asesor[24]['progress_pagos'])>=80)
                 $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
-                         style="width: '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado'])*100,2).'%;background: #03af03;"
+                         style="width: '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']*100),2).'%;background: #03af03;"
                          aria-valuenow="'.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado'])*100,2).'"
                          aria-valuemin="0" aria-valuemax="100"></div>';
       else if(round(( $count_asesor[24]['total_pagado']/ (($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: '') )*100,0)>70)
@@ -689,7 +717,7 @@ class DashboardController extends Controller
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
                     <div class="progress-bar rounded h-60-res" role="progressbar"
-                         style="width: '.(round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']),2)-70).'%;
+                         style="width: '.(round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']*100),2)-70).'%;
                      background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
                          aria-valuenow="'.(round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']),2) - 70).'"
                          aria-valuemin="0"
@@ -707,14 +735,14 @@ class DashboardController extends Controller
                        aria-valuemin
                        aria-valuemax="100"></div>
                       <div class="progress-bar h-60-res" role="progressbar"
-                           style="width: '.(round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']),2)-40).'%;
+                           style="width: '.(round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']*100),2)-40).'%;
                        background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
                            aria-valuenow="'.(round(( $count_asesor[24]['total_pagado']/(($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: '')),2)-40).'"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
       else
               $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
-                       style="width: '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']),2).'%"
+                       style="width: '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']*100),2).'%"
                        aria-valuenow="'.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']),2).'"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
@@ -741,7 +769,7 @@ class DashboardController extends Controller
       {
         if(round(($count_asesor[24]['total_pedido']/((($count_asesor[24]['meta'] >0) ? $count_asesor[24]['meta'] : '')))*100,0)>=80)
           $html.='<div class="progress-bar bg-success rounded" role="progressbar"
-                 style="height:40px; width: '. round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100,2).'%;background: #03af03;"
+                 style="height:40px; width: '. round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta']*100),2).'%;background: #03af03;"
                  aria-valuenow="'. round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100,2).'"
                  aria-valuemin="0" aria-valuemax="100"></div>';
         else if(round(($count_asesor[24]['total_pedido']/((($count_asesor[24]['meta'] >0) ? $count_asesor[24]['meta'] : '')))*100,0)>70)
@@ -751,7 +779,7 @@ class DashboardController extends Controller
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
             <div class="progress-bar rounded" role="progressbar"
-                 style="height:40px !important; width: '.(round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100,2)).'%;
+                 style="height:40px !important; width: '.(round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta']*100),2)).'%;
              background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
                  aria-valuenow="'.(round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100,2)-70).'"
                  aria-valuemin="0"
@@ -769,15 +797,15 @@ class DashboardController extends Controller
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
             <div class="progress-bar" role="progressbar"
-                 style="width: '.round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100,2).'%;
+                 style="width: '.round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta']*100),2).'%;
              background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                 aria-valuenow="'.(round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100,2)-40).'"
+                 aria-valuenow="'.(round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta']),2)-40).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
         else
           $html.='<div class="progress-bar bg-danger" role="progressbar"
-                   style="width: '.round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100,2).'%"
-                 aria-valuenow="'.round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta'])*100,2).'"
+                   style="width: '.round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta']*100),2).'%"
+                 aria-valuenow="'.round(($count_asesor[24]['total_pedido']/$count_asesor[24]['meta']),2).'"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
       }

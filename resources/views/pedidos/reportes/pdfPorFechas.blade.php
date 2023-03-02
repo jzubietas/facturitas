@@ -69,11 +69,11 @@
   <table id="detalle" class="table table-bordered">
     <thead>
       <tr>
-        <th scope="col">ITEM</th>
-        <th scope="col">COMPROBANTE</th>
-        <th scope="col">CLIENTE</th>
-        <th scope="col">MONTO</th>
-        <th scope="col">FECHA</th>
+        <th scope="col" style="vertical-align: middle">ITEM</th>
+        <th scope="col" style="vertical-align: middle">COMPROBANTE</th>
+        <th scope="col" style="vertical-align: middle">CLIENTE</th>
+        <th scope="col" style="vertical-align: middle">MONTO</th>
+        <th scope="col" style="vertical-align: middle">FECHA</th>
       </tr>
     </thead>
     <tbody>

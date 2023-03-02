@@ -55,17 +55,17 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Código</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>
-            <th scope="col">Asesor</th>
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Total (S/)</th>
-            <th scope="col">Estado de pedido</th>
-            <th scope="col">Estado de pago</th>
-            <th scope="col">Administracion</th>
-            <th scope="col">Acciones</th>
+            <th scope="col" style="vertical-align: middle">Item</th>
+            <th scope="col" style="vertical-align: middle">Código</th>
+            <th scope="col" style="vertical-align: middle">Cliente</th>
+            <th scope="col" style="vertical-align: middle">Razón social</th>
+            <th scope="col" style="vertical-align: middle">Asesor</th>
+            <th scope="col" style="vertical-align: middle">Fecha de registro</th>
+            <th scope="col" style="vertical-align: middle">Total (S/)</th>
+            <th scope="col" style="vertical-align: middle">Estado de pedido</th>
+            <th scope="col" style="vertical-align: middle">Estado de pago</th>
+            <th scope="col" style="vertical-align: middle">Administracion</th>
+            <th scope="col" style="vertical-align: middle">Acciones</th>
           </tr>
         </thead>
         <tbody>

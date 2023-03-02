@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de Clientes')
+@section('title', 'Lista de Clientes Nulos')
 
 @section('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 @endsection
 
 @section('content_header')
-  <h1>Lista de clientes en situacion NUEVOS
+  <h1>Lista de clientes en situacion NULOS
     @can('clientes.create')
       <a href="{{ route('clientes.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
@@ -20,7 +20,7 @@
        <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
       </div>
     </div>
-    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes NUEVO', 'key' => '3'])
+    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes NULOS', 'key' => '8'])
     @endcan
   </h1>
   @if($superasesor > 0)
@@ -136,6 +136,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click","#delete",function(){
+
       console.log("action delete action")
       var formData = $("#formdelete").serialize();
       console.log(formData);
@@ -151,12 +152,31 @@ $(document).ready(function () {
 
     });
 
+  $('#modal-delete').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('delete')
+      $("#hiddenClienteId").val(idunico);
+      if(idunico<10){
+        idunico='PAG000'+idunico;
+      }else if(idunico<100){
+        idunico= 'PAG00'+idunico;
+      }else if(idunico<1000){
+        idunico='PAG0'+idunico;
+      }else{
+        idunico='PAG'+idunico;
+      }
+      $(".textcode").html(idunico);
+
+    });
+
+
+
     $('#tablaPrincipal').DataTable({
         processing: true,
         responsive:true,
         autowidth:true,
         serverSide: true,
-        ajax: "{{ route('clientesnuevotabla') }}",
+        ajax: "{{ route('nulostabla') }}",
         initComplete:function(settings,json){
 
         },
@@ -189,6 +209,10 @@ $(document).ready(function () {
             }
           }
         },
+        //{data: 'estado', name: 'estado'},
+        //{data: 'user', name: 'user'},
+        //{data: 'identificador', name: 'identificador'},
+        //{data: 'provincia', name: 'provincia'},
         {
           data: 'direccion',
           name: 'direccion',
@@ -196,8 +220,15 @@ $(document).ready(function () {
             return row.direccion+' - '+row.provincia+' ('+row.distrito+')';
           }
         },
+        //{data: 'direccion', name: 'direccion'},
         {data: 'identificador', name: 'identificador'},
         {data: 'situacion', name: 'situacion'},
+        //{data: 'cantidad', name: 'cantidad'},
+        //{data: 'dateY', name: 'dateY'},
+        //{data: 'dateM', name: 'dateM'},
+        //{data: 'anio', name: 'anio'},
+        //{data: 'mes', name: 'mes'},
+        //{data: 'deuda', name: 'deuda'},
         {data: 'fechaultimopedido', name: 'fechaultimopedido'},{data: 'codigoultimopedido', name: 'codigoultimopedido'},
         {
           data: 'action',
@@ -240,7 +271,22 @@ $(document).ready(function () {
             {
               $(row).addClass('red');
             }
-
+            /*if(data["deuda"] == "0")
+            {
+                $(row).addClass('white');
+            }else{
+              if ( (data["dateY"] - data["anio"]) == 0 )
+              {
+                if(   (data["dateM"] - data["mes"]) >= 0 &&  (data["dateM"] - data["mes"]) <2 )
+                {
+                  $(row).addClass('lighblue');
+                }else{
+                  $(row).addClass('red');
+                }
+              }else{
+                $(row).addClass('red');
+              }
+            }*/
         },
         language: {
         "decimal": "",

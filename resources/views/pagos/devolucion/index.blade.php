@@ -13,7 +13,7 @@
                 <div class="card mt-4">
                     @if(
     $devolucion->status != \App\Models\Devolucion::DEVUELTO&& auth()->user()->rol==\App\Models\User::ROL_ADMIN)
-                        <div class="card-body">
+                        <div class="card-body pl-0">
                             {{Form::model($devolucion,['route'=>['pagos.devolucion.update',$devolucion],'files'=>true])}}
                             <div>
                                 <ul class="list-group">

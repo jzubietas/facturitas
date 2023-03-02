@@ -197,15 +197,15 @@ __________________________________
   width="100%" id="tblListadoHistorial">
 <thead>
 <tr>
-<th>CLIENTE</th>
-<th>RUC - EMPRESA</th>
-<th>MES/AÑO</th>
-<th>CANTIDAD</th>
-<th>TIPO BANCA</th>
-<th>COURIER</th>
-<th>DESCRIPCIÓN</th>
-<th>NOTA</th>
-<th>ACCIONES</th>
+<th style="vertical-align: middle">CLIENTE</th>
+<th style="vertical-align: middle">RUC - EMPRESA</th>
+<th style="vertical-align: middle">MES/AÑO</th>
+<th style="vertical-align: middle">CANTIDAD</th>
+<th style="vertical-align: middle">TIPO BANCA</th>
+<th style="vertical-align: middle">COURIER</th>
+<th style="vertical-align: middle">DESCRIPCIÓN</th>
+<th style="vertical-align: middle">NOTA</th>
+<th style="vertical-align: middle">ACCIONES</th>
 </tr>
 </thead>
 <tbody>
@@ -1247,22 +1247,23 @@ ${files.map(function (file) {
                   const valorTipoBanca=$('#ptipo_banca').val().split('_')[0];
                   if (arrayCombo.includes(valorTipoBanca)) {
                     swalWithBootstrapButtons.fire({
-                      title: 'Estas seguro (a)?',
-                      text: "Estas creando un pedido sin sobre!",
+                      title: 'EL SIGUIENTE PEDIDO SE VA A REALIZAR <b>SIN SOBRE</b>',
+                      text: "ESTAS DE ACUERDO",
                       icon: 'warning',
                       showCancelButton: true,
-                      confirmButtonText: 'Si, con sobre',
-                      cancelButtonText: 'No, sin sobre',
+                      cancelButtonText: 'SI, SIN SOBRE',
+                      confirmButtonText: 'NO, CON SOBRE',
+
                       reverseButtons: true
                     }).then((result) => {
                       if (result.isConfirmed) {
                         swalWithBootstrapButtons.fire({
-                          title: 'Pero, Estás seguro (a)?',
-                          text: "Recuerda que estás creando un pedido sin sobre! Revisa antes de Continuar.",
+                          title: 'ESTAS SEGURO DE CREAR UN PEDIDO <b>CON SOBRE</b>',
+                          text: "¿Estás seguro (a)? Revisa antes de Continuar.",
                           icon: 'warning',
                           showCancelButton: true,
-                          confirmButtonText: 'Si, con sobre',
-                          cancelButtonText: 'No, sin sobre',
+                          cancelButtonText: 'NO',
+                          confirmButtonText: 'SI',
                           reverseButtons: true
                         }).then((result) => {
                           if (result.isConfirmed) {

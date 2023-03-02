@@ -80,7 +80,7 @@ class PdfController extends Controller
 
     public function Analisisgrafico(Request $request)
     {
-      return $request->all();
+/*      return $request->all();*/
       $_pedidos_mes_pasado = User::select([
         'users.id','users.name','users.email'
         ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO RECIENTE' ) recuperado_reciente")

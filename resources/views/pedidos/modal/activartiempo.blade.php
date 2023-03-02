@@ -19,20 +19,20 @@
                             <div class="form-row">
 
                                 <div class="form-group col-lg-6">
-                                    {!! Form::label('user_id_tiempo', 'Asesor*') !!} &nbsp; &nbsp; &nbsp; 
+                                    {!! Form::label('user_id_tiempo', 'Asesor*') !!} &nbsp; &nbsp; &nbsp;
 
                                     <select name="user_id_tiempo" class="border form-control border-secondary" id="user_id_tiempo" data-live-search="true" >
-                                        <option value="">---- SELECCIONE ASESOR ----</option>                  
-                                    </select>          
+                                        <option value="">---- SELECCIONE ASESOR ----</option>
+                                    </select>
 
                                 </div>
 
                                 <div class="form-group col-lg-6">
-                                    {!! Form::label('cliente_id_tiempo', 'Cliente*') !!} &nbsp; &nbsp; &nbsp; 
+                                    {!! Form::label('cliente_id_tiempo', 'Cliente*') !!} &nbsp; &nbsp; &nbsp;
 
                                     <select name="cliente_id_tiempo" class="border form-control border-secondary" id="cliente_id_tiempo" data-live-search="true" >
-                                        <option value="">---- SELECCIONE CLIENTE ----</option>                  
-                                    </select>          
+                                        <option value="">---- SELECCIONE CLIENTE ----</option>
+                                    </select>
 
                                 </div>
 
@@ -49,12 +49,12 @@
                                 </div>
 
                             </div>
-                
 
-                        </div> 
+
+                        </div>
                     </div>
                 </div>
-            
+
                 <div class="modal-footer">
                     <button type="submit" id="activar_tiempo" class="btn btn-info btn-sm" >Establecer</button>
                     <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">Cerrar</button>

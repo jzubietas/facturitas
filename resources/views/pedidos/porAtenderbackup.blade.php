@@ -22,7 +22,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos por atender', 'key' => '7'])    
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos por atender', 'key' => '7'])
   </h1>
   @if($superasesor > 0)
   <br>
@@ -52,14 +52,14 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Código</th>
-            <th scope="col">Razón social</th>
-            <th scope="col">Asesor</th>
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Adjuntos</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Acciones</th>
+            <th scope="col" style="vertical-align: middle">Item</th>
+            <th scope="col" style="vertical-align: middle">Código</th>
+            <th scope="col" style="vertical-align: middle">Razón social</th>
+            <th scope="col" style="vertical-align: middle">Asesor</th>
+            <th scope="col" style="vertical-align: middle">Fecha de registro</th>
+            <th scope="col" style="vertical-align: middle">Adjuntos</th>
+            <th scope="col" style="vertical-align: middle">Estado</th>
+            <th scope="col" style="vertical-align: middle">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -76,7 +76,7 @@
               @endif
               <td>{{ $pedido->codigos }}</td>
               <td>{{ $pedido->empresas }}</td>
-              <td>{{ $pedido->users }}</td>              
+              <td>{{ $pedido->users }}</td>
               <td>{{ $pedido->fecha }}</td>
               <td style="text-align: center">
                 <a href="" data-target="#modal-veradjunto-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>
@@ -172,7 +172,7 @@
         ajax: "{{ route('operaciones.poratendertabla') }}",
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -183,17 +183,17 @@
                   return 'PED0'+row.id;
                 }else{
                   return 'PED'+row.id;
-                } 
+                }
               }
           },
           {data: 'codigos', name: 'codigos', },
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
-          {data: 'fecha', name: 'fecha', },          
+          {data: 'fecha', name: 'fecha', },
           {
-            data: 'action', 
-            name: 'action', 
-            orderable: false, 
+            data: 'action',
+            name: 'action',
+            orderable: false,
             searchable: false,
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
@@ -203,21 +203,21 @@
               @include('pedidos.modal.atender')
               @include('pedidos.modal.veradjunto')
 
-              return data;                          
+              return data;
             }
           },
           {data: 'condicion', name: 'condicion', },
           {
-            data: 'action2', 
-            name: 'action2', 
-            orderable: false, 
+            data: 'action2',
+            name: 'action2',
+            orderable: false,
             searchable: false,
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
-              
+
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
-              
+
               @can('operacion.atender')
                 data = data+'<a href="" data-target="#modal-atender-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
                 //<a href="" data-target="#modal-atender-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm">Atender</button></a>
@@ -228,7 +228,7 @@
               @endcan
 
               return data;
-                         
+
             }
           },
         ]
@@ -249,7 +249,7 @@
     function mostrarValores2() {
       $("#condicion").val($("#pcondicion option:selected").text());
     }
-  </script>  
+  </script>
 
   @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
     <script>
@@ -264,14 +264,14 @@
   <script>
     //VALIDAR CAMPOS ANTES DE ENVIAR
     document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });
 
     function validarFormulario(evento) {
       evento.preventDefault();
       var adjunto = document.getElementById('adjunto').value;
       var cant_compro = document.getElementById('cant_compro').value;
-      
+
       if (adjunto == '') {
           Swal.fire(
             'Error',
@@ -295,22 +295,22 @@
         }
         else {
           this.submit();
-        }      
+        }
     }
   </script>
 
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
 <script>
-  window.onload = function () {      
+  window.onload = function () {
     $('#tablaPrincipal').DataTable().draw();
   }
 </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -327,7 +327,7 @@
                 }
             );
 
-      
+
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             var table = $('#tablaPrincipal').DataTable();
@@ -338,5 +338,5 @@
             });
         });
   </script>
-  
+
 @stop

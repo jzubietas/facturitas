@@ -111,7 +111,7 @@ class OperacionController extends Controller
                 'pedidos.condicion_code',
                 'pedidos.estado',
                 'pedidos.estado_ruta',
-                DB::raw("(CASE WHEN dp.tipo_banca='ELECTRONICA - sin banca' THEN 'No' ELSE 'Si' END) AS sobrevalida"),
+                'dp.sobre_valida',
             ])
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')

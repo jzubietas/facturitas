@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-body">
+    <div class="card-body pl-0">
         <div class="row">
             <div class="col-md-4">
                 <ul class="list-group">
@@ -9,7 +9,7 @@
                     @foreach(data_get($resultados,'fisico') as $item)
                         <li class="list-group-item">
                             <div class="card" style="background: {{data_get($item,'bg')}};">
-                                <div class="card-body">
+                                <div class="card-body pl-0">
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
@@ -34,7 +34,7 @@
                     @foreach(data_get($resultados,'electronic') as $item)
                         <li class="list-group-item">
                             <div class="card" style="background: {{data_get($item,'bg')}};">
-                                <div class="card-body">
+                                <div class="card-body pl-0">
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
@@ -58,7 +58,7 @@
               @foreach(data_get($resultados,'anulado') as $item)
                 <li class="list-group-item">
                   <div class="card" style="background: {{data_get($item,'bg')}};">
-                    <div class="card-body">
+                    <div class="card-body pl-0">
                       <div class="d-flex justify-content-between">
                         <div>
                           <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>

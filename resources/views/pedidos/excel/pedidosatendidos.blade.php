@@ -1,22 +1,22 @@
 <table>
   <thead>
     <tr>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">ITEM</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">JEFE DE OPERACIONES</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">IDENTIFICADOR DE ASESOR</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">CODIGO DE PEDIDO</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">RAZON SOCIAL</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">RUC</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">MES</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">TIPO</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">CANTIDAD DEL PEDIDO</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">OPERARIO</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">CANT. DE DOCUMENTOS</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">ESTADO DE PEDIDO</th>
-      <th style="background-color: #FFFF00; text-align: center; color: #0000;">FECHA DE REGISTRO DE PEDIDO</th>
-      <th style="background-color: #FFFF00; text-align: center; color: #0000;">FECHA ELABORACIÓN PEDIDOS</th>
-      <th style="background-color: #FFFF00; text-align: center; color: #0000;">FECHA DE FINALIZACIÓN DE PEDIDO</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">DETALLE</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">ITEM</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">JEFE DE OPERACIONES</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">IDENTIFICADOR DE ASESOR</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">CODIGO DE PEDIDO</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">RAZON SOCIAL</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">RUC</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">MES</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">TIPO</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">CANTIDAD DEL PEDIDO</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">OPERARIO</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">CANT. DE DOCUMENTOS</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">ESTADO DE PEDIDO</th>
+      <th style="background-color: #FFFF00; text-align: center; color: #0000; vertical-align: middle">FECHA DE REGISTRO DE PEDIDO</th>
+      <th style="background-color: #FFFF00; text-align: center; color: #0000; vertical-align: middle">FECHA ELABORACIÓN PEDIDOS</th>
+      <th style="background-color: #FFFF00; text-align: center; color: #0000; vertical-align: middle">FECHA DE FINALIZACIÓN DE PEDIDO</th>
+      <th style="background-color: #4472C4; text-align: center; color: #ffff; vertical-align: middle">DETALLE</th>
     </tr>
   </thead>
   <tbody>
