@@ -39,27 +39,21 @@ class AlertaController extends Controller
         return response();
     }
     public function listtablecontactos(Request $request){
+      $data = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')
+        ->where('confirmado',0)
+        ->orderByRaw("guardado DESC, confirmado DESC")
+        ->select(['detalle_contactos.*']);
       if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
-        $data = DetalleContactos::whereIn('guardado',[0,1])
-          ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
-          ->join('users as u', 'c.user_id', 'u.id')
-          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
-          ->select(['detalle_contactos.*']);
+        $data = $data->whereIn('guardado',[0,1]);
       }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
-        $data = DetalleContactos::where('guardado',0)
-          ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
-          ->join('users as u', 'c.user_id', 'u.id')
-          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
-          ->select(['detalle_contactos.*']);
+        $data = $data->where('guardado',0);
       }else if (in_array(auth()->user()->rol, [User::ROL_MOTORIZADO])) {
-        $data = DetalleContactos::whereIn('guardado',[0,1])
-          ->join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
-          ->join('users as u', 'c.user_id', 'u.id')
-          ->where('confirmado',0)->orderByRaw("guardado DESC, confirmado DESC")
-          ->select(['detalle_contactos.*']);
+        $data = $data->where('guardado',0);
+      }else if (in_array(auth()->user()->rol, [User::ROL_ENCARGADO])) {
+        $data = $data->whereIn('guardado',[0,1]);
       }
       if (Auth::user()->rol == "Llamadas") {
-
         $usersasesores = User::where('users.rol', 'Asesor')
           ->where('users.estado', '1')
           ->where('users.llamada', Auth::user()->id)
@@ -67,7 +61,6 @@ class AlertaController extends Controller
             DB::raw("users.identificador as identificador")
           )
           ->pluck('users.identificador');
-        //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
         $data = $data->WhereIn("u.identificador", $usersasesores);
 
 
