@@ -336,6 +336,13 @@ return [
                     'icon' => 'fas fa-check-circle dot_encargado_tienda_agente_count',
                     'active' => ['enviados'],
                 ],
+                [
+                  'text' => 'Bandejas de recojo',
+                  'route' => 'pedidos.recojo',
+                  'can' => 'pedidos.index',
+                  'icon' => 'fas fa-check-circle',
+                  'active' => ['pedidos de recojo'],
+                ],
             ],
         ],
 
