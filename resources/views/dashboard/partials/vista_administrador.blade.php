@@ -226,24 +226,24 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
+                                {{--<x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>--}}
                             </div>
 
                             <div class="col-lg-12">
-                                <x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>
+                                {{--<x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>--}}
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <x-grafico-pedidos-por-dia rol="Administrador"
+                        {{--<x-grafico-pedidos-por-dia rol="Administrador"
                                                    title="Cantidad de pedidos de los asesores por dia"
                                                    label-x="Asesores" label-y="Cant. Pedidos"
-                                                   only-day></x-grafico-pedidos-por-dia>
+                                                   only-day></x-grafico-pedidos-por-dia>--}}
 
-                        <x-grafico-pedidos-por-dia rol="Administrador"
+                        {{--<x-grafico-pedidos-por-dia rol="Administrador"
                                                    title="Cantidad de pedidos de los asesores por mes"
                                                    label-x="Asesores"
-                                                   label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
+                                                   label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>--}}
                     </div>
                 </div>
             </div>
@@ -257,7 +257,7 @@
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
                 <div class="card">
                     <div class="card-body pl-0">
-                        <div id="pagosxmes" class="w-100" style="height: 550px;"></div>
+                        {{--<div id="pagosxmes" class="w-100" style="height: 550px;"></div>--}}
                     </div>
                 </div>
             </div>
