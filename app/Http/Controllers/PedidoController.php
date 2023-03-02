@@ -359,7 +359,7 @@ class PedidoController extends Controller
                                     <i class="fa fa-file"></i> Adjuntos
                                 </button>';
                     }else{
-                      
+
                     }
 
                 }
