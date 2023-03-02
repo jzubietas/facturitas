@@ -177,7 +177,7 @@ class PedidoController extends Controller
 
 
         if (Auth::user()->rol == "Llamadas") {
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
@@ -185,7 +185,7 @@ class PedidoController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);*/
         } else if (Auth::user()->rol == "Jefe de llamadas") {
             /*$usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -348,7 +348,9 @@ class PedidoController extends Controller
                 }
 
                 if ($pedido->da_confirmar_descarga) {
-                    $btn[] = '<button data-jqconfirmdetalle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
+                    if ($pedido->estado == 1)
+                    {
+                      $btn[] = '<button data-jqconfirmdetalle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
                                     data-idc="' . $pedido->id . '"
                                     data-codigo="' . $pedido->codigos . '"
                                     class="btn btn-light btn-sm text-left" ' . (($pedido->da_confirmar_descarga == 0 && !empty($pedido->sustento_adjunto)) ? 'style="border: 3px solid #dc3545!important;"' : '') . '
@@ -356,6 +358,10 @@ class PedidoController extends Controller
                                      >
                                     <i class="fa fa-file"></i> Adjuntos
                                 </button>';
+                    }else{
+
+                    }
+
                 }
 
                 if (!in_array($pedido->condicion_envio_code, [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])) {
@@ -600,7 +606,7 @@ class PedidoController extends Controller
         $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.icelular as icelulares',
@@ -622,7 +628,7 @@ class PedidoController extends Controller
                 'pedidos.pago',
                 'pedidos.pagado',
                 'pedidos.envio'
-            )
+            ])
             ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])

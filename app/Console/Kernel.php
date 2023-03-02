@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('fixed:bin')->everyMinute();
+        //$schedule->command('fixed:bin')->everyMinute();
 
         $schedule->command('backup:database')
             ->dailyAt('19:30');
@@ -40,8 +40,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('motorizado:send-observado')
             ->dailyAt('23:59');
 
-        $schedule->command('olva:sync')
-            ->dailyAt('20:00');
+        /*$schedule->command('olva:sync')
+            ->dailyAt('20:00');*/
 
         //Resetea las metas de los asesores el primer dia del mes
         $schedule->command('automatic:metas:reset')->monthlyOn(1, '00:01');;
