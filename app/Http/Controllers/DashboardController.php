@@ -19,11 +19,19 @@ use \Yajra\Datatables\Datatables;
 
 class DashboardController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
     if (auth()->user()->rol == 'MOTORIZADO') {
       return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
     }
+
+    $fecha = null;
+    if (!request()->has("fecha")) {
+      $fecha = Carbon::now();
+    } else {
+      $fecha = $request->fecha;
+    }
+
 
     $mirol = Auth::user()->rol;
     $lst_users_vida = null;
@@ -50,7 +58,8 @@ class DashboardController extends Controller
     }*/
 
 
-    return view('dashboard.dashboard', compact('lst_users_vida'));
+    return view('dashboard.dashboard', compact('fecha','lst_users_vida'));
+
   }
 
   public function widgets(Request $request)
@@ -120,12 +129,8 @@ class DashboardController extends Controller
    * @throws \Exception
    */
 
-
-
   public function viewMetaTable(Request $request)
   {
-
-
     $metas = [];
     $total_asesor= User::query()->activo()->rolAsesor()->count();
     if (auth()->user()->rol == User::ROL_ASESOR){
@@ -187,7 +192,7 @@ class DashboardController extends Controller
           }
         }
       }
-
+      /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
       $date_pagos = Carbon::parse(now())->subMonth();
       $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
         ->where('pedidos.codigo', 'not like', "%-C%")->activo()->whereDate('pedidos.created_at', now())->where('pendiente_anulacion', '<>','1' )->count();

@@ -44,20 +44,20 @@
                            style="text-align: center">{{-- tablaPrincipal --}}
                         <thead><h4 style="text-align: center"><strong>Detalle de pedido</strong></h4>
                         <tr>
-                            <th scope="col">Código</th>
-                            <th scope="col">Empresa</th>
-                            <th scope="col">Mes</th>
-                            <th scope="col">Año</th>
-                            <th scope="col">RUC</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">Tipo de comprobante<br>y banca</th>
-                            <th scope="col">Porcentaje</th>
-                            <th scope="col">Courier</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Nota</th>
-                            <th scope="col">Adjunto</th>
-                            <th scope="col">FT</th>
-                            <th scope="col">Opciones</th>
+                            <th scope="col" style="vertical-align: middle">Código</th>
+                            <th scope="col" style="vertical-align: middle">Empresa</th>
+                            <th scope="col" style="vertical-align: middle">Mes</th>
+                            <th scope="col" style="vertical-align: middle">Año</th>
+                            <th scope="col" style="vertical-align: middle">RUC</th>
+                            <th scope="col" style="vertical-align: middle">Cantidad</th>
+                            <th scope="col" style="vertical-align: middle">Tipo de comprobante<br>y banca</th>
+                            <th scope="col" style="vertical-align: middle">Porcentaje</th>
+                            <th scope="col" style="vertical-align: middle">Courier</th>
+                            <th scope="col" style="vertical-align: middle">Descripción</th>
+                            <th scope="col" style="vertical-align: middle">Nota</th>
+                            <th scope="col" style="vertical-align: middle">Adjunto</th>
+                            <th scope="col" style="vertical-align: middle">FT</th>
+                            <th scope="col" style="vertical-align: middle">Opciones</th>
                         </tr>
                         </thead>
                         <tbody>

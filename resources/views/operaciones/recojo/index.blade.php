@@ -20,11 +20,11 @@
         <table id="tablaRecojo" class="table table-striped w-100">
           <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Codigo</th>
-            <th scope="col">Razon social</th>
-            <th scope="col">Estado Envio</th>
-            <th scope="col">Acciones</th>
+            <th scope="col" style="vertical-align: middle">Item</th>
+            <th scope="col" style="vertical-align: middle">Codigo</th>
+            <th scope="col" style="vertical-align: middle">Razon social</th>
+            <th scope="col" style="vertical-align: middle">Estado Envio</th>
+            <th scope="col" style="vertical-align: middle">Acciones</th>
           </tr>
           </thead>
           <tbody>

@@ -607,7 +607,7 @@
                             return `
 <form>
 <div class="card">
-    <div class="card-body">
+    <div class="card-body pl-0">
         <div class="col-md-12">
             <ul class="list-group">
                 <li class="list-group-item">
@@ -1122,7 +1122,7 @@
                                 url: "{{ route('envios.recepcionmotorizado.iniciar_ruta_masiva') }}",
                             }).always(function (data) {
                                 console.log(data);
-                                
+
                                 if(data.html=='1')
                                 {
                                   $('#tablaPrincipal').DataTable().ajax.reload();

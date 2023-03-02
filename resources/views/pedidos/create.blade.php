@@ -197,15 +197,15 @@ __________________________________
   width="100%" id="tblListadoHistorial">
 <thead>
 <tr>
-<th>CLIENTE</th>
-<th>RUC - EMPRESA</th>
-<th>MES/AÑO</th>
-<th>CANTIDAD</th>
-<th>TIPO BANCA</th>
-<th>COURIER</th>
-<th>DESCRIPCIÓN</th>
-<th>NOTA</th>
-<th>ACCIONES</th>
+<th style="vertical-align: middle">CLIENTE</th>
+<th style="vertical-align: middle">RUC - EMPRESA</th>
+<th style="vertical-align: middle">MES/AÑO</th>
+<th style="vertical-align: middle">CANTIDAD</th>
+<th style="vertical-align: middle">TIPO BANCA</th>
+<th style="vertical-align: middle">COURIER</th>
+<th style="vertical-align: middle">DESCRIPCIÓN</th>
+<th style="vertical-align: middle">NOTA</th>
+<th style="vertical-align: middle">ACCIONES</th>
 </tr>
 </thead>
 <tbody>

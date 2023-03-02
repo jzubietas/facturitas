@@ -29,5 +29,6 @@ class PostUpdateSituacion
     public function handle()
     {
         Cliente::createSituacionByCliente($this->cliente_id);
+        //Cliente::createSituacionNulosByCliente($this->cliente_id);
     }
 }

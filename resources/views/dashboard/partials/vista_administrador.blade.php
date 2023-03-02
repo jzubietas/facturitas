@@ -90,12 +90,13 @@
 
 
     <div class="col-lg-12 " id="contenedor-fullscreen">
+
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
         <div class="d-flex justify-content-center align-items-center ml-5">
           <label class="p-0 m-0" for="ingresar">Fecha: </label>
-          <input type="date" id="calendario" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}">
+          <input type="date" id="fecha" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}" >
         </div>
       </div>
 
@@ -199,7 +200,7 @@
                     </div>
                 </div>
             </div>
-{{--            <div class="col-md-12">
+            <div class="col-md-12">
                 <div class="row" id="widget-container">
                     <div class="col-md-12">
                         <div class="card">
@@ -209,7 +210,7 @@
                                         <li class="list-group-item">
                                             <div class="row">
                                                 <div class="col-md-9">
-                                                    --}}{{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}{{--
+                                                     <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
                                                     <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
                                                 </div>
                                                 <div class="col-md-3">
@@ -225,38 +226,38 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
+                                {{--<x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>--}}
                             </div>
 
                             <div class="col-lg-12">
-                                <x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>
+                                {{--<x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>--}}
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <x-grafico-pedidos-por-dia rol="Administrador"
+                        {{--<x-grafico-pedidos-por-dia rol="Administrador"
                                                    title="Cantidad de pedidos de los asesores por dia"
                                                    label-x="Asesores" label-y="Cant. Pedidos"
-                                                   only-day></x-grafico-pedidos-por-dia>
+                                                   only-day></x-grafico-pedidos-por-dia>--}}
 
-                        <x-grafico-pedidos-por-dia rol="Administrador"
+                        {{--<x-grafico-pedidos-por-dia rol="Administrador"
                                                    title="Cantidad de pedidos de los asesores por mes"
                                                    label-x="Asesores"
-                                                   label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
+                                                   label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>--}}
                     </div>
                 </div>
-            </div>--}}
+            </div>
         </div>
     </div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                <x-grafico-top-clientes-pedidos top="10"></x-grafico-top-clientes-pedidos>
+                {{--<x-grafico-top-clientes-pedidos top="10"></x-grafico-top-clientes-pedidos>--}}
             </div>
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
                 <div class="card">
-                    <div class="card-body">
-                        <div id="pagosxmes" class="w-100" style="height: 550px;"></div>
+                    <div class="card-body pl-0">
+                        {{--<div id="pagosxmes" class="w-100" style="height: 550px;"></div>--}}
                     </div>
                 </div>
             </div>
@@ -304,7 +305,6 @@
         .table_analisis {
           display: grid;
           grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-          /*width: 880px;/*
         }
     </style>
 @endpush
@@ -312,18 +312,7 @@
 
 @section('js-datatables')
   <script>
-    $(function () {
-      $('#calendario').change(function (e) {
-        const value = e.target.value;
-        console.log(value)
-        if (value) {
-          window.location.replace('{{route('dashboard.index')}}?date=' + value)
-        }
-      })
-    });
-  </script>
-    <script>
-        $(".animated-progress span").each(function () {
+         $(".animated-progress span").each(function () {
             $(this).animate(
                 {
                     width: $(this).attr("data-progress") + "%",
@@ -341,10 +330,21 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
+
+        $('#fecha').val("{{\Carbon\Carbon::parse($fecha)->format('Y-m-d')}}");
+
+        $(document).on('change','#fecha',function(){
+          const value = e.target.value;
+          console.log(value)
+          if (value) {
+            window.location.replace('{{route('dashboard.index')}}?fecha=' + value)
+          }
+        });
+
         window.cargaNueva = function (entero) {
           console.log(' '+entero)
           var fd=new FormData();
-          fd.append('fecha',$('#calendario').val("{{\Carbon\Carbon::now()->format('Y-m-d')}}"));
+          fd.append('fecha',$('#fecha').val());
           fd.append('ii',entero);
           $.ajax({
             data: fd,

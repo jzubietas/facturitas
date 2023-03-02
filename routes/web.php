@@ -149,6 +149,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientes.recuperados.recientes', [ClienteController::class, 'indexRecuperadoRecientes'])->name('clientes.recuperados.recientes');
     Route::get('recuperadostabla', [ClienteController::class, 'indexrecuperadotabla'])->name('recuperadostabla');
 
+    Route::get('clientes.nulos', [ClienteController::class, 'indexnulo'])->name('clientes.nulos');
+    Route::get('nulostabla', [ClienteController::class, 'indexnulotabla'])->name('nulostabla');
+
     /*Controller Cliente*/
 
     /*Controller Basefria*/
