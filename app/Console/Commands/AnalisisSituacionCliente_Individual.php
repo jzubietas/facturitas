@@ -476,6 +476,21 @@ class AnalisisSituacionCliente_Individual extends Command
               $this->warn('actual '.$mes_actual->format('Y-m'));
               //$this->warn('ultimo mes ');
               //update clientes
+              //calculo de count activos
+
+              $situacion_final=SituacionClientes::where('cliente_id',$cliente->id)
+                ->where('periodo',$mes_actual->format('Y-m'))->first();
+
+              $cont_ped_activo=Pedido::where('cliente_id',$cliente->id)->activo()->count();
+              if( !($situacion_final!='BASE FRIA') && ($cont_ped_activo==0) )
+              {
+                $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
+                  ->where('periodo',$mes_actual->format('Y-m'))
+                  ->first();
+                $situacion_cambia->update([
+                  'situacion'=>'NULO'
+                ]);
+              }
 
               $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
               //$this->warn($situacion_actual->situacion);
