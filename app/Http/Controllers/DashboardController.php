@@ -25,6 +25,14 @@ class DashboardController extends Controller
       return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
     }
 
+    $fecha = null;
+    if (!request()->has("fecha")) {
+      $fecha = Carbon::now();
+    } else {
+      $fecha = $request->fecha;
+    }
+
+
     $mirol = Auth::user()->rol;
     $lst_users_vida = null;
     $lst_users_vida = User::where('estado', '1');
@@ -50,21 +58,7 @@ class DashboardController extends Controller
     }*/
 
 
-    return view('dashboard.dashboard', compact('lst_users_vida'));
-    $fecha = null;
-
-    if (!request()->has("fecha")) {
-      $fecha = Carbon::now();
-    } else {
-      $fecha = $request->fecha;
-    }
-
-    return view(
-      'dashboard.dashboard',
-      compact(
-        'fecha','lst_users_vida'
-      ),
-    );
+    return view('dashboard.dashboard', compact('fecha','lst_users_vida'));
 
   }
 
