@@ -228,43 +228,43 @@ class RecojoController extends Controller
 
     $contar=0;
     $dirgrupo=0;
+    $zona_distrito = Distrito::where('distrito', $distrito_recojo)->first();
     foreach ($pedido_concatenado as $pedidoid) {
-      $pedido = Pedido::find($pedidoid);
+      //$pedido = Pedido::find($pedidoid);
 
-      //$pedido = Pedido::where("id", $pedidoid)->first();
-      if ($pedido) {
-        $contar++;
-        $dirgrupo = $pedido->direccion_grupo;
-        if ($dirgrupo) {
-          $contar++;
+      $pedido = Pedido::where("id", $pedidoid)->first();
+      $dirgrupo = $pedido->direccion_grupo;
+      Pedido::where("id", $pedidoid)->update([
+        'direccion_grupo' => null,
+        'destino' => 'LIMA',
+        'env_destino' => 'LIMA',
+        'env_zona_asignada' => null,
+        'env_zona'=>$zona_distrito->zona,
+        'env_cantidad' => 0,
+        'env_tracking' => '',
+        'env_numregistro' => '',
+        'env_rotulo' => '',
+        'env_importe' => 0.00,
+        'estado_ruta' => 0,
+        'fecha_salida' => null,
+        "env_nombre_cliente_recibe" => $Nombre_recibe,
+        "env_celular_cliente_recibe" => $celular_id,
+        'env_distrito'=>$zona_distrito->distrito,
+        "env_direccion" => $direccion_recojo,
+        "env_referencia" => $referencia_recojo,
+        "env_observacion" => $observacion_recojo,
+        "env_gmlink" => $gm_link,
+        "env_sustento" => $sustento_recojo,
+        "condicion_envio" => Pedido::RECOJO_COURIER,
+        "condicion_envio_code" => Pedido::RECOJO_COURIER_INT,
+        "estado_sobre"=>1
+      ]);
 
-          $pedido_update = Pedido::where("id", $pedidoid)->update([
-            'direccion_grupo' => null,
-            'destino' => 'LIMA',
-            'env_destino' => 'LIMA',
-            'env_zona_asignada' => null,
-            'env_cantidad' => 0,
-            'env_tracking' => '',
-            'env_numregistro' => '',
-            'env_rotulo' => '',
-            'env_importe' => 0.00,
-            'estado_ruta' => 0,
-            'fecha_salida' => null,
-            "env_nombre_cliente_recibe" => $Nombre_recibe,
-            "env_celular_cliente_recibe" => $celular_id,
-            "env_direccion" => $direccion_recojo,
-            "env_referencia" => $referencia_recojo,
-            "env_observacion" => $observacion_recojo,
-            "env_gmlink" => $gm_link,
-            "env_sustento" => $sustento_recojo,
-            "condicion_envio" => Pedido::RECOJO_COURIER,
-            "condicion_envio_code" => Pedido::RECOJO_COURIER_INT,
-            "estado_sobre"=>1
-          ]);
+      $pedido = Pedido::where("id", $pedidoid)->first();
 
       $dp_empresa = DetallePedido::activo()->where("pedido_id", $pedidoid)->first();
       if ( in_array($pedido->condicion_envio_code ,[Pedido::RECEPCION_COURIER_INT,Pedido::RECOJO_COURIER_INT] )) {
-        $attach_pedidos_data[$pedido->id] = [
+        $attach_pedidos_data[$pedidoid] = [
           'razon_social' => $dp_empresa->nombre_empresa,
           'codigo' => $dp_empresa->codigo,
         ];
@@ -273,7 +273,7 @@ class RecojoController extends Controller
       //$grupoCreatePedido = GrupoPedido::createGroupByPedido($pedido, true, true);
 
     }
-    $zona_distrito = Distrito::where('distrito', $distrito_recojo)->first();
+
     if (count($attach_pedidos_data) > 0)
     {
       $grupoPedido = GrupoPedido::createGroupByArray([
@@ -291,7 +291,6 @@ class RecojoController extends Controller
     }
 
     return response()->json(['html' => 1,'direccion_grupo' => $dirgrupo,'contador'=>$contar]);
-  }
-    }
+
   }
 }
