@@ -69,6 +69,7 @@ class MotorizadoController extends Controller
                     $query->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_OBSERVADO);
                     break;
                 default:
+                  //EN MOTORIZADO
                   //return $tab;
                     $query
                         ->where('direccion_grupos.estado', '1')
@@ -141,9 +142,15 @@ class MotorizadoController extends Controller
                                 return datal;
                             }
                      */
+
+                  if ($pedido->condicion_envio == Pedido::CONFIRMAR_RECOJO_MOTORIZADO){
+                    return $pedido->referencia;
+                  }else {
                     return collect(explode(',', $pedido->referencia))
                         ->map(fn($c, $index) => ($index + 1) . ") <b>$c</b>")
                         ->join("<br>");
+                  }
+
                 })
                 ->addColumn('action', function ($pedido) use ($tab) {
 

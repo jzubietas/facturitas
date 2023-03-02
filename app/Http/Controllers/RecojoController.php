@@ -144,6 +144,7 @@ class RecojoController extends Controller
   {
     $envio = DireccionGrupo::where("id", $request->input_confirmrecojomotorizado)->first();
 
+
     DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT);
 
       $pedidos = $envio->pedidos()
@@ -164,6 +165,16 @@ class RecojoController extends Controller
 
       $direccion_nueva=Directions::whereIn('rol',[User::ROL_JEFE_OPERARIO,User::ROL_JEFE_COURIER])->where('user_id',$jefeope)->first();
 
+      $envio_update = DireccionGrupo::where("id", $request->input_confirmrecojomotorizado)->update([
+        'nombre' => $direccion_nueva->cliente,
+        'celular'=>$direccion_nueva->numero_recojo,
+        'direccion'=>$direccion_nueva->direccion_recojo,
+        'referencia'=>$direccion_nueva->referencia,
+        'distrito' => $direccion_nueva->distrito ,
+        'destino'=>$direccion_nueva->destino,
+      ]);
+
+    return $envio_update;
 
       foreach ($pedidos as $pedidosFila){
           $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
