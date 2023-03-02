@@ -220,41 +220,14 @@ class RecojoController extends Controller
     foreach ($pedido_concatenado as $pedidoid) {
       $pedido = Pedido::find($pedidoid);
 
-      $pedido = Pedido::where("id", $pedidoid)->first();
+      //$pedido = Pedido::where("id", $pedidoid)->first();
       if ($pedido) {
         $contar++;
         $dirgrupo = $pedido->direccion_grupo;
         if ($dirgrupo) {
           $contar++;
-          PedidoMovimientoEstado::create([
-            'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,
-            'fecha' => now(),
-            'pedido' => $pedido->id,
-            'json_envio' => json_encode(array(
-              "recojo" => true,
-              'direccion_grupo' => null,
-              'destino' => 'LIMA',
-              'env_destino' => 'LIMA',
-              'env_zona_asignada' => null,
-              'env_cantidad' => 0,
-              'env_tracking' => '',
-              'env_numregistro' => '',
-              'env_rotulo' => '',
-              'env_importe' => 0.00,
-              'estado_ruta' => 0,
-              'fecha_salida' => null,
-              "env_nombre_cliente_recibe" => $Nombre_recibe,
-              "env_celular_cliente_recibe" => $celular_id,
-              "env_direccion" => $direccion_recojo,
-              "env_referencia" => $referencia_recojo,
-              "env_observacion" => $observacion_recojo,
-              "gm_link" => $gm_link,
-              "env_sustento" => $sustento_recojo,
-              'condicion_envio' => Pedido::RECOJO_COURIER,
-              'condicion_envio_code' => Pedido::RECOJO_COURIER_INT
-            ))
-          ]);
-          $pedido->update([
+
+          $pedido_update = Pedido::where("id", $pedidoid)->update([
             'direccion_grupo' => null,
             'destino' => 'LIMA',
             'env_destino' => 'LIMA',
@@ -271,66 +244,13 @@ class RecojoController extends Controller
             "env_direccion" => $direccion_recojo,
             "env_referencia" => $referencia_recojo,
             "env_observacion" => $observacion_recojo,
-            "gm_link" => $gm_link,
+            "env_gmlink" => $gm_link,
             "env_sustento" => $sustento_recojo,
             "condicion_envio" => Pedido::RECOJO_COURIER,
             "condicion_envio_code" => Pedido::RECOJO_COURIER_INT,
             "estado_sobre"=>1
           ]);
 
-      PedidoMovimientoEstado::create([
-        'condicion_envio_code' => Pedido::RECOJO_COURIER_INT,
-        'fecha' => now(),
-        'pedido' => $pedido->id,
-        'json_envio' => json_encode(array(
-          "recojo" => true,
-          'direccion_grupo' => null,
-          'destino' => 'LIMA',
-          'env_destino' => 'LIMA',
-          'env_zona_asignada' => null,
-          'env_cantidad' => 0,
-          'env_tracking' => '',
-          'env_numregistro' => '',
-          'env_rotulo' => '',
-          'env_importe' => 0.00,
-          'estado_ruta' => 0,
-          'fecha_salida' => null,
-          "env_nombre_cliente_recibe" => $Nombre_recibe,
-          "env_celular_cliente_recibe" => $celular_id,
-          "env_direccion" => $direccion_recojo,
-          "env_referencia" => $referencia_recojo,
-          "env_observacion" => $observacion_recojo,
-          "gm_link" => $gm_link,
-          "env_sustento" => $sustento_recojo,
-          'condicion_envio' => Pedido::RECOJO_COURIER,
-          'condicion_envio_code' => Pedido::RECOJO_COURIER_INT
-        ))
-      ]);
-      $pedido->update([
-        'direccion_grupo' => null,
-        'destino' => 'LIMA',
-        'env_destino' => 'LIMA',
-        'env_distrito'=>$distrito_recojo,
-        'env_zona_asignada' => null,
-        'env_cantidad' => 0,
-        'env_tracking' => '',
-        'env_numregistro' => '',
-        'env_rotulo' => '',
-        'env_importe' => 0.00,
-        'estado_ruta' => 0,
-        'fecha_salida' => null,
-        "env_nombre_cliente_recibe" => $Nombre_recibe,
-        "env_celular_cliente_recibe" => $celular_id,
-        "env_direccion" => $direccion_recojo,
-        "direccion" => $direccion_recojo,
-        "env_referencia" => $referencia_recojo,
-        "env_observacion" => $observacion_recojo,
-        "gm_link" => $gm_link,
-        "env_sustento" => $sustento_recojo,
-        "condicion_envio" => Pedido::RECOJO_COURIER,
-        "condicion_envio_code" => Pedido::RECOJO_COURIER_INT,
-        "estado_sobre"=>1
-      ]);
       $dp_empresa = DetallePedido::activo()->where("pedido_id", $pedidoid)->first();
       if ( in_array($pedido->condicion_envio_code ,[Pedido::RECEPCION_COURIER_INT,Pedido::RECOJO_COURIER_INT] )) {
         $attach_pedidos_data[$pedido->id] = [
