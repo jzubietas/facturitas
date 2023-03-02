@@ -141,7 +141,7 @@ class ClienteController extends Controller
     {
         $data = Cliente:://CLIENTES SIN PEDIDOS
         join('users as u', 'clientes.user_id', 'u.id')
-            ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+            //->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             //->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
             ->select(['clientes.id',
