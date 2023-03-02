@@ -40,18 +40,8 @@ class ResetVidasUsers extends Command
    */
   public function handle()
   {
-    $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
-    $periodo_original=Carbon::parse($fp->created_at)->startOfMonth();
-    $periodo_actual=Carbon::parse(now())->endOfMonth();
-
-    $this->warn( $periodo_original );
-    $this->info( $periodo_actual );
-
-    $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
-    $this->warn( $diff );
-    /*if (now()==$periodo_actual || now()==$periodo_actual ){}*/
-    /*Listado de los  (*10) usuarios ordernados por id asc*/
-    $usuarios=User::where('estado',1)->orderBy('id','asc')->offset(0)->limit(10)->get();
+    $this->warn("Comando : Reseteo vidas");
+    $usuarios=User::where('estado',1)->orderBy('id','asc')->get();
     $progress = $this->output->createProgressBar($usuarios->count());
     foreach($usuarios as $user)
     {
