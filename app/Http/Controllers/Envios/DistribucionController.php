@@ -368,7 +368,7 @@ class DistribucionController extends Controller
                 $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request, $zona) {
                   $valcod_recojo=intval($grupo->cod_recojo);
                     $cliente = $pedido->cliente;
-                    if($valcod_recojo  == 1){
+                    if($valcod_recojo  == 0){
                       return [
                       'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
                       'condicion_envio_at' => now(),
@@ -393,6 +393,8 @@ class DistribucionController extends Controller
                       'observacion' => $pedido->env_rotulo,//rotulo
                       'motorizado_id' => $request->motorizado_id,
                       'identificador' => $cliente->user->identificador,
+                        'cod_recojo' => $grupo->cod_recojo,
+                        'env_sustento_recojo' => $grupo->env_sustento_recojo,
                     ];
                   }else{
                       return [
@@ -419,6 +421,8 @@ class DistribucionController extends Controller
                         'observacion' => $pedido->env_rotulo,//rotulo
                         'motorizado_id' => $request->motorizado_id,
                         'identificador' => $cliente->user->identificador,
+                        'cod_recojo' => $grupo->cod_recojo,
+                        'env_sustento_recojo' => $grupo->env_sustento_recojo,
                       ];
                     }
                 })
@@ -436,7 +440,16 @@ class DistribucionController extends Controller
                         $grupos[] = $this->createDireccionGrupo($grupo, $groupData, $pedidos)->refresh();
                       if($grupo->cod_recojo == 1)
                       {
-                        $pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
+                        $pedidos = $grupo->pedidos()
+                          ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
+                          ->where('detalle_pedidos.estado', '1')
+                          ->select([
+                            'pedidos.*',
+                            'detalle_pedidos.nombre_empresa'
+                          ])
+                          ->activo()
+                          ->get();
+                        //$pedidosGruposPedidos = DB::table('grupo_pedido_items')->where('grupo_pedido_id', $grupo->id )->get();
                         foreach ($pedidos as $pedidosFila){
                           $pedidoUpdate = Pedido::where('id', $pedidosFila->id)->first();
                           $pedidoUpdate->update([

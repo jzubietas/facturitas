@@ -541,12 +541,14 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                 if (grupos.length === 0) {
                     return;
                 }
+                console.log(grupos)
                 $.confirm({
                     title: '¡Confirmar creación de paquetes!',
                     columnClass: 'xlarge',
                     content: function () {
                         const self = this
                         self.$$goSobres.hide();
+                        console.log("iniciar")
                         //return '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>' + zona + '</b>?'
                         return $.ajax({
                             url: link,
@@ -570,6 +572,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                             text: 'Aceptar y crear paquetes',
                             btnClass: 'btn-success',
                             action: function () {
+                              console.log("iniciar en ajax")
                                 buttom.find('.spinner-border').show()
                                 buttom.find('.sr-only').show()
                                 const self = this
@@ -578,9 +581,10 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                                 $.ajax({
                                     url: link.replace('visualizar=1', '').replace('visualizar', '_agrupar').replace('?&', '?'),
                                     data: {
-                                        groups: Array.from(table.data()).map(function (item) {
+                                        /*groups: Array.from(table.data()).map(function (item) {
                                             return item.id
-                                        })
+                                        })*/
+                                      groups:grupos
                                     },
                                     dataType: 'json',
                                     method: 'post'
