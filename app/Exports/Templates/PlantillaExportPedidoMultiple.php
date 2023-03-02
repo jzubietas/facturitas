@@ -26,7 +26,7 @@ class PlantillaExportPedidoMultiple implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-          new PageclienteSituacion(),
+          //new PageclienteSituacion(),
           new PageclienteinfoNoviembre(),
           new PageclienteinfoDiciembre(),
           new PageclienteinfoEnero2023(),
