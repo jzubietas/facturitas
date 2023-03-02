@@ -42,7 +42,14 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('olva:sync')
             ->dailyAt('20:00');
-        
+
+        //Resetea las metas de los asesores el primer dia del mes
+        $schedule->command('asesores:reset-metas')->monthly();
+
+        //Resetea las vidas en general los dias 15 y el ultimo dia del mes
+        /*$schedule->command('asesores:reset-metas')->monthlyOn(15, '23:59');;
+        $schedule->command('asesores:reset-metas')->lastDayOfMonth('23:59');;*/
+
 /*
         $schedule->command('olva:move-tienda-agente')
             ->dailyAt('00:00');
