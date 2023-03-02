@@ -190,15 +190,14 @@ class ClienteController extends Controller
 
         if (Auth::user()->rol == "Llamadas") {
 
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
@@ -1035,28 +1034,6 @@ class ClienteController extends Controller
 
     public function indexabandonotabla(Request $request)
     {
-        //
-
-
-        $dateM = Carbon::now()->format('m');
-        $dateY = Carbon::now()->format('Y');
-
-        $data = null;
-
-        $anios = [
-            "2020" => '2020 - 2021',
-            "2021" => '2021 - 2022',
-            "2022" => '2022 - 2023',
-            "2023" => '2023 - 2024',
-            "2024" => '2024 - 2025',
-            "2025" => '2025 - 2026',
-            "2026" => '2026 - 2027',
-            "2027" => '2027 - 2028',
-            "2028" => '2028 - 2029',
-            "2029" => '2029 - 2030',
-            "2030" => '2030 - 2031',
-            "2031" => '2031 - 2032',
-        ];
 
         $data = Cliente:://CLIENTES SIN PEDIDOS
         join('users as u', 'clientes.user_id', 'u.id')
@@ -1112,15 +1089,14 @@ class ClienteController extends Controller
 
         if (Auth::user()->rol == "Llamadas") {
 
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
 
@@ -1504,26 +1480,6 @@ class ClienteController extends Controller
 
     public function indexnuevotabla(Request $request)
     {
-        //
-        $dateM = Carbon::now()->format('m');
-        $dateY = Carbon::now()->format('Y');
-
-        $data = null;
-
-        $anios = [
-            "2020" => '2020 - 2021',
-            "2021" => '2021 - 2022',
-            "2022" => '2022 - 2023',
-            "2023" => '2023 - 2024',
-            "2024" => '2024 - 2025',
-            "2025" => '2025 - 2026',
-            "2026" => '2026 - 2027',
-            "2027" => '2027 - 2028',
-            "2028" => '2028 - 2029',
-            "2029" => '2029 - 2030',
-            "2030" => '2030 - 2031',
-            "2031" => '2031 - 2032',
-        ];
 
         $data = Cliente:://CLIENTES SIN PEDIDOS
         join('users as u', 'clientes.user_id', 'u.id')
@@ -1575,15 +1531,14 @@ class ClienteController extends Controller
 
         if (Auth::user()->rol == "Llamadas") {
 
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
@@ -1637,26 +1592,6 @@ class ClienteController extends Controller
 
     public function indexrecurrentetabla(Request $request)
     {
-        //
-        $dateM = Carbon::now()->format('m');
-        $dateY = Carbon::now()->format('Y');
-
-        $data = null;
-
-        $anios = [
-            "2020" => '2020 - 2021',
-            "2021" => '2021 - 2022',
-            "2022" => '2022 - 2023',
-            "2023" => '2023 - 2024',
-            "2024" => '2024 - 2025',
-            "2025" => '2025 - 2026',
-            "2026" => '2026 - 2027',
-            "2027" => '2027 - 2028',
-            "2028" => '2028 - 2029',
-            "2029" => '2029 - 2030',
-            "2030" => '2030 - 2031',
-            "2031" => '2031 - 2032',
-        ];
 
         $data = Cliente:://CLIENTES SIN PEDIDOS
         join('users as u', 'clientes.user_id', 'u.id')
@@ -1708,15 +1643,14 @@ class ClienteController extends Controller
 
         if (Auth::user()->rol == "Llamadas") {
 
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
@@ -1769,26 +1703,6 @@ class ClienteController extends Controller
 
     public function indexrecuperadotabla(Request $request)
     {
-        //
-        $dateM = Carbon::now()->format('m');
-        $dateY = Carbon::now()->format('Y');
-
-        $data = null;
-
-        $anios = [
-            "2020" => '2020 - 2021',
-            "2021" => '2021 - 2022',
-            "2022" => '2022 - 2023',
-            "2023" => '2023 - 2024',
-            "2024" => '2024 - 2025',
-            "2025" => '2025 - 2026',
-            "2026" => '2026 - 2027',
-            "2027" => '2027 - 2028',
-            "2028" => '2028 - 2029',
-            "2029" => '2029 - 2030',
-            "2030" => '2030 - 2031',
-            "2031" => '2031 - 2032',
-        ];
 
         $data = Cliente:://CLIENTES SIN PEDIDOS
         join('users as u', 'clientes.user_id', 'u.id')
@@ -1845,15 +1759,14 @@ class ClienteController extends Controller
 
         if (Auth::user()->rol == "Llamadas") {
 
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
@@ -1955,14 +1868,14 @@ class ClienteController extends Controller
       ]);
 
     if (Auth::user()->rol == "Llamadas") {
-      $usersasesores = User::where('users.rol', 'Asesor')
+      /*$usersasesores = User::where('users.rol', 'Asesor')
         ->where('users.estado', '1')
         ->where('users.llamada', Auth::user()->id)
         ->select(
           DB::raw("users.identificador as identificador")
         )
         ->pluck('users.identificador');
-      $data = $data->WhereIn("u.identificador", $usersasesores);
+      $data = $data->WhereIn("u.identificador", $usersasesores);*/
     } else if (Auth::user()->rol == "Jefe de llamadas") {
       /*$usersasesores = User::where('users.rol', 'Asesor')
           ->where('users.estado', '1')
