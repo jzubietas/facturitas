@@ -61,7 +61,7 @@ class PageclienteinfoMarzo2023 extends Export implements WithColumnFormatting,Wi
 
     public function title(): string
     {
-        return 'Detalle Febrero 2023';
+        return 'Detalle Marzo 2023';
     }
     public function map($model): array
     {
