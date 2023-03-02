@@ -200,7 +200,7 @@
                     </div>
                 </div>
             </div>
-{{--            <div class="col-md-12">
+            <div class="col-md-12">
                 <div class="row" id="widget-container">
                     <div class="col-md-12">
                         <div class="card">
@@ -210,7 +210,7 @@
                                         <li class="list-group-item">
                                             <div class="row">
                                                 <div class="col-md-9">
-                                                    --}}{{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}{{--
+                                                     <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
                                                     <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
                                                 </div>
                                                 <div class="col-md-3">
@@ -246,7 +246,7 @@
                                                    label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
                     </div>
                 </div>
-            </div>--}}
+            </div>
         </div>
     </div>
     <div class="container-fluid">
@@ -312,17 +312,7 @@
 
 @section('js-datatables')
   <script>
-    $(function () {
-      $('#fecha').change(function (e) {
-        const value = e.target.value;
-        console.log(value)
-        if (value) {
-          window.location.replace('{{route('dashboard.index')}}?fecha=' + value)
-        }
-      })
-    });
-
-        $(".animated-progress span").each(function () {
+         $(".animated-progress span").each(function () {
             $(this).animate(
                 {
                     width: $(this).attr("data-progress") + "%",
@@ -340,7 +330,17 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
+
         $('#fecha').val("{{\Carbon\Carbon::parse($fecha)->format('Y-m-d')}}");
+
+        $(document).on('change','#fecha',function(){
+          const value = e.target.value;
+          console.log(value)
+          if (value) {
+            window.location.replace('{{route('dashboard.index')}}?fecha=' + value)
+          }
+        });
+
         window.cargaNueva = function (entero) {
           console.log(' '+entero)
           var fd=new FormData();
