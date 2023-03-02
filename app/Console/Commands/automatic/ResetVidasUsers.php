@@ -51,16 +51,16 @@ class ResetVidasUsers extends Command
     $this->warn( $diff );
     /*if (now()==$periodo_actual || now()==$periodo_actual ){}*/
     /*Listado de los  (*10) usuarios ordernados por id asc*/
-    $usuarios=User::whereIn('estado',1)->orderBy('id','asc')->offset(0)->limit(10)->get();
+    $usuarios=User::where('estado',1)->orderBy('id','asc')->offset(0)->limit(10)->get();
     $progress = $this->output->createProgressBar($usuarios->count());
     foreach($usuarios as $user)
     {
       $this->warn($user->id);
-      /*$user->update([
+      $user->update([
         'vidas_total' => 3,
         'vidas_restantes' => 3,
         'cant_vidas_cero' => 0,
-      ]);*/
+      ]);
       $progress->advance();
     }
     $this->info("Finalizando...");

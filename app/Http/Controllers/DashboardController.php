@@ -25,9 +25,32 @@ class DashboardController extends Controller
       return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
     }
 
-    return view(
-      'dashboard.dashboard',
-    );
+    $mirol = Auth::user()->rol;
+    $lst_users_vida = null;
+    $lst_users_vida = User::where('estado', '1');
+
+    if ($mirol == User::ROL_JEFE_LLAMADAS) {
+      $lst_users_vida = $lst_users_vida->where('jefe', Auth::user()->id)->where("rol", User::ROL_LLAMADAS);
+      $lst_users_vida = $lst_users_vida->orderBy('name', 'ASC');
+    } else if ($mirol == User::ROL_JEFE_OPERARIO) {
+      $lst_users_vida = $lst_users_vida->where('jefe', Auth::user()->id)->where("rol", User::ROL_OPERARIO);
+      $lst_users_vida = $lst_users_vida->orderBy('name', 'ASC');
+    } else if ($mirol == User::ROL_ENCARGADO) {
+      $lst_users_vida = $lst_users_vida->where('supervisor', Auth::user()->id)->where("rol", User::ROL_ASESOR);
+      $lst_users_vida = $lst_users_vida->orderBy('exidentificador', 'ASC');
+    }else{
+      $lst_users_vida = $lst_users_vida->orderBy('name', 'ASC');
+    }
+    $lst_users_vida=$lst_users_vida->get();
+    /*$html = "";
+
+    foreach ($lst_users_vida as $user)
+    {
+      $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
+    }*/
+
+
+    return view('dashboard.dashboard', compact('lst_users_vida'));
   }
 
   public function widgets(Request $request)

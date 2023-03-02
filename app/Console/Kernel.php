@@ -47,8 +47,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('asesores:reset-metas')->monthly();
 
         //Resetea las vidas en general los dias 15 y el ultimo dia del mes
-        /*$schedule->command('asesores:reset-metas')->monthlyOn(15, '23:59');;
-        $schedule->command('asesores:reset-metas')->lastDayOfMonth('23:59');;*/
+        $schedule->command('asesores:vidas-metas')->monthlyOn(3, '10:15');;
+        /*$schedule->command('asesores:reset-metas')->lastDayOfMonth('23:59');;*/
 
 /*
         $schedule->command('olva:move-tienda-agente')
