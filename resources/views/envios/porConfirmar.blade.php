@@ -46,7 +46,7 @@
 @section('content')
 
     <div class="card">
-        <div class="card-body">
+        <div class="card-body pl-0">
             {{-- <table cellspacing="5" cellpadding="5">
               <tbody>
                 <tr>

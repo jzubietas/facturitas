@@ -170,25 +170,23 @@
                         <div class="table-responsive">
                             <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
                                 <thead style="background-color: #A9D0F5">
-                                <th>Opciones</th>
-                                {{--<th>Código</th>--}}
-                                <th>Empresa</th>
-                                <th>Mes</th>
-                                <th>Año</th>
-                                <th>RUC</th>
-                                <th>Cantidad</th>
-                                <th>Tipo de comprobante<br>y banca</th>
-                                <th>Porcentaje</th>
-                                <th>Courier</th>
-                                <th>Descripción</th>
-                                <th>Nota</th>
-                                <th>Validasobres</th>
-                                <th>Adjunto</th>
-                                <th>FT</th>
+                                <th style="vertical-align: middle">Opciones</th>
+                                <th style="vertical-align: middle">Empresa</th>
+                                <th style="vertical-align: middle">Mes</th>
+                                <th style="vertical-align: middle">Año</th>
+                                <th style="vertical-align: middle">RUC</th>
+                                <th style="vertical-align: middle">Cantidad</th>
+                                <th style="vertical-align: middle">Tipo de comprobante<br>y banca</th>
+                                <th style="vertical-align: middle">Porcentaje</th>
+                                <th style="vertical-align: middle">Courier</th>
+                                <th style="vertical-align: middle">Descripción</th>
+                                <th style="vertical-align: middle">Nota</th>
+                                <th style="vertical-align: middle">Validasobres</th>
+                                <th style="vertical-align: middle">Adjunto</th>
+                                <th style="vertical-align: middle">FT</th>
                                 </thead>
                                 <tfoot>
                                 <th style="text-align: center">TOTAL</th>
-                                {{--<th></th>--}}
                                 <th></th>
                                 <th></th>
                                 <th></th>

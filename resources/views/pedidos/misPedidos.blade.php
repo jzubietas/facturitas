@@ -56,22 +56,19 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Código</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Asesor</th>
-              <th scope="col">RUC</th>
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Total (S/)</th>
-
-            <th scope="col">Estado de pago</th>
-            <!--<th scope="col">Estado de sobre</th>-->
-            <th scope="col">Estado de envío</th>
-            <!--<th scope="col">Destino</th>-->
-            <th scope="col">Diferencia</th>
-            <th scope="col">Acciones</th>
+            <th scope="col" style="vertical-align: middle">Item</th>
+            <th scope="col" style="vertical-align: middle">Código</th>
+            <th scope="col" style="vertical-align: middle">Cliente</th>
+            <th scope="col" style="vertical-align: middle">Razón social</th>
+            <th scope="col" style="vertical-align: middle">Cantidad</th>
+            <th scope="col" style="vertical-align: middle">Asesor</th>
+            <th scope="col" style="vertical-align: middle">RUC</th>
+            <th scope="col" style="vertical-align: middle">Fecha de registro</th>
+            <th scope="col" style="vertical-align: middle">Total (S/)</th>
+            <th scope="col" style="vertical-align: middle">Estado de pago</th>
+            <th scope="col" style="vertical-align: middle">Estado de envío</th>
+            <th scope="col" style="vertical-align: middle">Diferencia</th>
+            <th scope="col" style="vertical-align: middle">Acciones</th>
           </tr>
         </thead>
         <tbody>

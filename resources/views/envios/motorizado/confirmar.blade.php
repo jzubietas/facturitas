@@ -29,7 +29,7 @@
     @include('envios.motorizado.modal.recojo_enviarope')
 
     <div class="card">
-        <div class="card-body">
+        <div class="card-body pl-0">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>

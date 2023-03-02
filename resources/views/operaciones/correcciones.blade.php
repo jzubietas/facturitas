@@ -46,18 +46,18 @@
             <table id="tablaPrincipal" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Codigo</th>
-                    <th scope="col">Ruc</th>
-                    <th scope="col">Empresa</th>
-                    <th scope="col">Asesor</th>
-                    <th scope="col">Fecha de correccion</th>
-                    <th scope="col">Condicion</th>
-                    <th scope="col">Motivo</th>
-                    <th scope="col">Adjuntos</th>
-                    <th scope="col">Detalle</th>
-                    <th scope="col">Accion</th>
+                    <th scope="col" style="vertical-align: middle">Item</th>
+                    <th scope="col" style="vertical-align: middle">Tipo</th>
+                    <th scope="col" style="vertical-align: middle">Codigo</th>
+                    <th scope="col" style="vertical-align: middle">Ruc</th>
+                    <th scope="col" style="vertical-align: middle">Empresa</th>
+                    <th scope="col" style="vertical-align: middle">Asesor</th>
+                    <th scope="col" style="vertical-align: middle">Fecha de correccion</th>
+                    <th scope="col" style="vertical-align: middle">Condicion</th>
+                    <th scope="col" style="vertical-align: middle">Motivo</th>
+                    <th scope="col" style="vertical-align: middle">Adjuntos</th>
+                    <th scope="col" style="vertical-align: middle">Detalle</th>
+                    <th scope="col" style="vertical-align: middle">Accion</th>
                 </tr>
                 </thead>
                 <tbody>

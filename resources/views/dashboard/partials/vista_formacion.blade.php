@@ -184,7 +184,7 @@
       </div>
       <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body pl-0">
             <div id="pagosxmes" class="w-100" style="height: 550px;"></div>
           </div>
         </div>

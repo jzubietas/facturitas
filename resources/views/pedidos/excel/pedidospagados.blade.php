@@ -1,16 +1,16 @@
 <table>
   <thead>
     <tr>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ITEM</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ID</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">PEDIDO</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">CLIENTE</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">RAZON SOCIAL</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ASESOR</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">FECHA DE REGISTRO</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">TOTAL (S/)</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PEDIDO</th>
-      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PAGO</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">ITEM</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">ID</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">PEDIDO</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">CLIENTE</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">RAZON SOCIAL</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">ASESOR</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">FECHA DE REGISTRO</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">TOTAL (S/)</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">ESTADO DE PEDIDO</th>
+      <th style="background-color: #4c5eaf; text-align: center;vertical-align: middle; color: #ffff;">ESTADO DE PAGO</th>
     </tr>
   </thead>
   <tbody>

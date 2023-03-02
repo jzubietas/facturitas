@@ -58,24 +58,21 @@
       <table id="tablaPrincipal" class="table table-striped table-responsive">{{-- display nowrap  --}}
         <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Código</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>
-            <th scope="col">Asesor</th>
-            <th scope="col">F. Registro</th>
-            <th scope="col">Total (S/)</th>
-            <th scope="col">Est. pedido</th>
-            <th scope="col">Est. pago</th>
-            <th scope="col">Con. pago</th>
-            <th scope="col">Est. sobre</th>
-            <!--<th scope="col">Est. envío</th>
-            <th scope="col">Cond. Pago</th>-->
-            <th scope="col">Est. Envio</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Diferencia</th>
-            {{--<th scope="col">Resp. Pedido</th>--}}
-            <th scope="col">Acciones</th>
+            <th scope="col" style="vertical-align: middle">Item</th>
+            <th scope="col" style="vertical-align: middle">Código</th>
+            <th scope="col" style="vertical-align: middle">Cliente</th>
+            <th scope="col" style="vertical-align: middle">Razón social</th>
+            <th scope="col" style="vertical-align: middle">Asesor</th>
+            <th scope="col" style="vertical-align: middle">F. Registro</th>
+            <th scope="col" style="vertical-align: middle">Total (S/)</th>
+            <th scope="col" style="vertical-align: middle">Est. pedido</th>
+            <th scope="col" style="vertical-align: middle">Est. pago</th>
+            <th scope="col" style="vertical-align: middle">Con. pago</th>
+            <th scope="col" style="vertical-align: middle">Est. sobre</th>
+            <th scope="col" style="vertical-align: middle">Est. Envio</th>
+            <th scope="col" style="vertical-align: middle">Estado</th>
+            <th scope="col" style="vertical-align: middle">Diferencia</th>
+            <th scope="col" style="vertical-align: middle">Acciones</th>
           </tr>
         </thead>
         <tbody>
