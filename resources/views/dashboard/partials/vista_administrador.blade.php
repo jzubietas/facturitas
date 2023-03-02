@@ -94,10 +94,8 @@
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
         <div class="d-flex justify-content-center align-items-center ml-5">
-          {{--
           <label class="p-0 m-0" for="ingresar">Fecha: </label>
           <input type="date" id="calendario" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}">
---}}
         </div>
       </div>
 
@@ -171,7 +169,6 @@
                                 </div>
                                 <select class="form-control" id="datepickerDashborad"
                                         aria-describedby="basic-addon3">
-
                                     @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
                                         @php
                                             $currentMonth=$currentDate->clone()->startOfYear()->addMonths($month-1);
@@ -314,6 +311,17 @@
 
 
 @section('js-datatables')
+  <script>
+    $(function () {
+      $('#calendario').change(function (e) {
+        const value = e.target.value;
+        console.log(value)
+        if (value) {
+          window.location.replace('{{route('dashboard.index')}}?date=' + value)
+        }
+      })
+    });
+  </script>
     <script>
         $(".animated-progress span").each(function () {
             $(this).animate(
@@ -336,7 +344,7 @@
         window.cargaNueva = function (entero) {
           console.log(' '+entero)
           var fd=new FormData();
-          /*fd.append('fecha',$('#calendario').val("{{\Carbon\Carbon::now()->format('Y-m-d')}}"));*/
+          fd.append('fecha',$('#calendario').val("{{\Carbon\Carbon::now()->format('Y-m-d')}}"));
           fd.append('ii',entero);
           $.ajax({
             data: fd,
