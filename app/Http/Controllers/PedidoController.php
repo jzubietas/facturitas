@@ -177,7 +177,7 @@ class PedidoController extends Controller
 
 
         if (Auth::user()->rol == "Llamadas") {
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
@@ -185,7 +185,7 @@ class PedidoController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);*/
         } else if (Auth::user()->rol == "Jefe de llamadas") {
             /*$usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')

@@ -95,84 +95,6 @@
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
 <script>
-    $(document).ready(function(){
-        $('#modal-asignarjefellamadas').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var idunico = button.data('jefellamadas')
-            $("#hiddenIdjefellamadas").val(idunico);
-            if(idunico<10){
-                idunico='USER000'+idunico;
-            }else if(idunico<100){
-                idunico= 'USER00'+idunico;
-            }else if(idunico<1000){
-                idunico='USERG0'+idunico;
-            }else{
-                idunico='USER'+idunico;
-            }
-            $(".textcode").html(idunico);
-        });
-
-
-    $('#modal-asignarasesor').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var idunico = button.data('asesor')
-            $("#hiddenIdasesor").val(idunico);
-            if(idunico<10){
-                idunico='USER000'+idunico;
-            }else if(idunico<100){
-                idunico= 'USER00'+idunico;
-            }else if(idunico<1000){
-                idunico='USER0'+idunico;
-            }else{
-                idunico='USER'+idunico;
-            }
-            $(".textcode").html(idunico);
-
-    });
-
-    /*cargar combos para y submit guardar form */
-
-    $(document).on("submit", "#formjefellamadas", function (evento) {
-        evento.preventDefault();
-        //var form=FormData();
-        var formData = $("#formjefellamadas").serialize();
-
-        $.ajax({
-            type:'POST',
-            url:"{{ route('users.asignarjefellamadaspost') }}",
-            data:formData,
-        }).done(function (data) {
-            Swal.fire(
-                    'Usuario asignado correctamente',
-                    '',
-                    'success'
-                )
-            $("#modal-asignarjefellamadas").modal("hide");
-        });
-
-    });
-    $(document).on("submit", "#formasesor", function (evento) {
-        evento.preventDefault();
-        //var form=FormData();
-        var formData = $("#formasesor").serialize();
-        $.ajax({
-            type:'POST',
-            url:"{{ route('users.asignarasesorpost') }}",
-            data:formData,
-        }).done(function (data) {
-            Swal.fire(
-                    'Usuario asignado correctamente',
-                    '',
-                    'success'
-                )
-                $("#modal-asignarasesor").modal("hide");
-        });
-
-
-    });
-
-});
-
 
   $(document).ready(function () {
 
@@ -180,6 +102,81 @@
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+    });
+
+    $('#modal-asignarjefellamadas').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('jefellamadas')
+      $("#hiddenIdjefellamadas").val(idunico);
+      if(idunico<10){
+        idunico='USER000'+idunico;
+      }else if(idunico<100){
+        idunico= 'USER00'+idunico;
+      }else if(idunico<1000){
+        idunico='USERG0'+idunico;
+      }else{
+        idunico='USER'+idunico;
+      }
+      $(".textcode").html(idunico);
+    });
+
+    $('#modal-asignarasesor').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('asesor')
+      $("#hiddenIdasesor").val(idunico);
+      if(idunico<10){
+        idunico='USER000'+idunico;
+      }else if(idunico<100){
+        idunico= 'USER00'+idunico;
+      }else if(idunico<1000){
+        idunico='USER0'+idunico;
+      }else{
+        idunico='USER'+idunico;
+      }
+      $(".textcode").html(idunico);
+
+    });
+
+    $(document).on("submit", "#formasesor", function (evento) {
+      evento.preventDefault();
+      //var form=FormData();
+      var formData = $("#formasesor").serialize();
+      $.ajax({
+        type:'POST',
+        url:"{{ route('users.asignarasesorpost') }}",
+        data:formData,
+      }).done(function (data) {
+        Swal.fire(
+          'Usuario asignado correctamente',
+          '',
+          'success'
+        )
+        $("#modal-asignarasesor").modal("hide");
+      });
+
+
+    });
+
+    $(document).on("submit", "#formjefellamadas", function (evento) {
+      evento.preventDefault();
+      //var form=FormData();
+      var formData = $("#formjefellamadas").serialize();
+
+      $.ajax({
+        type:'POST',
+        url:"{{ route('users.asignarjefellamadaspost') }}",
+        data:formData,
+      }).done(function (data) {
+        Swal.fire(
+          'Usuario asignado correctamente',
+          '',
+          'success'
+        )
+        $("#modal-asignarjefellamadas").modal("hide");
+        $('#tablaPrincipal').DataTable().ajax.reload();
+
+      });
+
     });
 
     $('#tablaPrincipal').DataTable({
