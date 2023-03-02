@@ -1,30 +1,28 @@
 <table>
     <thead>
     <tr>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ITEM</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ID</th>
-        <th width="120px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">PEDIDO</th>
-        <th width="120px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">MES PEDIDO</th>
-        <th width="120px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">AÑO PEDIDO</th>
-        <th width="120px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">CLIENTE CELULAR</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">NOMBRE CLIENTE</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">RAZON SOCIAL</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ASESOR</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">FECHA DE REGISTRO</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">IMPORTE (S/)</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">TIPO</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">PORCENTAJE</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">FT</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">COURIER (S/)</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">TOTAL (S/)</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">DIFERENCIA (S/)</th>
-
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PAGO</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">REVISADO ADMINISTRACION
-        </th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE ENVIO</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">FECHA DE MODIFICACION</th>
-        <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">MODIFICADOR</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">ITEM</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">ID</th>
+        <th width="120px" style="background-color: #4c5eaf; text-align: center;vertical-align:middle;  color: #ffff;">PEDIDO</th>
+        <th width="120px" style="background-color: #4c5eaf; text-align: center;vertical-align:middle;  color: #ffff;">MES PEDIDO</th>
+        <th width="120px" style="background-color: #4c5eaf; text-align: center;vertical-align:middle;  color: #ffff;">AÑO PEDIDO</th>
+        <th width="120px" style="background-color: #4c5eaf; text-align: center;vertical-align:middle;  color: #ffff;">CLIENTE CELULAR</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">NOMBRE CLIENTE</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">RAZON SOCIAL</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">ASESOR</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">FECHA DE REGISTRO</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">IMPORTE (S/)</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">TIPO</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">PORCENTAJE</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">FT</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">COURIER (S/)</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">TOTAL (S/)</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">DIFERENCIA (S/)</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">ESTADO DE PAGO</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">REVISADO ADMINISTRACION</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">ESTADO DE ENVIO</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">FECHA DE MODIFICACION</th>
+        <th width="80px" style="background-color: #4c5eaf; text-align: center; vertical-align:middle; color: #ffff;">MODIFICADOR</th>
     </tr>
     </thead>
     <tbody>

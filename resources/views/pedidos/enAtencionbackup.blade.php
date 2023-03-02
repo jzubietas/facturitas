@@ -22,7 +22,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos en atención', 'key' => '8'])       
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos en atención', 'key' => '8'])
   </h1>
   @if($superasesor > 0)
   <br>
@@ -52,14 +52,13 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Código</th>
-            {{-- <th scope="col">Cliente</th> --}}
-            <th scope="col">Razón social</th>
-            <th scope="col">Asesor</th>
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Acciones</th>
+            <th scope="col" style="vertical-align: middle">Item</th>
+            <th scope="col" style="vertical-align: middle">Código</th>
+            <th scope="col" style="vertical-align: middle">Razón social</th>
+            <th scope="col" style="vertical-align: middle">Asesor</th>
+            <th scope="col" style="vertical-align: middle">Fecha de registro</th>
+            <th scope="col" style="vertical-align: middle">Estado</th>
+            <th scope="col" style="vertical-align: middle">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -76,7 +75,7 @@
               @endif
               <td>{{ $pedido->codigos }}</td>
               <td>{{ $pedido->empresas }}</td>
-              <td>{{ $pedido->users }}</td>              
+              <td>{{ $pedido->users }}</td>
               <td>{{ $pedido->fecha }}</td>
               <td>{{ $pedido->condicion }}</td>
               <td>
@@ -85,7 +84,7 @@
                 @endcan
                 @can('operacion.PDF')
                   <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                @endcan                
+                @endcan
               </td>
             </tr>
             @include('pedidos.modal')
@@ -201,17 +200,17 @@
   @endif
 
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
   <script>
-    window.onload = function () {      
+    window.onload = function () {
       $('#tablaPrincipal').DataTable().draw();
     }
   </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -228,7 +227,7 @@
                 }
             );
 
-      
+
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             var table = $('#tablaPrincipal').DataTable();

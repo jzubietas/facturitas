@@ -95,7 +95,7 @@
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
         <div class="d-flex justify-content-center align-items-center ml-5">
-          <label class="p-0 m-0" for="ingresar">Fecha: </label> 
+          <label class="p-0 m-0" for="ingresar">Fecha: </label>
           <input type="date" id="fecha" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}" >
         </div>
       </div>
@@ -256,7 +256,7 @@
             </div>
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body pl-0">
                         <div id="pagosxmes" class="w-100" style="height: 550px;"></div>
                     </div>
                 </div>

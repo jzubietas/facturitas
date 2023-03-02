@@ -1,17 +1,17 @@
 <table>
     <thead>
     <tr>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ITEM</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">CODIGO</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">CLIENTE</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">RAZON SOCIAL</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ASESOR</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">FECHA DE REGISTRO</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">TOTAL (S/)</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PEDIDO</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PAGO</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ADMINISTRACION</th>
-        <th scope="col" style="background-color: #4c5eaf; text-align: center; color: #ffff;">DIFERENCIA</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">ITEM</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">CODIGO</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">CLIENTE</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">RAZON SOCIAL</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">ASESOR</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">FECHA DE REGISTRO</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">TOTAL (S/)</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">ESTADO DE PEDIDO</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">ESTADO DE PAGO</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">ADMINISTRACION</th>
+        <th scope="col" style="background-color: #4c5eaf; text-align: center; vertical-align: middle; color: #ffff;">DIFERENCIA</th>
 
         {{--
               <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ITEM</th>

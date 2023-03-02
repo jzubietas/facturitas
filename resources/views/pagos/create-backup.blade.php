@@ -43,7 +43,8 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
+      <div class="card- pl-0">
+        <div class="card-body ">
             <div class="form-row">
 
 
@@ -135,7 +136,7 @@
                                 {{-- <th scope="col">PEDIDO</th> --}}
                                 <th scope="col">CODIGO</th>
                                 <th scope="col">IMPORTE</th>
-                                
+
                                 {{--<th scope="col">MONTO</th>--}}
                                 <th scope="col">SALDO</th>
                                 <th scope="col">DIFERENCIA</th>

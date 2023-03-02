@@ -70,7 +70,7 @@
                   @foreach ($ventas as $v)
                   <br>Nª 000{{ $v->id }}</b>
                   <br>Cliente: {{ $v->clientes }}
-                  <br>Vendedor: {{ $v->users}} 
+                  <br>Vendedor: {{ $v->users}}
                   @endforeach
                   <br>
                   <br>{{ $fecha }}</p>
@@ -78,9 +78,9 @@
       <table width: 100%;>
         <thead>
           <tr>
-            <th class="cantidad">CANT</th>
-            <th class="producto">PRODUCTO</th>
-            <th class="precio">S/</th>
+            <th class="cantidad" style="vertical-align: middle">CANT</th>
+            <th class="producto" style="vertical-align: middle">PRODUCTO</th>
+            <th class="precio" style="vertical-align: middle">S/</th>
           </tr>
         </thead>
         <tbody>
@@ -88,7 +88,7 @@
           @foreach ($detalleVentas as $dv)
           <tr>
             <td class="cantidad">{{ $dv->cantidad }}</td>
-            <td class="producto">{{ $dv->articulos }}</td>          
+            <td class="producto">{{ $dv->articulos }}</td>
             <td class="precio">s/{{ $dv->subtotal }}</td>
           </tr>
           @php $sum += $dv->subtotal; @endphp

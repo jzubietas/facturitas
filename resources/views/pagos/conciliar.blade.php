@@ -9,7 +9,7 @@
           </button>
         </div>
         <div class="card">
-          <div class="card-body">
+          <div class="card-body pl-0">
             <div class="card-body border border-secondary rounded">
               <table id="tablaPrincipalConciliar" class="table table-striped" style="text-align: center">
                 <thead><h4 style="text-align: center"><strong>Listado de la clientes con pedidos con deuda</strong></h4>
@@ -25,9 +25,9 @@
                 <tbody>
                 </tbody>
               </table>
-            </div>   
+            </div>
           </div>
-        </div>  
+        </div>
         <div class="modal-footer">
           <a href="{{ route('pedidos.sinpagos') }}" class="btn btn-danger btn-sm">Ver deudores</a>
           <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">Cerrar</button>

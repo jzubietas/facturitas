@@ -42,15 +42,15 @@
       <table id="tablaPrincipal" class="table table-striped" style="width:100%">
         <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Código</th>
-            <th scope="col">Razón social</th>
-            <th scope="col">Asesor</th>
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Atendido por</th>
-            <th scope="col">Jefe</th>
-            <th scope="col">Acciones</th>
+            <th scope="col" style="vertical-align: middle">Item</th>
+            <th scope="col" style="vertical-align: middle">Código</th>
+            <th scope="col" style="vertical-align: middle">Razón social</th>
+            <th scope="col" style="vertical-align: middle">Asesor</th>
+            <th scope="col" style="vertical-align: middle">Fecha de registro</th>
+            <th scope="col" style="vertical-align: middle">Estado</th>
+            <th scope="col" style="vertical-align: middle">Atendido por</th>
+            <th scope="col" style="vertical-align: middle">Jefe</th>
+            <th scope="col" style="vertical-align: middle">Acciones</th>
           </tr>
         </thead>
         <tbody>

@@ -113,7 +113,7 @@
             <div class="row" id="widget-container">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body pl-0">
                             <div class="">
                                 <ul class="list-group">
                                     <li class="list-group-item">

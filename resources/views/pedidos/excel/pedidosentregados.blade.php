@@ -1,22 +1,20 @@
 <table>
   <thead>
     <tr>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">ITEM</th>
-     
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">IDENTIFICADOR DE ASESOR</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">CODIGO DE PEDIDO</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">RAZON SOCIAL</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">RUC</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">MES</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">TIPO</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">CANTIDAD DEL PEDIDO</th>
-
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">CANT. DE DOCUMENTOS</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">ESTADO DE PEDIDO</th>
-      <th style="background-color: #FFFF00; text-align: center; color: #0000;">FECHA DE REGISTRO DE PEDIDO</th>
-      <th style="background-color: #FFFF00; text-align: center; color: #0000;">FECHA ELABORACIÓN PEDIDOS</th>
-      <th style="background-color: #FFFF00; text-align: center; color: #0000;">FECHA DE FINALIZACIÓN DE PEDIDO</th>
-      <th style="background-color: #4472C4; text-align: center; color: #ffff;">DETALLE</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">ITEM</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">IDENTIFICADOR DE ASESOR</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">CODIGO DE PEDIDO</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">RAZON SOCIAL</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">RUC</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">MES</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">TIPO</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">CANTIDAD DEL PEDIDO</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">CANT. DE DOCUMENTOS</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">ESTADO DE PEDIDO</th>
+      <th style="background-color: #FFFF00; text-align: center; vertical-align: middle; color: #0000;">FECHA DE REGISTRO DE PEDIDO</th>
+      <th style="background-color: #FFFF00; text-align: center; vertical-align: middle; color: #0000;">FECHA ELABORACIÓN PEDIDOS</th>
+      <th style="background-color: #FFFF00; text-align: center; vertical-align: middle; color: #0000;">FECHA DE FINALIZACIÓN DE PEDIDO</th>
+      <th style="background-color: #4472C4; text-align: center; vertical-align: middle; color: #ffff;">DETALLE</th>
     </tr>
   </thead>
   <tbody>
@@ -24,7 +22,7 @@
     @foreach ($pedidos as $pedido)
       <tr>
         <td>{{ $cont + 1 }}</td>{{-- ITEM --}}
-       
+
         <td>{{ $pedido->id_asesor }}</td>{{-- IDENTIFICADOR ASESOR --}}
         <td>{{ $pedido->codigo }}</td>{{-- CODIGO PEDIDO --}}
         <td>{{ $pedido->empresa }}</td>{{-- RAZON SOCIAL --}}
@@ -32,7 +30,7 @@
         <td>{{ $pedido->mes }}</td>{{-- MES --}}
         <td>{{ $pedido->tipo }}</td>{{-- TIPO --}}
         <td>{{ $pedido->cantidad }}</td>{{-- CANTIDAD --}}
-     
+
         <td>{{ $pedido->cant_compro }}</td>{{-- CANT. DOCUMENTOS --}}
         <td>{{ $pedido->estado_envio }}</td>{{-- ESTADO PEDIDO --}}
         <td>{{ $pedido->fecha_registro }}</td>{{-- FECHA REGISTRO PEDIDO --}}

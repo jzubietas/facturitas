@@ -8,16 +8,16 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        
+
         <form id="formulariodistribuir" name="formulariodistribuir" enctype="multipart/form-data">
           <input type="hidden" id="hiddenDistribuir" name="hiddenDistribuir">
           <div class="modal-body">
-            
+
           </div>
           <div style="margin: 10px">
             <div class="card">
               <div class="border rounded card-body border-secondary">
-                <div class="card-body">
+                <div class="card-body pl-0">
                   <div class="form-row">
                     <div class="form-group col-lg-12">
                       <div class="row">
@@ -34,12 +34,12 @@
                                         {!! Form::select('distribuir', $distribuir , '0', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                                     </div>
 
-                                      
+
                                 </div>
                               </div>
 
 
-                         
+
                         </div>
                       </div>
                     </div>

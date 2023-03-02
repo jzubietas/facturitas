@@ -101,21 +101,21 @@
       <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
         <thead>
         <tr>
-          <th></th>
-          <th scope="col">Código</th>
-          <th scope="col">Cliente</th>
-          <th scope="col">Razón social</th>
-          <th scope="col">Cantidad</th>
-          <th scope="col">Asesor</th>
-          <th scope="col">RUC</th>
-          <th scope="col">F. Registro</th>
-          <th scope="col">F. Actualizacion</th>
-          <th scope="col">Total (S/)</th>
-          <th scope="col">Est. pago</th>
-          <th scope="col">Con. pago</th>
-          <th scope="col">Est. Sobre</th>
-          <th scope="col">Diferencia</th>
-          <th scope="col">Acciones</th>
+          <th style="vertical-align: middle"></th>
+          <th style="vertical-align: middle" scope="col">Código</th>
+          <th style="vertical-align: middle" scope="col">Cliente</th>
+          <th style="vertical-align: middle" scope="col">Razón social</th>
+          <th style="vertical-align: middle" scope="col">Cantidad</th>
+          <th style="vertical-align: middle" scope="col">Asesor</th>
+          <th style="vertical-align: middle" scope="col">RUC</th>
+          <th style="vertical-align: middle" scope="col">F. Registro</th>
+          <th style="vertical-align: middle" scope="col">F. Actualizacion</th>
+          <th style="vertical-align: middle" scope="col">Total (S/)</th>
+          <th style="vertical-align: middle" scope="col">Est. pago</th>
+          <th style="vertical-align: middle" scope="col">Con. pago</th>
+          <th style="vertical-align: middle" scope="col">Est. Sobre</th>
+          <th style="vertical-align: middle" scope="col">Diferencia</th>
+          <th style="vertical-align: middle" scope="col">Acciones</th>
         </tr>
         </thead>
         <tbody>

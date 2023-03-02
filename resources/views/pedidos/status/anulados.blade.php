@@ -13,15 +13,14 @@
             <table id="tablaPrincipal" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Código</th>
-                    {{-- <th scope="col">Razón social</th> --}}
-                    <th scope="col">Asesor</th>
-                    <th scope="col">Fecha de Anulacion</th>
-                    <th scope="col">Tipo de Banca</th>
-                    <th scope="col">Adjuntos</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" style="vertical-align: middle">Item</th>
+                    <th scope="col" style="vertical-align: middle">Código</th>
+                    <th scope="col" style="vertical-align: middle">Asesor</th>
+                    <th scope="col" style="vertical-align: middle">Fecha de Anulacion</th>
+                    <th scope="col" style="vertical-align: middle">Tipo de Banca</th>
+                    <th scope="col" style="vertical-align: middle">Adjuntos</th>
+                    <th scope="col" style="vertical-align: middle">Estado</th>
+                    <th scope="col" style="vertical-align: middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>

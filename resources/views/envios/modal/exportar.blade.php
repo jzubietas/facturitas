@@ -8,14 +8,14 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        
+
         @if($key === '1')
           {!! Form::open(['route' => ['sobresRutaEnvioExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @endif
-  
-              <div class="card-body">
+
+              <div class="card-body pl-0">
                 <div class="form-row">
-                  <div class="form-group col-lg-12" style="text-align: center; font-size:16px">                  
+                  <div class="form-group col-lg-12" style="text-align: center; font-size:16px">
                     <div class="form-row">
                       <div class="col-lg-12">
                         {!! Form::label('anio', 'Elija la fecha del reporte') !!} <br><br>
@@ -29,7 +29,7 @@
                     </div>
                   </div>
                 </div>
-              </div>    
+              </div>
               <div class="card-footer">
                 <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
               </div>

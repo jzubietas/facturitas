@@ -21,20 +21,20 @@
           <thead>
           <tr>
             <th></th>
-            <th scope="col">Código</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Asesor</th>
-            <th scope="col">RUC</th>
-            <th scope="col">F. Registro</th>
-            <th scope="col">F. Actualizacion</th>
-            <th scope="col">Total (S/)</th>
-            <th scope="col">Est. pago</th>
-            <th scope="col">Con. pago</th>
-            <th scope="col">Est. Sobre</th>
-            <th scope="col">Diferencia</th>
-            <th scope="col">...</th>
+            <th scope="col" style="vertical-align: middle">Código</th>
+            <th scope="col" style="vertical-align: middle">Cliente</th>
+            <th scope="col" style="vertical-align: middle">Razón social</th>
+            <th scope="col" style="vertical-align: middle">Cantidad</th>
+            <th scope="col" style="vertical-align: middle">Asesor</th>
+            <th scope="col" style="vertical-align: middle">RUC</th>
+            <th scope="col" style="vertical-align: middle">F. Registro</th>
+            <th scope="col" style="vertical-align: middle">F. Actualizacion</th>
+            <th scope="col" style="vertical-align: middle">Total (S/)</th>
+            <th scope="col" style="vertical-align: middle">Est. pago</th>
+            <th scope="col" style="vertical-align: middle">Con. pago</th>
+            <th scope="col" style="vertical-align: middle">Est. Sobre</th>
+            <th scope="col" style="vertical-align: middle">Diferencia</th>
+            <th scope="col" style="vertical-align: middle">...</th>
           </tr>
           </thead>
           <tbody>

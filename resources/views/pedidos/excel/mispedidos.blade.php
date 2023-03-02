@@ -1,40 +1,37 @@
 <table>
   <thead>
     <tr>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">ITEM</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">ID</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">USUARIO QUE CREO EL PEDIDO</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">FECHA DE ÚLTIMA MODIFIACIÓN</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">USUARIO DE ÚLTIMA MODIFICACIÓN</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">ASESOR NOMBRE</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">ASESOR IDENTIFICADOR</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">FECHA DE PEDIDO</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">CODIGO DE PEDIDO</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">NOMBRE DE CLIENTE</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">TELEFONO</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">RAZON SOCIAL</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">MES</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">RUC</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">CANTIDAD DE PEDIDO</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">TIPO</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">PORCENTAJE (%)</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">IMPORTE A PAGAR (S/)</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">COURIER (S/)</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">TOTAL POR PAGAR (S/)</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">CANT. DE COMPROBANTES (S/)</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">OPERARIO QUE EMITIO LA FACTURA</th>
-      <th style="background-color: #FFFF00; text-align: center; color: #000000;">ESTADO DE PEDIDO</th>
-      <th style="background-color: #FFFF00; text-align: center; color: #000000;">ESTADO DE SOBRE</th>
-      <th style="background-color: #FFC000; text-align: center; color: #000000;">FECHA DE CANCELACION DE PAGO</th>
-      {{-- <th style="background-color: #FFC000; text-align: center; color: #000000;">FECHA DE VOUCHER</th>
-      <th style="background-color: #FFC000; text-align: center; color: #000000;">IMPORTE PAGADO</th>
-      <th style="background-color: #FFC000; text-align: center; color: #000000;">BANCO</th> --}}
-      <th style="background-color: #FFC000; text-align: center; color: #000000;">ESTADO DE PAGO</th>
-      <th style="background-color: #FF0000; text-align: center; color: #000000;">DIFERENCIA</th>
-      <th style="background-color: #92D050; text-align: center; color: #000000;">FECHA DE APROBACIÓN DE PAGO</th>
-      <th></th>
-      <th style="background-color: #BDD7EE; text-align: center; color: #000000;">Responsable</th>
-      <th style="background-color: #BDD7EE; text-align: center; color: #000000;">Motivo de anulación</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">ITEM</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">ID</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">USUARIO QUE CREO EL PEDIDO</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">FECHA DE ÚLTIMA MODIFIACIÓN</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">USUARIO DE ÚLTIMA MODIFICACIÓN</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">ASESOR NOMBRE</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">ASESOR IDENTIFICADOR</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">FECHA DE PEDIDO</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">CODIGO DE PEDIDO</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">NOMBRE DE CLIENTE</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">TELEFONO</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">RAZON SOCIAL</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">MES</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">RUC</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">CANTIDAD DE PEDIDO</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">TIPO</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">PORCENTAJE (%)</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">IMPORTE A PAGAR (S/)</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">COURIER (S/)</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">TOTAL POR PAGAR (S/)</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">CANT. DE COMPROBANTES (S/)</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000; vertical-align: middle">OPERARIO QUE EMITIO LA FACTURA</th>
+      <th style="background-color: #FFFF00; text-align: center; color: #000000; vertical-align: middle">ESTADO DE PEDIDO</th>
+      <th style="background-color: #FFFF00; text-align: center; color: #000000; vertical-align: middle">ESTADO DE SOBRE</th>
+      <th style="background-color: #FFC000; text-align: center; color: #000000; vertical-align: middle">FECHA DE CANCELACION DE PAGO</th>
+      <th style="background-color: #FFC000; text-align: center; color: #000000; vertical-align: middle">ESTADO DE PAGO</th>
+      <th style="background-color: #FF0000; text-align: center; color: #000000; vertical-align: middle">DIFERENCIA</th>
+      <th style="background-color: #92D050; text-align: center; color: #000000; vertical-align: middle">FECHA DE APROBACIÓN DE PAGO</th>
+      <th style="vertical-align: middle"></th>
+      <th style="background-color: #BDD7EE; text-align: center; color: #000000; vertical-align: middle">Responsable</th>
+      <th style="background-color: #BDD7EE; text-align: center; color: #000000; vertical-align: middle">Motivo de anulación</th>
     </tr>
   </thead>
   <tbody>
@@ -72,7 +69,7 @@
         <td>
             {{ $pedido->cant_compro }}
         </td>{{-- CANTIDAD COMPROBANTES --}}
-        <td>USER0{{ $pedido->operario }}</td>{{-- OPERARIO EMITIO FACTURA --}}        
+        <td>USER0{{ $pedido->operario }}</td>{{-- OPERARIO EMITIO FACTURA --}}
         <td>{{ $pedido->estado_pedido }}</td>{{-- ESTADO PEDIDO --}}
         <td>{{ $pedido->estado_envio }}</td>{{-- ESTADO SOBRE --}}
         @if($pedido->fecha_ult_pago == null){{-- FECHA CANCELACION DE PAGO --}}
@@ -87,13 +84,13 @@
           <td style="color: #FF0000">SIN PAGOS</td>
         @else
           <td>{{ $pedido->estado_pago }}</td>
-        @endif        
+        @endif
         <td>{{ $pedido->diferencia }}</td>{{-- DIFERENCIA --}}
         @if($pedido->fecha_aprobacion==null){{-- FECHA APROBACION PAGO --}}
           <td style="color: #FF0000">SIN APROBACION</td>
         @else
           <td>{{ $pedido->fecha_aprobacion }}</td>
-        @endif        
+        @endif
         <td></td>
         <td>{{ $pedido->responsable }}</td>{{-- RESPONSABLE --}}
         <td>{{ $pedido->motivo }}</td>{{-- MOTIVO ANULACION --}}
@@ -133,7 +130,7 @@
         <td>
             {{ $pedido->cant_compro }}
         </td>
-        <td>USER0{{ $pedido->operario }}</td>   
+        <td>USER0{{ $pedido->operario }}</td>
         <td>{{ $pedido->estado_pedido }}</td>
         <td>{{ $pedido->estado_envio }}</td>
         <td style="color: #FF0000">SIN PAGOS</td>
