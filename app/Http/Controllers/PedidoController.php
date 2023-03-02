@@ -600,7 +600,7 @@ class PedidoController extends Controller
         $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.icelular as icelulares',
@@ -622,7 +622,7 @@ class PedidoController extends Controller
                 'pedidos.pago',
                 'pedidos.pagado',
                 'pedidos.envio'
-            )
+            ])
             ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
