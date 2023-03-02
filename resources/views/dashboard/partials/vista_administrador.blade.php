@@ -90,12 +90,13 @@
 
 
     <div class="col-lg-12 " id="contenedor-fullscreen">
+
       <div class="d-flex justify-content-center">
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
         <div class="d-flex justify-content-center align-items-center ml-5">
-          <label class="p-0 m-0" for="ingresar">Fecha: </label>
-          <input type="date" id="calendario" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}">
+          <label class="p-0 m-0" for="ingresar">Fecha: </label> 
+          <input type="date" id="fecha" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}" >
         </div>
       </div>
 
@@ -304,7 +305,6 @@
         .table_analisis {
           display: grid;
           grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-          /*width: 880px;/*
         }
     </style>
 @endpush
@@ -313,16 +313,15 @@
 @section('js-datatables')
   <script>
     $(function () {
-      $('#calendario').change(function (e) {
+      $('#fecha').change(function (e) {
         const value = e.target.value;
         console.log(value)
         if (value) {
-          window.location.replace('{{route('dashboard.index')}}?date=' + value)
+          window.location.replace('{{route('dashboard.index')}}?fecha=' + value)
         }
       })
     });
-  </script>
-    <script>
+
         $(".animated-progress span").each(function () {
             $(this).animate(
                 {
@@ -341,10 +340,11 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
+        $('#fecha').val("{{\Carbon\Carbon::parse($fecha)->format('Y-m-d')}}");
         window.cargaNueva = function (entero) {
           console.log(' '+entero)
           var fd=new FormData();
-          fd.append('fecha',$('#calendario').val("{{\Carbon\Carbon::now()->format('Y-m-d')}}"));
+          fd.append('fecha',$('#fecha').val());
           fd.append('ii',entero);
           $.ajax({
             data: fd,

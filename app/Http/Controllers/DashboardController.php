@@ -19,15 +19,27 @@ use \Yajra\Datatables\Datatables;
 
 class DashboardController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
     if (auth()->user()->rol == 'MOTORIZADO') {
       return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
     }
 
+    $fecha = null;
+
+    if (!request()->has("fecha")) {
+      $fecha = Carbon::now();
+    } else {
+      $fecha = $request->fecha;
+    }
+
     return view(
       'dashboard.dashboard',
+      compact(
+        'fecha',
+      ),
     );
+
   }
 
   public function widgets(Request $request)
