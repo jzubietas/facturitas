@@ -1247,22 +1247,23 @@ ${files.map(function (file) {
                   const valorTipoBanca=$('#ptipo_banca').val().split('_')[0];
                   if (arrayCombo.includes(valorTipoBanca)) {
                     swalWithBootstrapButtons.fire({
-                      title: '¿Estas creando un pedido <b>SIN SOBRE</b>?',
-                      text: "Estas seguro (a)!",
+                      title: 'EL SIGUIENTE PEDIDO SE VA A REALIZAR <b>SIN SOBRE</b>',
+                      text: "ESTAS DE ACUERDO",
                       icon: 'warning',
                       showCancelButton: true,
-                      confirmButtonText: 'SI',
-                      cancelButtonText: 'NO',
+                      cancelButtonText: 'SI, SIN SOBRE',
+                      confirmButtonText: 'NO, CON SOBRE',
+
                       reverseButtons: true
                     }).then((result) => {
                       if (result.isConfirmed) {
                         swalWithBootstrapButtons.fire({
-                          title: 'Recuerda, que estás creando un pedido <b>SIN SOBRE</b>?',
-                          text: "Pero, ¿Estás seguro (a)? Revisa antes de Continuar.",
+                          title: 'ESTAS SEGURO DE CREAR UN PEDIDO <b>CON SOBRE</b>',
+                          text: "¿Estás seguro (a)? Revisa antes de Continuar.",
                           icon: 'warning',
                           showCancelButton: true,
-                          confirmButtonText: 'SI',
                           cancelButtonText: 'NO',
+                          confirmButtonText: 'SI',
                           reverseButtons: true
                         }).then((result) => {
                           if (result.isConfirmed) {
