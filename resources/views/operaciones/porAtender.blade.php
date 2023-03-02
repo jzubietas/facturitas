@@ -541,7 +541,7 @@
                         }
                     },
                     {data: 'codigos', name: 'codigos',},
-                    {data: 'sobrevalida', name: 'sobrevalida',},
+                    {data: 'sobre_valida', name: 'sobre_valida',},
                     {data: 'empresas', name: 'empresas',},
                     {data: 'mes', name: 'mes',},
                     {data: 'users', name: 'users',},
@@ -601,7 +601,7 @@
                     },
                 ],
                 "createdRow": function (row, data, dataIndex) {
-                  if(data["sobrevalida"]=='No')
+                  if(data["sobre_valida"]=='No')
                   {
                     $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
                   }
