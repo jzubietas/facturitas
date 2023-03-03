@@ -428,11 +428,11 @@ class DashboardController extends Controller
       $html .= '<tbody>
               <tr class="responsive-table">
                   <th class="col-lg-4 col-md-12 col-sm-12">';
-      if($object_totales['pedidos_dia']==0){
-        $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  TOTAL DE PEDIDOS DEL DIA: '.$object_totales['pedidos_dia'].' </span>';
-      }else {
-        $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  TOTAL DE PEDIDOS DEL DIA: '.$object_totales['pedidos_dia'].' </span>';
-      }
+
+        $html .= '<span class="px-4 pt-1 pb-1 '.( ($object_totales['pedidos_dia']==0)? 'bg-red':'bg-white' ).' text-center justify-content-center w-100 rounded font-weight-bold"
+                    style="display:flex; align-items: center;height: 40px !important; color: black !important;">
+                    TOTAL DE PEDIDOS DEL DIA: '.$object_totales['pedidos_dia'].' </span>';
+
       $html .= '
                   </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
