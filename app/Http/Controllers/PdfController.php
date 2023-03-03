@@ -120,19 +120,40 @@ class PdfController extends Controller
                                 DB::raw('count(situacion_clientes.situacion) as total')
                             ])->get();
         $html=[];
-        $html[]='<div class="row table-situacion-clientes">';
-            $html[]='<div class="col-md-12 scrollbar-x">';
-                $html[]='<div class="table_situacion_clientes" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">';
+        $html[]= '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
         foreach ($situaciones_clientes as $situacion_cliente)
         {
-            $html[]= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"
-                        style="display:flex; align-items: center;height: 40px !important; color: black !important;">'.
-                        $situacion_cliente->situacion.' - '.$situacion_cliente->total.
-                    ' </span>';
+            $html[]='<tr>';
+                $html[]='<td style="width:20%;" class="text-center">';
+                    $html[]= '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
+                                    style="align-items: center;height: 40px !important; color: black !important;">'.
+                                $situacion_cliente->situacion.
+                            '</span>';
+                $html[]='</td>';
+
+                $html[]='<td style="width:80%">';
+                    $html[]='<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                              <div class="rounded" role="progressbar" style="background: green; width: 20%" ></div>
+                                       </div>
+                                       <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                              <span style="font-weight: lighter">
+                                                        <b style="font-weight: bold !important; font-size: 18px">  10% </b> - dividendo / divisor
+                                                             <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                             '.$situacion_cliente->total.'
+                                                            </p>
+                                              </span>
+                                       </div>
+                                   </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                            </div>';
+                $html[]='</td>';
+            $html[]='</tr>';
         }
-                $html[]='</div>';
-            $html[]='</div>';
-        $html[]='</div>';
+
+        $html[]='</table>';
+        $html=join('', $html);
         return $html;
 
     }
