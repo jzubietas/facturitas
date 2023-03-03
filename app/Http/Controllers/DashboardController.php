@@ -945,6 +945,7 @@ class DashboardController extends Controller
         }
         $html.=  '</td>';
         $html.=  '   <td>';
+
         /*META-2*/
         if ($data["meta_new"] == 0) {
           if ($data["progress_pedidos"] <= 100) {
@@ -973,6 +974,7 @@ class DashboardController extends Controller
                                   </div>';
           }
         }
+
         /*META-1*/
         if ($data["meta_new"] == 1){
           if ($data["progress_pedidos"] >= 90) {
