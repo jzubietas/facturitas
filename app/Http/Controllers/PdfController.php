@@ -120,14 +120,34 @@ class PdfController extends Controller
       ])
       ->select([
         'situacion_clientes.situacion',
-        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO' THEN (select sum(m.cliente_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE' THEN (select sum(m.cliente_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO' THEN (select sum(m.cliente_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta "),
+        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
+                                                    THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                                    THEN (select sum(m.meta_quincena_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                                    THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_quincena "),
+
+        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
+                                                  THEN (select sum(m.cliente_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                                    THEN (select sum(m.cliente_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                                    THEN (select sum(m.cliente_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
+
+        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
+                                                    THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                                    THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
+
         DB::raw('count(situacion_clientes.situacion) as total')
       ])->get();
     $html = [];
     $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
+    //return $situaciones_clientes;
     foreach ($situaciones_clientes as $situacion_cliente) {
+
       $html[] = '<tr>';
       $html[] = '<td style="width:20%;" class="text-center">';
       $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
@@ -139,32 +159,50 @@ class PdfController extends Controller
       $html[] = '<td style="width:80%">';
       $porcentaje = 0;
       $diferenciameta = 0;
-      if ($situacion_cliente->meta > 0) {
-        $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta) * 100, 2);
-        $diferenciameta = $situacion_cliente->meta - $situacion_cliente->total;
+      $valor_meta = 0;
+
+      if ($situacion_cliente->total < $situacion_cliente->meta_quincena) {
+        //meta quincena
+        $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_quincena) * 100, 2);
+        $diferenciameta = $situacion_cliente->meta_quincena - $situacion_cliente->total;
         if ($diferenciameta < 0) $diferenciameta = 0;
+        $valor_meta = $situacion_cliente->meta_quincena;
+
+      } else if ($situacion_cliente->total < $situacion_cliente->meta_1) {
+        //meta 1
+        $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_1) * 100, 2);
+        $diferenciameta = $situacion_cliente->meta_1 - $situacion_cliente->total;
+        if ($diferenciameta < 0) $diferenciameta = 0;
+        $valor_meta = $situacion_cliente->meta_1;
+
+      } else {
+        //meta 2
+        $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_2) * 100, 2);
+        $diferenciameta = $situacion_cliente->meta_2 - $situacion_cliente->total;
+        if ($diferenciameta < 0) $diferenciameta = 0;
+        $valor_meta = $situacion_cliente->meta_2;
+
       }
-      /*META 1*/
-      /*      if (meta == 0) {*/
+
       if ($porcentaje >= 90) {
         $html[] = '<div class="w-100 bg-white rounded">
-                                  <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
-                                              <div class="rounded" role="progressbar" style="background: #008ffb; width: ' . $porcentaje . '%" ></div>
-                                       </div>
-                                       <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                              <span style="font-weight: lighter">
-                                                        <b style="font-weight: bold !important; font-size: 18px">
-                                                          ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' / ' . $situacion_cliente->meta . '
-                                                             <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
-                                                             ' . $diferenciameta . '
-                                                            </p>
-                                              </span>
-                                       </div>
-                                   </div>
-                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
-                            </div>';
+                                        <div class="position-relative rounded">
+                                            <div class="progress bg-white rounded" style="height: 40px">
+                                                    <div class="rounded" role="progressbar" style="background: #008ffb; width: ' . $porcentaje . '%" ></div>
+                                             </div>
+                                             <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                    <span style="font-weight: lighter">
+                                                              <b style="font-weight: bold !important; font-size: 18px">
+                                                                ' . $porcentaje . '% </b>
+                                                               - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                                   <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                                   ' . $diferenciameta . '
+                                                                  </p>
+                                                    </span>
+                                             </div>
+                                         </div>
+                                        <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                  </div>';
       } else if ($porcentaje > 75) {
         $html[] = '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
@@ -175,7 +213,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' / ' . $situacion_cliente->meta . '
+                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
@@ -194,7 +232,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' / ' . $situacion_cliente->meta . '
+                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
@@ -213,7 +251,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' / ' . $situacion_cliente->meta . '
+                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
@@ -223,37 +261,6 @@ class PdfController extends Controller
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
       }
-      /*      }*/
-
-      /*META 2*/
-      /*      if (meta == 1) {
-              if ($porcentaje <= 100) {
-                $html.=  '<div class="w-100 bg-white rounded">
-                                          <div class="position-relative rounded">
-                                            <div class="progress bg-white rounded" style="height: 40px">
-                                                <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $porcentaje . '%" ></div>
-                                                </div>
-                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                  <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $porcentaje . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '.  ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
-                                              </div>
-                                          </div>
-                                          <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                        </div>';
-              }
-              else{
-                $html.=  '<div class="w-100 bg-white rounded">
-                                          <div class="position-relative rounded">
-                                            <div class="progress bg-white rounded" style="height: 40px">
-                                                <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                                </div>
-                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                  <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
-                                              </div>
-                                          </div>
-                                          <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                        </div>';
-              }
-            }*/
 
       $html[] = '</td>';
       $html[] = '</tr>';
