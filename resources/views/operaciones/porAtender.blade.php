@@ -69,7 +69,7 @@
 
 @stop
 
-@section('css')
+@push('css')
     {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
@@ -113,7 +113,7 @@
         }
 
     </style>
-@stop
+@endpush
 
 @section('js')
     {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}

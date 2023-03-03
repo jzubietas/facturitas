@@ -25,17 +25,17 @@
                 <table id="tablaPrincipal" class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col" style="vertical-align: middle">Item</th>
-                        <th scope="col" style="vertical-align: middle">Código</th>
-                        <th scope="col" style="vertical-align: middle">Cliente</th>
-                        <th scope="col" style="vertical-align: middle">Razón social</th>
-                        <th scope="col" style="vertical-align: middle">Mes</th>
-                        <th scope="col" style="vertical-align: middle">Asesor</th>
-                        <th scope="col" style="vertical-align: middle">Fecha de atención</th>{{--fecha hora--}}
-                        <th scope="col" style="vertical-align: middle">Tipo de Banca</th>
-                        <th scope="col" style="vertical-align: middle">Adjuntos</th>
-                        <th scope="col" style="vertical-align: middle">Estado</th>
-                        <th scope="col" style="vertical-align: middle">Acciones</th>
+                        <th scope="col" class="align-middle">Item</th>
+                        <th scope="col" class="align-middle">Código</th>
+                        <th scope="col" class="align-middle">Cliente</th>
+                        <th scope="col" class="align-middle">Razón social</th>
+                        <th scope="col" class="align-middle">Mes</th>
+                        <th scope="col" class="align-middle">Asesor</th>
+                        <th scope="col" class="align-middle">Fecha de atención</th>{{--fecha hora--}}
+                        <th scope="col" class="align-middle">Tipo de Banca</th>
+                        <th scope="col" class="align-middle">Adjuntos</th>
+                        <th scope="col" class="align-middle">Estado</th>
+                        <th scope="col" class="align-middle">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -49,16 +49,62 @@
     @include('operaciones.modal.veradjuntoid')
 @endsection
 
-@section('css')
-<style>
-.allow-copy{
-    -webkit-user-select: all!important;
-    -moz-user-select: all!important;
-    -ms-user-select: all!important;
-    user-select: all!important;
-}
-</style>
-@stop
+@push('css')
+  <style>
+    .allow-copy{
+      -webkit-user-select: all!important;
+      -moz-user-select: all!important;
+      -ms-user-select: all!important;
+      user-select: all!important;
+    }
+    @media screen and (max-width: 2249px){
+      #tablaPrincipal{
+        width: 100% !important;
+      }
+      th:nth-child(9){
+        width: 100px !important;
+      }
+/*      td:nth-child(10){
+        display: flex !important;
+        width: ;
+      }*/
+      td:nth-child(10) span{
+        white-space: nowrap;
+      }
+      th:nth-child(11){
+        min-width: 130px !important;
+        max-width: 200px !important;
+      }
+
+      .sorting:before,
+      .sorting:after,
+      sorting_desc:before,
+      sorting_desc:after
+      {
+        top: 20px !important;
+      }
+
+      td{
+        vertical-align: middle !important;
+        text-align: center !important;
+      }
+    }
+    @media screen and (max-width: 2144px){
+      thead,
+      tr,
+      td{
+        vertical-align: middle !important;
+      }
+    }
+
+    @media screen and (max-width: 2039px){
+
+    }
+    @media screen and (max-width: 1440px){
+
+    }
+  </style>
+@endpush
 
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>

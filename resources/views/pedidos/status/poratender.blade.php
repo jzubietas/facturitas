@@ -37,17 +37,17 @@
                 <table id="tablaPrincipal" class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col" style="vertical-align: middle">Item</th>
-                        <th scope="col" style="vertical-align: middle">Código</th>
-                        <th scope="col" style="vertical-align: middle">Cliente</th>
-                        <th scope="col" style="vertical-align: middle">Razón social</th>
-                        <th scope="col" style="vertical-align: middle">Mes</th>
-                        <th scope="col" style="vertical-align: middle">Asesor</th>
-                        <th scope="col" style="vertical-align: middle">Fecha de registro</th>{{--fecha hora--}}
-                        <th scope="col" style="vertical-align: middle">Tipo de Banca</th>
-                        <th scope="col" style="vertical-align: middle">Adjuntos Asesor</th>
-                        <th scope="col" style="vertical-align: middle">Estado</th>
-                        <th scope="col" style="vertical-align: middle">Adjuntos Operaciones</th>
+                        <th scope="col" class="align-middle">Item</th>
+                        <th scope="col" class="align-middle">Código</th>
+                        <th scope="col" class="align-middle">Cliente</th>
+                        <th scope="col" class="align-middle">Razón social</th>
+                        <th scope="col" class="align-middle">Mes</th>
+                        <th scope="col" class="align-middle">Asesor</th>
+                        <th scope="col" class="align-middle">Fecha de registro</th>{{--fecha hora--}}
+                        <th scope="col" class="align-middle">Tipo de Banca</th>
+                        <th scope="col" class="align-middle">Adjuntos</th>
+                        <th scope="col" class="align-middle">Estado</th>
+                        <th scope="col" class="align-middle">Adjuntos Operaciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -245,7 +245,7 @@
                                 return '';
                             } else {
                                 if (data > 0) {
-                                    data = '<a href="" data-target="#modal-veradjunto" data-group="1" data-adjunto=' + row.id + ' data-toggle="modal" ><button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                                    data = '<a href="" class="btn-fontsize" " data-target="#modal-veradjunto" data-group="1" data-adjunto=' + row.id + ' data-toggle="modal" ><button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
                                     return data;
                                 } else {
                                     return '';
@@ -457,3 +457,80 @@
         });
     </script>
 @stop
+
+@push('css')
+  <style>
+  @media screen and (max-width: 2249px){
+    #tablaPrincipal{
+      width: 100% !important;
+    }
+    thead{
+      vertical-align: middle;
+    }
+    th:nth-child(9){
+      width: 100px !important;
+    }
+    th:nth-child(11){
+      width: 130px !important;
+    }
+    .sorting:before,
+    .sorting:after,
+    sorting_desc:before,
+    sorting_desc:after
+
+    {
+      top: 20px !important;
+    }
+    td{
+      vertical-align: middle !important;
+      text-align: center !important;
+    }
+    #tablaPrincipal tbody div ul{
+      padding-left: 0px !important;
+      margin-bottom: 0px !important;
+    }
+  }
+
+  @media screen and (max-width: 2144px){
+    thead,
+    tr,
+    td{
+      vertical-align: middle !important;
+    }
+
+    .btn-fontsize{
+      font-size: 11px;
+      min-width: 85px;
+      max-width: 130px;
+    }
+
+    .dis-grid{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 2fr));
+      gap:0.7rem
+    }
+  }
+
+  @media screen and (max-width: 2039px){
+    .dis-grid{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+      flex-direction: column;
+    }
+    .btn-fontsize{
+      min-width: 75px;
+      width: 100px;
+    }
+  }
+  @media screen and (max-width: 1440px){
+    .etiquetas_asignacion{
+      font-size: 9px;
+      padding: 2px;
+      white-space: pre-line !important;
+    }
+  }
+  </style>
+@endpush
+

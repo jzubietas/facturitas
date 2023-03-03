@@ -26,3 +26,15 @@
     </div>
 
 </aside>
+
+{{--@push('css')
+  <style>
+
+    .sidebar-mini.sidebar-collapse .main-sidebar, .sidebar-mini.sidebar-collapse .main-sidebar::before{
+      margin-left: 0 !important;
+    }
+
+
+  </style>
+
+@endpush--}}

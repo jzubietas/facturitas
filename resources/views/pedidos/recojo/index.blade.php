@@ -21,20 +21,20 @@
           <thead>
           <tr>
             <th></th>
-            <th scope="col" style="vertical-align: middle">Código</th>
-            <th scope="col" style="vertical-align: middle">Cliente</th>
-            <th scope="col" style="vertical-align: middle">Razón social</th>
-            <th scope="col" style="vertical-align: middle">Cantidad</th>
-            <th scope="col" style="vertical-align: middle">Asesor</th>
-            <th scope="col" style="vertical-align: middle">RUC</th>
-            <th scope="col" style="vertical-align: middle">F. Registro</th>
-            <th scope="col" style="vertical-align: middle">F. Actualizacion</th>
-            <th scope="col" style="vertical-align: middle">Total (S/)</th>
-            <th scope="col" style="vertical-align: middle">Est. pago</th>
-            <th scope="col" style="vertical-align: middle">Con. pago</th>
-            <th scope="col" style="vertical-align: middle">Est. Sobre</th>
-            <th scope="col" style="vertical-align: middle">Diferencia</th>
-            <th scope="col" style="vertical-align: middle">...</th>
+            <th scope="col" class="align-middle">Código</th>
+            <th scope="col" class="align-middle">Cliente</th>
+            <th scope="col" class="align-middle">Razón social</th>
+            <th scope="col" class="align-middle">Cantidad</th>
+            <th scope="col" class="align-middle">Asesor</th>
+            <th scope="col" class="align-middle">RUC</th>
+            <th scope="col" class="align-middle">F. Registro</th>
+            <th scope="col" class="align-middle">F. Actualizacion</th>
+            <th scope="col" class="align-middle">Total (S/)</th>
+            <th scope="col" class="align-middle">Est. pago</th>
+            <th scope="col" class="align-middle">Con. pago</th>
+            <th scope="col" class="align-middle">Est. Sobre</th>
+            <th scope="col" class="align-middle">Diferencia</th>
+            <th scope="col" class="align-middle">...</th>
           </tr>
           </thead>
           <tbody>
@@ -464,3 +464,77 @@ ${data.foto3 ? `
   </script>
 
 @stop
+<style>
+  @media screen and (max-width: 2249px){
+    .dis-grid{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+      flex-direction: column;
+    }
+    .btn-fontsize{
+      font-size: 15px;
+    }
+    .etiquetas_asignacion{
+      background-color: #b0deb3 !important;
+      font-size: 12px;
+      padding: 4px;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+      color: #4a604b !important;
+      margin-left: 2px;
+    }
+    .sorting:before,
+    .sorting:after
+    {
+      top: 20px;
+    }
+
+  }
+  @media screen and (max-width: 2144px){
+    thead,
+    tr,
+    td{
+      vertical-align: middle !important;
+    }
+
+    .btn-fontsize{
+      font-size: 11px;
+      min-width: 85px;
+      max-width: 130px;
+    }
+
+    .dis-grid{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 2fr));
+      gap:0.7rem
+    }
+  }
+
+  @media screen and (max-width: 2039px){
+    .dis-grid{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+      flex-direction: column;
+    }
+    .btn-fontsize{
+      min-width: 75px;
+      width: 100px;
+    }
+  }
+
+  @media screen and (max-width: 1440px){
+    .etiquetas_asignacion{
+      font-size: 9px;
+      padding: 2px;
+      white-space: pre-line !important;
+    }
+  }
+</style>
+@section('css')
+

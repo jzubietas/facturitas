@@ -101,21 +101,21 @@
       <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
         <thead>
         <tr>
-          <th style="vertical-align: middle"></th>
-          <th style="vertical-align: middle" scope="col">Código</th>
-          <th style="vertical-align: middle" scope="col">Cliente</th>
-          <th style="vertical-align: middle" scope="col">Razón social</th>
-          <th style="vertical-align: middle" scope="col">Cantidad</th>
-          <th style="vertical-align: middle" scope="col">Id</th>
-          <th style="vertical-align: middle" scope="col">RUC</th>
-          <th style="vertical-align: middle" scope="col">F. Registro</th>
-          <th style="vertical-align: middle" scope="col">F. Actualizacion</th>
-          <th style="vertical-align: middle" scope="col">Total (S/)</th>
-          <th style="vertical-align: middle" scope="col">Est. pago</th>
-          <th style="vertical-align: middle" scope="col">Con. pago</th>
-          <th style="vertical-align: middle" scope="col">Est. Sobre</th>
-          <th style="vertical-align: middle" scope="col">Dif.</th>
-          <th style="vertical-align: middle" scope="col">Acciones</th>
+          <th class="align-middle"></th>
+          <th class="align-middle" scope="col">Código</th>
+          <th class="align-middle" scope="col">Cliente</th>
+          <th class="align-middle" scope="col">Razón social</th>
+          <th class="align-middle" scope="col">Cantidad</th>
+          <th class="align-middle" scope="col">Id</th>
+          <th class="align-middle" scope="col">RUC</th>
+          <th class="align-middle" scope="col">F. Registro</th>
+          <th class="align-middle" scope="col">F. Actualizacion</th>
+          <th class="align-middle" scope="col">Total (S/)</th>
+          <th class="align-middle" scope="col">Est. pago</th>
+          <th class="align-middle" scope="col">Con. pago</th>
+          <th class="align-middle" scope="col">Est. Sobre</th>
+          <th class="align-middle" scope="col">Dif.</th>
+          <th class="align-middle" scope="col">Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -131,7 +131,7 @@
   </div>
 @stop
 
-@section('css')
+@push('css')
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
@@ -228,6 +228,12 @@
         color: #4a604b !important;
         margin-left: 2px;
       }
+      .sorting:before,
+      .sorting:after
+      {
+        top: 20px;
+      }
+
     }
 
     @media screen and (max-width: 2144px){
@@ -272,7 +278,7 @@
       }
     }
   </style>
-@stop
+@endpush
 
 @section('js')
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
