@@ -138,6 +138,7 @@
         url: "{{ route('users.getmetallamadas') }}",
         success: function (resultado){
           console.log(resultado)
+          console.log(resultado.html['user_id'])
         }
       });
 
