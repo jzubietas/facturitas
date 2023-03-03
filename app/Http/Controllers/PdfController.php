@@ -141,7 +141,7 @@ class PdfController extends Controller
                 $porcentaje=0;
                 if($situacion_cliente->meta>0)
                 {
-                    $porcentaje=round($situacion_cliente->total/$situacion_cliente->meta,2);
+                    $porcentaje=round(($situacion_cliente->total/$situacion_cliente->meta)*100,2);
                     $diferenciameta=$situacion_cliente->meta-$situacion_cliente->total;
                     if($diferenciameta<0)$diferenciameta=0;
                 }
