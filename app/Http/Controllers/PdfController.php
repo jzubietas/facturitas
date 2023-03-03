@@ -145,7 +145,7 @@ class PdfController extends Controller
                             ])->get();
         $html=[];
         $html[]= '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
-        return $situaciones_clientes;
+        //return $situaciones_clientes;
         foreach ($situaciones_clientes as $situacion_cliente)
         {
 
@@ -190,7 +190,6 @@ class PdfController extends Controller
 
                 }
 
-                $valor_meta=0;
                 if ($porcentaje >= 90)
                 {
                   $html[] = '<div class="w-100 bg-white rounded">
