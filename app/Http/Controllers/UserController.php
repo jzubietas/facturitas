@@ -974,11 +974,13 @@ class UserController extends Controller
   }
   public function AsignarMetaLlamada(Request $request)
   {
-    $meta_quincena=(($request->meta_quincena)? $request->meta_quincena:0);
+    $meta_quincena_nuevo=(($request->meta_quincena_nuevo)? $request->meta_quincena_nuevo:0);
     $meta_cliente_nuevo=(($request->cliente_nuevo)? $request->cliente_nuevo:0);
     $meta_cliente_nuevo_2=(($request->cliente_nuevo_2)? $request->cliente_nuevo_2:0);
+    $meta_quincena_recuperado_abandono=(($request->meta_quincena_recuperado_abandono)? $request->meta_quincena_recuperado_abandono:0);
     $meta_cliente_recuperado_abandono=(($request->cliente_recuperado_abandono)? $request->cliente_recuperado_abandono:0);
     $meta_cliente_recuperado_abandono_2=(($request->cliente_recuperado_abandono_2)? $request->cliente_recuperado_abandono_2:0);
+    $meta_quincena_recuperado_reciente=(($request->meta_quincena_recuperado_reciente)? $request->meta_quincena_recuperado_reciente:0);
     $meta_cliente_recuperado_reciente=(($request->cliente_recuperado_reciente)? $request->cliente_recuperado_reciente:0);
     $meta_cliente_recuperado_reciente_2=(($request->cliente_recuperado_reciente_2)? $request->cliente_recuperado_reciente_2:0);
     $fecha_created=Carbon::now();
@@ -992,11 +994,13 @@ class UserController extends Controller
     {
       DB::table('metas')->where('anio',$yy)->where('mes',$mm)
         ->where('user_id',$id_jl->id)->update([
-          'meta_quincena' => $meta_quincena,
+          'meta_quincena_nuevo' => $meta_quincena_nuevo,
           'cliente_nuevo' => $meta_cliente_nuevo,
           'cliente_nuevo_2' => $meta_cliente_nuevo_2,
+          'meta_quincena_recuperado_abandono' => $meta_quincena_recuperado_abandono,
           'cliente_recuperado_abandono' => $meta_cliente_recuperado_abandono,
           'cliente_recuperado_abandono_2' => $meta_cliente_recuperado_abandono_2,
+          'meta_quincena_recuperado_reciente' => $meta_quincena_recuperado_reciente,
           'cliente_recuperado_reciente' => $meta_cliente_recuperado_reciente,
           'cliente_recuperado_reciente_2' => $meta_cliente_recuperado_reciente_2,
         ]);
@@ -1008,11 +1012,13 @@ class UserController extends Controller
         'email'=>$user->email,
         'anio'=>$yy,
         'mes'=>$mm,
-        'meta_quincena' => $meta_quincena,
+        'meta_quincena_nuevo' => $meta_quincena_nuevo,
         'cliente_nuevo' => $meta_cliente_nuevo,
         'cliente_nuevo_2' => $meta_cliente_nuevo_2,
+        'meta_quincena_recuperado_abandono' => $meta_quincena_recuperado_abandono,
         'cliente_recuperado_abandono' => $meta_cliente_recuperado_abandono,
         'cliente_recuperado_abandono_2' => $meta_cliente_recuperado_abandono_2,
+        'meta_quincena_recuperado_reciente' => $meta_quincena_recuperado_reciente,
         'cliente_recuperado_reciente' => $meta_cliente_recuperado_reciente,
         'cliente_recuperado_reciente_2' => $meta_cliente_recuperado_reciente_2,
         'status'=>1,
