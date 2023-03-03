@@ -36,7 +36,7 @@
         </div>
         <div class="col-md-12">
           <div class="d-flex justify-content-center">
-            <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+            <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
           </div>
           <div id="metas_situacion_clientes"></div>
         </div>
