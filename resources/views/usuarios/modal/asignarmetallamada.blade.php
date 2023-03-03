@@ -31,11 +31,11 @@
               {!! Form::label('meta_quincena_recuperado_abandono', 'META QUINCENA RECUPERADO ABANDONO') !!}
               {!! Form::number('meta_quincena_recuperado_abandono', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta quincena recuperado abandono']) !!}
             </div>
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-4">
               {!! Form::label('cliente_recuperado_abandono', 'META DE RECUPERADOS ABANDONO') !!}
               {!! Form::number('cliente_recuperado_abandono', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta de recuperados abandono']) !!}
             </div>
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-4">
               {!! Form::label('cliente_recuperado_abandono_2', 'META 2 DE RECUPERADOS ABANDONO') !!}
               {!! Form::number('cliente_recuperado_abandono_2', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 2 de recuperados abandono']) !!}
             </div>
@@ -44,11 +44,11 @@
               {!! Form::label('meta_quincena_recuperado_reciente', 'META QUINCENA RECUPERADO RECIENTE') !!}
               {!! Form::number('meta_quincena_recuperado_reciente', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta quincena recuperado reciente']) !!}
             </div>
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-4">
               {!! Form::label('cliente_recuperado_reciente', 'META DE RECUPERADOS RECIENTE') !!}
               {!! Form::number('cliente_recuperado_reciente', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta de recuperados reciente']) !!}
             </div>
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-4">
               {!! Form::label('cliente_recuperado_reciente_2', 'META 2 DE RECUPERADOS RECIENTE') !!}
               {!! Form::number('cliente_recuperado_reciente_2', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 2 de recuperados reciente']) !!}
             </div>
