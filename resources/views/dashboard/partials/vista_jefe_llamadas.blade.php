@@ -1,6 +1,6 @@
 <div style="text-align: center; font-family:'Times New Roman', Times, serif">
     <h2>
-        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</b></p>
+        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</p>
     </h2>
 </div>
 <br>
@@ -9,7 +9,7 @@
 <div class="row">
 
     @include('dashboard.widgets.buscar_cliente')
-    @include('dashboard.partials.vista_quitar_vidas')
+    {{--@include('dashboard.partials.vista_quitar_vidas')--}}
   <div class="col-md-12">
     <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
   </div>
