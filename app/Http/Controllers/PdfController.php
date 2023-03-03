@@ -145,9 +145,9 @@ class PdfController extends Controller
         if ($diferenciameta < 0) $diferenciameta = 0;
       }
       /*META 1*/
-/*      if (meta == 0) {*/
-        if ($porcentaje >= 90) {
-          $html[] = '<div class="w-100 bg-white rounded">
+      /*      if (meta == 0) {*/
+      if ($porcentaje >= 90) {
+        $html[] = '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                               <div class="rounded" role="progressbar" style="background: #008ffb; width: ' . $porcentaje . '%" ></div>
@@ -165,8 +165,8 @@ class PdfController extends Controller
                                    </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
-        } else if ($porcentaje > 75) {
-          $html[] = '<div class="w-100 bg-white rounded">
+      } else if ($porcentaje > 75) {
+        $html[] = '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                               <div class="rounded" role="progressbar" style="background: green; width: ' . $porcentaje . '%" ></div>
@@ -184,8 +184,8 @@ class PdfController extends Controller
                                    </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
-        } else if ($porcentaje > 50) {
-          $html[] = '<div class="w-100 bg-white rounded">
+      } else if ($porcentaje > 50) {
+        $html[] = '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                               <div class="rounded" role="progressbar" style="background: #ffc107; width: ' . $porcentaje . '%" ></div>
@@ -203,8 +203,8 @@ class PdfController extends Controller
                                    </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
-        } else {
-          $html[] = '<div class="w-100 bg-white rounded">
+      } else {
+        $html[] = '<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                               <div class="rounded" role="progressbar" style="background: #dc3545; width: ' . $porcentaje . '%" ></div>
@@ -222,38 +222,38 @@ class PdfController extends Controller
                                    </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
-        }
-/*      }*/
+      }
+      /*      }*/
 
       /*META 2*/
-/*      if (meta == 1) {
-        if ($porcentaje <= 100) {
-          $html.=  '<div class="w-100 bg-white rounded">
-                                    <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
-                                          <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $porcentaje . '%" ></div>
+      /*      if (meta == 1) {
+              if ($porcentaje <= 100) {
+                $html.=  '<div class="w-100 bg-white rounded">
+                                          <div class="position-relative rounded">
+                                            <div class="progress bg-white rounded" style="height: 40px">
+                                                <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $porcentaje . '%" ></div>
+                                                </div>
+                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                  <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $porcentaje . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '.  ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
+                                              </div>
                                           </div>
-                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $porcentaje . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '.  ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
-                                        </div>
-                                    </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
-        }
-        else{
-          $html.=  '<div class="w-100 bg-white rounded">
-                                    <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
-                                          <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                          <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                        </div>';
+              }
+              else{
+                $html.=  '<div class="w-100 bg-white rounded">
+                                          <div class="position-relative rounded">
+                                            <div class="progress bg-white rounded" style="height: 40px">
+                                                <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                </div>
+                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                  <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
+                                              </div>
                                           </div>
-                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
-                                        </div>
-                                    </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
-        }
-      }*/
+                                          <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                        </div>';
+              }
+            }*/
 
       $html[] = '</td>';
       $html[] = '</tr>';
