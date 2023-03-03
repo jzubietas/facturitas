@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
 use App\Models\Pago;
+use App\Models\SituacionClientes;
 use App\Models\User;
 use App\Models\Pedido;
 use Carbon\Carbon;
@@ -78,6 +79,86 @@ class PdfController extends Controller
         return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes','anios','dateM','dateY'));
     }
 
+    public function SituacionClientes(Request $request)
+    {
+        //situaciones clientes
+        /*BABANDONO RECIENTE    150 / 210
+        ABANDONO 250/300
+        BASE FRIA 230/270
+         * */
+
+        $inicio_s=Carbon::now()->startOfMonth()->format('Y-m-d');
+        $inicio_f=Carbon::now()->endOfMonth()->format('Y-m-d');
+        //situacion antes vs situacion actual
+        $periodo_antes=Carbon::now()->subMonth()->startOfMonth()->format('Y-m');
+        $periodo_actual=Carbon::now()->startOfMonth()->format('Y-m');
+
+        $situaciones_clientes=SituacionClientes::leftJoin('situacion_clientes as a','a.cliente_id','situacion_clientes.cliente_id')
+                            ->where([
+                                ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+                                ['a.situacion', '=', 'ABANDONO RECIENTE'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->orWhere([
+                                ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
+                                ['a.situacion', '=', 'RECURRENTE'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->orWhere([
+                                ['situacion_clientes.situacion', '=', 'NUEVO'],
+                                ['a.situacion', '=', 'BASE FRIA'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->groupBy([
+                                'situacion_clientes.situacion'
+                            ])
+                            ->select([
+                                'situacion_clientes.situacion',
+                                DB::raw('count(situacion_clientes.situacion) as total')
+                            ])->get();
+        $html=[];
+        $html[]= '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
+        foreach ($situaciones_clientes as $situacion_cliente)
+        {
+            $html[]='<tr>';
+                $html[]='<td style="width:20%;" class="text-center">';
+                    $html[]= '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
+                                    style="align-items: center;height: 40px !important; color: black !important;">'.
+                                $situacion_cliente->situacion.
+                            '</span>';
+                $html[]='</td>';
+
+                $html[]='<td style="width:80%">';
+                    $html[]='<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                              <div class="rounded" role="progressbar" style="background: green; width: 20%" ></div>
+                                       </div>
+                                       <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                              <span style="font-weight: lighter">
+                                                        <b style="font-weight: bold !important; font-size: 18px">
+                                                          10% </b>
+                                                         - '.$situacion_cliente->total.' / divisor
+                                                             <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                             '.$situacion_cliente->total.'
+                                                            </p>
+                                              </span>
+                                       </div>
+                                   </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                            </div>';
+                $html[]='</td>';
+            $html[]='</tr>';
+        }
+
+        $html[]='</table>';
+        $html=join('', $html);
+        return $html;
+
+    }
     public function Analisisgrafico(Request $request)
     {
 /*      return $request->all();*/

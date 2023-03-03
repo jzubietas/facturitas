@@ -177,7 +177,7 @@ class PedidoController extends Controller
             );
 
 
-        if (Auth::user()->rol == "Llamadas") {
+        if (Auth::user()->rol == User::ROL_LLAMADAS) {
             /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
@@ -374,7 +374,7 @@ class PedidoController extends Controller
                     if ($pedido->estado_correccion == "0") {
                         if (\Str::contains(\Str::lower($pedido->codigo), '-c')) {
                         } else {
-                            $btn[] = '<a href="#" data-backdrop="static" data-keyboard="fa1lse" class=" btn btn-light btn-sm text-left p-2 text-center btn-fontsize"
+                            $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class=" btn btn-light btn-sm text-left p-2 text-center btn-fontsize"
                             data-target="#modal-correccion-pedidos"
                             data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" >
                                 <i class="fa fa-check-circle text-warning"></i>
