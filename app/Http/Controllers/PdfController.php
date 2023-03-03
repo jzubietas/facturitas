@@ -139,6 +139,7 @@ class PdfController extends Controller
 
                 $html[]='<td style="width:80%">';
                 $porcentaje=0;
+                $diferenciameta=0;
                 if($situacion_cliente->meta>0)
                 {
                     $porcentaje=round(($situacion_cliente->total/$situacion_cliente->meta)*100,2);
