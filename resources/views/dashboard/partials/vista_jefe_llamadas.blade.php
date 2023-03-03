@@ -123,6 +123,9 @@
           <div class="col-md-12">
             <div id="metas_total"></div>
           </div>
+          <div class="col-md-12">
+            <div id="metas_situacion_clientes"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -196,10 +199,24 @@
         })
       }
 
+      window.cargReporteMetasSituacionClientes = function () {
+        var fd=new FormData();
+        $.ajax({
+          data: fd,
+          processData: false,
+          contentType: false,
+          method: 'POST',
+          url: "{{ route('dashboard.graficoSituacionClientes') }}",
+          success: function (resultado){
+            $('#metas_situacion_clientes').html(resultado);
+          }
+        })
+      }
+
       cargaNueva(1);
       cargaNueva(2);
       cargaNueva(3);
-
+      cargReporteMetasSituacionClientes();
       cargReporteAnalisis();
 
       setInterval(myTimer, 50000);
