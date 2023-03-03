@@ -145,8 +145,10 @@ class PdfController extends Controller
                             ])->get();
         $html=[];
         $html[]= '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
+        return $situaciones_clientes;
         foreach ($situaciones_clientes as $situacion_cliente)
         {
+
             $html[]='<tr>';
                 $html[]='<td style="width:20%;" class="text-center">';
                     $html[]= '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
