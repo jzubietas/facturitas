@@ -23,21 +23,21 @@
                     </div>
                 </div>
 
-                <div id="modal-agregarcontacto-pc-container" class="modal-correccionpedido-pc-container">
-                    @include('pedidos.modal.Correciones.partials.correccionpedido_pc')
+                <div id="modal-agregarcontacto-pc-container" class="modal-agregarcontacto-pc-container">
+                    @include('modal.AgregarContacto.partials.agregarcontacto_pc')
 
                 </div>
 
-                <div id="modal-agregarcontacto-f-container" class="modal-correccionpedido-f-container">
-                    @include('pedidos.modal.Correciones.partials.correccionpedido_f')
+                <div id="modal-agregarcontacto-f-container" class="modal-agregarcontacto-f-container">
+                    @include('modal.AgregarContacto.partials.agregarcontacto_f')
                 </div>
 
-                <div id="modal-correccionpedido-g-container" class="modal-correccionpedido-g-container">
-                    @include('pedidos.modal.Correciones.partials.correccionpedido_g')
+                <div id="modal-correccionpedido-g-container" class="modal-agregarcontacto-g-container">
+                    @include('modal.AgregarContacto.partials.agregarcontacto_g')
                 </div>
 
-                <div id="modal-correccionpedido-b-container" class="modal-correccionpedido-b-container">
-                    @include('pedidos.modal.Correciones.partials.correccionpedido_b')
+                <div id="modal-correccionpedido-b-container" class="modal-agregarcontacto-b-container">
+                    @include('modal.AgregarContacto.partials.agregarcontacto_b')
                 </div>
 
             </div>

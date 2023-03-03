@@ -71,6 +71,8 @@
     </div>
 
     @include('pedidos.modal.escanear_estado_sobres')
+    @include('modal.escanear_estado_sobres')
+
 @stop
 
 
