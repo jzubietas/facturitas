@@ -973,7 +973,7 @@ class UserController extends Controller
     $yy=$fecha_created->format('Y');
     $mm=$fecha_created->format('m');
     $find=DB::table('metas')->where('anio',$yy)->where('mes',$mm)
-      ->where('user_id',$request->asesor)->count();
+      ->where('user_id',$request->llamada)->count();
     if($find>0)
     {
       DB::table('metas')->where('anio',$yy)->where('mes',$mm)
