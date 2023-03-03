@@ -19,16 +19,31 @@
               {!! Form::number('cliente_nuevo', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta de nuevos']) !!}
             </div>
             <div class="form-group col-lg-6">
-              {!! Form::label('cliente_recurrente', 'META DE RECURRENTES') !!}
-              {!! Form::number('cliente_recurrente', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta de recurrentes']) !!}
+              {!! Form::label('cliente_nuevo_2', 'META 2 DE NUEVOS') !!}
+              {!! Form::number('cliente_nuevo_2', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 2 de nuevos']) !!}
             </div>
+
             <div class="form-group col-lg-6">
               {!! Form::label('cliente_recuperado_abandono', 'META DE RECUPERADOS ABANDONO') !!}
               {!! Form::number('cliente_recuperado_abandono', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta de recuperados abandono']) !!}
             </div>
             <div class="form-group col-lg-6">
+              {!! Form::label('cliente_recuperado_abandono_2', 'META 2 DE RECUPERADOS ABANDONO') !!}
+              {!! Form::number('cliente_recuperado_abandono_2', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 2 de recuperados abandono']) !!}
+            </div>
+
+            <div class="form-group col-lg-6">
               {!! Form::label('cliente_recuperado_reciente', 'META DE RECUPERADOS RECIENTE') !!}
               {!! Form::number('cliente_recuperado_reciente', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta de recuperados reciente']) !!}
+            </div>
+            <div class="form-group col-lg-6">
+              {!! Form::label('cliente_recuperado_reciente_2', 'META 2 DE RECUPERADOS RECIENTE') !!}
+              {!! Form::number('cliente_recuperado_reciente_2', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 2 de recuperados reciente']) !!}
+            </div>
+
+            <div class="form-group col-lg-12">
+              {!! Form::label('meta_quincena', 'META QUINCENA') !!}
+              {!! Form::number('meta_quincena', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta quincena']) !!}
             </div>
 
           </div>

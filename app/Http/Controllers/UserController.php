@@ -961,30 +961,44 @@ class UserController extends Controller
         return redirect()->route('users.asesores')->with('info', 'asignado');
     }
 
+  public function ConsultarMetaLlamada(Request $request)
+  {
+    $id_jl=User::where('rol',User::ROL_JEFE_LLAMADAS)->activo()->first();
+    $fecha_created=Carbon::now();
+    $yy=$fecha_created->format('Y');
+    $mm=$fecha_created->format('m');
+    $consulta = DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+      ->where('user_id',38)->first();
+    return response()->json(['html' => $consulta]);
+
+  }
   public function AsignarMetaLlamada(Request $request)
   {
-    //return $request;
+    $meta_quincena=(($request->meta_quincena)? $request->meta_quincena:0);
     $meta_cliente_nuevo=(($request->cliente_nuevo)? $request->cliente_nuevo:0);
-    $meta_cliente_recurrente=(($request->cliente_recurrente)? $request->cliente_recurrente:0);
+    $meta_cliente_nuevo_2=(($request->cliente_nuevo_2)? $request->cliente_nuevo_2:0);
     $meta_cliente_recuperado_abandono=(($request->cliente_recuperado_abandono)? $request->cliente_recuperado_abandono:0);
+    $meta_cliente_recuperado_abandono_2=(($request->cliente_recuperado_abandono_2)? $request->cliente_recuperado_abandono_2:0);
     $meta_cliente_recuperado_reciente=(($request->cliente_recuperado_reciente)? $request->cliente_recuperado_reciente:0);
-    //$meta_cobro=0;
+    $meta_cliente_recuperado_reciente_2=(($request->cliente_recuperado_reciente_2)? $request->cliente_recuperado_reciente_2:0);
     $fecha_created=Carbon::now();
     $yy=$fecha_created->format('Y');
     $mm=$fecha_created->format('m');
     $find=DB::table('metas')->where('anio',$yy)->where('mes',$mm)
       //->where('user_id',$request->llamada)->count();
       ->where('rol',User::ROL_JEFE_LLAMADAS)->count();
-    //
     $id_jl=User::where('rol',User::ROL_JEFE_LLAMADAS)->activo()->first();
     if($find>0)
     {
       DB::table('metas')->where('anio',$yy)->where('mes',$mm)
         ->where('user_id',$id_jl->id)->update([
+          'meta_quincena' => $meta_quincena,
           'cliente_nuevo' => $meta_cliente_nuevo,
-          'cliente_recurrente' => $meta_cliente_recurrente,
+          'cliente_nuevo_2' => $meta_cliente_nuevo_2,
           'cliente_recuperado_abandono' => $meta_cliente_recuperado_abandono,
+          'cliente_recuperado_abandono_2' => $meta_cliente_recuperado_abandono_2,
           'cliente_recuperado_reciente' => $meta_cliente_recuperado_reciente,
+          'cliente_recuperado_reciente_2' => $meta_cliente_recuperado_reciente_2,
         ]);
     }else{
       $user=User::where('id',$id_jl->id)->first();
@@ -994,17 +1008,17 @@ class UserController extends Controller
         'email'=>$user->email,
         'anio'=>$yy,
         'mes'=>$mm,
+        'meta_quincena' => $meta_quincena,
         'cliente_nuevo' => $meta_cliente_nuevo,
-        'cliente_recurrente' => $meta_cliente_recurrente,
+        'cliente_nuevo_2' => $meta_cliente_nuevo_2,
         'cliente_recuperado_abandono' => $meta_cliente_recuperado_abandono,
+        'cliente_recuperado_abandono_2' => $meta_cliente_recuperado_abandono_2,
         'cliente_recuperado_reciente' => $meta_cliente_recuperado_reciente,
+        'cliente_recuperado_reciente_2' => $meta_cliente_recuperado_reciente_2,
         'status'=>1,
         'created_at'=>now(),
       ]);
-
     }
-    //return redirect()->route('users.llamadas')->with('info', 'asignado');
-
     return response()->json(['html' => $request]);
   }
 
