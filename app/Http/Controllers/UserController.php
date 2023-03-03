@@ -973,44 +973,24 @@ class UserController extends Controller
     $yy=$fecha_created->format('Y');
     $mm=$fecha_created->format('m');
     $find=DB::table('metas')->where('anio',$yy)->where('mes',$mm)
-      ->where('user_id',$request->llamada)->count();
+      //->where('user_id',$request->llamada)->count();
+      ->where('rol',User::ROL_JEFE_LLAMADAS)->count();
+    //
+    $id_jl=User::where('rol',User::ROL_JEFE_LLAMADAS)->activo()->first();
     if($find>0)
     {
       DB::table('metas')->where('anio',$yy)->where('mes',$mm)
-        ->where('user_id',$request->llamada)->update([
+        ->where('user_id',$id_jl->id)->update([
           'cliente_nuevo' => $meta_cliente_nuevo,
           'cliente_recurrente' => $meta_cliente_recurrente,
           'cliente_recuperado_abandono' => $meta_cliente_recuperado_abandono,
           'cliente_recuperado_reciente' => $meta_cliente_recuperado_reciente,
         ]);
-      /*$user=User::where('id',$request->llamada)->first();
-      $user->update([
-        'meta_pedido' => $meta_pedido_1,
-        'meta_pedido_2' => $meta_pedido_2,
-        'meta_cobro' => $meta_cobro,
-        'meta_quincena' => $meta_quincena,
-      ]);*/
-
-      /*$encargado=User::where('id',$user->supervisor)->first();
-      DB::table('metas')->where('anio',$yy)->where('mes',$mm)
-        ->where('user_id',$encargado->id)->update([
-          'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
-          'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
-          'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
-          'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
-        ]);*/
-      //encontro registro
-      /*$encargado->update([
-        'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
-        'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
-        'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
-        'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
-      ]);*/
     }else{
-      $user=User::where('id',$request->llamada)->first();
+      $user=User::where('id',$id_jl->id)->first();
       DB::table('metas')->insert([
         'rol'=>$user->rol,
-        'user_id'=>$request->llamada,
+        'user_id'=>$user->id,
         'email'=>$user->email,
         'anio'=>$yy,
         'mes'=>$mm,
@@ -1021,28 +1001,7 @@ class UserController extends Controller
         'status'=>1,
         'created_at'=>now(),
       ]);
-      /*$user->update([
-        'meta_pedido' => $meta_pedido_1,
-        'meta_pedido_2' => $meta_pedido_2,
-        'meta_cobro' => $meta_cobro,
-        'meta_quincena' => $meta_quincena,
-      ]);*/
 
-      /*$encargado=User::where('id',$user->supervisor)->first();
-      DB::table('metas')->where('anio',$yy)->where('mes',$mm)
-        ->where('user_id',$encargado->id)->update([
-          'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
-          'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
-          'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
-          'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
-        ]);*/
-      //encontro registro
-      /*$encargado->update([
-        'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
-        'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
-        'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
-        'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
-      ]);*/
     }
     //return redirect()->route('users.llamadas')->with('info', 'asignado');
 
