@@ -141,7 +141,9 @@ class PdfController extends Controller
                 $porcentaje=0;
                 if($situacion_cliente->meta>0)
                 {
-                    $porcentaje=round($situacion_cliente->total/$situacion_cliente->meta,2);
+                    $porcentaje=round(($situacion_cliente->total/$situacion_cliente->meta)*100,2);
+                    $diferenciameta=$situacion_cliente->meta-$situacion_cliente->total;
+                    if($diferenciameta<0)$diferenciameta=0;
                 }
                     $html[]='<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
@@ -154,7 +156,7 @@ class PdfController extends Controller
                                                           '.$porcentaje.'% </b>
                                                          - '.$situacion_cliente->total.' / '.$situacion_cliente->meta.'
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
-                                                             '.$situacion_cliente->total.'
+                                                             '.$diferenciameta.'
                                                             </p>
                                               </span>
                                        </div>

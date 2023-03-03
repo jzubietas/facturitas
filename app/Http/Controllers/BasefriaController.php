@@ -68,14 +68,14 @@ class BasefriaController extends Controller
             ->where('clientes.tipo', '0');
 
         if (Auth::user()->rol == 'Llamadas') {
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
 
         }
         else if (Auth::user()->rol == 'Asesor') {
