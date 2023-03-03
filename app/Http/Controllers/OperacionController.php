@@ -591,7 +591,7 @@ class OperacionController extends Controller
                 $btn[] = '<a href="" data-target="#modalcorreccion-veradjunto"'.
                             'data-correccion="' . $pedido->id . '"'.
                             'data-toggle="modal" >'.
-                                '<button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> VerAAAA</button>'.
+                                '<button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button>'.
                                 '</a>';
                 return join('', $btn);
             })

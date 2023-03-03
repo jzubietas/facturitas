@@ -281,7 +281,7 @@ class PedidoController extends Controller
                     color: black !important;">Con ruta</span>';
                 }
               $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-              $badge_estado .= '<span class="rounded etiquetas_asignacion">' . $pedido->condicion_envio . '</span>';
+              $badge_estado .= '<span class="rounded etiquetas_asignacion" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) use ($miidentificador) {

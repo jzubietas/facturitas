@@ -15,6 +15,7 @@
       font-family: 'Poppins', sans-serif;
       font-weight: bold;
     }
+
     .bootstrap-select.btn-group .btn .filter-option {
       text-align: right
     }
@@ -27,8 +28,8 @@
       text-align: right !important;
     }
 
-    .btn.dropdown-toggle.bs-placeholder{
-      background-color:black !important;
+    .btn.dropdown-toggle.bs-placeholder {
+      background-color: black !important;
     }
   </style>
 
@@ -194,89 +195,104 @@
     }
 
     td.details-control {
-      background: url("/images/details_open.png")  no-repeat center center;
+      background: url("/images/details_open.png") no-repeat center center;
       cursor: pointer;
     }
+
     tr.details td.details-control {
       background: url('/images/details_close.png') no-repeat center center;
     }
-
-    #tablaPrincipal{
+    #tablaPrincipal {
       width: 100% !important;
     }
 
 
+    @media screen and (max-width: 2249px) {
+      #tablaPrincipal {
+        width: 100% !important;
+        font-size: 14px !important;
+      }
 
-    @media screen and (max-width: 2249px){
-      .dis-grid{
+      .dis-grid {
         display: flex;
         justify-content: center;
         align-items: center;
         align-self: center;
         flex-direction: column;
       }
-      .btn-fontsize{
+
+      .btn-fontsize {
         font-size: 15px;
       }
-      .etiquetas_asignacion{
+
+      .etiquetas_asignacion {
         background-color: #b0deb3 !important;
         font-size: 12px;
         padding: 4px;
         font-weight: 700;
         line-height: 1;
         white-space: nowrap;
-        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         color: #4a604b !important;
         margin-left: 2px;
       }
+
       .sorting:before,
       .sorting:after,
       .sorting_desc:before,
-      .sorting_desc:after{
+      .sorting_desc:after {
         top: 20px !important;
       }
 
     }
 
-    @media screen and (max-width: 2144px){
+    @media screen and (max-width: 2144px) {
       thead,
       tr,
-      td{
+      td {
         vertical-align: middle !important;
       }
 
-      .btn-fontsize{
+      .btn-fontsize {
         font-size: 11px;
         min-width: 85px;
         max-width: 130px;
       }
 
-      .dis-grid{
+      .dis-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 2fr));
-        gap:0.7rem
+        gap: 0.7rem
       }
     }
 
-    @media screen and (max-width: 2039px){
-      .dis-grid{
+    @media screen and (max-width: 2039px) {
+      .dis-grid {
         display: flex;
         justify-content: center;
         align-items: center;
         align-self: center;
         flex-direction: column;
       }
-      .btn-fontsize{
+
+      .btn-fontsize {
         min-width: 75px;
         width: 100px;
       }
     }
 
-    @media screen and (max-width: 1440px){
-      #tablaPrincipal{
+    @media screen and (max-width: 1920px){
+      #tablaPrincipal {
+        font-size: 14px !important;
+      }
+    }
+
+    @media screen and (max-width: 1440px) {
+      #tablaPrincipal {
         font-size: 13px !important;
       }
-      .etiquetas_asignacion{
+
+      .etiquetas_asignacion {
         font-size: 9px;
         padding: 2px;
         white-space: pre-line !important;
@@ -307,19 +323,18 @@
 
 
     //VALIDAR CAMPO CELULAR
-    function maxLengthCheck(object)
-    {
+    function maxLengthCheck(object) {
       if (object.value.length > object.maxLength)
         object.value = object.value.slice(0, object.maxLength)
     }
   </script>
   <script>
     //import objects from "lodash/_SetCache";
-    let tablaPrincipal=null;
-    let dataForm_pc={};
-    let dataForm_f={};
-    let dataForm_g={};
-    let dataForm_b={};
+    let tablaPrincipal = null;
+    let dataForm_pc = {};
+    let dataForm_f = {};
+    let dataForm_g = {};
+    let dataForm_b = {};
     const configDataTableLanguages = {
       language: {
         "decimal": "",
@@ -429,7 +444,7 @@
       $('#modal-correccion-pedidos').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         $('#modalcorreccionpedido').val(button.data('codigo'))
-        $('button:submit').prop("disabled",false)
+        $('button:submit').prop("disabled", false)
         ocultar_div_modal_correccion_pedidos();
       })
 
@@ -469,7 +484,7 @@
         $('#direcciones_add ul').html('');
         $('#pedidoid').val(button.data('pedidoid'));
         $('#direcciones_add ul').append(`
-                    <li>`+button.data('pedidocodigo')+`</li>
+                    <li>` + button.data('pedidocodigo') + `</li>
                 `);
 
         var fd_asesor = new FormData();
@@ -487,14 +502,14 @@
             const datosdevueltos = data.split("|");
             console.log(datosdevueltos)
             let validadatosdevueltos = datosdevueltos[1];
-            if (validadatosdevueltos==0){
+            if (validadatosdevueltos == 0) {
               $("button.btnVerMasPedidos").attr("disabled", true);
             }
             $("#Direccion_de_entrega").val(datosdevueltos[0]);
           }
         });
 
-        $('button:submit').prop("disabled",false)
+        $('button:submit').prop("disabled", false)
         ocultar_div_modal_correccion_pedidos();
       })
 
@@ -504,8 +519,8 @@
         let celular_id = $("#celular_recojo").val();
         let direccion_recojo = $("#direccion_recojo").val();
         let referencia_recojo = $("#referencia_recojo").val();
-        let observacion_recojo= $("#observacion_recojo").val();
-        let gm_link= $("#gmlink_recojo").val();
+        let observacion_recojo = $("#observacion_recojo").val();
+        let gm_link = $("#gmlink_recojo").val();
         let direccion_entrega = $("#Direccion_de_entrega").val();
         let sustento_recojo = $("#sustento-recojo").val();
         let pedido_concatenado = $("#pedido_concatenado").val();
@@ -513,17 +528,16 @@
 
         console.log(distrito_recojo)
 
-        if (distrito_recojo== "" || distrito_recojo == null) {
+        if (distrito_recojo == "" || distrito_recojo == null) {
           Swal.fire('Debe seleccionar un distrito', '', 'warning');
           return false;
-        }
-        else if (direccion_recojo== "") {
+        } else if (direccion_recojo == "") {
           Swal.fire('Debe colocar una direccion de recojo', '', 'warning');
           return false;
         } else if (Nombre_recibe == "") {
           Swal.fire('Debe colocar el nombre del que recive', '', 'warning');
           return false;
-        } else if (celular_id== "") {
+        } else if (celular_id == "") {
           Swal.fire('Debe colocar el celular del quien recibe', '', 'warning');
           return false;
         } else if (referencia_recojo == "") {
@@ -570,8 +584,6 @@
       });
 
 
-
-
       $('#modal-listclientes').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         var cliente = $('#clienteid').val()
@@ -600,8 +612,8 @@
             'className': 'select-checkbox',
             'targets': [0], /* column index */
             'orderable': false, /* true or false */
-          }] ,
-          ColumnDefs:[{
+          }],
+          ColumnDefs: [{
             'targets': [0],
             'orderable': false,
           }],
@@ -616,7 +628,7 @@
               orderable: false,
               sWidth: '5%',
             },
-            {data: 'codigo', name: 'codigo',sWidth: '40%',},
+            {data: 'codigo', name: 'codigo', sWidth: '40%',},
             {
               "data": 'nombre_empresa',
               "name": 'nombre_empresa',
@@ -630,7 +642,7 @@
             'style': 'multi',
             selector: 'td:first-child'
           },
-          order: [[ 1, 'asc' ]]
+          order: [[1, 'asc']]
         });
 
       })
@@ -651,7 +663,7 @@
               data: 'pedidoid'
             },
             {
-              nane : 'clienteid'
+              nane: 'clienteid'
             },
             {
               data: 'codigo'
@@ -679,7 +691,6 @@
           }
         }
       });
-
 
 
       $('#celular_recojo').on('input', function () {
@@ -831,10 +842,9 @@
 
       $(document).on('click',
         "button#btn_correccion_pc,button#btn_correccion_f,button#btn_correccion_g,button#btn_correccion_b",
-        function(e){
+        function (e) {
           ocultar_div_modal_correccion_pedidos();
-          switch (e.target.id)
-          {
+          switch (e.target.id) {
             case 'btn_correccion_pc':
               $("#modal-correccionpedido-pc-container").show();
               break;
@@ -853,103 +863,96 @@
 
       $(document).on("submit", "form.correccion", function (e) {
         e.preventDefault();
-        var form=null;
-        var formData=null;
+        var form = null;
+        var formData = null;
         console.log(e.target.id)
-        if(e.target.id=='form-correccionpedido-pc')
-        {
-          let cant_sustento_pc=$("textarea[name='sustento-pc']").val().length;
+        if (e.target.id == 'form-correccionpedido-pc') {
+          let cant_sustento_pc = $("textarea[name='sustento-pc']").val().length;
           dataForm_pc.sustento_pc = $("textarea[name='sustento-pc']").val()
-          let cant_detalle_pc=$("textarea[name='detalle-pc']").val().length;
-          dataForm_pc.detalle_pc=$("textarea[name='detalle-pc']").val();
-          if(cant_sustento_pc==0)
-          {
-            Swal.fire('Error','No se puede ingresar un sustento vacio','warning').then(function(){
+          let cant_detalle_pc = $("textarea[name='detalle-pc']").val().length;
+          dataForm_pc.detalle_pc = $("textarea[name='detalle-pc']").val();
+          if (cant_sustento_pc == 0) {
+            Swal.fire('Error', 'No se puede ingresar un sustento vacio', 'warning').then(function () {
               console.log("before")
               $("textarea[name='sustento-pc']").focus()
             });
             return false;
-          }else if(cant_detalle_pc==0)
-          {
-            Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
-          }if(dataForm_pc.correcion_pc_captura === undefined) {
-          Swal.fire('Error','No se puede ingresar una captura vacia','warning');return false;
-        }
-        }
-        else if(e.target.id=='form-correccionpedido-f')
-        {
-          let cant_sustento_f=$("textarea[name='sustento-f']").val().length;
+          } else if (cant_detalle_pc == 0) {
+            Swal.fire('Error', 'No se puede ingresar un detalle vacio', 'warning');
+            return false;
+          }
+          if (dataForm_pc.correcion_pc_captura === undefined) {
+            Swal.fire('Error', 'No se puede ingresar una captura vacia', 'warning');
+            return false;
+          }
+        } else if (e.target.id == 'form-correccionpedido-f') {
+          let cant_sustento_f = $("textarea[name='sustento-f']").val().length;
           dataForm_f.sustento_f = $("textarea[name='sustento-f']").val()
-          let cant_facturas_f=$('input[name="correcion_f_facturas[]"]')[0].files.length
+          let cant_facturas_f = $('input[name="correcion_f_facturas[]"]')[0].files.length
           //dataForm_f.correcion_f_facturas=$('input[name="correcion_f_facturas"]')[0].files;
-          let cant_detalle_f=$("textarea[name='detalle-f']").val().length;
+          let cant_detalle_f = $("textarea[name='detalle-f']").val().length;
           dataForm_f.detalle_f = $("textarea[name='detalle-f']").val()
 
 
-          if(cant_sustento_f==0)
-          {
-            Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
-          }else if(cant_facturas_f==0)
-          {
-            Swal.fire('Error','No se puede ingresar facturas vacias','warning');return false;
-          }else if(cant_detalle_f==0)
-          {
-            Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+          if (cant_sustento_f == 0) {
+            Swal.fire('Error', 'No se puede ingresar un sustento vacio', 'warning');
+            return false;
+          } else if (cant_facturas_f == 0) {
+            Swal.fire('Error', 'No se puede ingresar facturas vacias', 'warning');
+            return false;
+          } else if (cant_detalle_f == 0) {
+            Swal.fire('Error', 'No se puede ingresar un detalle vacio', 'warning');
+            return false;
           }
-        }
-        else if(e.target.id=='form-correccionpedido-g')
-        {
-          let cant_sustento_g=$("textarea[name='sustento-g']").val().length
+        } else if (e.target.id == 'form-correccionpedido-g') {
+          let cant_sustento_g = $("textarea[name='sustento-g']").val().length
           dataForm_g.sustento_g = $("textarea[name='sustento-g']").val()
-          let cant_adjuntos_g=$('input[name="correcion_g_adjuntos[]"]')[0].files.length
+          let cant_adjuntos_g = $('input[name="correcion_g_adjuntos[]"]')[0].files.length
 
-          let cant_detalle_g=$("textarea[name='detalle-g']").val().length;
+          let cant_detalle_g = $("textarea[name='detalle-g']").val().length;
           dataForm_g.detalle_g = $("textarea[name='detalle-g']").val()
-          if(cant_sustento_g==0)
-          {
-            Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
-          }else if(cant_adjuntos_g==0)
-          {
-            Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
-          }else if(cant_detalle_g==0)
-          {
-            Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+          if (cant_sustento_g == 0) {
+            Swal.fire('Error', 'No se puede ingresar un sustento vacio', 'warning');
+            return false;
+          } else if (cant_adjuntos_g == 0) {
+            Swal.fire('Error', 'No se puede ingresar una adjuntos vacios', 'warning');
+            return false;
+          } else if (cant_detalle_g == 0) {
+            Swal.fire('Error', 'No se puede ingresar un detalle vacio', 'warning');
+            return false;
           }
-        }
-        else if(e.target.id=='form-correccionpedido-b')
-        {
-          let cant_sustento_b=$("textarea[name='sustento-b']").val().length;
+        } else if (e.target.id == 'form-correccionpedido-b') {
+          let cant_sustento_b = $("textarea[name='sustento-b']").val().length;
           dataForm_b.sustento_b = $("textarea[name='sustento-b']").val()
-          let cant_adjuntos_b=$('input[name="correcion_b_adjuntos[]"]')[0].files.length
-          if(cant_sustento_b==0)
-          {
-            Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
-          }else if(cant_adjuntos_b==0)
-          {
-            Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
+          let cant_adjuntos_b = $('input[name="correcion_b_adjuntos[]"]')[0].files.length
+          if (cant_sustento_b == 0) {
+            Swal.fire('Error', 'No se puede ingresar un sustento vacio', 'warning');
+            return false;
+          } else if (cant_adjuntos_b == 0) {
+            Swal.fire('Error', 'No se puede ingresar una adjuntos vacios', 'warning');
+            return false;
           }
         }
-        switch (e.target.id)
-        {
+        switch (e.target.id) {
           case 'form-correccionpedido-pc':
             dataForm_pc.opcion = 1
-            dataForm_pc.modalcorreccionpedido=$('#modalcorreccionpedido').val();
-            formData=dataForm_pc
+            dataForm_pc.modalcorreccionpedido = $('#modalcorreccionpedido').val();
+            formData = dataForm_pc
             break;
           case 'form-correccionpedido-f':
             dataForm_f.opcion = 2
-            dataForm_f.modalcorreccionpedido=$('#modalcorreccionpedido').val();
-            formData=dataForm_f
+            dataForm_f.modalcorreccionpedido = $('#modalcorreccionpedido').val();
+            formData = dataForm_f
             break;
           case 'form-correccionpedido-g':
             dataForm_g.opcion = 3
-            dataForm_g.modalcorreccionpedido=$('#modalcorreccionpedido').val();
-            formData=dataForm_g
+            dataForm_g.modalcorreccionpedido = $('#modalcorreccionpedido').val();
+            formData = dataForm_g
             break;
           case 'form-correccionpedido-b':
             dataForm_b.opcion = 4
-            dataForm_b.modalcorreccionpedido=$('#modalcorreccionpedido').val();
-            formData=dataForm_b
+            dataForm_b.modalcorreccionpedido = $('#modalcorreccionpedido').val();
+            formData = dataForm_b
             break;
         }
         var fd = new FormData();
@@ -960,9 +963,9 @@
             fd.append(key, formData[key]);
           }
         })
-        switch(e.target.id)
-        {
-          case 'form-correccionpedido-pc':break;
+        switch (e.target.id) {
+          case 'form-correccionpedido-pc':
+            break;
           case 'form-correccionpedido-f':
             let files_f_f = $('[name="correcion_f_facturas[]');
             if (files_f_f[0].files.length > 0) {
@@ -996,14 +999,17 @@
         }
         console.log(fd);
         $.ajax({
-          data: fd,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal_correccionpedidos') }}",
-          beforeSend: function() {
-            $('button:submit').prop("disabled",true)
+          data: fd,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          url: "{{ route('ajax_modal_correccionpedidos') }}",
+          beforeSend: function () {
+            $('button:submit').prop("disabled", true)
           },
           success: function (data) {
             console.log(data);
-            if(data.html!="0")
-            {
+            if (data.html != "0") {
               $("#modal-correccion-pedidos").modal("hide");
               //recargar tabla
               $('#tablaPrincipal').DataTable().ajax.reload();
@@ -1017,7 +1023,7 @@
               console.log("response 0")
             }
           },
-          error: function(xhr) {
+          error: function (xhr) {
             console.log("Error occured.please try again");
             //$(placeholder).append(xhr.statusText + xhr.responseText);
             //$(placeholder).removeClass('loading');
@@ -1025,7 +1031,7 @@
         })
       });
 
-      $(document).on("click","#form-correccionpedido-pc #attachmentfiles",function(){
+      $(document).on("click", "#form-correccionpedido-pc #attachmentfiles", function () {
         console.log("creando input virtual")
         var file = document.createElement('input');
         file.type = 'file';
@@ -1126,7 +1132,7 @@
 
       function openConfirmDownloadDocuments(action, idc, codigo) {
         $.confirm({
-          theme:'material',
+          theme: 'material',
           title: `
 <h5>Detalle de atencion de pedido <b class="allow-copy">${codigo}</b></h5>
 `,
@@ -1140,7 +1146,7 @@
               }
             },
           },
-          draggable:false,
+          draggable: false,
           backgroundDismiss: function () {
             return false; // modal wont close.
           },
@@ -1169,7 +1175,7 @@
 
               html += `</div>`
               self.setContentAppend(html);
-              if(response.cliente){
+              if (response.cliente) {
                 self.setTitle(`
 <div class="d-flex justify-content-between w-100 align-content-center">
 <h5>Cliente: <b class="allow-copy">${response.cliente.nombre}</b></h5>
@@ -1192,6 +1198,7 @@
           },
         });
       }
+
       var detailRows = [];
       tablaPrincipal = $('#tablaPrincipal').DataTable({
         dom: 'Blfrtip',
@@ -1229,7 +1236,7 @@
 
           $('[data-jqconfirm]', row).click(function () {
             $.confirm({
-              theme:'material',
+              theme: 'material',
               columnClass: 'large',
               title: 'Editar direccion de envio',
               content: function () {
@@ -1268,7 +1275,7 @@
                     /*if (form.rotulo.files.length > 0) {
                         data.append('rotulo', form.rotulo.files[0])
                     }*/
-                    if(data.get('celular').length!=9){
+                    if (data.get('celular').length != 9) {
                       $.alert({
                         title: 'Alerta!',
                         content: '¡El numero de celular debe tener 9 digitos!',
@@ -1295,7 +1302,7 @@
 
                 },
               },
-              onContentReady:function (){
+              onContentReady: function () {
 
                 var self = this;
                 //console.log(self.$content.find('form')[0])
@@ -1359,7 +1366,7 @@ ${data.foto3 ? `
 
           })
 
-          $("[data-jqconfirmdetalle=jqConfirm]",row).on('click', function (e) {
+          $("[data-jqconfirmdetalle=jqConfirm]", row).on('click', function (e) {
             openConfirmDownloadDocuments($(e.target).data('target'), $(e.target).data('idc'), $(e.target).data('codigo'))
           })
         },
@@ -1544,15 +1551,15 @@ ${data.foto3 ? `
           }
 
         },
-/*        buttons: [
-          {
-            text: 'RECOGER',
-            className: 'btn btn-danger visible_button_recoger mb-4',
-            action: function (e, dt, node, config) {
-              $('#modal-recoger-sobre').modal("show");
-            }
-          }
-        ],*/
+        /*        buttons: [
+                  {
+                    text: 'RECOGER',
+                    className: 'btn btn-danger visible_button_recoger mb-4',
+                    action: function (e, dt, node, config) {
+                      $('#modal-recoger-sobre').modal("show");
+                    }
+                  }
+                ],*/
       });
 
       function charge_corrections(pedido_id) {
@@ -1561,8 +1568,13 @@ ${data.foto3 ? `
         formData.append("pedido", pedido_id);
 
         $.ajax({
-          async:false,data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('correccionesJson') }}",
-          success:function(res){
+          async: false,
+          data: formData,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          url: "{{ route('correccionesJson') }}",
+          success: function (res) {
             console.log(res);
             return res;
           }
@@ -1576,10 +1588,10 @@ ${data.foto3 ? `
         var tr = $(this).closest('tr');
         var row = tablaPrincipal.row(tr);
 
-        var data = tablaPrincipal.row( $(this).closest('tr') ).data()
+        var data = tablaPrincipal.row($(this).closest('tr')).data()
         var idxio = detailRows.indexOf(data.id);
         console.log(idxio)
-        var idx=data.id;
+        var idx = data.id;
         if (row.child.isShown()) {
           tr.removeClass('details');
           row.child.hide();
@@ -1595,17 +1607,19 @@ ${data.foto3 ? `
           formData.append("pedido", idx);
           //row.child('asdasd').show();
 
-          $.ajax({url: "{{ route('correccionesJson') }}" ,
-            data: formData,processData: false,contentType: false,type: 'POST'})
-            .done(function(data,textStatus, jqXHR){
+          $.ajax({
+            url: "{{ route('correccionesJson') }}",
+            data: formData, processData: false, contentType: false, type: 'POST'
+          })
+            .done(function (data, textStatus, jqXHR) {
               //code to handle data from webservice here.
               console.log(data.html);
               row.child(data.html).show()
             })
-            .fail(function(jqXHR, textStatus, errorThrown){
+            .fail(function (jqXHR, textStatus, errorThrown) {
               //code to handle error here.
             })
-            .always(function(data, textStatus, jqXHR){
+            .always(function (data, textStatus, jqXHR) {
               //this code will always execute regardless
             });
 
@@ -1616,7 +1630,7 @@ ${data.foto3 ? `
       });
 
       tablaPrincipal.on('draw', function () {
-        detailRows.forEach(function(id, i) {
+        detailRows.forEach(function (id, i) {
           $('#' + id + ' td.details-control').trigger('click');
         });
       });
@@ -1829,17 +1843,17 @@ ${data.foto3 ? `
           seleccion.push(rowId);
         });
         var ids = [];
-        $(".tabla-listar-clientes tr td input[type='checkbox']:checked").each(function(){
+        $(".tabla-listar-clientes tr td input[type='checkbox']:checked").each(function () {
           row = $(this).closest('tr');
           ids.push({
-            codigo : row.find('td:eq(1)').text(),
+            codigo: row.find('td:eq(1)').text(),
           });
         });
         seleccion = seleccion.join(',');
         $('#pedido_concatenado').val(seleccion); //setear un valor
-        ids.forEach(function(pedido) {
+        ids.forEach(function (pedido) {
           $('#direcciones_add ul').append(`
-                    <li>`+pedido.codigo+`</li>
+                    <li>` + pedido.codigo + `</li>
                 `);
         });
 

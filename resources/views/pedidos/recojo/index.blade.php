@@ -59,62 +59,76 @@
     .yellow_color_table {
       background-color: #ffd60a !important;
     }
+
     .blue_color_table {
       background-color: #3A98B9 !important;
     }
+    #tblListadoRecojo {
+      width: 100% !important;
+    }
 
-
-    @media screen and (max-width: 2249px){
-      #tblListadoRecojo{
+    @media screen and (max-width: 2249px) {
+      #tblListadoRecojo {
         width: 100% !important;
       }
-      #tblListadoRecojo td p{
+
+      #tblListadoRecojo td p {
         margin: 0;
       }
-      thead{
+
+      thead {
         vertical-align: middle;
       }
+
       .sorting:before,
       .sorting:after,
       .sorting_desc:before,
-      .sorting_desc:after{
+      .sorting_desc:after {
         top: 20px !important;
       }
-      th:nth-child(11){
+
+      th:nth-child(11) {
         width: 5px !important;
       }
-      td:nth-child(n+1){
+
+      td:nth-child(n+1) {
         text-align: start !important;
       }
-      td{
+
+      td {
         vertical-align: middle !important;
         text-align: center !important;
       }
-      td:nth-child(12){
+
+      td:nth-child(12) {
         min-width: 100px !important;
         max-width: 250px !important;
       }
-      td:nth-child(12) span{
+
+      td:nth-child(12) span {
         white-space: break-spaces;
       }
 
-      #tablaPrincipal tbody div ul{
+      #tablaPrincipal tbody div ul {
         padding-left: 0px !important;
         margin-bottom: 0px !important;
       }
     }
-    @media screen and (max-width: 2144px){
+
+    @media screen and (max-width: 2144px) {
       thead,
       tr,
-      td{
+      td {
         vertical-align: middle !important;
       }
     }
-    @media screen and (max-width: 1440px){
-      #tblListadoRecojo{
+
+    @media screen and (max-width: 1440px) {
+      #tblListadoRecojo {
         font-size: 13px !important;
       }
     }
+
     @media (max-width: 32rem) {
       div.dataTables_wrapper div.dataTables_filter input {
         width: 200px !important;
@@ -130,7 +144,7 @@
     }
 
 
-    td:nth-child(11){
+    td:nth-child(11) {
       min-width: 100px !important;
       max-width: 350px !important;
     }
@@ -149,7 +163,7 @@
   <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
-    let tblListadoRecojo=null;
+    let tblListadoRecojo = null;
 
     $(document).ready(function () {
 
@@ -168,6 +182,7 @@
         }
 
       }
+
       var detailRows = [];
 
       tblListadoRecojo = $('#tblListadoRecojo').DataTable({
@@ -206,7 +221,7 @@
 
           $('[data-jqconfirm]', row).click(function () {
             $.confirm({
-              theme:'material',
+              theme: 'material',
               columnClass: 'large',
               title: 'Editar direccion de envio',
               content: function () {
@@ -238,7 +253,7 @@
                     console.log(self.$content.find('form')[0])
                     const form = self.$content.find('form')[0];
                     const data = new FormData(form)
-                    if(data.get('celular').length!=9){
+                    if (data.get('celular').length != 9) {
                       $.alert({
                         title: 'Alerta!',
                         content: '¡El numero de celular debe tener 9 digitos!',
@@ -265,7 +280,7 @@
 
                 },
               },
-              onContentReady:function (){
+              onContentReady: function () {
 
                 var self = this;
                 const form = self.$content.find('form')[0];
@@ -321,7 +336,7 @@ ${data.foto3 ? `
 
           })
 
-          $("[data-jqconfirmdetalle=jqConfirm]",row).on('click', function (e) {
+          $("[data-jqconfirmdetalle=jqConfirm]", row).on('click', function (e) {
             openConfirmDownloadDocuments($(e.target).data('target'), $(e.target).data('idc'), $(e.target).data('codigo'))
           })
         },
@@ -524,71 +539,75 @@ ${data.foto3 ? `
 
 @stop
 <style>
-  @media screen and (max-width: 2249px){
-    .dis-grid{
+  @media screen and (max-width: 2249px) {
+    .dis-grid {
       display: flex;
       justify-content: center;
       align-items: center;
       align-self: center;
       flex-direction: column;
     }
-    .btn-fontsize{
+
+    .btn-fontsize {
       font-size: 15px;
     }
-    .etiquetas_asignacion{
+
+    .etiquetas_asignacion {
       background-color: #b0deb3 !important;
       font-size: 12px;
       padding: 4px;
       font-weight: 700;
       line-height: 1;
       white-space: nowrap;
-      transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+      transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
       color: #4a604b !important;
       margin-left: 2px;
     }
+
     .sorting:before,
-    .sorting:after
-    {
+    .sorting:after {
       top: 20px;
     }
 
   }
-  @media screen and (max-width: 2144px){
+
+  @media screen and (max-width: 2144px) {
     thead,
     tr,
-    td{
+    td {
       vertical-align: middle !important;
     }
 
-    .btn-fontsize{
+    .btn-fontsize {
       font-size: 11px;
       min-width: 85px;
       max-width: 130px;
     }
 
-    .dis-grid{
+    .dis-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 2fr));
-      gap:0.7rem
+      gap: 0.7rem
     }
   }
 
-  @media screen and (max-width: 2039px){
-    .dis-grid{
+  @media screen and (max-width: 2039px) {
+    .dis-grid {
       display: flex;
       justify-content: center;
       align-items: center;
       align-self: center;
       flex-direction: column;
     }
-    .btn-fontsize{
+
+    .btn-fontsize {
       min-width: 75px;
       width: 100px;
     }
   }
 
-  @media screen and (max-width: 1440px){
-    .etiquetas_asignacion{
+  @media screen and (max-width: 1440px) {
+    .etiquetas_asignacion {
       font-size: 9px;
       padding: 2px;
       white-space: pre-line !important;
