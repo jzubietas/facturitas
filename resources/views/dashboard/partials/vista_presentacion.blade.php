@@ -10,7 +10,7 @@
 <div class="row">
 
     <div class="col-lg-9 col-12">
-        @include('dashboard.widgets.pedidos_creados')
+        {{--@include('dashboard.widgets.pedidos_creados')--}}
     </div>
 </div>
 
