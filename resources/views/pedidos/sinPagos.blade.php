@@ -46,18 +46,18 @@
             <table id="tablaPrincipal" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col" style="vertical-align: middle">Item</th>
-                    <th scope="col" style="vertical-align: middle">Código</th>
-                    <th scope="col" style="vertical-align: middle">Cliente</th>
-                    <th scope="col" style="vertical-align: middle">Razón social</th>
-                    <th scope="col" style="vertical-align: middle">Asesor</th>
-                    <th scope="col" style="vertical-align: middle">Fecha de registro</th>
-                    <th scope="col" style="vertical-align: middle">Total (S/)</th>
-                    <th scope="col" style="vertical-align: middle">Estado de pedido</th>
-                    <th scope="col" style="vertical-align: middle">Estado de pago</th>
-                    <th scope="col" style="vertical-align: middle">Administracion</th>
-                    <th scope="col" style="vertical-align: middle">Diferencia</th>
-                    <th scope="col" style="vertical-align: middle">Acciones</th>
+                    <th scope="col" class="align-middle">Item</th>
+                    <th scope="col" class="align-middle">Código</th>
+                    <th scope="col" class="align-middle">Cliente</th>
+                    <th scope="col" class="align-middle">Razón social</th>
+                    <th scope="col" class="align-middle">Asesor</th>
+                    <th scope="col" class="align-middle">Fecha de registro</th>
+                    <th scope="col" class="align-middle">Total (S/)</th>
+                    <th scope="col" class="align-middle">Estado de pedido</th>
+                    <th scope="col" class="align-middle">Estado de pago</th>
+                    <th scope="col" class="align-middle">Administracion</th>
+                    <th scope="col" class="align-middle">Diferencia</th>
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,7 +69,7 @@
 
 @stop
 
-@section('css')
+@push('css')
     <link rel="stylesheet" href="../css/admin_custom.css">
     <style>
         .bg-4 {
@@ -110,8 +110,54 @@
             text-shadow: 10px 2px #6ac7c2;
         }
 
+        @media screen and (max-width: 2249px){
+          #tablaPrincipal{
+            width: 100% !important;
+          }
+          #tablaPrincipal tbody div ul{
+            padding-left: 0px !important;
+            margin-bottom: 0px !important;
+          }
+          th:nth-child(9){
+            width: 100px !important;
+          }
+          td:nth-child(10) span{
+            white-space: break-spaces;
+          }
+          th:nth-child(11){
+            min-width: 130px !important;
+            max-width: 200px !important;
+          }
+
+          .sorting:before,
+          .sorting:after,
+          sorting_desc:before,
+          sorting_desc:after
+          {
+            top: 20px !important;
+          }
+
+          td{
+            vertical-align: middle !important;
+            text-align: center !important;
+          }
+        }
+        @media screen and (max-width: 2144px){
+          thead,
+          tr,
+          td{
+            vertical-align: middle !important;
+          }
+        }
+
+        @media screen and (max-width: 2039px){
+        }
+        @media screen and (max-width: 1440px){
+        }
+
+
     </style>
-@stop
+@endpush
 
 @section('js')
     {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
@@ -273,29 +319,29 @@
                             var urledit = '{{ route("pedidos.edit", ":id") }}';
                             urledit = urledit.replace(':id', row.id);
 
-                            data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
+                            data = '<div><ul class="dis-grid" aria-labelledby="dropdownMenuButton">';
 
 
                             @can('pedidos.pedidosPDF')
-                                data = data + '<a href="' + urlpdf + '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> PDF</a>';
+                                data = data + '<a href="' + urlpdf + '" class="btn-sm dropdown-item btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-primary"></i> PDF</a>';
                             @endcan
                                 @can('pedidos.show')
-                                data = data + '<a href="' + urlshow + '" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver</a>';
+                                data = data + '<a href="' + urlshow + '" class="btn-sm dropdown-item btn-fontsize"><i class="fas fa-eye text-success"></i> Ver</a>';
                             @endcan
                                 @can('pedidos.edit')
                             if (!row.pendiente_anulacion) {
                             if (row.condicion_pa == 0) {
-                                data = data + '<a href="' + urledit + '" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning"></i>  Editar</a>';
+                                data = data + '<a href="' + urledit + '" class="btn-sm dropdown-item btn-fontsize"><i class="fas fa-edit text-warning"></i>  Editar</a>';
                             }
                             }
                             @endcan
                                 @can('pedidos.destroy')
                             if (row.estado == 0) {
-                                data = data + '<a href="" data-target="#modal-restaurar" class="btn-sm dropdown-item" data-toggle="modal" data-restaurar="' + row.id + '" ><i class="fa fa-undo" aria-hidden="true"></i> Restaurar</a>';
+                                data = data + '<a href="" data-target="#modal-restaurar" class="btn-sm dropdown-item btn-fontsize" data-toggle="modal" data-restaurar="' + row.id + '" ><i class="fa fa-undo" aria-hidden="true"></i> Restaurar</a>';
                             } else {
                                 if (!row.pendiente_anulacion) {
                                     if (row.condicion_pa == 0) {
-                                        data = data + '<a href="" data-target="#modal-delete" class="btn-sm dropdown-item" data-toggle="modal" data-delete="' + row.id + '" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                        data = data + '<a href="" data-target="#modal-delete" class="btn-sm dropdown-item btn-fontsize" data-toggle="modal" data-delete="' + row.id + '" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                     }
                                 }
                             }

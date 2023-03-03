@@ -64,12 +64,13 @@
       th:nth-child(9){
         width: 100px !important;
       }
-/*      td:nth-child(10){
+      td:nth-child(10){
         display: flex !important;
-        width: ;
-      }*/
+        min-width: 100px !important;
+        max-width: 150px !important;
+      }
       td:nth-child(10) span{
-        white-space: nowrap;
+        white-space: break-spaces;
       }
       th:nth-child(11){
         min-width: 130px !important;
@@ -98,10 +99,8 @@
     }
 
     @media screen and (max-width: 2039px){
-
     }
     @media screen and (max-width: 1440px){
-
     }
   </style>
 @endpush

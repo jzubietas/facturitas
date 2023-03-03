@@ -27,7 +27,7 @@
 
 </aside>
 
-{{--@push('css')
+@push('css')
   <style>
 
     .sidebar-mini.sidebar-collapse .main-sidebar, .sidebar-mini.sidebar-collapse .main-sidebar::before{
@@ -37,4 +37,4 @@
 
   </style>
 
-@endpush--}}
+@endpush
