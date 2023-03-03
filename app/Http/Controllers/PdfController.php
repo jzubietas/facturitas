@@ -93,6 +93,9 @@ class PdfController extends Controller
         $periodo_antes=Carbon::now()->subMonth()->startOfMonth()->format('Y-m');
         $periodo_actual=Carbon::now()->startOfMonth()->format('Y-m');
 
+        $mes_w=Carbon::now()->startOfMonth()->format('m');
+        $anio_w=Carbon::now()->startOfMonth()->format('Y');
+
         $situaciones_clientes=SituacionClientes::leftJoin('situacion_clientes as a','a.cliente_id','situacion_clientes.cliente_id')
                             ->where([
                                 ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
@@ -117,6 +120,9 @@ class PdfController extends Controller
                             ])
                             ->select([
                                 'situacion_clientes.situacion',
+                                DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO' THEN (select sum(m.cliente_recuperado_abandono) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."')
+                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE' THEN (select sum(m.cliente_recuperado_reciente) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."')
+                                                    WHEN situacion_clientes.situacion='NUEVO' THEN (select sum(m.cliente_nuevo) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."') end) as meta "),
                                 DB::raw('count(situacion_clientes.situacion) as total')
                             ])->get();
         $html=[];
@@ -132,16 +138,21 @@ class PdfController extends Controller
                 $html[]='</td>';
 
                 $html[]='<td style="width:80%">';
+                $porcentaje=0;
+                if($situacion_cliente->meta>0)
+                {
+                    $porcentaje=round($situacion_cliente->total/$situacion_cliente->meta,2);
+                }
                     $html[]='<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
-                                              <div class="rounded" role="progressbar" style="background: green; width: 20%" ></div>
+                                              <div class="rounded" role="progressbar" style="background: green; width: '.$porcentaje.'%" ></div>
                                        </div>
                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
-                                                          10% </b>
-                                                         - '.$situacion_cliente->total.' / divisor
+                                                          '.$porcentaje.'% </b>
+                                                         - '.$situacion_cliente->total.' / '.$situacion_cliente->meta.'
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              '.$situacion_cliente->total.'
                                                             </p>

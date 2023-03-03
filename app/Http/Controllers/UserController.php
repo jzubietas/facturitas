@@ -244,6 +244,11 @@ class UserController extends Controller
                 $btn = "";
                 $btn = $btn . '<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
                 //$btn = $btn.'<a href="" data-target="#modal-asignarasesor" data-toggle="modal" data-supervisor="'.$user->id.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Asesor</button></a>';
+
+                $btn = $btn . '<a href="" data-target="#modal-asignarmetallamada" data-toggle="modal" data-llamada="' . $user->id . '">'.
+                  '<button class="btn btn-info btn-sm"> Asignar metas del mes</button>'.
+                  '</a>';
+
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -955,6 +960,94 @@ class UserController extends Controller
         }
         return redirect()->route('users.asesores')->with('info', 'asignado');
     }
+
+  public function AsignarMetaLlamada(Request $request)
+  {
+    //return $request;
+    $meta_cliente_nuevo=(($request->cliente_nuevo)? $request->cliente_nuevo:0);
+    $meta_cliente_recurrente=(($request->cliente_recurrente)? $request->cliente_recurrente:0);
+    $meta_cliente_recuperado_abandono=(($request->cliente_recuperado_abandono)? $request->cliente_recuperado_abandono:0);
+    $meta_cliente_recuperado_reciente=(($request->cliente_recuperado_reciente)? $request->cliente_recuperado_reciente:0);
+    //$meta_cobro=0;
+    $fecha_created=Carbon::now();
+    $yy=$fecha_created->format('Y');
+    $mm=$fecha_created->format('m');
+    $find=DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+      ->where('user_id',$request->llamada)->count();
+    if($find>0)
+    {
+      DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+        ->where('user_id',$request->llamada)->update([
+          'cliente_nuevo' => $meta_cliente_nuevo,
+          'cliente_recurrente' => $meta_cliente_recurrente,
+          'cliente_recuperado_abandono' => $meta_cliente_recuperado_abandono,
+          'cliente_recuperado_reciente' => $meta_cliente_recuperado_reciente,
+        ]);
+      /*$user=User::where('id',$request->llamada)->first();
+      $user->update([
+        'meta_pedido' => $meta_pedido_1,
+        'meta_pedido_2' => $meta_pedido_2,
+        'meta_cobro' => $meta_cobro,
+        'meta_quincena' => $meta_quincena,
+      ]);*/
+
+      /*$encargado=User::where('id',$user->supervisor)->first();
+      DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+        ->where('user_id',$encargado->id)->update([
+          'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+          'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+          'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+          'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+        ]);*/
+      //encontro registro
+      /*$encargado->update([
+        'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+        'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+        'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+        'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+      ]);*/
+    }else{
+      $user=User::where('id',$request->llamada)->first();
+      DB::table('metas')->insert([
+        'rol'=>$user->rol,
+        'user_id'=>$request->llamada,
+        'email'=>$user->email,
+        'anio'=>$yy,
+        'mes'=>$mm,
+        'cliente_nuevo' => $meta_cliente_nuevo,
+        'cliente_recurrente' => $meta_cliente_recurrente,
+        'cliente_recuperado_abandono' => $meta_cliente_recuperado_abandono,
+        'cliente_recuperado_reciente' => $meta_cliente_recuperado_reciente,
+        'status'=>1,
+        'created_at'=>now(),
+      ]);
+      /*$user->update([
+        'meta_pedido' => $meta_pedido_1,
+        'meta_pedido_2' => $meta_pedido_2,
+        'meta_cobro' => $meta_cobro,
+        'meta_quincena' => $meta_quincena,
+      ]);*/
+
+      /*$encargado=User::where('id',$user->supervisor)->first();
+      DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+        ->where('user_id',$encargado->id)->update([
+          'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+          'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+          'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+          'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+        ]);*/
+      //encontro registro
+      /*$encargado->update([
+        'meta_pedido' => $encargado->meta_pedido+$user->meta_pedido,
+        'meta_pedido_2' => $encargado->meta_pedido_2+$user->meta_pedido_2,
+        'meta_cobro' => $encargado->meta_cobro+$user->meta_cobro,
+        'meta_quincena' => $encargado->meta_quincena+$user->meta_quincena,
+      ]);*/
+    }
+    //return redirect()->route('users.llamadas')->with('info', 'asignado');
+
+    return response()->json(['html' => $request]);
+  }
 
 
     public function Encargados()
