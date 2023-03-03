@@ -9,7 +9,7 @@
 <div class="row">
 
     @include('dashboard.widgets.buscar_cliente')
-    {{--@include('dashboard.partials.vista_quitar_vidas')--}}
+    @include('dashboard.partials.vista_quitar_vidas')
   <div class="col-md-12">
     <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
   </div>
@@ -92,10 +92,10 @@
                             <div class="row">
                                 <div class="col-md-9">
                                     {{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}
-                                    <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
+                                    {{--<x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>--}}
                                 </div>
                                 <div class="col-md-3">
-                                    <x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>
+                                    {{--<x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>--}}
                                 </div>
                             </div>
                         </li>
