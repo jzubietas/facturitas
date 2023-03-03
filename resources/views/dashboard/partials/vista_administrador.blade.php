@@ -110,9 +110,7 @@
             <div class="col-md-6">
               <div id="metas_dp"></div>
             </div>
-            <div class="col-md-12">
-              <div id="metas_total" ></div>
-            </div>
+
             <div class="col-md-12">
               <div id="supervisor_total" ></div>
             </div>
@@ -122,7 +120,11 @@
             <div class="col-md-12">
               <div id="supervisor_B" ></div>
             </div>
+            <div class="col-md-12">
+              <div id="metas_total" ></div>
+            </div>
           </div>
+
         </div>
       </div>
       {{--FIN-TABLA-DUAL--}}

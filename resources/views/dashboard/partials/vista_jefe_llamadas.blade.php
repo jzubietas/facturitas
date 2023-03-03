@@ -1,6 +1,6 @@
 <div style="text-align: center; font-family:'Times New Roman', Times, serif">
     <h2>
-        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</b></p>
+        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</p>
     </h2>
 </div>
 <br>
@@ -92,10 +92,10 @@
                             <div class="row">
                                 <div class="col-md-9">
                                     {{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}
-                                    <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
+                                    {{--<x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>--}}
                                 </div>
                                 <div class="col-md-3">
-                                    <x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>
+                                    {{--<x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>--}}
                                 </div>
                             </div>
                         </li>
