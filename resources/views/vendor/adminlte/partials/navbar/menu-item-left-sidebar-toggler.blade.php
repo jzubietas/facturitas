@@ -14,7 +14,7 @@
     </a>
 </li>
 @if(user_rol(\App\Models\User::ROL_ASESOR)||user_rol(\App\Models\User::ROL_ADMIN))
-    <li class="nav-item">
+    <li class="nav-item ml-2">
         <a class="nav-link btn btn-warning btn-sm" href="#" data-toggle="addalert">
             <b class="text-black font-weight-bold">
                 <i class="fas fa-bell"></i>
@@ -25,7 +25,7 @@
 @endif
 
 @if(user_rol(\App\Models\User::ROL_ASESOR)||user_rol(\App\Models\User::ROL_ADMIN))
-  <li class="nav-item">
+  <li class="nav-item ml-2">
     <a class="nav-link btn btn-info btn-sm" href="#" data-toggle="contactoalert">
       <b class="text-white font-weight-bold">
         <i class="fas fa-user-plus p-1"></i>
