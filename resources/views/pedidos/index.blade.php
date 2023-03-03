@@ -1397,6 +1397,7 @@ ${data.foto3 ? `
           {
             data: 'condicion_pa',
             name: 'condicion_pa',
+            'visible': false,
             render: function (data, type, row, meta) {
 
               if (row.condiciones == 'ANULADO' || row.condicion_code == 4 || row.estado == 0) {
