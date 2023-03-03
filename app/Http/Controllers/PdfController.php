@@ -145,7 +145,8 @@ class PdfController extends Controller
                     $diferenciameta=$situacion_cliente->meta-$situacion_cliente->total;
                     if($diferenciameta<0)$diferenciameta=0;
                 }
-                    $html[]='<div class="w-100 bg-white rounded">
+                if ($porcentaje>75){
+                  $html[]='<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                               <div class="rounded" role="progressbar" style="background: green; width: '.$porcentaje.'%" ></div>
@@ -163,6 +164,46 @@ class PdfController extends Controller
                                    </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
+                }else if($porcentaje>50){
+                  $html[]='<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                              <div class="rounded" role="progressbar" style="background: #ffc107; width: '.$porcentaje.'%" ></div>
+                                       </div>
+                                       <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                              <span style="font-weight: lighter">
+                                                        <b style="font-weight: bold !important; font-size: 18px">
+                                                          '.$porcentaje.'% </b>
+                                                         - '.$situacion_cliente->total.' / '.$situacion_cliente->meta.'
+                                                             <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                             '.$diferenciameta.'
+                                                            </p>
+                                              </span>
+                                       </div>
+                                   </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                            </div>';
+                }else {
+                  $html[]='<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                              <div class="rounded" role="progressbar" style="background: #dc3545; width: '.$porcentaje.'%" ></div>
+                                       </div>
+                                       <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                              <span style="font-weight: lighter">
+                                                        <b style="font-weight: bold !important; font-size: 18px">
+                                                          '.$porcentaje.'% </b>
+                                                         - '.$situacion_cliente->total.' / '.$situacion_cliente->meta.'
+                                                             <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                             '.$diferenciameta.'
+                                                            </p>
+                                              </span>
+                                       </div>
+                                   </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                            </div>';
+                }
+
                 $html[]='</td>';
             $html[]='</tr>';
         }
