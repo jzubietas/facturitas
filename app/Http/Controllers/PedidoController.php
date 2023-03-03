@@ -6,6 +6,7 @@ use App\Events\PedidoAnulledEvent;
 use App\Events\PedidoAtendidoEvent;
 use App\Events\PedidoEntregadoEvent;
 use App\Events\PedidoEvent;
+use App\Jobs\PostUpdateSituacion;
 use App\Models\AttachCorrection;
 use App\Models\Cliente;
 use App\Models\Departamento;
@@ -1931,6 +1932,8 @@ class PedidoController extends Controller
                 ]);
                 $html = $detalle_pedidos;
             }
+            //Cliente::createSituacionByCliente($pedido->cliente_id);
+            //PostUpdateSituacion::dispatchSync($pedido->cliente_id);
             event(new PedidoAnulledEvent($pedido));
 
 
