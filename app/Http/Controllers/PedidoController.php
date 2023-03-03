@@ -187,7 +187,6 @@ class PedidoController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);*/
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);*/
         } else if (Auth::user()->rol == "Jefe de llamadas") {
             /*$usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
