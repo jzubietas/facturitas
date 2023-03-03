@@ -177,7 +177,7 @@ class PedidoController extends Controller
             );
 
 
-        if (Auth::user()->rol == "Llamadas") {
+        if (Auth::user()->rol == User::ROL_LLAMADAS) {
             /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)

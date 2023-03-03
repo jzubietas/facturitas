@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
 use App\Models\Pago;
+use App\Models\SituacionClientes;
 use App\Models\User;
 use App\Models\Pedido;
 use Carbon\Carbon;
@@ -78,6 +79,63 @@ class PdfController extends Controller
         return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes','anios','dateM','dateY'));
     }
 
+    public function SituacionClientes(Request $request)
+    {
+        //situaciones clientes
+        /*BABANDONO RECIENTE    150 / 210
+        ABANDONO 250/300
+        BASE FRIA 230/270
+         * */
+
+        $inicio_s=Carbon::now()->startOfMonth()->format('Y-m-d');
+        $inicio_f=Carbon::now()->endOfMonth()->format('Y-m-d');
+        //situacion antes vs situacion actual
+        $periodo_antes=Carbon::now()->subMonth()->startOfMonth()->format('Y-m');
+        $periodo_actual=Carbon::now()->startOfMonth()->format('Y-m');
+
+        $situaciones_clientes=SituacionClientes::leftJoin('situacion_clientes as a','a.cliente_id','situacion_clientes.cliente_id')
+                            ->where([
+                                ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+                                ['a.situacion', '=', 'ABANDONO RECIENTE'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->orWhere([
+                                ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
+                                ['a.situacion', '=', 'RECURRENTE'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->orWhere([
+                                ['situacion_clientes.situacion', '=', 'NUEVO'],
+                                ['a.situacion', '=', 'BASE FRIA'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->groupBy([
+                                'situacion_clientes.situacion'
+                            ])
+                            ->select([
+                                'situacion_clientes.situacion',
+                                DB::raw('count(situacion_clientes.situacion) as total')
+                            ])->get();
+        $html=[];
+        $html[]='<div class="row table-situacion-clientes">';
+            $html[]='<div class="col-md-12 scrollbar-x">';
+                $html[]='<div class="table_situacion_clientes" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">';
+        foreach ($situaciones_clientes as $situacion_cliente)
+        {
+            $html[]= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"
+                        style="display:flex; align-items: center;height: 40px !important; color: black !important;">'.
+                        $situacion_cliente->situacion.' - '.$situacion_cliente->total.
+                    ' </span>';
+        }
+                $html[]='</div>';
+            $html[]='</div>';
+        $html[]='</div>';
+        return $html;
+
+    }
     public function Analisisgrafico(Request $request)
     {
 /*      return $request->all();*/
