@@ -67,8 +67,12 @@
 @stop
 
 @section('css')
-  <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
+
   <style>
+
+    .perla {
+      background-color: #faedcd !important;
+    }
 
   .red {
     background-color: red !important;
@@ -136,7 +140,6 @@ $(document).ready(function () {
     });
 
     $(document).on("click","#delete",function(){
-
       console.log("action delete action")
       var formData = $("#formdelete").serialize();
       console.log(formData);
@@ -152,25 +155,6 @@ $(document).ready(function () {
 
     });
 
-  $('#modal-delete').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget)
-      var idunico = button.data('delete')
-      $("#hiddenClienteId").val(idunico);
-      if(idunico<10){
-        idunico='PAG000'+idunico;
-      }else if(idunico<100){
-        idunico= 'PAG00'+idunico;
-      }else if(idunico<1000){
-        idunico='PAG0'+idunico;
-      }else{
-        idunico='PAG'+idunico;
-      }
-      $(".textcode").html(idunico);
-
-    });
-
-
-
     $('#tablaPrincipal').DataTable({
         processing: true,
         responsive:true,
@@ -178,7 +162,7 @@ $(document).ready(function () {
         serverSide: true,
         ajax: "{{ route('clientesnuevotabla') }}",
         initComplete:function(settings,json){
-         
+
         },
         columns: [
         {
@@ -209,10 +193,6 @@ $(document).ready(function () {
             }
           }
         },
-        //{data: 'estado', name: 'estado'},
-        //{data: 'user', name: 'user'},
-        //{data: 'identificador', name: 'identificador'},
-        //{data: 'provincia', name: 'provincia'},
         {
           data: 'direccion',
           name: 'direccion',
@@ -220,15 +200,8 @@ $(document).ready(function () {
             return row.direccion+' - '+row.provincia+' ('+row.distrito+')';
           }
         },
-        //{data: 'direccion', name: 'direccion'},
         {data: 'identificador', name: 'identificador'},
         {data: 'situacion', name: 'situacion'},
-        //{data: 'cantidad', name: 'cantidad'},
-        //{data: 'dateY', name: 'dateY'},
-        //{data: 'dateM', name: 'dateM'},
-        //{data: 'anio', name: 'anio'},
-        //{data: 'mes', name: 'mes'},
-        //{data: 'deuda', name: 'deuda'},
         {data: 'fechaultimopedido', name: 'fechaultimopedido'},{data: 'codigoultimopedido', name: 'codigoultimopedido'},
         {
           data: 'action',
@@ -260,33 +233,28 @@ $(document).ready(function () {
         },
         ],
         "createdRow": function( row, data, dataIndex){
-            if(data["pedidos_mes_deuda"] >0 && data["pedidos_mes_deuda_antes"] == 0 )
+          if(data["situacion"]=='BLOQUEADO')
+          {
+            $(row).addClass('textred');
+
+          }else{
+            if(data["pedidos_mes_deuda_antes"]==0)
             {
-              $(row).addClass('lighblue');
-            }
-            else if(data["pedidos_mes_deuda"] >0 && data["pedidos_mes_deuda_antes"]  >0 )
-            {
-              $(row).addClass('red');
-            }else if(data["pedidos_mes_deuda"] == 0 && data["pedidos_mes_deuda_antes"] >0 )
-            {
-              $(row).addClass('red');
-            }
-            /*if(data["deuda"] == "0")
-            {
-                $(row).addClass('white');
-            }else{
-              if ( (data["dateY"] - data["anio"]) == 0 )
+              if(data["pedidos_mes_deuda"]==0)
               {
-                if(   (data["dateM"] - data["mes"]) >= 0 &&  (data["dateM"] - data["mes"]) <2 )
-                {
-                  $(row).addClass('lighblue');
-                }else{
-                  $(row).addClass('red');
-                }
+              }else if(data["pedidos_mes_deuda"]==1)
+              {
+                $(row).addClass('perla');
               }else{
-                $(row).addClass('red');
+                $(row).addClass('lighblue');
               }
-            }*/
+            }
+            else{
+              $(row).addClass('red');
+            }
+
+          }
+
         },
         language: {
         "decimal": "",

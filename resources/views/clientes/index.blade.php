@@ -93,6 +93,10 @@
             background-color: #4ac4e2 !important;
         }
 
+        .perla {
+          background-color: #faedcd !important;
+        }
+
         .textred {
             color: red !important;
         }
@@ -535,13 +539,21 @@
                         $(row).addClass('textred');
 
                     }else{
-                        if (data["pedidos_mes_deuda"] > 0 && data["pedidos_mes_deuda_antes"] == 0) {
+                        if(data["pedidos_mes_deuda_antes"]==0)
+                        {
+                          if(data["pedidos_mes_deuda"]==0)
+                          {
+                          }else if(data["pedidos_mes_deuda"]==1)
+                          {
+                            $(row).addClass('perla');
+                          }else{
                             $(row).addClass('lighblue');
-                        } else if (data["pedidos_mes_deuda"] > 0 && data["pedidos_mes_deuda_antes"] > 0) {
-                            $(row).addClass('red');
-                        } else if (data["pedidos_mes_deuda"] == 0 && data["pedidos_mes_deuda_antes"] > 0) {
-                            $(row).addClass('red');
+                          }
                         }
+                        else{
+                          $(row).addClass('red');
+                        }
+
                     }
                 },
                 language: {

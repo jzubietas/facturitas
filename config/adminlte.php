@@ -660,14 +660,14 @@ return [
                     'route' => 'clientes.recurrentes',
                     'can' => 'clientes.recurrentes',
                     'icon' => 'fas fa-check-circle',
-                    'active' => ['clientes'],
+                    'active' => ['recurrentes'],
                 ],
                 [
                     'text' => 'Abandono Recientes',
                     'route' => 'clientes.abandonos.recientes',
                     'can' => 'clientes.abandonos.reciente',//
                     'icon' => 'fas fa-check-circle',
-                    'active' => ['clientes'],
+                    'active' => ['abandono recientes'],
                 ],
                 /*[
                     'text' => 'CASI ABANDONO',
@@ -681,7 +681,7 @@ return [
                     'route' => 'clientes.abandonos',
                     'can' => 'clientes.abandonos',
                     'icon' => 'fas fa-check-circle',
-                    'active' => ['clientes'],
+                    'active' => ['abandonos'],
                 ],
 
                 [
@@ -689,23 +689,29 @@ return [
                     'route' => 'clientes.nuevos',
                     'can' => 'clientes.nuevos',
                     'icon' => 'fas fa-check-circle',
-                    'active' => ['clientes'],
+                    'active' => ['nuevos'],
                 ],
                 [
                     'text' => 'Recuperados Reciente',
                     'route' => 'clientes.recuperados.recientes',
                     'can' => 'clientes.recuperados.reciente',//
                     'icon' => 'fas fa-check-circle',
-                    'active' => ['clientes'],
+                    'active' => ['recuperado reciente'],
                 ],
                 [
                     'text' => 'Recuperados Abandono',
                     'route' => 'clientes.recuperados',
                     'can' => 'clientes.recuperados',
                     'icon' => 'fas fa-check-circle',
-                    'active' => ['clientes'],
+                    'active' => ['recuperados'],
                 ],
-
+                [
+                  'text' => 'Nulos',
+                  'route' => 'clientes.nulos',
+                  'can' => 'clientes.recuperados',
+                  'icon' => 'fas fa-check-circle',
+                  'active' => ['Nulos'],
+                ],
 
                 [
                     'text' => 'Base fría',

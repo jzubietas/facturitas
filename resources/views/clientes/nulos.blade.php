@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de Clientes en situacion ABANDONO')
+@section('title', 'Lista de Clientes Nulos')
 
 @section('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 @endsection
 
 @section('content_header')
-  <h1>Lista de clientes en situacion ABANDONO
+  <h1>Lista de clientes en situacion NULOS
     @can('clientes.create')
       <a href="{{ route('clientes.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
@@ -20,7 +20,7 @@
        <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
       </div>
     </div>
-    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes ABANDONO', 'key' => '5'])
+    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes NULOS', 'key' => '8'])
     @endcan
   </h1>
   @if($superasesor > 0)
@@ -180,7 +180,7 @@ $(document).ready(function () {
         responsive:true,
         autowidth:true,
         serverSide: true,
-        ajax: "{{ route('clientesabandonotabla') }}",
+        ajax: "{{ route('nulostabla') }}",
         initComplete:function(settings,json){
 
         },
@@ -241,13 +241,13 @@ $(document).ready(function () {
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
-            var urledit = '{{ route("clientes.edit.abandono", ":id") }}';
+            var urledit = '{{ route("clientes.edit.nuevo", ":id") }}';
             urledit = urledit.replace(':id', row.id);
 
             var urlshow = '{{ route("clientes.show", ":id") }}';
             urlshow = urlshow.replace(':id', row.id);
 
-            @can('clientes.edit.abandono')
+            @can('clientes.edit.nuevo')
               data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
             @endcan
 
@@ -267,6 +267,7 @@ $(document).ready(function () {
           if(data["situacion"]=='BLOQUEADO')
           {
             $(row).addClass('textred');
+
           }else{
             if(data["pedidos_mes_deuda_antes"]==0)
             {
@@ -287,7 +288,7 @@ $(document).ready(function () {
         },
         language: {
         "decimal": "",
-        "emptyTable": "No hay información",
+        "emptyTable": "No hay informaciÃ³n",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
