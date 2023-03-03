@@ -109,9 +109,12 @@
       var button = $(event.relatedTarget)
       var idunico = button.data('llamada')
       $("#cliente_nuevo").val(0);
-      $("#cliente_recurrente").val(0);
+      $("#cliente_nuevo_2").val(0);
       $("#cliente_recuperado_abandono").val(0);
+      $("#cliente_recuperado_abandono_2").val(0);
       $("#cliente_recuperado_reciente").val(0);
+      $("#cliente_recuperado_reciente_2").val(0);
+      $("#meta_quincena").val(0);
 
       $("#llamada").val(idunico);
       if (idunico < 10) {
@@ -124,6 +127,21 @@
         idunico = 'USER' + idunico;
       }
       $(".textcode").html(idunico);
+      //carga ajax
+      let datosform = new FormData();
+      datosform.append('rol','Jefe de llamadas');
+      $.ajax({
+        data: datosform,
+        processData: false,
+        contentType: false,
+        method: 'POST',
+        url: "{{ route('users.getmetallamadas') }}",
+        success: function (resultado){
+          console.log(resultado)
+          //console.log(resultado.html['user_id'])
+        }
+      });
+
     });
 
     $(document).on("submit", "#formasignarmetallamada", function (evento) {

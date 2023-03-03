@@ -96,12 +96,199 @@ class PdfController extends Controller
     $mes_w = Carbon::now()->startOfMonth()->format('m');
     $anio_w = Carbon::now()->startOfMonth()->format('Y');
 
-    $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
-      ->where([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO RECIENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
+        $situaciones_clientes=SituacionClientes::leftJoin('situacion_clientes as a','a.cliente_id','situacion_clientes.cliente_id')
+                            ->where([
+                                ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+                                ['a.situacion', '=', 'ABANDONO RECIENTE'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->orWhere([
+                                ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
+                                ['a.situacion', '=', 'RECURRENTE'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->orWhere([
+                                ['situacion_clientes.situacion', '=', 'NUEVO'],
+                                ['a.situacion', '=', 'BASE FRIA'],
+                                ['situacion_clientes.periodo', '=', $periodo_actual],
+                                ['a.periodo', '=', $periodo_antes]
+                            ])
+                            ->groupBy([
+                                'situacion_clientes.situacion'
+                            ])
+                            ->select([
+                                'situacion_clientes.situacion',
+                                DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
+                                                    THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                                    THEN (select sum(m.meta_quincena_recuperado_reciente) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                                    THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas') end) as meta_quincena "),
+
+                              DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
+                                                  THEN (select sum(m.cliente_recuperado_abandono) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                                    THEN (select sum(m.cliente_recuperado_reciente) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                                    THEN (select sum(m.cliente_nuevo) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas') end) as meta_1 "),
+
+                              DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
+                                                    THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                                    THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='".$anio_w."' and m.mes='".$mes_w."' and m.rol='Jefe de llamadas') end) as meta_2 "),
+
+                                DB::raw('count(situacion_clientes.situacion) as total')
+                            ])->get();
+        $html=[];
+        $html[]= '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
+        //return $situaciones_clientes;
+        foreach ($situaciones_clientes as $situacion_cliente)
+        {
+
+            $html[]='<tr>';
+                $html[]='<td style="width:20%;" class="text-center">';
+                    $html[]= '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
+                                    style="align-items: center;height: 40px !important; color: black !important;">'.
+                                $situacion_cliente->situacion.
+                            '</span>';
+                $html[]='</td>';
+
+                $html[]='<td style="width:80%">';
+                $porcentaje=0;
+                $diferenciameta=0;
+                $valor_meta=0;
+
+                if($situacion_cliente->total<$situacion_cliente->meta_quincena)
+                {
+                  //meta quincena
+                  $porcentaje=round(($situacion_cliente->total / $situacion_cliente->meta_quincena)*100,2);
+                  $diferenciameta=$situacion_cliente->meta_quincena-$situacion_cliente->total;
+                  if($diferenciameta<0)$diferenciameta=0;
+                  $valor_meta=$situacion_cliente->meta_quincena;
+
+                }
+                else if($situacion_cliente->total<$situacion_cliente->meta_1)
+                {
+                  //meta 1
+                  $porcentaje=round(($situacion_cliente->total / $situacion_cliente->meta_1)*100,2);
+                  $diferenciameta=$situacion_cliente->meta_1-$situacion_cliente->total;
+                  if($diferenciameta<0)$diferenciameta=0;
+                  $valor_meta=$situacion_cliente->meta_1;
+
+                }
+                else
+                {
+                  //meta 2
+                  $porcentaje=round(($situacion_cliente->total/$situacion_cliente->meta_2)*100,2);
+                  $diferenciameta=$situacion_cliente->meta_2-$situacion_cliente->total;
+                  if($diferenciameta<0)$diferenciameta=0;
+                  $valor_meta=$situacion_cliente->meta_2;
+
+                }
+
+                if ($porcentaje >= 90)
+                {
+                  $html[] = '<div class="w-100 bg-white rounded">
+                                        <div class="position-relative rounded">
+                                            <div class="progress bg-white rounded" style="height: 40px">
+                                                    <div class="rounded" role="progressbar" style="background: #008ffb; width: ' . $porcentaje . '%" ></div>
+                                             </div>
+                                             <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                    <span style="font-weight: lighter">
+                                                              <b style="font-weight: bold !important; font-size: 18px">
+                                                                ' . $porcentaje . '% </b>
+                                                               - ' . $situacion_cliente->total . ' /  '. $valor_meta . '
+                                                                   <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                                   ' . $diferenciameta . '
+                                                                  </p>
+                                                    </span>
+                                             </div>
+                                         </div>
+                                        <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                  </div>';
+                }
+                else if ($porcentaje>75){
+                  $html[]='<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                              <div class="rounded" role="progressbar" style="background: green; width: '.$porcentaje.'%" ></div>
+                                       </div>
+                                       <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                              <span style="font-weight: lighter">
+                                                        <b style="font-weight: bold !important; font-size: 18px">
+                                                          '.$porcentaje.'% </b>
+                                                         - ' . $situacion_cliente->total . ' /  '. $valor_meta . '
+                                                             <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                             '.$diferenciameta.'
+                                                            </p>
+                                              </span>
+                                       </div>
+                                   </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                            </div>';
+                }
+                else if($porcentaje>50){
+                  $html[]='<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                              <div class="rounded" role="progressbar" style="background: #ffc107; width: '.$porcentaje.'%" ></div>
+                                       </div>
+                                       <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                              <span style="font-weight: lighter">
+                                                        <b style="font-weight: bold !important; font-size: 18px">
+                                                          '.$porcentaje.'% </b>
+                                                         - ' . $situacion_cliente->total . ' /  '. $valor_meta . '
+                                                             <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                             '.$diferenciameta.'
+                                                            </p>
+                                              </span>
+                                       </div>
+                                   </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                            </div>';
+                }
+                else {
+                  $html[]='<div class="w-100 bg-white rounded">
+                                  <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                              <div class="rounded" role="progressbar" style="background: #dc3545; width: '.$porcentaje.'%" ></div>
+                                       </div>
+                                       <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                              <span style="font-weight: lighter">
+                                                        <b style="font-weight: bold !important; font-size: 18px">
+                                                          '.$porcentaje.'% </b>
+                                                         - ' . $situacion_cliente->total . ' /  '. $valor_meta . '
+                                                             <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                             '.$diferenciameta.'
+                                                            </p>
+                                              </span>
+                                       </div>
+                                   </div>
+                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
+                            </div>';
+                }
+
+                $html[]='</td>';
+            $html[]='</tr>';
+        }
+
+        $html[]='</table>';
+        $html=join('', $html);
+        return $html;
+
+    }
+    public function Analisisgrafico(Request $request)
+    {
+/*      return $request->all();*/
+      $_pedidos_mes_pasado = User::select([
+        'users.id','users.name','users.email'
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO RECIENTE' ) recuperado_reciente")
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO ABANDONO' ) recuperado_abandono")
+        ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='NUEVO' ) nuevo")
       ])
       ->orWhere([
         ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],

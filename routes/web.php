@@ -221,6 +221,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('users.asignarmetaasesorPost', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesorPost');
     Route::post('users.asignarmetallamadaPost', [UserController::class, 'AsignarMetaLlamada'])->name('users.asignarmetallamadaPost');
 
+    Route::post('users.getmetallamadas', [UserController::class, 'ConsultarMetaLlamada'])->name('users.getmetallamadas');
+
 
     Route::get('users.encargados', [UserController::class, 'Encargados'])->name('users.encargados');
     Route::post('users.asignarmetaencargado/{user}', [UserController::class, 'AsignarMetaEncargado'])->name('users.asignarmetaencargado');
