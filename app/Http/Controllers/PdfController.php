@@ -165,7 +165,7 @@ class PdfController extends Controller
                   $porcentaje=round(($situacion_cliente->total / $situacion_cliente->meta_quincena)*100,2);
                   $diferenciameta=$situacion_cliente->meta_quincena-$situacion_cliente->total;
                   if($diferenciameta<0)$diferenciameta=0;
-
+                  $valor_meta=$situacion_cliente->meta_quincena;
 
                 }
                 else if($situacion_cliente->total<$situacion_cliente->meta_1)
@@ -174,6 +174,7 @@ class PdfController extends Controller
                   $porcentaje=round(($situacion_cliente->total / $situacion_cliente->meta_1)*100,2);
                   $diferenciameta=$situacion_cliente->meta_1-$situacion_cliente->total;
                   if($diferenciameta<0)$diferenciameta=0;
+                  $valor_meta=$situacion_cliente->meta_1;
 
                 }
                 else
@@ -182,12 +183,33 @@ class PdfController extends Controller
                   $porcentaje=round(($situacion_cliente->total/$situacion_cliente->meta_2)*100,2);
                   $diferenciameta=$situacion_cliente->meta_2-$situacion_cliente->total;
                   if($diferenciameta<0)$diferenciameta=0;
-
+                  $valor_meta=$situacion_cliente->meta_2;
 
                 }
 
-
-                if ($porcentaje>75){
+                $valor_meta=0;
+                if ($porcentaje >= 90)
+                {
+                  $html[] = '<div class="w-100 bg-white rounded">
+                                        <div class="position-relative rounded">
+                                            <div class="progress bg-white rounded" style="height: 40px">
+                                                    <div class="rounded" role="progressbar" style="background: #008ffb; width: ' . $porcentaje . '%" ></div>
+                                             </div>
+                                             <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                    <span style="font-weight: lighter">
+                                                              <b style="font-weight: bold !important; font-size: 18px">
+                                                                ' . $porcentaje . '% </b>
+                                                               - ' . $situacion_cliente->total . ' / ' . $valor_meta . '
+                                                                   <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                                   ' . $diferenciameta . '
+                                                                  </p>
+                                                    </span>
+                                             </div>
+                                         </div>
+                                        <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                  </div>';
+                }
+                else if ($porcentaje>75){
                   $html[]='<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -197,7 +219,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           '.$porcentaje.'% </b>
-                                                         - '.$situacion_cliente->total.' / '.$situacion_cliente->meta.'
+                                                         - '.$situacion_cliente->total.' / '.$valor_meta.'
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              '.$diferenciameta.'
                                                             </p>
@@ -217,7 +239,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           '.$porcentaje.'% </b>
-                                                         - '.$situacion_cliente->total.' / '.$situacion_cliente->meta.'
+                                                         - '.$situacion_cliente->total.' / '.$valor_meta.'
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              '.$diferenciameta.'
                                                             </p>
@@ -237,7 +259,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           '.$porcentaje.'% </b>
-                                                         - '.$situacion_cliente->total.' / '.$situacion_cliente->meta.'
+                                                         - '.$situacion_cliente->total.' / '.$valor_meta.'
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              '.$diferenciameta.'
                                                             </p>
