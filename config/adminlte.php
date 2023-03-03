@@ -291,7 +291,7 @@ return [
 
         [
             'text' => 'Pedidos',
-            'icon' => 'fa fa-file',
+            'icon' => 'fas fa-truck',
             'can' => 'pedidos.modulo',
             'submenu' => [
                 [
@@ -420,7 +420,7 @@ return [
         ],
         [
             'text' => 'Courier',
-            'icon' => 'fas fa-people-carry',
+            'icon' => 'fa fa-archive',
             'can' => 'courier.modulo',
             'submenu' => [
                 [

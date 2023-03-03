@@ -1,6 +1,6 @@
 <div style="text-align: center; font-family:'Times New Roman', Times, serif">
     <h2>
-        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</b></p>
+        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</p>
     </h2>
 </div>
 <br>
@@ -92,10 +92,10 @@
                             <div class="row">
                                 <div class="col-md-9">
                                     {{-- <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}
-                                    <x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>
+                                    {{--<x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>--}}
                                 </div>
                                 <div class="col-md-3">
-                                    <x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>
+                                    {{--<x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>--}}
                                 </div>
                             </div>
                         </li>
@@ -107,7 +107,7 @@
 
   <div class="col-lg-12 " id="contenedor-fullscreen">
     <div class="d-flex justify-content-center">
-      <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+      <h1 class="text-uppercase justify-center text-center">Metas</h1>
       <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
     </div>
     {{--TABLA DUAL--}}
@@ -122,6 +122,12 @@
           </div>
           <div class="col-md-12">
             <div id="metas_total"></div>
+          </div>
+          <div class="col-md-12">
+            <div class="d-flex justify-content-center">
+              <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
+            </div>
+            <div id="metas_situacion_clientes"></div>
           </div>
         </div>
       </div>
@@ -196,10 +202,24 @@
         })
       }
 
+      window.cargReporteMetasSituacionClientes = function () {
+        var fd=new FormData();
+        $.ajax({
+          data: fd,
+          processData: false,
+          contentType: false,
+          method: 'POST',
+          url: "{{ route('dashboard.graficoSituacionClientes') }}",
+          success: function (resultado){
+            $('#metas_situacion_clientes').html(resultado);
+          }
+        })
+      }
+
       cargaNueva(1);
       cargaNueva(2);
       cargaNueva(3);
-
+      cargReporteMetasSituacionClientes();
       cargReporteAnalisis();
 
       setInterval(myTimer, 50000);

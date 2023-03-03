@@ -110,9 +110,7 @@
             <div class="col-md-6">
               <div id="metas_dp"></div>
             </div>
-            <div class="col-md-12">
-              <div id="metas_total" ></div>
-            </div>
+
             <div class="col-md-12">
               <div id="supervisor_total" ></div>
             </div>
@@ -122,19 +120,30 @@
             <div class="col-md-12">
               <div id="supervisor_B" ></div>
             </div>
+            <div class="col-md-12">
+              <div id="metas_total" ></div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="d-flex justify-content-center">
+                <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
+                </div>
+              <div id="metas_situacion_clientes"></div>
+            </div>
           </div>
+
         </div>
       </div>
       {{--FIN-TABLA-DUAL--}}
     </div>
 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div id="reporteanalisis"></div>
-        </div>
-      </div>
-    </div>
+{{--    <div class="container-fluid">--}}
+{{--      <div class="row">--}}
+{{--        <div class="col-md-12">--}}
+{{--          <div id="reporteanalisis"></div>--}}
+{{--        </div>--}}
+{{--      </div>--}}
+{{--    </div>--}}
 
     <div class="container-fluid">
         <div class="row">
@@ -370,6 +379,7 @@
           })
         }
 
+
         window.cargReporteAnalisis = function () {
           var fd=new FormData();
           $.ajax({
@@ -384,14 +394,29 @@
           })
         }
 
+        window.cargReporteMetasSituacionClientes = function () {
+          var fd=new FormData();
+          $.ajax({
+            data: fd,
+            processData: false,
+            contentType: false,
+            method: 'POST',
+            url: "{{ route('dashboard.graficoSituacionClientes') }}",
+            success: function (resultado){
+              $('#metas_situacion_clientes').html(resultado);
+            }
+          })
+        }
+
         cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
         cargaNueva(4);
         cargaNueva(5);
         cargReporteAnalisis();
+        cargReporteMetasSituacionClientes();
 
-        setInterval(myTimer, 5000);
+        setInterval(myTimer, 500000);
 
         function myTimer() {
           cargaNueva(1);

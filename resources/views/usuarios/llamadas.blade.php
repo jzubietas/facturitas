@@ -39,6 +39,7 @@
       </table>
         @include('usuarios.modal.asignarjefellamadas')
         @include('usuarios.modal.asignarasesor')
+        @include('usuarios.modal.asignarmetallamada')
     </div>
   </div>
 
@@ -102,6 +103,45 @@
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+    });
+
+    $('#modal-asignarmetallamada').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('llamada')
+      $("#cliente_nuevo").val(0);
+      $("#cliente_recurrente").val(0);
+      $("#cliente_recuperado_abandono").val(0);
+      $("#cliente_recuperado_reciente").val(0);
+
+      $("#llamada").val(idunico);
+      if (idunico < 10) {
+        idunico = 'USER000' + idunico;
+      } else if (idunico < 100) {
+        idunico = 'USER00' + idunico;
+      } else if (idunico < 1000) {
+        idunico = 'USERG0' + idunico;
+      } else {
+        idunico = 'USER' + idunico;
+      }
+      $(".textcode").html(idunico);
+    });
+
+    $(document).on("submit", "#formasignarmetallamada", function (evento) {
+      evento.preventDefault();
+      var formData = $("#formasignarmetallamada").serialize();
+      $.ajax({
+        type: 'POST',
+        url: "{{ route('users.asignarmetallamadaPost') }}",
+        data: formData
+      }).done(function (data) {
+        $("#modal-asignarmetallamada").modal("hide");
+        Swal.fire(
+          'Meta asignado correctamente',
+          '',
+          'success'
+        )
+        $('#tablaPrincipal').DataTable().ajax.reload();
+      });
     });
 
     $('#modal-asignarjefellamadas').on('show.bs.modal', function (event) {

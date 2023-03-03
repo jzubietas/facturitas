@@ -75,6 +75,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
   Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
 
   Route::any('dashboard.viewAnalisis', [PdfController::class, 'Analisisgrafico'])->name('dashboard.viewAnalisis');
+  Route::any('dashboard.graficoSituacionClientes', [PdfController::class, 'SituacionClientes'])->name('dashboard.graficoSituacionClientes');
+
 
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
 //Route::post('upload-image', [PagoController::class, 'storeimage'])->name('upload-image');
@@ -217,6 +219,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('users.asignarmetaasesor/{user}', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesor');
 
     Route::post('users.asignarmetaasesorPost', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesorPost');
+    Route::post('users.asignarmetallamadaPost', [UserController::class, 'AsignarMetaLlamada'])->name('users.asignarmetallamadaPost');
+
 
     Route::get('users.encargados', [UserController::class, 'Encargados'])->name('users.encargados');
     Route::post('users.asignarmetaencargado/{user}', [UserController::class, 'AsignarMetaEncargado'])->name('users.asignarmetaencargado');

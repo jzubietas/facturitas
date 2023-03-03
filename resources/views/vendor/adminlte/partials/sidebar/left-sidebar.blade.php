@@ -1,3 +1,4 @@
+{{--NAVBAR - LEFT--}}
 <aside class="main-sidebar {{ config('adminlte.classes_sidebar', 'sidebar-dark-primary elevation-4') }}">
 
     {{-- Sidebar brand logo --}}
@@ -20,9 +21,28 @@
                 @endif>
                 {{-- Configured sidebar links --}}
                 @each('adminlte::partials.sidebar.menu-item', $adminlte->menu('sidebar'), 'item')
-
             </ul>
         </nav>
     </div>
 
 </aside>
+
+@push('css')
+  <style>
+
+    .sidebar-mini.sidebar-collapse .main-sidebar, .sidebar-mini.sidebar-collapse .main-sidebar::before{
+      margin-left: 0 !important;
+    }
+    .sidebar nav ul .nav-item.has-treeview a {
+
+    }
+
+    .sidebar-dark-dark .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-dark .nav-sidebar > .nav-item > .nav-link.active{
+      background-color: #343a40 !important;
+      color: #fff !important;
+    }
+
+
+  </style>
+
+@endpush
