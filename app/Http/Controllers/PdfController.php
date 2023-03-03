@@ -158,12 +158,35 @@ class PdfController extends Controller
                 $html[]='<td style="width:80%">';
                 $porcentaje=0;
                 $diferenciameta=0;
-                if($situacion_cliente->meta>0)
+
+                if($situacion_cliente->total<$situacion_cliente->meta_quincena)
                 {
-                    $porcentaje=round(($situacion_cliente->total/$situacion_cliente->meta)*100,2);
-                    $diferenciameta=$situacion_cliente->meta-$situacion_cliente->total;
-                    if($diferenciameta<0)$diferenciameta=0;
+                  //meta quincena
+                  $porcentaje=round(($situacion_cliente->total / $situacion_cliente->meta_quincena)*100,2);
+                  $diferenciameta=$situacion_cliente->meta_quincena-$situacion_cliente->total;
+                  if($diferenciameta<0)$diferenciameta=0;
+
+
                 }
+                else if($situacion_cliente->total<$situacion_cliente->meta_1)
+                {
+                  //meta 1
+                  $porcentaje=round(($situacion_cliente->total / $situacion_cliente->meta_1)*100,2);
+                  $diferenciameta=$situacion_cliente->meta_1-$situacion_cliente->total;
+                  if($diferenciameta<0)$diferenciameta=0;
+
+                }
+                else
+                {
+                  //meta 2
+                  $porcentaje=round(($situacion_cliente->total/$situacion_cliente->meta_2)*100,2);
+                  $diferenciameta=$situacion_cliente->meta_2-$situacion_cliente->total;
+                  if($diferenciameta<0)$diferenciameta=0;
+
+
+                }
+
+
                 if ($porcentaje>75){
                   $html[]='<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
@@ -183,7 +206,8 @@ class PdfController extends Controller
                                    </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
-                }else if($porcentaje>50){
+                }
+                else if($porcentaje>50){
                   $html[]='<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -202,7 +226,8 @@ class PdfController extends Controller
                                    </div>
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
-                }else {
+                }
+                else {
                   $html[]='<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
