@@ -1,6 +1,9 @@
+{{--envios/olva--}}
+
 @extends('adminlte::page')
 
 @section('title', 'Lista de pedidos por enviar')
+
 
 @section('content_header')
     <h1>Lista de Envios en TIENDA/AGENTE para el encargado</h1>
@@ -16,8 +19,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             {{-- <table cellspacing="5" cellpadding="5">
               <tbody>
                 <tr>
@@ -34,17 +37,17 @@
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Asesor</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Fecha de Envio</th>
-                    <th scope="col">Razón social</th>
-                    <th scope="col">Destino</th>
-                    <th scope="col">Tracking</th>
-                    <th scope="col">Numero de registro</th>
-                    <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
-                    <th scope="col">Acciones</th>
+                    <th class="align-middle" scope="col">Item</th>
+                    <th class="align-middle" scope="col">Código</th>
+                    <th class="align-middle" scope="col">Id</th>
+                    <th class="align-middle" scope="col">Cliente</th>
+                    <th class="align-middle" scope="col">Fecha de Envio</th>
+                    <th class="align-middle" scope="col">Razón social</th>
+                    <th class="align-middle" scope="col">Destino</th>
+                    <th class="align-middle" scope="col">Tracking</th>
+                    <th class="align-middle" scope="col">Numero de registro</th>
+                    <th class="align-middle" scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
+                    <th class="align-middle" scope="col">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,6 +61,56 @@
 @push('css')
     <link rel="stylesheet" href="{{asset('/css/admin_custom.css')}}">
     @include('partials.css.time_line_css')
+  <style>
+    @media screen and (max-width: 2249px){
+      #tablaPrincipal_wrapper{
+        width: 100% !important;
+      }
+      #tablaPrincipal_wrapper td p{
+        margin: 0;
+      }
+      thead{
+        vertical-align: middle;
+      }
+      th:nth-child(4){
+        min-width: 80px;
+        max-width: 200px;
+      }
+      th:nth-child(6){
+        min-width: 80px;
+        max-width: 200px;
+      }
+      td:nth-child(n+1){
+        text-align: start !important;
+      }
+      .sorting:before,
+      .sorting:after,
+      .sorting_desc:before,
+      .sorting_desc:after{
+        top: 20px !important;
+      }
+      td{
+        vertical-align: middle !important;
+        text-align: center !important;
+      }
+      #tablaPrincipal tbody div ul{
+        padding-left: 0px !important;
+        margin-bottom: 0px !important;
+      }
+    }
+    @media screen and (max-width: 2144px){
+      thead,
+      tr,
+      td{
+        vertical-align: middle !important;
+      }
+    }
+    @media screen and (max-width: 1440px){
+      #tablaPrincipal{
+        font-size: 13px !important;
+      }
+    }
+  </style>
 @endpush
 
 @section('js')

@@ -1,3 +1,4 @@
+{{--pedidos--}}
 @extends('adminlte::page')
 
 @section('title', 'Pedidos - Bandeja de pedidos')
@@ -229,9 +230,10 @@
         margin-left: 2px;
       }
       .sorting:before,
-      .sorting:after
-      {
-        top: 20px;
+      .sorting:after,
+      .sorting_desc:before,
+      .sorting_desc:after{
+        top: 20px !important;
       }
 
     }
@@ -271,6 +273,9 @@
     }
 
     @media screen and (max-width: 1440px){
+      #tablaPrincipal{
+        font-size: 13px !important;
+      }
       .etiquetas_asignacion{
         font-size: 9px;
         padding: 2px;

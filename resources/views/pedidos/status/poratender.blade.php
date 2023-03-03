@@ -1,3 +1,4 @@
+{{--pedidos/estados/porAtender--}}
 @extends('adminlte::page')
 @section('title', 'Estado del pedidos')
 @section('content_header')
@@ -31,8 +32,8 @@
             </div>
         </div>
     </div>
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <div class="table-responsive">
                 <table id="tablaPrincipal" class="table table-striped">
                     <thead>
@@ -475,10 +476,8 @@
     }
     .sorting:before,
     .sorting:after,
-    sorting_desc:before,
-    sorting_desc:after
-
-    {
+    .sorting_desc:before,
+    .sorting_desc:after{
       top: 20px !important;
     }
     td{
@@ -525,12 +524,16 @@
     }
   }
   @media screen and (max-width: 1440px){
+    #tablaPrincipal{
+      font-size: 13px !important;
+    }
     .etiquetas_asignacion{
       font-size: 9px;
       padding: 2px;
       white-space: pre-line !important;
     }
   }
+
   </style>
 @endpush
 

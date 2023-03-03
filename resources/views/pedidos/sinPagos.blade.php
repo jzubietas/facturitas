@@ -1,3 +1,4 @@
+{{--pedidos.sinpagos--}}
 @extends('adminlte::page')
 
 @section('title', 'Pedidos | Pedidos por cobrar')
@@ -41,8 +42,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <table id="tablaPrincipal" class="table table-striped">
                 <thead>
                 <tr>
@@ -131,9 +132,8 @@
 
           .sorting:before,
           .sorting:after,
-          sorting_desc:before,
-          sorting_desc:after
-          {
+          .sorting_desc:before,
+          .sorting_desc:after{
             top: 20px !important;
           }
 
@@ -153,6 +153,9 @@
         @media screen and (max-width: 2039px){
         }
         @media screen and (max-width: 1440px){
+          #tablaPrincipal{
+            font-size: 13px !important;
+          }
         }
 
 

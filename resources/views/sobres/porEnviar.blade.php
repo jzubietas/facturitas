@@ -1,3 +1,4 @@
+{{--sobres.porenviar--}}
 @extends('adminlte::page')
 
 @section('title', 'Pedidos | Sobres por enviar')
@@ -30,8 +31,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
 
             <table id="tablaPrincipal" class="table table-striped" style="width:100% !important;">
 
@@ -42,17 +43,16 @@
                     </th>
                 </tr>
                 <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Asesor</th>
-                    {{-- <th scope="col">Cliente</th> --}}
-                    <th scope="col">Razón social</th>
-                    <th scope="col">Nombre Cliente</th>
-                    <th scope="col">Telefono Cliente</th>
-                    <th scope="col">Fecha de registro</th>
-                    <th scope="col">Estado de envio</th>
-                    <th scope="col">Observacion Devolucion</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="align-middle">Item</th>
+                    <th scope="col" class="align-middle">Código</th>
+                    <th scope="col" class="align-middle">Id</th>
+                    <th scope="col" class="align-middle">Razón social</th>
+                    <th scope="col" class="align-middle">Nombre Cliente</th>
+                    <th scope="col" class="align-middle">Telefono Cliente</th>
+                    <th scope="col" class="align-middle">Fecha de registro</th>
+                    <th scope="col" class="align-middle">Estado de envio</th>
+                    <th scope="col" class="align-middle">Observacion Devolucion</th>
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -70,7 +70,7 @@
 
 @stop
 
-@section('css')
+@push('css')
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf_viewer.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.csss">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.csss">
@@ -135,44 +135,67 @@
         .pull-right {
             float: right !important;
         }
-
-    </style>
-    <style>
-        /*#canvas_container {
-        width: 200px !important;
-        height: 400px !important;
-        overflow: auto;
-        }*/
-        /* #canvas_container {
-             background: #333;
-             text-align: center;
-             border: solid 3px;
-         }*/
-
         #pdf_renderer {
             position: relative;
         }
-
         #canvas_container {
             position: relative;
         }
-
         .modal-lg {
             max-width: 80%;
         }
 
-        .dataTables_filter {
+        @media screen and (max-width: 2249px){
+          #tablaPrincipal{
+            width: 100% !important;
+          }
+          thead{
+            vertical-align: middle;
+          }
+          td:nth-child(n+1){
+            text-align: start !important;
+          }
+          td:nth-child(7),
+          td:nth-child(9){
+            text-align: center;
+          }
+          th:nth-child(9){
+            width: 100px !important;
+          }
+          th:nth-child(11){
+            width: 130px !important;
+          }
+          .sorting:before,
+          .sorting:after,
+          .sorting_desc:before,
+          .sorting_desc:after{
+            top: 20px !important;
+          }
+          td{
+            vertical-align: middle !important;
+            text-align: center !important;
+          }
+          #tablaPrincipal tbody div ul{
+            padding-left: 0px !important;
+            margin-bottom: 0px !important;
+          }
+        }
 
+        @media screen and (max-width: 1440px){
+          #tablaPrincipal{
+            font-size: 13px !important;
+          }
         }
 
         @if(auth()->user()->rol !='Administrador')
             .visible_button_recoger {
-            opacity: 0;
+          opacity: 0;
         }
         @endif
+
     </style>
 
-@stop
+@endpush
 
 @push('js')
 
@@ -1490,7 +1513,7 @@
                         "previous": "Anterior"
                     }
                 },
-                buttons: [
+/*                buttons: [
                     {
                         text: 'RECOGER',
                         className: 'btn btn-danger visible_button_recoger mb-4',
@@ -1498,7 +1521,7 @@
                             $('#modal-recoger-sobre').modal("show");
                         }
                     }
-                ],
+                ],*/
             });
 
 

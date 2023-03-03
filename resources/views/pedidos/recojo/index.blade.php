@@ -1,3 +1,4 @@
+{{--pedidos.recojo--}}
 @extends('adminlte::page')
 
 @section('title', 'RECOJO')
@@ -13,9 +14,9 @@
 
   @include('envios.motorizado.modal.recojo_enviarope')
 
-  <div class="card p-0">
+  <div class="card p-0" style="overflow: hidden !important;">
 
-    <div class="tab-content" id="myTabContent">
+    <div class="tab-content" id="myTabContent" style="overflow-x: scroll !important;">
       <div class="tab-pane fade show active" id="enmotorizado" role="tabpanel" aria-labelledby="enmotorizado-tab">
         <table id="tblListadoRecojo" class="table table-striped">{{-- display nowrap  --}}
           <thead>
@@ -25,7 +26,7 @@
             <th scope="col" class="align-middle">Cliente</th>
             <th scope="col" class="align-middle">Razón social</th>
             <th scope="col" class="align-middle">Cantidad</th>
-            <th scope="col" class="align-middle">Asesor</th>
+            <th scope="col" class="align-middle">Id</th>
             <th scope="col" class="align-middle">RUC</th>
             <th scope="col" class="align-middle">F. Registro</th>
             <th scope="col" class="align-middle">F. Actualizacion</th>
@@ -55,6 +56,65 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
   <style>
+    .yellow_color_table {
+      background-color: #ffd60a !important;
+    }
+    .blue_color_table {
+      background-color: #3A98B9 !important;
+    }
+
+
+    @media screen and (max-width: 2249px){
+      #tblListadoRecojo{
+        width: 100% !important;
+      }
+      #tblListadoRecojo td p{
+        margin: 0;
+      }
+      thead{
+        vertical-align: middle;
+      }
+      .sorting:before,
+      .sorting:after,
+      .sorting_desc:before,
+      .sorting_desc:after{
+        top: 20px !important;
+      }
+      th:nth-child(11){
+        width: 5px !important;
+      }
+      td:nth-child(n+1){
+        text-align: start !important;
+      }
+      td{
+        vertical-align: middle !important;
+        text-align: center !important;
+      }
+      td:nth-child(12){
+        min-width: 100px !important;
+        max-width: 250px !important;
+      }
+      td:nth-child(12) span{
+        white-space: break-spaces;
+      }
+
+      #tablaPrincipal tbody div ul{
+        padding-left: 0px !important;
+        margin-bottom: 0px !important;
+      }
+    }
+    @media screen and (max-width: 2144px){
+      thead,
+      tr,
+      td{
+        vertical-align: middle !important;
+      }
+    }
+    @media screen and (max-width: 1440px){
+      #tblListadoRecojo{
+        font-size: 13px !important;
+      }
+    }
     @media (max-width: 32rem) {
       div.dataTables_wrapper div.dataTables_filter input {
         width: 200px !important;
@@ -69,11 +129,10 @@
       }
     }
 
-    .yellow_color_table {
-      background-color: #ffd60a !important;
-    }
-    .blue_color_table {
-      background-color: #3A98B9 !important;
+
+    td:nth-child(11){
+      min-width: 100px !important;
+      max-width: 350px !important;
     }
   </style>
   @include('partials.css.time_line_css')
