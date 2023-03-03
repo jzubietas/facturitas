@@ -146,7 +146,7 @@ class PdfController extends Controller
                     $html[]='<div class="w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
-                                              <div class="rounded" role="progressbar" style="background: green; width: 20%" ></div>
+                                              <div class="rounded" role="progressbar" style="background: green; width: '.$porcentaje.'%" ></div>
                                        </div>
                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                               <span style="font-weight: lighter">
