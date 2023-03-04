@@ -281,7 +281,7 @@
                         {
                             data: 'periodo',
                             name: 'periodo',
-                            sWidth: '10%'
+                            sWidth: '20%'
                         },
                         {
                             data: 'cantidad_pedidos',
