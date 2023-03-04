@@ -17,8 +17,8 @@
     <li class="nav-item ml-2">
         <a class="nav-link btn btn-warning btn-sm" href="#" data-toggle="addalert">
             <b class="text-black font-weight-bold">
-                <i class="fas fa-bell"></i>
-                Agregar Alerta
+                <i class="fas fa-sticky-note"></i>
+                Notas
             </b>
         </a>
     </li>
