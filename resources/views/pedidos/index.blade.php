@@ -224,14 +224,17 @@
       .btn-fontsize {
         font-size: 15px;
       }
-
+      td:nth-child(11) span {
+        white-space: break-spaces !important;
+        padding: 8px !important;
+      }
       .etiquetas_asignacion {
         background-color: #b0deb3 !important;
         font-size: 12px;
         padding: 4px;
         font-weight: 700;
         line-height: 1;
-        white-space: nowrap;
+        white-space: break-spaces;
         transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         color: #4a604b !important;
         margin-left: 2px;
@@ -285,6 +288,15 @@
       #tablaPrincipal {
         font-size: 14px !important;
       }
+      .etiquetas_asignacion {
+        font-size: 9px;
+        padding: 8px;
+        white-space: break-spaces !important;
+      }
+      td:nth-child(11) span {
+        padding: 8px !important;
+      }
+
     }
 
     @media screen and (max-width: 1440px) {
