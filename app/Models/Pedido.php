@@ -408,9 +408,12 @@ cosnt RECOJO CLIENTE CONFIRMAR MOTORIZADO*/
     }
 
     public function scopePendienteAnulacion($query){
-      return $query->whereIn($this->qualifyColumn('condicion_code'), [self::POR_ATENDER_INT, self::ANULADO_INT]);
+      return $query->whereIn($this->qualifyColumn('pendiente_anulacion'), [1]);
     }
 
+    public function scopeAsesoresDeOperarios(){
+
+    }
     public function scopeImporte($query, $importe){
       return $query->where($this->qualifyColumn('env_importe'), '=', $importe);
     }
