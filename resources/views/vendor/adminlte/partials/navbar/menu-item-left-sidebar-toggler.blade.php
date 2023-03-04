@@ -26,7 +26,8 @@
 
 @if(user_rol(\App\Models\User::ROL_ASESOR)||user_rol(\App\Models\User::ROL_ADMIN))
   <li class="nav-item ml-2">
-    <a class="nav-link btn btn-info btn-sm" href="#" data-toggle="contactoalert">
+
+    <a class="nav-link btn btn-info btn-sm" href="#" data-target="#modal-agregar-contacto" data-toggle="modal">
       <b class="text-white font-weight-bold">
         <i class="fas fa-user-plus p-1"></i>
         Agregar Contacto
