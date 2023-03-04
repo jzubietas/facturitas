@@ -185,14 +185,6 @@
                         , {data: null}
                         , {data: null}
                         , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
                     ],
                 language: {
                     "decimal": "",
