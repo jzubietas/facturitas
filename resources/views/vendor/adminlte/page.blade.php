@@ -90,6 +90,10 @@
     <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script>
         let tblListadoLlamadas=null;
+        let tblCambioNombre=null;
+        let tblBloqueoClientes=null;
+        let tblCambioNumero=null;
+
         let dataForm_agregarcontacto_n = {};
         let dataForm_agregarcontacto_cno = {};
         let dataForm_agregarcontacto_b = {};
@@ -111,6 +115,9 @@
             columns:
               [
                 {
+                  data: 'tipo_insert'
+                },
+                {
                   data: 'nombre_asesor'
                 },
                 {
@@ -125,6 +132,83 @@
                 }
               ],
           });
+          tblCambioNombre = $('#tablaCambioNombre').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
+          tblBloqueoClientes = $('#tablaBloqueoClientes').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
+          tblCambioNumero = $('#tablaCambioNumero').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
+
+
 
 
 
@@ -287,16 +371,160 @@
 
           $('#modal-llamadas-1').on('show.bs.modal', function (event) {
             tblListadoLlamadas.destroy();
+            tblCambioNombre.destroy();
+            tblBloqueoClientes.destroy();
+            tblCambioNumero.destroy();
+            ocultar_div_modal_correccion_pedidos();
             tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
               responsive: true,
               "bPaginate": true,
               "bFilter": true,
               "bInfo": false,
               'ajax': {
-                url: "{{ route('alertas.listtablecontactos') }}",
+                url: "{{ route('listtablecontactos') }}",
+                data:{tipo:1,rbnvalue:1},
                 "type": "get",
               },
               columns: [
+                {data: 'tipo_insert', name: 'tipo_insert'},
+                {data: 'codigo_asesor', name: 'codigo_asesor'},
+                {data: 'celular', name: 'celular',},
+                {data: 'nombres_cliente', name: 'nombre_cliente',},
+                {data: 'nombre_contacto', name: 'nombre_contacto',},
+                {data: 'action', name: 'action',},
+              ],
+              "createdRow": function (row, data, dataIndex) {
+                if(data["guardado"]==1)
+                {
+                  $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
+                }
+              },
+              order: false,
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+                }
+              }
+            });
+            tblCambioNombre = $('#tablaCambioNombre').DataTable({
+              responsive: true,
+              "bPaginate": true,
+              "bFilter": true,
+              "bInfo": false,
+              'ajax': {
+                url: "{{ route('listtablecontactos') }}",
+                data:{tipo:2,rbnvalue:1},
+                "type": "get",
+              },
+              columns: [
+                {data: 'tipo_insert', name: 'tipo_insert'},
+                {data: 'codigo_asesor', name: 'codigo_asesor'},
+                {data: 'celular', name: 'celular',},
+                {data: 'nombres_cliente', name: 'nombre_cliente',},
+                {data: 'nombre_contacto', name: 'nombre_contacto',},
+                {data: 'action', name: 'action',},
+              ],
+              "createdRow": function (row, data, dataIndex) {
+                if(data["guardado"]==1)
+                {
+                  $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
+                }
+              },
+              order: false,
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+                }
+              }
+            });
+            tblBloqueoClientes = $('#tablaBloqueoClientes').DataTable({
+              responsive: true,
+              "bPaginate": true,
+              "bFilter": true,
+              "bInfo": false,
+              'ajax': {
+                url: "{{ route('listtablecontactos') }}",
+                data:{tipo:3,rbnvalue:1},
+                "type": "get",
+              },
+              columns: [
+                {data: 'tipo_insert', name: 'tipo_insert'},
+                {data: 'codigo_asesor', name: 'codigo_asesor'},
+                {data: 'celular', name: 'celular',},
+                {data: 'nombres_cliente', name: 'nombre_cliente',},
+                {data: 'nombre_contacto', name: 'nombre_contacto',},
+                {data: 'action', name: 'action',},
+              ],
+              "createdRow": function (row, data, dataIndex) {
+                if(data["guardado"]==1)
+                {
+                  $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
+                }
+              },
+              order: false,
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+                }
+              }
+            });
+            tblCambioNumero = $('#tablaCambioNumero').DataTable({
+              responsive: true,
+              "bPaginate": true,
+              "bFilter": true,
+              "bInfo": false,
+              'ajax': {
+                url: "{{ route('listtablecontactos') }}",
+                data:{tipo:4,rbnvalue:1},
+                "type": "get",
+              },
+              columns: [
+                {data: 'tipo_insert', name: 'tipo_insert'},
                 {data: 'codigo_asesor', name: 'codigo_asesor'},
                 {data: 'celular', name: 'celular',},
                 {data: 'nombres_cliente', name: 'nombre_cliente',},
@@ -378,6 +606,90 @@
             });
 
           })
+
+          window.ocultar_div_modal_correccion_pedidos = function () {
+            console.log("ocultar div")
+            $("#modal-ListadoClientes").hide();
+            $("#modal-CambioNombre").hide();
+            $("#modal-BLoqueoCliente").hide();
+            $("#modal-CambioNumero").hide();
+          }
+
+          $(document).on('click',
+            "button#btnListNuevoCliente,button#btnListCambioNombre,button#btnListBloqueo,button#btnListCambioNumero",
+            function (e) {
+              ocultar_div_modal_correccion_pedidos();
+              switch (e.target.id) {
+                case 'btnListNuevoCliente':
+                  $("#modal-ListadoClientes").show();
+                  break;
+                case 'btnListCambioNombre':
+                  $("#modal-CambioNombre").show();
+                  break;
+                case 'btnListBloqueo':
+                  $("#modal-BLoqueoCliente").show();
+                  break;
+                case 'btnListCambioNumero':
+                  $("#modal-CambioNumero").show();
+                  break;
+              }
+
+            })
+          $("input[name='rbnTipo']",$('#radioBtnDiv')).change(
+            function(e)
+            {
+              var valorRadioButton= $(this).val();
+              console.log('VALOR RADIO',$(this).val() );
+              //Reload datatable
+              tblListadoLlamadas.destroy();
+              tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
+                responsive: true,
+                "bPaginate": true,
+                "bFilter": true,
+                "bInfo": false,
+                'ajax': {
+                  url: "{{ route('listtablecontactos') }}",
+                  data:{tipo:1,rbnvalue:valorRadioButton},
+                  "type": "get",
+                },
+                columns: [
+                  {data: 'tipo_insert', name: 'tipo_insert'},
+                  {data: 'codigo_asesor', name: 'codigo_asesor'},
+                  {data: 'celular', name: 'celular',},
+                  {data: 'nombres_cliente', name: 'nombre_cliente',},
+                  {data: 'nombre_contacto', name: 'nombre_contacto',},
+                  {data: 'action', name: 'action',},
+                ],
+                "createdRow": function (row, data, dataIndex) {
+                  if(data["guardado"]==1)
+                  {
+                    $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
+                  }
+                },
+                order: false,
+                language: {
+                  "decimal": "",
+                  "emptyTable": "No hay información",
+                  "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                  "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                  "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                  "infoPostFix": "",
+                  "thousands": ",",
+                  "lengthMenu": "Mostrar _MENU_ Entradas",
+                  "loadingRecords": "Cargando...",
+                  "processing": "Procesando...",
+                  "search": "Buscar:",
+                  "zeroRecords": "Sin resultados encontrados",
+                  "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                  }
+                }
+              });
+            });
+
             $(document).on("change", "#opciones_modal1", function () {
                 let value = $(this).val();
                 ocultar_div_modal1();
