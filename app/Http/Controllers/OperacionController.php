@@ -696,8 +696,8 @@ class OperacionController extends Controller
                 , Pedido::RECEPCION_COURIER_INT
                 , Pedido::ENVIO_COURIER_JEFE_OPE_INT
                 , Pedido::ENTREGADO_SIN_SOBRE_OPE_INT
+                , Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT
                 , Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
-                //, Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT
                 , Pedido::ATENDIDO_OPE_INT
                 , Pedido::ENVIADO_OPE_INT
             ]);

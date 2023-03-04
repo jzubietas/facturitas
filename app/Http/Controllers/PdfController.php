@@ -304,8 +304,8 @@ class PdfController extends Controller
   public function CobranzasGeneral(Request $request)
   {
     $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
-    $periodo_origen=Carbon::parse($fp->created_at);
-    $periodo_actual=Carbon::parse(now());
+    $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
+    $periodo_actual=Carbon::parse(now())->endOfMonth();
     $diferenciameses = ($periodo_origen->diffInMonths($periodo_actual));
     return $periodo_origen.'|'.$periodo_actual.'|'.$diferenciameses;
 
