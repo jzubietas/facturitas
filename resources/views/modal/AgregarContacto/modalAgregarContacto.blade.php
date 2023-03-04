@@ -1,7 +1,7 @@
 <div class="modal fade" id="modal-agregar-contacto" aria-labelledby="modal-agregar-contacto" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 800px!important;">
         <div class="modal-content">
-            <div class="modal-header bg-success">
+            <div class="modal-header bg-info">
                 <h5 class="modal-title" id="exampleModalLabel">Agregar Contacto</h5>
 
                 <button class="float-right btn btn-danger" data-dismiss="modal">Cerrar</button>

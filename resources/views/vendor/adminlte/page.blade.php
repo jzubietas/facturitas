@@ -212,15 +212,10 @@
                   });
                   return false;
                 }
-
-
-
                 break;
             }
 
           });
-
-
 
           $(document).on('click',
             "button#btn_agregarcontacto_n,button#btn_agregarcontacto_cno,button#btn_agregarcontacto_b,button#btn_agregarcontacto_cnu",
