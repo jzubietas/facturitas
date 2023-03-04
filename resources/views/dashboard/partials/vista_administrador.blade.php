@@ -315,6 +315,37 @@
           display: grid;
           grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
         }
+/*        .tabla-metas_pagos_pedidos{
+          font-size: 12px;
+        }*/
+      .format-size{
+        padding: 0;
+        font-weight: bold;
+        font-size: 18px;
+        margin-left: 10px;
+      }
+      .bold-size{
+        font-size: 18px;
+      }
+
+
+        @media screen and (max-width: 1440px) {
+          .tabla-metas_pagos_pedidos{
+            font-size: 12px;
+          }
+          .format-size{
+            padding: 0;
+            font-weight: bold;
+            font-size: 15px;
+            margin-left: 10px;
+          }
+          .bold-size{
+            font-size: 14px;
+          }
+
+        }
+
+
     </style>
 @endpush
 
