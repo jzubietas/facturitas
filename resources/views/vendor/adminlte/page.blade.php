@@ -90,6 +90,14 @@
     <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script>
         let tblListadoLlamadas=null;
+        let tblCambioNombre=null;
+        let tblBloqueoClientes=null;
+        let tblCambioNumero=null;
+
+        let dataForm_agregarcontacto_n = {};
+        let dataForm_agregarcontacto_cno = {};
+        let dataForm_agregarcontacto_b = {};
+        let dataForm_agregarcontacto_cnu = {};
         $(document).ready(function () {
 
             $.ajaxSetup({
@@ -107,6 +115,84 @@
             columns:
               [
                 {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
+          tblCambioNombre = $('#tablaCambioNombre').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
+          tblBloqueoClientes = $('#tablaBloqueoClientes').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
+          tblCambioNumero = $('#tablaCambioNumero').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
                   data: 'nombre_asesor'
                 },
                 {
@@ -122,20 +208,8 @@
               ],
           });
 
-          window.ocultar_div_modal_agregarcontacto = function () {
-            console.log("ocultar div")
-            $("#modal-agregarcontacto-n-container").hide();
-            $("#form-agregarcontacto-n input").val("");
 
-            $("#modal-agregarcontacto-cno").hide();
-            $("#form-agregarcontacto-cno input").val("");
 
-            $("#modal-agregarcontacto-b-container").hide();
-            $("#form-agregarcontacto-b input").val("");
-
-            $("#agregarcontacto-cnu-row").hide();
-            $("#form-agregarcontacto-cnu input").val("");
-          }
 
 
           window.ocultar_div_modal1 = function () {
@@ -150,17 +224,136 @@
                 $("#form-op-4-row input").val("");
             }
 
+          window.ocultar_div_modal_agregarcontacto = function () {
+            console.log("ocultar div para contacto")
+            $("#modal-agregarcontacto-n-container").hide();
+            $("#form-agregarcontacto-n input").val("");
+
+            $("#modal-agregarcontacto-cno-container").hide();
+            $("#form-agregarcontacto-cno input").val("");
+
+            $("#modal-agregarcontacto-b-container").hide();
+            $("#form-agregarcontacto-b input").val("");
+
+            $("#modal-agregarcontacto-cnu-container").hide();
+            $("#form-agregarcontacto-cnu input").val("");
+          }
+
+
           $('#modal-agregar-contacto').on('show.bs.modal', function (event) {
             ocultar_div_modal_agregarcontacto();
-            /*$("#opciones_modal1")
-              .html("")
-              .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
-              .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
-              .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
-              .append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
-              .selectpicker("refresh")*/
           })
 
+          $(document).on("click", "#form-agregarcontacto-b #attachmentfiles", function () {
+            var file = document.createElement('input');
+            file.type = 'file';
+            file.click()
+            file.addEventListener('change', function (e) {
+              console.log("change")
+              if (file.files.length > 0) {
+                $('#form-agregarcontacto-b').find('.result_picture').css('display', 'block');
+                console.log(URL.createObjectURL(file.files[0]))
+                dataForm_agregarcontacto_b.agregarcontacto_b_captura = file.files[0]
+                $('#form-agregarcontacto-b').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
+              }
+            })
+          })
+
+          $(document).on("submit", "form.agregarcontacto", function (e) {
+            e.preventDefault();
+            var form = null;
+            var formData = null;
+            console.log(e.target.id)
+            switch (e.target.id)
+            {
+              case 'form-agregarcontacto-b':
+                let cant_cliente_agregarcontacto_b = $("select[name='cliente_agregarcontacto-b']").val().length;
+                dataForm_agregarcontacto_b.cliente_agregarcontacto_b = $("select[name='cliente_agregarcontacto-b']").val()
+
+                let cant_sustento_agregarcontacto_b = $("textarea[name='sustento-agregarcontacto_b']").val().length;
+                dataForm_agregarcontacto_b.sustento_agregarcontacto_b = $("textarea[name='sustento-agregarcontacto_b']").val();
+
+                let cant_nro_contacto_agregarcontacto_b = $("input[name='nro_contacto_agregarcontacto_b']").val().length;
+                dataForm_agregarcontacto_b.nro_contacto_agregarcontacto_b = $("input[name='nro_contacto_agregarcontacto_b']").val();
+                if(cant_cliente_agregarcontacto_b==0)
+                {
+                  Swal.fire('Error', 'No se puede seleccionar un cliente vacio', 'warning').then(function () {
+                    $("select[name='cliente_agregarcontacto-b']").focus()
+                  });
+                  return false;
+                }
+                else if (cant_sustento_agregarcontacto_b == 0) {
+                  Swal.fire('Error', 'No se puede ingresar un sustento vacio', 'warning').then(function () {
+                    console.log("before")
+                    $("textarea[name='sustento-pc']").focus()
+                  });
+                  return false;
+                }
+                else if (cant_nro_contacto_agregarcontacto_b == 0) {
+                  Swal.fire('Error', 'No se puede ingresar un contacto vacio', 'warning').then(function () {
+                    console.log("before")
+                    $("input[name='nro_contacto_agregarcontacto_b']").focus()
+                  });
+                  return false;
+                }
+                break;
+            }
+
+          });
+
+          $(document).on('click',
+            "button#btn_agregarcontacto_n,button#btn_agregarcontacto_cno,button#btn_agregarcontacto_b,button#btn_agregarcontacto_cnu",
+            function (e) {
+              console.log(e.target.id);
+              ocultar_div_modal_agregarcontacto();
+              switch (e.target.id) {
+                case 'btn_agregarcontacto_n':
+                  $.ajax({
+                    url: "{{ route('clientecomboagregarcontacto') }}",
+                    method: 'POST',
+                    success: function (data) {
+                      console.log(data)
+                      $('#cliente_agregarcontacto_n').html(data.html).selectpicker("refresh");
+                      $("#modal-agregarcontacto-n-container").show();
+                    }
+                  });
+                  break;
+                case 'btn_agregarcontacto_cno':
+                  $.ajax({
+                    url: "{{ route('clientecomboagregarcontacto') }}",
+                    method: 'POST',
+                    success: function (data) {
+                      console.log(data)
+                      $('#cliente_agregarcontacto_cno').html(data.html).selectpicker("refresh");
+                      $("#modal-agregarcontacto-cno-container").show();
+                    }
+                  });
+                  break;
+                case 'btn_agregarcontacto_b':
+                  $.ajax({
+                    url: "{{ route('clientecomboagregarcontacto') }}",
+                    method: 'POST',
+                    success: function (data) {
+                      console.log(data)
+                      $('#cliente_agregarcontacto_b').html(data.html).selectpicker("refresh");
+                      $("#modal-agregarcontacto-b-container").show();
+                    }
+                  });
+                  break;
+                case 'btn_agregarcontacto_cnu':
+                  $.ajax({
+                    url: "{{ route('clientecomboagregarcontacto') }}",
+                    method: 'POST',
+                    success: function (data) {
+                      console.log(data)
+                      $('#cliente_agregarcontacto_cnu').html(data.html).selectpicker("refresh");
+                      $("#modal-agregarcontacto-cnu-container").show();
+                    }
+                  });
+                  break;
+              }
+
+            })
 
 
           //btn_componente-1
@@ -178,16 +371,160 @@
 
           $('#modal-llamadas-1').on('show.bs.modal', function (event) {
             tblListadoLlamadas.destroy();
+            tblCambioNombre.destroy();
+            tblBloqueoClientes.destroy();
+            tblCambioNumero.destroy();
+            ocultar_div_modal_correccion_pedidos();
             tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
               responsive: true,
               "bPaginate": true,
               "bFilter": true,
               "bInfo": false,
               'ajax': {
-                url: "{{ route('alertas.listtablecontactos') }}",
+                url: "{{ route('listtablecontactos') }}",
+                data:{tipo:1,rbnvalue:1},
                 "type": "get",
               },
               columns: [
+                {data: 'tipo_insert', name: 'tipo_insert'},
+                {data: 'codigo_asesor', name: 'codigo_asesor'},
+                {data: 'celular', name: 'celular',},
+                {data: 'nombres_cliente', name: 'nombre_cliente',},
+                {data: 'nombre_contacto', name: 'nombre_contacto',},
+                {data: 'action', name: 'action',},
+              ],
+              "createdRow": function (row, data, dataIndex) {
+                if(data["guardado"]==1)
+                {
+                  $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
+                }
+              },
+              order: false,
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+                }
+              }
+            });
+            tblCambioNombre = $('#tablaCambioNombre').DataTable({
+              responsive: true,
+              "bPaginate": true,
+              "bFilter": true,
+              "bInfo": false,
+              'ajax': {
+                url: "{{ route('listtablecontactos') }}",
+                data:{tipo:2,rbnvalue:1},
+                "type": "get",
+              },
+              columns: [
+                {data: 'tipo_insert', name: 'tipo_insert'},
+                {data: 'codigo_asesor', name: 'codigo_asesor'},
+                {data: 'celular', name: 'celular',},
+                {data: 'nombres_cliente', name: 'nombre_cliente',},
+                {data: 'nombre_contacto', name: 'nombre_contacto',},
+                {data: 'action', name: 'action',},
+              ],
+              "createdRow": function (row, data, dataIndex) {
+                if(data["guardado"]==1)
+                {
+                  $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
+                }
+              },
+              order: false,
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+                }
+              }
+            });
+            tblBloqueoClientes = $('#tablaBloqueoClientes').DataTable({
+              responsive: true,
+              "bPaginate": true,
+              "bFilter": true,
+              "bInfo": false,
+              'ajax': {
+                url: "{{ route('listtablecontactos') }}",
+                data:{tipo:3,rbnvalue:1},
+                "type": "get",
+              },
+              columns: [
+                {data: 'tipo_insert', name: 'tipo_insert'},
+                {data: 'codigo_asesor', name: 'codigo_asesor'},
+                {data: 'celular', name: 'celular',},
+                {data: 'nombres_cliente', name: 'nombre_cliente',},
+                {data: 'nombre_contacto', name: 'nombre_contacto',},
+                {data: 'action', name: 'action',},
+              ],
+              "createdRow": function (row, data, dataIndex) {
+                if(data["guardado"]==1)
+                {
+                  $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
+                }
+              },
+              order: false,
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+                }
+              }
+            });
+            tblCambioNumero = $('#tablaCambioNumero').DataTable({
+              responsive: true,
+              "bPaginate": true,
+              "bFilter": true,
+              "bInfo": false,
+              'ajax': {
+                url: "{{ route('listtablecontactos') }}",
+                data:{tipo:4,rbnvalue:1},
+                "type": "get",
+              },
+              columns: [
+                {data: 'tipo_insert', name: 'tipo_insert'},
                 {data: 'codigo_asesor', name: 'codigo_asesor'},
                 {data: 'celular', name: 'celular',},
                 {data: 'nombres_cliente', name: 'nombre_cliente',},
@@ -269,6 +606,90 @@
             });
 
           })
+
+          window.ocultar_div_modal_correccion_pedidos = function () {
+            console.log("ocultar div")
+            $("#modal-ListadoClientes").hide();
+            $("#modal-CambioNombre").hide();
+            $("#modal-BLoqueoCliente").hide();
+            $("#modal-CambioNumero").hide();
+          }
+
+          $(document).on('click',
+            "button#btnListNuevoCliente,button#btnListCambioNombre,button#btnListBloqueo,button#btnListCambioNumero",
+            function (e) {
+              ocultar_div_modal_correccion_pedidos();
+              switch (e.target.id) {
+                case 'btnListNuevoCliente':
+                  $("#modal-ListadoClientes").show();
+                  break;
+                case 'btnListCambioNombre':
+                  $("#modal-CambioNombre").show();
+                  break;
+                case 'btnListBloqueo':
+                  $("#modal-BLoqueoCliente").show();
+                  break;
+                case 'btnListCambioNumero':
+                  $("#modal-CambioNumero").show();
+                  break;
+              }
+
+            })
+          $("input[name='rbnTipo']",$('#radioBtnDiv')).change(
+            function(e)
+            {
+              var valorRadioButton= $(this).val();
+              console.log('VALOR RADIO',$(this).val() );
+              //Reload datatable
+              tblListadoLlamadas.destroy();
+              tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
+                responsive: true,
+                "bPaginate": true,
+                "bFilter": true,
+                "bInfo": false,
+                'ajax': {
+                  url: "{{ route('listtablecontactos') }}",
+                  data:{tipo:1,rbnvalue:valorRadioButton},
+                  "type": "get",
+                },
+                columns: [
+                  {data: 'tipo_insert', name: 'tipo_insert'},
+                  {data: 'codigo_asesor', name: 'codigo_asesor'},
+                  {data: 'celular', name: 'celular',},
+                  {data: 'nombres_cliente', name: 'nombre_cliente',},
+                  {data: 'nombre_contacto', name: 'nombre_contacto',},
+                  {data: 'action', name: 'action',},
+                ],
+                "createdRow": function (row, data, dataIndex) {
+                  if(data["guardado"]==1)
+                  {
+                    $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
+                  }
+                },
+                order: false,
+                language: {
+                  "decimal": "",
+                  "emptyTable": "No hay información",
+                  "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                  "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                  "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                  "infoPostFix": "",
+                  "thousands": ",",
+                  "lengthMenu": "Mostrar _MENU_ Entradas",
+                  "loadingRecords": "Cargando...",
+                  "processing": "Procesando...",
+                  "search": "Buscar:",
+                  "zeroRecords": "Sin resultados encontrados",
+                  "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                  }
+                }
+              });
+            });
+
             $(document).on("change", "#opciones_modal1", function () {
                 let value = $(this).val();
                 ocultar_div_modal1();
