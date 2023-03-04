@@ -122,7 +122,23 @@
               ],
           });
 
-            window.ocultar_div_modal1 = function () {
+          window.ocultar_div_modal_agregarcontacto = function () {
+            console.log("ocultar div")
+            $("#modal-agregarcontacto-n-container").hide();
+            $("#form-agregarcontacto-n input").val("");
+
+            $("#modal-agregarcontacto-cno").hide();
+            $("#form-agregarcontacto-cno input").val("");
+
+            $("#modal-agregarcontacto-b-container").hide();
+            $("#form-agregarcontacto-b input").val("");
+
+            $("#agregarcontacto-cnu-row").hide();
+            $("#form-agregarcontacto-cnu input").val("");
+          }
+
+
+          window.ocultar_div_modal1 = function () {
                 console.log("ocultar div")
                 $("#op-1-row").hide();
                 $("#form-op-1-row input").val("");
@@ -133,6 +149,19 @@
                 $("#op-4-row").hide();
                 $("#form-op-4-row input").val("");
             }
+
+          $('#modal-agregar-contacto').on('show.bs.modal', function (event) {
+            ocultar_div_modal_agregarcontacto();
+            /*$("#opciones_modal1")
+              .html("")
+              .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
+              .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
+              .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
+              .append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
+              .selectpicker("refresh")*/
+          })
+
+
 
           //btn_componente-1
           $('#modal-annuncient-1').on('show.bs.modal', function (event) {
