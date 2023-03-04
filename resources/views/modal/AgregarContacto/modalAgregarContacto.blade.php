@@ -24,19 +24,19 @@
                 </div>
 
                 <div id="modal-agregarcontacto-n-container" class="modal-agregarcontacto-n-container">
-                    @include('modal.AgregarContacto.partials.agregarcontacto_pc')
+                    @include('modal.AgregarContacto.partials.agregarcontacto_n')
                 </div>
 
                 <div id="modal-agregarcontacto-cno-container" class="modal-agregarcontacto-cno-container">
-                    @include('modal.AgregarContacto.partials.agregarcontacto_f')
+                    @include('modal.AgregarContacto.partials.agregarcontacto_cno')
                 </div>
 
                 <div id="modal-correccionpedido-b-container" class="modal-agregarcontacto-b-container">
-                    @include('modal.AgregarContacto.partials.agregarcontacto_g')
+                    @include('modal.AgregarContacto.partials.agregarcontacto_b')
                 </div>
 
                 <div id="modal-correccionpedido-cnu-container" class="modal-agregarcontacto-cnu-container">
-                    @include('modal.AgregarContacto.partials.agregarcontacto_b')
+                    @include('modal.AgregarContacto.partials.agregarcontacto_cnu')
                 </div>
 
             </div>
