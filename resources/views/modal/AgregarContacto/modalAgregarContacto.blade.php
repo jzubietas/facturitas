@@ -14,10 +14,10 @@
                     <div class="form-group col-lg-6">
 
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button id="btn_agregarcontacto_pc" type="button" class="btn rounded btn-info ml-2">Pedido Completo</button>
-                            <button id="btn_agregarcontacto_f" type="button" class="btn rounded btn-secondary  ml-2">Facturas</button>
-                            <button id="btn_agregarcontacto_g" type="button" class="btn rounded btn-warning  ml-2">Guias</button>
-                            <button id="btn_agregarcontacto_b" type="button" class="btn rounded btn-danger  ml-2">Bancarizaciones</button>
+                            <button id="btn_agregarcontacto_pc" type="button" class="btn rounded btn-info ml-2">Nuevo</button>
+                            <button id="btn_agregarcontacto_f" type="button" class="btn rounded btn-secondary  ml-2">Cambiar Nombre</button>
+                            <button id="btn_agregarcontacto_g" type="button" class="btn rounded btn-warning  ml-2">Bloqueo</button>
+                            <button id="btn_agregarcontacto_b" type="button" class="btn rounded btn-danger  ml-2">Cambiar Numero</button>
                         </div>
 
                     </div>
