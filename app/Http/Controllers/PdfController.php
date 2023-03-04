@@ -402,8 +402,9 @@ class PdfController extends Controller
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="">Cobranzas: '.$total_pagado_mespasado.'</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas: '.$total_pagado_mespasado.'</sub>';
       }
       else if ($porcentaje > 50)
       {
@@ -423,8 +424,9 @@ class PdfController extends Controller
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="">Cobranzas '.$total_pagado_mespasado.'</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas '.$total_pagado_mespasado.'</sub>';
       }
       else {
         $html[] = '<div class="w-100 bg-white rounded">
@@ -443,8 +445,9 @@ class PdfController extends Controller
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="">Cobranzas '.$total_pagado_mespasado.'</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas '.$total_pagado_mespasado.'</sub>';
       }
 
       $html[] = '</td>';
