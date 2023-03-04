@@ -2100,14 +2100,14 @@ class ClienteController extends Controller
         }
         $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton" style="display: flex; grid-gap: 2px;">';
 
-        if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
+        if (in_array(auth()->user()->rol, [User::ROL_ADMIN])) {
           $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
           $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnConfirmado" '.$deshabilitar_confirmado.'><i class="fa fa-check danger mr-8"></i></button>';
-          $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnConfirmado" '.$deshabilitar_reconfirmado.'><i class="fa fa-check-double danger mr-8"></i></button>';
-        }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
+          $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnReconfirmado" '.$deshabilitar_reconfirmado.'><i class="fa fa-check-double danger mr-8"></i></button>';
+        }else if (in_array(auth()->user()->rol, [User::ROL_JEFE_LLAMADAS,User::ROL_LLAMADAS])) {
           $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
-        }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
-          $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
+        }else if (in_array(auth()->user()->rol, [User::ROL_ENCARGADO,User::ROL_ASESOR])) {
+          $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnConfirmado" '.$deshabilitar_confirmado.'><i class="fa fa-check danger mr-8"></i></button>';
         }
 
 
@@ -2117,5 +2117,34 @@ class ClienteController extends Controller
       ->rawColumns(['action'])
       ->make(true);
     //return datatables($detallecontactos)->toJson();
+  }
+  public function guardado(Request $request)
+  {
+    //return $request->all();
+    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
+      'guardado' => true,
+      'confirmado' => false,
+    ]);
+    return $detallecontactos;
+  }
+
+  public function confirmado(Request $request)
+  {
+    //return $request->all();
+    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
+      'guardado' => true,
+      'confirmado' => true,
+    ]);
+    return $detallecontactos;
+  }
+  public function reconfirmado(Request $request)
+  {
+    //return $request->all();
+    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
+      'guardado' => true,
+      'confirmado' => true,
+      'reconfirmado' => true,
+    ]);
+    return $detallecontactos;
   }
 }

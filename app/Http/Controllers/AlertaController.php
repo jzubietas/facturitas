@@ -77,23 +77,5 @@ class AlertaController extends Controller
     return $detallecontactos;
   }
 
-  public function guardado(Request $request)
-  {
-    //return $request->all();
-    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
-      'guardado' => true,
-      'confirmado' => false,
-    ]);
-    return $detallecontactos;
-  }
 
-  public function confirmado(Request $request)
-  {
-    //return $request->all();
-    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
-      'guardado' => true,
-      'confirmado' => true,
-    ]);
-    return $detallecontactos;
-  }
 }

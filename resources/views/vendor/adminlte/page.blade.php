@@ -617,6 +617,213 @@
             });
 
           })
+          $('#tablaListadoLlamadas tbody').on('click', 'button.btnReconfirmado', function () {
+            var data = tblListadoLlamadas.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('enviarreconfirmado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaListadoLlamadas').DataTable().ajax.reload();
+              }
+            });
+          })
+
+          $('#tablaCambioNombre tbody').on('click', 'button.btnGuardado', function () {
+            var data = tblCambioNombre.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('alertas.guardado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaCambioNombre').DataTable().ajax.reload();
+              }
+
+
+            });
+
+          })
+          $('#tablaCambioNombre tbody').on('click', 'button.btnConfirmado', function () {
+            var data = tblCambioNombre.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('alertas.confirmado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaCambioNombre').DataTable().ajax.reload();
+              }
+
+
+            });
+
+          })
+          $('#tablaCambioNombre tbody').on('click', 'button.btnReconfirmado', function () {
+            var data = tblCambioNombre.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('enviarreconfirmado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaCambioNombre').DataTable().ajax.reload();
+              }
+            });
+          })
+
+          $('#tablaBloqueoClientes tbody').on('click', 'button.btnGuardado', function () {
+            var data = tblBloqueoClientes.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('alertas.guardado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaBloqueoClientes').DataTable().ajax.reload();
+              }
+
+
+            });
+
+          })
+          $('#tablaBloqueoClientes tbody').on('click', 'button.btnConfirmado', function () {
+            var data = tblBloqueoClientes.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('alertas.confirmado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaBloqueoClientes').DataTable().ajax.reload();
+              }
+
+
+            });
+
+          })
+          $('#tablaBloqueoClientes tbody').on('click', 'button.btnReconfirmado', function () {
+            var data = tblBloqueoClientes.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('enviarreconfirmado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaBloqueoClientes').DataTable().ajax.reload();
+              }
+            });
+          })
+
+          $('#tablaCambioNumero tbody').on('click', 'button.btnGuardado', function () {
+            var data = tblCambioNumero.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('alertas.guardado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaCambioNumero').DataTable().ajax.reload();
+              }
+
+
+            });
+
+          })
+          $('#tablaCambioNumero tbody').on('click', 'button.btnConfirmado', function () {
+            var data = tblCambioNumero.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('alertas.confirmado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaCambioNumero').DataTable().ajax.reload();
+              }
+
+
+            });
+
+          })
+          $('#tablaCambioNumero tbody').on('click', 'button.btnReconfirmado', function () {
+            var data = tblCambioNumero.row($(this).parents('tr')).data();
+            console.log('datos table',data);
+            var idllamada=data.id;
+            var formLlamadas = new FormData();
+            formLlamadas.append("detalle_contactos_id", idllamada);
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('enviarreconfirmado') }}",
+              data: formLlamadas,
+              success: function (data) {
+                console.log(data);
+                $('#tablaCambioNumero').DataTable().ajax.reload();
+              }
+            });
+          })
 
           window.ocultar_div_modal_correccion_pedidos = function () {
             console.log("ocultar div")
