@@ -177,6 +177,59 @@ class NotificationsController extends Controller
         }
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
 
+      $contadorContactosRegistrados = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')
+        ->whereIn('guardado', [0, 1])
+      ->whereIn('confirmado', [0, 1])
+      ->where('reconfirmado', 0);
+
+      if (Auth::user()->rol == "Llamadas") {
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.llamada', Auth::user()->id)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+        $contadorContactosRegistrados = $contadorContactosRegistrados->WhereIn("u.identificador", $usersasesores);
+
+
+      } else if (Auth::user()->rol == "Jefe de llamadas") {
+        /*$usersasesores = User::where('users.rol', 'Asesor')
+            ->where('users.estado', '1')
+            ->where('users.llamada', Auth::user()->id)
+            ->select(
+                DB::raw("users.identificador as identificador")
+            )
+            ->pluck('users.identificador');
+
+        $contadorContactosRegistrados = $contadorContactosRegistrados->WhereIn("u.identificador", $usersasesores);*/
+      } elseif (Auth::user()->rol == "Asesor") {
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.identificador', Auth::user()->identificador)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+        $contadorContactosRegistrados = $contadorContactosRegistrados->WhereIn("u.identificador", $usersasesores);
+
+      } else if (Auth::user()->rol == "Encargado") {
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.supervisor', Auth::user()->id)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+
+        $contadorContactosRegistrados = $contadorContactosRegistrados->WhereIn("u.identificador", $usersasesores);
+      } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+        //$asesorB=User::activo()->where('identificador','=','B')->pluck('id')
+        $contadorContactosRegistrados = $contadorContactosRegistrados->Where("u.identificador", '=', 'B');
+      }
+
+      $contadorContactosRegistrados=$contadorContactosRegistrados->count();
 
         $alertas=Alerta::noFinalize()
             ->noReadTime(now()->subMinutes(10))
@@ -200,7 +253,7 @@ class NotificationsController extends Controller
             'contador_en_motorizados_confirmar_count' => 0,
             'contador_sobres_devueltos' => 0,
             'contador_encargado_tienda_agente' => 0,
-            'contador_contactos_registrados' => 0,
+            'contador_contactos_registrados' => $contadorContactosRegistrados,
             'authorization_courier' => \Blade::renderComponent(new AutorizarRutaMotorizado()),
             'alertas' => $alertas,
         ];
