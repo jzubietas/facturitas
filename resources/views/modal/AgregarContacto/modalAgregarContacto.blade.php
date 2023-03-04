@@ -31,11 +31,11 @@
                   @include('modal.AgregarContacto.partials.agregarcontacto_cno')
                 </div>
 
-                <div id="modal-correccionpedido-b-container" class="modal-agregarcontacto-b-container">
+                <div id="modal-agregarcontacto-b-container" class="modal-agregarcontacto-b-container">
                   @include('modal.AgregarContacto.partials.agregarcontacto_b')
                 </div>
 
-                <div id="modal-correccionpedido-cnu-container" class="modal-agregarcontacto-cnu-container">
+                <div id="modal-agregarcontacto-cnu-container" class="modal-agregarcontacto-cnu-container">
                   @include('modal.AgregarContacto.partials.agregarcontacto_cnu')
                 </div>
 

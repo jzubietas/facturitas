@@ -14,20 +14,6 @@
           </select>
         </li>
 
-
-        <li class="list-group-item text-wrap">
-          <h6 class="alert alert-warning text-center font-weight-bold">
-            <b>Elegir cliente <span class="text-danger">(Obligatorio):</span></b>
-          </h6>
-
-          <select name="cliente_agregarcontacto_n" class="border form-control selectpicker border-secondary bg-dark" id="cliente_agregarcontacto_n"
-                  data-show-subtext="true" data-live-search="true"
-                  data-live-search-placeholder="Seleccione cliente" title="Ningun cliente seleccionado">
-
-          </select>
-
-        </li>
-
         <li class="list-group-item text-wrap">
             <h6 class="alert alert-warning text-center font-weight-bold">
                 <b>Numero de contacto <span class="text-danger">(Obligatorio):</span></b>

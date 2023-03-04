@@ -24,14 +24,9 @@
 
         <li class="list-group-item text-wrap">
           <h6 class="alert alert-warning text-center font-weight-bold">
-            <b>Numero de contacto <span class="text-danger">(Obligatorio):</span></b>
+            Captura
+            <span class="text-danger">(Obligatorio)</span>
           </h6>
-          <input name="nro_contacto_agregarcontacto_b" id="nro_contacto_agregarcontacto_b" class="form-control w-100"
-                 style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar nuevo nombre">
-        </li>
-
-        <li class="list-group-item text-wrap">
-          <h6 class="alert alert-warning text-center font-weight-bold">Captura</h6>
           <div id="attachmentfiles" class="border border-dark rounded d-flex justify-content-center align-items-center mb-4 position-relative"
                style="height: 400px">
             <i class="fa fa-upload"></i>
