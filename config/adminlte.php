@@ -280,7 +280,7 @@ return [
             'active' => ['pagos perdonar courier'],
         ],
         [
-            'text' => 'Config. Administrador',
+            'text' => 'Configuracion',
             'route' => 'settings.admin-settings',
             'can' => 'admin.configuration',
             'icon' => 'fas fa-cogs',
@@ -756,8 +756,8 @@ return [
         ],
 
         [
-            'text' => 'Accesos y permisos',
-            'icon' => 'fas fa-cogs',
+            'text' => 'Usuarios',
+            'icon' => 'fas fa-user',
             'can' => 'configuracion.modulo',
             'submenu' => [
                 [
