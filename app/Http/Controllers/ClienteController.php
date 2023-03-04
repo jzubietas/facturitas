@@ -271,7 +271,7 @@ class ClienteController extends Controller
     public function clientestablasituacion(Request $request)
     {
         $idconsulta = $request->cliente;
-        $data = SituacionClientes::where('id', $idconsulta)
+        $data = SituacionClientes::where('cliente_id', $idconsulta)
             ->select(
             [
                 'id',
