@@ -258,13 +258,8 @@
               .selectpicker("refresh")
           })
 
-
-          $('#modal-llamadas-1').on('show.bs.modal', function (event) {
+          function  fnListaTablaLlamadas(vtipo,vrbnvalue){
             tblListadoLlamadas.destroy();
-            tblCambioNombre.destroy();
-            tblBloqueoClientes.destroy();
-            tblCambioNumero.destroy();
-            ocultar_div_modal_correccion_pedidos();
             tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
               responsive: true,
               "bPaginate": true,
@@ -272,7 +267,7 @@
               "bInfo": false,
               'ajax': {
                 url: "{{ route('listtablecontactos') }}",
-                data:{tipo:1,rbnvalue:1},
+                data:{tipo:vtipo,rbnvalue:vrbnvalue},
                 "type": "get",
               },
               columns: [
@@ -311,6 +306,9 @@
                 }
               }
             });
+          }
+          function  fnListaCambioNombre(vtipo,vrbnvalue){
+            tblCambioNombre.destroy();
             tblCambioNombre = $('#tablaCambioNombre').DataTable({
               responsive: true,
               "bPaginate": true,
@@ -318,7 +316,7 @@
               "bInfo": false,
               'ajax': {
                 url: "{{ route('listtablecontactos') }}",
-                data:{tipo:2,rbnvalue:1},
+                data:{tipo:vtipo,rbnvalue:vrbnvalue},
                 "type": "get",
               },
               columns: [
@@ -357,6 +355,9 @@
                 }
               }
             });
+          }
+          function  fnListaBloqueoClientes(vtipo,vrbnvalue){
+            tblBloqueoClientes.destroy();
             tblBloqueoClientes = $('#tablaBloqueoClientes').DataTable({
               responsive: true,
               "bPaginate": true,
@@ -364,7 +365,7 @@
               "bInfo": false,
               'ajax': {
                 url: "{{ route('listtablecontactos') }}",
-                data:{tipo:3,rbnvalue:1},
+                data:{tipo:vtipo,rbnvalue:vrbnvalue},
                 "type": "get",
               },
               columns: [
@@ -403,6 +404,9 @@
                 }
               }
             });
+          }
+          function  fnListaCambioNumero(vtipo,vrbnvalue){
+            tblCambioNumero.destroy();
             tblCambioNumero = $('#tablaCambioNumero').DataTable({
               responsive: true,
               "bPaginate": true,
@@ -410,7 +414,7 @@
               "bInfo": false,
               'ajax': {
                 url: "{{ route('listtablecontactos') }}",
-                data:{tipo:4,rbnvalue:1},
+                data:{tipo:vtipo,rbnvalue:vrbnvalue},
                 "type": "get",
               },
               columns: [
@@ -449,7 +453,14 @@
                 }
               }
             });
+          }
 
+          $('#modal-llamadas-1').on('show.bs.modal', function (event) {
+            fnListaTablaLlamadas(1,1);
+            fnListaCambioNombre(2,1);
+            fnListaBloqueoClientes(3,1);
+            fnListaCambioNumero(4,1);
+            ocultar_div_modal_correccion_pedidos();
           })
 
           $('#tablaListadoLlamadas tbody').on('click', 'button.btnGuardado', function () {
@@ -525,61 +536,27 @@
               }
 
             })
-          $("input[name='rbnTipo']",$('#radioBtnDiv')).change(
-            function(e)
-            {
-              var valorRadioButton= $(this).val();
-              console.log('VALOR RADIO',$(this).val() );
-              //Reload datatable
-              tblListadoLlamadas.destroy();
-              tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
-                responsive: true,
-                "bPaginate": true,
-                "bFilter": true,
-                "bInfo": false,
-                'ajax': {
-                  url: "{{ route('listtablecontactos') }}",
-                  data:{tipo:1,rbnvalue:valorRadioButton},
-                  "type": "get",
-                },
-                columns: [
-                  {data: 'tipo_insert', name: 'tipo_insert'},
-                  {data: 'codigo_asesor', name: 'codigo_asesor'},
-                  {data: 'celular', name: 'celular',},
-                  {data: 'nombres_cliente', name: 'nombre_cliente',},
-                  {data: 'nombre_contacto', name: 'nombre_contacto',},
-                  {data: 'action', name: 'action',},
-                ],
-                "createdRow": function (row, data, dataIndex) {
-                  if(data["guardado"]==1)
-                  {
-                    $(row).css('background', '#F6F7C1').css('text-align', 'center').css('font-weight', 'bold');
-                  }
-                },
-                order: false,
-                language: {
-                  "decimal": "",
-                  "emptyTable": "No hay información",
-                  "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-                  "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                  "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                  "infoPostFix": "",
-                  "thousands": ",",
-                  "lengthMenu": "Mostrar _MENU_ Entradas",
-                  "loadingRecords": "Cargando...",
-                  "processing": "Procesando...",
-                  "search": "Buscar:",
-                  "zeroRecords": "Sin resultados encontrados",
-                  "paginate": {
-                    "first": "Primero",
-                    "last": "Ultimo",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                  }
-                }
-              });
-            });
-
+          $("input[name='rbnTipo']",$('#radioBtnDiv')).change(function(e)
+          {
+            var valorRadioButton= $(this).val();
+            fnListaTablaLlamadas(1,valorRadioButton);
+          });
+          $("input[name='rbnTipo2']",$('#radioBtnDiv2')).change(function(e)
+          {
+            var valorRadioButton2= $(this).val();
+            fnListaCambioNombre(2,valorRadioButton2);
+          });
+          $("input[name='rbnTipo3']",$('#radioBtnDiv3')).change(function(e)
+          {
+            var valorRadioButton3= $(this).val();
+            fnListaBloqueoClientes(3,valorRadioButton3);
+            fnListaCambioNumero(4,1);
+          });
+          $("input[name='rbnTipo4']",$('#radioBtnDiv4')).change(function(e)
+          {
+            var valorRadioButton4= $(this).val();
+            fnListaCambioNumero(4,valorRadioButton4);
+          });
             $(document).on("change", "#opciones_modal1", function () {
                 let value = $(this).val();
                 ocultar_div_modal1();
