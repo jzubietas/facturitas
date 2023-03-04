@@ -80,7 +80,7 @@ class OlvaController extends Controller
     public function table()
     {
         $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
-            ->join('users', 'users.id', 'clientes.user_id')
+            ->join('users', 'users.id', 'direccion_grupos.user_id')
             ->activo()
             ->whereIn('direccion_grupos.condicion_envio_code', [
                 Pedido::EN_TIENDA_AGENTE_OLVA_INT,
