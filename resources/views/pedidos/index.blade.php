@@ -1,4 +1,4 @@
-{{--pedidos--}}
+{{--/pedidos--}}
 @extends('adminlte::page')
 
 @section('title', 'Pedidos - Bandeja de pedidos')
@@ -103,7 +103,7 @@
       <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
         <thead>
         <tr>
-          <th class="align-middle"></th>
+          {{--<th class="align-middle"></th>--}}
           <th class="align-middle" scope="col">Código</th>
           <th class="align-middle" scope="col">Cliente</th>
           <th class="align-middle" scope="col">Razón social</th>
@@ -114,7 +114,7 @@
           <th class="align-middle" scope="col">F. Actualizacion</th>
           <th class="align-middle" scope="col">Total (S/)</th>
           <th class="align-middle" scope="col">Est. pago</th>
-          <th class="align-middle" scope="col">Con. pago</th>
+          <th class="align-middle" scope="col">Est. pago</th>
           <th class="align-middle" scope="col">Est. Sobre</th>
           <th class="align-middle" scope="col">Dif.</th>
           <th class="align-middle" scope="col">Acciones</th>
@@ -224,14 +224,17 @@
       .btn-fontsize {
         font-size: 15px;
       }
-
+      td:nth-child(11) span {
+        white-space: break-spaces !important;
+        padding: 8px !important;
+      }
       .etiquetas_asignacion {
         background-color: #b0deb3 !important;
         font-size: 12px;
         padding: 4px;
         font-weight: 700;
         line-height: 1;
-        white-space: nowrap;
+        white-space: break-spaces;
         transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         color: #4a604b !important;
         margin-left: 2px;
@@ -285,6 +288,15 @@
       #tablaPrincipal {
         font-size: 14px !important;
       }
+      .etiquetas_asignacion {
+        font-size: 9px;
+        padding: 8px;
+        white-space: break-spaces !important;
+      }
+      td:nth-child(11) span {
+        padding: 8px !important;
+      }
+
     }
 
     @media screen and (max-width: 1440px) {
@@ -1375,13 +1387,13 @@ ${data.foto3 ? `
         initComplete: function (settings, json) {
         },
         columns: [
-          {
+          /*{
             class: 'details-control',
             orderable: false,
             data: null,
             defaultContent: '',
             "searchable": false
-          },
+          },*/
           // CODIGO
           {data: 'codigos', name: 'codigos',},
           {
@@ -1417,7 +1429,6 @@ ${data.foto3 ? `
           {
             data: 'condicion_pa',
             name: 'condicion_pa',
-            'visible': false,
             render: function (data, type, row, meta) {
 
               if (row.condiciones == 'ANULADO' || row.condicion_code == 4 || row.estado == 0) {
@@ -1443,7 +1454,7 @@ ${data.foto3 ? `
               }
 
             }
-          },//estado de pago
+          },
           {
             data: 'condiciones_aprobado',
             name: 'condiciones_aprobado',
