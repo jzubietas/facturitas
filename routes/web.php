@@ -189,6 +189,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('correccionesJson', [OperacionController::class, 'correccionesJson'])->name('correccionesJson');
 
     Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
+    Route::post('clientecomboagregarcontacto', [UserController::class, 'ClienteAgregarContacto'])->name('clientecomboagregarcontacto');
     Route::post('asesorcombomodal', [UserController::class, 'AsesorcomboModal'])->name('asesorcombomodal');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
     Route::post('asesorcombopago', [UserController::class, 'Asesorcombopago'])->name('asesorcombopago');
