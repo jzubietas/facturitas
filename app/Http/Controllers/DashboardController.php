@@ -1015,7 +1015,7 @@ class DashboardController extends Controller
                                       <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                      <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /'. $data["meta"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_quincena"]-$data["total_pedido"]) > 0) ? ($data["meta_quincena"]-$data["total_pedido"]) : '0')  . '</p></span>
+                                      <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /'. $data["meta_quincena"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_quincena"]-$data["total_pedido"]) > 0) ? ($data["meta_quincena"]-$data["total_pedido"]) : '0')  . '</p></span>
                                   </div>
                               </div>
                             </div>
