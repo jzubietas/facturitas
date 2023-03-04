@@ -255,7 +255,7 @@
                     serverSide: true,
                     searching: true,
                     "order": [
-                        [0, "desc"]
+                        [0, "asc"]
                     ],
                     ajax: {
                         url: "{{ route('clientestablasituacion') }}",
