@@ -47,8 +47,6 @@ Route::middleware(['guest'])->get('/', function () {
 Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
     Route::get('alertas/listtablecontactos', [AlertaController::class,'listtablecontactos'])->name('alertas.listtablecontactos');
     Route::post('alertas/confirmar', [AlertaController::class,'confirmar'])->name('alertas.confirmar');
-    Route::post('alertas/guardado', [AlertaController::class,'guardado'])->name('alertas.guardado');
-    Route::post('alertas/confirmado', [AlertaController::class,'confirmado'])->name('alertas.confirmado');
     Route::resource('alertas', AlertaController::class);
     Route::any('alertas/cargarstore',[AlertaController::class,'cargarstore'])->name('cargarstore');
 
@@ -76,6 +74,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
   Route::any('dashboard.viewAnalisis', [PdfController::class, 'Analisisgrafico'])->name('dashboard.viewAnalisis');
   Route::any('dashboard.graficoSituacionClientes', [PdfController::class, 'SituacionClientes'])->name('dashboard.graficoSituacionClientes');
+  Route::any('dashboard.graficoCobranzasGeneral', [PdfController::class, 'CobranzasGeneral'])->name('dashboard.graficoCobranzasGeneral');
 
 
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
@@ -128,6 +127,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidos.recoger.clientes.pedidos.historial', [ClienteController::class, 'historialrecoger'])->name('pedidos.recoger.clientes.pedidos.historial');
     Route::get('clientestablasituacion', [ClienteController::class, 'clientestablasituacion'])->name('clientestablasituacion');
     Route::get('listtablecontactos', [ClienteController::class,'listtablecontactos'])->name('listtablecontactos');
+    Route::post('alertas/guardado', [ClienteController::class,'guardado'])->name('alertas.guardado');
+    Route::post('alertas/confirmado', [ClienteController::class,'confirmado'])->name('alertas.confirmado');
+    Route::post('enviarconfirmado', [ClienteController::class,'reconfirmado'])->name('enviarreconfirmado');
+    Route::post('agregarcontactonuevo', [ClienteController::class,'agregarcontactonuevo'])->name('agregarcontactonuevo');
 
     Route::get('pedidos.recojo', [PedidoController::class, 'pedidosrecojo'])->name('pedidos.recojo');
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside

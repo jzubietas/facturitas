@@ -509,17 +509,32 @@
 
       setInterval(myTimer, 500000);
 
-      function myTimer() {
+        window.cargReporteMetasCobranzasGeneral = function () {
+          var fd=new FormData();
+          $.ajax({
+            data: fd,
+            processData: false,
+            contentType: false,
+            method: 'POST',
+            url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
+            success: function (resultado){
+              $('#metas_cobranzas_general').html(resultado);
+            }
+          })
+        }
+
         cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
         cargaNueva(4);
         cargaNueva(5);
+
       }
+
+        cargReporteAnalisis();
 
       $('a[href$="#myModal"]').on("click", function () {
         $('#myModal').modal();
-      });
 
       var elem = document.querySelector("#contenedor-fullscreen");
       window.openFullscreen = function () {

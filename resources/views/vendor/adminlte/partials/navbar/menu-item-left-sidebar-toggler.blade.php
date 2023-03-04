@@ -24,7 +24,7 @@
     </li>
 @endif
 
-@if(user_rol(\App\Models\User::ROL_ASESOR)||user_rol(\App\Models\User::ROL_ADMIN))
+@if(user_rol(\App\Models\User::ROL_ASESOR)||user_rol(\App\Models\User::ROL_ADMIN)||user_rol(\App\Models\User::ROL_ENCARGADO))
   <li class="nav-item ml-2">
 
     <a class="nav-link btn btn-info btn-sm" href="#" data-target="#modal-agregar-contacto" data-toggle="modal">

@@ -12,9 +12,9 @@
 
             <div class="btn-group" role="group" aria-label="Basic example">
               <button id="btnListNuevoCliente" type="button" class="btn rounded btn-info ml-2"> <i class="fa fa-user"></i> Nuevo Cliente</button>
-              <button id="btnListCambioNombre" type="button" class="btn rounded btn-secondary  ml-2"><i class="fa fa-user-lock"></i> Cambio Nombre</button>
-              <button id="btnListBloqueo" type="button" class="btn rounded btn-danger   ml-2"><i class="fa fa-lock"></i>  Bloqueo</button>
-              <button id="btnListCambioNumero" type="button" class="btn rounded btn-warning  ml-2"><i class="fa fa-phone"></i>  Cambio Numero</button>
+              <button id="btnListCambioNombre" type="button" class="btn rounded btn-secondary  ml-2" ><i class="fa fa-user-lock"></i> Cambio Nombre</button>
+              <button id="btnListBloqueo" type="button" class="btn rounded btn-danger   ml-2" ><i class="fa fa-lock"></i>  Bloqueo</button>
+              <button id="btnListCambioNumero" type="button" class="btn rounded btn-warning  ml-2" ><i class="fa fa-phone"></i>  Cambio Numero</button>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
               </div>
             </div>
             <table id="tablaListadoLlamadas" class="table table-striped w-100" style="text-align: center">
-              <thead></h4>
+              <thead class="bg-gradient-info">
               <tr>
                 <th scope="col">Tipo</th>
                 <th scope="col">Asesor</th>
@@ -71,7 +71,7 @@
           </div>
           <div id="op-1-row" class="op-1-row"><!---->
             <table id="tablaCambioNombre" class="table table-striped w-100" style="text-align: center">
-              <thead></h4>
+              <thead class="bg-gradient-secondary"></h4>
               <tr>
                 <th scope="col">Tipo</th>
                 <th scope="col">Asesor</th>
@@ -104,7 +104,7 @@
           </div>
           <div id="op-1-row" class="op-1-row"><!---->
             <table id="tablaBloqueoClientes" class="table table-striped w-100" style="text-align: center">
-              <thead></h4>
+              <thead class="bg-gradient-danger"></h4>
               <tr>
                 <th scope="col">Tipo</th>
                 <th scope="col">Asesor</th>
@@ -137,7 +137,7 @@
           </div>
           <div id="op-1-row" class="op-1-row"><!---->
             <table id="tablaCambioNumero" class="table table-striped w-100" style="text-align: center">
-              <thead></h4>
+              <thead class="bg-gradient-yellow"></h4>
               <tr>
                 <th scope="col">Tipo</th>
                 <th scope="col">Asesor</th>

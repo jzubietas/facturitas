@@ -174,21 +174,13 @@
                 }
             });
 
-            tabla_historial_cliente = $('#tabla_pedidos').DataTable({
+            tabla_historial_cliente = $('#tablaPrincipalHistorialSituacion').DataTable({
                 "bPaginate": false,
                 "bFilter": false,
                 "bInfo": false,
                 columns:
                     [
                         {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
-                        , {data: null}
                         , {data: null}
                         , {data: null}
                         , {data: null}
@@ -253,22 +245,22 @@
             $('#modal-historial-situacion-cliente').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idcliente = button.data('cliente')
+                console.log("cliente "+idcliente);
 
 
                 $('#tablaPrincipalHistorialSituacion').DataTable().clear().destroy();
 
-                $('#tablaPrincipalHistorialSituacion').DataTable({
+              tabla_historial_cliente=$('#tablaPrincipalHistorialSituacion').DataTable({
                     processing: true,
                     serverSide: true,
                     searching: true,
                     "order": [
-                        [0, "desc"]
+                        [0, "asc"]
                     ],
                     ajax: {
                         url: "{{ route('clientestablasituacion') }}",
                         data: function (d) {
                             d.cliente = idcliente;
-
                         },
                     },
                     "createdRow": function (row, data, dataIndex) {
@@ -279,158 +271,28 @@
                     },
                     columns: [
                         {
-                            data: 'id',
-                            name: 'id',
-                            sWidth: '10%'
+                            data: 'periodo',
+                            name: 'periodo',
+                            sWidth: '20%'
                         },
                         {
-                            data: 'a_2021_11',
-                            name: 'a_2021_11',
+                            data: 'cantidad_pedidos',
+                            name: 'cantidad_pedidos',
                             sWidth: '20%',
                         },
                         {
-                            data: 's_2021_11',
-                            name: 's_2021_11',
+                            data: 'activos',
+                            name: 'activos',
                             sWidth: '20%',
                         },
                         {
-                            data: 'a_2021_12',
-                            name: 'a_2021_12',
+                            data: 'anulados',
+                            name: 'anulados',
                             sWidth: '20%',
                         },
                         {
-                            data: 's_2021_12',
-                            name: 's_2021_12',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_01',
-                            name: 'a_2022_01',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_01',
-                            name: 's_2022_01',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_02',
-                            name: 'a_2022_02',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_02',
-                            name: 's_2022_02',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_03',
-                            name: 'a_2022_03',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_03',
-                            name: 's_2022_03',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_04',
-                            name: 'a_2022_04',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_04',
-                            name: 's_2022_04',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_05',
-                            name: 'a_2022_05',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_05',
-                            name: 's_2022_05',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_06',
-                            name: 'a_2022_06',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_06',
-                            name: 's_2022_06',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_07',
-                            name: 'a_2022_07',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_07',
-                            name: 's_2022_07',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_08',
-                            name: 'a_2022_08',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_08',
-                            name: 's_2022_08',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_09',
-                            name: 'a_2022_09',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_09',
-                            name: 's_2022_09',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_10',
-                            name: 'a_2022_10',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_10',
-                            name: 's_2022_10',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_11',
-                            name: 'a_2022_11',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_11',
-                            name: 's_2022_11',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2022_12',
-                            name: 'a_2022_12',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2022_12',
-                            name: 's_2022_12',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 'a_2023_01',
-                            name: 'a_2023_01',
-                            sWidth: '20%',
-                        },
-                        {
-                            data: 's_2023_01',
-                            name: 's_2023_01',
+                            data: 'situacion',
+                            name: 'situacion',
                             sWidth: '20%',
                         },
                     ],

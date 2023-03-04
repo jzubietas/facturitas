@@ -12,6 +12,7 @@ use App\Models\DireccionEnvio;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
+use App\Models\SituacionClientes;
 use App\Models\User;
 use App\Models\ListadoResultado;
 use Carbon\Carbon;
@@ -270,43 +271,30 @@ class ClienteController extends Controller
     public function clientestablasituacion(Request $request)
     {
         $idconsulta = $request->cliente;
-        $idconsulta;
-        $data = ListadoResultado::where('id', $idconsulta)
-            ->select('id',
-                'a_2021_11',
-                'a_2021_12',
-                'a_2022_01',
-                'a_2022_02',
-                'a_2022_03',
-                'a_2022_04',
-                'a_2022_05',
-                'a_2022_06',
-                'a_2022_07',
-                'a_2022_08',
-                'a_2022_09',
-                'a_2022_10',
-                'a_2022_11',
-                'a_2022_12',
-                'a_2023_01',
-                's_2021_11',
-                's_2021_12',
-                's_2022_01',
-                's_2022_02',
-                's_2022_03',
-                's_2022_04',
-                's_2022_05',
-                's_2022_06',
-                's_2022_07',
-                's_2022_08',
-                's_2022_09',
-                's_2022_10',
-                's_2022_11',
-                's_2022_12',
-                's_2023_01',
+        $data = SituacionClientes::where('cliente_id', $idconsulta)
+            ->select(
+            [
+                'id',
+                'cliente_id',
+                'situacion',
+                'cantidad_pedidos',
+                'anulados',
+                'activos',
+                'periodo',
+            ]
             );
 
         return datatables()->query(DB::table($data))
+        ->addIndexColumn()
+            /*->editColumn('estado', function ($cliente) {
+                return '<span class="badge badge-success">aa</span>';
+            })*/
+            /*addColumn('action', function ($row) {
+                return '<button class="btn btn-success elegir">Elegir</button>';
+            })*/
+            //->rawColumns(['action', 'estado'])
             ->toJson();
+
 
     }
 
@@ -2100,14 +2088,14 @@ class ClienteController extends Controller
         }
         $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton" style="display: flex; grid-gap: 2px;">';
 
-        if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
+        if (in_array(auth()->user()->rol, [User::ROL_ADMIN])) {
           $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
           $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnConfirmado" '.$deshabilitar_confirmado.'><i class="fa fa-check danger mr-8"></i></button>';
-          $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnConfirmado" '.$deshabilitar_reconfirmado.'><i class="fa fa-check-double danger mr-8"></i></button>';
-        }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
+          $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnReconfirmado" '.$deshabilitar_reconfirmado.'><i class="fa fa-check-double danger mr-8"></i></button>';
+        }else if (in_array(auth()->user()->rol, [User::ROL_JEFE_LLAMADAS,User::ROL_LLAMADAS])) {
           $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
-        }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS])) {
-          $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-success dropdown-item text-break text-wrap btnGuardado" '.$deshabilitar_guardado.'><i class="fa fa-save text-success mr-8"></i></button>';
+        }else if (in_array(auth()->user()->rol, [User::ROL_ENCARGADO,User::ROL_ASESOR])) {
+          $btn[] = '<button style="font-size:18px" class="m-0 p-2 btn btn-sm btn-danger dropdown-item text-break text-wrap btnConfirmado" '.$deshabilitar_confirmado.'><i class="fa fa-check danger mr-8"></i></button>';
         }
 
 
@@ -2117,5 +2105,52 @@ class ClienteController extends Controller
       ->rawColumns(['action'])
       ->make(true);
     //return datatables($detallecontactos)->toJson();
+  }
+  public function agregarcontactonuevo(Request $request)
+  {
+    /*return $request->all();*/
+    $cliente=Cliente::where('id',$request->cliente_id)->first();
+    $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+    $asesor=User::where('id',$user_id)->first();
+
+    $detallecontactos=DetalleContactos::create([
+      'codigo_asesor' => $asesor->identificador,
+      'nombre_asesor' => $asesor->name,
+      'celular' => $cliente->celular."-". $cliente->icelular,
+      'codigo_cliente' => $cliente->id,
+      'nombres_cliente' => $cliente->nombre,
+      'nombre_contacto' => $request->contacto_nombre,
+      'codigo_registra' => auth()->user()->id,
+    ]);
+    return $detallecontactos;
+  }
+  public function guardado(Request $request)
+  {
+    //return $request->all();
+    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
+      'guardado' => true,
+      'confirmado' => false,
+    ]);
+    return $detallecontactos;
+  }
+
+  public function confirmado(Request $request)
+  {
+    //return $request->all();
+    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
+      'guardado' => true,
+      'confirmado' => true,
+    ]);
+    return $detallecontactos;
+  }
+  public function reconfirmado(Request $request)
+  {
+    //return $request->all();
+    $detallecontactos=DetalleContactos::where('id',$request->detalle_contactos_id)->update([
+      'guardado' => true,
+      'confirmado' => true,
+      'reconfirmado' => true,
+    ]);
+    return $detallecontactos;
   }
 }
