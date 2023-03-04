@@ -262,11 +262,11 @@
           $(document).on("submit", "form.agregarcontacto", function (e) {
             e.preventDefault();
             var form = null;
-            var formData = null;
-            console.log(e.target.id)
+            var formData = new FormData();
             switch (e.target.id)
             {
               case 'form-agregarcontacto-b':
+                console.log('MAYIMBE');
                 let cant_cliente_agregarcontacto_b = $("select[name='cliente_agregarcontacto-b']").val().length;
                 dataForm_agregarcontacto_b.cliente_agregarcontacto_b = $("select[name='cliente_agregarcontacto-b']").val()
 
@@ -276,20 +276,20 @@
                 let cant_nro_contacto_agregarcontacto_b = $("input[name='nro_contacto_agregarcontacto_b']").val().length;
                 dataForm_agregarcontacto_b.nro_contacto_agregarcontacto_b = $("input[name='nro_contacto_agregarcontacto_b']").val();
                 if(cant_cliente_agregarcontacto_b==0)
-                {
+                {console.log('no debiste');
                   Swal.fire('Error', 'No se puede seleccionar un cliente vacio', 'warning').then(function () {
                     $("select[name='cliente_agregarcontacto-b']").focus()
                   });
                   return false;
                 }
-                else if (cant_sustento_agregarcontacto_b == 0) {
+                else if (cant_sustento_agregarcontacto_b == 0) {console.log('amar mas el dinero');
                   Swal.fire('Error', 'No se puede ingresar un sustento vacio', 'warning').then(function () {
                     console.log("before")
                     $("textarea[name='sustento-pc']").focus()
                   });
                   return false;
                 }
-                else if (cant_nro_contacto_agregarcontacto_b == 0) {
+                else if (cant_nro_contacto_agregarcontacto_b == 0) { console.log('Se que ha algo en ti');
                   Swal.fire('Error', 'No se puede ingresar un contacto vacio', 'warning').then(function () {
                     console.log("before")
                     $("input[name='nro_contacto_agregarcontacto_b']").focus()
@@ -297,7 +297,25 @@
                   return false;
                 }
                 break;
-            }
+              case 'form-agregarcontacto-n':
+                console.log('casi');
+                var cliente_id= $('#cbxClienteAgregaNuevo').val();
+                var contacto_nombre= $('#txtNombreContactoNuevo').val();
+                $.ajax({
+                  url: "{{ route('agregarcontactonuevo') }}",
+                  method: 'POST',
+                  data:{cliente_id:cliente_id,contacto_nombre:contacto_nombre},
+                  success: function (data) {
+                    console.log('data Controller',data);
+                    Swal.fire('Notificacion', 'Se guardo el contacto correctamente.', 'success');
+                    $('#cbxClienteAgregaNuevo').val('-1');
+                    $('#txtNombreContactoNuevo').val('');
+                    $('#cbxClienteAgregaNuevo').html(data.html).selectpicker("refresh");
+                    /*$("#modal-agregarcontacto-n-container").show();*/
+                  }
+                });
+                break;
+            } console.log('Finaloiza switch')
 
           });
 
@@ -313,7 +331,7 @@
                     method: 'POST',
                     success: function (data) {
                       console.log(data)
-                      $('#cliente_agregarcontacto_n').html(data.html).selectpicker("refresh");
+                      $('#cbxClienteAgregaNuevo').html(data.html).selectpicker("refresh");
                       $("#modal-agregarcontacto-n-container").show();
                     }
                   });

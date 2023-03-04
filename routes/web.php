@@ -129,6 +129,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('alertas/guardado', [ClienteController::class,'guardado'])->name('alertas.guardado');
     Route::post('alertas/confirmado', [ClienteController::class,'confirmado'])->name('alertas.confirmado');
     Route::post('enviarconfirmado', [ClienteController::class,'reconfirmado'])->name('enviarreconfirmado');
+    Route::post('agregarcontactonuevo', [ClienteController::class,'agregarcontactonuevo'])->name('agregarcontactonuevo');
 
     Route::get('pedidos.recojo', [PedidoController::class, 'pedidosrecojo'])->name('pedidos.recojo');
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside

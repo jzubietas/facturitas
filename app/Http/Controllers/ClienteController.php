@@ -2106,6 +2106,24 @@ class ClienteController extends Controller
       ->make(true);
     //return datatables($detallecontactos)->toJson();
   }
+  public function agregarcontactonuevo(Request $request)
+  {
+    /*return $request->all();*/
+    $cliente=Cliente::where('id',$request->cliente_id)->first();
+    $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+    $asesor=User::where('id',$user_id)->first();
+
+    $detallecontactos=DetalleContactos::create([
+      'codigo_asesor' => $asesor->identificador,
+      'nombre_asesor' => $asesor->name,
+      'celular' => $cliente->celular."-". $cliente->icelular,
+      'codigo_cliente' => $cliente->id,
+      'nombres_cliente' => $cliente->nombre,
+      'nombre_contacto' => $request->contacto_nombre,
+      'codigo_registra' => auth()->user()->id,
+    ]);
+    return $detallecontactos;
+  }
   public function guardado(Request $request)
   {
     //return $request->all();

@@ -12,9 +12,9 @@
 
             <div class="btn-group" role="group" aria-label="Basic example">
               <button id="btnListNuevoCliente" type="button" class="btn rounded btn-info ml-2"> <i class="fa fa-user"></i> Nuevo Cliente</button>
-              <button id="btnListCambioNombre" type="button" class="btn rounded btn-secondary  ml-2"><i class="fa fa-user-lock"></i> Cambio Nombre</button>
-              <button id="btnListBloqueo" type="button" class="btn rounded btn-danger   ml-2"><i class="fa fa-lock"></i>  Bloqueo</button>
-              <button id="btnListCambioNumero" type="button" class="btn rounded btn-warning  ml-2"><i class="fa fa-phone"></i>  Cambio Numero</button>
+              <button id="btnListCambioNombre" type="button" class="btn rounded btn-secondary  ml-2" ><i class="fa fa-user-lock"></i> Cambio Nombre</button>
+              <button id="btnListBloqueo" type="button" class="btn rounded btn-danger   ml-2" ><i class="fa fa-lock"></i>  Bloqueo</button>
+              <button id="btnListCambioNumero" type="button" class="btn rounded btn-warning  ml-2" ><i class="fa fa-phone"></i>  Cambio Numero</button>
             </div>
           </div>
         </div>

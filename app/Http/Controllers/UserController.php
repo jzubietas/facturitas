@@ -443,7 +443,7 @@ class UserController extends Controller
     }
 
     $clientes = $clientes->orderBy('id', 'ASC')->get();
-    $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+    $html = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
     foreach ($clientes as $cliente) {
       switch (Auth::user()->rol) {
         case User::ROL_ASESOR:
