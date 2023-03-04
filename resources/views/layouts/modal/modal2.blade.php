@@ -7,8 +7,8 @@
         <button class="float-right btn btn-danger" data-dismiss="modal"><i class="fas fa-times" aria-hidden="true" ></i></button>
       </div>
       <div class="modal-body">
-        <div class="form-row">
-          <div class="form-group col-lg-12">
+        <div class="form-row ">
+          <div class="form-group mb-0">
 
             <div class="btn-group" role="group" aria-label="Basic example">
               <button id="btnListNuevoCliente" type="button" class="btn rounded btn-info ml-2"> <i class="fa fa-user"></i> Nuevo Cliente</button>
@@ -23,18 +23,27 @@
 
         <div id="modal-ListadoClientes" class="modal-ListadoClientes">
           <div id="op-1-row" class="op-1-row"><!---->
-            <div class="btn-group" role="group" aria-label="Basic example" id="radioBtnDiv">
-              <div class="form-check ">
-                <input class="form-check-input" type="radio" name="rbnTipo" id="rbnGuardar" checked value="1"/>
+            <div class="btn-group card-footer" role="group" aria-label="Basic example" id="radioBtnDiv">
+              <div class="form-check d-flex gap-5">
                 <label class="form-check-label" for="rbnGuardar"> Sin Guardar </label>
+                <input class="form-check-input" type="radio" name="rbnTipo" id="rbnGuardar" checked value="1"/>
+                <div class="ml-5">
+                  <i class="btnSinGuardarCont" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+                </div>
               </div>
-              <div class="form-check ml-4">
+              <div class="form-check ml-5  d-flex gap-5">
                 <input class="form-check-input" type="radio" name="rbnTipo" id="rbnGuardado" value="2"/>
                 <label class="form-check-label" for="rbnGuardado"> Guardado </label>
+                <div class="ml-5">
+                  <i class="btnGuardadoCont" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+                </div>
               </div>
-              <div class="form-check ml-4">
+              <div class="form-check ml-5  d-flex gap-5">
                 <input class="form-check-input" type="radio" name="rbnTipo" id="rbnConfirmado" value="3"/>
                 <label class="form-check-label" for="rbnConfirmado"> Confirmado </label>
+                <div class="ml-5">
+                  <i class="btnConfirmadoCont" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+                </div>
               </div>
             </div>
             <table id="tablaListadoLlamadas" class="table table-striped w-100" style="text-align: center">
@@ -53,20 +62,29 @@
             </table>
           </div>
         </div>
-        <br>
+
         <div id="modal-CambioNombre" class="modal-CambioNombre">
-          <div class="btn-group" role="group" aria-label="Basic example" id="radioBtnDiv2">
-            <div class="form-check ">
-              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnGuardar" checked value="1"/>
-              <label class="form-check-label" for="rbnGuardar"> Sin Guardar </label>
+          <div class="btn-group card-footer" role="group" aria-label="Basic example" id="radioBtnDiv2">
+            <div class="form-check  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnGuardar2" checked value="1"/>
+              <label class="form-check-label" for="rbnGuardar2"> Sin Guardar </label>
+              <div class="ml-5">
+                <i class="btnNoSaveContCamNom" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
-            <div class="form-check ml-4">
-              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnGuardado" value="2"/>
-              <label class="form-check-label" for="rbnGuardado"> Guardado </label>
+            <div class="form-check  ml-5  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnGuardado2" value="2"/>
+              <label class="form-check-label" for="rbnGuardado2"> Guardado </label>
+              <div class="ml-5">
+                <i class="btnSavedContCamNom" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
-            <div class="form-check ml-4">
-              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnConfirmado" value="3"/>
-              <label class="form-check-label" for="rbnConfirmado"> Confirmado </label>
+            <div class="form-check  ml-5  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnConfirmado2" value="3"/>
+              <label class="form-check-label" for="rbnConfirmado2"> Confirmado </label>
+              <div class="ml-5">
+                <i class="btnConfirmContCamNom" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
           </div>
           <div id="op-1-row" class="op-1-row"><!---->
@@ -88,18 +106,27 @@
         </div>
 
         <div id="modal-BLoqueoCliente" class="modal-BLoqueoCliente">
-          <div class="btn-group" role="group" aria-label="Basic example" id="radioBtnDiv3">
-            <div class="form-check ">
-              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnGuardar" checked value="1"/>
-              <label class="form-check-label" for="rbnGuardar"> Sin Bloqueo </label>
+          <div class="btn-group card-footer" role="group" aria-label="Basic example" id="radioBtnDiv3">
+            <div class="form-check  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnGuardar3" checked value="1"/>
+              <label class="form-check-label" for="rbnGuardar3"> Sin Bloqueo </label>
+              <div class="ml-5">
+                <i class="btnNoSaveContBloq" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
-            <div class="form-check ml-4">
-              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnGuardado" value="2"/>
-              <label class="form-check-label" for="rbnGuardado"> Bloquer </label>
+            <div class="form-check  ml-5  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnGuardado3" value="2"/>
+              <label class="form-check-label" for="rbnGuardado3"> Bloquear </label>
+              <div class="ml-5">
+                <i class="btnSavedContBloq" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
-            <div class="form-check ml-4">
-              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnConfirmado" value="3"/>
-              <label class="form-check-label" for="rbnConfirmado"> Bloqueado </label>
+            <div class="form-check  ml-5  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnConfirmado3" value="3"/>
+              <label class="form-check-label" for="rbnConfirmado3"> Bloqueado </label>
+              <div class="ml-5">
+                <i class="btnConfirmContBloq" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
           </div>
           <div id="op-1-row" class="op-1-row"><!---->
@@ -121,18 +148,27 @@
         </div>
 
         <div id="modal-CambioNumero" class="modal-CambioNumero">
-          <div class="btn-group" role="group" aria-label="Basic example" id="radioBtnDiv4">
-            <div class="form-check ">
-              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnGuardar" checked value="1"/>
-              <label class="form-check-label" for="rbnGuardar"> Sin Guardar </label>
+          <div class="btn-group card-footer" role="group" aria-label="Basic example" id="radioBtnDiv4">
+            <div class="form-check  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnGuardar4" checked value="1"/>
+              <label class="form-check-label" for="rbnGuardar4"> Sin Guardar </label>
+              <div class="ml-5">
+                <i class="btnNoSaveContCamNro" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
-            <div class="form-check ml-4">
-              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnGuardado" value="2"/>
-              <label class="form-check-label" for="rbnGuardado"> Guardado </label>
+            <div class="form-check  ml-5  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnGuardado4" value="2"/>
+              <label class="form-check-label" for="rbnGuardado4"> Guardado </label>
+              <div class="ml-5">
+                <i class="btnSavedContCamNro" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
-            <div class="form-check ml-4">
-              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnConfirmado" value="3"/>
-              <label class="form-check-label" for="rbnConfirmado"> Confirmado </label>
+            <div class="form-check  ml-5  d-flex gap-5">
+              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnConfirmado4" value="3"/>
+              <label class="form-check-label" for="rbnConfirmado4"> Confirmado </label>
+              <div class="ml-5">
+                <i class="btnConfirmContCamNro" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </div>
             </div>
           </div>
           <div id="op-1-row" class="op-1-row"><!---->

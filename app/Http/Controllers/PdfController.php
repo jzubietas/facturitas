@@ -310,7 +310,8 @@ class PdfController extends Controller
     $diferenciameses = ($periodo_origen->diffInMonths($periodo_actual));
     $mes_artificio=null;
 
-
+    //Carbon::setLocale('es');
+    setlocale(LC_ALL, 'es_ES');
     $html = [];
     $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
     for($i=1;$i<=$diferenciameses;$i++)
@@ -321,20 +322,22 @@ class PdfController extends Controller
       $mes_artificio=$periodo_origen->addMonths($i)->subMonth();
 
 
-      $total_pedido_mespasado = $this->applyFilterPersonalizado(Pedido::query()
+      $total_pedido_mespasado = $this->applyFilterPersonalizable(Pedido::query()
         ->where('codigo', 'not like', "%-C%")->activo()
         ->where('pendiente_anulacion', '<>','1' ), $mes_artificio, 'created_at')
         ->count();
-      $total_pagado_mespasado = $this->applyFilterPersonalizado(Pedido::query()
+      $total_pagado_mespasado = $this->applyFilterPersonalizable(Pedido::query()
         ->where('codigo', 'not like', "%-C%")->activo()
         ->where('pendiente_anulacion', '<>','1' )->pagados(), $mes_artificio, 'created_at')
         ->count();
 
+      $title_mes_artificio=$mes_artificio->format('F');
+      //$title_mes_artificio=$title_mes_artificio->formatLocalized('%B');
       $html[] = '<tr>';
       $html[] = '<td style="width:20%;" class="text-center">';
       $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-        $mes_artificio->format('Y-M').
+        $title_mes_artificio.
         '</span>';
       $html[] = '</td>';
 
@@ -377,8 +380,9 @@ class PdfController extends Controller
                                                     </span>
                                              </div>
                                          </div>
-                                        <sub class="">'.$total_pagado_mespasado.'</sub>
-                                  </div>';
+
+                                  </div>
+                                  <sub class="">Cobranzas: '.$total_pagado_mespasado.'</sub>';
       }
       else if ($porcentaje > 75)
       {
@@ -398,8 +402,9 @@ class PdfController extends Controller
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="">'.$total_pagado_mespasado.'</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas: '.$total_pagado_mespasado.'</sub>';
       }
       else if ($porcentaje > 50)
       {
@@ -419,8 +424,9 @@ class PdfController extends Controller
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="">'.$total_pagado_mespasado.'</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas '.$total_pagado_mespasado.'</sub>';
       }
       else {
         $html[] = '<div class="w-100 bg-white rounded">
@@ -439,8 +445,9 @@ class PdfController extends Controller
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="">'.$total_pagado_mespasado.'</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas '.$total_pagado_mespasado.'</sub>';
       }
 
       $html[] = '</td>';
@@ -450,77 +457,6 @@ class PdfController extends Controller
     $html[] = '</table>';
     $html = join('', $html);
     return $html;
-    return $periodo_origen.'|'.$periodo_actual.'|'.$diferenciameses;
-
-    $inicio_s = Carbon::now()->startOfMonth()->format('Y-m-d');
-    $inicio_f = Carbon::now()->endOfMonth()->format('Y-m-d');
-    $periodo_antes = Carbon::now()->subMonth()->startOfMonth()->format('Y-m');
-    $periodo_actual = Carbon::now()->startOfMonth()->format('Y-m');
-
-    $mes_w = Carbon::now()->startOfMonth()->format('m');
-    $anio_w = Carbon::now()->startOfMonth()->format('Y');
-
-    $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
-      ->where([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO RECIENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
-        ['a.situacion', '=', 'RECURRENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'NUEVO'],
-        ['a.situacion', '=', 'BASE FRIA'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->groupBy([
-        'situacion_clientes.situacion'
-      ])
-      ->select([
-        'situacion_clientes.situacion',
-        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
-                                                    THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
-                                                    THEN (select sum(m.meta_quincena_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_quincena "),
-
-        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
-                                                  THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
-                                                    THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
-
-        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
-                                                    THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
-                                                    THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
-
-        DB::raw('count(situacion_clientes.situacion) as total')
-      ])->get();
-    $html = [];
-    $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
-
-
-    $html[] = '</table>';
-    $html = join('', $html);
-    return $html;
-
   }
 
   public function Analisisgrafico(Request $request)
@@ -1157,7 +1093,6 @@ class PdfController extends Controller
   }
 
   public static function applyFilterPersonalizable($query, CarbonInterface $date = null, $column = 'created_at')
-
   {
     if ($date == null) {
       $date = now();

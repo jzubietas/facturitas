@@ -120,7 +120,27 @@
               <div id="supervisor_B"></div>
             </div>
             <div class="col-md-12">
-              <div id="metas_total"></div>
+              <div id="metas_total" ></div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="d-flex justify-content-center">
+                <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
+                </div>
+              <div id="metas_situacion_clientes"></div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="card bg-cyan">
+                <div class="card-header">
+                  <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
+                </div>
+                <div class="card-body">
+                  <div id="metas_cobranzas_general"></div>
+                </div>
+                <div class="card-fotter"></div>
+              </div>
+
             </div>
           </div>
 
