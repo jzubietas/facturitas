@@ -1,5 +1,5 @@
-<form id="form-agregarcontacto-b" name="form-agregarcontacto-b" class="correccion">
-    <input type="hidden" id="correccion_b" name="correccion_b">
+<form id="form-agregarcontacto-b" name="form-agregarcontacto-b" class="agregarcontacto">
+    <input type="hidden" id="agregarcontacto_b" name="agregarcontacto_b">
     <input type="hidden" name="opcion" value="4">
     <ul class="list-group">
         <li class="list-group-item text-wrap">
