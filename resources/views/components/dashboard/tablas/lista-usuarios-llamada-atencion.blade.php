@@ -4,10 +4,10 @@
     <table class="table border table-striped">
       <thead>
       <tr>
-        <th style="text-align: left; color: white;" class="bg-danger align-middle">Nº</th>
-        <th style="text-align: left; color: white;" class="bg-danger align-middle">Jefe o Supervisor</th>
-        <th style="text-align: left; color: white;" class="bg-danger align-middle">Nombres</th>
-        <th style="text-align: left; color: white;" class="bg-danger align-middle text-center">QTY Llamada atencion</th>
+        <th style="text-align: left; color: white;" class="bg-danger">Nº</th>
+        <th style="text-align: left; color: white;" class="bg-danger">Jefe o Supervisor</th>
+        <th style="text-align: left; color: white;" class="bg-danger">Nombres</th>
+        <th style="text-align: left; color: white;" class="bg-danger text-center">QTY Llamada atencion</th>
       </tr>
       </thead>
       <tbody>

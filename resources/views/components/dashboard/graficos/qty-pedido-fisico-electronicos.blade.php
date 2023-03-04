@@ -9,8 +9,8 @@
                     @foreach(data_get($resultados,'fisico') as $item)
                         <li class="list-group-item">
                             <div class="card" style="background: {{data_get($item,'bg')}};">
-                                <div class="card-body ml-2 mr-2">
-                                    <div class="center-around">
+                                <div class="card-body pl-0">
+                                    <div class="d-flex justify-content-between">
                                         <div>
                                             <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
                                         </div>
@@ -34,8 +34,8 @@
                     @foreach(data_get($resultados,'electronic') as $item)
                         <li class="list-group-item">
                             <div class="card" style="background: {{data_get($item,'bg')}};">
-                                <div class="card-body ml-2 mr-2">
-                                    <div class="center-around">
+                                <div class="card-body pl-0">
+                                    <div class="d-flex justify-content-between">
                                         <div>
                                             <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
                                         </div>
@@ -58,8 +58,8 @@
               @foreach(data_get($resultados,'anulado') as $item)
                 <li class="list-group-item">
                   <div class="card" style="background: {{data_get($item,'bg')}};">
-                    <div class="card-body ml-2 mr-2">
-                      <div class="center-around">
+                    <div class="card-body pl-0">
+                      <div class="d-flex justify-content-between">
                         <div>
                           <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
                         </div>
