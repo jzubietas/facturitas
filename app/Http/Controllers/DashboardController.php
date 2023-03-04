@@ -554,7 +554,7 @@ class DashboardController extends Controller
                  aria-valuemax="100"></div>';
       $html.='</div>
     <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
+             <span style="font-weight: lighter"> <b class="bold-size-total"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.$object_totales['progress_pagos'].'%</b> - '.$object_totales['total_pagado'].'/'.$object_totales['total_pedido_mespasado'].'</span>
     </div>
 </div>';
 
@@ -606,7 +606,7 @@ class DashboardController extends Controller
                  aria-valuemax="100">0000</div>';
       $html.='</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res" style="top: 10px;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  '.Carbon::now()->monthName .' : '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
+             <span style="font-weight: lighter"> <b class="bold-size-total"> TOTAL PEDIDOS -  '.Carbon::now()->monthName .' : '.$object_totales['progress_pedidos'].'%</b> - '.$object_totales['total_pedido'].'/'.$object_totales['meta'].'</span>
     </div>';
       $html.='</th>
               </tr>
@@ -675,7 +675,7 @@ class DashboardController extends Controller
                        aria-valuemax="100"></div>';
       $html.='</div>
                       <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.  (round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']) *100, 2))
+                            <span style="font-weight: lighter"> <b class="bold-size-total"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.  (round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']) *100, 2))
         .'% </b> - '. $count_asesor[46]['total_pagado'].'/'.$count_asesor[46]['total_pedido_mespasado'].'</span>
                       </div>
                     </div>';
@@ -884,7 +884,7 @@ class DashboardController extends Controller
                        aria-valuemax="100"></div>';
               $html.='</div>
                       <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado'])*100,2).'%</b> - '.$count_asesor[24]['total_pagado'].'/'.$count_asesor[24]['total_pedido_mespasado'].'</span>
+                            <span style="font-weight: lighter"> <b class="bold-size-total" > TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado'])*100,2).'%</b> - '.$count_asesor[24]['total_pagado'].'/'.$count_asesor[24]['total_pedido_mespasado'].'</span>
                       </div>
                     </div>';
 

@@ -72,11 +72,15 @@
   </div>
 </div>
 
+<div class="row mb-3">
+  @include('dashboard.widgets.buscar_cliente')
+  @include('dashboard.partials.vista_quitar_vidas')
+</div>
 
 <div class="row">
 
-  @include('dashboard.widgets.buscar_cliente')
-  @include('dashboard.partials.vista_quitar_vidas')
+
+
   <div class="col-md-12">
     <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
   </div>
@@ -90,10 +94,12 @@
 
   <div class="col-lg-12 " id="contenedor-fullscreen">
 
-    <div class="d-flex justify-content-center">
-      <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-      <button style="background: none; border: none" onclick="openFullscreen();"><i
-          class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
+    <div class="d-flex justify-content-center flex-wrap">
+      <div class="d-flex">
+        <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+        <button style="background: none; border: none" onclick="openFullscreen();"><i
+            class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
+      </div>
       <div class="d-flex justify-content-center align-items-center ml-5">
         <label class="p-0 m-0" for="ingresar">Fecha: </label>
         <input type="date" id="fecha" class="border-0 ml-3"
@@ -125,18 +131,22 @@
           <div class="col-md-12">
             <div id="metas_total"></div>
           </div>
-
-          <div class="col-md-12">
-            <div class="d-flex justify-content-center">
-              <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
-            </div>
-            <div id="metas_situacion_clientes"></div>
-          </div>
         </div>
 
       </div>
     </div>
     {{--FIN-TABLA-DUAL--}}
+  </div>
+
+  <br>
+
+  <div class="container-fluid">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-center">
+        <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
+      </div>
+      <div id="metas_situacion_clientes"></div>
+    </div>
   </div>
 
   {{--    <div class="container-fluid">--}}
@@ -337,11 +347,25 @@
     .bold-size {
       font-size: 18px;
       font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .bold-size-total {
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
     .name-size {
       font-size: 14px;
     }
+
+    .center-around{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
 
 
     @media screen and (max-width: 1440px) {
@@ -354,8 +378,6 @@
       }
 
       .format-size {
-        padding: 0;
-        font-weight: bold;
         font-size: 14px;
         margin-left: 3px;
       }
@@ -364,6 +386,25 @@
         font-size: 15px;
       }
 
+      .bold-size-total {
+        font-size: 11px;
+      }
+
+    }
+
+    @media screen and (max-width: 1345px){
+      .input-column{
+        flex-direction: column;
+      }
+    }
+    @media screen and (max-width: 991px){
+      .input-column{
+        flex-direction: row;
+      }
+      .margen{
+        margin-left: 4px;
+        margin-right: 4px;
+      }
     }
 
 
