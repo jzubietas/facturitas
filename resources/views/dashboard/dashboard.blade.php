@@ -107,46 +107,6 @@
                 }
             });
 
-            $("#buttom_search_cliente_clear").click(function () {
-                $("#search_content_result").html('');
-                $("#input_search_cliente").val('');
-            });
-            $("#input_search_type").on("change", function () {
-                $("#search_content_result").html('');
-                $("#input_search_cliente").val('');
-            })
-            $("#buttom_search_cliente").click(function () {
-                var tipo = $("#input_search_type").val()
-                if (!document.getElementById("input_search_cliente").value) {
-                    Swal.fire(
-                        'El campo de texto del buscador esta vacio, ingrese valores para poder buscar',
-                        '',
-                        'warning'
-                    )
-                    return;
-                }
-                if (tipo == "CLIENTE") {
-                    $.ajax({
-                        url: "{{route('dashboard.search-cliente')}}",
-                        data: {q: document.getElementById("input_search_cliente").value},
-                        context: document.body
-                    }).done(function (a) {
-                        console.log(a)
-                        $("#search_content_result").html(a);
-                    });
-                } else if (tipo == "RUC") {
-                    $.ajax({
-                        url: "{{route('dashboard.search-ruc')}}",
-                        data: {
-                            q: document.getElementById("input_search_cliente").value
-                        },
-                        context: document.body
-                    }).done(function (a) {
-                        console.log(a)
-                        $("#search_content_result").html(a);
-                    });
-                }
-            })
         })()
     </script>
 @endsection
@@ -176,22 +136,57 @@
         </script>
     @endif
     <script>
-      $.ajaxSetup({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+      $(document).ready(function () {
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+        $("#buttom_search_cliente_clear").click(function () {
+          $("#search_content_result").html('');
+          $("#input_search_cliente").val('');
+        });
+        $("#input_search_type").on("change", function () {
+          $("#search_content_result").html('');
+          $("#input_search_cliente").val('');
+        })
+
+        $("#buttom_search_cliente").click(function () {
+          var tipo = $("#input_search_type").val()
+
+          if (!document.getElementById("input_search_cliente").value) {
+            Swal.fire(
+              'El campo de texto del buscador esta vacio, ingrese valores para poder buscar',
+              '',
+              'warning'
+            )
+            return;
+          }
+          if (tipo == "CLIENTE") {
+            $.ajax({
+              url: "{{route('dashboard.search-cliente')}}",
+              data: {q: document.getElementById("input_search_cliente").value},
+              context: document.body
+            }).done(function (a) {
+              console.log(a)
+              $("#search_content_result").html(a);
+            });
+          } else if (tipo == "RUC") {
+            $.ajax({
+              url: "{{route('dashboard.search-ruc')}}",
+              data: {
+                q: document.getElementById("input_search_cliente").value
+              },
+              context: document.body
+            }).done(function (a) {
+              console.log(a)
+              $("#search_content_result").html(a);
+            });
+          }
+        })
+
       });
-
-/*      $.ajax({
-        url: "{{ route('lstusuariosvidas') }}",
-        method: 'POST',
-        success: function (data) {
-          $('#cbx_user_id_vidas').html(data.html);
-          $("#cbx_user_id_vidas").selectpicker("refresh").trigger("change");
-        }
-      });*/
-
-
     </script>
 @endpush
 
