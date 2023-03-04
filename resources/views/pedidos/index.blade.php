@@ -103,7 +103,7 @@
       <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
         <thead>
         <tr>
-          <th class="align-middle"></th>
+          {{--<th class="align-middle"></th>--}}
           <th class="align-middle" scope="col">Código</th>
           <th class="align-middle" scope="col">Cliente</th>
           <th class="align-middle" scope="col">Razón social</th>
@@ -1233,17 +1233,17 @@
           var pedidodiferencia = data.diferencia;
 
           if (data.condicion_code == 4 || data.estado == 0) {
-            $('td:eq(12)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+            $('td:eq(11)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
           } else {
             if (pedidodiferencia == null) {
-              $('td:eq(12)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+              $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
             } else {
               if (pedidodiferencia > 3 && pedidodiferencia <18) {
-                $('td:eq(12)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(11)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
               } else if (pedidodiferencia > 18) {
-                $('td:eq(12)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
               } else {
-                $('td:eq(12)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(11)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
               }
             }
           }
@@ -1387,13 +1387,13 @@ ${data.foto3 ? `
         initComplete: function (settings, json) {
         },
         columns: [
-          {
+          /*{
             class: 'details-control',
             orderable: false,
             data: null,
             defaultContent: '',
             "searchable": false
-          },
+          },*/
           // CODIGO
           {data: 'codigos', name: 'codigos',},
           {
