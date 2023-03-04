@@ -982,7 +982,7 @@ class DashboardController extends Controller
 
         /* META - QUINCENA */
         if ($data["meta_new"] == 0){
-          if ($data["progress_pedidos"] <= 37) {
+          if ($data["progress_pedidos"] < 90) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -995,7 +995,7 @@ class DashboardController extends Controller
                                   </div>
                                   <sub class="">Meta Quincenal</sub>';
           }
-          elseif ($data["progress_pedidos"] < 40) {
+          elseif ($data["progress_pedidos"] < 99) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -1050,7 +1050,7 @@ class DashboardController extends Controller
                                   </div>
                                   <sub class="">Meta 1</sub>';
           }
-          elseif ($data["progress_pedidos"] >= 70) {
+          elseif ($data["progress_pedidos"] >= 75) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -1076,7 +1076,7 @@ class DashboardController extends Controller
                                   </div>
                                   <sub class="">Meta 1</sub>';
           }
-          elseif ($data["progress_pedidos"] >= 50) {
+          elseif ($data["progress_pedidos"] >= 55) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
