@@ -12,6 +12,7 @@ use App\Models\DireccionEnvio;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
+use App\Models\SituacionClientes;
 use App\Models\User;
 use App\Models\ListadoResultado;
 use Carbon\Carbon;
@@ -271,38 +272,17 @@ class ClienteController extends Controller
     {
         $idconsulta = $request->cliente;
         $idconsulta;
-        $data = ListadoResultado::where('id', $idconsulta)
-            ->select('id',
-                'a_2021_11',
-                'a_2021_12',
-                'a_2022_01',
-                'a_2022_02',
-                'a_2022_03',
-                'a_2022_04',
-                'a_2022_05',
-                'a_2022_06',
-                'a_2022_07',
-                'a_2022_08',
-                'a_2022_09',
-                'a_2022_10',
-                'a_2022_11',
-                'a_2022_12',
-                'a_2023_01',
-                's_2021_11',
-                's_2021_12',
-                's_2022_01',
-                's_2022_02',
-                's_2022_03',
-                's_2022_04',
-                's_2022_05',
-                's_2022_06',
-                's_2022_07',
-                's_2022_08',
-                's_2022_09',
-                's_2022_10',
-                's_2022_11',
-                's_2022_12',
-                's_2023_01',
+        $data = SituacionClientes::where('id', $idconsulta)
+            ->select(
+            [
+                'id',
+                'cliente_id',
+                'situacion',
+                'cantidad_pedidos',
+                'anulados',
+                'activos',
+                'periodo',
+            ]
             );
 
         return datatables()->query(DB::table($data))
