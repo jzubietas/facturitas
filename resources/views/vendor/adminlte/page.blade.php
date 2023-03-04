@@ -90,6 +90,10 @@
     <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script>
         let tblListadoLlamadas=null;
+        let dataForm_agregarcontacto_n = {};
+        let dataForm_agregarcontacto_cno = {};
+        let dataForm_agregarcontacto_b = {};
+        let dataForm_agregarcontacto_cnu = {};
         $(document).ready(function () {
 
             $.ajaxSetup({
@@ -127,13 +131,13 @@
             $("#modal-agregarcontacto-n-container").hide();
             $("#form-agregarcontacto-n input").val("");
 
-            $("#modal-agregarcontacto-cno").hide();
+            $("#modal-agregarcontacto-cno-container").hide();
             $("#form-agregarcontacto-cno input").val("");
 
             $("#modal-agregarcontacto-b-container").hide();
             $("#form-agregarcontacto-b input").val("");
 
-            $("#agregarcontacto-cnu-row").hide();
+            $("#modal-agregarcontacto-cnu-container").hide();
             $("#form-agregarcontacto-cnu input").val("");
           }
 
@@ -161,6 +165,121 @@
               .selectpicker("refresh")*/
           })
 
+          $(document).on("click", "#form-agregarcontacto-b #attachmentfiles", function () {
+            var file = document.createElement('input');
+            file.type = 'file';
+            file.click()
+            file.addEventListener('change', function (e) {
+              console.log("change")
+              if (file.files.length > 0) {
+                $('#form-agregarcontacto-b').find('.result_picture').css('display', 'block');
+                console.log(URL.createObjectURL(file.files[0]))
+                dataForm_agregarcontacto_b.agregarcontacto_b_captura = file.files[0]
+                $('#form-agregarcontacto-b').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
+              }
+            })
+          })
+
+          $(document).on("submit", "form.agregarcontacto", function (e) {
+            e.preventDefault();
+            var form = null;
+            var formData = null;
+            console.log(e.target.id)
+            switch (e.target.id)
+            {
+              case 'form-agregarcontacto-b':
+                let cant_cliente_agregarcontacto_b = $("select[name='cliente_agregarcontacto-b']").val().length;
+                dataForm_agregarcontacto_b.cliente_agregarcontacto_b = $("select[name='cliente_agregarcontacto-b']").val()
+
+                let cant_sustento_agregarcontacto_b = $("textarea[name='sustento-agregarcontacto_b']").val().length;
+                dataForm_agregarcontacto_b.sustento_agregarcontacto_b = $("textarea[name='sustento-agregarcontacto_b']").val();
+
+                let cant_nro_contacto_agregarcontacto_b = $("input[name='nro_contacto_agregarcontacto_b']").val().length;
+                dataForm_agregarcontacto_b.nro_contacto_agregarcontacto_b = $("input[name='nro_contacto_agregarcontacto_b']").val();
+                if(cant_cliente_agregarcontacto_b==0)
+                {
+                  Swal.fire('Error', 'No se puede seleccionar un cliente vacio', 'warning').then(function () {
+                    $("select[name='cliente_agregarcontacto-b']").focus()
+                  });
+                  return false;
+                }
+                else if (cant_sustento_agregarcontacto_b == 0) {
+                  Swal.fire('Error', 'No se puede ingresar un sustento vacio', 'warning').then(function () {
+                    console.log("before")
+                    $("textarea[name='sustento-pc']").focus()
+                  });
+                  return false;
+                }
+                else if (cant_nro_contacto_agregarcontacto_b == 0) {
+                  Swal.fire('Error', 'No se puede ingresar un contacto vacio', 'warning').then(function () {
+                    console.log("before")
+                    $("input[name='nro_contacto_agregarcontacto_b']").focus()
+                  });
+                  return false;
+                }
+
+
+
+                break;
+            }
+
+          });
+
+
+
+          $(document).on('click',
+            "button#btn_agregarcontacto_n,button#btn_agregarcontacto_cno,button#btn_agregarcontacto_b,button#btn_agregarcontacto_cnu",
+            function (e) {
+              console.log(e.target.id);
+              ocultar_div_modal_agregarcontacto();
+              switch (e.target.id) {
+                case 'btn_agregarcontacto_n':
+                  $.ajax({
+                    url: "{{ route('clientecomboagregarcontacto') }}",
+                    method: 'POST',
+                    success: function (data) {
+                      console.log(data)
+                      $('#cliente_agregarcontacto_n').html(data.html).selectpicker("refresh");
+                      $("#modal-agregarcontacto-n-container").show();
+                    }
+                  });
+                  break;
+                case 'btn_agregarcontacto_cno':
+                  $.ajax({
+                    url: "{{ route('clientecomboagregarcontacto') }}",
+                    method: 'POST',
+                    success: function (data) {
+                      console.log(data)
+                      $('#cliente_agregarcontacto_cno').html(data.html).selectpicker("refresh");
+                      $("#modal-agregarcontacto-cno-container").show();
+                    }
+                  });
+                  break;
+                case 'btn_agregarcontacto_b':
+                  $.ajax({
+                    url: "{{ route('clientecomboagregarcontacto') }}",
+                    method: 'POST',
+                    success: function (data) {
+                      console.log(data)
+                      $('#cliente_agregarcontacto_b').html(data.html).selectpicker("refresh");
+                      $("#modal-agregarcontacto-b-container").show();
+                    }
+                  });
+                  break;
+                case 'btn_agregarcontacto_cnu':
+                  $.ajax({
+                    url: "{{ route('clientecomboagregarcontacto') }}",
+                    method: 'POST',
+                    success: function (data) {
+                      console.log(data)
+                      $('#cliente_agregarcontacto_cnu').html(data.html).selectpicker("refresh");
+                      $("#modal-agregarcontacto-cnu-container").show();
+                    }
+                  });
+                  break;
+              }
+
+            })
 
 
           //btn_componente-1

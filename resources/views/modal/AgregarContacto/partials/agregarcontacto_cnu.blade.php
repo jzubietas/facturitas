@@ -1,7 +1,18 @@
-<form id="form-agregarcontacto-g" name="form-agregarcontacto-g" class="correccion">
-    <input type="hidden" id="agregarcontacto_g" name="agregarcontacto_g">
+<form id="form-agregarcontacto-cnu" name="form-agregarcontacto-cnu" class="agregarcontacto">
+    <input type="hidden" id="agregarcontacto_cnu" name="agregarcontacto_cnu">
     <input type="hidden" name="opcion" value="3">
     <ul class="list-group">
+        <li class="list-group-item text-wrap">
+          <h6 class="alert alert-warning text-center font-weight-bold">
+            <b>Elegir cliente <span class="text-danger">(Obligatorio):</span></b>
+          </h6>
+
+          <select name="cliente_agregarcontacto_cnu" class="border form-control selectpicker border-secondary bg-dark" id="cliente_agregarcontacto_cnu"
+                  data-show-subtext="true" data-live-search="true"
+                  data-live-search-placeholder="Seleccione cliente" title="Ningun cliente seleccionado">
+          </select>
+        </li>
+
         <li class="list-group-item text-wrap">
             <h6 class="alert alert-warning text-center font-weight-bold">
                 Sustento por Pedido Completo

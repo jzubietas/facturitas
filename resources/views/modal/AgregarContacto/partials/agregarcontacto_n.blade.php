@@ -1,36 +1,41 @@
-<form id="form-agregarcontacto-pc" name="form-agregarcontacto-pc" class="correccion">
-    <input type="hidden" id="agregarcontacto_pc" name="agregarcontacto_pc">
+<form id="form-agregarcontacto-n" name="form-agregarcontacto-n" class="agregarcontacto">
+    <input type="hidden" id="agregarcontacto_n" name="agregarcontacto_n">
     <input type="hidden" name="opcion" value="1">
     <ul class="list-group">
+
         <li class="list-group-item text-wrap">
-            <h6 class="alert alert-warning text-center font-weight-bold">
-                <b>Sustento por Pedido Completo <span class="text-danger">(Obligatorio):</span></b>
-            </h6>
-            <textarea name="sustento-pc" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar sustento"></textarea>
+          <h6 class="alert alert-warning text-center font-weight-bold">
+            <b>Elegir cliente <span class="text-danger">(Obligatorio):</span></b>
+          </h6>
+
+          <select name="cliente_agregarcontacto_n" class="border form-control selectpicker border-secondary bg-dark" id="cliente_agregarcontacto_n"
+                  data-show-subtext="true" data-live-search="true"
+                  data-live-search-placeholder="Seleccione cliente" title="Ningun cliente seleccionado">
+          </select>
+        </li>
+
+
+        <li class="list-group-item text-wrap">
+          <h6 class="alert alert-warning text-center font-weight-bold">
+            <b>Elegir cliente <span class="text-danger">(Obligatorio):</span></b>
+          </h6>
+
+          <select name="cliente_agregarcontacto_n" class="border form-control selectpicker border-secondary bg-dark" id="cliente_agregarcontacto_n"
+                  data-show-subtext="true" data-live-search="true"
+                  data-live-search-placeholder="Seleccione cliente" title="Ningun cliente seleccionado">
+
+          </select>
+
         </li>
 
         <li class="list-group-item text-wrap">
             <h6 class="alert alert-warning text-center font-weight-bold">
-                <b>Detalle <span class="text-danger">(Obligatorio):</span></b>
+                <b>Numero de contacto <span class="text-danger">(Obligatorio):</span></b>
             </h6>
-            <textarea name="detalle-pc" class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar detalle"></textarea>
+            <input name="nro_contacto-agregarcontacto_n" id="nro_contacto-agregarcontacto_n" class="form-control w-100"
+                     style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar num contacto">
         </li>
 
-        <li class="list-group-item text-wrap">
-            <h6 class="alert alert-warning text-center font-weight-bold">Captura</h6>
-                <div id="attachmentfiles" class="border border-dark rounded d-flex justify-content-center align-items-center mb-4 position-relative"
-                     style="height: 400px">
-                    <i class="fa fa-upload"></i>
-                    <div class="result_picture position-absolute" style="display: block;top: 0;left: 0;bottom: 0;right: 0;text-align: center;">
-                        <img src="" class="h-100 img-fluid" alt="">
-                    </div>
-                </div>
-                <div class="alert alert-warning">Puede copiar y pegar la imagen o hacer click en el recuadro para seleccionar un archivo</div>
-
-            <input type="file" name="correcion_pc_captura" id="correcion_pc_captura"  class="d-none form-control" placeholder="">
-        </li>
     </ul>
     <hr class="mt-2 mb-3"/>
     <div class="form-group col-lg-12">
