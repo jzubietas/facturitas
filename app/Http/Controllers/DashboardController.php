@@ -855,6 +855,7 @@ class DashboardController extends Controller
 
       /*NUEVA SECCION */
       /*META QUINCENA PAOLA*/
+      return $count_asesor;
       if ($count_asesor[24]['meta_new'] == 0) {
         if (round(($count_asesor[24]['total_pedido'] / (($count_asesor[46]['meta_quincena'] > 0) ? $count_asesor[24]['meta_quincena'] : '')) * 100, 0) < 90) {
           $html .= '<div class="progress-bar bg-success rounded" role="progressbar"
