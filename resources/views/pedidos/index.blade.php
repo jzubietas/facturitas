@@ -1,4 +1,4 @@
-{{--pedidos--}}
+{{--/pedidos--}}
 @extends('adminlte::page')
 
 @section('title', 'Pedidos - Bandeja de pedidos')
@@ -114,7 +114,7 @@
           <th class="align-middle" scope="col">F. Actualizacion</th>
           <th class="align-middle" scope="col">Total (S/)</th>
           <th class="align-middle" scope="col">Est. pago</th>
-          <th class="align-middle" scope="col">Con. pago</th>
+          <th class="align-middle" scope="col">Est. pago</th>
           <th class="align-middle" scope="col">Est. Sobre</th>
           <th class="align-middle" scope="col">Dif.</th>
           <th class="align-middle" scope="col">Acciones</th>
@@ -1221,17 +1221,17 @@
           var pedidodiferencia = data.diferencia;
 
           if (data.condicion_code == 4 || data.estado == 0) {
-            $('td:eq(11)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+            $('td:eq(12)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
           } else {
             if (pedidodiferencia == null) {
-              $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+              $('td:eq(12)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
             } else {
               if (pedidodiferencia > 3 && pedidodiferencia <18) {
-                $('td:eq(11)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(12)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
               } else if (pedidodiferencia > 18) {
-                $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(12)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
               } else {
-                $('td:eq(11)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(12)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
               }
             }
           }
@@ -1417,7 +1417,6 @@ ${data.foto3 ? `
           {
             data: 'condicion_pa',
             name: 'condicion_pa',
-            'visible': false,
             render: function (data, type, row, meta) {
 
               if (row.condiciones == 'ANULADO' || row.condicion_code == 4 || row.estado == 0) {
@@ -1443,7 +1442,7 @@ ${data.foto3 ? `
               }
 
             }
-          },//estado de pago
+          },
           {
             data: 'condiciones_aprobado',
             name: 'condiciones_aprobado',
