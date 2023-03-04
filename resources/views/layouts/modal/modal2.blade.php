@@ -55,6 +55,20 @@
         </div>
         <br>
         <div id="modal-CambioNombre" class="modal-CambioNombre">
+          <div class="btn-group" role="group" aria-label="Basic example" id="radioBtnDiv2">
+            <div class="form-check ">
+              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnGuardar" checked value="1"/>
+              <label class="form-check-label" for="rbnGuardar"> Sin Guardar </label>
+            </div>
+            <div class="form-check ml-4">
+              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnGuardado" value="2"/>
+              <label class="form-check-label" for="rbnGuardado"> Guardado </label>
+            </div>
+            <div class="form-check ml-4">
+              <input class="form-check-input" type="radio" name="rbnTipo2" id="rbnConfirmado" value="3"/>
+              <label class="form-check-label" for="rbnConfirmado"> Confirmado </label>
+            </div>
+          </div>
           <div id="op-1-row" class="op-1-row"><!---->
             <table id="tablaCambioNombre" class="table table-striped w-100" style="text-align: center">
               <thead></h4>
@@ -74,6 +88,20 @@
         </div>
 
         <div id="modal-BLoqueoCliente" class="modal-BLoqueoCliente">
+          <div class="btn-group" role="group" aria-label="Basic example" id="radioBtnDiv3">
+            <div class="form-check ">
+              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnGuardar" checked value="1"/>
+              <label class="form-check-label" for="rbnGuardar"> Sin Bloqueo </label>
+            </div>
+            <div class="form-check ml-4">
+              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnGuardado" value="2"/>
+              <label class="form-check-label" for="rbnGuardado"> Bloquer </label>
+            </div>
+            <div class="form-check ml-4">
+              <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnConfirmado" value="3"/>
+              <label class="form-check-label" for="rbnConfirmado"> Bloqueado </label>
+            </div>
+          </div>
           <div id="op-1-row" class="op-1-row"><!---->
             <table id="tablaBloqueoClientes" class="table table-striped w-100" style="text-align: center">
               <thead></h4>
@@ -93,6 +121,20 @@
         </div>
 
         <div id="modal-CambioNumero" class="modal-CambioNumero">
+          <div class="btn-group" role="group" aria-label="Basic example" id="radioBtnDiv4">
+            <div class="form-check ">
+              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnGuardar" checked value="1"/>
+              <label class="form-check-label" for="rbnGuardar"> Sin Guardar </label>
+            </div>
+            <div class="form-check ml-4">
+              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnGuardado" value="2"/>
+              <label class="form-check-label" for="rbnGuardado"> Guardado </label>
+            </div>
+            <div class="form-check ml-4">
+              <input class="form-check-input" type="radio" name="rbnTipo4" id="rbnConfirmado" value="3"/>
+              <label class="form-check-label" for="rbnConfirmado"> Confirmado </label>
+            </div>
+          </div>
           <div id="op-1-row" class="op-1-row"><!---->
             <table id="tablaCambioNumero" class="table table-striped w-100" style="text-align: center">
               <thead></h4>
