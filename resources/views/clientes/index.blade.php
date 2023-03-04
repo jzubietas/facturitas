@@ -174,7 +174,7 @@
                 }
             });
 
-            tabla_historial_cliente = $('#tabla_pedidos').DataTable({
+            tabla_historial_cliente = $('#tablaPrincipalHistorialSituacion').DataTable({
                 "bPaginate": false,
                 "bFilter": false,
                 "bInfo": false,
@@ -253,11 +253,12 @@
             $('#modal-historial-situacion-cliente').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idcliente = button.data('cliente')
+                console.log("cliente "+idcliente);
 
 
                 $('#tablaPrincipalHistorialSituacion').DataTable().clear().destroy();
 
-                $('#tablaPrincipalHistorialSituacion').DataTable({
+              tabla_historial_cliente=$('#tablaPrincipalHistorialSituacion').DataTable({
                     processing: true,
                     serverSide: true,
                     searching: true,
@@ -268,7 +269,6 @@
                         url: "{{ route('clientestablasituacion') }}",
                         data: function (d) {
                             d.cliente = idcliente;
-
                         },
                     },
                     "createdRow": function (row, data, dataIndex) {

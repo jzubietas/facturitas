@@ -271,7 +271,6 @@ class ClienteController extends Controller
     public function clientestablasituacion(Request $request)
     {
         $idconsulta = $request->cliente;
-        $idconsulta;
         $data = SituacionClientes::where('id', $idconsulta)
             ->select(
             [
@@ -285,8 +284,17 @@ class ClienteController extends Controller
             ]
             );
 
-        return datatables()->query(DB::table($data))
+        return datatables()->query($data)//Datatables::of($data)
+        ->addIndexColumn()
+            /*->editColumn('estado', function ($cliente) {
+                return '<span class="badge badge-success">aa</span>';
+            })*/
+            /*addColumn('action', function ($row) {
+                return '<button class="btn btn-success elegir">Elegir</button>';
+            })*/
+            //->rawColumns(['action', 'estado'])
             ->toJson();
+
 
     }
 
