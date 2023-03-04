@@ -427,7 +427,7 @@
 
         $('#fecha').val("{{\Carbon\Carbon::parse($fecha)->format('Y-m-d')}}");
 
-        $(document).on('change', '#fecha', function () {
+        $(document).on('change','#fecha',function(){
           const value = e.target.value;
           console.log(value)
           if (value) {
@@ -436,26 +436,28 @@
         });
 
         window.cargaNueva = function (entero) {
-          console.log(' ' + entero)
-          var fd = new FormData();
-          fd.append('fecha', $('#fecha').val());
-          fd.append('ii', entero);
+          console.log(' '+entero)
+          var fd=new FormData();
+          fd.append('fecha',$('#fecha').val());
+          fd.append('ii',entero);
           $.ajax({
             data: fd,
             processData: false,
             contentType: false,
             method: 'POST',
             url: "{{ route('dashboard.viewMetaTable') }}",
-            success: function (resultado) {
-              if (entero == 1) {
+            success: function (resultado){
+              if(entero==1)
+              {
                 $('#metas_dp').html(resultado);
-              } else if (entero == 2) {
+              }else if(entero==2){
                 $('#meta').html(resultado);
-              } else if (entero == 3) {
+              }
+              else if(entero==3){
                 $('#metas_total').html(resultado);
-              } else if (entero == 4) {
+              }else if(entero==4){
                 $('#supervisor_total').html(resultado);
-              } else if (entero == 5) {
+              }else if(entero==5){
                 $('#supervisor_A').html(resultado);
               }
             }
@@ -464,29 +466,43 @@
 
 
         window.cargReporteAnalisis = function () {
-          var fd = new FormData();
+          var fd=new FormData();
           $.ajax({
             data: fd,
             processData: false,
             contentType: false,
             method: 'POST',
             url: "{{ route('dashboard.viewAnalisis') }}",
-            success: function (resultado) {
+            success: function (resultado){
               $('#reporteanalisis').html(resultado);
             }
           })
         }
 
         window.cargReporteMetasSituacionClientes = function () {
-          var fd = new FormData();
+          var fd=new FormData();
           $.ajax({
             data: fd,
             processData: false,
             contentType: false,
             method: 'POST',
             url: "{{ route('dashboard.graficoSituacionClientes') }}",
-            success: function (resultado) {
+            success: function (resultado){
               $('#metas_situacion_clientes').html(resultado);
+            }
+          })
+        }
+
+        window.cargReporteMetasCobranzasGeneral = function () {
+          var fd=new FormData();
+          $.ajax({
+            data: fd,
+            processData: false,
+            contentType: false,
+            method: 'POST',
+            url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
+            success: function (resultado){
+              $('#metas_cobranzas_general').html(resultado);
             }
           })
         }
@@ -498,38 +514,24 @@
         cargaNueva(5);
         cargReporteAnalisis();
         cargReporteMetasSituacionClientes();
+        cargReporteMetasCobranzasGeneral();
 
         setInterval(myTimer, 500000);
 
-        window.cargReporteMetasCobranzasGeneral = function () {
-          var fd = new FormData();
-          $.ajax({
-            data: fd,
-            processData: false,
-            contentType: false,
-            method: 'POST',
-            url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
-            success: function (resultado) {
-              $('#metas_cobranzas_general').html(resultado);
-            }
-          })
+        function myTimer() {
+          cargaNueva(1);
+          cargaNueva(2);
+          cargaNueva(3);
+          cargaNueva(4);
+          cargaNueva(5);
         }
 
-        cargaNueva(1);
-        cargaNueva(2);
-        cargaNueva(3);
-        cargaNueva(4);
-        cargaNueva(5);
-
-      }
-
-      cargReporteAnalisis();
-
-      $('a[href$="#myModal"]').on("click", function () {
-        $('#myModal').modal();
+        $('a[href$="#myModal"]').on( "click", function() {
+          $('#myModal').modal();
+        });
 
         var elem = document.querySelector("#contenedor-fullscreen");
-        window.openFullscreen = function () {
+        window.openFullscreen =function () {
           if (elem.requestFullscreen) {
             elem.requestFullscreen();
           } else if (elem.webkitRequestFullscreen) { /* Safari */
