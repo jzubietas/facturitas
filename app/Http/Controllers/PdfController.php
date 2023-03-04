@@ -104,6 +104,12 @@ class PdfController extends Controller
         ['a.periodo', '=', $periodo_antes]
       ])
       ->orWhere([
+        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+        ['a.situacion', '=', 'ABANDONO'],
+        ['situacion_clientes.periodo', '=', $periodo_actual],
+        ['a.periodo', '=', $periodo_antes]
+      ])
+      ->orWhere([
         ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
         ['a.situacion', '=', 'RECURRENTE'],
         ['situacion_clientes.periodo', '=', $periodo_actual],
