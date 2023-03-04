@@ -6,6 +6,7 @@ use App\Abstracts\Widgets;
 use App\Models\DetallePedido;
 use App\Models\Pedido;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -71,8 +72,10 @@ class QtyPedidoFisicoElectronicos extends Widgets
       $pedidosPendienteAnulacion = Pedido::query()
         ->pendienteAnulacion()
         ->join('users as u', 'pedidos.user_id', 'u.id')
-        ->whereNotNull('pedidos.user_anulacion_id')
-        ->whereBetween('pedidos.created_at', [now()->startOfMonth()->format('Y-m-d'), now()->endOfMonth()->format('Y-m-d')])
+        ->whereNotNull('pedidos.pendiente_anulacion')
+        /*->whereBetween( Db::raw('cast(pedidos.created_at  as date)'),
+          [Carbon::now()->format('Y-m-d'), Carbon::now()->format('Y-m-d')]
+        )*/
         ->count();
 
       $jefesOpe = User::activo()
@@ -98,6 +101,8 @@ class QtyPedidoFisicoElectronicos extends Widgets
         'color' => 'white',
       ]];
     }
+
+
 
     foreach ($jefesOpe as $user) {
       $operario = User::activo()
@@ -138,9 +143,6 @@ class QtyPedidoFisicoElectronicos extends Widgets
         ->whereIn('user_id', $asesores)
         ->join('users as u', 'pedidos.user_id', 'u.id')
         ->whereNotNull('pedidos.pendiente_anulacion')
-        /*->whereYear('pedidos.created_at', now()->format('Y'))*/
-        /*->whereMonth('pedidos.created_at', now()->format('m'))*/
-        ->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
         ->count();
 
       $dataFi[] = [
