@@ -284,7 +284,7 @@ class ClienteController extends Controller
             ]
             );
 
-        return datatables()->query($data)//Datatables::of($data)
+        return datatables()->query(DB::table($data))
         ->addIndexColumn()
             /*->editColumn('estado', function ($cliente) {
                 return '<span class="badge badge-success">aa</span>';
