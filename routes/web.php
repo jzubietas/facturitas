@@ -76,6 +76,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
   Route::any('dashboard.viewAnalisis', [PdfController::class, 'Analisisgrafico'])->name('dashboard.viewAnalisis');
   Route::any('dashboard.graficoSituacionClientes', [PdfController::class, 'SituacionClientes'])->name('dashboard.graficoSituacionClientes');
+  Route::any('dashboard.graficoCobranzasGeneral', [PdfController::class, 'CobranzasGeneral'])->name('dashboard.graficoCobranzasGeneral');
 
 
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
@@ -127,6 +128,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidos.recoger.clientes.pedidos', [ClienteController::class, 'pedidosclienteslistarecoger'])->name('pedidos.recoger.clientes.pedidos');
     Route::get('pedidos.recoger.clientes.pedidos.historial', [ClienteController::class, 'historialrecoger'])->name('pedidos.recoger.clientes.pedidos.historial');
     Route::get('clientestablasituacion', [ClienteController::class, 'clientestablasituacion'])->name('clientestablasituacion');
+    Route::get('listtablecontactos', [ClienteController::class,'listtablecontactos'])->name('listtablecontactos');
+
     Route::get('pedidos.recojo', [PedidoController::class, 'pedidosrecojo'])->name('pedidos.recojo');
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside
 
@@ -187,6 +190,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('correccionesJson', [OperacionController::class, 'correccionesJson'])->name('correccionesJson');
 
     Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
+    Route::post('clientecomboagregarcontacto', [UserController::class, 'ClienteAgregarContacto'])->name('clientecomboagregarcontacto');
     Route::post('asesorcombomodal', [UserController::class, 'AsesorcomboModal'])->name('asesorcombomodal');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
     Route::post('asesorcombopago', [UserController::class, 'Asesorcombopago'])->name('asesorcombopago');

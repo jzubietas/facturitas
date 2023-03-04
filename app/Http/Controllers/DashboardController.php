@@ -199,6 +199,7 @@ class DashboardController extends Controller
       $metatotal = (float)$asesor->meta_pedido;
       $metatotal_2 = (float)$asesor->meta_pedido_2;
       $metatotal_cobro = (float)$asesor->meta_cobro;
+      $metatotal_quincena = (float)$asesor->meta_quincena;
       $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
         ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>','1' ), now(), 'created_at')
         ->count();
@@ -225,6 +226,7 @@ class DashboardController extends Controller
         "total_pagado" => $total_pagado,
         "meta" => $metatotal,
         "meta_2" => $metatotal_2,
+        "meta_quincena" => $metatotal_quincena,
         "meta_cobro" => $metatotal_cobro,
         "pedidos_totales" => $pedidos_totales,
         "supervisor" =>  $supervisor,
@@ -257,18 +259,28 @@ class DashboardController extends Controller
       }
 
       if ($asesor->excluir_meta) {
+
         if ($metatotal_cobro > 0) {
           $p_pagos = round(($total_pedido_mespasado / $total_pagado) * 100, 2);
         } else {
           $p_pagos = 0;
         }
+
         if ($metatotal > 0) {
           $p_pedidos = round(($total_pedido / $metatotal) * 100, 2);
         } else {
           $p_pedidos = 0;
         }
+
+        if ($metatotal_quincena > 0){
+          $p_quincena = round(($total_pedido / $metatotal_quincena) * 100 , 2);
+        }else{
+          $p_quincena = 0;
+        }
+
         $item['progress_pagos'] = $p_pagos;
         $item['progress_pedidos'] = $p_pedidos;
+        $item['meta_quincena'] = $p_quincena;
       } else {
         $progressData[] = $item;
       }
@@ -294,6 +306,7 @@ class DashboardController extends Controller
           $newData[$identificador]['supervisor'] += data_get($item, 'supervisor');
 
           $newData[$identificador]['pedidos_totales'] += data_get($item, 'pedidos_totales');
+          $newData[$identificador]['meta_quincena'] += data_get($item, 'meta_quincena');
         }
       }
       $newData[$identificador]['name'] = collect($items)->map(function ($item) {
@@ -310,6 +323,7 @@ class DashboardController extends Controller
       $pedidos_dia = data_get($item, 'pedidos_dia');
       $pedidos_totales = data_get($item, 'pedidos_totales');
       $supervisor = data_get($item, 'supervisor');
+      $meta_quincena = data_get($item, 'meta_quincena');
 
       if ($pay > 0) {
         $p_pagos = round(($pay / $all_mespasado) * 100, 2);
@@ -317,33 +331,46 @@ class DashboardController extends Controller
         $p_pagos = 0;
       }
 
-      if ($allmeta > 0) {
-        $p_pedidos = round(($all / $allmeta) * 100, 2);
-      } else {
-        $p_pedidos = 0;
-      }
-
-      if ($allmeta_2 > 0) {
-        $p_pedidos_new = round(($all / $allmeta_2) * 100, 2);
-      } else {
-        $p_pedidos_new = 0;
-      }
-
-      if ($p_pedidos >= 100) {
-        $item['progress_pedidos'] = $p_pedidos_new;
-        $item['meta_new'] = 0;
-
-      } else {
-        $item['progress_pedidos'] = $p_pedidos;
-        $item['meta_new'] = 1;
+      /*meta quincena = 0*/
+      if ($all < $meta_quincena) {
+        if ($meta_quincena > 0) {
+          $p_quincena = round(($all / $meta_quincena) * 100, 2);
+          $item['meta_new'] = 0;
+          $item['progress_pedidos'] = $p_quincena;
+        } else {
+          $p_quincena = 0;
+          $item['meta_new'] = 0;
+          $item['progress_pedidos'] = $p_quincena;
+        }
+        /*meta 1*/
+      } else if ($all < $allmeta){
+        if ($allmeta > 0) {
+          $p_pedidos = round(($all / $allmeta) * 100, 2);
+          $item['meta_new'] = 1;
+          $item['progress_pedidos'] = $p_pedidos;
+        } else {
+          $p_pedidos = 0;
+          $item['meta_new'] = 1;
+          $item['progress_pedidos'] = $p_pedidos;
+        }
+        /*meta 2*/
+      } else{
+        if ($allmeta_2 > 0) {
+          $p_pedidos_new = round(($all / $allmeta_2) * 100, 2);
+          $item['meta_new'] = 2;
+          $item['progress_pedidos'] = $p_pedidos_new;
+        } else {
+          $p_pedidos_new = 0;
+          $item['meta_new'] = 2;
+          $item['progress_pedidos'] = $p_pedidos_new;
+        }
       }
 
       $item['progress_pagos'] = $p_pagos;
       $item['total_pedido'] = $all;
       $item['total_pedido_pasado'] = $all_mespasado;
       $item['pedidos_dia'] = $pedidos_dia;
-
-
+      $item['meta_quincena'] = $meta_quincena;
       $item['pedidos_totales'] = $pedidos_totales;
       return $item;
 
@@ -864,7 +891,8 @@ class DashboardController extends Controller
              <td>';
         if ($data["pedidos_dia"] > 0) {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
-        } else {
+        }
+        else {
           $html.=  '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold"> ' . $data["pedidos_dia"] . ' </span> ';
         }
         $html.=  '</td>';
@@ -881,7 +909,8 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } elseif ($data["progress_pagos"] >= 80) {
+        }
+        elseif ($data["progress_pagos"] >= 80) {
           $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -893,7 +922,8 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } elseif ($data["progress_pagos"] > 70) {
+        }
+        elseif ($data["progress_pagos"] > 70) {
           $html.=  '
                     <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -906,7 +936,8 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } elseif ($data["progress_pagos"] > 60) {
+        }
+        elseif ($data["progress_pagos"] > 60) {
           $html.=  ' <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -918,7 +949,8 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } elseif ($data["progress_pagos"] > 50) {
+        }
+        elseif ($data["progress_pagos"] > 50) {
           $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -930,7 +962,8 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } else {
+        }
+        else {
           $html.=  '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
                                   <div class="progress bg-white rounded" style="height: 40px">
@@ -945,36 +978,52 @@ class DashboardController extends Controller
         }
         $html.=  '</td>';
         $html.=  '   <td>';
-        /*META-2*/
-        if ($data["meta_new"] == 0) {
-          if ($data["progress_pedidos"] <= 100) {
+
+
+        /* META - QUINCENA */
+        if ($data["meta_new"] == 0){
+          if ($data["progress_pedidos"] < 90) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
-                                          <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                          <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: '. $data["progress_pedidos"] . '%" ></div>
                                           </div>
-                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '.  ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
-                                        </div>
+                                          <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . ' <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_quincena"]-$data["total_pedido"]) > 0) ? ($data["meta_quincena"]-$data["total_pedido"]) : '0') . '</p></span>
+                                          </div>
                                     </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
-          }else{
+                                  </div>
+                                  <sub class="">Meta Quincenal</sub>';
+          }
+          elseif ($data["progress_pedidos"] < 99) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
-                                          <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
+                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_quincena"]-$data["total_pedido"]) > 0) ? ($data["meta_quincena"]-$data["total_pedido"]) : '0')  . '</p></span>
                                         </div>
                                     </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
+                                  </div>
+                                  <sub class="">Meta Quincenal</sub>';
+          }
+          else {
+            $html.=  '<div class="w-100 bg-white rounded">
+                              <div class="position-relative rounded">
+                                  <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                      </div>
+                                  <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                      <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /'. $data["meta_quincena"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_quincena"]-$data["total_pedido"]) > 0) ? ($data["meta_quincena"]-$data["total_pedido"]) : '0')  . '</p></span>
+                                  </div>
+                              </div>
+                            </div>
+                            <sub class="">Meta Quincenal</sub>';
           }
         }
         /*META-1*/
-        if ($data["meta_new"] == 1){
+        else if ($data["meta_new"] == 1){
           if ($data["progress_pedidos"] >= 90) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -985,8 +1034,8 @@ class DashboardController extends Controller
                                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . ' <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta"]-$data["total_pedido"]) > 0) ? ($data["meta"]-$data["total_pedido"]) : '0') . '</p></span>
                                         </div>
                                     </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
+                                  </div>
+                                  <sub class="">Meta 1</sub>';
           }
           elseif ($data["progress_pedidos"] >= 80) {
             $html.=  '<div class="w-100 bg-white rounded">
@@ -998,9 +1047,10 @@ class DashboardController extends Controller
                                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta"]-$data["total_pedido"]) > 0) ? ($data["meta"]-$data["total_pedido"]) : '0')  . '</p></span>
                                         </div>
                                     </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
-          }elseif ($data["progress_pedidos"] >= 70) {
+                                  </div>
+                                  <sub class="">Meta 1</sub>';
+          }
+          elseif ($data["progress_pedidos"] >= 75) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -1010,9 +1060,10 @@ class DashboardController extends Controller
                                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta"]-$data["total_pedido"]) > 0) ? ($data["meta"]-$data["total_pedido"]) : '0') . '</p></span>
                                         </div>
                                     </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
-          } elseif ($data["progress_pedidos"] >= 60) {
+                                  </div>
+                                  <sub class="">Meta 1</sub>';
+          }
+          elseif ($data["progress_pedidos"] >= 60) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -1022,9 +1073,10 @@ class DashboardController extends Controller
                                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta"]-$data["total_pedido"]) > 0) ? ($data["meta"]-$data["total_pedido"]) : '0')  . '</p></span>
                                         </div>
                                     </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
-          } elseif ($data["progress_pedidos"] >= 50) {
+                                  </div>
+                                  <sub class="">Meta 1</sub>';
+          }
+          elseif ($data["progress_pedidos"] >= 55) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -1034,10 +1086,11 @@ class DashboardController extends Controller
                                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta"]-$data["total_pedido"]) > 0) ? ($data["meta"]-$data["total_pedido"]) : '0')  . '</p></span>
                                         </div>
                                     </div>
-                                    <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
+                                  </div>
+                                  <sub class="">Meta 1</sub>';
 
-          } else {
+          }
+          else {
             $html.=  '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
                                   <div class="progress bg-white rounded" style="height: 40px">
@@ -1047,8 +1100,38 @@ class DashboardController extends Controller
                                       <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /'. $data["meta"] . '  <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta"]-$data["total_pedido"]) > 0) ? ($data["meta"]-$data["total_pedido"]) : '0')  . '</p></span>
                                   </div>
                               </div>
-                              <sub class="d-none">% -  Pagados/ Asignados</sub>
-                            </div>';
+                            </div>
+                            <sub class="">Meta 1</sub>';
+          }
+        }
+
+        /*META-2*/
+        else if ($data["meta_new"] == 2) {
+          if ($data["progress_pedidos"] <= 100) {
+            $html.=  '<div class="w-100 bg-white rounded">
+                                    <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                          <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                          </div>
+                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '.  ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <sub class="">Meta 2</sub>';
+          }
+          else{
+            $html.=  '<div class="w-100 bg-white rounded">
+                                    <div class="position-relative rounded">
+                                      <div class="progress bg-white rounded" style="height: 40px">
+                                          <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                          </div>
+                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 18px">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / '. $data["meta_2"] . '<p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d9686!important"> '. ((($data["meta_2"]-$data["total_pedido"]) > 0) ? ($data["meta_2"]-$data["total_pedido"]) : '0'). '</p></span>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <sub class="">Meta 2</sub>';
           }
         }
         $html.=  '  </td>

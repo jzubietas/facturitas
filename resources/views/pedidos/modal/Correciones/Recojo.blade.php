@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-recojo-pedidos" aria-labelledby="modal-correccion-pedidos" aria-hidden="true">
+<div class="modal fade" id="modal-recojo-pedidos" aria-labelledby="modal-recojo-pedidos" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 800px!important;">
         <form id="form-recojo" name="form-recojo" >
             <div class="modal-content">

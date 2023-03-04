@@ -34,8 +34,6 @@
             <th scope="col" class="align-middle">Est. pago</th>
             <th scope="col" class="align-middle">Con. pago</th>
             <th scope="col" class="align-middle">Est. Sobre</th>
-            <th scope="col" class="align-middle">Diferencia</th>
-            <th scope="col" class="align-middle">...</th>
           </tr>
           </thead>
           <tbody>
@@ -206,15 +204,15 @@
           var pedidodiferencia = data.diferencia;
 
           if (data.condicion_code == 4 || data.estado == 0) {
-            $('td:eq(12)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+            $('td:eq(13)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
           } else {
             if (pedidodiferencia == null) {
-              $('td:eq(12)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+              $('td:eq(13)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
             } else {
               if (pedidodiferencia > 3) {
-                $('td:eq(12)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(13)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
               } else {
-                $('td:eq(12)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(13)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
               }
             }
           }
@@ -429,28 +427,8 @@ ${data.foto3 ? `
             data: 'condicion_envio',
             name: 'condicion_envio',
           },
-          {
-            data: 'diferencia',
-            name: 'diferencia',
-            render: function (data, type, row, meta) {
-              if (row.condicion_code == 4 || row.estado == 0) {
-                return '0';
-              }
-              if (row.diferencia == null) {
-                return 'NO REGISTRA PAGO';
-              } else {
-                if (row.diferencia > 0) {
-                  return row.diferencia;
-                } else {
-                  return row.diferencia;
-                }
-              }
-            }
-          },
-          {
-            data: 'action',
-            name: 'action',
-          },
+
+ 
         ],
         language: {
           "decimal": "",

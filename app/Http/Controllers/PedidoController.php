@@ -275,13 +275,13 @@ class PedidoController extends Controller
                 }
                 if ($pedido->estado_ruta == '1') {
                     $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
-                    padding: 4px 8px !important;
+                    padding: 8px !important;
+                    margin: 0px !important;
                     font-size: 8px;
-                    margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
                 }
               $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-              $badge_estado .= '<span class="rounded etiquetas_asignacion" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+              $badge_estado .= '<span class="rounded etiquetas_asignacion" style="margin: 0px !important; background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) use ($miidentificador) {
@@ -541,14 +541,14 @@ class PedidoController extends Controller
           return '<span class="badge badge-danger">ANULADO</span>';
         }
         if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #cd11af; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; ">Observado</span>';
+          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #cd11af; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; ">Observado</span>';
         } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #ff0014; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Contesto</span>';
+          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #ff0014; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Contesto</span>';
         } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #00b972; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Recibido</span>';
+          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #00b972; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Recibido</span>';
         }
         if ($pedido->estado_sobre == '1') {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
+          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
         }
         if ($pedido->estado_ruta == '1') {
           $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
@@ -2367,7 +2367,7 @@ class PedidoController extends Controller
                     return '<span class="badge badge-danger">ANULADO</span>';
                 }
                 if ($pedido->estado_sobre == '1') {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin: 0px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
 
                 }
                 if ($pedido->estado_ruta == '1') {
