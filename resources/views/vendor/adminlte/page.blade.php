@@ -98,6 +98,15 @@
         let dataForm_agregarcontacto_cno = {};
         let dataForm_agregarcontacto_b = {};
         let dataForm_agregarcontacto_cnu = {};
+        function insertContador(child, dotClass, value) {
+          var parent = $(child).parent();
+          var epa = parent.find(dotClass);
+          if (epa.length > 0) {
+            epa.html(value);
+          } else {
+            parent.append('<i class="' + dotClass.split('.').join(' ').trim() + '">' + value + '</i>');
+          }
+        }
         $(document).ready(function () {
 
             $.ajaxSetup({
@@ -393,10 +402,28 @@
               "bPaginate": true,
               "bFilter": true,
               "bInfo": false,
+              "pageLength": 10,
               'ajax': {
                 url: "{{ route('listtablecontactos') }}",
                 data:{tipo:vtipo,rbnvalue:vrbnvalue},
                 "type": "get",
+              },
+              initComplete: function (settings, json) {
+                var totalListaNuevos=tblListadoLlamadas.rows().count();
+                if (vrbnvalue==1){
+                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevos);
+                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', 0);
+                }else if (vrbnvalue==2){
+                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevos);
+                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', 0);
+
+                }else if (vrbnvalue==3){
+                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevos);
+                }
               },
               columns: [
                 {data: 'tipo_insert', name: 'tipo_insert'},
@@ -434,6 +461,7 @@
                 }
               }
             });
+
           }
           function  fnListaCambioNombre(vtipo,vrbnvalue){
             tblCambioNombre.destroy();
@@ -455,6 +483,23 @@
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
                 {data: 'action', name: 'action',},
               ],
+              initComplete: function (settings, json) {
+                var totalCambioNombre=tblCambioNombre.rows().count();
+                if (vrbnvalue==1){
+                  insertContador("i.btnNoSaveContCamNom", '.dot-notify.noti-side', totalCambioNombre);
+                  insertContador("i.btnSavedContCamNom", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', 0);
+                }else if (vrbnvalue==2){
+                  insertContador("i.btnNoSaveContCamNom", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnSavedContCamNom", '.dot-notify.noti-side', totalCambioNombre);
+                  insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', 0);
+
+                }else if (vrbnvalue==3){
+                  insertContador("i.btnNoSaveContCamNom", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnSavedContCamNom", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', totalCambioNombre);
+                }
+              },
               "createdRow": function (row, data, dataIndex) {
                 if(data["guardado"]==1)
                 {
@@ -504,6 +549,23 @@
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
                 {data: 'action', name: 'action',},
               ],
+              initComplete: function (settings, json) {
+                var totalBloqueados=tblBloqueoClientes.rows().count();
+                if (vrbnvalue==1){
+                  insertContador("i.btnNoSaveContBloq", '.dot-notify.noti-side', totalBloqueados);
+                  insertContador("i.btnSavedContBloq", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnConfirmContBloq", '.dot-notify.noti-side', 0);
+                }else if (vrbnvalue==2){
+                  insertContador("i.btnNoSaveContBloq", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnSavedContBloq", '.dot-notify.noti-side', totalBloqueados);
+                  insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', 0);
+
+                }else if (vrbnvalue==3){
+                  insertContador("i.btnNoSaveContBloq", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnSavedContBloq", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnConfirmContBloq", '.dot-notify.noti-side', totalBloqueados);
+                }
+              },
               "createdRow": function (row, data, dataIndex) {
                 if(data["guardado"]==1)
                 {
@@ -553,6 +615,23 @@
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
                 {data: 'action', name: 'action',},
               ],
+              initComplete: function (settings, json) {
+                var totalCambioNumero=tblCambioNumero.rows().count();
+                if (vrbnvalue==1){
+                  insertContador("i.btnNoSaveContCamNro", '.dot-notify.noti-side', totalCambioNumero);
+                  insertContador("i.btnSavedContCamNro", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnConfirmContCamNro", '.dot-notify.noti-side', 0);
+                }else if (vrbnvalue==2){
+                  insertContador("i.btnNoSaveContCamNro", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnSavedContCamNro", '.dot-notify.noti-side', totalCambioNumero);
+                  insertContador("i.btnConfirmContCamNro", '.dot-notify.noti-side', 0);
+
+                }else if (vrbnvalue==3){
+                  insertContador("i.btnNoSaveContCamNro", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnSavedContCamNro", '.dot-notify.noti-side', 0);
+                  insertContador("i.btnConfirmContCamNro", '.dot-notify.noti-side', totalCambioNumero);
+                }
+              },
               "createdRow": function (row, data, dataIndex) {
                 if(data["guardado"]==1)
                 {
@@ -1372,6 +1451,8 @@
               //$("#modal_clientes_deudas_content_loading").hide()
               //console.log(arguments)
             });
+
+
         })
 
     </script>
