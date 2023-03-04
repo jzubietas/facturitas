@@ -995,7 +995,7 @@ class DashboardController extends Controller
                                   </div>
                                   <sub class="">Meta Quincenal</sub>';
           }
-          elseif ($data["progress_pedidos"] < 40) {
+          elseif ($data["progress_pedidos"] < 90) {
             $html.=  '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
