@@ -130,6 +130,14 @@
                 </div>
               <div id="metas_situacion_clientes"></div>
             </div>
+
+            <div class="col-md-12">
+              <div class="d-flex justify-content-center">
+                <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
+              </div>
+              <div id="metas_cobranzas_general"></div>
+            </div>
+
           </div>
 
         </div>
@@ -408,6 +416,20 @@
           })
         }
 
+        window.cargReporteMetasCobranzasGeneral = function () {
+          var fd=new FormData();
+          $.ajax({
+            data: fd,
+            processData: false,
+            contentType: false,
+            method: 'POST',
+            url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
+            success: function (resultado){
+              $('#metas_cobranzas_general').html(resultado);
+            }
+          })
+        }
+
         cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
@@ -415,6 +437,7 @@
         cargaNueva(5);
         cargReporteAnalisis();
         cargReporteMetasSituacionClientes();
+        cargReporteMetasCobranzasGeneral();
 
         setInterval(myTimer, 500000);
 
