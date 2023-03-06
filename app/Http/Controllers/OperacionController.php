@@ -515,7 +515,7 @@ class OperacionController extends Controller
                 endif;
 
                 if($pedido->condicion_envio_code == 13):
-                    $btn[]='<li><a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'.$pedido->codigos.'" data-envio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a></li>';
+                    $btn[]='<li><a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-envio" data-code="'.$pedido->codigos.'" data-envio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a></li>';
                     $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.' data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir a LISTO PARA ENVIO</a></li>';
                 endif;
 
@@ -608,7 +608,7 @@ class OperacionController extends Controller
 
                 if(in_array(auth()->user()->rol, [User::ROL_ADMIN,User::ROL_OPERARIO,User::ROL_JEFE_OPERARIO]))
                 {
-                    $btn[] = '<a class="btn-md dropdown-item text-success " href="#"'.
+                    $btn[] = '<a class="btn-md dropdown-item text-success btn-fontsize" href="#"'.
                         'data-backdrop="static" data-keyboard="false"'.
                         'data-toggle="modal"'.
                         'data-correccion="'.$pedido->id.'"'.

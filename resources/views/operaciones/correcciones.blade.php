@@ -46,18 +46,18 @@
             <table id="tablaPrincipal" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
-                    <th scope="col" style="vertical-align: middle">Item</th>
-                    <th scope="col" style="vertical-align: middle">Tipo</th>
-                    <th scope="col" style="vertical-align: middle">Codigo</th>
-                    <th scope="col" style="vertical-align: middle">Ruc</th>
-                    <th scope="col" style="vertical-align: middle">Empresa</th>
-                    <th scope="col" style="vertical-align: middle">Asesor</th>
-                    <th scope="col" style="vertical-align: middle">Fecha de correccion</th>
-                    <th scope="col" style="vertical-align: middle">Condicion</th>
-                    <th scope="col" style="vertical-align: middle">Motivo</th>
-                    <th scope="col" style="vertical-align: middle">Adjuntos</th>
-                    <th scope="col" style="vertical-align: middle">Detalle</th>
-                    <th scope="col" style="vertical-align: middle">Accion</th>
+                    <th scope="col" class="align-middle">Item</th>
+                    <th scope="col" class="align-middle">Tipo</th>
+                    <th scope="col" class="align-middle">Codigo</th>
+                    <th scope="col" class="align-middle">Ruc</th>
+                    <th scope="col" class="align-middle">Empresa</th>
+                    <th scope="col" class="align-middle">Asesor</th>
+                    <th scope="col" class="align-middle">Fecha de correccion</th>
+                    <th scope="col" class="align-middle">Condicion</th>
+                    <th scope="col" class="align-middle">Motivo</th>
+                    <th scope="col" class="align-middle">Adjuntos</th>
+                    <th scope="col" class="align-middle">Detalle</th>
+                    <th scope="col" class="align-middle">Accion</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -72,7 +72,7 @@
     </div>
 @stop
 
-@section('css')
+@push('css')
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
@@ -117,8 +117,17 @@
         .textred {
             color: red !important;
         }
+        #tablaPrincipal {
+          width: 100% !important;
+        }
+        td {
+          vertical-align: middle !important;
+          text-align: center !important;
+        }
+
+
     </style>
-@stop
+@pushend
 
 @section('js')
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
