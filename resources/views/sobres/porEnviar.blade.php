@@ -573,6 +573,8 @@
               $(".contenedor-formulario").addClass("col-6");
             }
 
+
+            $('#tablaPrincipalpedidosagregar').DataTable().ajax.reload();
             tabla_pedidos.columns.adjust().draw();
             $('#nombre').val('')
             $('#celular').val('')
@@ -598,13 +600,13 @@
               $(".contenedor-formulario").removeClass("col-6");
               $(".contenedor-formulario").addClass("col-4");
             }
+            $('#tablaPrincipalpedidosagregar').DataTable().ajax.reload();
             tabla_pedidos.columns.adjust().draw();
-            break;
             $('#numregistro').val('')
             $('#tracking').val('')
             $('#importe').val('')
             $('#rotulo').val('')
-
+            break;
           default:
             if (!$(".lima").hasClass("d-none")) {
               $(".lima").addClass("d-none");
@@ -621,7 +623,7 @@
               $(".contenedor-formulario").removeClass("col-4");
               $(".contenedor-formulario").addClass("col-6");
             }
-
+            $('#tablaPrincipalpedidosagregar').DataTable().ajax.reload();
             tabla_pedidos.columns.adjust().draw();
             break;
 
@@ -1229,6 +1231,7 @@
 
         $("#modal-historial-lima-a").attr("data-cliente", cliente);
         $("#modal-historial-provincia-a").attr("data-cliente", cliente);
+        let paralimaprovincia=$("#limaprovincia").val();
 
         console.log("carga modales")
         tabla_pedidos.destroy();
@@ -1240,7 +1243,7 @@
           "bInfo": false,
           'ajax': {
             url: "{{ route('cargar.pedidosenvioclientetabla') }}",
-            'data': {"cliente_id": cliente},
+            'data': {"cliente_id": cliente,"destino":paralimaprovincia},
             "type": "get",
           },
           columnDefs: [{

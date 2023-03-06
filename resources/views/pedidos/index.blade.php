@@ -1231,7 +1231,7 @@
         },
         rowCallback: function (row, data, index) {
           var pedidodiferencia = data.diferencia;
-          
+
           if (data.condicion_code == 4 || data.estado == 0) {
             $('td:eq(10)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
           }
