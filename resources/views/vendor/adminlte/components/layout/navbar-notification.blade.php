@@ -243,7 +243,6 @@
                     } else {
                         badge.empty();
                     }
-
                     // Update the badge color.
 
                     if (data.label_color) {

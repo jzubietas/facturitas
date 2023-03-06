@@ -207,9 +207,11 @@
           if (pedidodiferencia == null) {
             $('td:eq(9)', row).css('background', '#efb7b7').css('color', '##934242').css('text-align', 'center').css('font-weight', 'bold');
           } else {
-            if (pedidodiferencia > 3) {
+            if (pedidodiferencia <= 3) {
               $('td:eq(9)', row).css('background', '#efb7b7').css('color', '##934242').css('text-align', 'center').css('font-weight', 'bold');
-            } else {
+            } else if (pedidodiferencia > 3 && pedidodiferencia<19 ) {
+              $('td:eq(9)', row).css('background', '#fbba72').css('color', '##934242').css('text-align', 'center').css('font-weight', 'bold');
+            }else {
               $('td:eq(9)', row).css('background', '#afdfb2').css('text-align', 'center').css('font-weight', 'bold');
             }
           }

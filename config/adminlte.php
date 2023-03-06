@@ -235,7 +235,7 @@ return [
             'type' => 'navbar-notification',
             'id' => 'my-notification',
             'icon' => 'fas fa-envelope',
-            /* 'label'        => rand(0, 10) , */
+            /* 'label'        => rand(0, 10) ,*/
             'label_color' => 'danger',
             'route' => 'notifications.index',
             'topnav_right' => true,
