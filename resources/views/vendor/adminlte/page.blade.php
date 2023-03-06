@@ -394,9 +394,7 @@
               //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
               .selectpicker("refresh")
           })
-          let totalListaNuevosa=0;
-          let totalListaNuevosb=0;
-          let totalListaNuevosc=0;
+
           function  fnListaTablaLlamadas(vtipo,vrbnvalue){
             tblListadoLlamadas.destroy();
             tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
@@ -411,25 +409,13 @@
                 "type": "get",
               },
               initComplete: function (settings, json) {
-
+                var totalListaNuevos=tblListadoLlamadas.rows().count();
                 if (vrbnvalue==1){
-                  totalListaNuevosa=tblListadoLlamadas.rows().count();
-                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevosa);
-                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevosb);
-                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevosc);
-                  console.log('1) totalListaNuevosa=',totalListaNuevosa,'totalListaNuevosb=',totalListaNuevosb,'totalListaNuevosc=',totalListaNuevosc);
+                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevos);
                 }else if (vrbnvalue==2){
-                  totalListaNuevosb=tblListadoLlamadas.rows().count();
-                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevosa);
-                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevosb);
-                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevosc);console.log('',);
-                  console.log('2) totalListaNuevosa=',totalListaNuevosa,'totalListaNuevosb=',totalListaNuevosb,'totalListaNuevosc=',totalListaNuevosc);
+                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevos);
                 }else if (vrbnvalue==3){
-                  totalListaNuevosc=tblListadoLlamadas.rows().count();
-                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevosa);
-                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevosb);
-                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevosc);console.log('',);
-                  console.log('3) totalListaNuevosa=',totalListaNuevosa,'totalListaNuevosb=',totalListaNuevosb,'totalListaNuevosc=',totalListaNuevosc);
+                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevos);
                 }
               },
               columns: [
@@ -494,16 +480,10 @@
                 var totalCambioNombre=tblCambioNombre.rows().count();
                 if (vrbnvalue==1){
                   insertContador("i.btnNoSaveContCamNom", '.dot-notify.noti-side', totalCambioNombre);
-                  insertContador("i.btnSavedContCamNom", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', 0);
                 }else if (vrbnvalue==2){
-                  insertContador("i.btnNoSaveContCamNom", '.dot-notify.noti-side', 0);
                   insertContador("i.btnSavedContCamNom", '.dot-notify.noti-side', totalCambioNombre);
-                  insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', 0);
 
                 }else if (vrbnvalue==3){
-                  insertContador("i.btnNoSaveContCamNom", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnSavedContCamNom", '.dot-notify.noti-side', 0);
                   insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', totalCambioNombre);
                 }
               },
@@ -560,16 +540,10 @@
                 var totalBloqueados=tblBloqueoClientes.rows().count();
                 if (vrbnvalue==1){
                   insertContador("i.btnNoSaveContBloq", '.dot-notify.noti-side', totalBloqueados);
-                  insertContador("i.btnSavedContBloq", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnConfirmContBloq", '.dot-notify.noti-side', 0);
                 }else if (vrbnvalue==2){
-                  insertContador("i.btnNoSaveContBloq", '.dot-notify.noti-side', 0);
                   insertContador("i.btnSavedContBloq", '.dot-notify.noti-side', totalBloqueados);
-                  insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', 0);
 
                 }else if (vrbnvalue==3){
-                  insertContador("i.btnNoSaveContBloq", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnSavedContBloq", '.dot-notify.noti-side', 0);
                   insertContador("i.btnConfirmContBloq", '.dot-notify.noti-side', totalBloqueados);
                 }
               },
@@ -626,16 +600,10 @@
                 var totalCambioNumero=tblCambioNumero.rows().count();
                 if (vrbnvalue==1){
                   insertContador("i.btnNoSaveContCamNro", '.dot-notify.noti-side', totalCambioNumero);
-                  insertContador("i.btnSavedContCamNro", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnConfirmContCamNro", '.dot-notify.noti-side', 0);
                 }else if (vrbnvalue==2){
-                  insertContador("i.btnNoSaveContCamNro", '.dot-notify.noti-side', 0);
                   insertContador("i.btnSavedContCamNro", '.dot-notify.noti-side', totalCambioNumero);
-                  insertContador("i.btnConfirmContCamNro", '.dot-notify.noti-side', 0);
 
                 }else if (vrbnvalue==3){
-                  insertContador("i.btnNoSaveContCamNro", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnSavedContCamNro", '.dot-notify.noti-side', 0);
                   insertContador("i.btnConfirmContCamNro", '.dot-notify.noti-side', totalCambioNumero);
                 }
               },
@@ -671,9 +639,6 @@
 
           $('#modal-llamadas-1').on('show.bs.modal', function (event) {
             fnListaTablaLlamadas(1,1);
-            fnListaTablaLlamadas(1,2);
-            fnListaTablaLlamadas(1,3);
-
             fnListaCambioNombre(2,1);
             fnListaBloqueoClientes(3,1);
             fnListaCambioNumero(4,1);
