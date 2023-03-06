@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\DetallePedido;
+use App\Models\Meta;
 use App\Models\Pago;
 use App\Models\Pedido;
 use App\Models\Ruc;
@@ -25,11 +26,11 @@ class DashboardController extends Controller
       return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
     }
 
-    $fecha = null;
+    $fechametames = null;
     if (!request()->has("fecha")) {
-      $fecha = Carbon::now();
+      $fechametames = Carbon::now();
     } else {
-      $fecha = $request->fecha;
+      $fechametames = $request->fechametames;
     }
 
 
@@ -58,7 +59,7 @@ class DashboardController extends Controller
     }*/
 
 
-    return view('dashboard.dashboard', compact('fecha', 'lst_users_vida'));
+    return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida'));
 
   }
 
@@ -131,11 +132,11 @@ class DashboardController extends Controller
 
   public function viewMetaTable(Request $request)
   {
-    $fecha = null;
+    $fechametames = null;
     if (!request()->has("fecha")) {
-      $fecha = Carbon::now();
+      $fechametames = Carbon::now();
     } else {
-      $fecha = $request->fecha;
+      $fechametames = $request->fechametames;
     }
 
 
@@ -201,30 +202,54 @@ class DashboardController extends Controller
       }
       /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
       $date_pagos = Carbon::parse(now())->subMonth();
+      $fechametames = Carbon::now();
 
-      if (!request()->has("fecha")) {
-        $fecha = Carbon::now();
+      if (!request()->has("fechametames")) {
+        $fechametames = Carbon::now();
+        $date_pagos=Carbon::parse(now())->subMonth();
       } else {
-        $fecha = Carbon::parse($request->fecha);
+        $fechametames = Carbon::parse($request->fechametames);
+        $date_pagos=Carbon::parse($request->fechametames)->subMonth();
       }
+
       $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
-        ->where('pedidos.codigo', 'not like', "%-C%")->activo()->whereDate('pedidos.created_at', $fecha)->where('pendiente_anulacion', '<>', '1')->count();
-      $metatotal = (float)$asesor->meta_pedido;
-      $metatotal_2 = (float)$asesor->meta_pedido_2;
-      $metatotal_cobro = (float)$asesor->meta_cobro;
-      $metatotal_quincena = (float)$asesor->meta_quincena;
-      $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-        ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>', '1'), $fecha, 'created_at')
+        ->where('pedidos.codigo', 'not like', "%-C%")->activo()
+        ->whereDate('pedidos.created_at', $fechametames)
+        ->where('pendiente_anulacion', '<>', '1')->count();
+
+      //dd([$asesor_pedido_dia,$fechametames]);
+
+      //meta de asesor por historial
+
+      //$fechametames = Carbon::parse($request->fechametames);
+      $meta_calculo_row=Meta::where('rol',User::ROL_ASESOR)
+        ->where('user_id',$asesor->id)
+        ->where('anio',$fechametames->format('Y'))
+        ->where('mes',$fechametames->format('m'))->first();
+      //dd([$asesor_pedido_dia,$fechametames,$asesor->id]);
+      $metatotal = (float)$meta_calculo_row->meta_pedido;
+      $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
+      $metatotal_cobro = (float)$meta_calculo_row->meta_cobro;
+      $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
+      $asesorid=User::where('rol',User::ROL_ASESOR)->where('id',$asesor->id)->pluck('id');;
+      $total_pedido = $this->applyFilterCustomMetas(Pedido::query()->whereIn('user_id', $asesorid)
+        ->where('codigo', 'not like', "%-C%")->activo()
+        ->where('pendiente_anulacion', '<>', '1'),
+        $fechametames, 'created_at',1)
         ->count();
-      $total_pedido_mespasado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-        ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>', '1'), $date_pagos, 'created_at')
+      $total_pedido_mespasado = $this->applyFilterCustomMetas(Pedido::query()->whereIn('user_id', $asesorid)
+        ->where('codigo', 'not like', "%-C%")->activo()
+        ->where('pendiente_anulacion', '<>', '1'), $date_pagos, 'created_at',0)
         ->count();
-      $total_pagado = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-        ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>', '1')->pagados(), $date_pagos, 'created_at')
+      $total_pagado = $this->applyFilterCustomMetas(Pedido::query()->whereIn('user_id', $asesorid)
+        ->where('codigo', 'not like', "%-C%")->activo()
+        ->where('pendiente_anulacion', '<>', '1')->pagados(), $date_pagos, 'created_at',0)
         ->count();
       $supervisor = User::where('rol', User::ROL_ASESOR)->where('identificador', $asesor->identificador)->activo()->first()->supervisor;
       $pedidos_totales = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
-        ->where('pedidos.codigo', 'not like', "%-C%")->where('pendiente_anulacion', '<>', '1')->whereDate('pedidos.created_at', $fecha)->count();
+        ->where('pedidos.codigo', 'not like', "%-C%")
+        ->where('pendiente_anulacion', '<>', '1')
+        ->whereDate('pedidos.created_at', $fechametames)->count();
       $encargado_asesor = $asesor->supervisor;
 
 
@@ -912,7 +937,7 @@ class DashboardController extends Controller
                 <tr>
                     <th width="8%">Asesor</th>
                     <th width="11%">Id</th>
-                    <th width="8%"><span style="font-size:10px;"> Pedidos del día ' . $fecha->day . '  </span></th>
+                    <th width="8%"><span style="font-size:10px;"> Pedidos del día ' . $fechametames->day . '  </span></th>
                     <th width="36%">Cobranza  ' . Carbon::now()->subMonths(1)->monthName . ' </th>
                     <th width="38%">Pedidos  ' . Carbon::now()->monthName . ' </th>
                 </tr>
@@ -1172,7 +1197,6 @@ class DashboardController extends Controller
   }
 
   public static function applyFilterCustom($query, CarbonInterface $date = null, $column = 'created_at')
-
   {
     if ($date == null) {
       $date = now();
@@ -1181,6 +1205,26 @@ class DashboardController extends Controller
       $date->clone()->startOfMonth(),
       $date->clone()->endOfMonth()->endOfDay()
     ]);
+  }
+
+  public static function applyFilterCustomMetas($query, CarbonInterface $date = null, $column = 'created_at',$tipo=1)
+  {
+    if ($date == null) {
+      $date = now();
+    }
+    if($tipo==1)
+    {
+      return $query->whereBetween($column, [
+        $date->clone()->startOfMonth(),
+        $date->clone()
+      ]);
+    }else{
+      return $query->whereBetween($column, [
+        $date->clone()->startOfMonth(),
+        $date->clone()->endOfMonth()->endOfDay()
+      ]);
+    }
+
   }
 
   public static function applyFilterDateRange($request, $column = 'created_at'){

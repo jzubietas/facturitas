@@ -96,7 +96,7 @@
       <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
       <div class="d-flex justify-content-center align-items-center ml-5">
         <label class="p-0 m-0" for="ingresar">Fecha: </label>
-        <input type="date" id="fecha" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}" >
+        <input type="date" id="fechametames" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}" >
       </div>
     </div>
 
@@ -565,20 +565,25 @@
           }
         });
 
-        $("#fecha").val("{{\Carbon\Carbon::parse("$fecha")->format('Y-m-d')}}");
+        $("#fechametames").val("{{\Carbon\Carbon::parse("$fechametames")->format('Y-m-d')}}");
 
-        $(document).on('change', "#fecha", function (e) {
+        $(document).on('change', "#fechametames", function (e) {
           const value = e.target.value;
-          console.log(value)
-          if (value) {
-            window.location.replace('{{route('dashboard.index')}}?fecha=' + value)
-          }
+          //console.log(value)
+          //if (value) {
+            //window.location.replace('?fechametames=' + value)
+          //}
+
+          cargaNueva(1);
+          cargaNueva(2);
+          cargaNueva(3);
+
         });
 
         window.cargaNueva = function (entero) {
           console.log(' ' + entero)
           var fd = new FormData();
-          fd.append("fecha", $("#fecha").val());
+          fd.append("fechametames", $("#fechametames").val());
           fd.append('ii', entero);
           $.ajax({
             data: fd,
