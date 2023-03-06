@@ -1,9 +1,8 @@
 <div class="row">
     @if(count($clientes)>0)
         @foreach($clientes as $cliente)
-
-            <div class="col-md-6">
-                <div class="card mt-4" style=" background: rgba(25,255,247,0.06); ">
+            <div class="col-lg-12 col-md-12">
+                <div class="card m-0" style=" background: rgba(25,255,247,0.06); ">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -32,7 +31,6 @@
                                     @endif
                                 </ul>
                             </div>
-
                             <div class="col-md-6">
                                 <ul class="list-group">
                                     @if(count($cliente->porcentajes)>0)
@@ -49,14 +47,14 @@
                             </div>
                             <div class="col-md-12">
                                 @if(count($cliente->rucs)>0)
-                                    <div class="row px-4 py-2 mt-2 bg-dark"><b>Empresas</b></div>
-                                    <div class="row">
+                                    <div class=" px-4 py-2 mt-2 bg-dark rounded text-uppercase"><b>Empresas</b></div>
+                                    <div class="col-lg-12 pl-0 pr-0">
                                         @foreach(collect($cliente->rucs)->chunk(2) as $rucs)
-                                            <ul class="list-group mt-2 col-md-6">
+                                            <ul class="list-group mt-2 pr-0 d-flex flex-wrap" style="grid-gap: 10px !important">
                                                 @foreach($rucs as $ruc)
-                                                    <li class="list-group-item bg-dark border-bottom">
-                                                        RUC:<b>{{$ruc->num_ruc}}</b><br> Razon
-                                                        social:<b> {{$ruc->empresa??"--"}}</b>
+                                                    <li class="list-group-item bg-dark border-bottom rounded">
+                                                        RUC: <b> {{$ruc->num_ruc}}</b><br> Razon
+                                                        social: <b> {{$ruc->empresa??"--"}}</b>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -79,7 +77,7 @@
         @endforeach
     @else
         <div class="col-md-12">
-            <h1 class="alert alert-warning">No se encontraron clientes </h1>
+            <h3 class="alert alert-warning m-0">No se encontraron clientes </h3>
         </div>
     @endif
 </div>

@@ -551,6 +551,8 @@
         $("#distrito").val("").selectpicker("refresh")
         $('#pdf_renderer_object').attr('data', null)
         $('#rotulo').val(null)
+        let paralimaprovincia2=$("select[name=limaprovincia]").val();
+        let cliente2 = $("#cliente_id").val();
 
         switch ($(this).val()) {
           case 'L':
@@ -573,7 +575,6 @@
               $(".contenedor-formulario").addClass("col-6");
             }
 
-            tabla_pedidos.columns.adjust().draw();
             $('#nombre').val('')
             $('#celular').val('')
             $('#direccion').val('')
@@ -598,13 +599,11 @@
               $(".contenedor-formulario").removeClass("col-6");
               $(".contenedor-formulario").addClass("col-4");
             }
-            tabla_pedidos.columns.adjust().draw();
-            break;
             $('#numregistro').val('')
             $('#tracking').val('')
             $('#importe').val('')
             $('#rotulo').val('')
-
+            break;
           default:
             if (!$(".lima").hasClass("d-none")) {
               $(".lima").addClass("d-none");
@@ -622,10 +621,61 @@
               $(".contenedor-formulario").addClass("col-6");
             }
 
-            tabla_pedidos.columns.adjust().draw();
             break;
-
         }
+
+        tabla_pedidos.destroy();
+
+        tabla_pedidos = $('#tablaPrincipalpedidosagregar').DataTable({
+          responsive: true,
+          "bPaginate": false,
+          "bFilter": false,
+          "bInfo": false,
+          'ajax': {
+            url: "{{ route('cargar.pedidosenvioclientetabla') }}",
+            'data': {"cliente_id": cliente2,"destino":paralimaprovincia2},
+            "type": "get",
+          },
+          columnDefs: [{
+            'targets': [0], /* column index */
+            'orderable': false, /* true or false */
+          }],
+          rowCallback: function (row, data, index) {
+            if (data.da_confirmar_descarga != '1') {
+              $('input[type=checkbox]', row).attr('disabled', 'disabled')
+            }
+          },
+          columns: [
+            {
+              "data": "id",
+              'targets': [0],
+              'checkboxes': {
+                'selectRow': true
+              },
+              defaultContent: '',
+              orderable: false,
+              sWidth: '5%',
+            },
+            {data: 'codigo', name: 'codigo', sWidth: '40%',},
+            {
+              "data": 'nombre_empresa',
+              "name": 'nombre_empresa',
+              "render": function (data, type, row, meta) {
+                return data;
+              },
+              sWidth: '40%',
+            },
+            {data: 'condicion_envio', name: 'condicion_envio', sWidth: '15%',},
+          ],
+          'select': {
+            'style': 'multi',
+            selector: 'td:first-child'
+          },
+        });
+        $('#tablaPrincipalpedidosagregar').DataTable().ajax.reload();
+        tabla_pedidos.columns.adjust().draw();
+
+
       });
 
       $(document).on("click", "#direccionConfirmar", function (event) {
@@ -1229,6 +1279,7 @@
 
         $("#modal-historial-lima-a").attr("data-cliente", cliente);
         $("#modal-historial-provincia-a").attr("data-cliente", cliente);
+        let paralimaprovincia=$("select[name=limaprovincia]").val();
 
         console.log("carga modales")
         tabla_pedidos.destroy();
@@ -1240,7 +1291,7 @@
           "bInfo": false,
           'ajax': {
             url: "{{ route('cargar.pedidosenvioclientetabla') }}",
-            'data': {"cliente_id": cliente},
+            'data': {"cliente_id": cliente,"destino":paralimaprovincia},
             "type": "get",
           },
           columnDefs: [{

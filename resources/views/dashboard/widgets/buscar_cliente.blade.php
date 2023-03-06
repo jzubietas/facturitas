@@ -5,6 +5,7 @@
         <div class="card-header">Buscar Cliente/RUC</div>
         <div class="card-header">
           <div class="row align-items-center">
+
             <div class="col-md-9">
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -15,10 +16,10 @@
                     </select>
                   </div>
                 </div>
-                <input id="input_search_cliente" class="form-control" maxlength="11"
-                       placeholder="Buscar cliente">
+                <input id="input_search_cliente" class="form-control" maxlength="11" placeholder="Buscar cliente">
               </div>
             </div>
+
             <div class="col-md-3">
               <div class="input-group justify-content-center">
                 <div class="input-group-append input-column">
@@ -33,18 +34,20 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
 
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-body">
-              <div id="search_content_result">
-              </div>
-            </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div id="search_content_result">
           </div>
         </div>
+      </div>
+    </div>
+
   </div>
 </div>

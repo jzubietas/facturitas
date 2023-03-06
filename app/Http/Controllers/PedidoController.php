@@ -298,7 +298,8 @@ class PedidoController extends Controller
                             'foto3' => foto_url($grupo->foto3),
                         ];
                         if (collect($fotos)->values()->filter()->count() > 0) {
-                            $btn[] = '<button data-verforotos=\'' . json_encode($fotos) . '\' class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize"><i class="fa-camera text-dark text-dark"></i> Ver Fotos</button>';
+                            $btn[] = '<button data-verforotos=\'' . json_encode($fotos) . '\' class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize"><i class="fa fa-camera" aria-hidden="true"></i>
+ Ver Fotos</button>';
                         } else {
                             $btn[] = '<button disabled class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize"><i class="fa fa-camera text-dark text-wrap text-center btn-fontsize"></i> Sin Fotos</button>';
                         }
