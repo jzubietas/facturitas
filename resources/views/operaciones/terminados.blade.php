@@ -1,3 +1,4 @@
+{{--operaciones.terminados--}}
 @extends('adminlte::page')
 
 @section('title', 'Operaciones | Sobres terminados')
@@ -38,8 +39,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card"  style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <table style="display: none;" cellspacing="5" cellpadding="5">
                 <tbody>
                 <tr>
@@ -130,40 +131,50 @@
         #tablaPrincipal {
           width: 100% !important;
         }
+        td {
+          vertical-align: middle !important;
+          text-align: center !important;
+        }
+
         @media screen and (max-width: 2249px) {
           #tablaPrincipal {
             width: 100% !important;
             font-size: 14px !important;
           }
 
-
           .btn-fontsize {
             font-size: 15px;
-          }
-          td:nth-child(11) span {
-            white-space: break-spaces !important;
-            padding: 8px !important;
-          }
-          .etiquetas_asignacion {
-            background-color: #b0deb3 !important;
-            font-size: 12px;
-            padding: 4px;
-            font-weight: 700;
-            line-height: 1;
-            white-space: break-spaces;
-            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-            color: #4a604b !important;
-            margin-left: 2px;
           }
 
           .sorting:before,
           .sorting:after,
           .sorting_desc:before,
           .sorting_desc:after {
-            top: 20px !important;
+            top: 30px !important;
           }
 
         }
+
+        @media screen and (max-width: 2144px) {
+          .btn-fontsize {
+            font-size: 13px;
+            min-width: 85px;
+            max-width: 160px;
+          }
+
+        }
+
+        @media screen and (max-width: 1500px) {
+          th:nth-child(6){
+            max-width: 230px !important;
+          }
+
+          td:nth-child(6) span{
+            white-space: break-spaces !important;
+            padding: 8px !important;
+          }
+        }
+
 
 
     </style>
