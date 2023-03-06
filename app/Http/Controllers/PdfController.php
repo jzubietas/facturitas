@@ -9,6 +9,7 @@ use App\Models\SituacionClientes;
 use App\Models\User;
 use App\Models\Pedido;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -307,78 +308,36 @@ class PdfController extends Controller
     $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
     $periodo_actual=Carbon::parse(now())->endOfMonth();
     $diferenciameses = ($periodo_origen->diffInMonths($periodo_actual));
-    return $periodo_origen.'|'.$periodo_actual.'|'.$diferenciameses;
+    $mes_artificio=null;
 
-    $inicio_s = Carbon::now()->startOfMonth()->format('Y-m-d');
-    $inicio_f = Carbon::now()->endOfMonth()->format('Y-m-d');
-    $periodo_antes = Carbon::now()->subMonth()->startOfMonth()->format('Y-m');
-    $periodo_actual = Carbon::now()->startOfMonth()->format('Y-m');
-
-    $mes_w = Carbon::now()->startOfMonth()->format('m');
-    $anio_w = Carbon::now()->startOfMonth()->format('Y');
-
-    $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
-      ->where([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO RECIENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
-        ['a.situacion', '=', 'RECURRENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'NUEVO'],
-        ['a.situacion', '=', 'BASE FRIA'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->groupBy([
-        'situacion_clientes.situacion'
-      ])
-      ->select([
-        'situacion_clientes.situacion',
-        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
-                                                    THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
-                                                    THEN (select sum(m.meta_quincena_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_quincena "),
-
-        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
-                                                  THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
-                                                    THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
-
-        DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
-                                                    THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
-                                                    THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
-
-        DB::raw('count(situacion_clientes.situacion) as total')
-      ])->get();
+    //Carbon::setLocale('es');
+    setlocale(LC_ALL, 'es_ES');
     $html = [];
     $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
-    foreach ($situaciones_clientes as $situacion_cliente) {
+    for($i=1;$i<=$diferenciameses;$i++)
+    {
+      $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
+      $html_mes=$periodo_origen->addMonths($i)->format('Y-M');
+      $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
+      $mes_artificio=$periodo_origen->addMonths($i)->subMonth();
 
+
+      $total_pedido_mespasado = $this->applyFilterPersonalizable(Pedido::query()
+        ->where('codigo', 'not like', "%-C%")->activo()
+        ->where('pendiente_anulacion', '<>','1' ), $mes_artificio, 'created_at')
+        ->count();
+      $total_pagado_mespasado = $this->applyFilterPersonalizable(Pedido::query()
+        ->where('codigo', 'not like', "%-C%")->activo()
+        ->where('pendiente_anulacion', '<>','1' )->pagados(), $mes_artificio, 'created_at')
+        ->count();
+
+      $title_mes_artificio=$mes_artificio->format('F');
+      //$title_mes_artificio=$title_mes_artificio->formatLocalized('%B');
       $html[] = '<tr>';
       $html[] = '<td style="width:20%;" class="text-center">';
       $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-        $situacion_cliente->situacion .
+        $title_mes_artificio.
         '</span>';
       $html[] = '</td>';
 
@@ -388,24 +347,11 @@ class PdfController extends Controller
       $valor_meta = 0;
       $color_progress = '';
       $color_degradado = 0;
-      if ($situacion_cliente->total < $situacion_cliente->meta_quincena) {
-        //meta quincena
-        $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_quincena) * 100, 2);
-        $diferenciameta = $situacion_cliente->meta_quincena - $situacion_cliente->total;
-        if ($diferenciameta < 0) $diferenciameta = 0;
-        $valor_meta = $situacion_cliente->meta_quincena;
-        if($porcentaje < 90){
-          $color_progress = '#FFD4D4';  /*ROSADO*/
-        }else{
-          $color_progress = 'linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%)';   /*ROSADO-ROJO*/
-        }
-
-      } else if ($situacion_cliente->total < $situacion_cliente->meta_1) {
+      if ($total_pagado_mespasado   < $total_pedido_mespasado) {
         //meta 1
-        $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_1) * 100, 2);
-        $diferenciameta = $situacion_cliente->meta_1 - $situacion_cliente->total;
+        $porcentaje = round(($total_pagado_mespasado / $total_pedido_mespasado) * 100, 2);
+        $diferenciameta = $total_pagado_mespasado - $total_pedido_mespasado;
         if ($diferenciameta < 0) $diferenciameta = 0;
-        $valor_meta = $situacion_cliente->meta_1;
         if($porcentaje < 45){
           $color_progress = '#DC3545FF';  /*ROJO*/
         }else if($porcentaje < 50){
@@ -415,24 +361,6 @@ class PdfController extends Controller
         }else{
           $color_progress= '#8ec117';  /*AMARILLO-VERDE*/
         }
-      } else {
-        $valor_mayor_cero=intval($situacion_cliente->meta_2);
-        if ($valor_mayor_cero>0){
-          $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_2) * 100, 2);
-        }else{
-          $porcentaje = round(0, 2);
-        }
-        $diferenciameta = $situacion_cliente->meta_2 - $situacion_cliente->total;
-        if ($diferenciameta < 0) $diferenciameta = 0;
-        $valor_meta = $situacion_cliente->meta_2;
-        if ($porcentaje < 99){
-          $color_progress = '#8ec117';  /*VERDE*/
-        }else if ($porcentaje < 98){
-          $color_progress = 'linear-gradient(90deg, rgba(3,175,3,1) 0%, rgba(24,150,24,1) 60%, rgba(0,143,251,1) 100%)';  /*VERDE-AZUL*/
-        }else {
-          $color_progress = '#008ffb'; /*AZUL*/
-        }
-
       }
 
       if ($porcentaje >= 90) {
@@ -445,15 +373,16 @@ class PdfController extends Controller
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>
-                                                               - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                               - ' . $total_pagado_mespasado . ' /  ' . $total_pedido_mespasado . '
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    ' . $diferenciameta . '
                                                                   </p>
                                                     </span>
                                              </div>
                                          </div>
-                                        <sub class="d-none">% -  Pagados/ Asignados</sub>
-                                  </div>';
+
+                                  </div>
+                                  <sub class="">Cobranzas: '.$total_pagado_mespasado.'</sub>';
       }
       else if ($porcentaje > 75)
       {
@@ -466,15 +395,16 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                         - ' . $total_pagado_mespasado . ' /  ' . $total_pedido_mespasado . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas: '.$total_pagado_mespasado.'</sub>';
       }
       else if ($porcentaje > 50)
       {
@@ -487,15 +417,16 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                         - ' . $total_pagado_mespasado . ' /  ' . $total_pedido_mespasado . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas '.$total_pagado_mespasado.'</sub>';
       }
       else {
         $html[] = '<div class="w-100 bg-white rounded">
@@ -507,25 +438,25 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                         - ' . $total_pagado_mespasado . ' /  ' . $total_pedido_mespasado . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
                                               </span>
                                        </div>
                                    </div>
-                                  <sub class="d-none">% -  Pagados/ Asignados</sub>
-                            </div>';
+
+                            </div>
+                            <sub class="">Cobranzas '.$total_pagado_mespasado.'</sub>';
       }
 
       $html[] = '</td>';
       $html[] = '</tr>';
-    }
 
+    }
     $html[] = '</table>';
     $html = join('', $html);
     return $html;
-
   }
 
   public function Analisisgrafico(Request $request)
@@ -1159,6 +1090,17 @@ class PdfController extends Controller
     //$canvas = PDF::getDomPDF();
     //return $canvas;
     return $pdf->stream('pedido ' . $pedido->id . '.pdf');
+  }
+
+  public static function applyFilterPersonalizable($query, CarbonInterface $date = null, $column = 'created_at')
+  {
+    if ($date == null) {
+      $date = now();
+    }
+    return $query->whereBetween($column, [
+      $date->clone()->startOfMonth(),
+      $date->clone()->endOfMonth()->endOfDay()
+    ]);
   }
 
 }
