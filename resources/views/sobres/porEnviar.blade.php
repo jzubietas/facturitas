@@ -1229,6 +1229,7 @@
 
         $("#modal-historial-lima-a").attr("data-cliente", cliente);
         $("#modal-historial-provincia-a").attr("data-cliente", cliente);
+        let paralimaprovincia=$("#limaprovincia").val();
 
         console.log("carga modales")
         tabla_pedidos.destroy();
@@ -1240,7 +1241,7 @@
           "bInfo": false,
           'ajax': {
             url: "{{ route('cargar.pedidosenvioclientetabla') }}",
-            'data': {"cliente_id": cliente},
+            'data': {"cliente_id": cliente,"destino":paralimaprovincia},
             "type": "get",
           },
           columnDefs: [{
