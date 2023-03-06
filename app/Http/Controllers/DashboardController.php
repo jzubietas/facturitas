@@ -589,7 +589,7 @@ class DashboardController extends Controller
                  style="width: ' . ($object_totales['progress_pedidos']) . '%"
                  aria-valuenow="' . ($object_totales['progress_pedidos']) . '"
                  aria-valuemin="0"
-                 aria-valuemax="100">0000</div>';
+                 aria-valuemax="100"></div>';
       $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res" style="top: 10px;font-size: 12px;">
              <span style="font-weight: lighter"> <b class="bold-size-total"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>    </div>';
