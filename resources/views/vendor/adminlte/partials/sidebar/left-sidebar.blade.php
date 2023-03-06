@@ -27,25 +27,4 @@
 
 </aside>
 
-@push('css')
-  <style>
 
-    .sidebar-mini.sidebar-collapse .main-sidebar, .sidebar-mini.sidebar-collapse .main-sidebar::before{
-      margin-left: 0 !important;
-    }
-    .sidebar-dark-dark .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-dark .nav-sidebar > .nav-item > .nav-link.active{
-      background-color: #343a40 !important;
-      color: #fff !important;
-    }
-    @media (min-width: 768px){
-      body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
-        transition: margin-left .3s ease-in-out !important;
-        margin-left: 0px !important;
-      }
-    }
-
-
-
-  </style>
-
-@endpush
