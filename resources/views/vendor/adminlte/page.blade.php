@@ -394,7 +394,9 @@
               //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
               .selectpicker("refresh")
           })
-
+          let totalListaNuevosa=0;
+          let totalListaNuevosb=0;
+          let totalListaNuevosc=0;
           function  fnListaTablaLlamadas(vtipo,vrbnvalue){
             tblListadoLlamadas.destroy();
             tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
@@ -409,20 +411,25 @@
                 "type": "get",
               },
               initComplete: function (settings, json) {
-                var totalListaNuevos=tblListadoLlamadas.rows().count();
-                if (vrbnvalue==1){
-                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevos);
-                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', 0);
-                }else if (vrbnvalue==2){
-                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevos);
-                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', 0);
 
+                if (vrbnvalue==1){
+                  totalListaNuevosa=tblListadoLlamadas.rows().count();
+                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevosa);
+                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevosb);
+                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevosc);
+                  console.log('1) totalListaNuevosa=',totalListaNuevosa,'totalListaNuevosb=',totalListaNuevosb,'totalListaNuevosc=',totalListaNuevosc);
+                }else if (vrbnvalue==2){
+                  totalListaNuevosb=tblListadoLlamadas.rows().count();
+                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevosa);
+                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevosb);
+                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevosc);console.log('',);
+                  console.log('2) totalListaNuevosa=',totalListaNuevosa,'totalListaNuevosb=',totalListaNuevosb,'totalListaNuevosc=',totalListaNuevosc);
                 }else if (vrbnvalue==3){
-                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', 0);
-                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevos);
+                  totalListaNuevosc=tblListadoLlamadas.rows().count();
+                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevosa);
+                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevosb);
+                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevosc);console.log('',);
+                  console.log('3) totalListaNuevosa=',totalListaNuevosa,'totalListaNuevosb=',totalListaNuevosb,'totalListaNuevosc=',totalListaNuevosc);
                 }
               },
               columns: [
@@ -664,11 +671,15 @@
 
           $('#modal-llamadas-1').on('show.bs.modal', function (event) {
             fnListaTablaLlamadas(1,1);
+            fnListaTablaLlamadas(1,2);
+            fnListaTablaLlamadas(1,3);
+
             fnListaCambioNombre(2,1);
             fnListaBloqueoClientes(3,1);
             fnListaCambioNumero(4,1);
             ocultar_div_modal_correccion_pedidos();
           })
+
 
           $('#tablaListadoLlamadas tbody').on('click', 'button.btnGuardado', function () {
             var data = tblListadoLlamadas.row($(this).parents('tr')).data();
