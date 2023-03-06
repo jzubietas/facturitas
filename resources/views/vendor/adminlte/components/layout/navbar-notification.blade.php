@@ -237,7 +237,7 @@
                     let dropdown = t.find(".adminlte-dropdown-content");
 
                     // Update the badge label.
-
+                    console.log('DATOS CONTADORES=',data);
                     if (data.label && data.label > 0) {
                         badge.html(data.label);
                     } else {

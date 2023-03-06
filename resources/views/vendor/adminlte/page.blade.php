@@ -222,7 +222,7 @@
 
 
           window.ocultar_div_modal1 = function () {
-                console.log("ocultar div")
+                console.log("ocultar div asdfss")
                 $("#op-1-row").hide();
                 $("#form-op-1-row input").val("");
                 $("#op-2-row").hide();
@@ -899,11 +899,11 @@
           })
 
           window.ocultar_div_modal_correccion_pedidos = function () {
-            console.log("ocultar div")
-            $("#modal-ListadoClientes").hide();
-            $("#modal-CambioNombre").hide();
-            $("#modal-BLoqueoCliente").hide();
-            $("#modal-CambioNumero").hide();
+            console.log("ocultar div asd")
+            $("#modal-correccionpedido-pc-container").hide();
+            $("#modal-correccionpedido-f-container").hide();
+            $("#modal-correccionpedido-g-container").hide();
+            $("#modal-correccionpedido-b-container").hide();
           }
 
           $(document).on('click',
