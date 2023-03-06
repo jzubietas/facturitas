@@ -114,7 +114,7 @@
           <th class="align-middle" scope="col">F. Actualizacion</th>
           <th class="align-middle" scope="col">Total (S/)</th>
           <th class="align-middle" scope="col">Est. pago</th>
-          {{--<th class="align-middle" scope="col">Con. pago</th>--}}
+          <th class="align-middle" scope="col">Con. pago</th>
           <th class="align-middle" scope="col">Est. Sobre</th>
           <th class="align-middle" scope="col">Dif.</th>
           <th class="align-middle" scope="col">Acciones</th>
@@ -1232,7 +1232,7 @@
         rowCallback: function (row, data, index) {
           var pedidodiferencia = data.diferencia;
 
-          if (data.condicion_code == 4 || data.estado == 0) {
+          /*if (data.condicion_code == 4 || data.estado == 0) {
             $('td:(10)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
           } else {
             if (pedidodiferencia == null) {
@@ -1246,7 +1246,7 @@
                 $('td:eq(10)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
               }
             }
-          }
+          }*/
 
           $('[data-jqconfirm]', row).click(function () {
             $.confirm({
@@ -1479,7 +1479,7 @@ ${data.foto3 ? `
           },  */
           //{data: 'responsable', name: 'responsable', },//estado de envio
 
-          //{data: 'condicion_pa', name: 'condicion_pa', },//ss
+          {data: 'condicion_pa', name: 'condicion_pa','visible':false },
           {data: 'condicion_envio', name: 'condicion_envio'},
 
           /*
