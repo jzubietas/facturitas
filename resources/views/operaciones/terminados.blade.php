@@ -55,17 +55,17 @@
             <table id="tablaPrincipal" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
-                    <th scope="col" style="vertical-align: middle">Item</th>
-                    <th scope="col" style="vertical-align: middle">Código</th>
-                    <th scope="col" style="vertical-align: middle">Razón social</th>
-                    <th scope="col" style="vertical-align: middle">Asesor</th>
-                    <th scope="col" style="vertical-align: middle">Fecha de registro</th>
-                    <th scope="col" style="vertical-align: middle">Destino</th>
-                    <th scope="col" style="vertical-align: middle">Estado</th>
-                    <th scope="col" style="vertical-align: middle">Adjuntos</th>
-                    <th scope="col" style="vertical-align: middle">Atendido por</th>
-                    <th scope="col" style="vertical-align: middle">Jefe</th>
-                    <th scope="col" style="vertical-align: middle">Accion</th>
+                    <th scope="col" class="align-middle">Item</th>
+                    <th scope="col" class="align-middle">Código</th>
+                    <th scope="col" class="align-middle">Razón social</th>
+                    <th scope="col" class="align-middle">Asesor</th>
+                    <th scope="col" class="align-middle">Fecha de registro</th>
+                    <th scope="col" class="align-middle">Destino</th>
+                    <th scope="col" class="align-middle">Estado</th>
+                    <th scope="col" class="align-middle">Adjuntos</th>
+                    <th scope="col" class="align-middle">Atendido por</th>
+                    <th scope="col" class="align-middle">Jefe</th>
+                    <th scope="col" class="align-middle">Accion</th>
                 </tr>
                 </thead>
                 <tbody>
