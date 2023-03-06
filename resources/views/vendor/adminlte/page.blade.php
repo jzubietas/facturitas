@@ -642,7 +642,7 @@
             fnListaCambioNombre(2,1);
             fnListaBloqueoClientes(3,1);
             fnListaCambioNumero(4,1);
-            ocultar_div_modal_correccion_pedidos();
+            ocultar_div_modal_listado_clientes();
           })
 
 
@@ -898,18 +898,26 @@
             });
           })
 
-          window.ocultar_div_modal_correccion_pedidos = function () {
+          /*window.ocultar_div_modal_correccion_pedidos = function () {
             console.log("ocultar div asd")
             $("#modal-correccionpedido-pc-container").hide();
             $("#modal-correccionpedido-f-container").hide();
             $("#modal-correccionpedido-g-container").hide();
             $("#modal-correccionpedido-b-container").hide();
+          }*/
+
+          window.ocultar_div_modal_listado_clientes = function () {
+            console.log("ocultar div asd")
+            $("#modal-ListadoClientes").hide();
+            $("#modal-CambioNombre").hide();
+            $("#modal-BLoqueoCliente").hide();
+            $("#modal-CambioNumero").hide();
           }
 
           $(document).on('click',
             "button#btnListNuevoCliente,button#btnListCambioNombre,button#btnListBloqueo,button#btnListCambioNumero",
             function (e) {
-              ocultar_div_modal_correccion_pedidos();
+              ocultar_div_modal_listado_clientes();
               switch (e.target.id) {
                 case 'btnListNuevoCliente':
                   $("#modal-ListadoClientes").show();
