@@ -2,7 +2,7 @@
     <div class="modal-dialog" style="max-width: 800px!important;">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h5 class="modal-title" id="exampleModalLabel">Correccion en Pedidos asd</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Correccion en Pedidos</h5>
 
                 <button class="float-right btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
