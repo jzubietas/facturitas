@@ -55,6 +55,7 @@ class NotificationsController extends Controller
         ];
 
         $dropdownHtml = '';
+        $devoluciones = [];
         if (\Auth::check()) {
             if (\Auth::user()->rol == User::ROL_ADMIN) {
                 $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->orderByDesc('created_at')->get();
