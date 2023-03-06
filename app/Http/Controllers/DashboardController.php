@@ -597,7 +597,8 @@ class DashboardController extends Controller
               </tr>
               </tbody>';
       $html .= '</table>';
-    } /*LUISSSSSSSSSSSSSSSSSSSSSSSSSSSSS ----- 46   */
+    }
+    /*LUISSSSSSSSSSSSSSSSSSSSSSSSSSSSS ----- 46   */
     else if ($request->ii == 4) {
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
       $html .= '<tbody>
@@ -786,7 +787,8 @@ class DashboardController extends Controller
               </tr>
               </tbody>';
       $html .= '</table>';
-    } /*PAOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----- 24*/
+    }
+    /*PAOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----- 24*/
     else if ($request->ii == 5) {
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
       $html .= '<tbody>
