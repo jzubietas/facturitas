@@ -315,7 +315,7 @@ class PdfController extends Controller
     $html = [];
     $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
     //$html="";
-    for($i=1;$i<=$diferenciameses+1;$i++)
+    for($i=1;$i<=$diferenciameses;$i++)
     {
       $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
       $html_mes=$periodo_origen->addMonths($i)->format('Y-M');
