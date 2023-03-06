@@ -236,7 +236,7 @@ class NotificationsController extends Controller
             ->withCurrentUser()->get()->filter(fn(Alerta $alerta) => ($alerta->date_at == null || Carbon::parse($alerta->date_at)->subHour() <= now()))->values();
         return [
             'icon' => 'fas fa-envelope',
-            'label' => '0',
+            'label' => count(auth()->user()->unreadNotifications) + count($devoluciones),
             'label_color' => 'danger',
             'icon_color' => 'white',
             'dropdown' => $dropdownHtml,
