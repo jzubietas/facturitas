@@ -299,9 +299,9 @@
 
     }
 
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1500px) {
       #tablaPrincipal {
-        font-size: 8px !important;
+        font-size: 10px !important;
       }
 
       .etiquetas_asignacion {
