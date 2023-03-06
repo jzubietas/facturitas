@@ -158,3 +158,118 @@
   </script>
 
 @endsection
+@push('css')
+  <style>
+    .list-group .list-group-item {
+      background: #a5770f1a;
+    }
+
+    .animated-progress {
+      width: 300px;
+      height: 30px;
+      border-radius: 5px;
+      margin: 20px 10px;
+      border: 1px solid rgb(189, 113, 113);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .animated-progress span {
+      height: 100%;
+      display: block;
+      width: 0;
+      color: rgb(255, 251, 251);
+      line-height: 30px;
+      text-align: end;
+      padding-right: 5px;
+    }
+
+    td:nth-child(1),
+    td:nth-child(2),
+    td:nth-child(3) {
+      font-weight: bold;
+    }
+
+    td:nth-child(3) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .table_analisis {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .format-size {
+      padding: 0;
+      font-weight: bold;
+      font-size: 18px;
+      margin-left: 8px;
+    }
+
+    .bold-size {
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .bold-size-total {
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .name-size {
+      font-size: 14px;
+    }
+
+    .center-around {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    @media screen and (max-width: 1440px) {
+      .tabla-metas_pagos_pedidos {
+        font-size: 12px;
+      }
+
+      .name-size {
+        font-size: 12px;
+      }
+
+      .format-size {
+        font-size: 14px;
+        margin-left: 3px;
+      }
+
+      .bold-size {
+        font-size: 15px;
+      }
+
+      .bold-size-total {
+        font-size: 11px;
+      }
+
+    }
+
+    @media screen and (max-width: 1345px) {
+      .input-column {
+        flex-direction: column;
+      }
+    }
+
+    @media screen and (max-width: 991px) {
+      .input-column {
+        flex-direction: row;
+      }
+
+      .margen {
+        margin-left: 4px;
+        margin-right: 4px;
+      }
+    }
+  </style>
+@endpush
+

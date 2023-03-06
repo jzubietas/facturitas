@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Pedido;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -41,23 +42,75 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
                 'pedidos.condicion_envio as estado_pedido',
                 'pedidos.condicion_envio as estado_envio'
             ])
-            ->where('pedidos.estado', '1')
+          ->where('pedidos.estado', '1')
+          ->where('pedidos.pendiente_anulacion', '0')
             //->where('dp.estado', '1')
             //->where('pedidos.envio', '<>', '0')
             //->where('pedidos.direccion', '1')
             //->where('pedidos.destino', 'LIMA')
             //->where('di.provincia', 'LIMA')
             ->whereIn('pedidos.condicion_envio_code', [
-                Pedido::EN_ATENCION_OPE_INT,
-                Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT,
-                Pedido::RECIBIDO_JEFE_OPE_INT,
-                Pedido::RECEPCION_COURIER_INT,
+              Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+              Pedido::RECIBIDO_JEFE_OPE_INT,
+              Pedido::RECEPCION_COURIER_INT,
             ])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta])
             ->sinDireccionEnvio()
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get();
+            ->orderBy('pedidos.created_at', 'DESC');
 
+      if (Auth::user()->rol == "Operario") {
+        $asesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->Where('users.operario', Auth::user()->id)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+
+        $pedidosLima = $pedidosLima->WhereIn('u.identificador', $asesores);
+
+      } else if (Auth::user()->rol == "Jefe de operaciones") {
+        $operarios = User::where('users.rol', 'Operario')
+          ->where('users.estado', '1')
+          ->where('users.jefe', Auth::user()->id)
+          ->select(
+            DB::raw("users.id as id")
+          )
+          ->pluck('users.id');
+
+        $asesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->WhereIn('users.operario', $operarios)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+
+        $pedidosLima = $pedidosLima->WhereIn('u.identificador', $asesores);
+
+      } else if (Auth::user()->rol == "Asesor") {
+        $pedidosLima = $pedidosLima->Where('u.identificador', Auth::user()->identificador);
+
+      } else if (Auth::user()->rol == "Super asesor") {
+        $pedidosLima = $pedidosLima->Where('u.identificador', Auth::user()->identificador);
+
+      } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+        $pedidosLima = $pedidosLima->Where('u.identificador', Auth::user()->identificador);
+      } else if (Auth::user()->rol == "Encargado") {
+
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.supervisor', Auth::user()->id)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+
+        $pedidosLima = $pedidosLima->whereIn('u.identificador', $usersasesores);
+      }
+
+
+        $pedidosLima=$pedidosLima->get();
         $this->pedidosLima = $pedidosLima;
         return $this;
     }
