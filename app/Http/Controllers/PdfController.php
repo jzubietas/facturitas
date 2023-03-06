@@ -314,6 +314,7 @@ class PdfController extends Controller
     setlocale(LC_ALL, 'es_ES');
     $html = [];
     $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
+    //$html="";
     for($i=1;$i<=$diferenciameses;$i++)
     {
       $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
@@ -324,12 +325,16 @@ class PdfController extends Controller
 
       $total_pedido_mespasado = $this->applyFilterPersonalizable(Pedido::query()
         ->where('codigo', 'not like', "%-C%")->activo()
+        ->where('user_id','<>',51)
         ->where('pendiente_anulacion', '<>','1' ), $mes_artificio, 'created_at')
         ->count();
       $total_pagado_mespasado = $this->applyFilterPersonalizable(Pedido::query()
         ->where('codigo', 'not like', "%-C%")->activo()
+        ->where('user_id','<>',51)
         ->where('pendiente_anulacion', '<>','1' )->pagados(), $mes_artificio, 'created_at')
         ->count();
+
+
 
       $title_mes_artificio=$mes_artificio->format('F');
       //$title_mes_artificio=$title_mes_artificio->formatLocalized('%B');
