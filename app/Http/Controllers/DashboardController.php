@@ -226,25 +226,30 @@ class DashboardController extends Controller
         ->where('user_id',$asesor->id)
         ->where('anio',$fechametames->format('Y'))
         ->where('mes',$fechametames->format('m'))->first();
-      //dd([$asesor_pedido_dia,$fechametames,$asesor->id]);
+
       $metatotal = (float)$meta_calculo_row->meta_pedido;
       $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
       $metatotal_cobro = (float)$meta_calculo_row->meta_cobro;
       $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
       $asesorid=User::where('rol',User::ROL_ASESOR)->where('id',$asesor->id)->pluck('id');;
-      $total_pedido = $this->applyFilterCustomMetas(Pedido::query()->whereIn('user_id', $asesorid)
+      $total_pedido = $this->applyFilterCustomMetas(Pedido::query()->where('user_id', $asesor->id)
         ->where('codigo', 'not like', "%-C%")->activo()
         ->where('pendiente_anulacion', '<>', '1'),
         $fechametames, 'created_at',1)
         ->count();
-      $total_pedido_mespasado = $this->applyFilterCustomMetas(Pedido::query()->whereIn('user_id', $asesorid)
+      $total_pedido_mespasado = $this->applyFilterCustomMetas(Pedido::query()->where('user_id', $asesor->id)
         ->where('codigo', 'not like', "%-C%")->activo()
-        ->where('pendiente_anulacion', '<>', '1'), $date_pagos, 'created_at',0)
+        ->where('pendiente_anulacion', '<>', '1'), $date_pagos, 'created_at',0,$fechametames)
         ->count();
-      $total_pagado = $this->applyFilterCustomMetas(Pedido::query()->whereIn('user_id', $asesorid)
+      //
+
+      $total_pagado = $this->applyFilterCustomMetas(Pedido::query()->where('user_id', $asesor->id)
         ->where('codigo', 'not like', "%-C%")->activo()
-        ->where('pendiente_anulacion', '<>', '1')->pagados(), $date_pagos, 'created_at',0)
+        ->where('pendiente_anulacion', '<>', '1')->pagados(), $date_pagos, 'created_at',0,$fechametames)
         ->count();
+
+      //dd([$total_pagado,$date_pagos,$asesor->id]);
+
       $supervisor = User::where('rol', User::ROL_ASESOR)->where('identificador', $asesor->identificador)->activo()->first()->supervisor;
       $pedidos_totales = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
         ->where('pedidos.codigo', 'not like', "%-C%")
@@ -1207,7 +1212,7 @@ class DashboardController extends Controller
     ]);
   }
 
-  public static function applyFilterCustomMetas($query, CarbonInterface $date = null, $column = 'created_at',$tipo=1)
+  public static function applyFilterCustomMetas($query, CarbonInterface $date = null, $column = 'created_at',$tipo=1,CarbonInterface $date2 = null)
   {
     if ($date == null) {
       $date = now();
@@ -1221,7 +1226,7 @@ class DashboardController extends Controller
     }else{
       return $query->whereBetween($column, [
         $date->clone()->startOfMonth(),
-        $date->clone()->endOfMonth()->endOfDay()
+        $date2->endOfDay()
       ]);
     }
 
