@@ -114,7 +114,7 @@
           <th class="align-middle" scope="col">F. Actualizacion</th>
           <th class="align-middle" scope="col">Total (S/)</th>
           <th class="align-middle" scope="col">Est. pago</th>
-          {{--<th class="align-middle" scope="col">Con. pago</th>--}}
+          <th class="align-middle" scope="col">Con. pago</th>
           <th class="align-middle" scope="col">Est. Sobre</th>
           <th class="align-middle" scope="col">Dif.</th>
           <th class="align-middle" scope="col">Acciones</th>
@@ -1479,7 +1479,7 @@ ${data.foto3 ? `
           },  */
           //{data: 'responsable', name: 'responsable', },//estado de envio
 
-          //{data: 'condicion_pa', name: 'condicion_pa', },//ss
+          {data: 'condicion_pa', name: 'condicion_pa','visible':false },
           {data: 'condicion_envio', name: 'condicion_envio'},
 
           /*
