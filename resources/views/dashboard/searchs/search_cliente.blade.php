@@ -2,7 +2,7 @@
     @if(count($clientes)>0)
         @foreach($clientes as $cliente)
             <div class="col-lg-12 col-md-12">
-                <div class="card mt-4" style=" background: rgba(25,255,247,0.06); ">
+                <div class="card m-0" style=" background: rgba(25,255,247,0.06); ">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
