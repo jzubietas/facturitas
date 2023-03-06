@@ -82,7 +82,7 @@
     </div>
 @stop
 
-@section('css')
+@push('css')
     {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
@@ -127,8 +127,50 @@
         .textred {
             color: red !important;
         }
+        #tablaPrincipal {
+          width: 100% !important;
+        }
+        @media screen and (max-width: 2249px) {
+          #tablaPrincipal {
+            width: 100% !important;
+            font-size: 14px !important;
+          }
+
+
+          .btn-fontsize {
+            font-size: 15px;
+          }
+          td:nth-child(11) span {
+            white-space: break-spaces !important;
+            padding: 8px !important;
+          }
+          .etiquetas_asignacion {
+            background-color: #b0deb3 !important;
+            font-size: 12px;
+            padding: 4px;
+            font-weight: 700;
+            line-height: 1;
+            white-space: break-spaces;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            color: #4a604b !important;
+            margin-left: 2px;
+          }
+
+          .sorting:before,
+          .sorting:after,
+          .sorting_desc:before,
+          .sorting_desc:after {
+            top: 20px !important;
+          }
+
+        }
+
+
     </style>
-@stop
+
+
+
+@endpush
 
 @section('js')
     {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
