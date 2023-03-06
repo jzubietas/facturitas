@@ -565,9 +565,9 @@
           }
         });
 
-        $('#fecha').val("{{\Carbon\Carbon::parse($fecha)->format('Y-m-d')}}");
+        $("#fecha").val("{{\Carbon\Carbon::parse("$fecha")->format('Y-m-d')}}");
 
-        $(document).on('change', '#fecha', function () {
+        $(document).on('change', "#fecha", function (e) {
           const value = e.target.value;
           console.log(value)
           if (value) {
@@ -578,7 +578,7 @@
         window.cargaNueva = function (entero) {
           console.log(' ' + entero)
           var fd = new FormData();
-          fd.append('fecha', $('#fecha').val());
+          fd.append("fecha", $("#fecha").val());
           fd.append('ii', entero);
           $.ajax({
             data: fd,
@@ -654,7 +654,7 @@
         cargReporteMetasSituacionClientes();
         cargReporteMetasCobranzasGeneral();
 
-        setInterval(myTimer, 500000);
+        setInterval(myTimer, 5000);
 
         function myTimer() {
           cargaNueva(1);
