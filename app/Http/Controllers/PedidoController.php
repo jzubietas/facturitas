@@ -383,8 +383,7 @@ class PedidoController extends Controller
                     }
 
                 }
-              $btn []= '</details>';
-              /*SUMARY*/
+
 
 
 
@@ -403,6 +402,9 @@ class PedidoController extends Controller
                                 <i class="fa fa-check-circle text-warning"></i>
                                 Recojo</a>';
                 }
+
+              $btn []= '</details>';
+              /*SUMARY*/
 
 
                 $btn[] = '</ul></div>';
