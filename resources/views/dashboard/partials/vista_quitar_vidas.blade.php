@@ -1,4 +1,4 @@
-<div class="col-lg-6 rounded margen" style="background: #d4edda">
+<div class="col-lg-6 rounded margen" style="background: #d4edda;height: fit-content;">
   <div class="card-header">Quitar vida</div>
   <div class="card-header">
     <div class="row align-items-center">
