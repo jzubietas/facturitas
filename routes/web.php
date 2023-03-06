@@ -619,7 +619,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
         return redirect()->back();
     })->name('markAsRead');
     Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'])->name('markNotification');
-
+    Route::post('/descargaDevolucion', [NotificationsController::class, 'descargaDevolucion'])->name('descargaDevolucion');
 //PDF
     //MODULO PEDIDOS
     Route::get('PDF/{pedido}/pedido', [PdfController::class, 'pedidosPDF'])->name('pedidosPDF');

@@ -104,9 +104,11 @@ padding: 8px !important;
 }
 
 .badge-danger {
-color: #ad3939 !important;
-background-color: #efb7b7 !important;
-padding: 8px !important;
+color: #ffffff !important;
+background-color: #e74c3c !important;
+  padding: 0px 4px !important;
+  position: absolute !important;
+  right: 0px !important;
 }
 
 .badge-info {

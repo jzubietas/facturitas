@@ -58,44 +58,96 @@ class NotificationsController extends Controller
         $devoluciones = [];
         if (\Auth::check()) {
             if (\Auth::user()->rol == User::ROL_ADMIN) {
-                $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->orderByDesc('created_at')->get();
+              $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->orderByDesc('created_at')->get();
                 foreach ($devoluciones as $key => $devolucion) {
-                    $icon = "<i class='mr-2 fas fa-fw fa-envelope'></i>";
-
+                    $icon = "<i class='mr-2 fas fa-fw fa-envelope text-danger'></i>";
                     $time = "<span class='float-right text-muted text-sm'>
                        {$devolucion->created_at->diffForHumans()}
                      </span>";
 
                     $dropdownHtml .= "<a href='" . route('pagos.devolucion', $devolucion) . "' class='dropdown-item'>
-                             {$icon}
-                             <span class='text-wrap'>
-                              Pago por devolver a <b>{$devolucion->cliente->nombre}</b> un valor de <b>{$devolucion->amount_format}</b>
-</span>
-                             {$time}
-                              </a>";
-
+                                         {$icon}
+                                           <span class='text-wrap'>
+                                              Pago por devolver a <b>{$devolucion->cliente->nombre}</b> un valor de <b>{$devolucion->amount_format}</b>
+                                          </span>
+                                         {$time}
+                                       </a>";
                     if ($key < count($devoluciones) - 1) {
                         $dropdownHtml .= "<div class='dropdown-divider'></div>";
                     }
                 }
+            }elseif (\Auth::user()->rol == User::ROL_ASESOR){
+              $devoluciones = Devolucion::query()
+                ->with(['cliente', 'pago', 'asesor'])
+                ->devueltos()
+                ->where('asesor_id',\Auth::user()->id)
+                ->orderByDesc('created_at')->get();
+              foreach ($devoluciones as $key => $devolucion) {
+                $icon = "<i class='mr-2 fas fa-fw fa-envelope-open text-primary'></i>";
+                $time = "<span class='float-right text-muted text-sm'>
+                       {$devolucion->created_at->diffForHumans()}
+                     </span>";
+
+                $dropdownHtml .= "<a href='" . route('pagos.devolucion', $devolucion) . "' class='dropdown-item'>
+                                         {$icon}
+                                           <span class='text-wrap'>
+                                              Pago devuelto a <b>{$devolucion->cliente->nombre}</b> un valor de <b>{$devolucion->amount_format}</b>
+                                          </span>
+                                         {$time}
+                                       </a>";
+                if ($key < count($devoluciones) - 1) {
+                  $dropdownHtml .= "<div class='dropdown-divider'></div>";
+                }
+              }
+            }elseif (\Auth::user()->rol == User::ROL_ENCARGADO){
+              $encargado=User::where('rol',User::ROL_ENCARGADO)->activo()->where('id',\Auth::user()->id)->first();
+              $asesores=User::where('rol',User::ROL_ASESOR)->activo()->where('supervisor',$encargado->id)->select(
+                DB::raw("users.id as id")
+              )->pluck('users.id');
+              $devoluciones = Devolucion::query()
+                ->with(['cliente', 'pago', 'asesor'])
+                ->devueltos()
+                ->whereIn('asesor_id',$asesores)
+                ->orderByDesc('created_at')->get();
+              foreach ($devoluciones as $key => $devolucion) {
+                if ($key<=3){
+                  $icon = "<i class='mr-2 fas fa-fw fa-envelope-open text-primary'></i>";
+                  $time = "<span class='float-right text-muted text-sm'>
+                       {$devolucion->created_at->diffForHumans()}
+                     </span>";
+
+                  $dropdownHtml .= "<a href='" . route('pagos.devolucion', $devolucion) . "' class='dropdown-item'>
+                                         {$icon}
+                                           <span class='text-wrap'>
+                                              Pago devuelto a <b>{$devolucion->cliente->nombre}</b> un valor de <b>{$devolucion->amount_format}</b>
+                                          </span>
+                                         {$time}
+                                       </a>";
+                  if ($key < count($devoluciones) - 1) {
+                    $dropdownHtml .= "<div class='dropdown-divider'></div>";
+                  }
+                }
+              }
             }
         }
 
 
         foreach (auth()->user()->unreadNotifications as $key => $not) {
-            $icon = "<i class='mr-2 fas fa-fw fa-envelope'></i>";
-
-            $time = "<span class='float-right text-muted text-sm'>
+            $icon = "<i class='mr-2 fas fa-fw fa-envelope text-success'></i>";
+            $time = "<span class='float-right text-muted text-smfloat-right text-muted text-sm'>
                        {$not['created_at']->diffForHumans()}
                      </span>";
 
             $dropdownHtml .= "<a href='/notifications' class='dropdown-item'>
-                                {$icon}{$not['data']['asunto']}{$time}
+                                {$icon}
+                                <span class='text-wrap'>
+                                    {$not['data']['asunto']}
+                                </span>
+                                {$time}
                               </a>";
-
-            if ($key < count($notifications) - 1) {
+            /*if ($key < count($not) - 1) {*/
                 $dropdownHtml .= "<div class='dropdown-divider'></div>";
-            }
+            /*}*/
         }
 
 
@@ -113,7 +165,8 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
             $contador_correcciones=$contador_correcciones->WhereIn('u.identificador', $asesores);
-        } else if (Auth::user()->rol == "Jefe de operaciones") {
+        }
+        else if (Auth::user()->rol == "Jefe de operaciones") {
             $operarios = User::where('users.rol', 'Operario')
                 ->where('users.estado', '1')
                 ->where('users.jefe', Auth::user()->id)
@@ -268,9 +321,24 @@ class NotificationsController extends Controller
         if (\Auth::check()) {
             if (\Auth::user()->rol == User::ROL_ADMIN) {
                 $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->get();
+            }else if (\Auth::user()->rol == User::ROL_ASESOR) {
+              $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])
+                ->devueltos()
+                ->where('asesor_id',\Auth::user()->id)
+                ->orderByDesc('created_at')->get();
+            }else if (\Auth::user()->rol == User::ROL_ENCARGADO) {
+              $encargados=User::where('rol',User::ROL_ENCARGADO)->activo()->where('id',\Auth::user()->id)->first();
+              $asesores=User::where('rol',User::ROL_ASESOR)->activo()->where('supervisor',$encargados->id)->select(
+                DB::raw("users.id as id")
+              )->pluck('users.id');
+              $devoluciones = Devolucion::query()
+                ->with(['cliente', 'pago', 'asesor'])
+                ->devueltos()
+                ->whereIn('asesor_id',$asesores)
+                ->orderByDesc('created_at')->get();
+
             }
         }
-        //return $devoluciones;
         return view('notifications.index', compact('postNotifications', 'devoluciones'));
     }
 
@@ -281,5 +349,12 @@ class NotificationsController extends Controller
                 return $query->where('id', $request->input('id'));
             })->markAsRead();
         return response()->noContent();
+    }
+
+    public  function  descargaDevolucion(Request $request){
+      $devoluciones = Devolucion::where('id',$request->devolucion_id)->update([
+        'status' => Devolucion::DESCARGADO,
+      ]);
+      return response()->json(['datos' => $devoluciones]);
     }
 }
