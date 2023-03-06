@@ -875,7 +875,7 @@ class ClienteController extends Controller
             {
 
             }else */
-            if($request->destino=='PROVINCIA')
+            if($request->destino=='P')
             {
                 $pedidos=$pedidos->whereIn('pedidos.condicion_envio_code', [
                     Pedido::RECEPCION_COURIER_INT
