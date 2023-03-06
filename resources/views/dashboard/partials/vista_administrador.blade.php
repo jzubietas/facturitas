@@ -91,12 +91,14 @@
 
   <div class="col-lg-12 " id="contenedor-fullscreen">
 
-    <div class="d-flex justify-content-center flex-column flex-wrap justify-content-center">
-      <div class="d-flex justify-content-center">
-        <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-        <button style="background: none; border: none" onclick="openFullscreen();"><i
-            class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
+    <div class="d-flex justify-content-center">
+      <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+      <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
+      <div class="d-flex justify-content-center align-items-center ml-5">
+        <label class="p-0 m-0" for="ingresar">Fecha: </label>
+        <input type="date" id="fecha" class="border-0 ml-3" min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}" max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}" >
       </div>
+    </div>
 
       {{--TABLA DUAL--}}
       <div class="" style=" overflow: hidden !important;">
@@ -563,9 +565,9 @@
           }
         });
 
-        $('#fecha').val("{{\Carbon\Carbon::parse($fecha)->format('Y-m-d')}}");
+        $("#fecha").val("{{\Carbon\Carbon::parse("$fecha")->format('Y-m-d')}}");
 
-        $(document).on('change', '#fecha', function () {
+        $(document).on('change', "#fecha", function (e) {
           const value = e.target.value;
           console.log(value)
           if (value) {
@@ -576,7 +578,7 @@
         window.cargaNueva = function (entero) {
           console.log(' ' + entero)
           var fd = new FormData();
-          fd.append('fecha', $('#fecha').val());
+          fd.append("fecha", $("#fecha").val());
           fd.append('ii', entero);
           $.ajax({
             data: fd,
@@ -652,7 +654,7 @@
         cargReporteMetasSituacionClientes();
         cargReporteMetasCobranzasGeneral();
 
-        setInterval(myTimer, 500000);
+        setInterval(myTimer, 5000);
 
         function myTimer() {
           cargaNueva(1);
