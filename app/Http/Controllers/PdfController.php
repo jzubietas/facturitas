@@ -328,12 +328,37 @@ class PdfController extends Controller
         ->where('user_id','<>',51)
         ->where('pendiente_anulacion', '<>','1' ), $mes_artificio, 'created_at')
         ->count();
+
       $total_pagado_mespasado = $this->applyFilterPersonalizable(Pedido::query()
         ->where('codigo', 'not like', "%-C%")->activo()
         ->where('user_id','<>',51)
         ->where('pendiente_anulacion', '<>','1' )->pagados(), $mes_artificio, 'created_at')
         ->count();
 
+      $porcentaje = 0;
+      $diferenciameta = 0;
+      $valor_meta = 0;
+      $color_progress = '';
+      $color_degradado = 0;
+      if ($total_pagado_mespasado   < $total_pedido_mespasado) {
+        //meta 1
+        $porcentaje = round(($total_pagado_mespasado / $total_pedido_mespasado) * 100, 2);
+        $diferenciameta = $total_pedido_mespasado - $total_pagado_mespasado;
+        if ($diferenciameta < 0) $diferenciameta = 0;
+        if($porcentaje < 45){
+          $color_progress = '#DC3545FF';  /*ROJO*/
+        }else if($porcentaje < 50){
+          $color_progress = 'linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%)';  /*ROJO-AMARILLO*/
+        }else if($porcentaje < 95){
+          $color_progress = '#ffc107';  /*AMARILLO*/
+        }else{
+          $color_progress= '#8ec117';  /*AMARILLO-VERDE*/
+        }
+      }
+
+      if ($total_pagado_mespasado == $total_pedido_mespasado){
+        continue;
+      }
 
 
       $title_mes_artificio=$mes_artificio->format('F - Y');
@@ -347,32 +372,14 @@ class PdfController extends Controller
       $html[] = '</td>';
 
       $html[] = '<td style="width:80%">';
-      $porcentaje = 0;
-      $diferenciameta = 0;
-      $valor_meta = 0;
-      $color_progress = '';
-      $color_degradado = 0;
-      if ($total_pagado_mespasado   < $total_pedido_mespasado) {
-        //meta 1
-        $porcentaje = round(($total_pagado_mespasado / $total_pedido_mespasado) * 100, 2);
-        $diferenciameta = $total_pagado_mespasado - $total_pedido_mespasado;
-        if ($diferenciameta < 0) $diferenciameta = 0;
-        if($porcentaje < 45){
-          $color_progress = '#DC3545FF';  /*ROJO*/
-        }else if($porcentaje < 50){
-          $color_progress = 'linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%)';  /*ROJO-AMARILLO*/
-        }else if($porcentaje < 95){
-          $color_progress = '#ffc107';  /*AMARILLO*/
-        }else{
-          $color_progress= '#8ec117';  /*AMARILLO-VERDE*/
-        }
-      }
+
+
 
       if ($porcentaje >= 90) {
         $html[] = '<div class="w-100 bg-white rounded">
                                         <div class="position-relative rounded">
                                             <div class="progress bg-white rounded" style="height: 40px">
-                                                    <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
+                                                    <div class="rounded" role="progressbar" style="background: ' . $color_progress . ' !important; width: ' . $porcentaje . '%" ></div>
                                              </div>
                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                                     <span style="font-weight: lighter">
@@ -387,7 +394,7 @@ class PdfController extends Controller
                                          </div>
 
                                   </div>
-                                  <sub class="">Cobranzas: '.$total_pagado_mespasado.'</sub>';
+                                  <sub class="">Cobranzas: ' . $total_pagado_mespasado . '</sub>';
       }
       else if ($porcentaje > 75)
       {
