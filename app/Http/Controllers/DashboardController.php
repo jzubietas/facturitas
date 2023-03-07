@@ -55,7 +55,6 @@ class DashboardController extends Controller
 
     foreach ($lst_users_vida as $user)
     {
-<<<<<<< HEAD
         $metas = [];
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
@@ -172,10 +171,6 @@ class DashboardController extends Controller
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->count();
-=======
-      $html .= '<option style="color:black" value="' . $user->id . '">' . $user->identificador ." - ". $user->name . '</option>';
-    }*/
->>>>>>> parent of ce1f51f3 (cambios)
 
 
     return view('dashboard.dashboard', compact('fecha', 'lst_users_vida'));
