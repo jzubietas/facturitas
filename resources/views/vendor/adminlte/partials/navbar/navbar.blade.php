@@ -27,22 +27,23 @@
 
       @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO]))
         <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
-          <button class="nav-link btn btn-success btn-sm  font-11 font-weight-bold" id="btn_componente-1"
+          <button class="nav-link btn btn-success btn-sm  font-11 font-weight-bold d-flex align-items-center justify-content-center a-navbar" id="btn_componente-1"
                   data-toggle="modal" data-target="#modal-annuncient-1" type="button">
-            <i class="fas fa-bell" aria-hidden="true"></i> PERMISOSS
+            <i class="fas fa-bell" aria-hidden="true"></i>
+            <p class="m-0 text-card-navbar ml-2">Permisos</p>
           </button>
         </li>
       @endif
 
 
         <li class="nav-item dropdown show p-1" id="my-btn-annuncements-2">
-            <button class="nav-link btn btn-secondary btn-sm font-11 font-weight-bold" id="btn_buscar_scan"
+            <button class="nav-link btn btn-secondary btn-sm font-11 font-weight-bold d-flex align-items-center justify-content-center a-navbar" id="btn_buscar_scan"
                     data-toggle="modal" data-target="#modal-escanear-estado-sobre" type="button">
-                <i class="fa fa-barcode" aria-hidden="true"></i> Buscar
+                <i class="fa fa-barcode" aria-hidden="true"></i> <p class="m-0 text-card-navbar ml-2">Buscar</p>
             </button>
         </li>
 
-        <div id="divListadoVidas" style="display: flex;"></div>
+        <div id="divListadoVidas" class="vidas-navbar d-flex"></div>
 
         @yield('content_top_nav_right')
 

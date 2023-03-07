@@ -44,7 +44,7 @@
 @section('content')
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5" class="table-responsive">
+      {{--<table cellspacing="5" cellpadding="5" class="table-responsive">
         <tbody>
           <tr>
             <td>Fecha Minima:</td>
@@ -54,7 +54,7 @@
             <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
           </tr>
         </tbody>
-      </table><br>
+      </table><br>--}}
       <table id="tablaPrincipal" class="table table-striped table-responsive">{{-- display nowrap  --}}
         <thead>
           <tr>
@@ -285,9 +285,9 @@
 
     tabla_pedidos=$('#tablaPrincipal').DataTable({
       responsive: true,
-        "bPaginate": false,
-        "bFilter": false,
-        "bInfo": false,
+        "bPaginate": true,
+        "bFilter": true,
+        "bInfo": true,
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('pedidosperdonarcurriertabla') }}",
         "createdRow": function( row, data, dataIndex){
@@ -687,7 +687,7 @@
     /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
 
-            $.fn.dataTable.ext.search.push(
+            /*$.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
                     var max = $('#max').datepicker("getDate");
@@ -711,7 +711,7 @@
             // Event listener to the two range filtering inputs to redraw on input
             $('#min, #max').change(function () {
                 table.draw();
-            });
+            });*/
         });
   </script>
 @stop

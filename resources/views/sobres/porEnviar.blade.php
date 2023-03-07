@@ -34,7 +34,7 @@
   <div class="card" style="overflow: hidden !important;">
     <div class="card-body" style="overflow-x: scroll !important;">
 
-      <table id="tablaPrincipal" class="table table-striped" style="width:100% !important;">
+      <table id="tablaSobresPorEnviar" class="table table-striped" style="width:100% !important;">
 
         <thead>
         <tr>
@@ -146,60 +146,6 @@
 
     .modal-lg {
       max-width: 80%;
-    }
-
-    #tablaPrincipal {
-      width: 100% !important;
-    }
-
-    @media screen and (max-width: 2249px) {
-      #tablaPrincipal {
-        width: 100% !important;
-      }
-
-      thead {
-        vertical-align: middle;
-      }
-
-      td:nth-child(n+1) {
-        text-align: start !important;
-      }
-
-      td:nth-child(7),
-      td:nth-child(9) {
-        text-align: center;
-      }
-
-      th:nth-child(9) {
-        width: 100px !important;
-      }
-
-      th:nth-child(11) {
-        width: 130px !important;
-      }
-
-      .sorting:before,
-      .sorting:after,
-      .sorting_desc:before,
-      .sorting_desc:after {
-        top: 20px !important;
-      }
-
-      td {
-        vertical-align: middle !important;
-        text-align: center !important;
-      }
-
-      #tablaPrincipal tbody div ul {
-        padding-left: 0px !important;
-        margin-bottom: 0px !important;
-      }
-    }
-
-    @media screen and (max-width: 1440px) {
-      #tablaPrincipal {
-        font-size: 13px !important;
-      }
     }
 
     @if(auth()->user()->rol !='Administrador')
@@ -341,7 +287,7 @@
   </script>
 
   <script>
-    let tablaPrincipal = null;
+    let tablaSobresPorEnviar = null;
 
     $(document).ready(function () {
 
@@ -551,6 +497,8 @@
         $("#distrito").val("").selectpicker("refresh")
         $('#pdf_renderer_object').attr('data', null)
         $('#rotulo').val(null)
+        let paralimaprovincia2=$("select[name=limaprovincia]").val();
+        let cliente2 = $("#cliente_id").val();
 
         switch ($(this).val()) {
           case 'L':
@@ -573,7 +521,6 @@
               $(".contenedor-formulario").addClass("col-6");
             }
 
-            tabla_pedidos.columns.adjust().draw();
             $('#nombre').val('')
             $('#celular').val('')
             $('#direccion').val('')
@@ -598,13 +545,11 @@
               $(".contenedor-formulario").removeClass("col-6");
               $(".contenedor-formulario").addClass("col-4");
             }
-            tabla_pedidos.columns.adjust().draw();
-            break;
             $('#numregistro').val('')
             $('#tracking').val('')
             $('#importe').val('')
             $('#rotulo').val('')
-
+            break;
           default:
             if (!$(".lima").hasClass("d-none")) {
               $(".lima").addClass("d-none");
@@ -622,10 +567,61 @@
               $(".contenedor-formulario").addClass("col-6");
             }
 
-            tabla_pedidos.columns.adjust().draw();
             break;
-
         }
+
+        tabla_pedidos.destroy();
+
+        tabla_pedidos = $('#tablaPrincipalpedidosagregar').DataTable({
+          responsive: true,
+          "bPaginate": false,
+          "bFilter": false,
+          "bInfo": false,
+          'ajax': {
+            url: "{{ route('cargar.pedidosenvioclientetabla') }}",
+            'data': {"cliente_id": cliente2,"destino":paralimaprovincia2},
+            "type": "get",
+          },
+          columnDefs: [{
+            'targets': [0], /* column index */
+            'orderable': false, /* true or false */
+          }],
+          rowCallback: function (row, data, index) {
+            if (data.da_confirmar_descarga != '1') {
+              $('input[type=checkbox]', row).attr('disabled', 'disabled')
+            }
+          },
+          columns: [
+            {
+              "data": "id",
+              'targets': [0],
+              'checkboxes': {
+                'selectRow': true
+              },
+              defaultContent: '',
+              orderable: false,
+              sWidth: '5%',
+            },
+            {data: 'codigo', name: 'codigo', sWidth: '40%',},
+            {
+              "data": 'nombre_empresa',
+              "name": 'nombre_empresa',
+              "render": function (data, type, row, meta) {
+                return data;
+              },
+              sWidth: '40%',
+            },
+            {data: 'condicion_envio', name: 'condicion_envio', sWidth: '15%',},
+          ],
+          'select': {
+            'style': 'multi',
+            selector: 'td:first-child'
+          },
+        });
+        $('#tablaPrincipalpedidosagregar').DataTable().ajax.reload();
+        tabla_pedidos.columns.adjust().draw();
+
+
       });
 
       $(document).on("click", "#direccionConfirmar", function (event) {
@@ -822,7 +818,7 @@
                 return false;
               } else {
                 $("#modal-direccion").modal("hide");
-                $("#tablaPrincipal").DataTable().ajax.reload();
+                $("#tablaSobresPorEnviar").DataTable().ajax.reload();
               }
             }
           });
@@ -1229,6 +1225,7 @@
 
         $("#modal-historial-lima-a").attr("data-cliente", cliente);
         $("#modal-historial-provincia-a").attr("data-cliente", cliente);
+        let paralimaprovincia=$("select[name=limaprovincia]").val();
 
         console.log("carga modales")
         tabla_pedidos.destroy();
@@ -1240,7 +1237,7 @@
           "bInfo": false,
           'ajax': {
             url: "{{ route('cargar.pedidosenvioclientetabla') }}",
-            'data': {"cliente_id": cliente},
+            'data': {"cliente_id": cliente,"destino":paralimaprovincia},
             "type": "get",
           },
           columnDefs: [{
@@ -1406,14 +1403,14 @@
           url: "{{ route('envios.enviarid') }}",
           success: function (data) {
             $("#modal-enviar").modal("hide");
-            $('#tablaPrincipal').DataTable().ajax.reload();
+            $('#tablaSobresPorEnviar').DataTable().ajax.reload();
 
           }
         });
       });
 
 
-      tablaPrincipal = $('#tablaPrincipal').DataTable({
+      tablaSobresPorEnviar = $('#tablaSobresPorEnviar').DataTable({
         dom: 'Blfrtip',
         processing: true,
         stateSave: true,
@@ -1538,8 +1535,8 @@
       })*/
 
 
-      $('#tablaPrincipal tbody').on('click', 'button', function () {
-        var data = tablaPrincipal.row($(this).closest('tr')).data();
+      $('#tablaSobresPorEnviar tbody').on('click', 'button', function () {
+        var data = tablaSobresPorEnviar.row($(this).closest('tr')).data();
         console.log("got the data"); //This alert is never reached
         console.log(data)
 

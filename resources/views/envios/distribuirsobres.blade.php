@@ -66,7 +66,7 @@
     <div class="card">
         <div class="card-body pl-0">
             <div class="table-responsive">
-                <table id="tablaPrincipal" class="table table-striped">
+                <table id="tablaCourierSobresconDireccion" class="table table-striped">
                     <thead>
                     <tr>
                         <th scope="col" style="font-size:14px;">Sobres</th>
@@ -156,7 +156,7 @@
 
         $(document).ready(function () {
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaCourierSobresconDireccion').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -178,7 +178,7 @@
                 rowCallback: function (row, data, index) {
                     const self = this
                     $("[data-elTable]", row).click(function () {
-                        $("#tablaPrincipal [data-elTable]").attr('disabled', 'disabled')
+                        $("#tablaCourierSobresconDireccion [data-elTable]").attr('disabled', 'disabled')
                         $(this).find('.spinner-border').show()
                         $(this).find('.sr-only').show()
 
@@ -339,7 +339,7 @@
                         insertIds = insertIds.filter(function (id) {
                             return id != data.id;
                         })
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaCourierSobresconDireccion').DataTable().ajax.reload();
                         table.api().row(row).remove().draw(false)
                     })
                     $('[data-jqdetalle]', row).click(function () {
@@ -352,7 +352,7 @@
                             typeAnimated: true,
                             buttons: {
                                 cancelar: function () {
-                                    $('#tablaPrincipal').DataTable().ajax.reload();
+                                    $('#tablaCourierSobresconDireccion').DataTable().ajax.reload();
                                     return true
                                 }
                             },
@@ -384,7 +384,7 @@
                                                 setEvents()
                                             })
                                             .always(function () {
-                                                $('#tablaPrincipal').DataTable().ajax.reload();
+                                                $('#tablaCourierSobresconDireccion').DataTable().ajax.reload();
                                             })
                                     })
                                 }
@@ -603,7 +603,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                                         buttom.find('.spinner-border').hide()
                                         buttom.find('.sr-only').hide()
 
-                                        $('#tablaPrincipal').DataTable().ajax.reload();
+                                        $('#tablaCourierSobresconDireccion').DataTable().ajax.reload();
                                         table.clear()
                                             .draw();
                                     })
@@ -640,7 +640,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                         return data.id
                     })
 
-                    const table = $('#tablaPrincipal' + zona).DataTable();
+                    const table = $('#tablaCourierSobresconDireccion' + zona).DataTable();
                     currentDate.forEach(function (data) {
                         table.row.add(createZoneRowTable(data, zona))
                     })
@@ -656,7 +656,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                 })
             }
             window.onbeforeunload = closeIt;
-            $('#tablaPrincipal').DataTable().draw(false);
+            $('#tablaCourierSobresconDireccion').DataTable().draw(false);
         });
     </script>
 

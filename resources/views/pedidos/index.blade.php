@@ -100,7 +100,7 @@
                 </tbody>
             </table>
             <br>-->
-      <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
+      <table id="tablabandejapedidos" class="table table-striped">{{-- display nowrap  --}}
         <thead>
         <tr>
           {{--<th class="align-middle"></th>--}}
@@ -114,7 +114,7 @@
           <th class="align-middle" scope="col">F. Actualizacion</th>
           <th class="align-middle" scope="col">Total (S/)</th>
           <th class="align-middle" scope="col">Est. pago</th>
-          <th class="align-middle" scope="col">Est. pago</th>
+          <th class="align-middle" scope="col">Con. pago</th>
           <th class="align-middle" scope="col">Est. Sobre</th>
           <th class="align-middle" scope="col">Dif.</th>
           <th class="align-middle" scope="col">Acciones</th>
@@ -202,114 +202,7 @@
     tr.details td.details-control {
       background: url('/images/details_close.png') no-repeat center center;
     }
-    #tablaPrincipal {
-      width: 100% !important;
-    }
 
-
-    @media screen and (max-width: 2249px) {
-      #tablaPrincipal {
-        width: 100% !important;
-        font-size: 14px !important;
-      }
-
-      .dis-grid {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        align-self: center;
-        flex-direction: column;
-      }
-
-      .btn-fontsize {
-        font-size: 15px;
-      }
-      td:nth-child(11) span {
-        white-space: break-spaces !important;
-        padding: 8px !important;
-      }
-      .etiquetas_asignacion {
-        background-color: #b0deb3 !important;
-        font-size: 12px;
-        padding: 4px;
-        font-weight: 700;
-        line-height: 1;
-        white-space: break-spaces;
-        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-        color: #4a604b !important;
-        margin-left: 2px;
-      }
-
-      .sorting:before,
-      .sorting:after,
-      .sorting_desc:before,
-      .sorting_desc:after {
-        top: 20px !important;
-      }
-
-    }
-
-    @media screen and (max-width: 2144px) {
-      thead,
-      tr,
-      td {
-        vertical-align: middle !important;
-      }
-
-      .btn-fontsize {
-        font-size: 11px;
-        min-width: 85px;
-        max-width: 130px;
-      }
-
-      .dis-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 2fr));
-        gap: 0.7rem
-      }
-    }
-
-    @media screen and (max-width: 2039px) {
-      .dis-grid {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        align-self: center;
-        flex-direction: column;
-      }
-
-      .btn-fontsize {
-        min-width: 75px;
-        width: 100px;
-      }
-    }
-
-    @media screen and (max-width: 1920px){
-      #tablaPrincipal {
-        font-size: 14px !important;
-      }
-      .etiquetas_asignacion {
-        font-size: 9px;
-        padding: 8px;
-        white-space: break-spaces !important;
-      }
-      td:nth-child(11) span {
-        padding: 8px !important;
-      }
-
-    }
-
-    @media screen and (max-width: 1440px) {
-      #tablaPrincipal {
-        font-size: 13px !important;
-      }
-
-      .etiquetas_asignacion {
-        font-size: 9px;
-        padding: 2px;
-        white-space: pre-line !important;
-      }
-    }
   </style>
 @endpush
 
@@ -342,7 +235,7 @@
   </script>
   <script>
     //import objects from "lodash/_SetCache";
-    let tablaPrincipal = null;
+    let tablaBandejaPedidos = null;
     let dataForm_pc = {};
     let dataForm_f = {};
     let dataForm_g = {};
@@ -589,7 +482,7 @@
           success: function (data) {
             console.log(data);
             $("#modal-recojo-pedidos").modal("hide");
-            $('#tablaPrincipal').DataTable().ajax.reload();
+            $('#tablabandejapedidos').DataTable().ajax.reload();
           }
         });
 
@@ -1024,7 +917,7 @@
             if (data.html != "0") {
               $("#modal-correccion-pedidos").modal("hide");
               //recargar tabla
-              $('#tablaPrincipal').DataTable().ajax.reload();
+              $('#tablabandejapedidos').DataTable().ajax.reload();
               var urlpdf = '{{ route('correccionPDF', ':id') }}';
               urlpdf = urlpdf.replace(':id', data.codigo);
               window.open(urlpdf, '_blank');
@@ -1212,7 +1105,7 @@
       }
 
       var detailRows = [];
-      tablaPrincipal = $('#tablaPrincipal').DataTable({
+      tablaBandejaPedidos = $('#tablabandejapedidos').DataTable({
         dom: 'Blfrtip',
         processing: true,
         serverSide: true,
@@ -1233,17 +1126,18 @@
           var pedidodiferencia = data.diferencia;
 
           if (data.condicion_code == 4 || data.estado == 0) {
-            $('td:eq(11)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
-          } else {
+            $('td:eq(10)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+          }
+           else {
             if (pedidodiferencia == null) {
-              $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+              $('td:eq(10)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
             } else {
               if (pedidodiferencia > 3 && pedidodiferencia <18) {
-                $('td:eq(11)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(10)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
               } else if (pedidodiferencia > 18) {
-                $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(10)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
               } else {
-                $('td:eq(11)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
+                $('td:eq(10)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
               }
             }
           }
@@ -1307,7 +1201,7 @@
                       url: "{{route('pedidos.envios.update-direccion')}}",
                     }).always(function () {
                       self.close();
-                      $('#tablaPrincipal').DataTable().ajax.reload();
+                      $('#tablabandejapedidos').DataTable().ajax.reload();
                     });
                     return false
                   }
@@ -1412,25 +1306,10 @@ ${data.foto3 ? `
           {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
           {data: 'users', name: 'users',},
           {data: 'ruc', name: 'ruc',},
-          {
-            data: 'fecha',
-            name: 'fecha',
-          },
-          {
-            data: 'fecha_up',
-            name: 'fecha_up',
-            "visible": false,
-          },
-          {
-            data: 'total',
-            name: 'total',
-            render: $.fn.dataTable.render.number(',', '.', 2, '')
-          },
-          {
-            data: 'condicion_pa',
-            name: 'condicion_pa',
-            render: function (data, type, row, meta) {
-
+          {data: 'fecha', name: 'fecha',},
+          {data: 'fecha_up', name: 'fecha_up',"visible": false,},
+          {data: 'total', name: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '')},
+          {data: 'condicion_pa', name: 'condicion_pa', render: function (data, type, row, meta) {
               if (row.condiciones == 'ANULADO' || row.condicion_code == 4 || row.estado == 0) {
                 return 'ANULADO';
               } else {
@@ -1455,10 +1334,7 @@ ${data.foto3 ? `
 
             }
           },
-          {
-            data: 'condiciones_aprobado',
-            name: 'condiciones_aprobado',
-            render: function (data, type, row, meta) {
+          /*{data: 'condiciones_aprobado', name: 'condiciones_aprobado', render: function (data, type, row, meta) {
               if (row.condicion_code == 4 || row.estado == 0) {
                 return 'ANULADO';
               }
@@ -1469,7 +1345,7 @@ ${data.foto3 ? `
               }
 
             }
-          },
+          },*/
           /*
           {
             //estado del sobre
@@ -1497,11 +1373,8 @@ ${data.foto3 ? `
           },  */
           //{data: 'responsable', name: 'responsable', },//estado de envio
 
-          //{data: 'condicion_pa', name: 'condicion_pa', },//ss
-          {
-            data: 'condicion_envio',
-            name: 'condicion_envio',
-          },//
+          {data: 'condicion_pa', name: 'condicion_pa','visible':false },
+          {data: 'condicion_envio', name: 'condicion_envio'},
 
           /*
           {
@@ -1597,11 +1470,11 @@ ${data.foto3 ? `
 
       }
 
-      $('#tablaPrincipal tbody').on('click', 'tr td.details-control', function () {
+      $('#tablabandejapedidos tbody').on('click', 'tr td.details-control', function () {
         var tr = $(this).closest('tr');
-        var row = tablaPrincipal.row(tr);
+        var row = tablaBandejaPedidos.row(tr);
 
-        var data = tablaPrincipal.row($(this).closest('tr')).data()
+        var data = tablaBandejaPedidos.row($(this).closest('tr')).data()
         var idxio = detailRows.indexOf(data.id);
         console.log(idxio)
         var idx = data.id;
@@ -1642,29 +1515,29 @@ ${data.foto3 ? `
         }
       });
 
-      tablaPrincipal.on('draw', function () {
+      tablaBandejaPedidos.on('draw', function () {
         detailRows.forEach(function (id, i) {
           $('#' + id + ' td.details-control').trigger('click');
         });
       });
 
 
-      $('#tablaPrincipal_filter label input').on('paste', function (e) {
+      $('#tablabandejapedidos_filter label input').on('paste', function (e) {
         var pasteData = e.originalEvent.clipboardData.getData('text')
         localStorage.setItem("search_tabla", pasteData);
       });
-      $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
+      $(document).on("keypress", '#tablabandejapedidos_filter label input', function () {
         localStorage.setItem("search_tabla", $(this).val());
         console.log("search_tabla es " + localStorage.getItem("search_tabla"));
       });
 
-      $(document).on("blur", '#tablaPrincipal_filter label input', function () {
+      $(document).on("blur", '#tablabandejapedidos_filter label input', function () {
         localStorage.setItem("search_tabla", $(this).val());
         console.log("search_tabla es " + localStorage.getItem("search_tabla"));
 
       });
 
-      $('#tablaPrincipal_filter label input').on('paste', function (e) {
+      $('#tablabandejapedidos_filter label input').on('paste', function (e) {
         var pasteData = e.originalEvent.clipboardData.getData('text')
         localStorage.setItem("search_tabla", pasteData);
       });
@@ -1741,7 +1614,7 @@ ${data.foto3 ? `
       }).done(function (data) {
         $("#modal-delete").modal("hide");
         resetearcamposdelete();
-        $('#tablaPrincipal').DataTable().ajax.reload();
+        $('#tablabandejapedidos').DataTable().ajax.reload();
       }).fail(function (err, error, errMsg) {
         console.log(arguments, err, errMsg)
         if (err.status == 401) {
@@ -1769,7 +1642,7 @@ ${data.foto3 ? `
       }).done(function (data) {
         $("#modal-restaurar").modal("hide");
         //resetearcamposdelete();
-        $('#tablaPrincipal').DataTable().ajax.reload();
+        $('#tablabandejapedidos').DataTable().ajax.reload();
       });
     }
 
@@ -1838,7 +1711,7 @@ ${data.foto3 ? `
           table.draw();
         }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
       });
-      var table = $('#tablaPrincipal').DataTable();
+      var table = $('#tablabandejapedidos').DataTable();
 
       // Event listener to the two range filtering inputs to redraw on input
       $('#min, #max').change(function () {

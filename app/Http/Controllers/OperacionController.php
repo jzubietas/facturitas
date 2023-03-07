@@ -515,7 +515,7 @@ class OperacionController extends Controller
                 endif;
 
                 if($pedido->condicion_envio_code == 13):
-                    $btn[]='<li><a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'.$pedido->codigos.'" data-envio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a></li>';
+                    $btn[]='<li><a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-envio" data-code="'.$pedido->codigos.'" data-envio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a></li>';
                     $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.' data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir a LISTO PARA ENVIO</a></li>';
                 endif;
 
@@ -608,7 +608,7 @@ class OperacionController extends Controller
 
                 if(in_array(auth()->user()->rol, [User::ROL_ADMIN,User::ROL_OPERARIO,User::ROL_JEFE_OPERARIO]))
                 {
-                    $btn[] = '<a class="btn-md dropdown-item text-success " href="#"'.
+                    $btn[] = '<a class="btn-md dropdown-item text-success btn-fontsize" href="#"'.
                         'data-backdrop="static" data-keyboard="false"'.
                         'data-toggle="modal"'.
                         'data-correccion="'.$pedido->id.'"'.
@@ -792,34 +792,34 @@ class OperacionController extends Controller
                 $btn = [];
 
                 //$btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton" style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr)); gap:0.7rem">';
-                $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton">';
+                $btn[] = '<div><ul class="m-0 p-1 d-flex flex-wrap align-items-center justify-content-center" aria-labelledby="dropdownMenuButton">';
 
                 //$btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="m-1 btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
                 if (\auth()->user()->can('operacion.PDF')) {
-                    $btn[] = '<a class="btn-sm dropdown-item" href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank">
+                    $btn[] = '<a class="btn-sm dropdown-item btn-fontsize" href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank">
                         <i class="fa fa-file-pdf"></i>
                         PDF
                         </a>';
                 }
 
-                $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-veradjuntos-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-veradjuntos=' . $pedido->id . ' data-toggle="modal" >
+                $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-veradjuntos-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-veradjuntos=' . $pedido->id . ' data-toggle="modal" >
                                 <i class="fa fa-paperclip text-primary" aria-hidden="true"></i>
                                 Ver Adjuntos
                                </a>';
 
                 if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)
                 if($pedido->condicion_envio_code==Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT){
-                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-asindireccion" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Sobres sin Direccion</a>';
+                    $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-revertir-asindireccion" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Sobres sin Direccion</a>';
                 }
 
                 if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)
                 if($pedido->condicion_envio_code==Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT){
-                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-ajefeop" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe OPE</a>';
+                    $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-revertir-ajefeop" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe OPE</a>';
                 }
 
                 if($pedido->condicion_envio_code==Pedido::ENVIO_COURIER_JEFE_OPE_INT    ) {
 
-                        $btn[] = '<a class="btn-sm dropdown-item" href="#" data-target="#modal-revertir-ajefeop" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
+                        $btn[] = '<a class="btn-sm dropdown-item btn-fontsize" href="#" data-target="#modal-revertir-ajefeop" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
 
 
                     //$btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en currier,  solo el currier tiene permiso de revertir" disabled class="btn btn-disabled btn-success btn-sm" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</button>';

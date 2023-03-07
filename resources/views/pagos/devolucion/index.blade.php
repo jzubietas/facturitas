@@ -5,7 +5,6 @@
 @section('content_header')
     <h1>Devolver Pago a <b>{{$devolucion->cliente->nombre}}</b></h1>
 @stop
-
 @section('content')
     <div class="container">
         <div class="row">
@@ -68,6 +67,7 @@
                             {{Form::close()}}
                         </div>
                     @else
+                    <input type="hidden" name="devolucion_id" id="devolucion_id" value="{{$devolucion->id}}">
                         <div class="card-body">
                             <div>
                                 <ul class="list-group">
@@ -87,11 +87,10 @@
                                     </li>
                                     <li class="list-group-item">
                                         <div>
-                                            <a href="{{route('dashboard.index')}}#section_devoluciones"
-                                               class="btn btn-dark">
-                                                <i class="fa fa-link"></i>
-                                                Ir al dashboard
-                                            </a>
+                                          <!-- (Condition) ? trueStatement : falseStatement -->
+                                          <button class="btn btn-dark btnDescargaDevolucion" >
+                                            <i class="fas fa-file-download"></i> Marcar como leído </button>
+
                                             <a href="{{route('pagos.show',$devolucion->pago)}}#section_devoluciones"
                                                target="_blank" class="btn btn-info">
                                                 <i class="fa fa-link"></i>
@@ -304,15 +303,49 @@
     </div>
 @stop
 @section('js')
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script>
-        (function () {
-            document.getElementById('voucher').onchange = evt => {
-                const [file] = evt.target.files
-                if (file) {
-                    document.getElementById('voucher_img').src = URL.createObjectURL(file)
-                    document.getElementById('voucher_img').style.display = 'block'
-                }
+      $(document).ready(function () {
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        console.log('OFDSODSFJOFSDKSDKL');
+        /*document.getElementById('voucher').onchange = evt => {
+            const [file] = evt.target.files
+            if (file) {
+                document.getElementById('voucher_img').src = URL.createObjectURL(file)
+                document.getElementById('voucher_img').style.display = 'block'
             }
-        })()
+        }*/
+        $(document).on("change", "#voucher", function (evt) {
+          const [file] = evt.target.files
+          if (file) {
+            $('#voucher_img').attr('src',URL.createObjectURL(file));
+            $('#voucher_img').css('display','block');
+          }
+        })
+
+        $(document).on("click", ".btnDescargaDevolucion", function () {
+          var devolucion_id=$('#devolucion_id').val();
+          var formDev = new FormData();
+          formDev.append('devolucion_id',devolucion_id);
+          $.ajax({
+            processData: false,
+            contentType: false,
+            data: formDev,
+            type: 'POST',
+            url: "{{ route('descargaDevolucion') }}",
+            success: function (data) {
+              console.log(data);
+
+              Swal.fire('Alerta', 'Se procedio a marcar como leido correctamente.', 'success');
+            }
+          });
+
+        })
+      })
     </script>
 @endsection
+

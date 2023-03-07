@@ -1101,7 +1101,7 @@ class PagoController extends Controller
             ->where('pago_pedidos.pago_id', $pago->id)
             ->get();
 
-        $detallePagos = DetallePago::select('id',
+        $detallePagos = DetallePago::select(['id',
             'monto',
             'banco',
             'imagen',
@@ -1109,7 +1109,7 @@ class PagoController extends Controller
             'titular',
             'cuenta',
             'fecha_deposito',
-            'observacion')
+            'observacion'])
             ->where('estado', '1')
             ->where('pago_id', $pago->id)
             ->get();
@@ -2265,6 +2265,12 @@ class PagoController extends Controller
         /* $destinationPath = storage_path("app/public/adjuntos/".$pedido->adjunto); */
 
         return response()->download($destinationPath);
+    }
+
+    public function DescargarImgDevolucion(Request $request)
+    {
+      $destinationPath = base_path("storage/app/public/" . $request->imagen);
+      return response()->download($destinationPath);
     }
 
     public function perdonardeuda(Request $request)

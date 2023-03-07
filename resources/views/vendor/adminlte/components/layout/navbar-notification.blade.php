@@ -237,13 +237,11 @@
                     let dropdown = t.find(".adminlte-dropdown-content");
 
                     // Update the badge label.
-
                     if (data.label && data.label > 0) {
                         badge.html(data.label);
                     } else {
                         badge.empty();
                     }
-
                     // Update the badge color.
 
                     if (data.label_color) {

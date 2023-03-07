@@ -39,7 +39,7 @@
           </tr>
         </tbody>
       </table><br>
-      <table id="tablaPrincipal" class="table table-striped" style="width:100%">
+      <table id="tablaOperacionesJefeOperaciones" class="table table-striped" style="width:100%">
         <thead>
           <tr>
             <th scope="col" style="vertical-align: middle">Item</th>
@@ -169,7 +169,7 @@
 
             $('#close-scan').on('click', function (){
                 console.log("actualizamos la tabla");
-                $('#tablaPrincipal').DataTable().draw(false);
+                $('#tablaOperacionesJefeOperaciones').DataTable().draw(false);
             });
         })
 
@@ -469,7 +469,7 @@
                     console.log(data);
                     $("#modal-envio .textcode").text('');
                     $("#modal-envio").modal("hide");
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesJefeOperaciones').DataTable().ajax.reload();
                 }
             });
         });
@@ -496,7 +496,7 @@
                         console.log(data);
                         $("#modal-envio-op .textcode").text('');
                         $("#modal-envio-op").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesJefeOperaciones').DataTable().ajax.reload();
                     }
                 });
             }else{
@@ -512,7 +512,7 @@
                         console.log(data);
                         $("#modal-envio-op .textcode").text('');
                         $("#modal-envio-op").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesJefeOperaciones').DataTable().ajax.reload();
                     }
                 });
             }
@@ -544,7 +544,7 @@
             console.log(data);
             $("#modal-revertir .textcode").text('');
             $("#modal-revertir").modal("hide");
-            $('#tablaPrincipal').DataTable().ajax.reload();
+            $('#tablaOperacionesJefeOperaciones').DataTable().ajax.reload();
            }
         });
       });
@@ -568,7 +568,7 @@
         $("#responsable").val( idresponsable );
       });
 
-      $('#tablaPrincipal').DataTable({
+      $('#tablaOperacionesJefeOperaciones').DataTable({
           //dom: '<"top"i>rt',
         processing: true,
         stateSave:true,
@@ -635,11 +635,11 @@
 
       });
 
-      $('#tablaPrincipal_filter label input').on('paste', function(e) {
+      $('#tablaOperacionesJefeOperaciones_filter label input').on('paste', function(e) {
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
+    $(document).on("keypress",'#tablaOperacionesJefeOperaciones_filter label input',function(){
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
@@ -675,7 +675,7 @@
 
   <script>
     /*window.onload = function () {
-      $('#tablaPrincipal').DataTable().draw();
+      $('#tablaOperacionesJefeOperaciones').DataTable().draw();
     }*/
   </script>
 
@@ -701,21 +701,21 @@
 
             $("#min").datepicker({
               onSelect: function () {
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                $('#tablaOperacionesJefeOperaciones').DataTable().ajax.reload();
                 //localStorage.setItem('dateMin', $(this).val() );
               }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
             });
 
             $("#max").datepicker({
               onSelect: function () {
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                $('#tablaOperacionesJefeOperaciones').DataTable().ajax.reload();
                 //localStorage.setItem('dateMax', $(this).val() );
               }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy"
             });
 
             //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
-            //var table = $('#tablaPrincipal').DataTable();
+            //var table = $('#tablaOperacionesJefeOperaciones').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
             /*$('#min, #max').change(function () {

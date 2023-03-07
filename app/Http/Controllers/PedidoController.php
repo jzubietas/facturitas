@@ -298,7 +298,8 @@ class PedidoController extends Controller
                             'foto3' => foto_url($grupo->foto3),
                         ];
                         if (collect($fotos)->values()->filter()->count() > 0) {
-                            $btn[] = '<button data-verforotos=\'' . json_encode($fotos) . '\' class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize"><i class="fa-camera text-dark text-dark"></i> Ver Fotos</button>';
+                            $btn[] = '<button data-verforotos=\'' . json_encode($fotos) . '\' class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize"><i class="fa fa-camera" aria-hidden="true"></i>
+ Ver Fotos</button>';
                         } else {
                             $btn[] = '<button disabled class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize"><i class="fa fa-camera text-dark text-wrap text-center btn-fontsize"></i> Sin Fotos</button>';
                         }
@@ -383,8 +384,7 @@ class PedidoController extends Controller
                     }
 
                 }
-              $btn []= '</details>';
-              /*SUMARY*/
+
 
 
 
@@ -403,6 +403,9 @@ class PedidoController extends Controller
                                 <i class="fa fa-check-circle text-warning"></i>
                                 Recojo</a>';
                 }
+
+              $btn []= '</details>';
+              /*SUMARY*/
 
 
                 $btn[] = '</ul></div>';
@@ -608,7 +611,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             ])
-            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
+            /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
             //->whereNotIn("pedidos.envio", ['3'])
@@ -640,7 +643,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             ])
-            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
+            /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
             //->whereNotIn("pedidos.envio", ['3'])

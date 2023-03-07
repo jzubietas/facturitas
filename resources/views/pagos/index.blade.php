@@ -375,8 +375,6 @@
                   'refresh'
               ]
           } );
-
-
   });
   </script>
 
@@ -385,7 +383,9 @@
       //$('#motivo').val("");
       //$('#responsable').val("");
     }
-
+    function  descargaDevolucion(){
+      console.log('AGape'); return false;
+    }
 
   </script>
 

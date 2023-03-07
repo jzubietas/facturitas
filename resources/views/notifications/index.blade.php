@@ -17,19 +17,36 @@
 
                         @if (auth()->user())
                             @foreach($devoluciones as $notification)
+                              @if($notification->status==1)
                                 <div class="alert alert-default-warning">
-                                    Asunto: <a href="{{route('pagos.show',$notification->pago)}}" target="_blank"
-                                               class="text-info">Pago</a>
-                                    por devolver a <a href="{{route('clientes.show',$notification->cliente)}}"
-                                                      target="_blank"
-                                                      class="text-info">{{$notification->cliente->nombre}}</a>
-                                    un valor de <b>{{$notification->amount_format}}</b>
+                                  Asunto: <a href="{{route('pagos.show',$notification->pago)}}" target="_blank"
+                                             class="text-info">Pago</a>
+                                  por devolver a <a href="{{route('clientes.show',$notification->cliente)}}"
+                                                    target="_blank"
+                                                    class="text-info">{{$notification->cliente->nombre}}</a>
+                                  un valor de <b>{{$notification->amount_format}}</b>
 
-                                    <a href="{{route('pagos.devolucion',$notification)}}"
-                                       class="ml-4 btn btn-dark">Gestionar</a>
+                                  <a href="{{route('pagos.devolucion',$notification)}}"
+                                     class="ml-4 btn btn-dark">Gestionar</a>
 
-                                    <br>
+                                  <br>
                                 </div>
+                              @endif
+                              @if($notification->status==2)
+                                <div class="alert alert-default-primary">
+                                  Asunto: <a href="{{route('pagos.show',$notification->pago)}}" target="_blank"
+                                             class="text-info">Pago</a>
+                                  <b>Devuelto</b> a <a href="{{route('clientes.show',$notification->cliente)}}"
+                                                    target="_blank"
+                                                    class="text-info">{{$notification->cliente->nombre}}</a>
+                                  un valor de <b>{{$notification->amount_format}}</b>
+
+                                  <a href="{{route('pagos.devolucion',$notification)}}"
+                                     class="ml-4 btn btn-dark">Gestionar</a>
+
+                                  <br>
+                                </div>
+                                @endif
                             @endforeach
 
                             @forelse ($postNotifications as $notification)

@@ -15,24 +15,26 @@ class Devolucion extends Model
     const PENDIENTE = '1';
     const DEVUELTO = '2';
     const ACEPTADO = '3';
+    const DESCARGADO = '4';
 
     protected $guarded = ['id'];
-    /*protected $fillable = [
-        "pago_id",
-        "client_id",
-        "asesor_id",
-        "amount",
-
-        "bank_destino",
-        "bank_number",
-        "num_operacion",
-
-        "status",
-        "voucher_disk",
-        "voucher_path",
-        "returned_at",
-        'bank_titular',
-    ];*/
+    protected $fillable = [
+      'id',
+      'pago_id',
+      'client_id',
+      'asesor_id',
+      'bank_destino',
+      'bank_number',
+      'num_operacion',
+      'bank_titular',
+      'amount',
+      'status',
+      'voucher_disk',
+      'voucher_path',
+      'returned_at',
+      'created_at',
+      'updated_at'
+    ];
 
     protected $casts = [
         'amount' => 'double',
@@ -89,6 +91,11 @@ class Devolucion extends Model
     {
         $query->where('status', '=', self::PENDIENTE);
     }
+
+  public function scopeDevueltos($query)
+  {
+    $query->where('status', '=', self::DEVUELTO);
+  }
 
     public function pago()
     {

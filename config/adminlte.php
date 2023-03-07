@@ -146,7 +146,7 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
+    'sidebar_collapse' => true,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
@@ -235,7 +235,7 @@ return [
             'type' => 'navbar-notification',
             'id' => 'my-notification',
             'icon' => 'fas fa-envelope',
-            /* 'label'        => rand(0, 10) , */
+            /* 'label'        => rand(0, 10) ,*/
             'label_color' => 'danger',
             'route' => 'notifications.index',
             'topnav_right' => true,
@@ -369,7 +369,7 @@ return [
                   'text' => 'Bandeja de recojo',
                   'route' => 'operaciones.recojos.index',
                   'can' => 'operacion.correccion',
-                  'icon' => 'fas fa-check-circle dot_correcciones_count',
+                  'icon' => 'fas fa-share-square',
                   'active' => [' bandeja de recojo'],
                 ],
                 [

@@ -1,3 +1,4 @@
+{{--operaciones.terminados--}}
 @extends('adminlte::page')
 
 @section('title', 'Operaciones | Sobres terminados')
@@ -38,8 +39,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card"  style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <table style="display: none;" cellspacing="5" cellpadding="5">
                 <tbody>
                 <tr>
@@ -52,20 +53,20 @@
                 </tbody>
             </table>
             <br>
-            <table id="tablaPrincipal" class="table table-striped" style="width:100%">
+            <table id="tablaOperacionesBandejadeSobres" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
-                    <th scope="col" style="vertical-align: middle">Item</th>
-                    <th scope="col" style="vertical-align: middle">Código</th>
-                    <th scope="col" style="vertical-align: middle">Razón social</th>
-                    <th scope="col" style="vertical-align: middle">Asesor</th>
-                    <th scope="col" style="vertical-align: middle">Fecha de registro</th>
-                    <th scope="col" style="vertical-align: middle">Destino</th>
-                    <th scope="col" style="vertical-align: middle">Estado</th>
-                    <th scope="col" style="vertical-align: middle">Adjuntos</th>
-                    <th scope="col" style="vertical-align: middle">Atendido por</th>
-                    <th scope="col" style="vertical-align: middle">Jefe</th>
-                    <th scope="col" style="vertical-align: middle">Accion</th>
+                    <th scope="col" class="align-middle">Item</th>
+                    <th scope="col" class="align-middle">Código</th>
+                    <th scope="col" class="align-middle">Razón social</th>
+                    <th scope="col" class="align-middle">Asesor</th>
+                    <th scope="col" class="align-middle">Fecha de registro</th>
+                    <th scope="col" class="align-middle">Destino</th>
+                    <th scope="col" class="align-middle">Estado</th>
+                    <th scope="col" class="align-middle">Adjuntos</th>
+                    <th scope="col" class="align-middle">Atendido por</th>
+                    <th scope="col" class="align-middle">Jefe</th>
+                    <th scope="col" class="align-middle">Accion</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -82,7 +83,7 @@
     </div>
 @stop
 
-@section('css')
+@push('css')
     {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
@@ -127,8 +128,60 @@
         .textred {
             color: red !important;
         }
+        #tablaOperacionesBandejadeSobres {
+          width: 100% !important;
+        }
+        td {
+          vertical-align: middle !important;
+          text-align: center !important;
+        }
+
+        @media screen and (max-width: 2249px) {
+          #tablaOperacionesBandejadeSobres {
+            width: 100% !important;
+            font-size: 14px !important;
+          }
+
+          .btn-fontsize {
+            font-size: 15px;
+          }
+
+          .sorting:before,
+          .sorting:after,
+          .sorting_desc:before,
+          .sorting_desc:after {
+            top: 30px !important;
+          }
+
+        }
+
+        @media screen and (max-width: 2144px) {
+          .btn-fontsize {
+            font-size: 13px;
+            min-width: 85px;
+            max-width: 160px;
+          }
+
+        }
+
+        @media screen and (max-width: 1500px) {
+          th:nth-child(6){
+            max-width: 230px !important;
+          }
+
+          td:nth-child(6) span{
+            white-space: break-spaces !important;
+            padding: 8px !important;
+          }
+        }
+
+
+
     </style>
-@stop
+
+
+
+@endpush
 
 @section('js')
     {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
@@ -404,7 +457,7 @@
                                 //$("#modal-copiar").modal("show");
                                 $("#modal-correccion-op .textcode").text('');
                                 $("#modal-correccion-op").modal("hide");
-                                $('#tablaPrincipal').DataTable().ajax.reload();
+                                $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                             }else{
                                 console.log("vacio")
                             }
@@ -465,7 +518,7 @@
                         $("#modal-revertir-poratender .textcode").text('');
                         $("#modal-revertir-poratender .textcantadjunto").text('');
                         $("#modal-revertir-poratender").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -487,7 +540,7 @@
                         console.log(data);
                         $("#modal-correccion-op .textcode").text('');
                         $("#modal-correccion-op").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -509,7 +562,7 @@
                         console.log(data);
                         $("#modal-envio-op .textcode").text('');
                         $("#modal-envio-op").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -540,7 +593,7 @@
                         console.log(data);
                         $("#modal-revertir .textcode").text('');
                         $("#modal-revertir").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -592,7 +645,7 @@
                         $("#modal-revertir-ajefeop .textcode").text('');
                         $("#modal-revertir-ajefeop .textcantadjunto").text('');
                         $("#modal-revertir-ajefeop").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -625,12 +678,12 @@
                         $("#modal-revertir-asindireccion .textcode").text('');
                         $("#modal-revertir-asindireccion .textcantadjunto").text('');
                         $("#modal-revertir-asindireccion").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaOperacionesBandejadeSobres').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -749,11 +802,11 @@
 
             });
 
-            $('#tablaPrincipal_filter label input').on('paste', function (e) {
+            $('#tablaOperacionesBandejadeSobres_filter label input').on('paste', function (e) {
                 var pasteData = e.originalEvent.clipboardData.getData('text')
                 localStorage.setItem("search_tabla", pasteData);
             });
-            $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
+            $(document).on("keypress", '#tablaOperacionesBandejadeSobres_filter label input', function () {
                 localStorage.setItem("search_tabla", $(this).val());
                 console.log("search_tabla es " + localStorage.getItem("search_tabla"));
             });
@@ -789,7 +842,7 @@
 
     <script>
         /*window.onload = function () {
-          $('#tablaPrincipal').DataTable().draw();
+          $('#tablaOperacionesBandejadeSobres').DataTable().draw();
         }*/
     </script>
 
@@ -815,21 +868,21 @@
 
             $("#min").datepicker({
                 onSelect: function () {
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     //localStorage.setItem('dateMin', $(this).val() );
                 }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
             });
 
             $("#max").datepicker({
                 onSelect: function () {
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     //localStorage.setItem('dateMax', $(this).val() );
                 }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
             });
 
             //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
-            //var table = $('#tablaPrincipal').DataTable();
+            //var table = $('#tablaOperacionesBandejadeSobres').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
             /*$('#min, #max').change(function () {

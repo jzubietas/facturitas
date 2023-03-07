@@ -41,7 +41,7 @@
     <div class="card">
         <div class="card-body">
             <br>
-            <table id="tablaPrincipal" class="table table-striped">
+            <table id="tablaOperacionesPedidosPorAtender" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col" style="vertical-align: middle">Item</th>
@@ -231,7 +231,7 @@
                         console.log(data);
                         $("#modal-atender .textcode").text('');
                         $("#modal-atender").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesPedidosPorAtender').DataTable().ajax.reload();
                     }
                 });
             });
@@ -289,7 +289,7 @@
                             console.log(data);
                             $("#modal-atender .textcode").text('');
                             $("#modal-atender").modal("hide");
-                            $('#tablaPrincipal').DataTable().ajax.reload();
+                            $('#tablaOperacionesPedidosPorAtender').DataTable().ajax.reload();
 
                         }
 
@@ -510,7 +510,7 @@
                 $("#responsable").val(idresponsable);
             });
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaOperacionesPedidosPorAtender').DataTable({
                 processing: true,
                 //stateSave:true,
                 serverSide: true,
@@ -666,7 +666,7 @@
 
     <script>
         /*window.onload = function () {
-          $('#tablaPrincipal').DataTable().draw();
+          $('#tablaOperacionesPedidosPorAtender').DataTable().draw();
         }*/
     </script>
 
@@ -709,7 +709,7 @@
                     table.draw();
                 }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
             });
-            var table = $('#tablaPrincipal').DataTable();
+            var table = $('#tablaOperacionesPedidosPorAtender').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
             $('#min, #max').change(function () {

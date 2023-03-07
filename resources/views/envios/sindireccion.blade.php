@@ -45,7 +45,7 @@
                 </tr>
               </tbody>
             </table><br> --}}
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
+            <table id="tablaCourierSobresSinDireccion" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
 
@@ -170,7 +170,7 @@
                     url: "{{ route('operaciones.confirmarentregasinenvio') }}",
                     success: function (data) {
                         $("#modal-confirmacion").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaCourierSobresSinDireccion').DataTable().ajax.reload();
                     }
                 });
             });
@@ -294,7 +294,7 @@
                     url: "{{ route('envios.enviarid') }}",
                     success: function (data) {
                         $("#modal-enviar").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaCourierSobresSinDireccion').DataTable().ajax.reload();
 
                     }
                 });
@@ -305,7 +305,7 @@
                 evento.preventDefault();
             });
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaCourierSobresSinDireccion').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -410,7 +410,7 @@
                                         url: action
                                     }).done(function () {
                                         self.close()
-                                        $('#tablaPrincipal').DataTable().draw(false);
+                                        $('#tablaCourierSobresSinDireccion').DataTable().draw(false);
                                     }).always(function () {
                                         self.hideLoading(true)
                                     });

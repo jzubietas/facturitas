@@ -31,7 +31,7 @@
                 </tr>
               </tbody>
             </table><br> --}}
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
+            <table id="tablaCourierSeguimientoProvincia" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
@@ -77,7 +77,7 @@
                 }
             });
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaCourierSeguimientoProvincia').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -487,7 +487,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                                     }
                                 }).always(function () {
                                     self.hideLoading(true)
-                                    $('#tablaPrincipal').DataTable().draw(false)
+                                    $('#tablaCourierSeguimientoProvincia').DataTable().draw(false)
                                 })
                                 return false
                             }

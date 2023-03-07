@@ -98,6 +98,15 @@
         let dataForm_agregarcontacto_cno = {};
         let dataForm_agregarcontacto_b = {};
         let dataForm_agregarcontacto_cnu = {};
+        function insertContador(child, dotClass, value) {
+          var parent = $(child).parent();
+          var epa = parent.find(dotClass);
+          if (epa.length > 0) {
+            epa.html(value);
+          } else {
+            parent.append('<i class="' + dotClass.split('.').join(' ').trim() + '">' + value + '</i>');
+          }
+        }
         $(document).ready(function () {
 
             $.ajaxSetup({
@@ -213,7 +222,7 @@
 
 
           window.ocultar_div_modal1 = function () {
-                console.log("ocultar div")
+                console.log("ocultar div asdfss")
                 $("#op-1-row").hide();
                 $("#form-op-1-row input").val("");
                 $("#op-2-row").hide();
@@ -393,10 +402,21 @@
               "bPaginate": true,
               "bFilter": true,
               "bInfo": false,
+              "pageLength": 10,
               'ajax': {
                 url: "{{ route('listtablecontactos') }}",
                 data:{tipo:vtipo,rbnvalue:vrbnvalue},
                 "type": "get",
+              },
+              initComplete: function (settings, json) {
+                var totalListaNuevos=tblListadoLlamadas.rows().count();
+                if (vrbnvalue==1){
+                  insertContador("i.btnSinGuardarCont", '.dot-notify.noti-side', totalListaNuevos);
+                }else if (vrbnvalue==2){
+                  insertContador("i.btnGuardadoCont", '.dot-notify.noti-side', totalListaNuevos);
+                }else if (vrbnvalue==3){
+                  insertContador("i.btnConfirmadoCont", '.dot-notify.noti-side', totalListaNuevos);
+                }
               },
               columns: [
                 {data: 'tipo_insert', name: 'tipo_insert'},
@@ -434,6 +454,7 @@
                 }
               }
             });
+
           }
           function  fnListaCambioNombre(vtipo,vrbnvalue){
             tblCambioNombre.destroy();
@@ -455,6 +476,17 @@
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
                 {data: 'action', name: 'action',},
               ],
+              initComplete: function (settings, json) {
+                var totalCambioNombre=tblCambioNombre.rows().count();
+                if (vrbnvalue==1){
+                  insertContador("i.btnNoSaveContCamNom", '.dot-notify.noti-side', totalCambioNombre);
+                }else if (vrbnvalue==2){
+                  insertContador("i.btnSavedContCamNom", '.dot-notify.noti-side', totalCambioNombre);
+
+                }else if (vrbnvalue==3){
+                  insertContador("i.btnConfirmContCamNom", '.dot-notify.noti-side', totalCambioNombre);
+                }
+              },
               "createdRow": function (row, data, dataIndex) {
                 if(data["guardado"]==1)
                 {
@@ -504,6 +536,17 @@
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
                 {data: 'action', name: 'action',},
               ],
+              initComplete: function (settings, json) {
+                var totalBloqueados=tblBloqueoClientes.rows().count();
+                if (vrbnvalue==1){
+                  insertContador("i.btnNoSaveContBloq", '.dot-notify.noti-side', totalBloqueados);
+                }else if (vrbnvalue==2){
+                  insertContador("i.btnSavedContBloq", '.dot-notify.noti-side', totalBloqueados);
+
+                }else if (vrbnvalue==3){
+                  insertContador("i.btnConfirmContBloq", '.dot-notify.noti-side', totalBloqueados);
+                }
+              },
               "createdRow": function (row, data, dataIndex) {
                 if(data["guardado"]==1)
                 {
@@ -553,6 +596,17 @@
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
                 {data: 'action', name: 'action',},
               ],
+              initComplete: function (settings, json) {
+                var totalCambioNumero=tblCambioNumero.rows().count();
+                if (vrbnvalue==1){
+                  insertContador("i.btnNoSaveContCamNro", '.dot-notify.noti-side', totalCambioNumero);
+                }else if (vrbnvalue==2){
+                  insertContador("i.btnSavedContCamNro", '.dot-notify.noti-side', totalCambioNumero);
+
+                }else if (vrbnvalue==3){
+                  insertContador("i.btnConfirmContCamNro", '.dot-notify.noti-side', totalCambioNumero);
+                }
+              },
               "createdRow": function (row, data, dataIndex) {
                 if(data["guardado"]==1)
                 {
@@ -588,8 +642,9 @@
             fnListaCambioNombre(2,1);
             fnListaBloqueoClientes(3,1);
             fnListaCambioNumero(4,1);
-            ocultar_div_modal_correccion_pedidos();
+            ocultar_div_modal_listado_clientes();
           })
+
 
           $('#tablaListadoLlamadas tbody').on('click', 'button.btnGuardado', function () {
             var data = tblListadoLlamadas.row($(this).parents('tr')).data();
@@ -843,8 +898,16 @@
             });
           })
 
-          window.ocultar_div_modal_correccion_pedidos = function () {
-            console.log("ocultar div")
+          /*window.ocultar_div_modal_correccion_pedidos = function () {
+            console.log("ocultar div asd")
+            $("#modal-correccionpedido-pc-container").hide();
+            $("#modal-correccionpedido-f-container").hide();
+            $("#modal-correccionpedido-g-container").hide();
+            $("#modal-correccionpedido-b-container").hide();
+          }*/
+
+          window.ocultar_div_modal_listado_clientes = function () {
+            console.log("ocultar div asd")
             $("#modal-ListadoClientes").hide();
             $("#modal-CambioNombre").hide();
             $("#modal-BLoqueoCliente").hide();
@@ -854,7 +917,7 @@
           $(document).on('click',
             "button#btnListNuevoCliente,button#btnListCambioNombre,button#btnListBloqueo,button#btnListCambioNumero",
             function (e) {
-              ocultar_div_modal_correccion_pedidos();
+              ocultar_div_modal_listado_clientes();
               switch (e.target.id) {
                 case 'btnListNuevoCliente':
                   $("#modal-ListadoClientes").show();
@@ -1372,6 +1435,8 @@
               //$("#modal_clientes_deudas_content_loading").hide()
               //console.log(arguments)
             });
+
+
         })
 
     </script>
