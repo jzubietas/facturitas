@@ -236,7 +236,7 @@
                                             <td class="bg-{{$devolucion->estado_color}}">
                                                 {{$devolucion->estado_text}}
                                             </td>
-                                            <td><a href="" data-target="#modal-imagen-{{ $detallePago->id }}"
+                                            <td><a href="" data-target="#modal-imagen-{{ $devolucion->id }}"
                                                    data-toggle="modal">
                                                     <img
                                                         src="{{ Storage::disk($devolucion->voucher_disk)->url($devolucion->voucher_path) }}"
@@ -256,7 +256,7 @@
                                             $sumPa = $sumPa + $devolucion->amount;
                                             $contPa++;
                                         @endphp
-                                        @include('pagos.modals.modalimagen')
+                                        {{--@include('pagos.modals.modalimagen')--}}
                                     @endforeach
                                     </tbody>
                                     <tfoot>
