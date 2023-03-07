@@ -369,7 +369,7 @@ return [
                   'text' => 'Bandeja de recojo',
                   'route' => 'operaciones.recojos.index',
                   'can' => 'operacion.correccion',
-                  'icon' => 'fas fa-check-circle dot_correcciones_count',
+                  'icon' => 'fas fa-share-square',
                   'active' => [' bandeja de recojo'],
                 ],
                 [
