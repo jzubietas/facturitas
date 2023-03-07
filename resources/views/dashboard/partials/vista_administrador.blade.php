@@ -99,8 +99,6 @@
         <div class="d-flex justify-content-center align-items-center ml-5">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
             <input type="date" id="fechametames" class="border-0 ml-3"
-                   min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}"
-                   max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}"
                    value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
         </div></div>
 
