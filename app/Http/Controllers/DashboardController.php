@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\DetallePedido;
+use App\Models\Meta;
 use App\Models\Pago;
 use App\Models\Pedido;
 use App\Models\Ruc;
