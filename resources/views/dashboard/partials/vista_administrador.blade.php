@@ -95,12 +95,13 @@
         <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
         <button style="background: none; border: none" onclick="openFullscreen();">
             <i class="fas fa-expand-arrows-alt ml-3"
-               style="font-size: 20px"></i></button>
+               style="font-size: 20px"></i>
+        </button>
         <div class="d-flex justify-content-center align-items-center ml-5">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
-            <input type="date" id="fechametames" class="border-0 ml-3"
-                   value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
-        </div></div>
+            <input type="date" id="fechametames" class="border-0 ml-3" value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
+        </div>
+    </div>
 
     {{--TABLA DUAL--}}
     <div class="" style=" overflow: hidden !important;">
@@ -190,6 +191,8 @@
           cargaNueva(3);
           cargaNueva(4);
           cargaNueva(5);
+
+          cargReporteMetasCobranzasGeneral();
 
 
       });
@@ -281,6 +284,7 @@
         cargaNueva(3);
         cargaNueva(4);
         cargaNueva(5);
+          cargReporteMetasCobranzasGeneral();
       }
 
       $('a[href$="#myModal"]').on("click", function () {

@@ -17,10 +17,19 @@
 </div>
 
 <div class="col-lg-12 " id="contenedor-fullscreen">
-  <div class="d-flex justify-content-center">
-    <h1 class="text-uppercase justify-center text-center">Metas</h1>
-    <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
-  </div>
+
+    <div class="d-flex justify-content-center">
+        <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+        <button style="background: none; border: none" onclick="openFullscreen();">
+            <i class="fas fa-expand-arrows-alt ml-3"
+               style="font-size: 20px"></i>
+        </button>
+        <div class="d-flex justify-content-center align-items-center ml-5">
+            <label class="p-0 m-0" for="ingresar">Fecha: </label>
+            <input type="date" id="fechametames" class="border-0 ml-3" value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
+        </div>
+    </div>
+
   {{--TABLA DUAL--}}
   <div class="">
     <div class=" ">
@@ -47,15 +56,6 @@
 </div>
 
 
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-12">
-      <div id="reporteanalisis"></div>
-    </div>
-  </div>
-</div>
-
 @section('js-datatables')
   <script>
     $(".animated-progress span").each(function () {
@@ -75,43 +75,33 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
-      window.cargaNueva = function (entero) {
-        console.log(' '+entero)
-        var fd=new FormData();
-        fd.append('ii',entero);
-        $.ajax({
-          data: fd,
-          processData: false,
-          contentType: false,
-          method: 'POST',
-          url: "{{ route('dashboard.viewMetaTable') }}",
-          success: function (resultado){
-            if(entero==1)
-            {
-              $('#metas_dp').html(resultado);
-            }else if(entero==2){
-              $('#meta').html(resultado);
-            }
-            else if(entero==3){
-              $('#metas_total').html(resultado);
-            }
-          }
-        })
-      }
-      window.cargReporteAnalisis = function () {
-        var fd=new FormData();
-        //fd.append('ii',entero);
-        $.ajax({
-          data: fd,
-          processData: false,
-          contentType: false,
-          method: 'POST',
-          url: "{{ route('dashboard.viewAnalisis') }}",
-          success: function (resultado){
-            $('#reporteanalisis').html(resultado);
-          }
-        })
-      }
+        window.cargaNueva = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            fd.append('fechametames', $('#fechametames').val());
+            fd.append('ii', entero);
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable') }}",
+                success: function (resultado) {
+                    if (entero == 1) {
+                        $('#metas_dp').html(resultado);
+                    } else if (entero == 2) {
+                        $('#meta').html(resultado);
+                    } else if (entero == 3) {
+                        $('#metas_total').html(resultado);
+                    } else if (entero == 4) {
+                        $('#supervisor_total').html(resultado);
+                    } else if (entero == 5) {
+                        $('#supervisor_A').html(resultado);
+                    }
+                }
+            })
+        }
+
       window.cargReporteMetasSituacionClientes = function () {
         var fd=new FormData();
         $.ajax({
@@ -130,7 +120,6 @@
       cargaNueva(1);
       cargaNueva(2);
       cargaNueva(3);
-      cargReporteAnalisis();
       cargReporteMetasSituacionClientes();
 
       setInterval(myTimer, 50000);
