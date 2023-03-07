@@ -4084,13 +4084,6 @@ metas_dp .animated-progress {
   }
 }
 
-/*TOTALES*/
-#supervisor_total,
-#supervisor_A,
-#metas_total{
-  width: 100% !important;
-}
-
 /*---------------- MODULO PEDIDO ----------------*/
 
 /*---------------- MODULO DASHBOARD ----------------*/
