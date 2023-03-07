@@ -328,25 +328,13 @@ class PdfController extends Controller
         ->where('user_id','<>',51)
         ->where('pendiente_anulacion', '<>','1' ), $mes_artificio, 'created_at')
         ->count();
+
       $total_pagado_mespasado = $this->applyFilterPersonalizable(Pedido::query()
         ->where('codigo', 'not like', "%-C%")->activo()
         ->where('user_id','<>',51)
         ->where('pendiente_anulacion', '<>','1' )->pagados(), $mes_artificio, 'created_at')
         ->count();
 
-
-
-      $title_mes_artificio=$mes_artificio->format('F');
-      //$title_mes_artificio=$title_mes_artificio->formatLocalized('%B');
-      $html[] = '<tr>';
-      $html[] = '<td style="width:20%;" class="text-center">';
-      $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
-                                    style="align-items: center;height: 40px !important; color: black !important;">' .
-        $title_mes_artificio.
-        '</span>';
-      $html[] = '</td>';
-
-      $html[] = '<td style="width:80%">';
       $porcentaje = 0;
       $diferenciameta = 0;
       $valor_meta = 0;
@@ -355,7 +343,7 @@ class PdfController extends Controller
       if ($total_pagado_mespasado   < $total_pedido_mespasado) {
         //meta 1
         $porcentaje = round(($total_pagado_mespasado / $total_pedido_mespasado) * 100, 2);
-        $diferenciameta = $total_pagado_mespasado - $total_pedido_mespasado;
+        $diferenciameta = $total_pedido_mespasado - $total_pagado_mespasado;
         if ($diferenciameta < 0) $diferenciameta = 0;
         if($porcentaje < 45){
           $color_progress = '#DC3545FF';  /*ROJO*/
@@ -368,11 +356,30 @@ class PdfController extends Controller
         }
       }
 
+      if ($total_pagado_mespasado == $total_pedido_mespasado){
+        continue;
+      }
+
+
+      $title_mes_artificio=$mes_artificio->format('F - Y');
+      //$title_mes_artificio=$title_mes_artificio->formatLocalized('%B');
+      $html[] = '<tr>';
+      $html[] = '<td style="width:20%;" class="text-center">';
+      $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
+                                    style="align-items: center;height: 40px !important; color: black !important;">' .
+        $title_mes_artificio.
+        '</span>';
+      $html[] = '</td>';
+
+      $html[] = '<td style="width:80%">';
+
+
+
       if ($porcentaje >= 90) {
         $html[] = '<div class="w-100 bg-white rounded">
                                         <div class="position-relative rounded">
                                             <div class="progress bg-white rounded" style="height: 40px">
-                                                    <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
+                                                    <div class="rounded" role="progressbar" style="background: ' . $color_progress . ' !important; width: ' . $porcentaje . '%" ></div>
                                              </div>
                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                                     <span style="font-weight: lighter">
@@ -387,7 +394,7 @@ class PdfController extends Controller
                                          </div>
 
                                   </div>
-                                  <sub class="">Cobranzas: '.$total_pagado_mespasado.'</sub>';
+                                  <sub class="">Cobranzas: ' . $total_pagado_mespasado . '</sub>';
       }
       else if ($porcentaje > 75)
       {
