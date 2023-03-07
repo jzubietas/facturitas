@@ -356,8 +356,7 @@
             @if($mirol == 'Encargado' && id == 46)
             cargaNueva(4);
             @endif
-
-                @@if($mirol == 'Encargado' && id == 24)
+            @if($mirol == 'Encargado' && id == 24)
             cargaNueva(5);
                 @endif
             }
