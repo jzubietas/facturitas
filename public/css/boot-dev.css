@@ -4085,7 +4085,74 @@ metas_dp .animated-progress {
 }
 
 /*---------------- MODULO PEDIDO ----------------*/
+/*--- /pedidos ---*/
+/*--- /pedidos/estados/porAtender ---*/
+/*--- /pedidos/estados/Atendidos ---*/
+/*--- /pedidos.sinpagos ---*/
+/*--- /sobres.porenviar ---*/
+/*--- /envios/olva ---*/
+/*--- /pedidos.recojo ---*/
 
-/*---------------- MODULO DASHBOARD ----------------*/
+/*---------------- MODULO OPERACIONES ----------------*/
+/*--- /operaciones.terminados ---*/
+/*--- /operaciones.correcciones ---*/
+/*--- /operaciones/recojos ---*/
+/*--- /operaciones.poratender ---*/
+/*--- /operaciones.atendidos ---*/
+/*--- /operaciones.entregados ---*/
+/*--- /pedidos/estados/anulados ---*/
 
+/*---------------- MODULO COURRIER ----------------*/
+/*--- /envios.estadosobres ---*/
+/*--- /envios.porconfirmar ---*/
+/*--- /envios.distribuirsobres ---*/
+/*--- /envios.sindireccion ---*/
+/*--- /envios.parareparto ---*/
+/*--- /envios.rutaenvio ---*/
+/*--- /envios/motorizados/confirmar ---*/
+/*--- /envios.seguimientoprovincia ---*/
 
+/*---------------- MODULO MOTORIZADO ----------------*/
+/*--- /envios.recepcionmotorizado ---*/
+/*--- /envios/motorizados ---*/
+/*--- /envios.devueltos ---*/
+
+/*---------------- MODULO PAGOS ----------------*/
+/*--- /pagos ---*/
+/*--- /pagos.mispagos ---*/
+/*--- /pagos.pagosincompletos ---*/
+/*--- /pagos.pagosobservados ---*/
+
+/*---------------- MODULO ADMINISTRACION ----------------*/
+/*--- /administracion.porrevisar ---*/
+/*--- /administracion.pendientes ---*/
+/*--- /administracion.observados ---*/
+/*--- /administracion.aprobados ---*/
+/*--- /movimientos ---*/
+
+/*---------------- MODULO PERSONAS ----------------*/
+/*--- /clientes ---*/
+/*--- /clientes.recurrentes ---*/
+/*--- /clientes.abandonos.recientes ---*/
+/*--- /clientes.abandonos ---*/
+/*--- /clientes.nuevos ---*/
+/*--- /clientes.recuperados.recientes ---*/
+/*--- /clientes.recuperados ---*/
+/*--- /clientes.nulos ---*/
+/*--- /basefria ---*/
+
+/*---------------- MODULO REPORTES ----------------*/
+/*--- /reportes.index ---*/
+/*--- /reportes.operaciones ---*/
+/*--- /reportes.analisis ---*/
+
+/*---------------- MODULO USUARIOS ----------------*/
+/*--- /roles ---*/
+/*--- /users ---*/
+/*--- /users.encargados ---*/
+/*--- /users.asesores ---*/
+/*--- /users.jefes ---*/
+/*--- /users.operarios ---*/
+/*--- /users.misoperarios ---*/
+/*--- /users.mipersonal ---*/
+/*--- /users.llamadas ---*/
