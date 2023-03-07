@@ -483,7 +483,7 @@ ${data.foto3 ? `
         });
       });
 
-      datatablerecojo.on('responsive-display', function (e, datatable, row, showHide, update) {
+      tblListadoRecojo.on('responsive-display', function (e, datatable, row, showHide, update) {
         console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
         if (showHide) {
           renderButtomsDataTable($(row.node()).siblings('.child'), row.data())

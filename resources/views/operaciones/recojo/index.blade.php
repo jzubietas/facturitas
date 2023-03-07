@@ -119,7 +119,6 @@
 
         },
         createdRow: function (row, data, dataIndex) {
-          console.log(data["cod_recojo"])
           if(data["condicion_envio_code"]==31)
           {
             $(row).addClass('yellow_color_table');
