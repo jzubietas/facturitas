@@ -10,7 +10,7 @@
 
         </div>
         <div class="card-body">
-            <table id="tablaPrincipal" class="table table-striped">
+            <table id="tablaOperacionesPendienteAnulacion" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col" style="vertical-align: middle">Item</th>
@@ -60,7 +60,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $('#tablaPrincipal').DataTable({
+            $('#tablaOperacionesPendienteAnulacion').DataTable({
                 processing: true,
                 serverSide: true,
                 searching: true,
@@ -106,7 +106,7 @@
                                             }
                                         }).always(function () {
                                             self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().draw(false);
+                                            $('#tablaOperacionesPendienteAnulacion').DataTable().draw(false);
                                         });
                                     }
                                 },
@@ -252,7 +252,7 @@
                     $('#modal_confirmar_anular').modal('hide')
                     $("#anularAttachments").val(null)
 
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesPendienteAnulacion').DataTable().ajax.reload();
                 });
             })
 

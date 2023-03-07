@@ -53,7 +53,7 @@
                 </tbody>
             </table>
             <br>
-            <table id="tablaPrincipal" class="table table-striped" style="width:100%">
+            <table id="tablaOperacionesBandejadeSobres" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
                     <th scope="col" class="align-middle">Item</th>
@@ -128,7 +128,7 @@
         .textred {
             color: red !important;
         }
-        #tablaPrincipal {
+        #tablaOperacionesBandejadeSobres {
           width: 100% !important;
         }
         td {
@@ -137,7 +137,7 @@
         }
 
         @media screen and (max-width: 2249px) {
-          #tablaPrincipal {
+          #tablaOperacionesBandejadeSobres {
             width: 100% !important;
             font-size: 14px !important;
           }
@@ -457,7 +457,7 @@
                                 //$("#modal-copiar").modal("show");
                                 $("#modal-correccion-op .textcode").text('');
                                 $("#modal-correccion-op").modal("hide");
-                                $('#tablaPrincipal').DataTable().ajax.reload();
+                                $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                             }else{
                                 console.log("vacio")
                             }
@@ -518,7 +518,7 @@
                         $("#modal-revertir-poratender .textcode").text('');
                         $("#modal-revertir-poratender .textcantadjunto").text('');
                         $("#modal-revertir-poratender").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -540,7 +540,7 @@
                         console.log(data);
                         $("#modal-correccion-op .textcode").text('');
                         $("#modal-correccion-op").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -562,7 +562,7 @@
                         console.log(data);
                         $("#modal-envio-op .textcode").text('');
                         $("#modal-envio-op").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -593,7 +593,7 @@
                         console.log(data);
                         $("#modal-revertir .textcode").text('');
                         $("#modal-revertir").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -645,7 +645,7 @@
                         $("#modal-revertir-ajefeop .textcode").text('');
                         $("#modal-revertir-ajefeop .textcantadjunto").text('');
                         $("#modal-revertir-ajefeop").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
@@ -678,12 +678,12 @@
                         $("#modal-revertir-asindireccion .textcode").text('');
                         $("#modal-revertir-asindireccion .textcantadjunto").text('');
                         $("#modal-revertir-asindireccion").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     }
                 });
             });
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaOperacionesBandejadeSobres').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -802,11 +802,11 @@
 
             });
 
-            $('#tablaPrincipal_filter label input').on('paste', function (e) {
+            $('#tablaOperacionesBandejadeSobres_filter label input').on('paste', function (e) {
                 var pasteData = e.originalEvent.clipboardData.getData('text')
                 localStorage.setItem("search_tabla", pasteData);
             });
-            $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
+            $(document).on("keypress", '#tablaOperacionesBandejadeSobres_filter label input', function () {
                 localStorage.setItem("search_tabla", $(this).val());
                 console.log("search_tabla es " + localStorage.getItem("search_tabla"));
             });
@@ -842,7 +842,7 @@
 
     <script>
         /*window.onload = function () {
-          $('#tablaPrincipal').DataTable().draw();
+          $('#tablaOperacionesBandejadeSobres').DataTable().draw();
         }*/
     </script>
 
@@ -868,21 +868,21 @@
 
             $("#min").datepicker({
                 onSelect: function () {
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     //localStorage.setItem('dateMin', $(this).val() );
                 }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
             });
 
             $("#max").datepicker({
                 onSelect: function () {
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesBandejadeSobres').DataTable().ajax.reload();
                     //localStorage.setItem('dateMax', $(this).val() );
                 }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
             });
 
             //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
-            //var table = $('#tablaPrincipal').DataTable();
+            //var table = $('#tablaOperacionesBandejadeSobres').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
             /*$('#min, #max').change(function () {
