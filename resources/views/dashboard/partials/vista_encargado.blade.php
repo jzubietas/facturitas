@@ -347,10 +347,8 @@
             @if($mirol == 'Encargado' && id == 24)
             cargaNueva(5);
             @endif
-
-
+                
             setInterval(myTimer, 10000);
-
             function myTimer() {
                 cargaNueva(1);
                 cargaNueva(2);
