@@ -1,4 +1,4 @@
-<li @isset($item['id']) id="{{ $item['id'] }}" @endisset class="nav-item dropdown">
+<li @isset($item['id']) id="{{ $item['id'] }}" @endisset class="nav-item dropdown d-flex justify-content-center align-items-center">
 
     {{-- Menu toggler --}}
     <a class="nav-link dropdown-toggle {{ $item['class'] }}" href=""

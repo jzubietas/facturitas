@@ -148,60 +148,6 @@
       max-width: 80%;
     }
 
-    #tablaSobresPorEnviar {
-      width: 100% !important;
-    }
-
-    @media screen and (max-width: 2249px) {
-      #tablaSobresPorEnviar {
-        width: 100% !important;
-      }
-
-      thead {
-        vertical-align: middle;
-      }
-
-      td:nth-child(n+1) {
-        text-align: start !important;
-      }
-
-      td:nth-child(7),
-      td:nth-child(9) {
-        text-align: center;
-      }
-
-      th:nth-child(9) {
-        width: 100px !important;
-      }
-
-      th:nth-child(11) {
-        width: 130px !important;
-      }
-
-      .sorting:before,
-      .sorting:after,
-      .sorting_desc:before,
-      .sorting_desc:after {
-        top: 20px !important;
-      }
-
-      td {
-        vertical-align: middle !important;
-        text-align: center !important;
-      }
-
-      #tablaSobresPorEnviar tbody div ul {
-        padding-left: 0px !important;
-        margin-bottom: 0px !important;
-      }
-    }
-
-    @media screen and (max-width: 1440px) {
-      #tablaSobresPorEnviar {
-        font-size: 13px !important;
-      }
-    }
-
     @if(auth()->user()->rol !='Administrador')
             .visible_button_recoger {
       opacity: 0;

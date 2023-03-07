@@ -692,51 +692,51 @@ class UserController extends Controller
     $user=User::where('estado', '1')
       ->where('id', Auth::user()->id)->first();
     if ($user->vidas_restantes==1){
-      $html='<li class="nav-item dropdown show" id="my-annuncements-3">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+      $html='<li class="nav-item dropdown show d-flex align-items-center" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0 d-flex" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2 d-flex justify-content-center align-items-center align-self-center"
                    data-toggle="modal" data-target="#modal-vidas-3" type="button">
                   <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
                 </a>
             </span>
         </li>';
     } elseif ($user->vidas_restantes==2){
-      $html='<li class="nav-item dropdown show" id="my-annuncements-2">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2"
+      $html='<li class="nav-item dropdown show d-flex align-items-center" id="my-annuncements-2">
+            <span class="nav-link p-1 m-0 d-flex" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2 d-flex justify-content-center align-items-center align-self-center"
                    data-toggle="modal" data-target="#modal-vidas-2" type="button">
                   <i class="fas fa-male text-warning btnVidasCont2" aria-hidden="true" ></i>
                 </a>
             </span>
         </li>
-        <li class="nav-item dropdown show" id="my-annuncements-3">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+        <li class="nav-item dropdown show d-flex align-items-center" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0 d-flex" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2 d-flex justify-content-center align-items-center align-self-center"
                    data-toggle="modal" data-target="#modal-vidas-3" type="button">
                   <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
                 </a>
             </span>
         </li>';
     }elseif ($user->vidas_restantes==3){
-      $html='<li class="nav-item dropdown show" id="my-annuncements-1">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class="font-36 border-0 font-weight-bold btnVidas1 ml-2"
+      $html='<li class="nav-item dropdown show d-flex align-items-center" id="my-annuncements-1">
+            <span class="nav-link p-1 m-0 d-flex" aria-expanded="true">
+                <a class="font-36 border-0 font-weight-bold btnVidas1 ml-2 d-flex justify-content-center align-items-center align-self-center"
                     data-toggle="modal" data-target="#modal-vidas-1" type="button">
                   <i class="fas fa-male text-success btnVidasCont" aria-hidden="true" ></i>
                 </a>
             </span>
         </li>
-        <li class="nav-item dropdown show" id="my-annuncements-2">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2"
+        <li class="nav-item dropdown show d-flex align-items-center" id="my-annuncements-2">
+            <span class="nav-link p-1 m-0 d-flex" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas2 ml-2 d-flex justify-content-center align-items-center align-self-center"
                    data-toggle="modal" data-target="#modal-vidas-2" type="button">
                   <i class="fas fa-male text-warning btnVidasCont2" aria-hidden="true" ></i>
                 </a>
             </span>
         </li>
-        <li class="nav-item dropdown show" id="my-annuncements-3">
-            <span class="nav-link p-1 m-0" aria-expanded="true">
-                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2"
+        <li class="nav-item dropdown show d-flex align-items-center" id="my-annuncements-3">
+            <span class="nav-link p-1 m-0 d-flex" aria-expanded="true">
+                <a class=" font-36 border-0 font-weight-bold btnVidas3 ml-2 d-flex justify-content-center align-items-center align-self-center"
                    data-toggle="modal" data-target="#modal-vidas-3" type="button">
                   <i class="fas fa-male text-danger btnVidasCont3" aria-hidden="true" ></i>
                 </a>

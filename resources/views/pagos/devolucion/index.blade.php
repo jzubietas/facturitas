@@ -87,7 +87,10 @@
                                     </li>
                                     <li class="list-group-item">
                                         <div>
-                                          <button class="btn btn-dark btnDescargaDevolucion"> <i class="fas fa-file-download"></i> Descargar</button>
+                                          <!-- (Condition) ? trueStatement : falseStatement -->
+                                          <button class="btn btn-dark btnDescargaDevolucion" >
+                                            <i class="fas fa-file-download"></i> Marcar como leído </button>
+
                                             <a href="{{route('pagos.show',$devolucion->pago)}}#section_devoluciones"
                                                target="_blank" class="btn btn-info">
                                                 <i class="fa fa-link"></i>
@@ -335,10 +338,12 @@
             type: 'POST',
             url: "{{ route('descargaDevolucion') }}",
             success: function (data) {
-              console.log('DATOS: ',data);
-              Swal.fire('Alerta', 'Se procedio a realizar la descarga', 'success');
+              console.log(data);
+
+              Swal.fire('Alerta', 'Se procedio a marcar como leido correctamente.', 'success');
             }
           });
+
         })
       })
     </script>
