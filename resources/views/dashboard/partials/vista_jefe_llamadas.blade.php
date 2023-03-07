@@ -144,6 +144,21 @@
   </div>
 </div>
 
+<div class="container-fluid">
+    <div class="col-md-12">
+        <div class="card bg-cyan">
+            <div class="card-header">
+                <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
+            </div>
+            <div class="card-body">
+                <div id="metas_cobranzas_general"></div>
+            </div>
+            <div class="card-fotter"></div>
+        </div>
+
+    </div>
+</div>
+
 @section('js-datatables')
   <script>
     $(".animated-progress span").each(function () {
@@ -216,11 +231,26 @@
         })
       }
 
+        window.cargReporteMetasCobranzasGeneral = function () {
+            var fd = new FormData();
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
+                success: function (resultado) {
+                    $('#metas_cobranzas_general').html(resultado);
+                }
+            })
+        }
+
       cargaNueva(1);
       cargaNueva(2);
       cargaNueva(3);
       cargReporteMetasSituacionClientes();
       cargReporteAnalisis();
+        cargReporteMetasCobranzasGeneral();
 
       setInterval(myTimer, 50000);
 
