@@ -23,7 +23,7 @@
   <div class="card" style="overflow: hidden !important;">
     <div class="card-body" style="overflow-x: scroll !important;">
       <div class="table-responsive">
-        <table id="tablaPrincipal" class="table table-striped">
+        <table id="tablaBandejaPedidosAtendidos" class="table table-striped">
           <thead>
           <tr>
             <th scope="col" class="align-middle">Item</th>
@@ -58,12 +58,12 @@
       -ms-user-select: all !important;
       user-select: all !important;
     }
-    #tablaPrincipal {
+    #tablaBandejaPedidosAtendidos {
       width: 100% !important;
     }
 
     @media screen and (max-width: 2249px) {
-      #tablaPrincipal {
+      #tablaBandejaPedidosAtendidos {
         width: 100% !important;
       }
 
@@ -111,7 +111,7 @@
     }
 
     @media screen and (max-width: 1440px) {
-      #tablaPrincipal {
+      #tablaBandejaPedidosAtendidos {
         font-size: 13px !important;
       }
     }
@@ -145,7 +145,7 @@
         }
       });
       $("#select_status_list").change(function () {
-        $('#tablaPrincipal').DataTable().ajax.reload();
+        $('#tablaBandejaPedidosAtendidos').DataTable().ajax.reload();
       })
 
       function openConfirmDownloadDocuments(action, idc, codigo) {
@@ -173,7 +173,7 @@
                   }).fail(function () {
                     self.hideLoading(true)
                   }).always(function () {
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaBandejaPedidosAtendidos').DataTable().ajax.reload();
                   })
                 } else {
                   $.confirm({
@@ -254,14 +254,14 @@
         });
       }
 
-      /*$("#tablaPrincipal").bind("DOMSubtreeModified", function() {
+      /*$("#tablaBandejaPedidosAtendidos").bind("DOMSubtreeModified", function() {
           console.log("tree changed",arguments);
       });
       new MutationObserver(() => {
           console.log("tree changed",arguments);
       }).observe(document, {subtree: true, childList: true});
   */
-      $('#tablaPrincipal').DataTable({
+      $('#tablaBandejaPedidosAtendidos').DataTable({
         processing: true,
         serverSide: true,
         searching: true,
@@ -453,8 +453,7 @@
             console.log(data);
             $("#modal-atender .textcode").text('');
             $("#modal-atender").modal("hide");
-            $('#tablaPrincipal').DataTable().ajax.reload();
-
+            $('#tablaBandejaPedidosAtendidos').DataTable().ajax.reload();
           }
 
         });

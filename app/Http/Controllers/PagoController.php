@@ -1101,7 +1101,7 @@ class PagoController extends Controller
             ->where('pago_pedidos.pago_id', $pago->id)
             ->get();
 
-        $detallePagos = DetallePago::select('id',
+        $detallePagos = DetallePago::select(['id',
             'monto',
             'banco',
             'imagen',
@@ -1109,7 +1109,7 @@ class PagoController extends Controller
             'titular',
             'cuenta',
             'fecha_deposito',
-            'observacion')
+            'observacion'])
             ->where('estado', '1')
             ->where('pago_id', $pago->id)
             ->get();

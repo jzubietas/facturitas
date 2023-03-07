@@ -100,7 +100,7 @@
                 </tbody>
             </table>
             <br>-->
-      <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
+      <table id="tablabandejapedidos" class="table table-striped">{{-- display nowrap  --}}
         <thead>
         <tr>
           {{--<th class="align-middle"></th>--}}
@@ -202,13 +202,13 @@
     tr.details td.details-control {
       background: url('/images/details_close.png') no-repeat center center;
     }
-    #tablaPrincipal {
+    #tablabandejapedidos {
       width: 100% !important;
     }
 
 
     @media screen and (max-width: 2249px) {
-      #tablaPrincipal {
+      #tablabandejapedidos {
         width: 100% !important;
         font-size: 14px !important;
       }
@@ -285,7 +285,7 @@
     }
 
     @media screen and (max-width: 1920px){
-      #tablaPrincipal {
+      #tablabandejapedidos {
         font-size: 14px !important;
       }
       .etiquetas_asignacion {
@@ -300,7 +300,7 @@
     }
 
     @media screen and (max-width: 1500px) {
-      #tablaPrincipal {
+      #tablabandejapedidos {
         font-size: 10px !important;
       }
 
@@ -342,7 +342,7 @@
   </script>
   <script>
     //import objects from "lodash/_SetCache";
-    let tablaPrincipal = null;
+    let tablaBandejaPedidos = null;
     let dataForm_pc = {};
     let dataForm_f = {};
     let dataForm_g = {};
@@ -589,7 +589,7 @@
           success: function (data) {
             console.log(data);
             $("#modal-recojo-pedidos").modal("hide");
-            $('#tablaPrincipal').DataTable().ajax.reload();
+            $('#tablabandejapedidos').DataTable().ajax.reload();
           }
         });
 
@@ -1024,7 +1024,7 @@
             if (data.html != "0") {
               $("#modal-correccion-pedidos").modal("hide");
               //recargar tabla
-              $('#tablaPrincipal').DataTable().ajax.reload();
+              $('#tablabandejapedidos').DataTable().ajax.reload();
               var urlpdf = '{{ route('correccionPDF', ':id') }}';
               urlpdf = urlpdf.replace(':id', data.codigo);
               window.open(urlpdf, '_blank');
@@ -1212,7 +1212,7 @@
       }
 
       var detailRows = [];
-      tablaPrincipal = $('#tablaPrincipal').DataTable({
+      tablaBandejaPedidos = $('#tablabandejapedidos').DataTable({
         dom: 'Blfrtip',
         processing: true,
         serverSide: true,
@@ -1308,7 +1308,7 @@
                       url: "{{route('pedidos.envios.update-direccion')}}",
                     }).always(function () {
                       self.close();
-                      $('#tablaPrincipal').DataTable().ajax.reload();
+                      $('#tablabandejapedidos').DataTable().ajax.reload();
                     });
                     return false
                   }
@@ -1577,11 +1577,11 @@ ${data.foto3 ? `
 
       }
 
-      $('#tablaPrincipal tbody').on('click', 'tr td.details-control', function () {
+      $('#tablabandejapedidos tbody').on('click', 'tr td.details-control', function () {
         var tr = $(this).closest('tr');
-        var row = tablaPrincipal.row(tr);
+        var row = tablaBandejaPedidos.row(tr);
 
-        var data = tablaPrincipal.row($(this).closest('tr')).data()
+        var data = tablaBandejaPedidos.row($(this).closest('tr')).data()
         var idxio = detailRows.indexOf(data.id);
         console.log(idxio)
         var idx = data.id;
@@ -1622,29 +1622,29 @@ ${data.foto3 ? `
         }
       });
 
-      tablaPrincipal.on('draw', function () {
+      tablaBandejaPedidos.on('draw', function () {
         detailRows.forEach(function (id, i) {
           $('#' + id + ' td.details-control').trigger('click');
         });
       });
 
 
-      $('#tablaPrincipal_filter label input').on('paste', function (e) {
+      $('#tablabandejapedidos_filter label input').on('paste', function (e) {
         var pasteData = e.originalEvent.clipboardData.getData('text')
         localStorage.setItem("search_tabla", pasteData);
       });
-      $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
+      $(document).on("keypress", '#tablabandejapedidos_filter label input', function () {
         localStorage.setItem("search_tabla", $(this).val());
         console.log("search_tabla es " + localStorage.getItem("search_tabla"));
       });
 
-      $(document).on("blur", '#tablaPrincipal_filter label input', function () {
+      $(document).on("blur", '#tablabandejapedidos_filter label input', function () {
         localStorage.setItem("search_tabla", $(this).val());
         console.log("search_tabla es " + localStorage.getItem("search_tabla"));
 
       });
 
-      $('#tablaPrincipal_filter label input').on('paste', function (e) {
+      $('#tablabandejapedidos_filter label input').on('paste', function (e) {
         var pasteData = e.originalEvent.clipboardData.getData('text')
         localStorage.setItem("search_tabla", pasteData);
       });
@@ -1721,7 +1721,7 @@ ${data.foto3 ? `
       }).done(function (data) {
         $("#modal-delete").modal("hide");
         resetearcamposdelete();
-        $('#tablaPrincipal').DataTable().ajax.reload();
+        $('#tablabandejapedidos').DataTable().ajax.reload();
       }).fail(function (err, error, errMsg) {
         console.log(arguments, err, errMsg)
         if (err.status == 401) {
@@ -1749,7 +1749,7 @@ ${data.foto3 ? `
       }).done(function (data) {
         $("#modal-restaurar").modal("hide");
         //resetearcamposdelete();
-        $('#tablaPrincipal').DataTable().ajax.reload();
+        $('#tablabandejapedidos').DataTable().ajax.reload();
       });
     }
 
@@ -1818,7 +1818,7 @@ ${data.foto3 ? `
           table.draw();
         }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
       });
-      var table = $('#tablaPrincipal').DataTable();
+      var table = $('#tablabandejapedidos').DataTable();
 
       // Event listener to the two range filtering inputs to redraw on input
       $('#min, #max').change(function () {

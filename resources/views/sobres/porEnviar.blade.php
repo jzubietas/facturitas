@@ -34,7 +34,7 @@
   <div class="card" style="overflow: hidden !important;">
     <div class="card-body" style="overflow-x: scroll !important;">
 
-      <table id="tablaPrincipal" class="table table-striped" style="width:100% !important;">
+      <table id="tablaSobresPorEnviar" class="table table-striped" style="width:100% !important;">
 
         <thead>
         <tr>
@@ -148,12 +148,12 @@
       max-width: 80%;
     }
 
-    #tablaPrincipal {
+    #tablaSobresPorEnviar {
       width: 100% !important;
     }
 
     @media screen and (max-width: 2249px) {
-      #tablaPrincipal {
+      #tablaSobresPorEnviar {
         width: 100% !important;
       }
 
@@ -190,14 +190,14 @@
         text-align: center !important;
       }
 
-      #tablaPrincipal tbody div ul {
+      #tablaSobresPorEnviar tbody div ul {
         padding-left: 0px !important;
         margin-bottom: 0px !important;
       }
     }
 
     @media screen and (max-width: 1440px) {
-      #tablaPrincipal {
+      #tablaSobresPorEnviar {
         font-size: 13px !important;
       }
     }
@@ -341,7 +341,7 @@
   </script>
 
   <script>
-    let tablaPrincipal = null;
+    let tablaSobresPorEnviar = null;
 
     $(document).ready(function () {
 
@@ -872,7 +872,7 @@
                 return false;
               } else {
                 $("#modal-direccion").modal("hide");
-                $("#tablaPrincipal").DataTable().ajax.reload();
+                $("#tablaSobresPorEnviar").DataTable().ajax.reload();
               }
             }
           });
@@ -1457,14 +1457,14 @@
           url: "{{ route('envios.enviarid') }}",
           success: function (data) {
             $("#modal-enviar").modal("hide");
-            $('#tablaPrincipal').DataTable().ajax.reload();
+            $('#tablaSobresPorEnviar').DataTable().ajax.reload();
 
           }
         });
       });
 
 
-      tablaPrincipal = $('#tablaPrincipal').DataTable({
+      tablaSobresPorEnviar = $('#tablaSobresPorEnviar').DataTable({
         dom: 'Blfrtip',
         processing: true,
         stateSave: true,
@@ -1589,8 +1589,8 @@
       })*/
 
 
-      $('#tablaPrincipal tbody').on('click', 'button', function () {
-        var data = tablaPrincipal.row($(this).closest('tr')).data();
+      $('#tablaSobresPorEnviar tbody').on('click', 'button', function () {
+        var data = tablaSobresPorEnviar.row($(this).closest('tr')).data();
         console.log("got the data"); //This alert is never reached
         console.log(data)
 

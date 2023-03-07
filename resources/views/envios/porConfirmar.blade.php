@@ -18,7 +18,7 @@
                                         responsable="fernandez_recepcion"
                                         tipo="pedido"
                                         accion="recepcionar_sobres"
-                                        :tables-ids="['#tablaPrincipal']">
+                                        :tables-ids="['#tablaCourierRecepciondeSobres']">
 
             </x-common-button-qr-scanner>
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -60,7 +60,7 @@
                 </tr>
               </tbody>
             </table><br> --}}
-            <table id="tablaPrincipal" class="table table-striped">
+            <table id="tablaCourierRecepciondeSobres" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
@@ -145,7 +145,7 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     <script>
-        let tablaPrincipal=null;
+        let tablaCourierRecepciondeSobres=null;
         $(document).ready(function () {
 
             $.ajaxSetup({
@@ -153,7 +153,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-    /*tablaPrincipal*/
+    /*tablaCourierRecepciondeSobres*/
 
 
 
@@ -185,7 +185,7 @@
                         console.log(data);
                         $("#modal-envio .textcode").text('');
                         $("#modal-envio").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload(null, false);
+                        $('#tablaCourierRecepciondeSobres').DataTable().ajax.reload(null, false);
                     }
                 });
             });
@@ -248,7 +248,7 @@
                 }).done(function (data) {
                     if (data.html != 0) {
                         $("#modal-recibir").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload(null, false);
+                        $('#tablaCourierRecepciondeSobres').DataTable().ajax.reload(null, false);
                     } else {
 
                     }
@@ -267,7 +267,7 @@
               $("#hiddenAtender").val(idunico);
             });*/
 
-            tablaPrincipal=$('#tablaPrincipal').DataTable({
+          tablaCourierRecepciondeSobres=$('#tablaCourierRecepciondeSobres').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -398,7 +398,7 @@
                 var input = $('.dataTables_filter input')[0];
                 let value_in=input.value.replace('(', '*').replace("'", '-');
                 console.log(input.value)
-                tablaPrincipal.search( value_in ).draw();
+                tablaCourierRecepciondeSobres.search( value_in ).draw();
                 //e.stopPropagation()
             })*/;
 

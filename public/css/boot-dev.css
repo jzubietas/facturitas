@@ -1340,4 +1340,42 @@ margin: 2px;
   }
 }
 
+/*NAVBAR*/
+/*style tablas   MOD pedidos*/
+
+#my-notification{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (max-width: 805px){
+  .main-header navbar-nav navbar-item a{
+    margin: 0 !important;
+  }
+
+  .text-card-navbar,
+  .vidas-navbar{
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 525px){
+  #divListadoVidas{
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 435px) {
+  #fullscreen-navbar{
+    display: none !important;
+  }
+  .a-navbar{
+    padding: 8px !important;
+  }
+}
+
+/*/pedidos*/
+
+/**/
+
 
