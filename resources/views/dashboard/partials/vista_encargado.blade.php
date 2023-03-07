@@ -85,28 +85,50 @@
 
     {{--      DATATABLE--}}
     <div class="col-lg-12 " id="contenedor-fullscreen">
-      <div class="d-flex justify-content-center">
-        <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-        <button style="background: none; border: none" onclick="openFullscreen();"><i
-            class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
-      </div>
-      {{--TABLA DUAL--}}
-      <div class="">
-        <div class=" ">
-          <div class="row">
-            <div class="col-md-6">
-              <div id="meta"></div>
+
+        <div class="d-flex justify-content-center">
+            <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+            <button style="background: none; border: none" onclick="openFullscreen();">
+                <i class="fas fa-expand-arrows-alt ml-3"
+                   style="font-size: 20px"></i>
+            </button>
+            <div class="d-flex justify-content-center align-items-center ml-5">
+                <label class="p-0 m-0" for="ingresar">Fecha: </label>
+                <input type="date" id="fechametames" class="border-0 ml-3" value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
             </div>
-            <div class="col-md-6">
-              <div id="metas_dp"></div>
-            </div>
-            <div class="col-md-12">
-              <div id="metas_total"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      {{--FIN-TABLA-DUAL--}}
+
+
+      {{--TABLA DUAL--}}
+        <div class="" style=" overflow: hidden !important;">
+            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="meta"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="metas_dp"></div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="supervisor_total"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="supervisor_A"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="supervisor_B"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="metas_total"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        {{--FIN-TABLA-DUAL--}}
     </div>
     {{--FIN-DATATABLE--}}
 
@@ -287,31 +309,38 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
-      window.cargaNueva = function (entero) {
-        console.log(' ' + entero)
-        var fd = new FormData();
-        fd.append('ii', entero);
-        $.ajax({
-          data: fd,
-          processData: false,
-          contentType: false,
-          method: 'POST',
-          url: "{{ route('dashboard.viewMetaTable') }}",
-          success: function (resultado) {
-            if (entero == 1) {
-              $('#metas_dp').html(resultado);
-            } else if (entero == 2) {
-              $('#meta').html(resultado);
-            } else if (entero == 3) {
-              $('#metas_total').html(resultado);
-            }
-          }
-        })
-      }
+        window.cargaNueva = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            fd.append('fechametames', $('#fechametames').val());
+            fd.append('ii', entero);
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable') }}",
+                success: function (resultado) {
+                    if (entero == 1) {
+                        $('#metas_dp').html(resultado);
+                    } else if (entero == 2) {
+                        $('#meta').html(resultado);
+                    } else if (entero == 3) {
+                        $('#metas_total').html(resultado);
+                    } else if (entero == 4) {
+                        $('#supervisor_total').html(resultado);
+                    } else if (entero == 5) {
+                        $('#supervisor_A').html(resultado);
+                    }
+                }
+            })
+        }
 
       cargaNueva(1);
       cargaNueva(2);
       cargaNueva(3);
+      cargaNueva(4);
+      cargaNueva(5);
 
       setInterval(myTimer, 10000);
 
@@ -319,6 +348,8 @@
         cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
+        cargaNueva(4);
+        cargaNueva(5);
       }
 
       $('a[href$="#myModal"]').on("click", function () {

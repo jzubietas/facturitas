@@ -1,6 +1,6 @@
 <div style="text-align: center; font-family:'Times New Roman', Times, serif">
     <h2>
-        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</b></p>
+        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</p>
     </h2>
 </div>
 <br>
@@ -16,45 +16,20 @@
 
 </div>
 
-<div class="col-lg-12 " id="contenedor-fullscreen">
+<div class="container-fluid">
+    <div class="col-md-12">
+        <div class="card bg-cyan">
+            <div class="card-header">
+                <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
+            </div>
+            <div class="card-body">
+                <div id="metas_cobranzas_general"></div>
+            </div>
+            <div class="card-fotter"></div>
+        </div>
 
-    <div class="d-flex justify-content-center">
-        <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-        <button style="background: none; border: none" onclick="openFullscreen();">
-            <i class="fas fa-expand-arrows-alt ml-3"
-               style="font-size: 20px"></i>
-        </button>
-        <div class="d-flex justify-content-center align-items-center ml-5">
-            <label class="p-0 m-0" for="ingresar">Fecha: </label>
-            <input type="date" id="fechametames" class="border-0 ml-3" value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
-        </div>
     </div>
-
-  {{--TABLA DUAL--}}
-  <div class="">
-    <div class=" ">
-      <div class="row">
-        <div class="col-md-6">
-          <div id="meta"></div>
-        </div>
-        <div class="col-md-6">
-          <div id="metas_dp"></div>
-        </div>
-        <div class="col-md-12">
-          <div id="metas_total"></div>
-        </div>
-        <div class="col-md-12">
-          <div class="d-flex justify-content-center">
-            <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
-          </div>
-          <div id="metas_situacion_clientes"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  {{--FIN-TABLA-DUAL--}}
 </div>
-
 
 @section('js-datatables')
   <script>
@@ -75,60 +50,29 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
-        window.cargaNueva = function (entero) {
-            console.log(' ' + entero)
+
+
+        window.cargReporteMetasCobranzasGeneral = function () {
             var fd = new FormData();
-            fd.append('fechametames', $('#fechametames').val());
-            fd.append('ii', entero);
             $.ajax({
                 data: fd,
                 processData: false,
                 contentType: false,
                 method: 'POST',
-                url: "{{ route('dashboard.viewMetaTable') }}",
+                url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
                 success: function (resultado) {
-                    if (entero == 1) {
-                        $('#metas_dp').html(resultado);
-                    } else if (entero == 2) {
-                        $('#meta').html(resultado);
-                    } else if (entero == 3) {
-                        $('#metas_total').html(resultado);
-                    } else if (entero == 4) {
-                        $('#supervisor_total').html(resultado);
-                    } else if (entero == 5) {
-                        $('#supervisor_A').html(resultado);
-                    }
+                    $('#metas_cobranzas_general').html(resultado);
                 }
             })
         }
 
-      window.cargReporteMetasSituacionClientes = function () {
-        var fd=new FormData();
-        $.ajax({
-          data: fd,
-          processData: false,
-          contentType: false,
-          method: 'POST',
-          url: "{{ route('dashboard.graficoSituacionClientes') }}",
-          success: function (resultado){
-            $('#metas_situacion_clientes').html(resultado);
-          }
-        })
-      }
-
-
-      cargaNueva(1);
-      cargaNueva(2);
-      cargaNueva(3);
-      cargReporteMetasSituacionClientes();
+        cargReporteMetasCobranzasGeneral();
 
       setInterval(myTimer, 50000);
 
 
       function myTimer() {
-        cargaNueva(1);
-        cargaNueva(2);
-        cargaNueva(3);
+          cargReporteMetasCobranzasGeneral
       }
       $('a[href$="#myModal"]').on( "click", function() {
         $('#myModal').modal();
