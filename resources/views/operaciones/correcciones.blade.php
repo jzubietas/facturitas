@@ -43,7 +43,7 @@
                 </tbody>
             </table>
             <br>
-            <table id="tablaPrincipal" class="table table-striped" style="width:100%">
+            <table id="tablaOperacionesBandejadeCorrecciones" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
                     <th scope="col" class="align-middle">Item</th>
@@ -117,7 +117,7 @@
         .textred {
             color: red !important;
         }
-        #tablaPrincipal {
+        #tablaOperacionesBandejadeCorrecciones {
           width: 100% !important;
         }
         td {
@@ -284,7 +284,7 @@
                         console.log(data);
                         $("#modalcorreccion-corregir .textcode").text('');
                         $("#modalcorreccion-corregir").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     }
                 });
             });
@@ -323,7 +323,7 @@
                     contentType: false,
                 }).done(function (data) {
                     $("#modalcorreccion-corregir").modal("hide");
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                 }).fail(function (err, error, errMsg) {
                     console.log(arguments, err, errMsg)
                 });
@@ -349,7 +349,7 @@
                     contentType: false,
                 }).done(function (data) {
                     $("#modalcorreccion-rechazo").modal("hide");
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                 }).fail(function (err, error, errMsg) {
                     console.log(arguments, err, errMsg)
                 });
@@ -403,7 +403,7 @@
                         $("#modal-revertir-poratender .textcode").text('');
                         $("#modal-revertir-poratender .textcantadjunto").text('');
                         $("#modal-revertir-poratender").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     }
                 });
             });
@@ -425,7 +425,7 @@
                         console.log(data);
                         $("#modal-correccion-op .textcode").text('');
                         $("#modal-correccion-op").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     }
                 });
             });
@@ -447,7 +447,7 @@
                         console.log(data);
                         $("#modal-envio-op .textcode").text('');
                         $("#modal-envio-op").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     }
                 });
             });
@@ -477,7 +477,7 @@
                         console.log(data);
                         $("#modal-revertir .textcode").text('');
                         $("#modal-revertir").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     }
                 });
             });
@@ -529,7 +529,7 @@
                         $("#modal-revertir-ajefeop .textcode").text('');
                         $("#modal-revertir-ajefeop .textcantadjunto").text('');
                         $("#modal-revertir-ajefeop").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     }
                 });
             });
@@ -562,12 +562,12 @@
                         $("#modal-revertir-asindireccion .textcode").text('');
                         $("#modal-revertir-asindireccion .textcantadjunto").text('');
                         $("#modal-revertir-asindireccion").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     }
                 });
             });
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaOperacionesBandejadeCorrecciones').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -655,11 +655,11 @@
 
             });
 
-            $('#tablaPrincipal_filter label input').on('paste', function (e) {
+            $('#tablaOperacionesBandejadeCorrecciones_filter label input').on('paste', function (e) {
                 var pasteData = e.originalEvent.clipboardData.getData('text')
                 localStorage.setItem("search_tabla", pasteData);
             });
-            $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
+            $(document).on("keypress", '#tablaOperacionesBandejadeCorrecciones_filter label input', function () {
                 localStorage.setItem("search_tabla", $(this).val());
                 console.log("search_tabla es " + localStorage.getItem("search_tabla"));
             });
@@ -695,7 +695,7 @@
 
     <script>
         /*window.onload = function () {
-          $('#tablaPrincipal').DataTable().draw();
+          $('#tablaOperacionesBandejadeCorrecciones').DataTable().draw();
         }*/
     </script>
 
@@ -721,21 +721,21 @@
 
             $("#min").datepicker({
                 onSelect: function () {
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     //localStorage.setItem('dateMin', $(this).val() );
                 }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
             });
 
             $("#max").datepicker({
                 onSelect: function () {
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    $('#tablaOperacionesBandejadeCorrecciones').DataTable().ajax.reload();
                     //localStorage.setItem('dateMax', $(this).val() );
                 }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
             });
 
             //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
-            //var table = $('#tablaPrincipal').DataTable();
+            //var table = $('#tablaOperacionesBandejadeCorrecciones').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
             /*$('#min, #max').change(function () {

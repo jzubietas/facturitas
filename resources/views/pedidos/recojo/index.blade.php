@@ -107,7 +107,7 @@
         white-space: break-spaces;
       }
 
-      #tablaPrincipal tbody div ul {
+      #tblListadoRecojo tbody div ul {
         padding-left: 0px !important;
         margin-bottom: 0px !important;
       }
@@ -428,7 +428,7 @@ ${data.foto3 ? `
             name: 'condicion_envio',
           },
 
- 
+
         ],
         language: {
           "decimal": "",
