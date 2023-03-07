@@ -491,6 +491,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('administracion.updaterevisar/{pago}', [PagoController::class, 'updateRevisar'])->name('administracion.updaterevisar');
     Route::post('administracion.updaterevisar.post', [PagoController::class, 'updateRevisarpost'])->name('administracion.updaterevisar.post');
     Route::get('pagos/{imagen}/descargarimagen', [PagoController::class, 'DescargarImagen'])->name('pagos.descargarimagen');
+  Route::get('pagos/descargarimgdev', [PagoController::class, 'DescargarImgDevolucion'])->name('pagos.descargarimgdev');
 
     Route::get('asesorespago', [PagoController::class, 'asesorespago'])->name('asesorespago');
 

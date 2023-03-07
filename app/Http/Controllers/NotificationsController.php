@@ -352,7 +352,8 @@ class NotificationsController extends Controller
     }
 
     public  function  descargaDevolucion(Request $request){
-      $devoluciones = Devolucion::where('id',$request->devolucion_id)->update([
+      $devoluciones = Devolucion::where('id',$request->devolucion_id)->first();
+      $devoluciones->update([
         'status' => Devolucion::DESCARGADO,
       ]);
       return response()->json(['datos' => $devoluciones]);

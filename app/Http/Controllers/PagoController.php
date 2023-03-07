@@ -2267,6 +2267,12 @@ class PagoController extends Controller
         return response()->download($destinationPath);
     }
 
+    public function DescargarImgDevolucion(Request $request)
+    {
+      $destinationPath = base_path("storage/app/public/" . $request->imagen);
+      return response()->download($destinationPath);
+    }
+
     public function perdonardeuda(Request $request)
     {
         //return $request->all();
