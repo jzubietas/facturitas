@@ -35,6 +35,7 @@ class DashboardController extends Controller
 
 
         $mirol = Auth::user()->rol;
+        $id = Auth::user()->id;
         $lst_users_vida = null;
         $lst_users_vida = User::where('estado', '1');
 
@@ -53,7 +54,7 @@ class DashboardController extends Controller
         $lst_users_vida = $lst_users_vida->get();
 
 
-        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida'));
+        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id'));
 
     }
 
