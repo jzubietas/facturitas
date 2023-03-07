@@ -91,48 +91,43 @@
 
 <div class="col-lg-12 " id="contenedor-fullscreen">
 
-  <div class="d-flex justify-content-center">
-    <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-    <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3"
-                                                                                  style="font-size: 20px"></i></button>
-    <div class="d-flex justify-content-center align-items-center ml-5">
-      <label class="p-0 m-0" for="ingresar">Fecha: </label>
-      <input type="date" id="fechametames" class="border-0 ml-3"
-             min="{{\Carbon\Carbon::now()->startOfDay()->startOfMonth()->format('Y-m-d')}}"
-             max="{{\Carbon\Carbon::now()->endOfDay()->format('Y-m-d')}}">
+  <div class="d-flex justify-content-center flex-column flex-wrap justify-content-center">
+    <div class="d-flex justify-content-center">
+      <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+      <button style="background: none; border: none" onclick="openFullscreen();"><i
+          class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
     </div>
-  </div>
 
-  {{--TABLA DUAL--}}
-  <div class="" style=" overflow: hidden !important;">
-    <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
-      <div class="row">
-        <div class="col-md-6">
-          <div id="meta"></div>
-        </div>
-        <div class="col-md-6">
-          <div id="metas_dp"></div>
-        </div>
+    {{--TABLA DUAL--}}
+    <div class="" style=" overflow: hidden !important;">
+      <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
+        <div class="row">
+          <div class="col-md-6">
+            <div id="meta"></div>
+          </div>
+          <div class="col-md-6">
+            <div id="metas_dp"></div>
+          </div>
 
-        <div class="col-md-12">
-          <div id="supervisor_total"></div>
-        </div>
-        <div class="col-md-12">
-          <div id="supervisor_A"></div>
-        </div>
-        <div class="col-md-12">
-          <div id="supervisor_B"></div>
-        </div>
-        <div class="col-md-12">
-          <div id="metas_total"></div>
+          <div class="col-md-12">
+            <div id="supervisor_total"></div>
+          </div>
+          <div class="col-md-12">
+            <div id="supervisor_A"></div>
+          </div>
+          <div class="col-md-12">
+            <div id="supervisor_B"></div>
+          </div>
+          <div class="col-md-12">
+            <div id="metas_total"></div>
+          </div>
+
         </div>
 
       </div>
-
     </div>
+    {{--FIN-TABLA-DUAL--}}
   </div>
-  {{--FIN-TABLA-DUAL--}}
-</div>
 
 </div>
 <br>
@@ -468,6 +463,9 @@
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 
+    /*        .tabla-metas_pagos_pedidos{
+              font-size: 12px;
+            }*/
     .format-size {
       padding: 0;
       font-weight: bold;
@@ -496,6 +494,7 @@
       justify-content: space-around;
       align-items: center;
     }
+
 
     @media screen and (max-width: 1440px) {
       .tabla-metas_pagos_pedidos {
@@ -537,6 +536,8 @@
         margin-right: 4px;
       }
     }
+
+
   </style>
 @endpush
 
@@ -562,47 +563,42 @@
         }
       });
 
-        $("#fechametames").val("{{\Carbon\Carbon::parse("$fechametames")->format('Y-m-d')}}");
+      $('#fecha').val("{{\Carbon\Carbon::parse($fecha)->format('Y-m-d')}}");
 
-        $(document).on('change', "#fechametames", function (e) {
-          const value = e.target.value;
-          //console.log(value)
-          //if (value) {
-            //window.location.replace('?fechametames=' + value)
-          //}
-
-          cargaNueva(1);
-          cargaNueva(2);
-          cargaNueva(3);
-
-        });
-
-        window.cargaNueva = function (entero) {
-          console.log(' ' + entero)
-          var fd = new FormData();
-          fd.append("fechametames", $("#fechametames").val());
-          fd.append('ii', entero);
-          $.ajax({
-            data: fd,
-            processData: false,
-            contentType: false,
-            method: 'POST',
-            url: "{{ route('dashboard.viewMetaTable') }}",
-            success: function (resultado) {
-              if (entero == 1) {
-                $('#metas_dp').html(resultado);
-              } else if (entero == 2) {
-                $('#meta').html(resultado);
-              } else if (entero == 3) {
-                $('#metas_total').html(resultado);
-              } else if (entero == 4) {
-                $('#supervisor_total').html(resultado);
-              } else if (entero == 5) {
-                $('#supervisor_A').html(resultado);
-              }
-            }
-          })
+      $(document).on('change', '#fecha', function () {
+        const value = e.target.value;
+        console.log(value)
+        if (value) {
+          window.location.replace('{{route('dashboard.index')}}?fecha=' + value)
         }
+      });
+
+      window.cargaNueva = function (entero) {
+        console.log(' ' + entero)
+        var fd = new FormData();
+        fd.append('fecha', $('#fecha').val());
+        fd.append('ii', entero);
+        $.ajax({
+          data: fd,
+          processData: false,
+          contentType: false,
+          method: 'POST',
+          url: "{{ route('dashboard.viewMetaTable') }}",
+          success: function (resultado) {
+            if (entero == 1) {
+              $('#metas_dp').html(resultado);
+            } else if (entero == 2) {
+              $('#meta').html(resultado);
+            } else if (entero == 3) {
+              $('#metas_total').html(resultado);
+            } else if (entero == 4) {
+              $('#supervisor_total').html(resultado);
+            } else if (entero == 5) {
+              $('#supervisor_A').html(resultado);
+            }
+          }
+        })
+      }
 
 
       window.cargReporteAnalisis = function () {
@@ -656,7 +652,7 @@
       cargReporteMetasSituacionClientes();
       cargReporteMetasCobranzasGeneral();
 
-      setInterval(myTimer, 5000);
+      setInterval(myTimer, 500000);
 
       function myTimer() {
         cargaNueva(1);
