@@ -229,19 +229,52 @@ class DashboardController extends Controller
 
       $metatotal = (float)$meta_calculo_row->meta_pedido;
       $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
-      $metatotal_cobro = (float)$meta_calculo_row->meta_cobro;
+      //$metatotal_cobro = (float)$meta_calculo_row->meta_cobro;
       $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
-      $asesorid=User::where('rol',User::ROL_ASESOR)->where('id',$asesor->id)->pluck('id');;
-      $total_pedido = $this->applyFilterCustomMetas(Pedido::query()->where('user_id', $asesor->id)
-        ->where('codigo', 'not like', "%-C%")->activo()
-        ->where('pendiente_anulacion', '<>', '1'),
-        $fechametames, 'created_at',1)
+      $asesorid=User::where('rol',User::ROL_ASESOR)->where('id',$asesor->id)->pluck('id');
+
+      $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+        ->where('codigo', 'not like', "%-C%")->activo()->where('pendiente_anulacion', '<>', '1'), now(), 'created_at')
         ->count();
 
-      $total_pedido_mespasado = $this->applyFilterCustomMetas(Pedido::query()->where('user_id', $asesor->id)
+
+      /*$total_pedido = $this->applyFilterCustomMetas(Pedido::query()->where('user_id', $asesor->id)
         ->where('codigo', 'not like', "%-C%")->activo()
-        ->where('pendiente_anulacion', '<>', '1'), $date_pagos, 'created_at',0,$fechametames)
+        ->where('pendiente_anulacion', '<>', '1'),
+        $fechametames, 'created_at',1,)
+        ->count();*/
+
+      $total_pagado=Pedido::query()
+        ->join("pago_pedidos","pago_pedidos.pedido_id","pedidos.id")
+        ->where('pedidos.user_id', $asesor->id)
+        ->where('pedidos.codigo', 'not like', "%-C%")
+        ->where('pedidos.estado','1')
+        ->where('pedidos.pendiente_anulacion', '<>', '1')
+        ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'),[$date_pagos->clone()->startOfMonth()->startOfDay(),$date_pagos->clone()->endOfMonth()->endOfDay()] )
+        ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+        ->where('pago_pedidos.estado',1)
+        ->where('pago_pedidos.pagado',2)
         ->count();
+      $total_pedido_mespasado = Pedido::query()
+        ->join("pago_pedidos","pago_pedidos.pedido_id","pedidos.id")
+        ->where('pedidos.user_id', $asesor->id)
+        ->where('pedidos.codigo', 'not like', "%-C%")
+        ->where('pedidos.estado','1')
+        ->where('pedidos.pendiente_anulacion', '<>', '1')
+        ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'),[$date_pagos->clone()->startOfMonth()->startOfDay(),$date_pagos->clone()->endOfMonth()->endOfDay()] )
+        //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+        //->where('pago_pedidos.estado',1)
+        //->where('pago_pedidos.pagado',2)
+        ->count();
+      //dd($total_pedido_mespasado);
+
+
+
+      /*if($tipo==1)
+      {
+        return $query->whereBetween($column, [$date_pagos->clone()->startOfMonth()->startOfDay(),$fechametames->clone()->endOfDay()]);
+      }else{
+        return $query->whereBetween($column, [$date_pagos->clone()->startOfMonth()->startOfDay(),$date_pagos->clone()->endOfMonth()->endOfDay()]);*/
 
       $total_pagado = $this->applyFilterCustomMetas(Pedido::query()->where('user_id', $asesor->id)
         ->where('codigo', 'not like', "%-C%")->activo()
@@ -267,7 +300,7 @@ class DashboardController extends Controller
         "meta" => $metatotal,
         "meta_2" => $metatotal_2,
         "meta_quincena" => $metatotal_quincena,
-        "meta_cobro" => $metatotal_cobro,
+        //"meta_cobro" => $metatotal_cobro,
         "pedidos_totales" => $pedidos_totales,
         "supervisor" => $supervisor,
       ];
@@ -303,8 +336,8 @@ class DashboardController extends Controller
 
       if ($asesor->excluir_meta) {
 
-        if ($metatotal_cobro > 0) {
-          $p_pagos = round(($total_pedido_mespasado / $total_pagado) * 100, 2);
+        if ($total_pedido_mespasado > 0) {
+          $p_pagos = round(($total_pagado/$total_pedido_mespasado ) * 100, 2);
         } else {
           $p_pagos = 0;
         }
@@ -344,19 +377,8 @@ class DashboardController extends Controller
             $item['progress_pedidos'] = $p_pedidos;
           }
           /*meta 2*/
-        } else {
-          if ($metatotal_cobro > 0) {
-            $p_pedidos_new = round(($total_pedido / $metatotal_cobro) * 100, 2);
-            $item['meta_new'] = 2;
-            $item['progress_pedidos'] = $p_pedidos_new;
-          } else {
-            $p_pedidos_new = 0;
-            $item['meta_new'] = 2;
-            $item['progress_pedidos'] = $p_pedidos_new;
-          }
         }
         /*-----------------------*/
-
 
         $item['progress_pagos'] = $p_pagos;
         $item['progress_pedidos'] = $p_pedidos;
@@ -376,11 +398,10 @@ class DashboardController extends Controller
           $newData[$identificador] = $item;
         } else {
           $newData[$identificador]['total_pedido'] += data_get($item, 'total_pedido');
-          $newData[$identificador]['total_pedido_pasado'] += data_get($item, 'total_pedido_mespasado');
+          $newData[$identificador]['total_pedido_mespasado'] += data_get($item, 'total_pedido_mespasado');
           $newData[$identificador]['total_pagado'] += data_get($item, 'total_pagado');
           $newData[$identificador]['meta'] += data_get($item, 'meta');
           $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
-          $newData[$identificador]['meta_cobro'] += data_get($item, 'meta_cobro');
           $newData[$identificador]['pedidos_dia'] += data_get($item, 'pedidos_dia');
           $newData[$identificador]['supervisor'] += data_get($item, 'supervisor');
           $newData[$identificador]['meta_new'] += data_get($item, 'meta_new');
@@ -397,21 +418,25 @@ class DashboardController extends Controller
       $all = data_get($item, 'total_pedido');
       $all_mespasado = data_get($item, 'total_pedido_mespasado');
       $pay = data_get($item, 'total_pagado');
+      $meta_quincena = data_get($item, 'meta_quincena');
       $allmeta = data_get($item, 'meta');
       $allmeta_2 = data_get($item, 'meta_2');
-      $allmeta_cobro = data_get($item, 'meta_cobro');
       $pedidos_dia = data_get($item, 'pedidos_dia');
       $pedidos_totales = data_get($item, 'pedidos_totales');
       $supervisor = data_get($item, 'supervisor');
-      $meta_quincena = data_get($item, 'meta_quincena');
       $meta_new = data_get($item, 'meta_new');
 
-
-      if ($pay > 0) {
-        $p_pagos = round(($pay / $all_mespasado) * 100, 2);
-      } else {
-        $p_pagos = 0;
+      if($all_mespasado==0)
+      {
+        $p_pagos=0;
+      }else{
+        if ($pay > 0) {
+          $p_pagos = round(($pay / $all_mespasado) * 100, 2);
+        } else {
+          $p_pagos = 0;
+        }
       }
+
 
       /*meta quincena = 0*/
       if ($all < $meta_quincena) {
@@ -473,7 +498,8 @@ class DashboardController extends Controller
       $progressData->splice($skip, $take)->all();
       //$progressData=array_slice($progressData, 2);
       //return $progressData;
-    } else if ($request->ii == 2) {
+    }
+    else if ($request->ii == 2) {
       if ($total_asesor % 2 == 0) {
         $skip = intval($total_asesor / 2);
         $take = intval($total_asesor / 2);
@@ -485,7 +511,9 @@ class DashboardController extends Controller
       $progressData->splice($skip, $take)->all();
       //$progressData=array_slice($progressData, 3);
       //return $progressData;
-    } else if ($request->ii == 3) {
+    }
+    else if ($request->ii == 3)
+    {
       $progressData->all();
     }
 
@@ -496,7 +524,6 @@ class DashboardController extends Controller
     $pay = collect($progressData)->pluck('total_pagado')->sum();
     $meta = collect($progressData)->pluck('meta')->sum();
     $meta_2 = collect($progressData)->pluck('meta_2')->sum();
-    $meta_cobro = collect($progressData)->pluck('meta_cobro')->sum();
     $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
     $supervisor = collect($progressData)->pluck('supervisor')->sum();
 
@@ -505,10 +532,17 @@ class DashboardController extends Controller
     } else {
       $p_pedidos = 0;
     }
-    if ($pay > 0) {
-      $p_pagos = round(($pay / $all_mespasado) * 100, 2);
-    } else {
-      $p_pagos = 0;
+    //echo '<br> pagado '.$pay." - mespasado ".$all_mespasado.'<br>';
+    //continue;
+    if($all_mespasado==0)
+    {
+      $p_pagos=0;
+    }else{
+      if ($pay > 0) {
+        $p_pagos = round(($pay / $all_mespasado) * 100, 2);
+      } else {
+        $p_pagos = 0;
+      }
     }
 
     $object_totales = [
@@ -519,7 +553,6 @@ class DashboardController extends Controller
       "total_pagado" => $pay,
       "meta" => $meta,
       "meta_2" => $meta_2,
-      "meta_cobro" => $meta_cobro,
       "pedidos_dia" => $pedidos_dia,
       "supervisor" => $supervisor,
     ];
@@ -657,14 +690,22 @@ class DashboardController extends Controller
                         <th class="col-lg-4 col-md-12 col-sm-12">';
       $html.='<div class="position-relative rounded">
                          <div class="progress rounded h-40 h-60-res">';
-      if(($count_asesor[46]['progress_pagos'])>=80)
+
+      if($count_asesor[46]['total_pedido_mespasado']==0)
+      {
         $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
+                         style="width: 0%;background: #03af03;"
+                         aria-valuenow="0"
+                         aria-valuemin="0" aria-valuemax="100"></div>';
+      }else{
+        if(($count_asesor[46]['progress_pagos'])>=80)
+          $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
                          style="width: '.round(( $count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado'])*100,2).'%;background: #03af03;"
                          aria-valuenow="'.round(( $count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']),2).'"
                          aria-valuemin="0" aria-valuemax="100"></div>';
 
-      else if( round(($count_asesor[46]['total_pagado']/(($count_asesor[46]['total_pedido_mespasado']>0) ? $count_asesor[46]['total_pedido_mespasado']: '')) *100, 0)>70)
-        $html.='<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
+        else if( round(($count_asesor[46]['total_pagado']/(($count_asesor[46]['total_pedido_mespasado']>0) ? $count_asesor[46]['total_pedido_mespasado']: '')) *100, 0)>70)
+          $html.='<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
                          style="height:40px; width: 70%"
                          aria-valuenow="70"
                          aria-valuemin="0"
@@ -675,14 +716,14 @@ class DashboardController extends Controller
                          aria-valuenow="'.(  round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-70).'"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
-      else if( round(($count_asesor[46]['total_pagado']/(($count_asesor[46]['total_pedido_mespasado']>0) ? $count_asesor[46]['total_pedido_mespasado']: '')) *100, 0)>50)
-        $html.='<div class="progress-bar bg-warning" role="progressbar"
+        else if( round(($count_asesor[46]['total_pagado']/(($count_asesor[46]['total_pedido_mespasado']>0) ? $count_asesor[46]['total_pedido_mespasado']: '')) *100, 0)>50)
+          $html.='<div class="progress-bar bg-warning" role="progressbar"
                        style="width: 70%"
                        aria-valuenow="70"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
-      else if( round(($count_asesor[46]['total_pagado']/(($count_asesor[46]['total_pedido_mespasado']>0) ? $count_asesor[46]['total_pedido_mespasado']: '')) *100, 0)>40)
-        $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
+        else if( round(($count_asesor[46]['total_pagado']/(($count_asesor[46]['total_pedido_mespasado']>0) ? $count_asesor[46]['total_pedido_mespasado']: '')) *100, 0)>40)
+          $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
                        style="width: 40%"
                        aria-valuenow="70"
                        aria-valuemin="0"
@@ -693,18 +734,32 @@ class DashboardController extends Controller
                            aria-valuenow="'.(  round($count_asesor[46]['total_pedido_mespasado']/$count_asesor[46]['total_pagado'],2)-40).'"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
-      else
-        $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
+        else
+          $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
                        style="width: '.(round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']*100) , 2)).'%"
                        aria-valuenow="'.(round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']) , 2)).'"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
-      $html.='</div>
+      }
+
+
+      if($count_asesor[46]['total_pedido_mespasado']==0)
+      {
+        $html.='</div>
                       <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.  (round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']) *100, 2))
-        .'% </b> - '. $count_asesor[46]['total_pagado'].'/'.$count_asesor[46]['total_pedido_mespasado'].'</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.  0
+          .'% </b> - '. $count_asesor[46]['total_pagado'].'/'.$count_asesor[46]['total_pedido_mespasado'].'</span>
                       </div>
                     </div>';
+      }else{
+        $html.='</div>
+                      <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.  (round(($count_asesor[46]['total_pagado']/$count_asesor[46]['total_pedido_mespasado']) *100, 2))
+          .'% </b> - '. $count_asesor[46]['total_pagado'].'/'.$count_asesor[46]['total_pedido_mespasado'].'</span>
+                      </div>
+                    </div>';
+      }
+
 
       $html.=' </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
@@ -804,13 +859,21 @@ class DashboardController extends Controller
                         <th class="col-lg-4 col-md-12 col-sm-12">';
       $html.='<div class="position-relative rounded">
                          <div class="progress rounded h-40 h-60-res">';
-      if(($count_asesor[24]['progress_pagos'])>=80)
+
+      if($count_asesor[24]['total_pedido_mespasado']==0)
+      {
         $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
+                         style="width: 0%;background: #03af03;"
+                         aria-valuenow="0"
+                         aria-valuemin="0" aria-valuemax="100"></div>';
+      }else{
+        if(($count_asesor[24]['progress_pagos'])>=80)
+          $html.='<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
                          style="width: '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']*100),2).'%;background: #03af03;"
                          aria-valuenow="'.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado'])*100,2).'"
                          aria-valuemin="0" aria-valuemax="100"></div>';
-      else if(round(( $count_asesor[24]['total_pagado']/ (($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: '') )*100,0)>70)
-        $html.='<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
+        else if(round(( $count_asesor[24]['total_pagado']/ (($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: '') )*100,0)>70)
+          $html.='<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
                          style="height:40px; width: 70%"
                          aria-valuenow="70"
                          aria-valuemin="0"
@@ -821,14 +884,14 @@ class DashboardController extends Controller
                          aria-valuenow="'.(round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']),2) - 70).'"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
-      else if(round(( $count_asesor[24]['total_pagado']/(($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: ''))*100,0)>50)
-        $html.='<div class="progress-bar bg-warning" role="progressbar"
+        else if(round(( $count_asesor[24]['total_pagado']/(($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: ''))*100,0)>50)
+          $html.='<div class="progress-bar bg-warning" role="progressbar"
                        style="width: 70%"
                        aria-valuenow="70"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
-      else if(round(( $count_asesor[24]['total_pagado']/(($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: ''))*100,0)>40)
-        $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
+        else if(round(( $count_asesor[24]['total_pagado']/(($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: ''))*100,0)>40)
+          $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
                        style="width: 40%"
                        aria-valuenow="70"
                        aria-valuemin
@@ -839,17 +902,29 @@ class DashboardController extends Controller
                            aria-valuenow="'.(round(( $count_asesor[24]['total_pagado']/(($count_asesor[24]['total_pedido_mespasado']>0) ? $count_asesor[24]['total_pedido_mespasado']: '')),2)-40).'"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
-      else
-        $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
+        else
+          $html.='<div class="progress-bar bg-danger h-60-res" role="progressbar"
                        style="width: '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']*100),2).'%"
                        aria-valuenow="'.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado']),2).'"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
-      $html.='</div>
+      }
+
+
+      if($count_asesor[24]['total_pedido_mespasado']==0)
+      {
+        $html.='</div>
+                      <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  %</b> - '.$count_asesor[24]['total_pagado'].'/'.$count_asesor[24]['total_pedido_mespasado'].'</span>
+                      </div>
+                    </div>';
+      }else{
+        $html.='</div>
                       <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - '.Carbon::now()->subMonths(1)->monthName .' :  '.round(( $count_asesor[24]['total_pagado']/$count_asesor[24]['total_pedido_mespasado'])*100,2).'%</b> - '.$count_asesor[24]['total_pagado'].'/'.$count_asesor[24]['total_pedido_mespasado'].'</span>
                       </div>
                     </div>';
+      }
 
       $html.=' </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
@@ -966,31 +1041,42 @@ class DashboardController extends Controller
         }
         $html .= '</td>';
         $html .= '<td>';
-        if ($data["progress_pagos"] == 100) {
+
+        /*inicio pagos*/
+
+        //$html.='<br> '.$data["progress_pagos"].' : '.$data["total_pagado"].' - '.$data["total_pedido_mespasado"].' <br>';
+        //continue;
+
+        if ($data["progress_pagos"] >= 100)
+        {
           $html .= ' <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                           <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p> </span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px">  100 ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p> </span>
                                         </div>
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } elseif ($data["progress_pagos"] >= 80) {
+        }
+        elseif ($data["progress_pagos"] >= 80  && $data["progress_pagos"]<100)
+        {
           $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                           <div class="rounded" role="progressbar" style="background: #8ec117 !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b  class="bold-size">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                            <span style="font-weight: lighter"> <b  class="bold-size"> dfdf ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
                                         </div>
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } elseif ($data["progress_pagos"] > 70) {
+        }
+        elseif ($data["progress_pagos"] > 70 && $data["progress_pagos"]<80)
+        {
           $html .= '
                     <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1003,7 +1089,9 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } elseif ($data["progress_pagos"] > 60) {
+        }
+        elseif ($data["progress_pagos"] > 60 && $data["progress_pagos"]<=70)
+        {
           $html .= ' <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -1015,7 +1103,9 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } elseif ($data["progress_pagos"] > 50) {
+        }
+        elseif ($data["progress_pagos"] > 50 && $data["progress_pagos"]<=60)
+        {
           $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
@@ -1027,19 +1117,24 @@ class DashboardController extends Controller
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
-        } else {
+        }
+        else {
           $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
                                   <div class="progress bg-white rounded" style="height: 40px">
                                       <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                      <span style="font-weight: lighter"> <b class="bold-size">  else ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
                                   </div>
                               </div>
                               <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
         }
+        /*fin pagos*/
+
+
+
         $html .= '</td>';
         $html .= '   <td>';
 
@@ -1217,9 +1312,9 @@ class DashboardController extends Controller
     }
     if($tipo==1)
     {
-      return $query->whereBetween($column, [$date_pagos->clone()->startOfMonth(),$date_pagos->clone()->endOfDay()]);
+      return $query->whereBetween($column, [$date_pagos->clone()->startOfMonth()->startOfDay(),$fechametames->clone()->endOfDay()]);
     }else{
-      return $query->whereBetween($column, [$date_pagos->clone()->startOfMonth(),$fechametames->clone()->endOfDay()]);
+      return $query->whereBetween($column, [$date_pagos->clone()->startOfMonth()->startOfDay(),$date_pagos->clone()->endOfMonth()->endOfDay()]);
     }
 
   }
