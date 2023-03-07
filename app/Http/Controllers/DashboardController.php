@@ -208,7 +208,7 @@ class DashboardController extends Controller
                 ->where('user_id', $asesor->id)
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
-            dd($asesor->id.' '.$fechametames->format('Y').' '.$fechametames->format('m') );
+            //dd($asesor->id.' '.$fechametames->format('Y').' '.$fechametames->format('m') );
 
             $metatotal = (float)$meta_calculo_row->meta_pedido;
             $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
