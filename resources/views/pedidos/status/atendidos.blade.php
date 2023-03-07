@@ -58,63 +58,7 @@
       -ms-user-select: all !important;
       user-select: all !important;
     }
-    #tablaBandejaPedidosAtendidos {
-      width: 100% !important;
-    }
 
-    @media screen and (max-width: 2249px) {
-      #tablaBandejaPedidosAtendidos {
-        width: 100% !important;
-      }
-
-      th:nth-child(9) {
-        width: 100px !important;
-      }
-
-      td:nth-child(10) {
-        display: flex !important;
-        min-width: 100px !important;
-        max-width: 150px !important;
-      }
-
-      td:nth-child(10) span {
-        white-space: break-spaces;
-      }
-
-      th:nth-child(11) {
-        min-width: 130px !important;
-        max-width: 200px !important;
-      }
-
-      .sorting:before,
-      .sorting:after,
-      .sorting_desc:before,
-      .sorting_desc:after {
-        top: 20px !important;
-      }
-
-      td {
-        vertical-align: middle !important;
-        text-align: center !important;
-      }
-    }
-
-    @media screen and (max-width: 2144px) {
-      thead,
-      tr,
-      td {
-        vertical-align: middle !important;
-      }
-    }
-
-    @media screen and (max-width: 2039px) {
-    }
-
-    @media screen and (max-width: 1440px) {
-      #tablaBandejaPedidosAtendidos {
-        font-size: 13px !important;
-      }
-    }
   </style>
 @endpush
 
