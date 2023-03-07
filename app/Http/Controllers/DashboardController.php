@@ -488,7 +488,7 @@ class DashboardController extends Controller
       $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
       $html .= '<tbody>
               <tr class="responsive-table">
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
+                  <th class="col-lg-4 col-md-6 col-sm-12">';
 
       $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold"
                     style="display:flex; align-items: center;height: 40px !important; color: black !important;">
@@ -496,7 +496,7 @@ class DashboardController extends Controller
 
       $html .= '
                   </th>
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
+                  <th class="col-lg-4 col-md-6 col-sm-12">';
       $html .= '<div class="position-relative rounded">
                 <div class="progress rounded h-40 h-60-res">';
       if ($object_totales['progress_pagos'] >= 80)
@@ -545,7 +545,7 @@ class DashboardController extends Controller
 <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
 
       $html .= ' </th>
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
+                  <th class="col-lg-4 col-md-6 col-sm-12">';
       $html .= '<div class="position-relative rounded">
                 <div class="progress rounded" style="height: 40px !important;">';
 
