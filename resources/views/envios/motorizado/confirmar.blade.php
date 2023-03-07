@@ -30,7 +30,7 @@
 
     <div class="card">
         <div class="card-body pl-0">
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
+            <table id="tablaCourierConfirmarFoto" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
@@ -70,7 +70,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $('#tablaPrincipal').DataTable({
+            $('#tablaCourierConfirmarFoto').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -107,7 +107,7 @@
                                         }).always(function () {
                                             self.close()
                                             self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().ajax.reload();
+                                            $('#tablaCourierConfirmarFoto').DataTable().ajax.reload();
                                         });
                                     }
                                 },
@@ -167,7 +167,7 @@
                                             })
                                             .always(function () {
                                                 self.showLoading(false)
-                                                $('#tablaPrincipal').DataTable().draw(false)
+                                                $('#tablaCourierConfirmarFoto').DataTable().draw(false)
                                             })
                                         return false
                                     }
@@ -308,7 +308,7 @@
               url: "{{ route('courier.confirmrecojo') }}",
               success: function (data) {
                 $("#modal_confirmrecojomotorizado").modal("hide");
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                $('#tablaCourierConfirmarFoto').DataTable().ajax.reload();
 
               }
             });
@@ -329,7 +329,7 @@
                     url: "{{ route('operaciones.confirmarmotorizadoconfirm') }}",
                     success: function (data) {
                         $("#modal-motorizado-entregar-confirm").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaCourierConfirmarFoto').DataTable().ajax.reload();
 
                     }
                 });
@@ -349,7 +349,7 @@
                         //console.log(data);
                         $("#modal-motorizado-entregar-confirm .textcode").text('');
                         $("#modal-motorizado-entregar-confirm").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaCourierConfirmarFoto').DataTable().ajax.reload();
                     }
                 });
             });

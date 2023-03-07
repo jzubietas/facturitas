@@ -53,7 +53,7 @@
             </table>
             <br>
             <div class="table-responsive">
-            <table id="tablaPrincipal" class="table table-striped" style="width:100%">
+            <table id="tablaOperacionesPedidosAtendidos" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
                     <th scope="col" class="align-middle">Item</th>
@@ -259,7 +259,7 @@
                         console.log(data);
                         $("#modal-editar-atencion .textcode").text('');
                         $("#modal-editar-atencion").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesPedidosAtendidos').DataTable().ajax.reload();
                     }
                 });
             });
@@ -342,7 +342,7 @@
                         $('#confirmar_atender').prop("disabled", false);
                         $('#confirmar_atender').text('Confirmar');
                         $('#modal-editar-atencion').modal('hide');
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesPedidosAtendidos').DataTable().ajax.reload();
 
                         //RecuperarAdjuntos(idunicoconfirmar);
                     }
@@ -434,7 +434,7 @@
                             console.log(data);
                             $("#modal-editar-atencion .textcode").text('');
                             $("#modal-editar-atencion").modal("hide");
-                            $('#tablaPrincipal').DataTable().ajax.reload();
+                            $('#tablaOperacionesPedidosAtendidos').DataTable().ajax.reload();
                         }
 
                     });
@@ -576,7 +576,7 @@
                         console.log(data);
                         $("#modal-envio .textcode").text('');
                         $("#modal-envio").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesPedidosAtendidos').DataTable().ajax.reload();
                     }
                 });
             });
@@ -596,7 +596,7 @@
                         console.log(data);
                         $("#modal-sinenvio .textcode").text('');
                         $("#modal-sinenvio").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesPedidosAtendidos').DataTable().ajax.reload();
                     }
                 });
             });
@@ -647,12 +647,12 @@
                         $("#modal-revertir-poratender .textcode").text('');
                         $("#modal-revertir-poratender .textcantadjunto").text('');
                         $("#modal-revertir-poratender").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $('#tablaOperacionesPedidosAtendidos').DataTable().ajax.reload();
                     }
                 });
             });
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaOperacionesPedidosAtendidos').DataTable({
                 processing: true,
                 serverSide: true,
                 searching: true,
@@ -770,11 +770,11 @@
 
             });
 
-            $('#tablaPrincipal_filter label input').on('paste', function (e) {
+            $('#tablaOperacionesPedidosAtendidos_filter label input').on('paste', function (e) {
                 var pasteData = e.originalEvent.clipboardData.getData('text')
                 localStorage.setItem("search_tabla", pasteData);
             });
-            $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
+            $(document).on("keypress", '#tablaOperacionesPedidosAtendidos_filter label input', function () {
                 localStorage.setItem("search_tabla", $(this).val());
                 console.log("search_tabla es " + localStorage.getItem("search_tabla"));
             });
@@ -811,7 +811,7 @@
 
     <script>
         /*window.onload = function () {
-          $('#tablaPrincipal').DataTable().draw();
+          $('#tablaOperacionesPedidosAtendidos').DataTable().draw();
         }*/
     </script>
 
@@ -854,7 +854,7 @@
                     table.draw();
                 }, changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy"
             });
-            var table = $('#tablaPrincipal').DataTable();
+            var table = $('#tablaOperacionesPedidosAtendidos').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
             $('#min, #max').change(function () {
