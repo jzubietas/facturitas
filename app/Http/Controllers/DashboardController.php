@@ -241,7 +241,7 @@ class DashboardController extends Controller
                 ->where('pago_pedidos.pagado', 2)//pagado
                 ->count();
             $total_pedido_mespasado = Pedido::query()
-                ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                //->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->where('pedidos.user_id', $asesor->id)
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
