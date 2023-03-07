@@ -339,7 +339,8 @@
 
             cargaNueva(1);
             cargaNueva(2);
-            cargaNueva(3);
+
+
             @if($mirol == 'Encargado' && $id == 46)
             cargaNueva(4);
             @endif
@@ -352,7 +353,7 @@
             function myTimer() {
                 cargaNueva(1);
                 cargaNueva(2);
-                cargaNueva(3);
+
             @if($mirol == 'Encargado' && $id == 46)
             cargaNueva(4);
             @endif
