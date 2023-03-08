@@ -325,6 +325,7 @@ class PdfController extends Controller
         $total_pagado_mespasado = Pedido::query()
             ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
             ->where('pedidos.codigo', 'not like', "%-C%")
+            ->whereNotIn('pedidos.user_id',[51])
             ->where('pedidos.estado', '1')
             ->where('pedidos.pendiente_anulacion', '<>', '1')
             ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
@@ -334,6 +335,7 @@ class PdfController extends Controller
 
         $total_pedido_mespasado = Pedido::query()
             ->where('pedidos.codigo', 'not like', "%-C%")
+            ->whereNotIn('pedidos.user_id',[51])
             ->where('pedidos.estado', '1')
             ->where('pedidos.pendiente_anulacion', '<>', '1')
             ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
