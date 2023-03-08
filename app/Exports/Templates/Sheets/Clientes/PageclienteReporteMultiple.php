@@ -381,7 +381,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' => '000099 ']
+                    'color' => ['argb' => '6acf0c ']
                 ]
             ]
         );
