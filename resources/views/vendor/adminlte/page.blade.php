@@ -739,6 +739,17 @@
           }
 
           $('#modal-llamadas-1').on('show.bs.modal', function (event) {
+              $.ajax({
+                  type: 'GET',
+                  url: "{{ route('listcontadorescontactos') }}",
+                  success: function (data) {
+                      console.log(data);
+                      insertContador("i.btnNewClienteCont", '.dot-notify.noti-side', data.nuevoCliente);
+                      insertContador("i.btnChangeNameCont", '.dot-notify.noti-side', data.cambioNombre);
+                      insertContador("i.btnBloqueoCont", '.dot-notify.noti-side', data.contbloqueo);
+                      insertContador("i.btnChangeNroCont", '.dot-notify.noti-side', data.cambioNumero);
+                  }
+              });
             fnListaTablaLlamadas(1,1);
             fnListaCambioNombre(2,1);
             fnListaBloqueoClientes(3,1);
