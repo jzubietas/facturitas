@@ -16,6 +16,7 @@ use App\Http\Controllers\PedidoHistoryController;
 use App\Http\Controllers\Pedidos\PedidoStatusController;
 use App\Http\Controllers\RecojoController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ScraperController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PedidoController;
@@ -131,6 +132,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('alertas/confirmado', [ClienteController::class,'confirmado'])->name('alertas.confirmado');
     Route::post('enviarconfirmado', [ClienteController::class,'reconfirmado'])->name('enviarreconfirmado');
     Route::post('agregarcontactonuevo', [ClienteController::class,'agregarcontactonuevo'])->name('agregarcontactonuevo');
+    Route::post('solicitabloqueocliente', [ClienteController::class,'solicitabloqueocliente'])->name('solicitabloqueocliente');
+    Route::post('clientecomboagregarcontacto', [ClienteController::class, 'ClienteAgregarContacto'])->name('clientecomboagregarcontacto');
+    Route::post('cambiarnombrecontacto', [ClienteController::class,'cambiarnombrecontacto'])->name('cambiarnombrecontacto');
+    Route::post('cambiarnumerocontacto', [ClienteController::class,'cambiarnumerocontacto'])->name('cambiarnumerocontacto');
 
     Route::get('pedidos.recojo', [PedidoController::class, 'pedidosrecojo'])->name('pedidos.recojo');
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside
@@ -192,7 +197,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('correccionesJson', [OperacionController::class, 'correccionesJson'])->name('correccionesJson');
 
     Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
-    Route::post('clientecomboagregarcontacto', [UserController::class, 'ClienteAgregarContacto'])->name('clientecomboagregarcontacto');
+
     Route::post('asesorcombomodal', [UserController::class, 'AsesorcomboModal'])->name('asesorcombomodal');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
     Route::post('asesorcombopago', [UserController::class, 'Asesorcombopago'])->name('asesorcombopago');
@@ -763,6 +768,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     //Route::post('getdireecionentrega', [SettingsController::class, 'getdireecionentrega'])->name('getdireecionentrega');
     Route::post('getdireecionentrega', [PedidoController::class, 'getdireecionentrega'])->name('getdireecionentrega');
 
+    //Ruta par usar scraping, con el paquete weidner/goutte
+    Route::get('scraper', [ScraperController::class, 'getscraper'])->name('scraper');
 
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);

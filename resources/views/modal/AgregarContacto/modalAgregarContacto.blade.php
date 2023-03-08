@@ -15,9 +15,9 @@
 
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button id="btn_agregarcontacto_n" type="button" class="btn rounded btn-info ml-2">Nuevo</button>
-                            <button id="btn_agregarcontacto_cno" type="button" class="btn rounded btn-secondary  ml-2" disabled>Cambiar Nombre</button>
-                            <button id="btn_agregarcontacto_b" type="button" class="btn rounded btn-danger ml-2" disabled>Bloqueo</button>
-                            <button id="btn_agregarcontacto_cnu" type="button" class="btn rounded btn-warning ml-2" disabled>Cambiar Numero</button>
+                            <button id="btn_agregarcontacto_cno" type="button" class="btn rounded btn-secondary  ml-2">Cambiar Nombre</button>
+                            <button id="btn_agregarcontacto_b" type="button" class="btn rounded btn-danger ml-2" >Bloqueo</button>
+                            <button id="btn_agregarcontacto_cnu" type="button" class="btn rounded btn-warning ml-2">Cambiar Numero</button>
                         </div>
 
                     </div>

@@ -101,7 +101,7 @@
                 <th scope="col">Asesor</th>
                 <th scope="col">Celular</th>
                 <th scope="col">Nombre Cliente</th>
-                <th scope="col">Contacto</th>
+                <th scope="col">Nvo. Nombre</th>
                 <th scope="col">Accion</th>
               </tr>
               </thead>
@@ -143,9 +143,9 @@
               <tr>
                 <th scope="col">Tipo</th>
                 <th scope="col">Asesor</th>
-                <th scope="col">Celular</th>
-                <th scope="col">Nombre Cliente</th>
-                <th scope="col">Contacto</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Imagen</th>
+                <th scope="col">Sustento</th>
                 <th scope="col">Accion</th>
               </tr>
               </thead>
@@ -189,7 +189,7 @@
                 <th scope="col">Asesor</th>
                 <th scope="col">Celular</th>
                 <th scope="col">Nombre Cliente</th>
-                <th scope="col">Contacto</th>
+                <th scope="col">Nvo. Numero</th>
                 <th scope="col">Accion</th>
               </tr>
               </thead>

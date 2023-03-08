@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 /* use Validator; */
 
+use App\Models\AttachCorrection;
 use App\Models\Cliente;
 use App\Models\CuentaBancaria;
 use App\Models\DetalleContactos;
@@ -1975,6 +1976,77 @@ class ClienteController extends Controller
         ]);
     }
 
+  public function ClienteAgregarContacto(Request $request)
+  {
+    //$mirol = Auth::user()->rol;
+    $clientes = Cliente:://CLIENTES SIN PEDIDOS
+    join('users as u', 'clientes.user_id', 'u.id')
+      ->where('clientes.tipo', '1')->activo()
+      ->select([
+        'clientes.id',
+        'clientes.nombre',
+        'clientes.icelular',
+        'clientes.celular'
+      ]);
+    switch (Auth::user()->rol)
+    {
+      case User::ROL_ASESOR:
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.identificador', Auth::user()->identificador)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+        $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+        break;
+      case User::ROL_LLAMADAS:
+        $clientes = $clientes->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+        break;
+      case User::ROL_JEFE_LLAMADAS:break;
+      case User::ROL_APOYO_ADMINISTRATIVO:
+        $clientes = $clientes->where('identificador', '<>', 'B');
+        break;
+      case User::ROL_ASESOR_ADMINISTRATIVO:
+        $clientes = $clientes->where("rol", User::ROL_ASESOR_ADMINISTRATIVO);
+        break;
+      default:
+        //$usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO"]);
+        //$clientes = $usersB->union($clientes);
+        break;
+    }
+
+    $clientes = $clientes->orderBy('id', 'ASC')->get();
+    $html = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+    foreach ($clientes as $cliente) {
+      switch (Auth::user()->rol) {
+        case User::ROL_ASESOR:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        case User::ROL_LLAMADAS:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        case User::ROL_JEFE_LLAMADAS:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        case User::ROL_APOYO_ADMINISTRATIVO:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        case User::ROL_ASESOR_ADMINISTRATIVO:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        default:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+      }
+
+    }
+
+    return response()->json(['html' => $html]);
+
+    //return response()->json($users);
+  }
+
   public function listtablecontactos(Request $request){ //rbnvalue
     $data = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
       ->join('users as u', 'c.user_id', 'u.id')
@@ -2066,6 +2138,24 @@ class ClienteController extends Controller
 
     return \Yajra\DataTables\DataTables::of(($data))
       ->addIndexColumn()
+      ->editColumn('foto', function ($data) {
+        if ($data->foto != '') {
+          //return $data->foto;
+          $urlimagen1 = \Storage::disk('pstorage')->url($data->foto);
+
+          $data = '<div class="card bg-transparent text-center border-none border-left-0 shadow-none" style="width: 8rem;border: none;">
+                          <a href="" data-target="#modal_imagen_cliente" data-toggle="modal" data-imagen="' . $data->foto . '">
+                            <img src="' . $urlimagen1 . '" alt="' . $data->foto . '" height="50px" width="50px" id="imagen_' . $data->id . '-1" class=" text-center">
+                          </a>
+                        <div class="card-body bg-transparent p-0">
+                            <h5 class="card-title"></h5>';
+          $data .= '    </div>';
+          $data .= '</div>';
+          return $data;
+        }  else {
+          return '';
+        }
+      })
       ->addColumn('tipo_insert', function ($data) {
         $vinsert="";;
         if ($data->tipo_insert==1){
@@ -2113,7 +2203,7 @@ class ClienteController extends Controller
         $btn[] = '</ul></div>';
         return join('', $btn);
       })
-      ->rawColumns(['action'])
+      ->rawColumns(['foto','action'])
       ->make(true);
     //return datatables($detallecontactos)->toJson();
   }
@@ -2132,8 +2222,35 @@ class ClienteController extends Controller
       'nombres_cliente' => $cliente->nombre,
       'nombre_contacto' => $request->contacto_nombre,
       'codigo_registra' => auth()->user()->id,
+      'tipo_insert' => 1,
     ]);
     return $detallecontactos;
+  }
+
+  public function solicitabloqueocliente(Request $request)
+  {
+    /*return $request->all();*/
+
+    $cliente=Cliente::where('id',$request->cliente_id)->first();
+    $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+    $asesor=User::where('id',$user_id)->first();
+
+
+    if ($request->hasFile('agregarcontacto_b_captura')) {
+      $captura = $request->file('agregarcontacto_b_captura')->store('pedidos/anulaciones', 'pstorage');
+    }
+    $detallecontactos=DetalleContactos::create([
+      'codigo_asesor' => $asesor->identificador,
+      'nombre_asesor' => $asesor->name,
+      'celular' => $cliente->celular."-". $cliente->icelular,
+      'codigo_cliente' => $cliente->id,
+      'nombres_cliente' => $cliente->nombre,
+      'nombre_contacto' => $request->sustentoBloqueo,
+      'codigo_registra' => auth()->user()->id,
+      'foto' => $captura,
+      'tipo_insert' => 3,
+    ]);
+    return response()->json(['detallecontactos' => $detallecontactos,'captura' => $captura]);
   }
   public function guardado(Request $request)
   {
@@ -2161,6 +2278,45 @@ class ClienteController extends Controller
       'guardado' => true,
       'confirmado' => true,
       'reconfirmado' => true,
+    ]);
+    return $detallecontactos;
+  }
+
+  public function cambiarnombrecontacto(Request $request)
+  {
+    /*return $request->all();*/
+    $cliente=Cliente::where('id',$request->cno_cliente_id)->first();
+    $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+    $asesor=User::where('id',$user_id)->first();
+
+    $detallecontactos=DetalleContactos::create([
+      'codigo_asesor' => $asesor->identificador,
+      'nombre_asesor' => $asesor->name,
+      'celular' => $cliente->celular."-". $cliente->icelular,
+      'codigo_cliente' => $cliente->id,
+      'nombres_cliente' => $cliente->nombre,
+      'nombre_contacto' => $request->cno_cambio_nombre,
+      'codigo_registra' => auth()->user()->id,
+      'tipo_insert' => 2,
+    ]);
+    return $detallecontactos;
+  }
+  public function cambiarnumerocontacto(Request $request)
+  {
+    /*return $request->all();*/
+    $cliente=Cliente::where('id',$request->cnu_cliente_id)->first();
+    $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+    $asesor=User::where('id',$user_id)->first();
+
+    $detallecontactos=DetalleContactos::create([
+      'codigo_asesor' => $asesor->identificador,
+      'nombre_asesor' => $asesor->name,
+      'celular' => $cliente->celular."-". $cliente->icelular,
+      'codigo_cliente' => $cliente->id,
+      'nombres_cliente' => $cliente->nombre,
+      'nombre_contacto' => $request->cnu_cambio_numero,
+      'codigo_registra' => auth()->user()->id,
+      'tipo_insert' => 4,
     ]);
     return $detallecontactos;
   }

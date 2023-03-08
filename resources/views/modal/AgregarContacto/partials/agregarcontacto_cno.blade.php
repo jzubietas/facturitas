@@ -3,22 +3,22 @@
     <input type="hidden" name="opcion" value="2">
     <ul class="list-group">
         <li class="list-group-item text-wrap">
-          <h6 class="alert alert-warning text-center font-weight-bold">
+          <h6 class="alert alert-secondary text-center font-weight-bold">
             <b>Elegir cliente <span class="text-danger">(Obligatorio):</span></b>
           </h6>
 
-          <select name="cliente_agregarcontacto_cno" class="border form-control selectpicker border-secondary bg-dark" id="cliente_agregarcontacto_cno"
+          <select name="cbxCambiaNombre" class="border form-control selectpicker border-secondary" id="cbxCambiaNombre"
                   data-show-subtext="true" data-live-search="true"
                   data-live-search-placeholder="Seleccione cliente" title="Ningun cliente seleccionado">
           </select>
         </li>
 
         <li class="list-group-item text-wrap">
-          <h6 class="alert alert-warning text-center font-weight-bold">
+          <h6 class="alert alert-secondary text-center font-weight-bold">
             <b>Numero de contacto <span class="text-danger">(Obligatorio):</span></b>
           </h6>
-          <input name="nro_contacto-agregarcontacto_cno" id="nro_contacto-agregarcontacto_cno" class="form-control w-100"
-                 style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar nuevo nombre">
+          <input name="txtCambiaNombre" id="txtCambiaNombre" class="form-control w-100"
+                 style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar nuevo nombre" type="text">
         </li>
 
     </ul>
