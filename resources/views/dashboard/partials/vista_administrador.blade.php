@@ -382,8 +382,10 @@
             var $visitorsChart = $('#visitors-chart')
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
+                    /*eje x: dias*/
                     labels: ['18th', '20th', '22nd', '24th', '26th', '28th', '30th'],
                     datasets: [{
+                        /*azul*/
                         type: 'line',
                         data: [100, 120, 170, 167, 180, 177, 160],
                         backgroundColor: 'transparent',
@@ -392,6 +394,7 @@
                         pointBackgroundColor: '#007bff',
                         fill: false
                     }, {
+                        /*plomo*/
                         type: 'line',
                         data: [60, 80, 70, 67, 80, 77, 100],
                         backgroundColor: 'tansparent',
