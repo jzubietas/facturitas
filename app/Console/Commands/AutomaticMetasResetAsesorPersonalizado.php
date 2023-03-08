@@ -44,7 +44,7 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
         $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
         $periodo_original=Carbon::parse($fp->created_at)->startOfMonth();
         //$periodo_actual=Carbon::parse(now())->endOfMonth();
-        $periodo_actual=Carbon::parse($this->argument('fecha'))->endOfMonth();
+        $periodo_actual=Carbon::parse($this->argument('fecha'))->startOfMonth()->endOfMonth()->endOfDay();
 
         $this->warn( $periodo_original );
         $this->info( $periodo_actual );
