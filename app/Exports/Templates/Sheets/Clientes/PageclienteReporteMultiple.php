@@ -389,12 +389,13 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
         foreach ($event->sheet->getRowIterator() as $row)
         {
             if($row->getRowIndex()==1)continue;
-            $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
-            /*if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
+            //$event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
+            if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
                 $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recurrente);
-            }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_V);
+            }
+            /*else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
             {
                 $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono);
             }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='NULO')
