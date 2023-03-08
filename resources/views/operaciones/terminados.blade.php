@@ -128,55 +128,6 @@
         .textred {
             color: red !important;
         }
-        #tablaOperacionesBandejadeSobres {
-          width: 100% !important;
-        }
-        td {
-          vertical-align: middle !important;
-          text-align: center !important;
-        }
-
-        @media screen and (max-width: 2249px) {
-          #tablaOperacionesBandejadeSobres {
-            width: 100% !important;
-            font-size: 14px !important;
-          }
-
-          .btn-fontsize {
-            font-size: 15px;
-          }
-
-          .sorting:before,
-          .sorting:after,
-          .sorting_desc:before,
-          .sorting_desc:after {
-            top: 30px !important;
-          }
-
-        }
-
-        @media screen and (max-width: 2144px) {
-          .btn-fontsize {
-            font-size: 13px;
-            min-width: 85px;
-            max-width: 160px;
-          }
-
-        }
-
-        @media screen and (max-width: 1500px) {
-          th:nth-child(6){
-            max-width: 230px !important;
-          }
-
-          td:nth-child(6) span{
-            white-space: break-spaces !important;
-            padding: 8px !important;
-          }
-        }
-
-
-
     </style>
 
 

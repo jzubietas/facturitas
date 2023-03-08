@@ -32,11 +32,6 @@
             overflow-x: scroll !important;
           }
         }
-        @media screen and (max-width: 575px){
-          .h-60-res{
-            height: 60px !important;
-          }
-        }
     </style>
 @endpush
 @section('content_header')
@@ -73,6 +68,8 @@
             @include('dashboard.partials.vista_jefe_llamadas')
         @elseif (Auth::user()->rol == 'Llamadas')
             @include('dashboard.partials.vista_llamadas')
+        @elseif (Auth::user()->rol == 'COBRANZAS')
+            @include('dashboard.partials.vista_cobranzas')
         @elseif (Auth::user()->rol == 'Logística')
             @include('dashboard.partials.vista_logistica')
         @else

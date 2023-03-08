@@ -1,19 +1,20 @@
-<div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
+<div style="text-align: center; font-family:'Times New Roman', Times, serif">
     <h2>
-        <p>
-            Bienvenido <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste, eres el
-            <b>{{ Auth::user()->rol }} del sistema</b>
-        </p>
+        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste</p>
     </h2>
 </div>
+<br>
+<br>
 
 <div class="row">
-
-    <div class="col-lg-9 col-12">
-        {{--@include('dashboard.widgets.pedidos_creados')--}}
+    @include('dashboard.widgets.buscar_cliente')
+{{--
+    <div class="col-lg-12">
+        <x-grafico-metas-mes></x-grafico-metas-mes>
     </div>
-</div>
+--}}
 
+</div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog- modal-lg" role="document">
@@ -26,42 +27,20 @@
 </div>
 <!-- Fin Modal -->
 
-<div class="row">
-
-  <div class="col-lg-12 " id="contenedor-fullscreen">
-    <div class="d-flex justify-content-center">
-      <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-      <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
-    </div>
-    {{--TABLA DUAL--}}
-    <div class="">
-      <div class=" ">
-        <div class="row">
-          <div class="col-md-6">
-            <div id="meta"></div>
-          </div>
-          <div class="col-md-6">
-            <div id="metas_dp"></div>
-          </div>
-          <div class="col-md-12">
-            <div id="metas_total"></div>
-          </div>
+<div class="container-fluid">
+    <div class="col-md-12">
+        <div class="card bg-cyan">
+            <div class="card-header">
+                <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
+            </div>
+            <div class="card-body">
+                <div id="metas_cobranzas_general"></div>
+            </div>
+            <div class="card-fotter"></div>
         </div>
-      </div>
-    </div>
-    {{--FIN-TABLA-DUAL--}}
-  </div>
-
-    <div class="container-fluid">
 
     </div>
-    <div class="container-fluid">
-
-    </div>
-
 </div>
-{{-- @include('dashboard.modal.alerta') --}}
-
 
 @section('js-datatables')
   <script>
@@ -75,8 +54,6 @@
       $(this).text($(this).attr("data-progress") + "%");
     });
   </script>
-  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
   <script>
     $(document).ready(function () {
       $.ajaxSetup({
@@ -84,41 +61,30 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
         $('#exampleModalCenter').modal('show');
-      window.cargaNueva = function (entero) {
-        console.log(' '+entero)
-        var fd=new FormData();
-        fd.append('ii',entero);
-        $.ajax({
-          data: fd,
-          processData: false,
-          contentType: false,
-          method: 'POST',
-          url: "{{ route('dashboard.viewMetaTable') }}",
-          success: function (resultado){
-            if(entero==1)
-            {
-              $('#metas_dp').html(resultado);
-            }else if(entero==2){
-              $('#meta').html(resultado);
-            }
-            else if(entero==3){
-              $('#metas_total').html(resultado);
-            }
-          }
-        })
-      }
 
-      cargaNueva(1);
-      cargaNueva(2);
-      cargaNueva(3);
+        window.cargReporteMetasCobranzasGeneral = function () {
+            var fd = new FormData();
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
+                success: function (resultado) {
+                    $('#metas_cobranzas_general').html(resultado);
+                }
+            })
+        }
 
-      setInterval(myTimer, 10000);
+        cargReporteMetasCobranzasGeneral();
+
+      setInterval(myTimer, 50000);
+
 
       function myTimer() {
-        cargaNueva(1);
-        cargaNueva(2);
-        cargaNueva(3);
+          cargReporteMetasCobranzasGeneral
       }
       $('a[href$="#myModal"]').on( "click", function() {
         $('#myModal').modal();
@@ -139,12 +105,7 @@
     });
   </script>
 
-
-
-
-
 @endsection
-
 @push('css')
   <style>
     .list-group .list-group-item {
@@ -259,3 +220,4 @@
     }
   </style>
 @endpush
+

@@ -67,25 +67,25 @@
         <td>{{ $dato['referencia'] }}</td>
 
         <?php if($dato['porcentajefsb']!=null){ ?>
-            <td>{{ $dato['porcentajefsb']['porcentaje'] }}</td>
+            <td>{{ $dato['porcentajefsb'] }}</td>
         <?php }else{ ?>
             <td></td>
         <?php } ?>
 
         <?php if($dato['porcentajefb']!=null){ ?>
-            <td>{{ $dato['porcentajefb']['porcentaje'] }}</td>
+            <td>{{ $dato['porcentajefb'] }}</td>
         <?php }else{ ?>
             <td></td>
         <?php } ?>
 
         <?php if($dato['porcentajeesb']!=null){ ?>
-            <td>{{ $dato['porcentajeesb']['porcentaje'] }}</td>
+            <td>{{ $dato['porcentajeesb'] }}</td>
         <?php }else{ ?>
             <td></td>
         <?php } ?>
 
         <?php if($dato['porcentajeeb']!=null){ ?>
-            <td>{{ $dato['porcentajeeb']['porcentaje'] }}</td>
+            <td>{{ $dato['porcentajeeb'] }}</td>
         <?php }else{ ?>
             <td></td>
         <?php } ?>
@@ -94,7 +94,7 @@
         <td>{{ $dato['fecha'] }}</td>
         <td>{{ $dato['codigo'] }}</td>
         @if($dato['situacion'] == 'RECURRENTE')
-          <td style="background: ##17a2b8">RECURRENTE</td>
+          <td style="background: #17a2b8;">RECURRENTE</td>
         @elseif($dato['situacion'] == 'NUEVO')
           <td style="background: #17a2b8">NUEVO</td>
         @elseif($dato['situacion'] == 'ABANDONO')
@@ -104,7 +104,7 @@
         @else
           <td >{{ $dato['situacion'] }}</td>
         @endif
-        
+
         <td>
             {{ $dato['eneroa'] }}
         </td>

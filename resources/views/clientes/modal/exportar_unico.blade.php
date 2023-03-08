@@ -27,21 +27,21 @@
       </div>
 
       @if($key === '1')
-        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'ABANDONO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @elseif($key === '2')
-        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'RECURRENTE','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '3')
-        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'NUEVO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '4')
-        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'RECUPERADO RECIENTE','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '5')
-        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'ABANDONO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '6')
-        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'RECUPERADO_ABANDONO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '7')
-        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'CASI_ABANDONO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '8')
-        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'ABANDONO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
 
       @endif
             <div class="card-body">

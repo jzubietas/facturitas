@@ -89,13 +89,30 @@
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img alt="Dia de la mujer" src="{{ asset('/img/diaMujer.jpg') }}" style="width: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin Modal -->
+
 <div class="col-lg-12 " id="contenedor-fullscreen">
 
-  <div class="d-flex justify-content-center flex-column flex-wrap justify-content-center">
     <div class="d-flex justify-content-center">
-      <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-      <button style="background: none; border: none" onclick="openFullscreen();"><i
-          class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
+        <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+        <button style="background: none; border: none" onclick="openFullscreen();">
+            <i class="fas fa-expand-arrows-alt ml-3"
+               style="font-size: 20px"></i>
+        </button>
+        <div class="d-flex justify-content-center align-items-center ml-5">
+            <label class="p-0 m-0" for="ingresar">Fecha: </label>
+            <input type="date" id="fechametames" class="border-0 ml-3" value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
+        </div>
     </div>
 
     {{--TABLA DUAL--}}
@@ -154,270 +171,7 @@
 
   </div>
 </div>
-{{--HISTORIAL DEL MES PASADO--}}
-{{--<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="d-flex justify-content-end align-items-center">
-          <div class="card my-2 mx-2">
-            @php
-              try {
-                   $currentDate=\Carbon\Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
-              }catch (Exception $ex){
-                   $currentDate=\Carbon\Carbon::createFromFormat('m-Y',now()->format('m-Y'));
-              }
 
-            @endphp
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text"> Seleccionar Mes</span>
-              </div>
-              <div class="input-group-prepend">
-                <a
-                  href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subYear()->format('m-Y')])}}"
-                  class="btn m-0 p-0"
-                  data-toggle="tooltip" data-placement="top" title="Un año atras">
-                            <span class="input-group-text">
-                                <
-                            </span>
-                </a>
-                <a
-                  href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subMonth()->format('m-Y')])}}"
-                  class="btn m-0 p-0"
-                  data-toggle="tooltip" data-placement="top" title="Un mes atras">
-                  <span class="input-group-text"><</span>
-                </a>
-              </div>
-              <select class="form-control" id="datepickerDashborad"
-                      aria-describedby="basic-addon3">
-                @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
-                  @php
-                    $currentMonth=$currentDate->clone()->startOfYear()->addMonths($month-1);
-                  @endphp
-                  <option
-                    {{$currentMonth->format('m-Y')==request('selected_date',now()->format('m-Y'))?'selected':''}}
-                    value="{{$currentMonth->format('m-Y')}}"
-                  >{{Str::ucfirst($currentMonth->monthName)}} {{$currentMonth->year}}</option>
-                @endforeach
-              </select>
-
-              <div class="input-group-append">
-                <a
-                  href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addMonths()->format('m-Y')])}}"
-                  class="btn m-0 p-0"
-                  data-toggle="tooltip" data-placement="top" title="Un mes adelante">
-                  <span class="input-group-text">></span>
-                </a>
-              </div>
-              <div class="input-group-append">
-                <a
-                  href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addYear()->format('m-Y')])}}"
-                  class="btn m-0 p-0"
-                  data-toggle="tooltip" data-placement="top" title="Un año adelante">
-                  <span class="input-group-text">></span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="row" id="widget-container">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-body">
-              <div class="mb-4 pb-4">
-                <ul class="list-group">
-                  <li class="list-group-item">
-                    <div class="row">
-                      <div class="col-md-9">
-                        --}}{{--<x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}{{--
-                        --}}{{--<x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>--}}{{--
-                      </div>
-                      <div class="col-md-3">
-                        --}}{{--<x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>--}}{{--
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="row">
-            <div class="col-md-6">
-              --}}{{--<x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>--}}{{--
-            </div>
-
-            <div class="col-lg-12">
-              --}}{{--<x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>--}}{{--
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12">
-          --}}{{--<x-grafico-pedidos-por-dia rol="Administrador"
-                                     title="Cantidad de pedidos de los asesores por dia"
-                                     label-x="Asesores" label-y="Cant. Pedidos"
-                                     only-day></x-grafico-pedidos-por-dia>--}}{{--
-
-          --}}{{--<x-grafico-pedidos-por-dia rol="Administrador"
-                                     title="Cantidad de pedidos de los asesores por mes"
-                                     label-x="Asesores"
-                                     label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>--}}{{--
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<br>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-      --}}{{--<x-grafico-top-clientes-pedidos top="10"></x-grafico-top-clientes-pedidos>--}}{{--
-    </div>
-    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
-      <div class="card">
-        <div class="card-body pl-0">
-          --}}{{--<div id="pagosxmes" class="w-100" style="height: 550px;"></div>--}}{{--
-        </div>
-      </div>
-    </div>
-  </div>
-</div>--}}{{--<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="d-flex justify-content-end align-items-center">
-          <div class="card my-2 mx-2">
-            @php
-              try {
-                   $currentDate=\Carbon\Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
-              }catch (Exception $ex){
-                   $currentDate=\Carbon\Carbon::createFromFormat('m-Y',now()->format('m-Y'));
-              }
-
-            @endphp
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text"> Seleccionar Mes</span>
-              </div>
-              <div class="input-group-prepend">
-                <a
-                  href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subYear()->format('m-Y')])}}"
-                  class="btn m-0 p-0"
-                  data-toggle="tooltip" data-placement="top" title="Un año atras">
-                            <span class="input-group-text">
-                                <
-                            </span>
-                </a>
-                <a
-                  href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subMonth()->format('m-Y')])}}"
-                  class="btn m-0 p-0"
-                  data-toggle="tooltip" data-placement="top" title="Un mes atras">
-                  <span class="input-group-text"><</span>
-                </a>
-              </div>
-              <select class="form-control" id="datepickerDashborad"
-                      aria-describedby="basic-addon3">
-                @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
-                  @php
-                    $currentMonth=$currentDate->clone()->startOfYear()->addMonths($month-1);
-                  @endphp
-                  <option
-                    {{$currentMonth->format('m-Y')==request('selected_date',now()->format('m-Y'))?'selected':''}}
-                    value="{{$currentMonth->format('m-Y')}}"
-                  >{{Str::ucfirst($currentMonth->monthName)}} {{$currentMonth->year}}</option>
-                @endforeach
-              </select>
-
-              <div class="input-group-append">
-                <a
-                  href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addMonths()->format('m-Y')])}}"
-                  class="btn m-0 p-0"
-                  data-toggle="tooltip" data-placement="top" title="Un mes adelante">
-                  <span class="input-group-text">></span>
-                </a>
-              </div>
-              <div class="input-group-append">
-                <a
-                  href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addYear()->format('m-Y')])}}"
-                  class="btn m-0 p-0"
-                  data-toggle="tooltip" data-placement="top" title="Un año adelante">
-                  <span class="input-group-text">></span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="row" id="widget-container">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-body">
-              <div class="mb-4 pb-4">
-                <ul class="list-group">
-                  <li class="list-group-item">
-                    <div class="row">
-                      <div class="col-md-9">
-                        --}}{{--<x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>--}}{{--
-                        --}}{{--<x-grafico-cobranzas-meses-progressbar></x-grafico-cobranzas-meses-progressbar>--}}{{--
-                      </div>
-                      <div class="col-md-3">
-                        --}}{{--<x-grafico-pedidos-mes-count-progress-bar></x-grafico-pedidos-mes-count-progress-bar>--}}{{--
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="row">
-            <div class="col-md-6">
-              --}}{{--<x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>--}}{{--
-            </div>
-
-            <div class="col-lg-12">
-              --}}{{--<x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>--}}{{--
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12">
-          --}}{{--<x-grafico-pedidos-por-dia rol="Administrador"
-                                     title="Cantidad de pedidos de los asesores por dia"
-                                     label-x="Asesores" label-y="Cant. Pedidos"
-                                     only-day></x-grafico-pedidos-por-dia>--}}{{--
-
-          --}}{{--<x-grafico-pedidos-por-dia rol="Administrador"
-                                     title="Cantidad de pedidos de los asesores por mes"
-                                     label-x="Asesores"
-                                     label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>--}}{{--
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<br>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-      --}}{{--<x-grafico-top-clientes-pedidos top="10"></x-grafico-top-clientes-pedidos>--}}{{--
-    </div>
-    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
-      <div class="card">
-        <div class="card-body pl-0">
-          --}}{{--<div id="pagosxmes" class="w-100" style="height: 550px;"></div>--}}{{--
-        </div>
-      </div>
-    </div>
-  </div>
-</div>--}}
 
 @section('js-datatables')
   <script>
@@ -440,20 +194,29 @@
         }
       });
 
-      $('#fecha').val("{{\Carbon\Carbon::parse($fecha)->format('Y-m-d')}}");
 
-      $(document).on('change', '#fecha', function () {
-        const value = e.target.value;
-        console.log(value)
-        if (value) {
-          window.location.replace('{{route('dashboard.index')}}?fecha=' + value)
-        }
+        $('#exampleModalCenter').modal('show');
+
+
+        $('#fechametames').val("{{\Carbon\Carbon::parse($fechametames)->format('Y-m-d')}}");
+
+      $(document).on('change', '#fechametames', function () {
+        //const value = e.target.value;
+          cargaNueva(1);
+          cargaNueva(2);
+          cargaNueva(3);
+          cargaNueva(4);
+          cargaNueva(5);
+
+          cargReporteMetasCobranzasGeneral();
+
+
       });
 
       window.cargaNueva = function (entero) {
         console.log(' ' + entero)
         var fd = new FormData();
-        fd.append('fecha', $('#fecha').val());
+        fd.append('fechametames', $('#fechametames').val());
         fd.append('ii', entero);
         $.ajax({
           data: fd,
@@ -537,6 +300,7 @@
         cargaNueva(3);
         cargaNueva(4);
         cargaNueva(5);
+          cargReporteMetasCobranzasGeneral();
       }
 
       $('a[href$="#myModal"]').on("click", function () {
