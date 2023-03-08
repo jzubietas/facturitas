@@ -3372,6 +3372,7 @@ d-none {
     background-image: url('../imagenes/pica.png');
     background-repeat: no-repeat;
     background-size: contain;
+    opacity: .2;
     -webkit-animation-name: nieve, horiz;
     -moz-animation-name: nieve, horiz;
     animation-name: nieve, horiz;
