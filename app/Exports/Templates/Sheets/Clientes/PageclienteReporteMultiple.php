@@ -56,7 +56,8 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 'clientes.deuda',
                 DB::raw(" (CASE WHEN clientes.deuda=1 then 'DEBE' else 'CANCELADO' end) as deposito "),
                 'clientes.pidio',
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
+                DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id and dp1.estado=1 order by dp1.created_at desc limit 1) as fecha"),
+                DB::raw("(select DATE_FORMAT(dp0.created_at,'%m') from pedidos dp0 where dp0.cliente_id=clientes.id and dp0.estado=1 order by dp0.created_at desc limit 1) as fechaultimopedido_dia"),
                 DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id and dp2.estado=1 order by dp2.created_at desc limit 1) as fechaultimopedido_mes"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id and dp3.estado=1 order by dp3.created_at desc limit 1) as fechaultimopedido_anio"),
                 DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id and dp.estado=1 order by dp.created_at desc limit 1) as codigo "),
@@ -72,6 +73,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             ->where('clientes.tipo','1');
             //->whereNotNull('clientes.situacion');
         $cal_sit=self::$situacion;
+        //$clientes=$clientes->limit(10);
         switch($cal_sit)
             {
                 case 'ABANDONO':
@@ -132,7 +134,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ->pluck('users.identificador');
             $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
         }
-        //$clientes=$clientes->limit(10);
+
         return $clientes->get();
     }
     public function fields(): array
@@ -156,9 +158,9 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             ,"deuda"=>"Deuda"
             ,"deposito"=>"Deposito"
             ,"fecha"=>"Fecha"
-            ,"fecha_dia"=>"Dia"
-            ,"fecha_mes"=>"Mes"
-            ,"fecha_anio"=>"Año"
+            ,"fechaultimopedido_dia"=>"Dia"
+            ,"fechaultimopedido_mes"=>"Mes"
+            ,"fechaultimopedido_anio"=>"Año"
             ,"codigo"=>"Codigo"
             ,"situacion"=>"Situacion"
             ,"estadopedido"=>"Estado pedido"
@@ -214,6 +216,9 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             'B' => NumberFormat::FORMAT_TEXT,
             'C' => NumberFormat::FORMAT_TEXT,
             'D' => NumberFormat::FORMAT_TEXT,
+            'S' => NumberFormat::FORMAT_TEXT,
+            'T' => NumberFormat::FORMAT_TEXT,
+            'U' => NumberFormat::FORMAT_TEXT,
 
         ];
     }
@@ -373,7 +378,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             )
         );
 
-        $event->sheet->styleCells(
+        /*$event->sheet->styleCells(
             'A1:AX1',
             [
                 'alignment' => [
@@ -381,7 +386,20 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' => '000099 ']
+                    'color' => ['argb' => '6acf0c ']
+                ]
+            ]
+        );*/
+
+        $event->sheet->styleCells(
+            'L1:O1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'cedb40']
                 ]
             ]
         );
