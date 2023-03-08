@@ -3958,6 +3958,11 @@ d-none {
         display: flex !important;
         width: 100% !important;
     }
+    #meta,
+    #metas_dp{
+        max-width: 100% !important;
+        width: 100% !important;
+    }
 }
 
 @media screen and (max-width: 1230px){
