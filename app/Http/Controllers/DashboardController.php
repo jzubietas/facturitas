@@ -678,12 +678,12 @@ class DashboardController extends Controller
                     $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
                        style="height: 30px !important;width: 40%"
                        aria-valuenow="70"
-                       aria-valuemin="0"
+                       aria-valuemin
                        aria-valuemax="100"></div>
-                      <div class="progress-bar h-60-res height-bar-progress" role="progressbar"
-                           style="height: 30px !important;width: ' . (round($count_asesor[46]['total_pedido_mespasado'] / $count_asesor[46]['total_pagado'] * 100, 2) - 40) . '%;
+                      <div class="progress-bar h-60-res" role="progressbar"
+                           style="width: ' . (round(($count_asesor[46]['total_pagado'] / $count_asesor[24]['total_pedido_mespasado'] * 100), 2) - 40) . '%;
                        background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                           aria-valuenow="' . (round($count_asesor[46]['total_pedido_mespasado'] / $count_asesor[46]['total_pagado'], 2) - 40) . '"
+                           aria-valuenow="' . (round(($count_asesor[46]['total_pagado'] / (($count_asesor[24]['total_pedido_mespasado'] > 0) ? $count_asesor[46]['total_pedido_mespasado'] : '')), 2) - 40) . '"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
                 else
