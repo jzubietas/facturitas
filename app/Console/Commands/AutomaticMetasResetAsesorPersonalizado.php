@@ -49,61 +49,76 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
         $this->warn( $periodo_original );
         $this->info( $periodo_actual );
 
-        $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
+        $diff = ($periodo_original->diffInMonths($periodo_actual))+1; //Cantodad de recorridos
         $this->warn( $diff );
 
         //crear metas este mes para usuarios
 
-        $usuarios=User::whereIn('rol',[User::ROL_ASESOR])->orderBy('id','asc')->get();
-
+        $usuarios=User::whereIn('rol',[User::ROL_ASESOR])->activo()->orderBy('id','asc')->get();
         $where_anio=$periodo_actual->format('Y');
         $where_mes=$periodo_actual->format('m');
-        foreach($usuarios as $usuario)
-        {
-            //recorro usuarios
-            //solo para el nuevo periodo
 
-            $meta_create_validar=Meta::where('user_id',$usuario->id)->where('anio',$where_anio)->where('mes',$where_mes)->count();
-            if($meta_create_validar>0)
+        for ($i=0; $i<$diff; $i++){
+
+            $periodo_actual=Carbon::parse($fp->created_at)->addMonths($i);
+            $where_anio=$periodo_actual->format('Y');
+            $where_mes=$periodo_actual->format('m');
+
+            $meta_create_validar=null;
+
+            foreach($usuarios as $usuario)
             {
-                //
-                /*User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
-                  [
-                    'meta_pedido'=>0,
-                    'meta_pedido_2'=>0,
-                    'meta_cobro'=>0,
-                    'meta_quincena'=>0
-                  ]
-                );*/
-            }
-            else{
-                Meta::create(
-                    [
-                        'rol'=>User::ROL_ASESOR,
-                        'user_id'=>$usuario->id,
-                        'email'=>$usuario->email,
-                        'anio'=>$where_anio,
-                        'mes'=>$where_mes,
+                //recorro usuarios
+                //solo para el nuevo periodo
+                $meta_create_validar=Meta::where('user_id',$usuario->id)
+                    ->where('anio',$where_anio)
+                    ->where('mes',$where_mes)
+                    ->count();
+                if($meta_create_validar>0)
+                {
+                    //
+                    /*User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
+                      [
                         'meta_pedido'=>0,
                         'meta_pedido_2'=>0,
                         'meta_cobro'=>0,
-                        'status'=>1,
-                        'created_at'=>now(),
                         'meta_quincena'=>0
-                    ]
-                );
-                User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
-                    [
-                        'meta_pedido'=>0,
-                        'meta_pedido_2'=>0,
-                        'meta_pedido_cobro'=>0,
-                        'meta_quincena'=>0
-                    ]
-                );
+                      ]
+                    );*/
+                }
+                else{
+                    Meta::create(
+                        [
+                            'rol'=>User::ROL_ASESOR,
+                            'user_id'=>$usuario->id,
+                            'email'=>$usuario->email,
+                            'anio'=>$where_anio,
+                            'mes'=>$where_mes,
+                            'meta_pedido'=>0,
+                            'meta_pedido_2'=>0,
+                            'meta_cobro'=>0,
+                            'status'=>1,
+                            'created_at'=>now(),
+                            'meta_quincena'=>0
+                        ]
+                    );
+                    User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
+                        [
+                            'meta_pedido'=>0,
+                            'meta_pedido_2'=>0,
+                            'meta_cobro'=>0,
+                            'meta_quincena'=>0
+                        ]
+                    );
+
+                }
 
             }
 
         }
+
+
+
 
         return 0;
     }

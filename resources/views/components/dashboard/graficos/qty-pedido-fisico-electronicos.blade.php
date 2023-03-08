@@ -1,5 +1,5 @@
 <div class="card">
-  <div class="card-body pl-0">
+  <div class="card-body">
     <div class="row">
       <div class="col-md-4">
         <ul class="list-group">
@@ -10,7 +10,7 @@
             <li class="list-group-item">
               <div class="card" style="background: {{data_get($item,'bg')}};">
                 <div class="card-body ml-2 mr-2">
-                  <div class="center-around">
+                  <div class="center-around d-flex justify-content-between align-items-center">
                     <div>
                       <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
                     </div>
@@ -35,7 +35,7 @@
             <li class="list-group-item">
               <div class="card" style="background: {{data_get($item,'bg')}};">
                 <div class="card-body ml-2 mr-2">
-                  <div class="center-around">
+                  <div class="center-around d-flex justify-content-between align-items-center">
                     <div>
                       <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
                     </div>
@@ -59,7 +59,7 @@
             <li class="list-group-item">
               <div class="card" style="background: {{data_get($item,'bg')}};">
                 <div class="card-body ml-2 mr-2">
-                  <div class="center-around">
+                  <div class="center-around d-flex justify-content-between align-items-center">
                     <div>
                       <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
                     </div>
