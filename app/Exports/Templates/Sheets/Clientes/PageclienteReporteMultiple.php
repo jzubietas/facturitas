@@ -128,6 +128,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
                 ->pluck('users.identificador');
             $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
         }
+        $clientes=$clientes->limit(10);
         return $clientes->get();
     }
     public function fields(): array
@@ -336,7 +337,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
         $style_nulo = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
         $style_abandono_reciente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
 
-        $row_cell_=22;
+        $row_cell_=21;
         $letter_cell='W';
         foreach ($event->sheet->getRowIterator() as $row)
         {
