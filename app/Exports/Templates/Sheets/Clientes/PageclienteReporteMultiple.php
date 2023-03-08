@@ -28,13 +28,13 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 });
 class PageclienteReporteMultiple extends Export implements WithStyles, WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents, WithColumnWidths
 {
-    public static $situacion='';
-    public static $anio='';
+    private $situacion='';
+    private  $anio='';
     public function __construct($situacion,$anio)
     {
         parent::__construct();
-        self::$situacion=$situacion;
-        self::$anio=$anio;
+        $this->situacion=$situacion;
+        $this->anio=$anio;
     }
     public function collection()
     {
@@ -72,8 +72,8 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             ->where('clientes.estado','1')
             ->where('clientes.tipo','1');
             //->whereNotNull('clientes.situacion');
-        $cal_sit=self::$situacion;
-        //$clientes=$clientes->limit(10);
+        $cal_sit=$this->situacion;
+        $clientes=$clientes->limit(10);
         switch($cal_sit)
             {
                 case 'ABANDONO':
@@ -166,19 +166,19 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             ,"estadopedido"=>"Estado pedido"
             ,"pidio"=>"Pidio"
             ,"estado"=>"Estado"
-            ,"eneroa"=>"Enero ".(self::$anio)
-            ,"enerob"=>"Enero ".(intval(self::$anio)+1)
-            ,"febreroa"=>"Febrero ".(self::$anio),"febrerob"=>"Febrero ".(intval(self::$anio)+1)
-            ,"marzoa"=>"Marzo ".(self::$anio),"marzob"=>"Marzo ".(intval(self::$anio)+1)
-            ,"abrila"=>"Abril ".(self::$anio),"abrilb"=>"Abril ".(intval(self::$anio)+1)
-            ,"mayoa"=>"Mayo ".(self::$anio),"mayob"=>"Mayo ".(intval(self::$anio)+1)
-            ,"junioa"=>"Junio ".(self::$anio),"juniob"=>"Junio ".(intval(self::$anio)+1)
-            ,"julioa"=>"Julio ".(self::$anio),"juliob"=>"Julio ".(intval(self::$anio)+1)
-            ,"agostoa"=>"Agosto ".(self::$anio),"agostob"=>"Agosto ".(intval(self::$anio)+1)
-            ,"setiembrea"=>"Setiembre ".(self::$anio),"setiembreb"=>"Setiembre ".(intval(self::$anio)+1)
-            ,"octubrea"=>"Octubre ".(self::$anio),"octubreb"=>"Octubre ".(intval(self::$anio)+1)
-            ,"noviembrea"=>"Noviembre ".(self::$anio),"noviembreb"=>"Noviembre ".(intval(self::$anio)+1)
-            ,"diciembrea"=>"Diciembre ".(self::$anio),"diciembreb"=>"Diciembre ".(intval(self::$anio)+1)
+            , "eneroa"=> sprintf("Enero %s", ($this->anio))
+            ,"enerob"=>"Enero ".(intval($this->anio)+1)
+            ,"febreroa"=>"Febrero ".($this->anio),"febrerob"=>"Febrero ".(intval($this->anio)+1)
+            ,"marzoa"=>"Marzo ".($this->anio),"marzob"=>"Marzo ".(intval($this->anio)+1)
+            ,"abrila"=>"Abril ".($this->anio),"abrilb"=>"Abril ".(intval($this->anio)+1)
+            ,"mayoa"=>"Mayo ".($this->anio),"mayob"=>"Mayo ".(intval($this->anio)+1)
+            ,"junioa"=>"Junio ".($this->anio),"juniob"=>"Junio ".(intval($this->anio)+1)
+            ,"julioa"=>"Julio ".($this->anio),"juliob"=>"Julio ".(intval($this->anio)+1)
+            ,"agostoa"=>"Agosto ".($this->anio),"agostob"=>"Agosto ".(intval($this->anio)+1)
+            ,"setiembrea"=>"Setiembre ".($this->anio),"setiembreb"=>"Setiembre ".(intval($this->anio)+1)
+            ,"octubrea"=>"Octubre ".($this->anio),"octubreb"=>"Octubre ".(intval($this->anio)+1)
+            ,"noviembrea"=>"Noviembre ".($this->anio),"noviembreb"=>"Noviembre ".(intval($this->anio)+1)
+            ,"diciembrea"=>"Diciembre ".($this->anio),"diciembreb"=>"Diciembre ".(intval($this->anio)+1)
         ];
     }
     public function columnWidths(): array
@@ -224,13 +224,13 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
     }
     public function title(): string
     {
-        return 'CLIENTES SITUACION '.(self::$anio).' '.(intval(self::$anio)+1). ' :: '.(self::$situacion);
+        return 'CLIENTES SITUACION '.($this->anio).' '.(intval($this->anio)+1). ' :: '.($this->situacion);
     }
     public function map($model): array
     {
         $model->deuda=( ($model->deuda==1)? 'SI':'NO' );
-        $model->anioa=self::$anio;
-        $model->aniob=( intval(self::$anio) +1);
+        $model->anioa=$this->anio;
+        $model->aniob=( intval($this->anio) +1);
         $model->eneroa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
             ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
             ->where(DB::raw('MONTH(created_at)'), '1')

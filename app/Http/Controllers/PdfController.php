@@ -318,22 +318,26 @@ class PdfController extends Controller
     for($i=1;$i<=$diferenciameses;$i++)
     {
       $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
-      $html_mes=$periodo_origen->addMonths($i)->format('Y-M');
+      //$html_mes=$periodo_origen->addMonths($i)->format('Y-M');
       $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
       $mes_artificio=$periodo_origen->addMonths($i)->subMonth();
 
+        $total_pagado_mespasado = Pedido::query()
+            ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+            ->where('pedidos.codigo', 'not like', "%-C%")
+            ->where('pedidos.estado', '1')
+            ->where('pedidos.pendiente_anulacion', '<>', '1')
+            ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
+            ->where('pago_pedidos.estado', 1)
+            ->where('pago_pedidos.pagado', 2)
+            ->count();
 
-      $total_pedido_mespasado = $this->applyFilterPersonalizable(Pedido::query()
-        ->where('codigo', 'not like', "%-C%")->activo()
-        ->where('user_id','<>',51)
-        ->where('pendiente_anulacion', '<>','1' ), $mes_artificio, 'created_at')
-        ->count();
-
-      $total_pagado_mespasado = $this->applyFilterPersonalizable(Pedido::query()
-        ->where('codigo', 'not like', "%-C%")->activo()
-        ->where('user_id','<>',51)
-        ->where('pendiente_anulacion', '<>','1' )->pagados(), $mes_artificio, 'created_at')
-        ->count();
+        $total_pedido_mespasado = Pedido::query()
+            ->where('pedidos.codigo', 'not like', "%-C%")
+            ->where('pedidos.estado', '1')
+            ->where('pedidos.pendiente_anulacion', '<>', '1')
+            ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
+            ->count();
 
       $porcentaje = 0;
       $diferenciameta = 0;
