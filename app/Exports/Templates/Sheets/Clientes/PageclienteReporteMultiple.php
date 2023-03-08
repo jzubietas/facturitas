@@ -327,25 +327,32 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
         $color_cabeceras='a9def9';
 
 
-        /*$style_recurrente = array(
-            'fill' => array(
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_cabeceras)
-            )
-        );
+        $style_recurrente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
+        $style_abandono = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
+        $style_nulo = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
+        $style_abandono_reciente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
 
-        $row_cell_=14;
-        $letter_cell='N';
+        $row_cell_=22;
+        $letter_cell='W';
         foreach ($event->sheet->getRowIterator() as $row)
         {
             if($row->getRowIndex()==1)continue;
             if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
                 $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recurrente);
+            }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
+            {
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono);
+            }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='NULO')
+            {
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_nulo);
+            }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
+            {
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono_reciente);
             }
 
 
-        }*/
+        }
 
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
