@@ -366,7 +366,7 @@ class PdfController extends Controller
         }
       }
 
-      if ($total_pagado_mespasado == $total_pedido_mespasado){
+      if ($porcentaje == 0){
         continue;
       }
 
