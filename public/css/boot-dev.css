@@ -3952,6 +3952,65 @@ d-none {
 
 /*---------------- MODULO DASHBOARD ----------------*/
 
+.contain-table-dual{
+    display: flex !important;
+    width: 100% !important;
+}
+
+@media screen and (max-width: 1230px){
+    .contain-table-dual{
+        flex-direction: column !important;
+    }
+    #meta,
+    #metas_dp{
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    #metas_dp{
+        margin-top: -3px !important;
+    }
+    #metas_dp thead{
+        display: none !important;
+    }
+
+    #metas_dp tbody td:nth-child(1){
+        width: 8% !important;
+    }
+    #metas_dp tbody td:nth-child(2){
+        width: 11% !important;
+    }
+    #metas_dp tbody td:nth-child(3){
+        width: 8% !important;
+    }
+    #metas_dp tbody td:nth-child(4){
+        width: 36% !important;
+    }
+    #metas_dp tbody td:nth-child(5){
+        width: 38% !important;
+    }
+}
+@media screen and (max-width: 800px){
+    #contenedor-fullscreen{
+        overflow-y: scroll !important;
+    }
+}
+
+@media screen and (max-width: 767px){
+    /*.contain-table-dual{
+        align-items: center !important;
+    }*/
+
+    #meta,
+    #metas_dp,
+    #supervisor_total,
+    #supervisor_A,
+    #metas_total{
+        max-width: 730px !important;
+        width: 730px !important;
+    }
+}
+
 #meta .height-bar-progress,
 #metas_dp .height-bar-progress,
 #supervisor_total .height-bar-progress,

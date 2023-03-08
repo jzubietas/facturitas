@@ -1,6 +1,6 @@
 @yield('css-datatables')
 
-{{--BIENVENIDA--}}
+{{-- BIENVENIDA --}}
 <div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
     <h2>
         <p>
@@ -10,7 +10,7 @@
     </h2>
 </div>
 
-{{--INFO--}}
+{{-- INFO --}}
 <div class="row d-none">
     <div class="col-lg-3 col-6">
         <div class="small-box bg-info">
@@ -64,23 +64,23 @@
     </div>
 </div>
 
-{{--BUSCAR / QUITAR VIDA--}}
+{{-- BUSCAR / QUITAR VIDA --}}
 <div class="row mb-3">
     @include('dashboard.widgets.buscar_cliente')
     @include('dashboard.partials.vista_quitar_vidas')
 </div>
 
-{{--LLAMADA DE ATENCION--}}
+{{-- LLAMADA DE ATENCION --}}
 <div class="col-md-12">
     <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
 </div>
 
-{{--ACTIVAR CLIENTE--}}
+{{-- ACTIVAR CLIENTE --}}
 <div class="col-lg-12">
     <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
 </div>
 
-{{--PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION--}}
+{{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
 <div class="col-lg-12">
     <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
 </div>
@@ -97,14 +97,16 @@
     </div>
 </div>
 
-{{--FULLSCREEN--}}
+{{-- FULLSCREEN --}}
 <div class="col-lg-12 " id="contenedor-fullscreen">
-    <div class="d-flex justify-content-center">
-        <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-        <button style="background: none; border: none" onclick="openFullscreen();">
-            <i class="fas fa-expand-arrows-alt ml-3"
-               style="font-size: 20px"></i>
-        </button>
+    <div class="d-flex justify-content-center flex-column mb-2">
+        <div class="d-flex justify-content-center">
+            <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
+            <button style="background: none; border: none" onclick="openFullscreen();">
+                <i class="fas fa-expand-arrows-alt ml-3"
+                   style="font-size: 20px"></i>
+            </button>
+        </div>
         <div class="d-flex justify-content-center align-items-center ml-5">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
             <input type="date" id="fechametames" class="border-0 ml-3"
@@ -112,27 +114,25 @@
         </div>
     </div>
 
-    {{--TABLA DUAL--}}
+    {{-- TABLA DUAL --}}
     <div class="" style=" overflow: hidden !important;">
         <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
             <div class="row">
-                <div class="col-md-6">
-                    <div id="meta"></div>
-                </div>
-                <div class="col-md-6">
-                    <div id="metas_dp"></div>
+                <div class="contain-table-dual">
+                        <div class="col-lg-6" id="meta"></div>
+                        <div class="col-lg-6" id="metas_dp"></div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div id="supervisor_total"></div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div id="supervisor_A"></div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div id="supervisor_B"></div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div id="metas_total"></div>
                 </div>
 
@@ -140,13 +140,13 @@
 
         </div>
     </div>
-    {{--FIN-TABLA-DUAL--}}
+    {{-- FIN-TABLA-DUAL --}}
 
 </div>
 
 <br>
 
-{{--METAS ASESOR DE LLAMADAS--}}
+{{-- METAS ASESOR DE LLAMADAS --}}
 <div class="container-fluid">
     <div class="col-md-12">
         <div class="d-flex justify-content-center">
@@ -156,7 +156,7 @@
     </div>
 </div>
 
-{{--METAS COBRANZA--}}
+{{-- METAS COBRANZA --}}
 <div class="container-fluid">
     <div class="col-md-12">
         <div class="card bg-cyan">
@@ -172,7 +172,7 @@
     </div>
 </div>
 
-{{--SPARKLINE--}}
+{{-- SPARKLINE --}}
 <div class="conatiner-fluid">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="card">
