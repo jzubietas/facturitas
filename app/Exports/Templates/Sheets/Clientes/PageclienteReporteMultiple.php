@@ -20,6 +20,8 @@ use Illuminate\Http\Request;
 
 class PageclienteReporteMultiple extends Export implements WithColumnFormatting,WithColumnWidths
 {
+    public static $situacion='';
+    public static $anio='';
     public function __construct($situacion,$anio)
     {
         parent::__construct();

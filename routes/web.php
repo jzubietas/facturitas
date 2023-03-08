@@ -652,7 +652,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('clientesabandonoExcel', [ExcelController::class, 'clientesabandonoExcel'])->name('clientesabandonoExcel');
 
-    Route::get('excel/clientes/reporte_multiple', [ExcelController::class, 'clientesReporteMultipleExcel'])->name('excel.clientes.reporte.multiple');
+    Route::any('excel/clientes/reporte_multiple', [ExcelController::class, 'clientesReporteMultipleExcel'])->name('excel.clientes.reporte.multiple');
 
     Route::get('excel/clientes/two_month_ago', [ExcelController::class, 'clientesTwoMonthAgoExcel'])->name('excel.clientes-two-month-ago-excel');
     Route::get('excel/clientes/four_month_ago', [ExcelController::class, 'clientesFourMonthAgoExcel'])->name('excel.clientes-four-month-ago-excel');
