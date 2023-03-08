@@ -19,6 +19,7 @@ use App\View\Components\dashboard\graficos\QtyPedidoFisicoElectronicos;
 use App\View\Components\dashboard\graficos\TopClientesPedidos;
 use App\View\Components\dashboard\tablas\FisElecJefeOperaciones;
 use App\View\Components\dashboard\tablas\ListaUsuariosLlamadasAtencion;
+use App\View\Components\UnificacionCambioCalculoPorc;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
@@ -61,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
         \Blade::component('grafico-pedidos-elect-fisico', QtyPedidoFisicoElectronicos::class);
         \Blade::component('tabla-jef-operaciones-fis-elect', FisElecJefeOperaciones::class);
         \Blade::component('tabla-list-llamada-atencion', ListaUsuariosLlamadasAtencion::class);
+        \Blade::component('frm-unif-cambio-calculo-porc', UnificacionCambioCalculoPorc::class);
 
         \Blade::component('grafico-pedidos-atendidos-anulados', GraficoPedidosAtendidoAnulados::class);
 
