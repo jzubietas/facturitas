@@ -89,6 +89,18 @@
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog- modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img alt="Dia de la mujer" src="{{ asset('/img/diaMujer.jpg') }}" style="width: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin Modal -->
+
 <div class="col-lg-12 " id="contenedor-fullscreen">
 
     <div class="d-flex justify-content-center">
@@ -182,7 +194,11 @@
         }
       });
 
-      $('#fechametames').val("{{\Carbon\Carbon::parse($fechametames)->format('Y-m-d')}}");
+
+        $('#exampleModalCenter').modal('show');
+
+
+        $('#fechametames').val("{{\Carbon\Carbon::parse($fechametames)->format('Y-m-d')}}");
 
       $(document).on('change', '#fechametames', function () {
         //const value = e.target.value;
