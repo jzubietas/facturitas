@@ -332,6 +332,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles,WithColumn
     public static function afterSheet(AfterSheet $event){
 
         $color_cabeceras='a9def9';
+        $color_V = '6acf0c';
 
 
         $style_recurrente = array(
