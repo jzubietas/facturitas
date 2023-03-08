@@ -336,7 +336,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
         $style_nulo = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
         $style_abandono_reciente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
 
-        $row_cell_=23;
+        $row_cell_=22;
         $letter_cell='W';
         foreach ($event->sheet->getRowIterator() as $row)
         {
