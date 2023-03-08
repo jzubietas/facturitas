@@ -681,9 +681,9 @@ class DashboardController extends Controller
                        aria-valuemin
                        aria-valuemax="100"></div>
                       <div class="progress-bar h-60-res" role="progressbar"
-                           style="width: ' . (round(($count_asesor[46]['total_pagado'] / $count_asesor[24]['total_pedido_mespasado'] * 100), 2) - 40) . '%;
+                           style="width: ' . (round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado'] * 100), 2) - 40) . '%;
                        background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                           aria-valuenow="' . (round(($count_asesor[46]['total_pagado'] / (($count_asesor[24]['total_pedido_mespasado'] > 0) ? $count_asesor[46]['total_pedido_mespasado'] : '')), 2) - 40) . '"
+                           aria-valuenow="' . (round(($count_asesor[46]['total_pagado'] / (($count_asesor[46]['total_pedido_mespasado'] > 0) ? $count_asesor[46]['total_pedido_mespasado'] : '')), 2) - 40) . '"
                            aria-valuemin="0"
                            aria-valuemax="100"></div>';
                 else
