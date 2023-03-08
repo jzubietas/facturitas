@@ -332,7 +332,12 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
         $color_cabeceras='a9def9';
 
 
-        $style_recurrente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
+        $style_recurrente = array(
+            'fill' => array(
+                'type'  => Fill::FILL_SOLID,
+                'color' => array('rgb' => $color_cabeceras)
+            )
+        );
         $style_abandono = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
         $style_nulo = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
         $style_abandono_reciente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
