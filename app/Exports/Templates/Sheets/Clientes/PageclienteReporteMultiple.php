@@ -62,10 +62,9 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
             ])
             ->where('clientes.estado','1')
             ->where('clientes.tipo','1')
-            ->whereNotNull('clientes.situacion');
-        if(self::$situacion)
-        {
-            switch(self::$situacion)
+            //->whereNotNull('clientes.situacion');
+
+        switch(self::$situacion)
             {
                 case 'ABANDONO':
                     $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO','ABANDONO RECIENTE']);
@@ -90,7 +89,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
                     break;
                 default:break;
             }
-        }
+
 
         if (Auth::user()->rol == "Llamadas")
         {
