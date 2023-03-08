@@ -131,44 +131,43 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
     {
         return [
             "item"=>"Item"
-            ,"id"=>"Asesor"
-            ,"asesor"=>"Celular"
-            ,"nombre"=>"Rucs"
-            ,"dni"=>"Deuda"
-            ,"celular"=>"Deuda"
-            ,"icelular"=>"Deuda"
-            ,"provincia"=>"Deuda"
-            ,"distrito"=>"Deuda"
-            ,"direccion"=>"Deuda"
-            ,"referencia"=>"Deuda"
-            ,"porcentajefsb"=>"Deuda"
-            ,"porcentajefb"=>"Deuda"
-            ,"porcentajeesb"=>"Deuda"
-            ,"porcentajeeb"=>"Deuda"
-            ,"porcentajeeb"=>"Deuda"
-            ,"deuda"=>"Importe ultimo pedido"
-            ,"deposito"=>"Mes ultimo pedido"
-            ,"fecha"=>"Mes ultimo pedido"
-            ,"fecha_dia"=>"Mes ultimo pedido"
-            ,"fecha_mes"=>"Mes ultimo pedido"
-            ,"fecha_anio"=>"Mes ultimo pedido"
-            ,"codigo"=>"Mes ultimo pedido"
-            ,"situacion"=>"Mes ultimo pedido"
-            ,"estadopedido"=>"Mes ultimo pedido"
-            ,"pidio"=>"Mes ultimo pedido"
-            ,"estado"=>"Mes ultimo pedido"
-            ,"eneroa"=>"Mes ultimo pedido","enerob"=>"Mes ultimo pedido"
-            ,"febreroa"=>"Mes ultimo pedido","febrerob"=>"Mes ultimo pedido"
-            ,"marzoa"=>"Mes ultimo pedido","marzob"=>"Mes ultimo pedido"
-            ,"abrila"=>"Mes ultimo pedido","abrilb"=>"Mes ultimo pedido"
-            ,"mayoa"=>"Mes ultimo pedido","mayob"=>"Mes ultimo pedido"
-            ,"junioa"=>"Mes ultimo pedido","juniob"=>"Mes ultimo pedido"
-            ,"julioa"=>"Mes ultimo pedido","juliob"=>"Mes ultimo pedido"
-            ,"agostoa"=>"Mes ultimo pedido","agostob"=>"Mes ultimo pedido"
-            ,"setiembrea"=>"Mes ultimo pedido","setiembreb"=>"Mes ultimo pedido"
-            ,"octubrea"=>"Mes ultimo pedido","octubreb"=>"Mes ultimo pedido"
-            ,"noviembrea"=>"Mes ultimo pedido","noviembreb"=>"Mes ultimo pedido"
-            ,"diciembrea"=>"Mes ultimo pedido","diciembreb"=>"Mes ultimo pedido"
+            ,"id"=>"Id"
+            ,"asesor"=>"Asesor"
+            ,"nombre"=>"Nombre"
+            ,"dni"=>"DNI"
+            ,"celular"=>"Celular"
+            ,"icelular"=>"Letra Celular"
+            ,"provincia"=>"Provincia"
+            ,"distrito"=>"Distrito"
+            ,"direccion"=>"Direccion"
+            ,"referencia"=>"Referencia"
+            ,"porcentajefsb"=>"Fisico sin banca"
+            ,"porcentajefb"=>"Fisico con banca"
+            ,"porcentajeesb"=>"Electronica sin banca"
+            ,"porcentajeeb"=>"Electronica con banca"
+            ,"deuda"=>"Deuda"
+            ,"deposito"=>"Deposito"
+            ,"fecha"=>"Fecha"
+            ,"fecha_dia"=>"Dia"
+            ,"fecha_mes"=>"Mes"
+            ,"fecha_anio"=>"Año"
+            ,"codigo"=>"Codigo"
+            ,"situacion"=>"Situacion"
+            ,"estadopedido"=>"Estado pedido"
+            ,"pidio"=>"Pidio"
+            ,"estado"=>"Estado"
+            ,"eneroa"=>"Enero ".(self::$anio),"enerob"=>"Enero ".(self::$anio+1)
+            ,"febreroa"=>"Febrero ".(self::$anio),"febrerob"=>"Febrero ".(self::$anio+1)
+            ,"marzoa"=>"Marzo ".(self::$anio),"marzob"=>"Marzo ".(self::$anio+1)
+            ,"abrila"=>"Abril ".(self::$anio),"abrilb"=>"Abril ".(self::$anio+1)
+            ,"mayoa"=>"Mayo ".(self::$anio),"mayob"=>"Mayo ".(self::$anio+1)
+            ,"junioa"=>"Junio ".(self::$anio),"juniob"=>"Junio ".(self::$anio+1)
+            ,"julioa"=>"Julio ".(self::$anio),"juliob"=>"Julio ".(self::$anio+1)
+            ,"agostoa"=>"Agosto ".(self::$anio),"agostob"=>"Agosto ".(self::$anio+1)
+            ,"setiembrea"=>"Setiembre ".(self::$anio),"setiembreb"=>"Setiembre ".(self::$anio+1)
+            ,"octubrea"=>"Octubre ".(self::$anio),"octubreb"=>"Octubre ".(self::$anio+1)
+            ,"noviembrea"=>"Noviembre ".(self::$anio),"noviembreb"=>"Noviembre ".(self::$anio+1)
+            ,"diciembrea"=>"Diciembre ".(self::$anio),"diciembreb"=>"Diciembre ".(self::$anio+1)
         ];
     }
     public function columnWidths(): array
