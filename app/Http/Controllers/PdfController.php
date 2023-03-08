@@ -321,7 +321,7 @@ class PdfController extends Controller
       //$html_mes=$periodo_origen->addMonths($i)->format('Y-M');
       $periodo_origen=Carbon::parse($fp->created_at)->startOfMonth();
       $mes_artificio=$periodo_origen->addMonths($i)->subMonth();
-      $mes_actual_artificio=Carbon::now();
+      //$mes_actual_artificio=Carbon::now();
 
         $total_pagado_mespasado = Pedido::query()
             ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
@@ -332,7 +332,7 @@ class PdfController extends Controller
             ->where('pedidos.pago','1')
             ->where('pedidos.pagado','2')
             ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
-            ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $mes_actual_artificio->clone()->endOfDay())
+            //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $mes_actual_artificio->clone()->endOfDay())
             ->where('pago_pedidos.estado', 1)
             ->where('pago_pedidos.pagado', 2)
             ->count();
