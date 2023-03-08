@@ -156,18 +156,19 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
             ,"estadopedido"=>"Estado pedido"
             ,"pidio"=>"Pidio"
             ,"estado"=>"Estado"
-            ,"eneroa"=>"Enero ".(self::$anio),"enerob"=>"Enero ".(self::$anio+1)
-            ,"febreroa"=>"Febrero ".(self::$anio),"febrerob"=>"Febrero ".(self::$anio+1)
-            ,"marzoa"=>"Marzo ".(self::$anio),"marzob"=>"Marzo ".(self::$anio+1)
-            ,"abrila"=>"Abril ".(self::$anio),"abrilb"=>"Abril ".(self::$anio+1)
-            ,"mayoa"=>"Mayo ".(self::$anio),"mayob"=>"Mayo ".(self::$anio+1)
-            ,"junioa"=>"Junio ".(self::$anio),"juniob"=>"Junio ".(self::$anio+1)
-            ,"julioa"=>"Julio ".(self::$anio),"juliob"=>"Julio ".(self::$anio+1)
-            ,"agostoa"=>"Agosto ".(self::$anio),"agostob"=>"Agosto ".(self::$anio+1)
-            ,"setiembrea"=>"Setiembre ".(self::$anio),"setiembreb"=>"Setiembre ".(self::$anio+1)
-            ,"octubrea"=>"Octubre ".(self::$anio),"octubreb"=>"Octubre ".(self::$anio+1)
-            ,"noviembrea"=>"Noviembre ".(self::$anio),"noviembreb"=>"Noviembre ".(self::$anio+1)
-            ,"diciembrea"=>"Diciembre ".(self::$anio),"diciembreb"=>"Diciembre ".(self::$anio+1)
+            ,"eneroa"=>"Enero ".(self::$anio)
+            ,"enerob"=>"Enero ".(intval(self::$anio)+1)
+            ,"febreroa"=>"Febrero ".(self::$anio),"febrerob"=>"Febrero ".(intval(self::$anio)+1)
+            ,"marzoa"=>"Marzo ".(self::$anio),"marzob"=>"Marzo ".(intval(self::$anio)+1)
+            ,"abrila"=>"Abril ".(self::$anio),"abrilb"=>"Abril ".(intval(self::$anio)+1)
+            ,"mayoa"=>"Mayo ".(self::$anio),"mayob"=>"Mayo ".(intval(self::$anio)+1)
+            ,"junioa"=>"Junio ".(self::$anio),"juniob"=>"Junio ".(intval(self::$anio)+1)
+            ,"julioa"=>"Julio ".(self::$anio),"juliob"=>"Julio ".(intval(self::$anio)+1)
+            ,"agostoa"=>"Agosto ".(self::$anio),"agostob"=>"Agosto ".(intval(self::$anio)+1)
+            ,"setiembrea"=>"Setiembre ".(self::$anio),"setiembreb"=>"Setiembre ".(intval(self::$anio)+1)
+            ,"octubrea"=>"Octubre ".(self::$anio),"octubreb"=>"Octubre ".(intval(self::$anio)+1)
+            ,"noviembrea"=>"Noviembre ".(self::$anio),"noviembreb"=>"Noviembre ".(intval(self::$anio)+1)
+            ,"diciembrea"=>"Diciembre ".(self::$anio),"diciembreb"=>"Diciembre ".(intval(self::$anio)+1)
         ];
     }
     public function columnWidths(): array
