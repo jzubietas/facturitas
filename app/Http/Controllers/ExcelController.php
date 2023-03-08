@@ -36,6 +36,7 @@ use App\Exports\SobresRutaEnvioExport;
 use App\Exports\Templates\PlantillaExportBasefriaMultiple;
 use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
+use App\Exports\Templates\PlantillaExportClientesReporteMultiple;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportPedidoMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
@@ -183,6 +184,13 @@ class ExcelController extends Controller
         return (new PlantillaExportClientesdosmesesMultiple())
             ->download('Lista de Clientes_pedidos_2_meses.xlsx');
     }
+
+    public function clientesReporteMultipleExcel(Request $request)
+    {
+        return (new PlantillaExportClientesReporteMultiple($request->situacion,'2022'))
+            ->download('Lista de Clientes Reporte.xlsx');
+    }
+
     public function clientesFourMonthAgoExcel(Request $request)
     {
         return (new PlantillaExportClientescuatromesesMultiple())
