@@ -790,7 +790,9 @@
             Swal.fire('Error', 'No se puede ingresar una captura vacia', 'warning');
             return false;
           }
-        } else if (e.target.id == 'form-correccionpedido-f') {
+        }
+        else if (e.target.id == 'form-correccionpedido-f')
+        {
           let cant_sustento_f = $("textarea[name='sustento-f']").val().length;
           dataForm_f.sustento_f = $("textarea[name='sustento-f']").val()
           let cant_facturas_f = $('input[name="correcion_f_facturas[]"]')[0].files.length
@@ -809,7 +811,9 @@
             Swal.fire('Error', 'No se puede ingresar un detalle vacio', 'warning');
             return false;
           }
-        } else if (e.target.id == 'form-correccionpedido-g') {
+        }
+        else if (e.target.id == 'form-correccionpedido-g')
+        {
           let cant_sustento_g = $("textarea[name='sustento-g']").val().length
           dataForm_g.sustento_g = $("textarea[name='sustento-g']").val()
           let cant_adjuntos_g = $('input[name="correcion_g_adjuntos[]"]')[0].files.length
@@ -826,7 +830,9 @@
             Swal.fire('Error', 'No se puede ingresar un detalle vacio', 'warning');
             return false;
           }
-        } else if (e.target.id == 'form-correccionpedido-b') {
+        }
+        else if (e.target.id == 'form-correccionpedido-b')
+        {
           let cant_sustento_b = $("textarea[name='sustento-b']").val().length;
           dataForm_b.sustento_b = $("textarea[name='sustento-b']").val()
           let cant_adjuntos_b = $('input[name="correcion_b_adjuntos[]"]')[0].files.length

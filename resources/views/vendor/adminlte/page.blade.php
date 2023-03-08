@@ -98,6 +98,7 @@
         let dataForm_agregarcontacto_cno = {};
         let dataForm_agregarcontacto_b = {};
         let dataForm_agregarcontacto_cnu = {};
+
         function insertContador(child, dotClass, value) {
           var parent = $(child).parent();
           var epa = parent.find(dotClass);
@@ -115,6 +116,9 @@
                 }
             });
 
+          $('#modal_imagen_cliente').on('show.bs.modal', function (event) {
+            console.log('SAPE');
+          });
 
           tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
             responsive: true,
@@ -180,10 +184,10 @@
                   data: 'nombre_asesor'
                 },
                 {
-                  nane : 'celular'
+                  nane : 'nombres_cliente'
                 },
                 {
-                  data: 'nombres_cliente'
+                  data: 'foto'
                 },
                 {data: 'nombre_contacto'},
                 {
@@ -234,7 +238,6 @@
             }
 
           window.ocultar_div_modal_agregarcontacto = function () {
-            console.log("ocultar div para contacto")
             $("#modal-agregarcontacto-n-container").hide();
             $("#form-agregarcontacto-n input").val("");
 
@@ -268,6 +271,27 @@
             })
           })
 
+          window.document.onpaste = function (event) {
+            var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            console.log(items);
+            console.log((event.clipboardData || event.originalEvent.clipboardData));
+            var files = []
+            for (index in items) {
+              var item = items[index];
+              if (item.kind === 'file') {
+                // adds the file to your dropzone instance
+                var file = item.getAsFile()
+                files.push(file)
+              }
+            }
+            if (files.length > 0) {
+              $('#form-correccionpedido-pc').find('.result_picture').css('display', 'block')
+              console.log(URL.createObjectURL(files[0]))
+              $('#form-correccionpedido-pc').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+              dataForm_agregarcontacto_b.agregarcontacto_b_captura = files[0]
+            }
+          }
+
           $(document).on("submit", "form.agregarcontacto", function (e) {
             e.preventDefault();
             var form = null;
@@ -276,38 +300,47 @@
             {
               case 'form-agregarcontacto-b':
                 console.log('MAYIMBE');
-                let cant_cliente_agregarcontacto_b = $("select[name='cliente_agregarcontacto-b']").val().length;
-                dataForm_agregarcontacto_b.cliente_agregarcontacto_b = $("select[name='cliente_agregarcontacto-b']").val()
+                let cant_txtSustentoBloqueo= $("textarea[name='txtSustentoBloqueo']").val().length;
+                dataForm_agregarcontacto_b.txtSustentoBloqueo = $("textarea[name='txtSustentoBloqueo']").val()
 
-                let cant_sustento_agregarcontacto_b = $("textarea[name='sustento-agregarcontacto_b']").val().length;
-                dataForm_agregarcontacto_b.sustento_agregarcontacto_b = $("textarea[name='sustento-agregarcontacto_b']").val();
-
-                let cant_nro_contacto_agregarcontacto_b = $("input[name='nro_contacto_agregarcontacto_b']").val().length;
-                dataForm_agregarcontacto_b.nro_contacto_agregarcontacto_b = $("input[name='nro_contacto_agregarcontacto_b']").val();
-                if(cant_cliente_agregarcontacto_b==0)
-                {console.log('no debiste');
-                  Swal.fire('Error', 'No se puede seleccionar un cliente vacio', 'warning').then(function () {
-                    $("select[name='cliente_agregarcontacto-b']").focus()
-                  });
-                  return false;
-                }
-                else if (cant_sustento_agregarcontacto_b == 0) {console.log('amar mas el dinero');
+                if (cant_txtSustentoBloqueo == 0) {
                   Swal.fire('Error', 'No se puede ingresar un sustento vacio', 'warning').then(function () {
                     console.log("before")
-                    $("textarea[name='sustento-pc']").focus()
+                    $("textarea[name='txtSustentoBloqueo']").focus()
                   });
                   return false;
                 }
-                else if (cant_nro_contacto_agregarcontacto_b == 0) { console.log('Se que ha algo en ti');
-                  Swal.fire('Error', 'No se puede ingresar un contacto vacio', 'warning').then(function () {
-                    console.log("before")
-                    $("input[name='nro_contacto_agregarcontacto_b']").focus()
-                  });
+                if (dataForm_agregarcontacto_b.agregarcontacto_b_captura === undefined) {
+                  Swal.fire('Error', 'No se puede ingresar una captura vacia', 'warning');
                   return false;
                 }
+
+                var cliente_id= $('#cbxClienteBloqueo').val();
+                var sustentoBloqueo= $('#txtSustentoBloqueo').val();
+
+                var formBloqueos = new FormData();
+                formBloqueos.append("cliente_id", cliente_id);
+                formBloqueos.append("sustentoBloqueo", sustentoBloqueo);
+                formBloqueos.append("agregarcontacto_b_captura", dataForm_agregarcontacto_b.agregarcontacto_b_captura );
+
+                $.ajax({
+                  processData: false,
+                  contentType: false,
+                  type: 'POST',
+                  url: "{{ route('solicitabloqueocliente') }}",
+                  data: formBloqueos,
+                  success: function (data) {
+                    console.log('BLoqueando',data);
+                    Swal.fire('Notificacion', 'Se solicito el bloqueo del contacto correctamente.', 'success');
+                    $('#cbxClienteBloqueo').val('-1');
+                    $('#txtSustentoBloqueo').val('');
+                    $('#form-agregarcontacto-b').find('.result_picture>img').attr('src', "")
+                    dataForm_agregarcontacto_b.agregarcontacto_b_captura = ""
+                    $('#cbxClienteBloqueo').html(data.html).selectpicker("refresh");
+                  }
+                });
                 break;
               case 'form-agregarcontacto-n':
-                console.log('casi');
                 var cliente_id= $('#cbxClienteAgregaNuevo').val();
                 var contacto_nombre= $('#txtNombreContactoNuevo').val();
                 $.ajax({
@@ -315,16 +348,84 @@
                   method: 'POST',
                   data:{cliente_id:cliente_id,contacto_nombre:contacto_nombre},
                   success: function (data) {
-                    console.log('data Controller',data);
                     Swal.fire('Notificacion', 'Se guardo el contacto correctamente.', 'success');
                     $('#cbxClienteAgregaNuevo').val('-1');
                     $('#txtNombreContactoNuevo').val('');
                     $('#cbxClienteAgregaNuevo').html(data.html).selectpicker("refresh");
-                    /*$("#modal-agregarcontacto-n-container").show();*/
                   }
                 });
                 break;
-            } console.log('Finaloiza switch')
+              case 'form-agregarcontacto-cno':
+                var cno_cliente_id= $('#cbxCambiaNombre').val();
+                var cno_cambio_nombre= $('#txtCambiaNombre').val();
+                if (cno_cliente_id == -1) {
+                  Swal.fire('Error', 'Seleccione un cliente', 'warning').then(function () {
+                    $("select[name='cbxCambiaNombre']").focus()
+                  });
+                  return false;
+                }
+
+                if (cno_cambio_nombre == '') {
+                  Swal.fire('Error', 'No se puede enviar el nombre vacio', 'warning').then(function () {
+                    console.log("before")
+                    $("text[name='txtCambiaNombre']").focus()
+                  });
+                  return false;
+                }
+                var formCambioNombre = new FormData();
+                formCambioNombre.append("cno_cliente_id", cno_cliente_id);
+                formCambioNombre.append("cno_cambio_nombre", cno_cambio_nombre);
+                $.ajax({
+                  processData: false,
+                  contentType: false,
+                  url: "{{ route('cambiarnombrecontacto') }}",
+                  method: 'POST',
+                  data:formCambioNombre,
+                  success: function (data) {
+                    Swal.fire('Notificacion', 'Se solicito el cambio de nombre correctamente.', 'success');
+                    $('#cbxCambiaNombre').val('-1');
+                    $('#txtCambiaNombre').val('');
+                    $('#cbxCambiaNombre').html(data.html).selectpicker("refresh");
+                  }
+                });
+                break;
+
+              case 'form-agregarcontacto-cnu':
+                var cnu_cliente_id= $('#cbxCambiaNumero').val();
+                var cnu_cambio_numero= $('#txtCambioNumeroNuevo').val();
+                if (cnu_cliente_id == -1) {
+                  Swal.fire('Error', 'Seleccione un cliente', 'warning').then(function () {
+                    $("select[name='cbxCambiaNumero']").focus()
+                  });
+                  return false;
+                }
+
+                if (cnu_cambio_numero == '') {
+                  Swal.fire('Error', 'No se puede enviar el numero vacio', 'warning').then(function () {
+                    console.log("before")
+                    $("text[name='txtCambioNumeroNuevo']").focus()
+                  });
+                  return false;
+                }
+                var formCambioNumero = new FormData();
+                formCambioNumero.append("cnu_cliente_id", cnu_cliente_id);
+                formCambioNumero.append("cnu_cambio_numero", cnu_cambio_numero);
+                $.ajax({
+                  processData: false,
+                  contentType: false,
+                  url: "{{ route('cambiarnumerocontacto') }}",
+                  method: 'POST',
+                  data:formCambioNumero,
+                  success: function (data) {
+                    Swal.fire('Notificacion', 'Se solicito el cambio de numero correctamente.', 'success');
+                    $('#cbxCambiaNumero').val('-1');
+                    $('#txtCambioNumeroAnterior').val('');
+                    $('#txtCambioNumeroNuevo').val('');
+                    $('#cbxCambiaNumero').html(data.html).selectpicker("refresh");
+                  }
+                });
+                break;
+            }
 
           });
 
@@ -339,7 +440,6 @@
                     url: "{{ route('clientecomboagregarcontacto') }}",
                     method: 'POST',
                     success: function (data) {
-                      console.log(data)
                       $('#cbxClienteAgregaNuevo').html(data.html).selectpicker("refresh");
                       $("#modal-agregarcontacto-n-container").show();
                     }
@@ -350,8 +450,7 @@
                     url: "{{ route('clientecomboagregarcontacto') }}",
                     method: 'POST',
                     success: function (data) {
-                      console.log(data)
-                      $('#cliente_agregarcontacto_cno').html(data.html).selectpicker("refresh");
+                      $('#cbxCambiaNombre').html(data.html).selectpicker("refresh");
                       $("#modal-agregarcontacto-cno-container").show();
                     }
                   });
@@ -361,8 +460,7 @@
                     url: "{{ route('clientecomboagregarcontacto') }}",
                     method: 'POST',
                     success: function (data) {
-                      console.log(data)
-                      $('#cliente_agregarcontacto_b').html(data.html).selectpicker("refresh");
+                      $('#cbxClienteBloqueo').html(data.html).selectpicker("refresh");
                       $("#modal-agregarcontacto-b-container").show();
                     }
                   });
@@ -372,8 +470,7 @@
                     url: "{{ route('clientecomboagregarcontacto') }}",
                     method: 'POST',
                     success: function (data) {
-                      console.log(data)
-                      $('#cliente_agregarcontacto_cnu').html(data.html).selectpicker("refresh");
+                      $('#cbxCambiaNumero').html(data.html).selectpicker("refresh");
                       $("#modal-agregarcontacto-cnu-container").show();
                     }
                   });
@@ -382,6 +479,10 @@
 
             })
 
+          $("#cbxCambiaNumero").on("change", function () {
+            var valcelular = $("option[value=" + $(this).val() + "]", this).attr('valcelular');
+            $('#txtCambioNumeroAnterior').val(valcelular)
+          });
 
           //btn_componente-1
           $('#modal-annuncient-1').on('show.bs.modal', function (event) {
@@ -531,8 +632,8 @@
               columns: [
                 {data: 'tipo_insert', name: 'tipo_insert'},
                 {data: 'codigo_asesor', name: 'codigo_asesor'},
-                {data: 'celular', name: 'celular',},
-                {data: 'nombres_cliente', name: 'nombre_cliente',},
+                {data: 'nombres_cliente', name: 'nombres_cliente',},
+                {data: 'foto', name: 'foto',},
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
                 {data: 'action', name: 'action',},
               ],

@@ -4,7 +4,7 @@
     <ul class="list-group">
 
         <li class="list-group-item text-wrap">
-          <h6 class="alert alert-warning text-center font-weight-bold">
+          <h6 class="alert alert-info text-center font-weight-bold">
             <b>Elegir cliente <span class="text-danger">(Obligatorio):</span></b>
           </h6>
 
@@ -15,7 +15,7 @@
         </li>
 
         <li class="list-group-item text-wrap">
-            <h6 class="alert alert-warning text-center font-weight-bold">
+            <h6 class="alert alert-info text-center font-weight-bold">
                 <b>Numero de contacto <span class="text-danger">(Obligatorio):</span></b>
             </h6>
             <input name="txtNombreContactoNuevo" id="txtNombreContactoNuevo" class="form-control w-100"

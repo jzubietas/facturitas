@@ -737,11 +737,7 @@ class OperacionController extends Controller
                 ->WhereIn('users.operario', $operarios)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
+                )
                 ->pluck('users.identificador');
 
             $pedidos->WhereIn('u.identificador', $asesores);
