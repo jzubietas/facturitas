@@ -209,7 +209,6 @@ class DashboardController extends Controller
                 ->where('user_id', $asesor->id)
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
-            //dd($asesor->id.' '.$fechametames->format('Y').' '.$fechametames->format('m') );
 
             $metatotal = (float)$meta_calculo_row->meta_pedido;
             $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
@@ -522,8 +521,8 @@ class DashboardController extends Controller
               <tr class="responsive-table">
                   <th class="col-lg-4 col-md-12 col-sm-12">';
 
-            $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold"
-                    style="display:flex; align-items: center;height: 40px !important; color: black !important;">
+            $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
+                    style="display:flex; align-items: center; color: black !important;">
                     TOTAL DE PEDIDOS DEL DIA: ' . $object_totales['pedidos_dia'] . ' </span>';
 
             $html .= '
@@ -537,8 +536,8 @@ class DashboardController extends Controller
                  aria-valuenow="' . $object_totales['progress_pagos'] . '"
                  aria-valuemin="0" aria-valuemax="100"></div>';
             else if ($object_totales['progress_pagos'] > 70)
-                $html .= '<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
-                 style="height:40px; width: 70%"
+                $html .= '<div class="progress-bar bg-warning rounded  h-60-res height-bar-progress" role="progressbar"
+                 style="width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
@@ -579,28 +578,28 @@ class DashboardController extends Controller
             $html .= ' </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
-                <div class="progress rounded" style="height: 40px !important;">';
+                <div class="progress rounded height-bar-progress">';
 
             if ($object_totales['progress_pedidos'] >= 80)
-                $html .= '<div class="progress-bar bg-success rounded" role="progressbar"
-                 style="height:40px; width: ' . $object_totales['progress_pagos'] . '%;background: #03af03;"
+                $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
+                 style="width: ' . $object_totales['progress_pagos'] . '%;background: #03af03;"
                  aria-valuenow="' . $object_totales['progress_pagos'] . '"
                  aria-valuemin="0" aria-valuemax="100"></div>';
             else if ($object_totales['progress_pedidos'] > 70)
-                $html .= '<div class="progress-bar bg-warning rounded" role="progressbar"
-                 style="height:40px; width: 70%"
+                $html .= '<div class="progress-bar bg-warning rounded height-bar-progress" role="progressbar"
+                 style="width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
-            <div class="progress-bar rounded" role="progressbar"
-                 style="height:40px !important; width: ' . ($object_totales['progress_pedidos'] - 70) . '%;
+            <div class="progress-bar rounded height-bar-progress" role="progressbar"
+                 style="width: ' . ($object_totales['progress_pedidos'] - 70) . '%;
              background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
                  aria-valuenow="' . ($object_totales['progress_pedidos'] - 70) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
             else if ($object_totales['progress_pedidos'] > 50)
-                $html .= '<div class="progress-bar bg-warning" role="progressbar"
-                 style="height:40px;width: 70%"
+                $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
+                 style="width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
@@ -636,9 +635,10 @@ class DashboardController extends Controller
                     <tr class="responsive-table">
                         <th class="col-lg-4 col-md-12 col-sm-12">';
             if (($count_asesor[46]['pedidos_dia']) == 0) {
-                $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO LUIS: ' . $count_asesor[46]['pedidos_dia'] . ' </span>';
-            } else {
-                $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO LUIS: ' . $count_asesor[46]['pedidos_dia'] . ' </span>';
+                $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress" style="display:flex; align-items: center; color: black !important;">  PEDIDOS DE ENCARGADO LUIS: ' . $count_asesor[46]['pedidos_dia'] . ' </span>';
+            }
+            else {
+                $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress" style="display:flex; align-items: center; color: black !important;">  PEDIDOS DE ENCARGADO LUIS: ' . $count_asesor[46]['pedidos_dia'] . ' </span>';
             }
             $html .= '        </th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
@@ -650,7 +650,8 @@ class DashboardController extends Controller
                          style="width: 0%;background: #03af03;"
                          aria-valuenow="0"
                          aria-valuemin="0" aria-valuemax="100"></div>';
-            } else {
+            }
+            else {
                 if (($count_asesor[46]['progress_pagos']) >= 80)
                     $html .= '<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
                          style="width: ' . round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado']) * 100, 2) . '%;background: #03af03;"
@@ -658,8 +659,8 @@ class DashboardController extends Controller
                          aria-valuemin="0" aria-valuemax="100"></div>';
 
                 else if (round(($count_asesor[46]['total_pagado'] / (($count_asesor[46]['total_pedido_mespasado'] > 0) ? $count_asesor[46]['total_pedido_mespasado'] : '')) * 100, 0) > 70)
-                    $html .= '<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
-                         style="height:40px; width: 70%"
+                    $html .= '<div class="progress-bar bg-warning rounded  h-60-res height-bar-progress" role="progressbar"
+                         style="width: 70%"
                          aria-valuenow="70"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
@@ -670,18 +671,18 @@ class DashboardController extends Controller
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
                 else if (round(($count_asesor[46]['total_pagado'] / (($count_asesor[46]['total_pedido_mespasado'] > 0) ? $count_asesor[46]['total_pedido_mespasado'] : '')) * 100, 0) > 50)
-                    $html .= '<div class="progress-bar bg-warning" role="progressbar"
+                    $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
                        style="width: 70%"
                        aria-valuenow="70"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>';
                 else if (round(($count_asesor[46]['total_pagado'] / (($count_asesor[46]['total_pedido_mespasado'] > 0) ? $count_asesor[46]['total_pedido_mespasado'] : '')) * 100, 0) > 40)
-                    $html .= '<div class="progress-bar bg-danger h-60-res" role="progressbar"
+                    $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
                        style="width: 40%"
                        aria-valuenow="70"
                        aria-valuemin="0"
                        aria-valuemax="100"></div>
-                      <div class="progress-bar h-60-res" role="progressbar"
+                      <div class="progress-bar h-60-res height-bar-progress" role="progressbar"
                            style="width: ' . (round($count_asesor[46]['total_pedido_mespasado'] / $count_asesor[46]['total_pagado'] * 100, 2) - 40) . '%;
                        background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
                            aria-valuenow="' . (round($count_asesor[46]['total_pedido_mespasado'] / $count_asesor[46]['total_pagado'], 2) - 40) . '"
@@ -695,28 +696,24 @@ class DashboardController extends Controller
                        aria-valuemax="100"></div>';
             }
 
-
             if ($count_asesor[46]['total_pedido_mespasado'] == 0) {
                 $html .= '</div>
                       <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . 0
-                    . '% </b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  %</b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
             } else {
                 $html .= '</div>
                       <div class="position-absolute w-100 text-center rounded" style="top: 10px;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . (round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado']) * 100, 2))
-                    . '% </b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado']) * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
             }
 
-
             $html .= ' </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
-                <div class="progress rounded" style="height: 40px !important;">';
+                <div class="progress rounded height-bar-progress">';
 
             if ($count_asesor[46]['meta'] == 0) {
                 $html .= '<div class="progress-bar bg-danger" role="progressbar"
@@ -724,27 +721,28 @@ class DashboardController extends Controller
                  aria-valuenow="' . (round(0, 2)) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
-            } else {
+            }
+            else {
                 if (round(($count_asesor[46]['total_pedido'] / (($count_asesor[46]['meta'] > 0) ? $count_asesor[46]['meta'] : '')) * 100, 0) >= 80)
-                    $html .= '<div class="progress-bar bg-success rounded" role="progressbar"
-                 style="height:40px; width: ' . round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) . '%;background: #03af03;"
-                 aria-valuenow="' . round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) . '"
+                    $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
+                 style="width: ' . round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) . '%;background: #03af03;"
+                 aria-valuenow="' . round(($count_ases46[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) . '"
                  aria-valuemin="0" aria-valuemax="100"></div>';
                 else if (round(($count_asesor[46]['total_pedido'] / (($count_asesor[46]['meta'] > 0) ? $count_asesor[46]['meta'] : '')) * 100, 0) > 70)
-                    $html .= '<div class="progress-bar bg-warning rounded" role="progressbar"
-                 style="height:40px; width: 70%"
+                    $html .= '<div class="progress-bar bg-warning rounded height-bar-progress" role="progressbar"
+                 style="width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
-            <div class="progress-bar rounded" role="progressbar"
-                 style="height:40px !important; width: ' . (round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) - 70) . '%;
+            <div class="progress-bar rounded height-bar-progress" role="progressbar"
+                 style="width: ' . (round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) - 70) . '%;
              background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
                  aria-valuenow="' . (round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) - 70) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
                 else if (round(($count_asesor[46]['total_pedido'] / (($count_asesor[46]['meta'] > 0) ? $count_asesor[46]['meta'] : '')) * 100, 0) > 50)
-                    $html .= '<div class="progress-bar bg-warning" role="progressbar"
-                 style="height:40px;width: 70%"
+                    $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
+                 style="width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
@@ -773,7 +771,8 @@ class DashboardController extends Controller
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res" style="top: 10px;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pedido'] . '/' . $count_asesor[46]['meta'] . '</span>
     </div>';
-            } else {
+            }
+            else {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res" style="top: 10px;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pedido'] . '/' . $count_asesor[46]['meta'] . '</span>
@@ -791,9 +790,9 @@ class DashboardController extends Controller
                     <tr class="responsive-table">
                         <th class="col-lg-4 col-md-12 col-sm-12">';
             if (($count_asesor[24]['pedidos_dia']) == 0) {
-                $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLA: ' . $count_asesor[24]['pedidos_dia'] . ' </span>';
+                $html .= '<span class="px-4 pt-1 pb-1 bg-red text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress" style="display:flex; align-items: center; color: black !important;">  PEDIDOS DE ENCARGADO PAOLA: ' . $count_asesor[24]['pedidos_dia'] . ' </span>';
             } else {
-                $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" style="display:flex; align-items: center;height: 40px !important; color: black !important;">  PEDIDOS DE ENCARGADO PAOLA: ' . $count_asesor[24]['pedidos_dia'] . ' </span>';
+                $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress" style="display:flex; align-items: center; color: black !important;">  PEDIDOS DE ENCARGADO PAOLA: ' . $count_asesor[24]['pedidos_dia'] . ' </span>';
             }
 
             $html .= '        </th>
@@ -813,8 +812,8 @@ class DashboardController extends Controller
                          aria-valuenow="' . round(($count_asesor[24]['total_pagado'] / $count_asesor[24]['total_pedido_mespasado']) * 100, 2) . '"
                          aria-valuemin="0" aria-valuemax="100"></div>';
                 else if (round(($count_asesor[24]['total_pagado'] / (($count_asesor[24]['total_pedido_mespasado'] > 0) ? $count_asesor[24]['total_pedido_mespasado'] : '')) * 100, 0) > 70)
-                    $html .= '<div class="progress-bar bg-warning rounded  h-60-res" role="progressbar"
-                         style="height:40px; width: 70%"
+                    $html .= '<div class="progress-bar bg-warning rounded  h-60-res height-bar-progress" role="progressbar"
+                         style="width: 70%"
                          aria-valuenow="70"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
@@ -868,7 +867,7 @@ class DashboardController extends Controller
             $html .= ' </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
-                <div class="progress rounded" style="height: 40px !important;">';
+                <div class="progress rounded height-bar-progress">';
 
             if ($count_asesor[24]['meta'] == 0) {
                 $html .= '<div class="progress-bar bg-danger" role="progressbar"
@@ -878,30 +877,30 @@ class DashboardController extends Controller
                  aria-valuemax="100"></div>';
             } else {
                 if (round(($count_asesor[24]['total_pedido'] / ((($count_asesor[24]['meta'] > 0) ? $count_asesor[24]['meta'] : ''))) * 100, 0) >= 80)
-                    $html .= '<div class="progress-bar bg-success rounded" role="progressbar"
-                 style="height:40px; width: ' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta'] * 100), 2) . '%;background: #03af03;"
+                    $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
+                 style="width: ' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta'] * 100), 2) . '%;background: #03af03;"
                  aria-valuenow="' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta']) * 100, 2) . '"
                  aria-valuemin="0" aria-valuemax="100"></div>';
                 else if (round(($count_asesor[24]['total_pedido'] / ((($count_asesor[24]['meta'] > 0) ? $count_asesor[24]['meta'] : ''))) * 100, 0) > 70)
-                    $html .= '<div class="progress-bar bg-warning rounded" role="progressbar"
-                 style="height:40px; width: 70%"
+                    $html .= '<div class="progress-bar bg-warning rounded height-bar-progress" role="progressbar"
+                 style="width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
-            <div class="progress-bar rounded" role="progressbar"
-                 style="height:40px !important; width: ' . (round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta'] * 100), 2)) . '%;
+            <div class="progress-bar rounded height-bar-progress" role="progressbar"
+                 style="width: ' . (round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta'] * 100), 2)) . '%;
              background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
                  aria-valuenow="' . (round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta']) * 100, 2) - 70) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
                 else if (round(($count_asesor[24]['total_pedido'] / ((($count_asesor[24]['meta'] > 0) ? $count_asesor[24]['meta'] : ''))) * 100, 0) > 50)
-                    $html .= '<div class="progress-bar bg-warning" role="progressbar"
-                 style="height:40px;width: 70%"
+                    $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
+                 style="width: 70%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
                 else if (round(($count_asesor[24]['total_pedido'] / ((($count_asesor[24]['meta'] > 0) ? $count_asesor[24]['meta'] : ''))) * 100, 0) > 40)
-                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                    $html .= '<div class="progress-bar bg-danger height-bar-progress" role="progressbar"
                  style="width: 40%"
                  aria-valuenow="70"
                  aria-valuemin="0"
@@ -980,7 +979,7 @@ class DashboardController extends Controller
                 if ($data["progress_pagos"] >= 100) {
                     $html .= ' <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -992,7 +991,7 @@ class DashboardController extends Controller
                 } elseif ($data["progress_pagos"] >= 80 && $data["progress_pagos"] < 100) {
                     $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: #8ec117 !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1005,7 +1004,7 @@ class DashboardController extends Controller
                     $html .= '
                     <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1017,7 +1016,7 @@ class DashboardController extends Controller
                 } elseif ($data["progress_pagos"] > 60 && $data["progress_pagos"] <= 70) {
                     $html .= ' <div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1029,7 +1028,7 @@ class DashboardController extends Controller
                 } elseif ($data["progress_pagos"] > 50 && $data["progress_pagos"] <= 60) {
                     $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%) !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1041,7 +1040,7 @@ class DashboardController extends Controller
                 } else {
                     $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
-                                  <div class="progress bg-white rounded" style="height: 40px">
+                                  <div class="progress bg-white rounded height-bar-progress">
                                       <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1063,7 +1062,7 @@ class DashboardController extends Controller
                     if ($data["progress_pedidos"] < 90) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                           <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1075,7 +1074,7 @@ class DashboardController extends Controller
                     } elseif ($data["progress_pedidos"] < 99) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1087,7 +1086,7 @@ class DashboardController extends Controller
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
-                                  <div class="progress bg-white rounded" style="height: 40px">
+                                  <div class="progress bg-white rounded height-bar-progress">
                                       <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1102,7 +1101,7 @@ class DashboardController extends Controller
                     if ($data["progress_pedidos"] >= 90) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(3,175,3,1) 0%, rgba(24,150,24,1) 60%, rgba(0,143,251,1) 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1114,7 +1113,7 @@ class DashboardController extends Controller
                     } elseif ($data["progress_pedidos"] >= 80) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: #8ec117 ; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1126,7 +1125,7 @@ class DashboardController extends Controller
                     } elseif ($data["progress_pedidos"] >= 75) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1138,7 +1137,7 @@ class DashboardController extends Controller
                     } elseif ($data["progress_pedidos"] >= 60) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1150,7 +1149,7 @@ class DashboardController extends Controller
                     } elseif ($data["progress_pedidos"] >= 55) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1163,7 +1162,7 @@ class DashboardController extends Controller
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
-                                  <div class="progress bg-white rounded" style="height: 40px">
+                                  <div class="progress bg-white rounded height-bar-progress">
                                       <div class="rounded" role="progressbar" style="background: #dc3545;width: ' . $data["progress_pedidos"] . '%" ></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1178,7 +1177,7 @@ class DashboardController extends Controller
                     if ($data["progress_pedidos"] <= 100) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
@@ -1190,7 +1189,7 @@ class DashboardController extends Controller
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded" style="height: 40px">
+                                      <div class="progress bg-white rounded height-bar-progress">
                                           <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
