@@ -229,6 +229,8 @@ class DashboardController extends Controller
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->where('pedidos.pago','1')
+                ->where('pedidos.pagado','2')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
                 ->where('pago_pedidos.estado', 1)
