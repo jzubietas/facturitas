@@ -572,7 +572,7 @@ class DashboardController extends Controller
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
             $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="height: 30px !important;font-size: 12px;">
+    <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
 <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
 
             $html .= ' </th>
@@ -622,7 +622,7 @@ class DashboardController extends Controller
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
             $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="height: 30px !important;font-size: 12px;">
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>    </div>';
             $html .= '</th>
               </tr>
@@ -696,13 +696,13 @@ class DashboardController extends Controller
 
             if ($count_asesor[46]['total_pedido_mespasado'] == 0) {
                 $html .= '</div>
-                      <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="height: 30px !important;font-size: 12px;">
+                      <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  %</b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
             } else {
                 $html .= '</div>
-                      <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="height: 30px !important;font-size: 12px;">
+                      <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado']) * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
@@ -765,12 +765,12 @@ class DashboardController extends Controller
 
             if ($count_asesor[46]['meta'] == 0) {
                 $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="height: 30px !important;font-size: 12px;">
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pedido'] . '/' . $count_asesor[46]['meta'] . '</span>
     </div>';
             } else {
                 $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="height: 30px !important;font-size: 12px;">
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pedido'] . '/' . $count_asesor[46]['meta'] . '</span>
     </div>';
             }
@@ -848,13 +848,13 @@ class DashboardController extends Controller
 
             if ($count_asesor[24]['total_pedido_mespasado'] == 0) {
                 $html .= '</div>
-                      <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="font-size: 12px;height: 30px !important;">
+                      <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px;height: 30px !important;">
                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  %</b> - ' . $count_asesor[24]['total_pagado'] . '/' . $count_asesor[24]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
             } else {
                 $html .= '</div>
-                      <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="font-size: 12px;height: 30px !important;">
+                      <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px;height: 30px !important;">
                             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . round(($count_asesor[24]['total_pagado'] / $count_asesor[24]['total_pedido_mespasado']) * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pagado'] . '/' . $count_asesor[24]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
@@ -917,12 +917,12 @@ class DashboardController extends Controller
 
             if ($count_asesor[24]['meta'] == 0) {
                 $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="font-size: 12px; height: 30px !important;">
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px; height: 30px !important;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta'] . '</span>
     </div>';
             } else {
                 $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="font-size: 12px; height: 30px !important;">
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px; height: 30px !important;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta']) * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta'] . '</span>
     </div>';
             }
@@ -1066,7 +1066,7 @@ class DashboardController extends Controller
                                           </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta Quincenal</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
                     } elseif ($data["progress_pedidos"] < 99) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1078,7 +1078,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta Quincenal</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
@@ -1090,7 +1090,7 @@ class DashboardController extends Controller
                                   </div>
                               </div>
                             </div>
-                            <sub class="top-visible">Meta Quincenal</sub>';
+                            <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
                     }
                 } /*META-1*/
                 else if ($data["meta_new"] == 1) {
@@ -1105,7 +1105,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
                     } elseif ($data["progress_pedidos"] >= 80) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1117,7 +1117,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
                     } elseif ($data["progress_pedidos"] >= 75) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1129,7 +1129,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
                     } elseif ($data["progress_pedidos"] >= 60) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1141,7 +1141,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
                     } elseif ($data["progress_pedidos"] >= 55) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1153,7 +1153,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
 
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
@@ -1166,7 +1166,7 @@ class DashboardController extends Controller
                                   </div>
                               </div>
                             </div>
-                            <sub class="top-visible">Meta 1</sub>';
+                            <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
                     }
                 } /*META-2*/
                 else if ($data["meta_new"] == 2) {
@@ -1181,7 +1181,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta 2</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta 2</sub>';
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1193,7 +1193,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible">Meta 2</sub>';
+                                  <sub class="top-visible" style="display: none !important;">Meta 2</sub>';
                     }
                 }
                 $html .= '  </td>
