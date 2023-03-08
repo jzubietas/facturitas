@@ -372,7 +372,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
         );
 
 
-        $event->sheet->styleCells(
+        /*$event->sheet->styleCells(
             'F',
             [
                 'alignment' => [
@@ -383,7 +383,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                     'color' => ['argb' => $color_A]
                 ]
             ]
-        );
+        );*/
 
         $row_cell_=23;
         $letter_cell='W';
