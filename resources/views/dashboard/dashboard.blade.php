@@ -32,11 +32,6 @@
             overflow-x: scroll !important;
           }
         }
-        @media screen and (max-width: 575px){
-          .h-60-res{
-            height: 60px !important;
-          }
-        }
     </style>
 @endpush
 @section('content_header')

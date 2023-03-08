@@ -3951,10 +3951,37 @@ d-none {
 
 /*---------------- MODULO DASHBOARD ----------------*/
 
-#meta height-bar-progress,
-metas_dp height-bar-progress{
+#meta .height-bar-progress,
+#metas_dp .height-bar-progress,
+#supervisor_total .height-bar-progress,
+#supervisor_A .height-bar-progress,
+#metas_total .height-bar-progress{
     height: 30px !important;
 }
+
+#supervisor_total .top-progress-bar-total,
+#supervisor_A .top-progress-bar-total,
+#metas_total .top-progress-bar-total{
+    top: 3px !important;
+}
+
+#supervisor_total .top-meta,
+#supervisor_A .top-meta,
+#metas_total .top-meta{
+    bottom: 5px !important;
+}
+
+#supervisor_total table,
+#supervisor_A table,
+#metas_total table{
+    margin-bottom: 5px !important;
+}
+
+#meta td,
+#metas_dp td{
+    padding: 10px !important;
+}
+
 #meta .list-group .list-group-item,
 metas_dp .list-group .list-group-item {
     background: #a5770f1a !important;
@@ -4086,6 +4113,13 @@ metas_dp .animated-progress {
     #metas_dp .margen {
         margin-left: 4px !important;
         margin-right: 4px !important;
+    }
+}
+
+@media screen and (max-width: 575px){
+    #meta .h-60-res,
+    #metas_dp .h-60-res{
+        height: 60px !important;
     }
 }
 
