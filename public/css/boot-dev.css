@@ -3964,10 +3964,16 @@ d-none {
         width: 100% !important;
     }
 
-    #supervisor_total table tbody tr,
+    /*#supervisor_total table tbody tr,
     #supervisor_A table tbody tr,
     #metas_total table tbody tr{
         width: calc(100%/3) !important;
+    }*/
+
+    #supervisor_total table tbody tr th:nth-child(n),
+    #supervisor_A table tbody tr th:nth-child(n),
+    #metas_total table tbody tr th:nth-child(n){
+        width: 33.33333% !important;
     }
 }
 
