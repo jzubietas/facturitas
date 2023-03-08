@@ -3963,6 +3963,12 @@ d-none {
         max-width: 100% !important;
         width: 100% !important;
     }
+
+    #supervisor_total table tbody tr,
+    #supervisor_A table tbody tr,
+    #metas_total table tbody tr{
+        width: calc(100%/3) !important;
+    }
 }
 
 @media screen and (max-width: 1230px){
