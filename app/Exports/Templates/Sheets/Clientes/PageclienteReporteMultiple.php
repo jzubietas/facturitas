@@ -344,12 +344,19 @@ class PageclienteReporteMultiple extends Export implements WithStyles,WithColumn
         $style_nulo = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
         $style_abandono_reciente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
 
+        $style_V = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_V)
+            )
+        );
+
         $row_cell_=23;
         $letter_cell='W';
         foreach ($event->sheet->getRowIterator() as $row)
         {
             if($row->getRowIndex()==1)continue;
-            $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_abandono);
+            $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
             /*if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
                 $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
