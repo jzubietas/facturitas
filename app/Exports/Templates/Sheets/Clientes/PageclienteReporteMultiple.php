@@ -131,7 +131,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ->pluck('users.identificador');
             $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
         }
-        $clientes=$clientes->limit(10);
+        //$clientes=$clientes->limit(10);
         return $clientes->get();
     }
     public function fields(): array
