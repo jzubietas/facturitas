@@ -63,8 +63,8 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
             ->where('clientes.estado','1')
             ->where('clientes.tipo','1')
             //->whereNotNull('clientes.situacion');
-
-        switch(self::$situacion)
+        $cal_sit=self::$situacion;
+        switch($cal_sit)
             {
                 case 'ABANDONO':
                     $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO','ABANDONO RECIENTE']);
