@@ -147,7 +147,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog- modal-xl" role="document">
+    <div class="modal-dialog modal-dialog- modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <img alt="Dia de la mujer" src="{{ asset('/img/diaMujer.jpg') }}" style="width: 100%">
