@@ -3,26 +3,29 @@
 namespace App\Exports\Templates\Sheets\Clientes;
 
 use App\Abstracts\Export;
-use App\Exports\Templates\Sheets\AfterSheet;
-use App\Exports\Templates\Sheets\Fill;
 use App\Models\Cliente;
-use App\Models\ListadoResultado;
 use App\Models\Pedido;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use Maatwebsite\Excel\Sheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use Illuminate\Http\Request;
+use Maatwebsite\Excel\Concerns\WithStyles;
+
+use \Maatwebsite\Excel\Sheet;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
-class PageclienteReporteMultiple extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteReporteMultiple extends Export implements WithStyles, WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents, WithColumnWidths
 {
     public static $situacion='';
     public static $anio='';
@@ -128,7 +131,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
                 ->pluck('users.identificador');
             $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
         }
-        $clientes=$clientes->limit(10);
+        //$clientes=$clientes->limit(10);
         return $clientes->get();
     }
     public function fields(): array
@@ -215,7 +218,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
     }
     public function title(): string
     {
-        return 'CLIENTES SITUACION '.(self::$anio).' '.(self::$anio+1). ' :: '.(self::$situacion);
+        return 'CLIENTES SITUACION '.(self::$anio).' '.(intval(self::$anio)+1). ' :: '.(self::$situacion);
     }
     public function map($model): array
     {
@@ -329,31 +332,78 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
 
     public static function afterSheet(AfterSheet $event){
 
-        $color_cabeceras='a9def9';
+        $color_R = 'ff5733';
+        $color__ = 'fcf8f2';
+        $color_A = 'faf01c';
+        $color_C = '1cfaf3';
+        $color_AR = '1cfaf3';
+        $color_N = 'e18b16';
+        $color_V = '6acf0c';
 
+        $style_R = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_R)
+            )
+        );
+        $style_AR = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_AR)
+            )
+        );
+        $style__ = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color__)
+            )
+        );
+        $style_A = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_A)
+            )
+        );
+        $style_V = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_V)
+            )
+        );
 
-        $style_recurrente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
-        $style_abandono = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
-        $style_nulo = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
-        $style_abandono_reciente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
+        $event->sheet->styleCells(
+            'A1:AX1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' => '000099 ']
+                ]
+            ]
+        );
 
-        $row_cell_=22;
+        $row_cell_=23;
         $letter_cell='W';
         foreach ($event->sheet->getRowIterator() as $row)
         {
             if($row->getRowIndex()==1)continue;
+            //$event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
             if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recurrente);
-            }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
+                //$event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_R);
+            }
+            else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
             {
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_A);
             }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='NULO')
             {
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_nulo);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style__);
             }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono_reciente);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_AR);
             }
 
 
@@ -379,4 +429,26 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
                     ]
                 ); */
     }
+    public function styles(Worksheet $sheet)
+    {
+        // TODO: Implement styles() method.
+        return [
+            'A' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+            'B' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+            'C' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+        ];
+    }
+
 }

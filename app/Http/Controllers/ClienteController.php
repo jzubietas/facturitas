@@ -2320,4 +2320,24 @@ class ClienteController extends Controller
     ]);
     return $detallecontactos;
   }
+
+  public function listcontadorescontactos(Request $request){
+    $nuevoCliente = DetalleContactos::where('tipo_insert',1)
+      ->select(['detalle_contactos.*']);
+    $nuevoCliente = $nuevoCliente->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('confirmado', 0)->count();
+
+    $cambioNombre = DetalleContactos::where('tipo_insert',2)
+      ->select(['detalle_contactos.*']);
+    $cambioNombre = $cambioNombre->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('confirmado', 0)->count();
+
+    $contbloqueo = DetalleContactos::where('tipo_insert',3)
+      ->select(['detalle_contactos.*']);
+    $contbloqueo = $contbloqueo->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('confirmado', 0)->count();
+
+    $cambioNumero = DetalleContactos::where('tipo_insert',4)
+      ->select(['detalle_contactos.*']);
+    $cambioNumero = $cambioNumero->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('confirmado', 0)->count();
+
+    return response()->json(['nuevoCliente' => $nuevoCliente,'cambioNombre' => $cambioNombre,'contbloqueo' => $contbloqueo,'cambioNumero' => $cambioNumero]);
+  }
 }

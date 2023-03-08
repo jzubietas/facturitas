@@ -46,7 +46,6 @@ Route::middleware(['guest'])->get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
-    Route::get('alertas/listtablecontactos', [AlertaController::class,'listtablecontactos'])->name('alertas.listtablecontactos');
     Route::post('alertas/confirmar', [AlertaController::class,'confirmar'])->name('alertas.confirmar');
     Route::resource('alertas', AlertaController::class);
     Route::any('alertas/cargarstore',[AlertaController::class,'cargarstore'])->name('cargarstore');
@@ -136,6 +135,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('clientecomboagregarcontacto', [ClienteController::class, 'ClienteAgregarContacto'])->name('clientecomboagregarcontacto');
     Route::post('cambiarnombrecontacto', [ClienteController::class,'cambiarnombrecontacto'])->name('cambiarnombrecontacto');
     Route::post('cambiarnumerocontacto', [ClienteController::class,'cambiarnumerocontacto'])->name('cambiarnumerocontacto');
+    Route::get('listcontadorescontactos', [ClienteController::class,'listcontadorescontactos'])->name('listcontadorescontactos');
 
     Route::get('pedidos.recojo', [PedidoController::class, 'pedidosrecojo'])->name('pedidos.recojo');
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside
