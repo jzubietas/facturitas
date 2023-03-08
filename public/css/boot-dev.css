@@ -3965,10 +3965,16 @@ d-none {
     top: 3px !important;
 }
 
-#supervisor_total .top-meta,
+/*#supervisor_total .top-meta,
 #supervisor_A .top-meta,
 #metas_total .top-meta {
     bottom: 5px !important;
+}*/
+
+#supervisor_total .top-visible,
+#supervisor_A .top-visible,
+#metas_total .top-visible {
+    display: none !important;
 }
 
 #supervisor_total table,

@@ -1066,7 +1066,7 @@ class DashboardController extends Controller
                                           </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta Quincenal</sub>';
+                                  <sub class="top-visible">Meta Quincenal</sub>';
                     } elseif ($data["progress_pedidos"] < 99) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1078,7 +1078,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta Quincenal</sub>';
+                                  <sub class="top-visible">Meta Quincenal</sub>';
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
@@ -1090,7 +1090,7 @@ class DashboardController extends Controller
                                   </div>
                               </div>
                             </div>
-                            <sub class="top-meta">Meta Quincenal</sub>';
+                            <sub class="top-visible">Meta Quincenal</sub>';
                     }
                 } /*META-1*/
                 else if ($data["meta_new"] == 1) {
@@ -1105,7 +1105,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta 1</sub>';
+                                  <sub class="top-visible">Meta 1</sub>';
                     } elseif ($data["progress_pedidos"] >= 80) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1117,7 +1117,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta 1</sub>';
+                                  <sub class="top-visible">Meta 1</sub>';
                     } elseif ($data["progress_pedidos"] >= 75) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1129,7 +1129,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta 1</sub>';
+                                  <sub class="top-visible">Meta 1</sub>';
                     } elseif ($data["progress_pedidos"] >= 60) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1141,7 +1141,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta 1</sub>';
+                                  <sub class="top-visible">Meta 1</sub>';
                     } elseif ($data["progress_pedidos"] >= 55) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1153,7 +1153,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta 1</sub>';
+                                  <sub class="top-visible">Meta 1</sub>';
 
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
@@ -1166,7 +1166,7 @@ class DashboardController extends Controller
                                   </div>
                               </div>
                             </div>
-                            <sub class="top-meta">Meta 1</sub>';
+                            <sub class="top-visible">Meta 1</sub>';
                     }
                 } /*META-2*/
                 else if ($data["meta_new"] == 2) {
@@ -1181,7 +1181,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta 2</sub>';
+                                  <sub class="top-visible">Meta 2</sub>';
                     } else {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1193,7 +1193,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-meta">Meta 2</sub>';
+                                  <sub class="top-visible">Meta 2</sub>';
                     }
                 }
                 $html .= '  </td>
