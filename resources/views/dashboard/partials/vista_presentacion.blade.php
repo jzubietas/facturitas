@@ -14,6 +14,17 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog- modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img alt="Dia de la mujer" src="{{ asset('/img/diaMujer.jpg') }}" style="width: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin Modal -->
 
 <div class="row">
 
@@ -73,6 +84,7 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+        $('#exampleModalCenter').modal('show');
       window.cargaNueva = function (entero) {
         console.log(' '+entero)
         var fd=new FormData();
