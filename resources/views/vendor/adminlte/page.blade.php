@@ -279,15 +279,14 @@
             for (index in items) {
               var item = items[index];
               if (item.kind === 'file') {
-                // adds the file to your dropzone instance
                 var file = item.getAsFile()
                 files.push(file)
               }
             }
             if (files.length > 0) {
-              $('#form-correccionpedido-pc').find('.result_picture').css('display', 'block')
+              $('#form-agregarcontacto-b').find('.result_picture').css('display', 'block')
               console.log(URL.createObjectURL(files[0]))
-              $('#form-correccionpedido-pc').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+              $('#form-agregarcontacto-b').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
               dataForm_agregarcontacto_b.agregarcontacto_b_captura = files[0]
             }
           }
@@ -299,7 +298,6 @@
             switch (e.target.id)
             {
               case 'form-agregarcontacto-b':
-                console.log('MAYIMBE');
                 let cant_txtSustentoBloqueo= $("textarea[name='txtSustentoBloqueo']").val().length;
                 dataForm_agregarcontacto_b.txtSustentoBloqueo = $("textarea[name='txtSustentoBloqueo']").val()
 
