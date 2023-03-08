@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -18,11 +19,12 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
-class PageclienteReporteMultiple extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteReporteMultiple extends Export implements WithStyles,WithColumnFormatting,WithColumnWidths
 {
     public static $situacion='';
     public static $anio='';
@@ -386,4 +388,26 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
                     ]
                 ); */
     }
+    public function styles(Worksheet $sheet)
+    {
+        // TODO: Implement styles() method.
+        return [
+            'A' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+            'B' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+            'C' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+        ];
+    }
+
 }
