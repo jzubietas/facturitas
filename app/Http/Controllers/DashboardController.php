@@ -863,7 +863,7 @@ class DashboardController extends Controller
             $html .= ' </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
-                <div class="progress rounded height-bar-progress">';
+                <div class="progress rounded height-bar-progress" style="height: 30px !important">';
 
             if ($count_asesor[24]['meta'] == 0) {
                 $html .= '<div class="progress-bar bg-danger" role="progressbar"
@@ -935,7 +935,7 @@ class DashboardController extends Controller
         } /*IZQUIERDA / DERECHA*/
         else if ($request->ii == 1 || $request->ii == 2) {
 
-            $html .= '<table class="table tabla-metas_pagos_pedidos table-dark" style="background: #e4dbc6; color: #232121">';
+            $html .= '<table class="table tabla-metas_pagos_pedidos table-dark" style="background: #e4dbc6; color: #232121; margin-bottom: 3px !important;">';
             $html .= '<thead>
                 <tr>
                     <th width="8%">Asesor</th>
