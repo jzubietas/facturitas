@@ -41,6 +41,11 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                             DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id and dp3.estado=1 order by dp3.created_at desc limit 1) as anio"),
                             DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id and dp.estado=1 order by dp.created_at desc limit 1) as codigo "),
                             'clientes.situacion',
+
+                            DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - sin banca' limit 1) as porcentajes_1"),
+                            DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - banca' limit 1) as porcentajes_2"),
+                            DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - sin banca' limit 1) as porcentajes_3"),
+                            DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - banca' limit 1) as porcentajes_4"),
                             ])
                     ->where('clientes.estado','1')
                     ->where('clientes.tipo','1')
@@ -100,7 +105,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
             $cont = 0;
 
             foreach($clientes as $cliente){
-                $porcentajefsb = Porcentaje::select('porcentaje')
+                /*$porcentajefsb = Porcentaje::select('porcentaje')
                                             ->where('cliente_id', $cliente->id)
                                             ->where('nombre', 'FISICO - sin banca')
                                             ->first();
@@ -115,7 +120,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                 $porcentajeeb = Porcentaje::select('porcentaje')
                                             ->where('cliente_id', $cliente->id)
                                             ->where('nombre', 'ELECTRONICA - banca')
-                                            ->first();
+                                            ->first();*/
 
                 $eneroa = Pedido::/* select(DB::raw('count(*) as total'))
                             -> */where('estado', '1')
@@ -285,10 +290,10 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                     'distrito' => $cliente->distrito,
                     'direccion' => $cliente->direccion,
                     'referencia' => $cliente->referencia,
-                    'porcentajefsb' => $porcentajefsb,
-                    'porcentajefb' => $porcentajefb,
-                    'porcentajeesb' => $porcentajeesb,
-                    'porcentajeeb' => $porcentajeeb,
+                    'porcentajefsb' => $cliente->porcentajes_1,
+                    'porcentajefb' => $cliente->porcentajes_2,
+                    'porcentajeesb' => $cliente->porcentajes_3,
+                    'porcentajeeb' => $cliente->porcentajes_4,
                     'deuda' => $cliente->deuda,
                     'deposito' => $deposito,
                     //'fecha' => date('d-m-Y H:i:s', strtotime($cliente->fecha)),
