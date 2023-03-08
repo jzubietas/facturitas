@@ -3,8 +3,6 @@
 namespace App\Exports\Templates\Sheets\Clientes;
 
 use App\Abstracts\Export;
-use App\Exports\Templates\Sheets\AfterSheet;
-use App\Exports\Templates\Sheets\Fill;
 use App\Models\Cliente;
 use App\Models\ListadoResultado;
 use App\Models\Pedido;
@@ -13,7 +11,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Sheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -215,7 +215,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
     }
     public function title(): string
     {
-        return 'CLIENTES SITUACION '.(self::$anio).' '.(self::$anio+1). ' :: '.(self::$situacion);
+        return 'CLIENTES SITUACION '.(self::$anio).' '.(intval(self::$anio)+1). ' :: '.(self::$situacion);
     }
     public function map($model): array
     {
@@ -347,8 +347,10 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
         foreach ($event->sheet->getRowIterator() as $row)
         {
             if($row->getRowIndex()==1)continue;
-            if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
+            $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_abandono);
+            /*if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
+                $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
                 $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recurrente);
             }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
             {
@@ -359,7 +361,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
             }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
                 $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono_reciente);
-            }
+            }*/
 
 
         }
