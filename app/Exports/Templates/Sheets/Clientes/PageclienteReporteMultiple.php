@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Sheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -331,25 +332,56 @@ class PageclienteReporteMultiple extends Export implements WithStyles,WithColumn
 
     public static function afterSheet(AfterSheet $event){
 
-        $color_cabeceras='a9def9';
+        $color_R = 'ff5733';
+        $color__ = 'fcf8f2';
+        $color_A = 'faf01c';
+        $color_C = '1cfaf3';
+        $color_N = 'e18b16';
         $color_V = '6acf0c';
 
-
-        $style_recurrente = array(
+        $style_R = array(
             'fill' => array(
-                'type'  => Fill::FILL_SOLID,
-                'color' => array('rgb' => $color_cabeceras)
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_R)
             )
         );
-        $style_abandono = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
-        $style_nulo = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
-        $style_abandono_reciente = array('fill' => array('fillType' => Fill::FILL_SOLID,'startColor' => array('argb' => $color_cabeceras)));
-
+        $style__ = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color__)
+            )
+        );
+        $style_A = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_A)
+            )
+        );
+        $style_C = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_C)
+            )
+        );
         $style_V = array(
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => array('argb' => $color_V)
             )
+        );
+
+
+        $event->sheet->styleCells(
+            'F',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' => $color_A]
+                ]
+            ]
         );
 
         $row_cell_=23;
