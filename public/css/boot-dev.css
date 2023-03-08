@@ -3357,107 +3357,7 @@ d-none {
 }
 
 
-/* EFECTO NIEVE */
-
-@-moz-keyframes nieve {
-    from {
-        top: -40px;
-    }
-    to {
-        top: 101%;
-    }
-}
-
-@-webkit-keyframes nieve {
-    from {
-        top: -40px;
-    }
-    to {
-        top: 2000px;
-    }
-}
-
-@keyframes nieve {
-    from {
-        top: -40px;
-    }
-    to {
-        top: 2000px;
-    }
-}
-
-@-moz-keyframes horiz2 {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@-webkit-keyframes horiz2 {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@keyframes horiz2 {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(-70px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@-moz-keyframes horiz {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@-webkit-keyframes horiz {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@keyframes horiz {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
+/*---------------- EFECTO NIEVE ----------------*/
 .tpl-snow > div {
     position: fixed;
     -webkit-animation: ease-in infinite normal;
@@ -3468,9 +3368,11 @@ d-none {
 .tpl-snow > div {
     z-index: 9999999999999;
     width: 30px;
-    height: 30px; /*background-image: url('../imagenes/pica.png');*/
+    height: 30px;
+    background-image: url('../imagenes/pica.png');
     background-repeat: no-repeat;
     background-size: contain;
+    opacity: .2;
     -webkit-animation-name: nieve, horiz;
     -moz-animation-name: nieve, horiz;
     animation-name: nieve, horiz;
@@ -3877,8 +3779,107 @@ d-none {
     animation-delay: .3s;
 }
 
+@-moz-keyframes nieve {
+    from {
+        top: -40px;
+    }
+    to {
+        top: 101%;
+    }
+}
 
-/*ESTILOS RESPONSIVOS*/
+@-webkit-keyframes nieve {
+    from {
+        top: -40px;
+    }
+    to {
+        top: 2000px;
+    }
+}
+
+@keyframes nieve {
+    from {
+        top: -40px;
+    }
+    to {
+        top: 2000px;
+    }
+}
+
+@-moz-keyframes horiz2 {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@-webkit-keyframes horiz2 {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes horiz2 {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-70px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@-moz-keyframes horiz {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@-webkit-keyframes horiz {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes horiz {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+
+/*---------------- ESTILOS RESPONSIVOS ----------------*/
 
 .h-40 {
     height: 40px !important;
