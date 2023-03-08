@@ -61,7 +61,7 @@ class PageclienteReporteMultiple extends Export implements WithColumnFormatting,
                 DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - banca' limit 1) as porcentajeeb"),
             ])
             ->where('clientes.estado','1')
-            ->where('clientes.tipo','1')
+            ->where('clientes.tipo','1');
             //->whereNotNull('clientes.situacion');
         $cal_sit=self::$situacion;
         switch($cal_sit)
