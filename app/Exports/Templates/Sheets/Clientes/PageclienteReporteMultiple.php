@@ -336,6 +336,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
         $color__ = 'fcf8f2';
         $color_A = 'faf01c';
         $color_C = '1cfaf3';
+        $color_AR = '1cfaf3';
         $color_N = 'e18b16';
         $color_V = '6acf0c';
 
@@ -343,6 +344,12 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => array('argb' => $color_R)
+            )
+        );
+        $style_AR = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_AR)
             )
         );
         $style__ = array(
@@ -355,12 +362,6 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => array('argb' => $color_A)
-            )
-        );
-        $style_C = array(
-            'fill' => array(
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_C)
             )
         );
         $style_V = array(
@@ -392,19 +393,19 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             //$event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
             if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
-                $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_V);
+                //$event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_R);
             }
-            /*else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
+            else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
             {
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_A);
             }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='NULO')
             {
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_nulo);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style__);
             }else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono_reciente);
-            }*/
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_AR);
+            }
 
 
         }
