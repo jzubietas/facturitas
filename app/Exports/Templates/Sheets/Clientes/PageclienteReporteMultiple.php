@@ -73,6 +73,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             ->where('clientes.tipo','1');
             //->whereNotNull('clientes.situacion');
         $cal_sit=self::$situacion;
+        //$clientes=$clientes->limit(10);
         switch($cal_sit)
             {
                 case 'ABANDONO':
@@ -133,7 +134,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ->pluck('users.identificador');
             $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
         }
-        $clientes=$clientes->limit(10);
+
         return $clientes->get();
     }
     public function fields(): array
