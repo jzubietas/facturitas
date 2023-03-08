@@ -3955,30 +3955,30 @@ d-none {
 #metas_dp .height-bar-progress,
 #supervisor_total .height-bar-progress,
 #supervisor_A .height-bar-progress,
-#metas_total .height-bar-progress{
+#metas_total .height-bar-progress {
     height: 30px !important;
 }
 
 #supervisor_total .top-progress-bar-total,
 #supervisor_A .top-progress-bar-total,
-#metas_total .top-progress-bar-total{
+#metas_total .top-progress-bar-total {
     top: 3px !important;
 }
 
 #supervisor_total .top-meta,
 #supervisor_A .top-meta,
-#metas_total .top-meta{
+#metas_total .top-meta {
     bottom: 5px !important;
 }
 
 #supervisor_total table,
 #supervisor_A table,
-#metas_total table{
+#metas_total table {
     margin-bottom: 5px !important;
 }
 
 #meta td,
-#metas_dp td{
+#metas_dp td {
     padding: 10px !important;
 }
 
@@ -4066,6 +4066,15 @@ metas_dp .animated-progress {
     align-items: center !important;
 }
 
+@media screen and (max-width: 1500px) {
+    #meta .height-bar-progress,
+    #metas_dp .height-bar-progress,
+    #supervisor_total .height-bar-progress,
+    #supervisor_A .height-bar-progress,
+    #metas_total .height-bar-progress {
+        height: 30px !important;
+    }
+}
 
 @media screen and (max-width: 1440px) {
     #meta .tabla-metas_pagos_pedidos,
@@ -4116,9 +4125,9 @@ metas_dp .animated-progress {
     }
 }
 
-@media screen and (max-width: 575px){
+@media screen and (max-width: 575px) {
     #meta .h-60-res,
-    #metas_dp .h-60-res{
+    #metas_dp .h-60-res {
         height: 60px !important;
     }
 }
@@ -4267,7 +4276,7 @@ metas_dp .animated-progress {
         top: 20px !important;
     }
 
-    #tablaBandejaPedidosPorAtender  td {
+    #tablaBandejaPedidosPorAtender td {
         vertical-align: middle !important;
         text-align: center !important;
     }
@@ -4589,6 +4598,7 @@ metas_dp .animated-progress {
 #tablaOperacionesBandejadeSobres {
     width: 100% !important;
 }
+
 #tablaOperacionesBandejadeSobres td {
     vertical-align: middle !important;
     text-align: center !important;
@@ -4623,11 +4633,11 @@ metas_dp .animated-progress {
 }
 
 @media screen and (max-width: 1500px) {
-    #tablaOperacionesBandejadeSobres th:nth-child(6){
+    #tablaOperacionesBandejadeSobres th:nth-child(6) {
         max-width: 230px !important;
     }
 
-    #tablaOperacionesBandejadeSobres td:nth-child(6) span{
+    #tablaOperacionesBandejadeSobres td:nth-child(6) span {
         white-space: break-spaces !important;
         padding: 8px !important;
     }
