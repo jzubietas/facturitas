@@ -371,19 +371,18 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             )
         );
 
-
-        /*$event->sheet->styleCells(
-            'F',
+        $event->sheet->styleCells(
+            'A1:AX1',
             [
                 'alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' => $color_A]
+                    'color' => ['argb' => '000099 ']
                 ]
             ]
-        );*/
+        );
 
         $row_cell_=23;
         $letter_cell='W';
