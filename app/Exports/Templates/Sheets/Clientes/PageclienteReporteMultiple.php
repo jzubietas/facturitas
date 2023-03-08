@@ -223,6 +223,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
     }
     public function map($model): array
     {
+        $model->deuda=( ($model->deuda==1)? 'SI':'NO' );
         $model->anioa=self::$anio;
         $model->aniob=( intval(self::$anio) +1);
         $model->eneroa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
