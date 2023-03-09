@@ -234,7 +234,7 @@ class UserController extends Controller
 
     public function Llamadastabla(Request $request)
     {
-        $users = User::where('rol', 'Llamadas')
+        $users = User::whereIn('rol', User::ROL_LLAMADAS,User::ROL_COBRANZAS)
             ->where('estado', '1')
             ->orderBy('created_at', 'DESC')
             ->get();
