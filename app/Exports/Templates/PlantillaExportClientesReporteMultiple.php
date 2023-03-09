@@ -7,19 +7,19 @@ class PlantillaExportClientesReporteMultiple implements \Maatwebsite\Excel\Conce
 {
     use Exportable;
 
-    public static $situacion='';
-    public static $anio='';
+    private $situacion='';
+    private  $anio='';
 
     public function __construct($situacion,$anio)
     {
-        self::$situacion=$situacion;
-        self::$anio=$anio;
+        $this->situacion=$situacion;
+        $this->anio=$anio;
     }
 
     public function sheets(): array
     {
         return [
-            new PageclienteReporteMultiple(self::$situacion,self::$anio),
+            new PageclienteReporteMultiple($this->situacion,$this->anio),
         ];
     }
 }

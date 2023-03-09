@@ -39,7 +39,7 @@
         $arr = explode(' ', trim($cadena))
         ?>
         {{$arr[0]}}
-      <sub>Administrador</sub>
+      <sub>{{ Auth::user()->adminlte_desc() }}</sub>
       </p>
 
       {{--PERFIL ROUTE--}}

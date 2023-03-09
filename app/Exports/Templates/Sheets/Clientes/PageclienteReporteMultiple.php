@@ -5,6 +5,7 @@ namespace App\Exports\Templates\Sheets\Clientes;
 use App\Abstracts\Export;
 use App\Models\Cliente;
 use App\Models\Pedido;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
@@ -27,13 +28,13 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 });
 class PageclienteReporteMultiple extends Export implements WithStyles, WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents, WithColumnWidths
 {
-    public static $situacion='';
-    public static $anio='';
+    private $situacion='';
+    private  $anio='';
     public function __construct($situacion,$anio)
     {
         parent::__construct();
-        self::$situacion=$situacion;
-        self::$anio=$anio;
+        $this->situacion=$situacion;
+        $this->anio=$anio;
     }
     public function collection()
     {
@@ -55,7 +56,8 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 'clientes.deuda',
                 DB::raw(" (CASE WHEN clientes.deuda=1 then 'DEBE' else 'CANCELADO' end) as deposito "),
                 'clientes.pidio',
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
+                DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id and dp1.estado=1 order by dp1.created_at desc limit 1) as fecha"),
+                DB::raw("(select DATE_FORMAT(dp0.created_at,'%m') from pedidos dp0 where dp0.cliente_id=clientes.id and dp0.estado=1 order by dp0.created_at desc limit 1) as fechaultimopedido_dia"),
                 DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id and dp2.estado=1 order by dp2.created_at desc limit 1) as fechaultimopedido_mes"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id and dp3.estado=1 order by dp3.created_at desc limit 1) as fechaultimopedido_anio"),
                 DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id and dp.estado=1 order by dp.created_at desc limit 1) as codigo "),
@@ -70,7 +72,8 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             ->where('clientes.estado','1')
             ->where('clientes.tipo','1');
             //->whereNotNull('clientes.situacion');
-        $cal_sit=self::$situacion;
+        $cal_sit=$this->situacion;
+        $clientes=$clientes->limit(10);
         switch($cal_sit)
             {
                 case 'ABANDONO':
@@ -131,7 +134,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ->pluck('users.identificador');
             $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
         }
-        //$clientes=$clientes->limit(10);
+
         return $clientes->get();
     }
     public function fields(): array
@@ -155,27 +158,27 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             ,"deuda"=>"Deuda"
             ,"deposito"=>"Deposito"
             ,"fecha"=>"Fecha"
-            ,"fecha_dia"=>"Dia"
-            ,"fecha_mes"=>"Mes"
-            ,"fecha_anio"=>"Año"
+            ,"fechaultimopedido_dia"=>"Dia"
+            ,"fechaultimopedido_mes"=>"Mes"
+            ,"fechaultimopedido_anio"=>"Año"
             ,"codigo"=>"Codigo"
             ,"situacion"=>"Situacion"
             ,"estadopedido"=>"Estado pedido"
             ,"pidio"=>"Pidio"
             ,"estado"=>"Estado"
-            ,"eneroa"=>"Enero ".(self::$anio)
-            ,"enerob"=>"Enero ".(intval(self::$anio)+1)
-            ,"febreroa"=>"Febrero ".(self::$anio),"febrerob"=>"Febrero ".(intval(self::$anio)+1)
-            ,"marzoa"=>"Marzo ".(self::$anio),"marzob"=>"Marzo ".(intval(self::$anio)+1)
-            ,"abrila"=>"Abril ".(self::$anio),"abrilb"=>"Abril ".(intval(self::$anio)+1)
-            ,"mayoa"=>"Mayo ".(self::$anio),"mayob"=>"Mayo ".(intval(self::$anio)+1)
-            ,"junioa"=>"Junio ".(self::$anio),"juniob"=>"Junio ".(intval(self::$anio)+1)
-            ,"julioa"=>"Julio ".(self::$anio),"juliob"=>"Julio ".(intval(self::$anio)+1)
-            ,"agostoa"=>"Agosto ".(self::$anio),"agostob"=>"Agosto ".(intval(self::$anio)+1)
-            ,"setiembrea"=>"Setiembre ".(self::$anio),"setiembreb"=>"Setiembre ".(intval(self::$anio)+1)
-            ,"octubrea"=>"Octubre ".(self::$anio),"octubreb"=>"Octubre ".(intval(self::$anio)+1)
-            ,"noviembrea"=>"Noviembre ".(self::$anio),"noviembreb"=>"Noviembre ".(intval(self::$anio)+1)
-            ,"diciembrea"=>"Diciembre ".(self::$anio),"diciembreb"=>"Diciembre ".(intval(self::$anio)+1)
+            , "eneroa"=> sprintf("Enero %s", ($this->anio))
+            ,"enerob"=>"Enero ".(intval($this->anio)+1)
+            ,"febreroa"=>"Febrero ".($this->anio),"febrerob"=>"Febrero ".(intval($this->anio)+1)
+            ,"marzoa"=>"Marzo ".($this->anio),"marzob"=>"Marzo ".(intval($this->anio)+1)
+            ,"abrila"=>"Abril ".($this->anio),"abrilb"=>"Abril ".(intval($this->anio)+1)
+            ,"mayoa"=>"Mayo ".($this->anio),"mayob"=>"Mayo ".(intval($this->anio)+1)
+            ,"junioa"=>"Junio ".($this->anio),"juniob"=>"Junio ".(intval($this->anio)+1)
+            ,"julioa"=>"Julio ".($this->anio),"juliob"=>"Julio ".(intval($this->anio)+1)
+            ,"agostoa"=>"Agosto ".($this->anio),"agostob"=>"Agosto ".(intval($this->anio)+1)
+            ,"setiembrea"=>"Setiembre ".($this->anio),"setiembreb"=>"Setiembre ".(intval($this->anio)+1)
+            ,"octubrea"=>"Octubre ".($this->anio),"octubreb"=>"Octubre ".(intval($this->anio)+1)
+            ,"noviembrea"=>"Noviembre ".($this->anio),"noviembreb"=>"Noviembre ".(intval($this->anio)+1)
+            ,"diciembrea"=>"Diciembre ".($this->anio),"diciembreb"=>"Diciembre ".(intval($this->anio)+1)
         ];
     }
     public function columnWidths(): array
@@ -213,17 +216,21 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             'B' => NumberFormat::FORMAT_TEXT,
             'C' => NumberFormat::FORMAT_TEXT,
             'D' => NumberFormat::FORMAT_TEXT,
+            'S' => NumberFormat::FORMAT_TEXT,
+            'T' => NumberFormat::FORMAT_TEXT,
+            'U' => NumberFormat::FORMAT_TEXT,
 
         ];
     }
     public function title(): string
     {
-        return 'CLIENTES SITUACION '.(self::$anio).' '.(intval(self::$anio)+1). ' :: '.(self::$situacion);
+        return 'CLIENTES SITUACION '.($this->anio).' '.(intval($this->anio)+1). ' :: '.($this->situacion);
     }
     public function map($model): array
     {
-        $model->anioa=self::$anio;
-        $model->aniob=( intval(self::$anio) +1);
+        $model->deuda=( ($model->deuda==1)? 'SI':'NO' );
+        $model->anioa=$this->anio;
+        $model->aniob=( intval($this->anio) +1);
         $model->eneroa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
             ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
             ->where(DB::raw('MONTH(created_at)'), '1')
@@ -371,7 +378,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             )
         );
 
-        $event->sheet->styleCells(
+        /*$event->sheet->styleCells(
             'A1:AX1',
             [
                 'alignment' => [
@@ -379,7 +386,20 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' => '000099 ']
+                    'color' => ['argb' => '6acf0c ']
+                ]
+            ]
+        );*/
+
+        $event->sheet->styleCells(
+            'L1:O1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'cedb40']
                 ]
             ]
         );

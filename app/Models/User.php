@@ -32,6 +32,7 @@ class User extends Authenticatable
     const ROL_OPERARIO = "Operario";
     const ROL_ENCARGADO = "Encargado";
     const ROL_LLAMADAS = "Llamadas";
+    const ROL_COBRANZAS = "COBRANZAS";
     const ROL_ASESOR = "Asesor";
     const ROL_LOGISTICA = "Logística";
     const ROL_JEFE_LLAMADAS = "Jefe de llamadas";

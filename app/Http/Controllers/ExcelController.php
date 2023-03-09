@@ -176,7 +176,9 @@ class ExcelController extends Controller
     }
     public function clientespedidosExcel(Request $request)
     {
-        return (new PlantillaExportPedidoMultiple($request->anio))
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+        return (new PlantillaExportClientesReporteMultiple('','2022'))
             ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
     }
     public function clientesTwoMonthAgoExcel(Request $request)

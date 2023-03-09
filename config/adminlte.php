@@ -824,7 +824,7 @@ return [
                     'active' => ['mi personal'],
                 ],
                 [
-                    'text' => 'Llamadas',
+                    'text' => 'Llamadas y Cobranzas',
                     'route' => 'users.llamadas',
                     'can' => 'users.llamadas',
                     'icon' => 'fas fa-check-circle',
