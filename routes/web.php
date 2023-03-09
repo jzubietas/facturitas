@@ -140,6 +140,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidos.recojo', [PedidoController::class, 'pedidosrecojo'])->name('pedidos.recojo');
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside
 
+    Route::get('pedidos.anulaciones', [PedidoController::class, 'pedidosanulaciones'])->name('pedidos.anulaciones');
+    Route::get('pedidosanulacionestabla', [PedidoController::class, 'indexanulacionestabla'])->name('pedidosanulacionestabla');//actualizado para serverside
+
+
     Route::get('registros.asesor.lista', [EnvioController::class, 'registrosasesor'])->name('registros.asesor.lista');
 
     Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');

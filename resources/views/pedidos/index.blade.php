@@ -1140,7 +1140,7 @@
             } else {
               if (pedidodiferencia > 3 && pedidodiferencia <18) {
                 $('td:eq(10)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
-              } else if (pedidodiferencia > 18) {
+              } else if (pedidodiferencia >= 18) {
                 $('td:eq(10)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
               } else {
                 $('td:eq(10)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
