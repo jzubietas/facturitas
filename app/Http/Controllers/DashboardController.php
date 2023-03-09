@@ -94,7 +94,7 @@ class DashboardController extends Controller
             $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $dia, 'month')->format('Y-m-d');
             //dd($dia_calculado); //"2023-03-01"
             $asd = array_keys($pedido_del_mes->toArray(), 'fecha');
-            dd($asd);
+            /*dd($asd);*/
             if (!array_key_exists($dia_calculado, array_keys($pedido_del_mes, 'fecha'))){
                 $pedido_del_mes[$dia_calculado]= 0;
             }
