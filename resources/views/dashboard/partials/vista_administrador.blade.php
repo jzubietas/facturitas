@@ -74,8 +74,9 @@
 <div class="col-md-12">
     <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
 </div>
-
-{{-- ACTIVAR CLIENTE --}}
+<div class="col-md-12">
+    <x-frm-unif-cambio-calculo-porc></x-frm-unif-cambio-calculo-porc>
+</div>
 <div class="col-lg-12">
     <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
 </div>
