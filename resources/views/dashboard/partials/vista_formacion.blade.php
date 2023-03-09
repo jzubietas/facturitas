@@ -239,6 +239,10 @@
       text-align: end;
       padding-right: 5px;
     }
+    .contain-table-dual {
+        display: flex !important;
+        width: 100% !important;
+    }
     @media screen and (max-width: 2249px) {
         .contain-table-dual {
             display: flex !important;
