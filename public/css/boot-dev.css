@@ -4765,7 +4765,43 @@ metas_dp .animated-progress {
 }
 
 /*--- /operaciones/recojos ---*/
+/*------------------PENDIENTE*/
+
 /*--- /operaciones.poratender ---*/
+#tablaOperacionesPedidosPorAtender{
+    width: 100% !important;
+}
+
+#tablaOperacionesPedidosPorAtender td {
+    vertical-align: middle !important;
+}
+
+@media screen and (max-width: 2249px) {
+    #tablaOperacionesPedidosPorAtender {
+        width: 100% !important;
+        font-size: 14px !important;
+    }
+
+    #tablaOperacionesPedidosPorAtender .btn-fontsize {
+        font-size: 15px;
+    }
+
+    #tablaOperacionesPedidosPorAtender .sorting::before,
+    #tablaOperacionesPedidosPorAtender .sorting::after,
+    #tablaOperacionesPedidosPorAtender .sorting_desc::before,
+    #tablaOperacionesPedidosPorAtender .sorting_desc::after {
+        top: 20px !important;
+    }
+
+    #tablaOperacionesPedidosPorAtender tbody td:nth-child(11){
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        grid-gap: 10px;
+        flex-wrap: wrap;
+    }
+}
+
 /*--- /operaciones.atendidos ---*/
 /*--- /operaciones.entregados ---*/
 /*--- /pedidos/estados/anulados ---*/
