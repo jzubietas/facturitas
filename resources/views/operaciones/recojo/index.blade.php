@@ -24,6 +24,7 @@
             <th scope="col" style="vertical-align: middle">Codigo</th>
             <th scope="col" style="vertical-align: middle">Razon social</th>
             <th scope="col" style="vertical-align: middle">Estado Envio</th>
+            <th scope="col" style="vertical-align: middle">Sustento</th>
             <th scope="col" style="vertical-align: middle">Acciones</th>
           </tr>
           </thead>
@@ -151,6 +152,7 @@
             name: 'producto',
           },
           {data: 'condicion_envio', name: 'condicion_envio',},
+            {data: 'env_sustento_recojo', name: 'env_sustento_recojo',},
           {
             data: 'action',
             name: 'action',

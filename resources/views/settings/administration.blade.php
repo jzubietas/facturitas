@@ -39,7 +39,9 @@
         <div class="col-8">
             <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
         </div>
-
+        <div class="col-md-12">
+            <x-frm-unif-cambio-calculo-porc></x-frm-unif-cambio-calculo-porc>
+        </div>
         <div class="col-md-12">
             @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
                 @foreach($jefe_operaciones_courier as $jefe_op)

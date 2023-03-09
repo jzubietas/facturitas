@@ -434,6 +434,7 @@ class PedidoController extends Controller
           Pedido::ENTREGADO_RECOJO_COURIER_INT,
           Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
           ])
+        ->where('pedidos.estado',1)
       ->select(
         [
           'pedidos.*',

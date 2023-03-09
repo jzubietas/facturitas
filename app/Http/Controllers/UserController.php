@@ -1290,7 +1290,7 @@ class UserController extends Controller
 
     public function getComboCliente(Request $request)
     {
-        $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        $html = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         $clientes = Cliente::where('clientes.estado', '1')
             ->get([
                 'clientes.id',
@@ -1318,7 +1318,7 @@ class UserController extends Controller
                 'porcentaje',
             ]);
         foreach ($rucs as $ruc) {
-            $html .= '<option style="color:black" value="' . $ruc->id . '" data-raz-soc="' . $ruc->empresa . '" >' . $ruc->num_ruc . '  -  ' . $ruc->empresa . '</option>';
+            $html .= '<option style="color:black" value="' . $ruc->id . '" data-raz-soc="' . $ruc->empresa . '" data-ruc="' . $ruc->num_ruc . '" >' . $ruc->num_ruc . '  -  ' . $ruc->empresa . '</option>';
         }
         return response()->json(['html' => $html]);
     }
@@ -1327,6 +1327,17 @@ class UserController extends Controller
     {
         $cliente = Ruc::query()->where("id", '=', $request->cliente_id)->update([
             'empresa' => $request->cliente_nombre,
+        ]);
+
+        return response()->json([
+            "success" => true,
+            'updated' => $cliente
+        ]);
+    }
+    public function updateRuc(Request $request)
+    {
+        $cliente = Ruc::query()->where("id", '=', $request->cliente_id)->update([
+            'num_ruc' => $request->cliente_ruc,
         ]);
 
         return response()->json([
