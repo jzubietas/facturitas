@@ -44,7 +44,7 @@ class DashboardController extends Controller
             $lst_users_vida = $lst_users_vida->where(function ($query) {
                 $query->where('jefe', '=', Auth::user()->id)
                     ->orWhereNull('jefe');
-            })->whereIn("rol", [User::ROL_LLAMADAS,User::ROL_COBRANZAS]);
+            })->whereIn("rol", [User::ROL_LLAMADAS, User::ROL_COBRANZAS]);
             $lst_users_vida = $lst_users_vida->orderBy('name', 'ASC');
         } else if ($mirol == User::ROL_JEFE_OPERARIO) {
             $lst_users_vida = $lst_users_vida->where('jefe', Auth::user()->id)->where("rol", User::ROL_OPERARIO);
@@ -57,7 +57,7 @@ class DashboardController extends Controller
         }
         $lst_users_vida = $lst_users_vida->get();
 
-        /*----- Dias por fecha -----*/
+        /*----- DIAS POR FECHA -----*/
         $fecha_actual = Carbon::now()->endOfDay(); // dia actual
         $primer_dia = Carbon::now()->startOfMonth()->startOfDay(); //primer dia del mes
 
@@ -67,7 +67,7 @@ class DashboardController extends Controller
         $mes_pasado = Carbon::now()->startOfMonth()->subMonth()->startOfDay();
         $diff = abs($primer_dia->diffInDays($fecha_actual)) + 1;
         $arr = [];
-        $arrMes=[];
+        $arrMes = [];
         $arrMesAnterior = [];
 
         for ($i = 1; $i <= $diff; $i++) {
@@ -79,48 +79,61 @@ class DashboardController extends Controller
 
         /*----- Mes Actual - pedidos -----*/
         $pedido_del_mes = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
-            ->where('rol', '=', User::ROL_ASESOR)
-            ->where('codigo', 'not like', "%-C%")->activo()
+            ->where('u.rol', '=', User::ROL_ASESOR)
+            ->where('pedidos.codigo', 'not like', "%-C%")->activo()
             ->where('pendiente_anulacion', '<>', '1')
-            /*->where('pedidos.created_at', Carbon::now()->startOfMonth())*/
-            ->whereBetween(DB::raw('Date(pedidos.created_at)'), [
-                $primer_dia, $fecha_actual
-            ])
+            ->whereBetween(DB::raw('Date(pedidos.created_at)'), [$primer_dia, $fecha_actual])
             ->groupBy(DB::raw('Date(pedidos.created_at)'))
             ->select(
                 DB::raw('Date(pedidos.created_at) as fecha'),
                 DB::raw('count(pedidos.created_at) as total')
-            )
-            ->get();
+            )->get();
 
-        foreach ($pedido_del_mes as $pedido_mes){
-            $arrMes[$pedido_mes->fecha] = $pedido_mes->total;
-        }
+
+        collect($arr)->map(function ($dia) use ($pedido_del_mes) {
+            $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $dia, 'month')->format('Y-m-d');
+            //dd($dia_calculado); //"2023-03-01"
+            $asd = array_keys($pedido_del_mes->toArray(), 'fecha');
+            dd($asd);
+            if (!array_key_exists($dia_calculado, array_keys($pedido_del_mes, 'fecha'))){
+                $pedido_del_mes[$dia_calculado]= 0;
+            }
+            return $dia;
+        });
+
+        var_dump($pedido_del_mes, true);
+
+
         $arrayMes_string = implode(',', $arrMes);
-
-
 
         /*----- Mes Anterior - pedidos -----*/
         $pedido_del_mes_anterior = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
-            ->where('rol', '=', User::ROL_ASESOR)
-            ->where('codigo', 'not like', "%-C%")->activo()
+            ->where('u.rol', '=', User::ROL_ASESOR)
+            ->where('pedidos.codigo', 'not like', "%-C%")->activo()
             ->where('pendiente_anulacion', '<>', '1')
-            /*->where('pedidos.created_at', Carbon::now()->startOfMonth()->subMonth())*/
-            ->whereBetween(DB::raw('Date(pedidos.created_at)'),
-                [ $primer_dia_anterior, $fecha_anterior ])
+            ->whereBetween(DB::raw('Date(pedidos.created_at)'), [$primer_dia_anterior, $fecha_anterior])
             ->groupBy(DB::raw('Date(pedidos.created_at)'))
             ->select(
                 DB::raw('Date(pedidos.created_at) as fecha_anterior'),
                 DB::raw('count(pedidos.created_at) as total_anterior')
             )
-            ->get();
+            ->get()->map(function ($porcentaje, $index) {
+                $porcentaje->rownumber = $index + 1;
+                return $porcentaje;
+            });
 
-        foreach ($pedido_del_mes_anterior as $pedido_mes_anterior){
+        foreach ($pedido_del_mes_anterior as $pedido_mes_anterior) {
             $arrMesAnterior[$pedido_mes_anterior->fecha_anterior] = $pedido_mes_anterior->total_anterior;
         }
         $arrayMesAnterior_string = implode(',', $arrMesAnterior);
 
-        //dd($arrayMes_string.$arrayMesAnterior_string);
+        foreach (explode(',', $arrayMesAnterior_string) as $calculoDias) {
+            if (!array_key_exists($calculoDias, $arrMesAnterior)) {
+                $arrMesAnterior[$calculoDias] = 0;
+            }
+        }
+        $arrayMesAnterior_string = implode(',', $arrMesAnterior);
+
 
         return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id', 'array_string', 'arrayMes_string', 'arrayMesAnterior_string'));
 
@@ -156,7 +169,7 @@ class DashboardController extends Controller
     public function searchCliente(Request $request)
     {
         $q = $request->get("q");//915722331
-        $nrocel =str_replace(' ', '', $q);
+        $nrocel = str_replace(' ', '', $q);
         $clientes = Cliente::query()
             ->with(['user', 'rucs', 'porcentajes'])
             ->where('celular', 'like', '%' . $nrocel . '%')
