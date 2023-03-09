@@ -604,7 +604,7 @@ class OperacionController extends Controller
             ->addColumn('action', function ($pedido) {
                 $btn = [];
 
-                $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton">';
+                $btn[] = '<div><ul class="m-0 p-1 d-flex justify-content-center align-items-center flex-wrap" aria-labelledby="dropdownMenuButton">';
 
                 if(in_array(auth()->user()->rol, [User::ROL_ADMIN,User::ROL_OPERARIO,User::ROL_JEFE_OPERARIO]))
                 {
@@ -618,7 +618,7 @@ class OperacionController extends Controller
                         </a>';
                 }
 
-                $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'pedido_id')) . '" class="btn-md dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'pedido_id')) . '" class="btn-md dropdown-item py-2 btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                 /*$btn[] = '<a class="btn-sm dropdown-item text-danger" href="#"'.
                         'data-toggle="modal"'.
                         'data-correccion="'.$pedido->id.'"'.
