@@ -7,6 +7,9 @@
     {{-- @can('users.create')
       <a href="{{ route('users.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan --}}
+      <a href="" data-target="#modal-asignarmetallamada" data-toggle="modal" data-llamada="">
+          <button class="btn btn-info btn-sm"> Asignar metas del mes</button>
+      </a>
   </h1>
   @if($superasesor > 0)
   <br>

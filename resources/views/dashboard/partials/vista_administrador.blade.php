@@ -74,8 +74,9 @@
 <div class="col-md-12">
     <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
 </div>
-
-{{-- ACTIVAR CLIENTE --}}
+<div class="col-md-12">
+    <x-frm-unif-cambio-calculo-porc></x-frm-unif-cambio-calculo-porc>
+</div>
 <div class="col-lg-12">
     <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
 </div>
@@ -101,7 +102,7 @@
 <div class="col-lg-12 " id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2">
         <div class="d-flex justify-content-center">
-            <h1 class="text-uppercase justify-center text-center">Metas del mes de {{\Carbon\Carbon::now()->startOfMonth()->format('F')}}</h1>
+            <h1 class="text-uppercase justify-center text-center">Metas del mes de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
             <button style="background: none; border: none" onclick="openFullscreen();">
                 <i class="fas fa-expand-arrows-alt ml-3"
                    style="font-size: 20px"></i>
