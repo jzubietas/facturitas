@@ -239,16 +239,7 @@
       text-align: end;
       padding-right: 5px;
     }
-    td:nth-child(1),
-    td:nth-child(2),
-    td:nth-child(3){
-      font-weight: bold;
-    }
-    td:nth-child(3) {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+
   </style>
 @endpush
 

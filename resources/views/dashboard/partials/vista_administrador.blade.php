@@ -197,6 +197,7 @@
                     --}}
                 </div>
 
+
                 <div class="position-relative mb-4">
                     <div class="chartjs-size-monitor">
                         <div class="chartjs-size-monitor-expand">
@@ -211,10 +212,11 @@
                 </div>
                 <div class="d-flex flex-row justify-content-end">
                     <span class="mr-2">
-                        <i class="fas fa-square text-primary"></i> #Mes actual
+                        <i class="fas fa-square text-primary"></i> #Mes actual:
                     </span>
                     <span>
                         <i class="fas fa-square text-gray"></i> #Mes anterior
+
                     </span>
                 </div>
             </div>
@@ -224,6 +226,8 @@
 
 
 <br>
+
+
 
 
 @section('js-datatables')
@@ -381,14 +385,18 @@
             var intersect = true
 
             var $visitorsChart = $('#visitors-chart')
+            let $arrr = [{{$array_string}}]
+            let $mes_actual = [{{$arrayMes_string}}]
+            let $mes_anterior = [{{$arrayMesAnterior_string}}]
+                console.log($arrr);
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
                     /*eje x: dias*/
-                    labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30',],
+                    labels: $arrr,
                     datasets: [{
                         /*azul*/
                         type: 'line',
-                        data: [100, 120, 170, 167, 180, 177, 160],
+                        data: $mes_actual,
                         backgroundColor: 'transparent',
                         borderColor: '#007bff',
                         pointBorderColor: '#007bff',
@@ -397,7 +405,7 @@
                     }, {
                         /*plomo*/
                         type: 'line',
-                        data: [60, 80, 70, 67, 80, 77, 100],
+                        data: $mes_anterior,
                         backgroundColor: 'tansparent',
                         borderColor: '#ced4da',
                         pointBorderColor: '#ced4da',
@@ -417,7 +425,7 @@
                                 lineWidth: '4px',
                                 color: 'rgba(0, 0, 0, .2)',
                                 zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 300}, ticksStyle)
+                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 250}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
                     }
                 }

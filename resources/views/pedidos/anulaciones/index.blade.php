@@ -4,6 +4,16 @@
 @section('title', 'ANULACIONES')
 
 @section('content_header')
+
+    @if(Auth::user()->rol == 'Administrador')
+    <a class="btn btn-info btn-sm m-0" href="#" data-target="#modal-agregar-anulacion" data-toggle="modal">
+        <b class="text-white font-weight-bold d-flex align-items-center justify-content-center">
+            <i class="fas fa-user-plus p-1"></i>
+            <p class="m-0 text-card-navbar">Agregar Anulacion</p>
+        </b>
+    </a>
+    @endif
+
   <h1 class="text-center">
     <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Bandeja de Anulaciones
   </h1>
@@ -12,11 +22,12 @@
 
 @section('content')
 
-  {{--@include('envios.motorizado.modal.recojo_enviarope')--}}
+  @include('modal.AgegarAnulacion.modalAgregarAnulacion')
 
   <div class="card p-0" style="overflow: hidden !important;">
 
     <div class="tab-content" id="myTabContent" style="overflow-x: scroll !important;">
+
       <div class="tab-pane fade show active" id="enmotorizado" role="tabpanel" aria-labelledby="enmotorizado-tab">
         <table id="tblListadoRecojo" class="table table-striped">{{-- display nowrap  --}}
           <thead>
@@ -366,6 +377,55 @@ ${data.foto3 ? `
 
         },
       });
+
+        window.ocultar_div_modal_agregaranulacion = function ()
+        {
+            $("#modal-agregaranulacion-pc-container").hide();
+            $("#form-agregaranulacion-pc input").val("");
+
+            $("#modal-agregaranulacion-f-container").hide();
+            $("#form-agregaranulacion-f input").val("");
+        }
+
+        ocultar_div_modal_agregaranulacion();
+
+    $('#modal-agregar-anulacion').on('show.bs.modal', function (event) {
+        ocultar_div_modal_agregaranulacion();
+
+    });
+
+    /**/
+        $(document).on('click',
+            "button#btn_agregaranulacion_pc,button#btn_agregaranulacion_f",
+            function (e) {
+                console.log(e.target.id);
+                ocultar_div_modal_agregaranulacion();
+                switch (e.target.id) {
+                    case 'btn_agregaranulacion_pc':
+                        $.ajax({
+                            url: "{{ route('clientecomboagregarcontacto') }}",
+                            method: 'POST',
+                            success: function (data) {
+                                $('#cbxClienteAgregaNuevo').html(data.html).selectpicker("refresh");
+                                $("#modal-agregaranulacion-pc-container").show();
+                            }
+                        });
+                        break;
+                    case 'btn_agregaranulacion_f':
+                        $.ajax({
+                            url: "{{ route('clientecomboagregarcontacto') }}",
+                            method: 'POST',
+                            success: function (data) {
+                                $('#cbxCambiaNombre').html(data.html).selectpicker("refresh");
+                                $("#modal-agregaranulacion-f-container").show();
+                            }
+                        });
+                        break;
+                }
+
+            })
+    /**/
+
 
       $('#modal-envio-recojo').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
