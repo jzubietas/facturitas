@@ -245,12 +245,17 @@ class UserController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($user) {
                 $btn = "";
-                $btn = $btn . '<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
-                //$btn = $btn.'<a href="" data-target="#modal-asignarasesor" data-toggle="modal" data-supervisor="'.$user->id.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Asesor</button></a>';
+                if($user->rol==User::ROL_LLAMADAS)
+                {
+                    /*$btn = $btn . '<a href="" data-target="#modal-asignarmetallamada" data-toggle="modal" data-llamada="' . $user->id . '">' .
+                        '<button class="btn btn-info btn-sm"> Asignar metas del mes</button>' .
+                        '</a>';*/
+                    $btn = $btn . '<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
+                }else if($user->rol==User::ROL_COBRANZAS){
 
-                $btn = $btn . '<a href="" data-target="#modal-asignarmetallamada" data-toggle="modal" data-llamada="' . $user->id . '">' .
-                    '<button class="btn btn-info btn-sm"> Asignar metas del mes</button>' .
-                    '</a>';
+                }
+
+                //$btn = $btn.'<a href="" data-target="#modal-asignarasesor" data-toggle="modal" data-supervisor="'.$user->id.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Asesor</button></a>';
 
                 return $btn;
             })
