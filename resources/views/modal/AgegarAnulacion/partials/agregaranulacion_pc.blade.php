@@ -1,11 +1,19 @@
 <form id="form-agregaranulacion-pc" name="form-agregaranulacion-pc" class="agregaranulacion">
     <input type="hidden" id="agregaranulacion_pc" name="agregaranulacion_pc">
-    <input type="hidden" name="opcion" value="2">
+    <input type="hidden" name="opcion" value="1">
     <ul class="list-group">
 
         <li class="list-group-item text-wrap">
+            <h6 class="alert alert-info text-center font-weight-bold">
+                <b>Codigo de pedido <span class="text-danger">(Obligatorio):</span></b>
+            </h6>
+            <input name="txtCodigoPedidoAnulacionPc" id="txtCodigoPedidoAnulacionPc" class="form-control w-100"
+                   style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar los nombres completos">
+        </li>
+
+        <li class="list-group-item text-wrap">
           <h6 class="alert alert-info text-center font-weight-bold">
-            <b>Elegir cliente <span class="text-danger">(Obligatorio):</span></b>
+            <b>Elegir asesor <span class="text-danger">(Obligatorio):</span></b>
           </h6>
 
           <select name="cbxClienteAgregaNuevo" class="border form-control selectpicker border-secondary bg-dark" id="cbxClienteAgregaNuevo"

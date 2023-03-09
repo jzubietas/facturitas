@@ -1,6 +1,6 @@
 <form id="form-agregaranulacion-f" name="form-agregaranulacion-f" class="agregaranulacion">
     <input type="hidden" id="agregaranulacion_f" name="agregaranulacion_f">
-    <input type="hidden" name="opcion" value="4">
+    <input type="hidden" name="opcion" value="2">
     <ul class="list-group">
         <li class="list-group-item text-wrap">
           <h6 class="alert alert-danger text-center font-weight-bold">
