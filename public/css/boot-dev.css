@@ -4251,10 +4251,10 @@ metas_dp .animated-progress {
         margin-left: 2px;
     }
 
-    #tablabandejapedidos .sorting:before,
-    #tablabandejapedidos .sorting:after,
-    #tablabandejapedidos .sorting_desc:before,
-    #tablabandejapedidos .sorting_desc:after {
+    #tablabandejapedidos .sorting::before,
+    #tablabandejapedidos .sorting::after,
+    #tablabandejapedidos .sorting_desc::before,
+    #tablabandejapedidos .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4346,10 +4346,10 @@ metas_dp .animated-progress {
         width: 130px !important;
     }
 
-    #tablaBandejaPedidosPorAtender .sorting:before,
-    #tablaBandejaPedidosPorAtender .sorting:after,
-    #tablaBandejaPedidosPorAtender .sorting_desc:before,
-    #tablaBandejaPedidosPorAtender .sorting_desc:after {
+    #tablaBandejaPedidosPorAtender .sorting::before,
+    #tablaBandejaPedidosPorAtender .sorting::after,
+    #tablaBandejaPedidosPorAtender .sorting_desc::before,
+    #tablaBandejaPedidosPorAtender .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4440,10 +4440,10 @@ metas_dp .animated-progress {
         max-width: 200px !important;
     }
 
-    tablaBandejaPedidosAtendidos .sorting:before,
-    tablaBandejaPedidosAtendidos .sorting:after,
-    tablaBandejaPedidosAtendidos .sorting_desc:before,
-    tablaBandejaPedidosAtendidos .sorting_desc:after {
+    tablaBandejaPedidosAtendidos .sorting::before,
+    tablaBandejaPedidosAtendidos .sorting::after,
+    tablaBandejaPedidosAtendidos .sorting_desc::before,
+    tablaBandejaPedidosAtendidos .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4498,10 +4498,10 @@ metas_dp .animated-progress {
         max-width: 200px !important;
     }
 
-    #tablaPrincipal .sorting:before,
-    #tablaPrincipal .sorting:after,
-    #tablaPrincipal .sorting_desc:before,
-    #tablaPrincipal .sorting_desc:after {
+    #tablaPrincipal .sorting::before,
+    #tablaPrincipal .sorting::after,
+    #tablaPrincipal .sorting_desc::before,
+    #tablaPrincipal .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4556,10 +4556,10 @@ metas_dp .animated-progress {
         width: 130px !important;
     }
 
-    #tablaSobresPorEnviar .sorting:before,
-    #tablaSobresPorEnviar .sorting:after,
-    #tablaSobresPorEnviar .sorting_desc:before,
-    #tablaSobresPorEnviar .sorting_desc:after {
+    #tablaSobresPorEnviar .sorting::before,
+    #tablaSobresPorEnviar .sorting::after,
+    #tablaSobresPorEnviar .sorting_desc::before,
+    #tablaSobresPorEnviar .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4601,10 +4601,10 @@ metas_dp .animated-progress {
         vertical-align: middle;
     }
 
-    #tblListadoRecojo .sorting:before,
-    #tblListadoRecojo .sorting:after,
-    #tblListadoRecojo .sorting_desc:before,
-    #tblListadoRecojo .sorting_desc:after {
+    #tblListadoRecojo .sorting::before,
+    #tblListadoRecojo .sorting::after,
+    #tblListadoRecojo .sorting_desc::before,
+    #tblListadoRecojo .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4691,10 +4691,10 @@ metas_dp .animated-progress {
         font-size: 15px;
     }
 
-    #tablaOperacionesBandejadeSobres .sorting:before,
-    #tablaOperacionesBandejadeSobres .sorting:after,
-    #tablaOperacionesBandejadeSobres .sorting_desc:before,
-    #tablaOperacionesBandejadeSobres .sorting_desc:after {
+    #tablaOperacionesBandejadeSobres .sorting::before,
+    #tablaOperacionesBandejadeSobres .sorting::after,
+    #tablaOperacionesBandejadeSobres .sorting_desc::before,
+    #tablaOperacionesBandejadeSobres .sorting_desc::after {
         top: 30px !important;
     }
 
@@ -4721,8 +4721,87 @@ metas_dp .animated-progress {
 }
 
 /*--- /operaciones.correcciones ---*/
+#tablaOperacionesBandejadeCorrecciones {
+    width: 100% !important;
+}
+
+#tablaOperacionesBandejadeCorrecciones td {
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+#tablaOperacionesBandejadeCorrecciones tbody tr{
+    font-weight: lighter !important;
+}
+
+@media screen and (max-width: 2249px) {
+    #tablaOperacionesBandejadeCorrecciones {
+        width: 100% !important;
+        font-size: 14px !important;
+    }
+
+    #tablaOperacionesBandejadeCorrecciones .btn-fontsize {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 2144px) {
+    #tablaOperacionesBandejadeCorrecciones .btn-fontsize {
+        font-size: 13px;
+        min-width: 85px;
+        max-width: 160px;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesBandejadeCorrecciones th:nth-child(6) {
+        max-width: 230px !important;
+    }
+
+    #tablaOperacionesBandejadeCorrecciones td:nth-child(6) span {
+        white-space: break-spaces !important;
+        padding: 8px !important;
+    }
+}
+
 /*--- /operaciones/recojos ---*/
+/*------------------PENDIENTE*/
+
 /*--- /operaciones.poratender ---*/
+#tablaOperacionesPedidosPorAtender{
+    width: 100% !important;
+}
+
+#tablaOperacionesPedidosPorAtender td {
+    vertical-align: middle !important;
+}
+
+@media screen and (max-width: 2249px) {
+    #tablaOperacionesPedidosPorAtender {
+        width: 100% !important;
+        font-size: 14px !important;
+    }
+
+    #tablaOperacionesPedidosPorAtender .btn-fontsize {
+        font-size: 15px;
+    }
+
+    #tablaOperacionesPedidosPorAtender .sorting::before,
+    #tablaOperacionesPedidosPorAtender .sorting::after,
+    #tablaOperacionesPedidosPorAtender .sorting_desc::before,
+    #tablaOperacionesPedidosPorAtender .sorting_desc::after {
+        top: 20px !important;
+    }
+
+    #tablaOperacionesPedidosPorAtender tbody td:nth-child(11){
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        grid-gap: 10px;
+        flex-wrap: wrap;
+    }
+}
+
 /*--- /operaciones.atendidos ---*/
 /*--- /operaciones.entregados ---*/
 /*--- /pedidos/estados/anulados ---*/

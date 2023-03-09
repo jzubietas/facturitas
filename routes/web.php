@@ -664,6 +664,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::any('excel/clientes/reporte_multiple', [ExcelController::class, 'clientesReporteMultipleExcel'])->name('excel.clientes.reporte.multiple');
 
+    Route::get('excel.basefria-all_asesor-excel', [ExcelController::class, 'basefriaAllAsesorExcel'])->name('excel.basefria-all_asesor-excel');
+
+
     Route::get('excel/clientes/two_month_ago', [ExcelController::class, 'clientesTwoMonthAgoExcel'])->name('excel.clientes-two-month-ago-excel');
     Route::get('excel/clientes/four_month_ago', [ExcelController::class, 'clientesFourMonthAgoExcel'])->name('excel.clientes-four-month-ago-excel');
 

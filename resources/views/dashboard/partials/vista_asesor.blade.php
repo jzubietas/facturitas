@@ -171,27 +171,25 @@
                         </div>
                     </div>
 
-                    {{--TABLA DUAL--}}
+                    {{-- TABLA DUAL --}}
                     <div class="" style=" overflow: hidden !important;">
                         <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div id="meta"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div id="metas_dp"></div>
+                                <div class="contain-table-dual">
+                                    <div class="col-lg-6" id="meta"></div>
+                                    <div class="col-lg-6" id="metas_dp"></div>
                                 </div>
 
-                                <div class="col-md-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div id="supervisor_total"></div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div id="supervisor_A"></div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div id="supervisor_B"></div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div id="metas_total"></div>
                                 </div>
 
@@ -199,7 +197,7 @@
 
                         </div>
                     </div>
-                    {{--FIN-TABLA-DUAL--}}
+                    {{-- FIN-TABLA-DUAL --}}
                 </div>
                 {{--FIN-DATATABLE--}}
                {{-- <!-- Modal -->

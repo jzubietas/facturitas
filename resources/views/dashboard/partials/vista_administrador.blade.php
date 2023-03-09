@@ -99,7 +99,8 @@
 <div class="col-lg-12 " id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2">
         <div class="d-flex justify-content-center">
-            <h1 class="text-uppercase justify-center text-center">Metas del mes de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+            <h1 class="text-uppercase justify-center text-center">Metas del mes
+                de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
             <button style="background: none; border: none" onclick="openFullscreen();">
                 <i class="fas fa-expand-arrows-alt ml-3"
                    style="font-size: 20px"></i>
@@ -117,8 +118,8 @@
         <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
             <div class="row">
                 <div class="contain-table-dual">
-                        <div class="col-lg-6" id="meta"></div>
-                        <div class="col-lg-6" id="metas_dp"></div>
+                    <div class="col-lg-6" id="meta"></div>
+                    <div class="col-lg-6" id="metas_dp"></div>
                 </div>
 
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -176,7 +177,7 @@
         <div class="card">
             <div class="card-header border-0">
                 <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Online Store Visitors</h3>
+                    <h3 class="card-title">Pedidos actuales por día</h3>
                     {{--<a href="javascript:void(0);">View Report</a>--}}
                 </div>
             </div>
@@ -184,14 +185,16 @@
                 <div class="d-flex">
                     <p class="d-flex flex-column">
                         <span class="text-bold text-lg">820</span>
-                        <span>Visitors Over Time</span>
+                        <span>Cantidad de pedidos</span>
                     </p>
+                    {{--
                     <p class="ml-auto d-flex flex-column text-right">
-                        <span class="text-success">
-                            <i class="fas fa-arrow-up"></i> 12.5%
-                        </span>
-                        <span class="text-muted">Since last week</span>
-                    </p>
+                                            <span class="text-success">
+                                                <i class="fas fa-arrow-up"></i> 12.5%
+                                            </span>
+                                            <span class="text-muted">Since last week</span>
+                                        </p>
+                    --}}
                 </div>
 
                 <div class="position-relative mb-4">
@@ -208,10 +211,10 @@
                 </div>
                 <div class="d-flex flex-row justify-content-end">
                     <span class="mr-2">
-                        <i class="fas fa-square text-primary"></i> This Week
+                        <i class="fas fa-square text-primary"></i> #Mes actual
                     </span>
                     <span>
-                        <i class="fas fa-square text-gray"></i> Last Week
+                        <i class="fas fa-square text-gray"></i> #Mes anterior
                     </span>
                 </div>
             </div>
@@ -381,7 +384,7 @@
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
                     /*eje x: dias*/
-                    labels: ['18th', '20th', '22nd', '24th', '26th', '28th', '30th'],
+                    labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30',],
                     datasets: [{
                         /*azul*/
                         type: 'line',
@@ -414,7 +417,7 @@
                                 lineWidth: '4px',
                                 color: 'rgba(0, 0, 0, .2)',
                                 zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 200}, ticksStyle)
+                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 300}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
                     }
                 }
