@@ -371,7 +371,7 @@ class PdfController extends Controller
       }
 
 
-      $title_mes_artificio=$mes_artificio->format('F - Y');
+      $title_mes_artificio=$mes_artificio->translatedFormat('F - Y');
       //$title_mes_artificio=$title_mes_artificio->formatLocalized('%B');
       $html[] = '<tr>';
       $html[] = '<td style="width:20%;" class="text-center">';

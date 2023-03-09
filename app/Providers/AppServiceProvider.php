@@ -41,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Carbon::setLocale(config('app.locale'));
+
         Collection::macro('trim',function (){
             $data= $this->map(function ($item){
                 if(is_string($item)){
@@ -73,8 +75,5 @@ class AppServiceProvider extends ServiceProvider
 
         \Blade::component('common-activar-cliente-por-tiempo', ActivarClientePorTiempo::class);
 
-        Carbon::setUTF8(true);
-        Carbon::setLocale(config('app.locale'));
-        setlocale(LC_ALL, 'es_MX', 'es', 'ES', 'es_MX.utf8');
     }
 }
