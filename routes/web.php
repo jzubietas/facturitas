@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlertaController;
+use App\Http\Controllers\AnulacionController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CourierRegistrosController;
 use App\Http\Controllers\DashboardController;
