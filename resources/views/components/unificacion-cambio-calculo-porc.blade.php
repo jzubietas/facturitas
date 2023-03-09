@@ -1,5 +1,4 @@
 <section id="tabs" class="project-tab">
-    <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <nav>
@@ -17,8 +16,7 @@
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="navCambioRuc" role="tabpanel"
-                         aria-labelledby="navCambioRuctab">
+                    <div class="tab-pane fade show active" id="navCambioRuc" role="tabpanel" aria-labelledby="navCambioRuctab">
                         <div class="card">
                             <div class="card-header">
                                 <h3>Cambio de Ruc</h3>
@@ -44,17 +42,17 @@
                                         </div>
 
                                         <div class="form-group col-lg-6">
-                                            {!! Form::label('cbxRuc', 'RUC*') !!} &nbsp; &nbsp; &nbsp;
-                                            <select name="cbxRuc"
+                                            {!! Form::label('cbxRucRel', 'RUC*') !!} &nbsp; &nbsp; &nbsp;
+                                            <select name="cbxRucRel"
                                                     class="border form-control border-secondary"
-                                                    id="cbxRuc" data-live-search="true">
+                                                    id="cbxRucRel" data-live-search="true">
                                                 <option value="">---- SELECCIONE RUC ----</option>
                                             </select>
                                         </div>
 
                                         <div class="form-group col-lg-6">
                                             {!! Form::label('pcantidad_tiempo', 'Empresa (Razon social)') !!}
-                                            <input type="text" name="txtRazonSocial" id="txtRazonSocial"
+                                            <input type="text" name="txtRazonSocialRel" id="txtRazonSocialRel"
                                                    class="form-control number" placeholder="Empresa (Razon social)...">
                                         </div>
 
@@ -70,121 +68,50 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="navCambioAsesor" role="tabpanel"
-                         aria-labelledby="navCambioAsesortab">
-                        <table class="table" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>TABLA 1</th>
-                                <th>Employer</th>
-                                <th>Time</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><a href="#">Work 1</a></td>
-                                <td>Doe</td>
-                                <td>john@example.com</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Work 2</a></td>
-                                <td>Moe</td>
-                                <td>mary@example.com</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Work 3</a></td>
-                                <td>Dooley</td>
-                                <td>july@example.com</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="tab-pane fade" id="navCambioAsesor" role="tabpanel" aria-labelledby="navCambioAsesortab">
+                        {{--navCambioAsesortab--}}
                     </div>
-                    <div class="tab-pane fade" id="navCambioCliente" role="tabpanel"
-                         aria-labelledby="navCambioClientetab">
-                        <table class="table" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>TABLA 3</th>
-                                <th>Date</th>
-                                <th>Award Position</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><a href="#">Work 1</a></td>
-                                <td>Doe</td>
-                                <td>john@example.com</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Work 2</a></td>
-                                <td>Moe</td>
-                                <td>mary@example.com</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Work 3</a></td>
-                                <td>Dooley</td>
-                                <td>july@example.com</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="tab-pane fade" id="navCambioCliente" role="tabpanel" aria-labelledby="navCambioClientetab">
+                        {{--navCambioClientetab--}}
                     </div>
-                    <div class="tab-pane fade" id="navCambioEmresa" role="tabpanel"
-                         aria-labelledby="navCambioEmresatab">
-                        <table class="table" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>TABLA 3</th>
-                                <th>Date</th>
-                                <th>Award Position</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><a href="#">Work 1</a></td>
-                                <td>Doe</td>
-                                <td>john@example.com</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Work 2</a></td>
-                                <td>Moe</td>
-                                <td>mary@example.com</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Work 3</a></td>
-                                <td>Dooley</td>
-                                <td>july@example.com</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="navBloqueoRuc" role="tabpanel" aria-labelledby="navBloqueoRuctab">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form_main">
-                                    <h4 class="heading"><strong>Quick </strong> Contact <span></span></h4>
-                                    <div class="form">
-                                        <form action="contact_send_mail.php" method="post" id="contactFrm"
-                                              name="contactFrm">
-                                            <input type="text" required="" placeholder="Please input your Name" value=""
-                                                   name="name" class="txt">
-                                            <input type="text" required="" placeholder="Please input your mobile No"
-                                                   value="" name="mob" class="txt">
-                                            <input type="text" required="" placeholder="Please input your Email"
-                                                   value="" name="email" class="txt">
-
-                                            <textarea placeholder="Your Message" name="mess" type="text"
-                                                      class="txt_3"></textarea>
-                                            <input type="submit" value="submit" name="submit" class="txt2">
-                                        </form>
+                    <div class="tab-pane fade" id="navCambioEmresa" role="tabpanel" aria-labelledby="navCambioEmresatab">
+                        {{--navCambioEmresatab--}}
+                        <div class="tab-pane fade show active" id="navCambioRuc" role="tabpanel" aria-labelledby="navCambioRuctab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Cambio de Nombre de empresa</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-body border border-secondary rounded">
+                                        <div class="form-row">
+                                            <div class="form-group col-lg-6">
+                                                {!! Form::label('cbxRucChangeName', 'RUC*') !!} &nbsp; &nbsp; &nbsp;
+                                                <select name="cbxRucChangeName"
+                                                        class="border form-control border-secondary"
+                                                        id="cbxRucChangeName" data-live-search="true">
+                                                    <option value="-1">---- SELECCIONE RUC ----</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                {!! Form::label('pcantidad_tiempo', 'Empresa (Razon social)') !!}
+                                                <input type="text" name="txtRazonSocialChangeName" id="txtRazonSocialChangeName"
+                                                       class="form-control number" placeholder="Empresa (Razon social)...">
+                                            </div>
+                                            <button type="button" id="btnCambiarNombreChangeName" class="btn btn-success btn-lg">
+                                                Cambiar Nombre
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane fade" id="navBloqueoRuc" role="tabpanel" aria-labelledby="navBloqueoRuctab">
+                        {{--navBloqueoRuctab--}}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </section>
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -222,20 +149,84 @@
                     method: 'GET',
                     success: function (data) {
                         console.log('Ruc',data);
-                        $('#cbxRuc').html(data.html);
-                        $("#cbxRuc").selectpicker("refresh");
+                        $('#cbxRucChangeName').html(data.html);
+                        $("#cbxRucChangeName").selectpicker("refresh");
+
+                        $('#cbxRucRel').html(data.html);
+                        $("#cbxRucRel").selectpicker("refresh");
                     }
                 });
             }
 
 
-            $("#cbxRuc").on("change", function () {
+            $("#cbxRucChangeName").on("change", function () {
                 var data_raz_soc = $("option[value=" + $(this).val() + "]", this).attr('data-raz-soc');
-                $('#txtRazonSocial').val(data_raz_soc);
+                $('#txtRazonSocialChangeName').val(data_raz_soc);
             });
 
-            $("#btnCambiarNombre").click(function () {
-                $("#btnCambiarNombre").attr('disabled', 'disabled')
+            $("#cbxRucRel").on("change", function () {
+                var data_raz_soc = $("option[value=" + $(this).val() + "]", this).attr('data-raz-soc');
+                $('#txtRazonSocialRel').val(data_raz_soc);
+            });
+
+            $("#btnCambiarNombreChangeName").click(function () {
+                $("#btnCambiarNombreChangeName").attr('disabled', 'disabled')
+                var data = {}
+                data.cliente_id = $("#cbxRucChangeName").val()
+                data.cliente_nombre = $("#txtRazonSocialChangeName").val()
+                if (data.cliente_nombre =='' ){
+                    Swal.fire(
+                        'Error',
+                        'Ingrese la razon social',
+                        'error'
+                    )
+                    $("#btnCambiarNombreChangeName").removeAttr('disabled')
+                    return false;
+                }
+                $.post('{{route('updateNameEmpresa')}}', data)
+                    .done(function (data) {
+                        console.log(data)
+                        if (data.success) {
+                            Swal.fire(
+                                'Notificacion',
+                                'Se actualizo el nombre correctamente',
+                                'success'
+                            )
+                            cargaComboRuc();
+                            $("#txtRazonSocialChangeName").val('')
+                        } else {
+                            Swal.fire(
+                                'Notificacion',
+                                'Los datos no fueron guardados',
+                                'warning'
+                            )
+                        }
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                        if (data.responseJSON.errors) {
+                            Swal.fire(
+                                'Error',
+                                Object.keys(data.responseJSON.errors).map(function (key) {
+                                    return `<b>${data.responseJSON.errors[key][0]}</b>`
+                                }).join('<hr class="my-1"><br>'),
+                                'error'
+                            )
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                'Ocurrio un error al intentar guardar la información',
+                                'error'
+                            )
+                        }
+                    })
+                    .always(function () {
+                        $("#btnCambiarNombreChangeName").removeAttr('disabled')
+                    })
+            })
+
+            /*$("#btnCrearNuevaRelacion").click(function () {
+                $("#btnCrearNuevaRelacion").attr('disabled', 'disabled')
                 var data = {}
                 data.cliente_id = $("#cbxRuc").val()
                 data.cliente_nombre = $("#txtRazonSocial").val()
@@ -245,7 +236,7 @@
                         'Ingrese la razon social',
                         'error'
                     )
-                    $("#btnCambiarNombre").removeAttr('disabled')
+                    $("#btnCrearNuevaRelacion").removeAttr('disabled')
                     return false;
                 }
                 $.post('{{route('updateNameEmpresa')}}', data)
@@ -286,9 +277,9 @@
                         }
                     })
                     .always(function () {
-                        $("#btnCambiarNombre").removeAttr('disabled')
+                        $("#btnCrearNuevaRelacion").removeAttr('disabled')
                     })
-            })
+            })*/
         })
     </script>
 @endpush
