@@ -384,12 +384,6 @@
             var intersect = true
 
             var $visitorsChart = $('#visitors-chart')
-            let $arrr = [{{$array_string}}]
-            let $mes_actual = [{{$arrayMes_string}}]
-            let $mes_anterior = [{{$arrayMesAnterior_string}}]
-            console.log($arrr);
-            console.log($mes_actual);
-            console.log($mes_anterior);
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
                     /*eje x: dias*/
