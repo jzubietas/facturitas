@@ -1,48 +1,58 @@
 <form id="form-agregaranulacion-f" name="form-agregaranulacion-f" class="agregaranulacion">
     <input type="hidden" id="agregaranulacion_f" name="agregaranulacion_f">
     <input type="hidden" name="opcion" value="2">
-    <ul class="list-group">
-        <li class="list-group-item text-wrap">
-          <h6 class="alert alert-danger text-center font-weight-bold">
-            <b>Elegir cliente <span class="text-danger">(Obligatorio):</span></b>
-          </h6>
-
-          <select name="cbxClienteBloqueo" class="border form-control selectpicker border-secondary" id="cbxClienteBloqueo"
-                  data-show-subtext="true" data-live-search="true"
-                  data-live-search-placeholder="Seleccione cliente" title="Ningun cliente seleccionado">
-          </select>
-        </li>
-
-        <li class="list-group-item text-wrap">
-          <h6 class="alert alert-danger text-center font-weight-bold">
-            Sustento
-            <span class="text-danger">(Obligatorio)</span>
-          </h6>
-          <textarea name="txtSustentoBloqueo" id="txtSustentoBloqueo" class="form-control w-100"
-                    rows="3" style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar sustento"></textarea>
-        </li>
-
-        <li class="list-group-item text-wrap">
-          <h6 class="alert alert-warndangering text-center font-weight-bold">
-            Captura
-            <span class="text-danger">(Obligatorio)</span>
-          </h6>
-          <div id="attachmentfiles" class="border border-dark rounded d-flex justify-content-center align-items-center mb-4 position-relative"
-               style="height: 400px">
-            <i class="fa fa-upload"></i>
-            <div class="result_picture position-absolute" style="display: block;top: 0;left: 0;bottom: 0;right: 0;text-align: center;">
-              <img src="" class="h-100 img-fluid" alt="">
+    <div class="row">
+        <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+            <input name="codigoCodigoF" id="codigoCodigoF"
+                   placeholder="Colocar codigo del pedido">
+            <div class="input-icon">
+                <i class="fa fa-barcode" aria-hidden="true"></i>
             </div>
-          </div>
-          <div class="alert alert-danger">Puede copiar y pegar la imagen o hacer click en el recuadro para seleccionar un archivo</div>
-
-          <input type="file" name="agregaranulacion_f_captura" id="agregaranulacion_f_captura"  class="d-none form-control" placeholder="">
-        </li>
-
-    </ul>
-    <hr class="mt-2 mb-3"/>
-    <div class="form-group col-lg-12">
-        <button type="submit" class="float-right btn btn-success">Enviar</button>
+        </div>
+        <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+            <input name="asesorCodigoF" id="asesorCodigoF" placeholder="Asesor" disabled>
+            <div class="input-icon">
+                <i class="fa fa-user-circle" aria-hidden="true"></i>
+            </div>
+        </div>
     </div>
+    <div class="row">
+        <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+            <input name="importeCodigoF" id="importeCodigoF"
+                   placeholder="Colocar el importe del pedido" disabled>
+            <div class="input-icon">
+                <i class="fa fa-plus-square" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+            <input name="anularCodigoF" id="anularCodigoF"
+                   placeholder="Colocar el importe a anular" disabled>
+            <div class="input-icon">
+                <i class="fa fa-minus-square" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+            <input name="rucCodigoF" id="rucCodigoF"
+                   placeholder="Colocar el RUC del cliente" disabled>
+            <div class="input-icon">
+                <i class="fa fa-list-ol" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+            <input name="razonCodigoF" id="razonCodigoF"
+                   placeholder="Colocar la razón social" disabled>
+            <div class="input-icon">
+                <i class="fa fa-map-pin" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
+            <button type="submit" class="float-right btn btn-success ">Enviar</button>
+        </div>
+    </div>
+
 
 </form>

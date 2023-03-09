@@ -24,8 +24,12 @@ body {
     transform-origin: bottom left;
 }
 
-d-none {
+.d-none {
     display: none !important;
+}
+
+.text-warn{
+    color: #983434;
 }
 
 #santa_navidad {

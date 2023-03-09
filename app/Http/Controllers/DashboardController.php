@@ -77,65 +77,7 @@ class DashboardController extends Controller
         $array_string = implode(',', $arr);
 
 
-        /*----- Mes Actual - pedidos -----*/
-        $pedido_del_mes = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
-            ->where('u.rol', '=', User::ROL_ASESOR)
-            ->where('pedidos.codigo', 'not like', "%-C%")->activo()
-            ->where('pendiente_anulacion', '<>', '1')
-            ->whereBetween(DB::raw('Date(pedidos.created_at)'), [$primer_dia, $fecha_actual])
-            ->groupBy(DB::raw('Date(pedidos.created_at)'))
-            ->select(
-                DB::raw('Date(pedidos.created_at) as fecha'),
-                DB::raw('count(pedidos.created_at) as total')
-            )->get();
-
-
-        collect($arr)->map(function ($dia) use ($pedido_del_mes) {
-            $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $dia, 'month')->format('Y-m-d');
-            //dd($dia_calculado); //"2023-03-01"
-            $asd = array_keys($pedido_del_mes->toArray(), 'fecha');
-            dd($asd);
-            if (!array_key_exists($dia_calculado, array_keys($pedido_del_mes, 'fecha'))){
-                $pedido_del_mes[$dia_calculado]= 0;
-            }
-            return $dia;
-        });
-
-        var_dump($pedido_del_mes, true);
-
-
-        $arrayMes_string = implode(',', $arrMes);
-
-        /*----- Mes Anterior - pedidos -----*/
-        $pedido_del_mes_anterior = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
-            ->where('u.rol', '=', User::ROL_ASESOR)
-            ->where('pedidos.codigo', 'not like', "%-C%")->activo()
-            ->where('pendiente_anulacion', '<>', '1')
-            ->whereBetween(DB::raw('Date(pedidos.created_at)'), [$primer_dia_anterior, $fecha_anterior])
-            ->groupBy(DB::raw('Date(pedidos.created_at)'))
-            ->select(
-                DB::raw('Date(pedidos.created_at) as fecha_anterior'),
-                DB::raw('count(pedidos.created_at) as total_anterior')
-            )
-            ->get()->map(function ($porcentaje, $index) {
-                $porcentaje->rownumber = $index + 1;
-                return $porcentaje;
-            });
-
-        foreach ($pedido_del_mes_anterior as $pedido_mes_anterior) {
-            $arrMesAnterior[$pedido_mes_anterior->fecha_anterior] = $pedido_mes_anterior->total_anterior;
-        }
-        $arrayMesAnterior_string = implode(',', $arrMesAnterior);
-
-        foreach (explode(',', $arrayMesAnterior_string) as $calculoDias) {
-            if (!array_key_exists($calculoDias, $arrMesAnterior)) {
-                $arrMesAnterior[$calculoDias] = 0;
-            }
-        }
-        $arrayMesAnterior_string = implode(',', $arrMesAnterior);
-
-
-        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id', 'array_string', 'arrayMes_string', 'arrayMesAnterior_string'));
+        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id', 'array_string'));
 
     }
 

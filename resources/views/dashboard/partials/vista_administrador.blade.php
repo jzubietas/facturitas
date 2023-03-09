@@ -384,12 +384,7 @@
             var intersect = true
 
             var $visitorsChart = $('#visitors-chart')
-            let $arrr = [{{$array_string}}]
-            let $mes_actual = [{{$arrayMes_string}}]
-            let $mes_anterior = [{{$arrayMesAnterior_string}}]
-            console.log($arrr);
-            console.log($mes_actual);
-            console.log($mes_anterior);
+
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
                     /*eje x: dias*/
@@ -397,7 +392,7 @@
                     datasets: [{
                         /*azul*/
                         type: 'line',
-                        data: $mes_actual,
+                        data: [100,200,300],
                         backgroundColor: 'transparent',
                         borderColor: '#007bff',
                         pointBorderColor: '#007bff',
@@ -406,7 +401,7 @@
                     }, {
                         /*plomo*/
                         type: 'line',
-                        data: $mes_anterior,
+                        data: [400,500,800],
                         backgroundColor: 'tansparent',
                         borderColor: '#ced4da',
                         pointBorderColor: '#ced4da',
