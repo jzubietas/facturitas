@@ -22,14 +22,20 @@
             </a>
         @endif
 
-        @if(Auth::user()->rol == 'Administrador' || Auth::user()->rol == 'Llamadas' || Auth::user()->rol == 'Jefe de llamadas')
+            <a href="{{route('excel.clientes-two-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                <i class="fa fa-download"></i>
+                <i class="fa fa-file-excel"></i>
+                EXPORTAR TODO BASE FRIA DE TODOS LOS ASESORES
+            </a>
+
+        {{--@if(Auth::user()->rol == 'Administrador' || Auth::user()->rol == 'Llamadas' || Auth::user()->rol == 'Jefe de llamadas')
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Exportar
             </button>
             <div class="dropdown-menu">
                 <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría por asesor</a>
             </div>
-        @endif
+        @endif--}}
 
     </div>
     {{-- @include('base_fria.modal.exportar') --}}

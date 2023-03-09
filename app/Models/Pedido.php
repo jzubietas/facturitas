@@ -40,8 +40,7 @@ class Pedido extends Model
     const EN_ATENCION_OPE = 'EN ATENCION - OPE'; // 2
     const ATENDIDO_OPE_INT = 3;
     const ATENDIDO_OPE = 'ATENDIDO - OPE'; // 3
-    const CORRECCION_OPE_INT=27;
-    const CORRECCION_OPE = 'CORRECCION - OPE'; // 27
+
     const ENVIADO_OPE_INT = 5;
     const ENVIADO_OPE = 'ENVIADO A JEFE OPE - OPE';//5
     const RECIBIDO_JEFE_OPE_INT = 6;
@@ -99,6 +98,10 @@ class Pedido extends Model
     const ENTREGADO_RECOJO_COURIER = 'ENTREGADO RECOJO - COURIER'; //34
     const ENTREGADO_RECOJO_JEFE_OPE_INT = 34;
     const ENTREGADO_RECOJO_JEFE_OPE = 'ENTREGADO RECOJO - JEFE OPE'; //34
+
+    const CORRECCION_OPE_INT=35;
+    const CORRECCION_OPE = 'CORRECCION - OPE'; // 35
+
 
 
 /*  cosnt RECOJO CLIENTE MOTORIZADO
