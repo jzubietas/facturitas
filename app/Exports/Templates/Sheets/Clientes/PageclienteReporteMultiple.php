@@ -73,7 +73,9 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
             ->where('clientes.tipo','1');
             //->whereNotNull('clientes.situacion');
         $cal_sit=$this->situacion;
-        $clientes=$clientes->limit(10);
+        /*validar los colores de los 10 primeros
+        $clientes=$clientes->limit(10);*/
+        $clientes=$clientes;
         switch($cal_sit)
             {
                 case 'ABANDONO':
