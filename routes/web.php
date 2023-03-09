@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlertaController;
+use App\Http\Controllers\AnulacionController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CourierRegistrosController;
 use App\Http\Controllers\DashboardController;
@@ -139,6 +140,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('pedidos.recojo', [PedidoController::class, 'pedidosrecojo'])->name('pedidos.recojo');
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside
+
+    Route::get('pedidos.anulaciones', [AnulacionController::class, 'pedidosanulaciones'])->name('pedidos.anulaciones');
+    Route::get('pedidosanulacionestabla', [AnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulacionestabla');//actualizado para serverside
+
 
     Route::get('registros.asesor.lista', [EnvioController::class, 'registrosasesor'])->name('registros.asesor.lista');
 

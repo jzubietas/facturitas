@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\PedidoAtendidoEvent;
 use App\Events\PedidoEntregadoEvent;
 use App\Events\PedidoEvent;
+use App\Models\Alerta;
 use App\Models\Cliente;
 use App\Models\Departamento;
 use App\Models\DetallePago;
@@ -1712,6 +1713,12 @@ class EnvioController extends Controller
         'condicion_envio' => Pedido::ATENDIDO_OPE,
         'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
       ]);
+        $alerta = Alerta::where('user_id',Auth::user()->id)->where('metadata',$pedido->id)->where('subject','RECOJO');
+        if ($alerta){
+            $alerta->update([
+                'finalized_at' => now()
+            ]);
+        }
       $mensaje="Recibido exitosamente";
     }else{
       $mensaje="No tiene grupo direccion, verificar";

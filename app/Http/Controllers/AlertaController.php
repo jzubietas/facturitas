@@ -24,11 +24,15 @@ class AlertaController extends Controller
     {
         $action = $request->action;
         if ($action == 'aceptar') {
+
             $alerta = Alerta::findOrFail($request->alerta_id);
-            $alerta->update([
-                'finalized_at' => now()
-            ]);
+            if ($alerta->subject!="RECOJO"){
+                $alerta->update([
+                    'finalized_at' => now()
+                ]);
+            }
             return $alerta;
+
         } elseif ($action == 'cancelar') {
             $alerta = Alerta::findOrFail($request->alerta_id);
             $alerta->update([
