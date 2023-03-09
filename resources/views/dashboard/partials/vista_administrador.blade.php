@@ -348,7 +348,7 @@
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
 
-            setInterval(myTimer, 500000);
+            setInterval(myTimer, 5000);
 
             function myTimer() {
                 cargaNueva(1);
