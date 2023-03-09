@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use \Yajra\Datatables\Datatables;
+use function Sodium\add;
 
 class DashboardController extends Controller
 {
@@ -53,8 +54,72 @@ class DashboardController extends Controller
         }
         $lst_users_vida = $lst_users_vida->get();
 
+        /*----- Dias por fecha -----*/
+        $fecha_actual = Carbon::now()->endOfDay(); // dia actual
+        $primer_dia = Carbon::now()->startOfMonth()->startOfDay(); //primer dia del mes
 
-        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id'));
+        $fecha_anterior = $fecha_actual->clone()->subMonth();
+        $primer_dia_anterior = $primer_dia->clone()->subMonth();
+
+        $mes_pasado = Carbon::now()->startOfMonth()->subMonth()->startOfDay();
+        $diff = abs($primer_dia->diffInDays($fecha_actual)) + 1;
+        $arr = [];
+        $arrMes=[];
+        $arrMesAnterior = [];
+
+        for ($i = 1; $i <= $diff; $i++) {
+            $arr[] = (string)($i);
+        }
+
+        $array_string = implode(',', $arr);
+
+
+        /*----- Mes Actual - pedidos -----*/
+        $pedido_del_mes = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
+            ->where('rol', '=', User::ROL_ASESOR)
+            ->where('codigo', 'not like', "%-C%")->activo()
+            ->where('pendiente_anulacion', '<>', '1')
+            /*->where('pedidos.created_at', Carbon::now()->startOfMonth())*/
+            ->whereBetween(DB::raw('Date(pedidos.created_at)'), [
+                $primer_dia, $fecha_actual
+            ])
+            ->groupBy(DB::raw('Date(pedidos.created_at)'))
+            ->select(
+                DB::raw('Date(pedidos.created_at) as fecha'),
+                DB::raw('count(pedidos.created_at) as total')
+            )
+            ->get();
+
+        foreach ($pedido_del_mes as $pedido_mes){
+            $arrMes[$pedido_mes->fecha] = $pedido_mes->total;
+        }
+        $arrayMes_string = implode(',', $arrMes);
+
+
+
+        /*----- Mes Anterior - pedidos -----*/
+        $pedido_del_mes_anterior = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
+            ->where('rol', '=', User::ROL_ASESOR)
+            ->where('codigo', 'not like', "%-C%")->activo()
+            ->where('pendiente_anulacion', '<>', '1')
+            /*->where('pedidos.created_at', Carbon::now()->startOfMonth()->subMonth())*/
+            ->whereBetween(DB::raw('Date(pedidos.created_at)'),
+                [ $primer_dia_anterior, $fecha_anterior ])
+            ->groupBy(DB::raw('Date(pedidos.created_at)'))
+            ->select(
+                DB::raw('Date(pedidos.created_at) as fecha_anterior'),
+                DB::raw('count(pedidos.created_at) as total_anterior')
+            )
+            ->get();
+
+        foreach ($pedido_del_mes_anterior as $pedido_mes_anterior){
+            $arrMesAnterior[$pedido_mes_anterior->fecha_anterior] = $pedido_mes_anterior->total_anterior;
+        }
+        $arrayMesAnterior_string = implode(',', $arrMesAnterior);
+
+        //dd($arrayMes_string.$arrayMesAnterior_string);
+
+        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id', 'array_string', 'arrayMes_string', 'arrayMesAnterior_string'));
 
     }
 
@@ -229,8 +294,8 @@ class DashboardController extends Controller
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
-                ->where('pedidos.pago','1')
-                ->where('pedidos.pagado','2')
+                ->where('pedidos.pago', '1')
+                ->where('pedidos.pagado', '2')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
                 ->where('pago_pedidos.estado', 1)
@@ -1233,4 +1298,18 @@ class DashboardController extends Controller
             return $query->whereBetween($column, [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()]);
         }
     }*/
+
+    /*    public static  function sparkline(Request $request){
+
+            $fecha_actual = Carbon::now()->endOfDay()->format('d'); // dia actual
+            $primer_dia = Carbon::now()->startOfMonth()->startOfDay()->format('d'); //primer dia del mes
+            $diff = abs(diff($fecha_actual, $primer_dia));
+            $arr = [];
+
+            for ($i=1; $i<=$diff; $i++){
+                $arr[] = $i;
+            }
+
+            dd($arr);
+        }*/
 }
