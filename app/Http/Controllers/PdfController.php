@@ -92,6 +92,8 @@ class PdfController extends Controller
     $anio_w = Carbon::now()->startOfMonth()->format('Y');
 
     $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
+        ->join('clientes as c','c.id','situacion_clientes.cliente_id')
+        ->join('users as u','u.id','c.user_id')
       ->where([
         ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
         ['a.situacion', '=', 'ABANDONO RECIENTE'],
@@ -143,7 +145,8 @@ class PdfController extends Controller
                                                     THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
 
         DB::raw('count(situacion_clientes.situacion) as total')
-      ])->get();
+      ])->whereNotIn('u.identificador',['15'])
+        ->get();
     $html = [];
     $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
     foreach ($situaciones_clientes as $situacion_cliente) {
