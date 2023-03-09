@@ -120,7 +120,8 @@
                                                                 notice.fire('pnotify:confirm', {notice, value});
                                                             })
                                                     },
-                                                }/*,
+                                                }
+                                                /*,
                                                 {
                                                     text: 'Aceptar',
                                                     primary: true,
