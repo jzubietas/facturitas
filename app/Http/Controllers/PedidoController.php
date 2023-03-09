@@ -9,6 +9,7 @@ use App\Events\PedidoEvent;
 use App\Jobs\PostUpdateSituacion;
 use App\Models\AttachCorrection;
 use App\Models\Cliente;
+use App\Models\Correction;
 use App\Models\Departamento;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
@@ -1934,6 +1935,16 @@ class PedidoController extends Controller
                 $detalle_pedidos = $pedido->detallePedidos()->update([
                     'estado' => '0'
                 ]);
+                //anular correciones tbm
+                //->where('celular', 'like', '%' . $q . '%')
+                $correct=Correction::where('code', 'like', '' . $pedido->codigo . '%')->get();
+                foreach ($correct as $correction)
+                {
+                    $correction->update(
+                        ['estado'=>0]
+                    );
+                }
+
                 $html = $detalle_pedidos;
             }
             //Cliente::createSituacionByCliente($pedido->cliente_id);
@@ -3265,6 +3276,14 @@ class PedidoController extends Controller
         $pedido->detallePedidos()->update([
             'estado' => '0'
         ]);
+
+        $correct=Correction::where('code', 'like', '' . $pedido->codigo . '-C%')->get();
+        foreach ($correct as $correction)
+        {
+            $correction->update(
+                ['estado'=>0]
+            );
+        }
 
         event(new PedidoAnulledEvent($pedido));
 
