@@ -187,6 +187,22 @@ class ExcelController extends Controller
             ->download('Lista de Clientes_pedidos_2_meses.xlsx');
     }
 
+    public function basefriaAllAsesorExcel(Request $request)
+    {
+        if($request->user_id)
+        {
+            return (new BaseFriaPorAsesorExport)
+                ->clientes($request)
+                ->download('Lista Base Fria por Asesor - USER' . $request->user_id . '.xlsx');
+        }
+        else
+        {
+            return (new BaseFriaPorAsesorExport)
+                ->clientes($request)
+                ->download('Lista Base Fria por todos los Asesores' .'xlsx');
+        }
+    }
+
     public function clientesReporteMultipleExcel(Request $request)
     {
         //return $request->all();

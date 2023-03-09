@@ -22,7 +22,7 @@
             </a>
         @endif
 
-            <a href="{{route('excel.clientes-two-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+            <a href="{{route('excel.basefria-all_asesor-excel')}}" target="_blank" class="btn btn-dark mr-4">
                 <i class="fa fa-download"></i>
                 <i class="fa fa-file-excel"></i>
                 EXPORTAR TODO BASE FRIA DE TODOS LOS ASESORES
