@@ -189,17 +189,17 @@ class ExcelController extends Controller
 
     public function basefriaAllAsesorExcel(Request $request)
     {
-        if($request->user_id)
+        if(!$request->user_id)
         {
             return (new BaseFriaPorAsesorExport)
                 ->clientes($request)
-                ->download('Lista Base Fria por Asesor - USER' . $request->user_id . '.xlsx');
+                ->download('Lista Base Fria por todos los Asesores.xlsx');
         }
         else
         {
             return (new BaseFriaPorAsesorExport)
                 ->clientes($request)
-                ->download('Lista Base Fria por todos los Asesores' .'xlsx');
+                ->download('Lista Base Fria por Asesor - USER' . $request->user_id . '.xlsx');
         }
     }
 

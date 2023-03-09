@@ -28,8 +28,9 @@ class BaseFriaPorAsesorExport implements FromView, ShouldAutoSize
         ->where('clientes.estado','1')
         ->where('clientes.tipo','0');
 
-        if($request->user_id)
+        if(!$request->user_id)
         {
+        }else{
             $base_fria=$base_fria->where('clientes.user_id', $request->user_id);
         }
 
