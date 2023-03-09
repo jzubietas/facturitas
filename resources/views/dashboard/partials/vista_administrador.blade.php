@@ -384,7 +384,6 @@
             var intersect = true
 
             var $visitorsChart = $('#visitors-chart')
-
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
                     /*eje x: dias*/

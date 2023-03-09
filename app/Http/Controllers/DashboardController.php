@@ -57,27 +57,10 @@ class DashboardController extends Controller
         }
         $lst_users_vida = $lst_users_vida->get();
 
-        /*----- DIAS POR FECHA -----*/
-        $fecha_actual = Carbon::now()->endOfDay(); // dia actual
-        $primer_dia = Carbon::now()->startOfMonth()->startOfDay(); //primer dia del mes
-
-        $fecha_anterior = $fecha_actual->clone()->subMonth();
-        $primer_dia_anterior = $primer_dia->clone()->subMonth();
-
-        $mes_pasado = Carbon::now()->startOfMonth()->subMonth()->startOfDay();
-        $diff = abs($primer_dia->diffInDays($fecha_actual)) + 1;
-        $arr = [];
-        $arrMes = [];
-        $arrMesAnterior = [];
-
-        for ($i = 1; $i <= $diff; $i++) {
-            $arr[] = (string)($i);
-        }
-
-        $array_string = implode(',', $arr);
 
 
-        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id', 'array_string'));
+
+        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id'));
 
     }
 

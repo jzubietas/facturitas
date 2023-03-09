@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alerta;
 use App\Models\Cliente;
+use App\Models\Porcentaje;
 use App\Models\Ruc;
 use App\Models\User;
 
@@ -1310,6 +1311,8 @@ class UserController extends Controller
     public function getComboRuc(Request $request)
     {
         $html = '<option value="-1">' . trans('---- SELECCIONE RUC ----') . '</option>';
+
+
         $rucs = Ruc::where('estado', '1')
             ->get([
                 'id',
@@ -1317,10 +1320,65 @@ class UserController extends Controller
                 'empresa',
                 'porcentaje',
             ]);
-        foreach ($rucs as $ruc) {
-            $html .= '<option style="color:black" value="' . $ruc->id . '" data-raz-soc="' . $ruc->empresa . '" data-ruc="' . $ruc->num_ruc . '" >' . $ruc->num_ruc . '  -  ' . $ruc->empresa . '</option>';
+        foreach ($rucs as $cliente) {
+            $html .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->empresa . '" data-ruc="' . $cliente->num_ruc . '" >' . $cliente->num_ruc . '  -  ' . $cliente->empresa . '</option>';
         }
         return response()->json(['html' => $html]);
+    }
+
+    public function getComboClientes(Request $request)
+    {
+        $html = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+
+        $clientes = Cliente::where('estado', '1')->where('tipo', '1')
+            ->get([
+                'id',
+                'nombre',
+                'celular',
+            ]);
+        foreach ($clientes as $cliente) {
+                $html .= '<option style="color:black" value="' . $cliente->id . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
+            }
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function getPorcClientes(Request $request)
+    {
+        /*return $request->all();*/
+        $clientesporc = Porcentaje::where('cliente_id', $request->cliente_id)
+            ->get([
+                'porcentajes.*',
+            ]);
+
+        return response()->json(['html' => $clientesporc]);
+    }
+    public function uptPorcClientes(Request $request)
+    {
+        /*return $request->all();*/
+        $porcentaje1 = Porcentaje::query()->where("cliente_id",  $request->cliente_id)->where("nombre",  Porcentaje::FISICO_SIN_BANCA)->update([
+            'porcentaje' => $request->porcentaje1,
+        ]);
+
+        $porcentaje2 = Porcentaje::query()->where("cliente_id",  $request->cliente_id)->where("nombre",  Porcentaje::FISICO_BANCA)->update([
+            'porcentaje' => $request->porcentaje2,
+        ]);
+
+        $porcentaje3 = Porcentaje::query()->where("cliente_id",  $request->cliente_id)->where("nombre",  Porcentaje::ELECTRONICA_SIN_BANCA)->update([
+            'porcentaje' => $request->porcentaje3,
+        ]);
+
+        $porcentaje4 = Porcentaje::query()->where("cliente_id",  $request->cliente_id)->where("nombre",  Porcentaje::ELECTRONICA_BANCA)->update([
+            'porcentaje' => $request->porcentaje4,
+        ]);
+
+        return response()->json([
+            "success" => true,
+            '$porcentaje1' => $porcentaje1,
+            '$porcentaje2' => $porcentaje2,
+            '$porcentaje3' => $porcentaje3,
+            '$porcentaje4' => $porcentaje4,
+        ]);
     }
 
     public function updateNameEmpresa(Request $request)

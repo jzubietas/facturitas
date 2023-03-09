@@ -28,7 +28,7 @@
           <small class="text-danger">{{ $message }}</small>
         @enderror
       </div>
-      <div class="form-group col-lg-3">        
+      <div class="form-group col-lg-3">
         {!! Form::label('dni', 'DNI') !!}
         {!! Form::number('dni', null, ['class' => 'form-control', 'id' => 'dni', 'min' =>'0', 'max' => '99999999', 'maxlength' => '8', 'oninput' => 'maxLengthCheck(this)']) !!}
         @error('dni')
@@ -73,8 +73,8 @@
         <table id="tabla_pagos" class="table table-striped">
           <thead class="bg-primary">
             <tr>
-              <th scope="col">ITEM</th> 
-              <th scope="col"></th>               
+              <th scope="col">ITEM</th>
+              <th scope="col"></th>
               <th scope="col">TIPO</th>
               <th scope="col">%</th>
             </tr>
@@ -106,10 +106,10 @@
               <td><input type="text" name="nporcentaje[]" value="ELECTRONICA - banca" disabled class="form-control"></td>
               <td><input type="number" step="0.1" name="porcentaje[]" id="porcentaje3" value="0" min="0" class="form-control"></td>
             </tr>
-            
+
           </tbody>
         </table>
-      </div>      
-    </div>  
+      </div>
+    </div>
   </div>
 </div>
