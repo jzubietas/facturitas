@@ -212,6 +212,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('getComboCliente', [UserController::class, 'getComboCliente'])->name('getComboCliente');
     Route::get('getComboRuc', [UserController::class, 'getComboRuc'])->name('getComboRuc');
     Route::post('updateNameEmpresa', [UserController::class, 'updateNameEmpresa'])->name('updateNameEmpresa');
+    Route::post('updateRuc', [UserController::class, 'updateRuc'])->name('updateRuc');
 
     Route::get('users.llamadas', [UserController::class, 'Llamadas'])->name('users.llamadas');////llamadas
     Route::get('users.llamadastabla', [UserController::class, 'Llamadastabla'])->name('users.llamadastabla');////llamadas

@@ -25,6 +25,38 @@
                                 <div class="card-body border border-secondary rounded">
                                     <div class="form-row">
                                         <div class="form-group col-lg-6">
+                                            {!! Form::label('cbxChangeRuc', 'RUC*') !!} &nbsp; &nbsp; &nbsp;
+                                            <select name="cbxChangeRuc"
+                                                    class="border form-control border-secondary"
+                                                    id="cbxChangeRuc" data-live-search="true">
+                                                <option value="-1">---- SELECCIONE RUC ----</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-lg-6">
+                                            {!! Form::label('txtChangeRuc', 'Ingrese RUC') !!}
+                                            {{--<input type="number" name="txtChangeRuc" id="txtChangeRuc" class="form-control number" placeholder="Ingrese RUC..." maxlength="11" minlength="11">--}}
+
+                                            {!! Form::number('Ingrese RUC', null, ['class' => 'form-control number', 'id' => 'txtChangeRuc', 'name' => 'txtChangeRuc', 'min' =>'11', 'max' => '11', 'maxlength' => '11', 'oninput' => 'maxLengthCheck(this)']) !!}
+                                        </div>
+                                        <button type="button" id="btnChangeRuc" class="btn btn-info btn-lg">
+                                            Actualizar RUC
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="navCambioAsesor" role="tabpanel" aria-labelledby="navCambioAsesortab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Cambio de Asesor</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-body border border-secondary rounded">
+                                    <div class="form-row">
+                                        <div class="form-group col-lg-6">
                                             {!! Form::label('cbxAsesor', 'Asesor*') !!} &nbsp; &nbsp;
                                             <select name="cbxAsesor" class="border form-control border-secondary"
                                                     id="cbxAsesor" data-live-search="true">
@@ -53,12 +85,8 @@
                                         <div class="form-group col-lg-6">
                                             {!! Form::label('pcantidad_tiempo', 'Empresa (Razon social)') !!}
                                             <input type="text" name="txtRazonSocialRel" id="txtRazonSocialRel"
-                                                   class="form-control number" placeholder="Empresa (Razon social)...">
+                                                   class="form-control number" placeholder="Empresa (Razon social)..." readonly>
                                         </div>
-
-                                        <button type="button" id="btnCambiarNombre" class="btn btn-success btn-lg">
-                                            Cambiar Nombre
-                                        </button>
                                         <button type="button" id="btnCrearNuevaRelacion" class="btn btn-info btn-lg">
                                             Crear nueva relacion
                                         </button>
@@ -67,9 +95,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane fade" id="navCambioAsesor" role="tabpanel" aria-labelledby="navCambioAsesortab">
-                        {{--navCambioAsesortab--}}
                     </div>
                     <div class="tab-pane fade" id="navCambioCliente" role="tabpanel" aria-labelledby="navCambioClientetab">
                         {{--navCambioClientetab--}}
@@ -154,6 +179,9 @@
 
                         $('#cbxRucRel').html(data.html);
                         $("#cbxRucRel").selectpicker("refresh");
+
+                        $('#cbxChangeRuc').html(data.html);
+                        $("#cbxChangeRuc").selectpicker("refresh");
                     }
                 });
             }
@@ -167,6 +195,11 @@
             $("#cbxRucRel").on("change", function () {
                 var data_raz_soc = $("option[value=" + $(this).val() + "]", this).attr('data-raz-soc');
                 $('#txtRazonSocialRel').val(data_raz_soc);
+            });
+
+            $("#cbxChangeRuc").on("change", function () {
+                var data_ruc = $("option[value=" + $(this).val() + "]", this).attr('data-ruc');
+                $('#txtChangeRuc').val(data_ruc);
             });
 
             $("#btnCambiarNombreChangeName").click(function () {
@@ -280,6 +313,61 @@
                         $("#btnCrearNuevaRelacion").removeAttr('disabled')
                     })
             })*/
+            $("#btnChangeRuc").click(function () {
+                $("#btnChangeRuc").attr('disabled', 'disabled')
+                var data = {}
+                data.cliente_id = $("#cbxChangeRuc").val()
+                data.cliente_ruc= $("#txtChangeRuc").val()
+                if (data.cliente_ruc =='' ){
+                    Swal.fire(
+                        'Error',
+                        'Ingrese el RUC',
+                        'error'
+                    )
+                    $("#btnChangeRuc").removeAttr('disabled')
+                    return false;
+                }
+                $.post('{{route('updateRuc')}}', data)
+                    .done(function (data) {
+                        console.log(data)
+                        if (data.success) {
+                            Swal.fire(
+                                'Notificacion',
+                                'Se actualizo el RUC correctamente',
+                                'success'
+                            )
+                            cargaComboRuc();
+                            $("#txtChangeRuc").val('')
+                        } else {
+                            Swal.fire(
+                                'Notificacion',
+                                'Los datos no fueron guardados',
+                                'warning'
+                            )
+                        }
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                        if (data.responseJSON.errors) {
+                            Swal.fire(
+                                'Error',
+                                Object.keys(data.responseJSON.errors).map(function (key) {
+                                    return `<b>${data.responseJSON.errors[key][0]}</b>`
+                                }).join('<hr class="my-1"><br>'),
+                                'error'
+                            )
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                'Ocurrio un error al intentar guardar la información',
+                                'error'
+                            )
+                        }
+                    })
+                    .always(function () {
+                        $("#btnChangeRuc").removeAttr('disabled')
+                    })
+            })
         })
     </script>
 @endpush
