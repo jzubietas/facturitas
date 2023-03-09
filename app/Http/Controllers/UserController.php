@@ -236,9 +236,22 @@ class UserController extends Controller
 
     public function Llamadastabla(Request $request)
     {
-        $users = User::whereIn('rol', [User::ROL_LLAMADAS,User::ROL_COBRANZAS])
-            ->where('estado', '1')
-            ->orderBy('created_at', 'DESC')
+        $users = User::leftjoin('users as jf','jf.id','users.supervisor')
+            ->leftjoin('users as op','op.id','op.operario')
+            ->whereIn('users.rol', [User::ROL_LLAMADAS,User::ROL_COBRANZAS])
+            ->where('users.estado', '1')
+            ->select([
+                'users.id',
+                'users.rol',
+                'users.name',
+                'users.email',
+                //'users.supervisor',
+                //'users.operario',
+                'users.estado',
+                'jf.name as supervisor',
+                'op.name as operario'
+            ])
+            ->orderBy('users.created_at', 'DESC')
             ->get();
 
         return Datatables::of($users)
@@ -252,7 +265,7 @@ class UserController extends Controller
                         '</a>';*/
                     $btn = $btn . '<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
                 }else if($user->rol==User::ROL_COBRANZAS){
-
+                    $btn = $btn . '<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
                 }
 
                 //$btn = $btn.'<a href="" data-target="#modal-asignarasesor" data-toggle="modal" data-supervisor="'.$user->id.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Asesor</button></a>';
