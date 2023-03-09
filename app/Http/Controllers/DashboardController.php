@@ -88,21 +88,29 @@ class DashboardController extends Controller
                 DB::raw('Date(pedidos.created_at) as fecha'),
                 DB::raw('count(pedidos.created_at) as total')
             )->get();
+        $collect_pedidos_del_mes=collect($pedido_del_mes)->toArray();
 
-
-        collect($arr)->map(function ($dia) use ($pedido_del_mes) {
+        collect($arr)->map(function ($dia) use ($collect_pedidos_del_mes, $pedido_del_mes) {
             $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $dia, 'month')->format('Y-m-d');
-            //dd($dia_calculado); //"2023-03-01"
-            $asd = array_keys($pedido_del_mes->toArray(), 'fecha');
-            dd($asd);
-            if (!array_key_exists($dia_calculado, array_keys($pedido_del_mes, 'fecha'))){
-                $pedido_del_mes[$dia_calculado]= 0;
+            //$asd = $pedido_del_mes->keyBy('fecha');
+            //dd($asd);
+            //dd($pedido_del_mes);
+            dd($collect_pedidos_del_mes);
+
+            if( !array_search($dia_calculado, array_column($collect_pedidos_del_mes, 'fecha')) )
+            {
+                $collect_pedidos_del_mes->push([$dia_calculado=>'0']);
             }
+            /*if (!array_key_exists($dia_calculado, $pedido_del_mes->keyBy('fecha')->toArray())){
+                $index_model_=array();
+
+                $collect_pedidos_del_mes->push($index_model_);
+                $pedido_del_mes->dia_calculado= 0;
+            }*/
             return $dia;
         });
 
-        var_dump($pedido_del_mes, true);
-
+        dd($collect_pedidos_del_mes);
 
         $arrayMes_string = implode(',', $arrMes);
 
