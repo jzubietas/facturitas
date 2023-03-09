@@ -51,12 +51,23 @@
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div id="metas_total"></div>
                 </div>
-
             </div>
 
         </div>
     </div>
     {{-- FIN-TABLA-DUAL --}}
+
+
+</div>
+
+{{-- METAS ASESOR DE LLAMADAS --}}
+<div class="container-fluid">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-center">
+            <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
+        </div>
+        <div id="metas_situacion_clientes"></div>
+    </div>
 </div>
 
 {{--<!-- Modal -->
