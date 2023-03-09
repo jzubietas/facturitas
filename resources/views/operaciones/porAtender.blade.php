@@ -38,23 +38,23 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important">
+        <div class="card-body" style="overflow-x: scroll !important">
             <br>
             <table id="tablaOperacionesPedidosPorAtender" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col" style="vertical-align: middle">Item</th>
-                    <th scope="col" style="vertical-align: middle">Código</th>
-                    <th scope="col" style="vertical-align: middle">Sobre</th>
-                    <th scope="col" style="vertical-align: middle">Razón social</th>
-                    <th scope="col" style="vertical-align: middle">Mes</th>
-                    <th scope="col" style="vertical-align: middle">Asesor</th>
-                    <th scope="col" style="vertical-align: middle">Fecha de registro</th>
-                    <th scope="col" style="vertical-align: middle">Tipo de Banca</th>
-                    <th scope="col" style="vertical-align: middle">Adjuntos</th>
-                    <th scope="col" style="vertical-align: middle">Estado</th>
-                    <th scope="col" style="vertical-align: middle">Acciones</th>
+                    <th scope="col" class="align-middle">Item</th>
+                    <th scope="col" class="align-middle">Código</th>
+                    <th scope="col" class="align-middle">Sobre</th>
+                    <th scope="col" class="align-middle">Razón social</th>
+                    <th scope="col" class="align-middle">Mes</th>
+                    <th scope="col" class="align-middle">Asesor</th>
+                    <th scope="col" class="align-middle">Fecha de registro</th>
+                    <th scope="col" class="align-middle">Tipo de Banca</th>
+                    <th scope="col" class="align-middle">Adjuntos</th>
+                    <th scope="col" class="align-middle">Estado</th>
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
