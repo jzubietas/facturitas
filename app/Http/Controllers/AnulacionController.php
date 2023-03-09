@@ -97,19 +97,12 @@ class AnulacionController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftJoin('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
-            ->whereIn('pedidos.condicion_envio_code',
+            ->whereIn('pedidos.condicion_code',
                 [
-                    Pedido::RECOJO_COURIER_INT,
-                    Pedido::REPARTO_RECOJO_COURIER_INT,
-                    Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT,
-                    Pedido::RECEPCION_RECOJO_MOTORIZADO_INT,
-                    Pedido::RECOJO_MOTORIZADO_INT,
-                    Pedido::RECIBIDO_RECOJO_CLIENTE_INT,
-                    Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT,
-                    Pedido::ENTREGADO_RECOJO_COURIER_INT,
-                    Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
-                ])
-            ->where('pedidos.estado',1)
+                    Pedido::ANULADO_INT
+                ]
+            )
+            //->where('pedidos.estado',1)
             ->select(
                 [
                     'pedidos.*',
