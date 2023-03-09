@@ -239,6 +239,24 @@
       text-align: end;
       padding-right: 5px;
     }
+    @media screen and (max-width: 2249px) {
+        .contain-table-dual {
+            display: flex !important;
+            width: 100% !important;
+        }
+
+        #meta,
+        #metas_dp {
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+
+        #supervisor_total table tbody tr th:nth-child(n),
+        #supervisor_A table tbody tr th:nth-child(n),
+        #metas_total table tbody tr th:nth-child(n) {
+            width: 33.33333% !important;
+        }
+    }
 
   </style>
 @endpush
