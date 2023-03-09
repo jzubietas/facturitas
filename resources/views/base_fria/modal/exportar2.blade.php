@@ -11,7 +11,7 @@
       {!! Form::open(['route' => ['basefriaporasesorExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
             <div class="card-body">
               <div class="form-row">
-                <div class="form-group col-lg-12" style="text-align: center; font-size:16px">                  
+                <div class="form-group col-lg-12" style="text-align: center; font-size:16px">
                   <div class="form-row">
                     <div class="col-lg-12">
                       {!! Form::label('user_id', 'Elija un asesor') !!} <br><br>
@@ -20,7 +20,7 @@
                   </div>
                 </div>
               </div>
-            </div>    
+            </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
             </div>
