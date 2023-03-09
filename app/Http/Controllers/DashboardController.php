@@ -88,9 +88,10 @@ class DashboardController extends Controller
     public function searchCliente(Request $request)
     {
         $q = $request->get("q");//915722331
+        $nrocel =str_replace(' ', '', $q);
         $clientes = Cliente::query()
             ->with(['user', 'rucs', 'porcentajes'])
-            ->where('celular', 'like', '%' . $q . '%')
+            ->where('celular', 'like', '%' . $nrocel . '%')
             ->orwhere(DB::raw("concat(clientes.celular,'-',clientes.icelular)"), 'like', '%' . $q . '%')
             ->orWhere('nombre', 'like', '%' . join("%", explode(" ", trim($q))) . '%')
             ->orWhere('dni', 'like', '%' . $q . '%')
