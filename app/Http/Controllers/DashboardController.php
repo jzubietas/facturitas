@@ -84,33 +84,37 @@ class DashboardController extends Controller
             ->where('pendiente_anulacion', '<>', '1')
             ->whereBetween(DB::raw('Date(pedidos.created_at)'), [$primer_dia, $fecha_actual])
             ->groupBy(DB::raw('Date(pedidos.created_at)'))
-            ->select(
+            ->select([
                 DB::raw('Date(pedidos.created_at) as fecha'),
                 DB::raw('count(pedidos.created_at) as total')
-            )->get();
-        $collect_pedidos_del_mes=collect($pedido_del_mes)->toArray();
-
-        collect($arr)->map(function ($dia) use ($collect_pedidos_del_mes, $pedido_del_mes) {
-            $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $dia, 'month')->format('Y-m-d');
-            //$asd = $pedido_del_mes->keyBy('fecha');
-            //dd($asd);
-            //dd($pedido_del_mes);
-            dd($collect_pedidos_del_mes);
-
-            if( !array_search($dia_calculado, array_column($collect_pedidos_del_mes, 'fecha')) )
-            {
-                $collect_pedidos_del_mes->push([$dia_calculado=>'0']);
-            }
-            /*if (!array_key_exists($dia_calculado, $pedido_del_mes->keyBy('fecha')->toArray())){
-                $index_model_=array();
-
-                $collect_pedidos_del_mes->push($index_model_);
-                $pedido_del_mes->dia_calculado= 0;
-            }*/
-            return $dia;
+            ])->get();
+        //dd($pedido_del_mes);
+        $data_return=[];
+        collect($pedido_del_mes)->map(function ($dia_mesmes) use($data_return) {
+            array_push($data_return,array("fecha"=>$dia_mesmes->fecha,"total"=>$dia_mesmes->total));
+            //$data_return[]=array("fecha"=>$dia_mesmes->fecha,"total"=>$dia_mesmes->total);
         });
 
-        dd($collect_pedidos_del_mes);
+        echo "<pre>";
+        print_r($data_return);
+        echo "</pre>";
+
+        $collect_pedidos_del_mes=collect($pedido_del_mes)->toArray();
+        $final_array=$pedido_del_mes->toArray();
+        //var_dump($final_array);
+        collect($arr)->map(function ($dia) use ($final_array, $collect_pedidos_del_mes, $pedido_del_mes) {
+            $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $dia, 'month')->format('Y-m-d');
+            if( !in_array($dia_calculado, array_column($collect_pedidos_del_mes, 'fecha')) )
+            {
+                echo "no existe $dia_calculado<br>";
+                $collect_pedidos_del_mes_item=array('fecha'=>$dia_calculado,'total'=>0,'condicion_envio_color'=>'#b0deb3');
+                //array('fecha'=>$dia_calculado,'total'=>0);
+                var_dump($collect_pedidos_del_mes_item);
+                $final_array[count($final_array)+1]=$collect_pedidos_del_mes_item;
+            }
+            return $dia;
+        });
+        dd($final_array);
 
         $arrayMes_string = implode(',', $arrMes);
 
