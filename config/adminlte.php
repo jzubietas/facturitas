@@ -343,6 +343,13 @@ return [
                   'icon' => 'fas fa-check-circle',
                   'active' => ['pedidos de recojo'],
                 ],
+                [
+                    'text' => 'Bandejas de anulaciones',
+                    'route' => 'pedidos.anulaciones',
+                    'can' => 'pedidos.index',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['pedidos anulaciones'],
+                ],
             ],
         ],
 

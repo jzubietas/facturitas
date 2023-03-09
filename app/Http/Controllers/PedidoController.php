@@ -574,6 +574,7 @@ class PedidoController extends Controller
       ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color'])
       ->make(true);
   }
+
   public function pedidosrecojo()
   {
     return view('pedidos.recojo.index');
