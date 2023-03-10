@@ -184,7 +184,7 @@
             <div class="card-body">
                 <div class="d-flex">
                     <p class="d-flex flex-column">
-                        <span class="text-bold text-lg">820</span>
+                        <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
                         <span>Cantidad de pedidos del día</span>
                     </p>
                     {{--
@@ -384,9 +384,9 @@
             var intersect = true
 
             var $visitorsChart = $('#visitors-chart')
-            let $arrr = [{{$array_string}}]
-            let $mes_actual = [{{$arrayMes_string}}]
-            let $mes_anterior = [{{$arrayMesAnterior_string}}]
+            let $arrr = [{{$contadores_arr}}]
+            let $mes_actual = [{{$contadores_mes_actual}}]
+            let $mes_anterior = [{{$contadores_mes_anterior}}]
             console.log($arrr);
             console.log($mes_actual);
             console.log($mes_anterior);
