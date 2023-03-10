@@ -85,7 +85,7 @@
     </div>
     <div class="col-md-12">
         <div class="card">
-            <div class="card-body pl-0">
+            <div class="card-body">
                 <div class="mb-4 pb-4">
                     <ul class="list-group">
                         <li class="list-group-item">

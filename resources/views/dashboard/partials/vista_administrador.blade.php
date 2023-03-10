@@ -184,7 +184,7 @@
             <div class="card-body">
                 <div class="d-flex">
                     <p class="d-flex flex-column">
-                        <span class="text-bold text-lg">820</span>
+                        <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
                         <span>Cantidad de pedidos del día</span>
                     </p>
                     {{--
@@ -348,7 +348,7 @@
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
 
-            setInterval(myTimer, 500000);
+            setInterval(myTimer, 5000);
 
             function myTimer() {
                 cargaNueva(1);
@@ -384,6 +384,12 @@
             var intersect = true
 
             var $visitorsChart = $('#visitors-chart')
+            let $arrr = [{{$contadores_arr}}]
+            let $mes_actual = [{{$contadores_mes_actual}}]
+            let $mes_anterior = [{{$contadores_mes_anterior}}]
+            console.log($arrr);
+            console.log($mes_actual);
+            console.log($mes_anterior);
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
                     /*eje x: dias*/

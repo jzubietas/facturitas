@@ -5,19 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\DetallePedido;
 use App\Models\Meta;
-use App\Models\Pago;
 use App\Models\Pedido;
 use App\Models\Ruc;
 use App\Models\User;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
 use App\View\Components\dashboard\graficos\PedidosMesCountProgressBar;
+use Blade;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use \Yajra\Datatables\Datatables;
-use function Sodium\add;
 
 class DashboardController extends Controller
 {
@@ -27,17 +26,8 @@ class DashboardController extends Controller
             return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
         }
 
-        $fechametames = null;
-        if (!request()->has("fechametames")) {
-            $fechametames = Carbon::now();
-        } else {
-            $fechametames = $request->fechametames;
-        }
-
-
         $mirol = Auth::user()->rol;
         $id = Auth::user()->id;
-        $lst_users_vida = null;
         $lst_users_vida = User::where('estado', '1');
 
         if ($mirol == User::ROL_JEFE_LLAMADAS) {
@@ -57,10 +47,81 @@ class DashboardController extends Controller
         }
         $lst_users_vida = $lst_users_vida->get();
 
+        /*----- DIAS POR FECHA -----*/
+        $primer_dia = Carbon::now()->clone()->startOfMonth()->startOfDay();
+        $fecha_anterior = Carbon::now()->clone()->subMonth()->endOfDay(); // dia actual
+
+        $primer_dia_anterior = Carbon::now()->clone()->subMonth()->startOfMonth()->startOfDay();
+        $fecha_actual = Carbon::now()->clone()->endOfDay(); // dia actual
+        $arr=[];
+        $diff=10;
+
+        for ($i = 1; $i <= $diff; $i++)
+        {
+            $arr[$i] = (string)($i);
+        }
+
+        $contadores_arr=implode(',',$arr);
+
+        $pedido_del_mes_anterior = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
+            ->where('u.rol', '=', User::ROL_ASESOR)
+            ->where('pedidos.codigo', 'not like', "%-C%")->activo()
+            ->where('pendiente_anulacion', '<>', '1')
+            ->whereBetween(DB::raw('Date(pedidos.created_at)'), [$primer_dia_anterior, $fecha_anterior])
+            ->groupBy(DB::raw('Date(pedidos.created_at)'))
+            ->select([
+                DB::raw('Date(pedidos.created_at) as fecha'),
+                DB::raw('count(pedidos.created_at) as total')
+            ])->get()->map(function ($pedidoanterior) {
+                return ["fecha"=>$pedidoanterior->fecha,"total"=>$pedidoanterior->total];
+            })->toArray();
+
+        for($i=1;$i<=count(($arr));$i++)
+        {
+            $dia_calculado=Carbon::parse(now())->clone()->subMonth()->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
+            $id = in_array($dia_calculado, array_column($pedido_del_mes_anterior, 'fecha'));
+            if($id===false)
+            {
+                $pedido_del_mes_anterior[]=["fecha"=>$dia_calculado,"total"=>0];
+            }
+        }
+
+        array_multisort( array_column($pedido_del_mes_anterior, "fecha"), SORT_ASC, $pedido_del_mes_anterior );
+
+        $contadores_mes_anterior = implode(",",array_column($pedido_del_mes_anterior, 'total'));
+
+        $pedido_del_mes = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
+            ->where('u.rol', '=', User::ROL_ASESOR)
+            ->where('pedidos.codigo', 'not like', "%-C%")->activo()
+            ->where('pendiente_anulacion', '<>', '1')
+            ->whereBetween(DB::raw('Date(pedidos.created_at)'), [$primer_dia, $fecha_actual])
+            ->groupBy(DB::raw('Date(pedidos.created_at)'))
+            ->select([
+                DB::raw('Date(pedidos.created_at) as fecha'),
+                DB::raw('count(pedidos.created_at) as total')
+            ])->get()->map(function ($pedido) {
+                return ["fecha"=>$pedido->fecha,"total"=>$pedido->total];
+            })->toArray();
+        for($i=1;$i<=count(($arr));$i++)
+        {
+            $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
+            $id = in_array($dia_calculado, array_column($pedido_del_mes, 'fecha'));
+            if($id===false)
+            {
+                $pedido_del_mes[]=["fecha"=>$dia_calculado,"total"=>0];
+            }
+        }
+        array_multisort( array_column($pedido_del_mes, "fecha"), SORT_ASC, $pedido_del_mes );
+        $contadores_mes_actual = implode(",",array_column($pedido_del_mes, 'total'));
+
+        $fechametames = Carbon::now();
+        $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
+            ->where('pedidos.codigo', 'not like', "%-C%")->activo()
+            ->whereDate('pedidos.created_at', $fechametames)
+            ->where('pendiente_anulacion', '<>', '1')->count();
 
 
-
-        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id'));
+        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id','contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual','asesor_pedido_dia'));
 
     }
 
@@ -76,16 +137,16 @@ class DashboardController extends Controller
                 [
                     [
                         "data" => [],
-                        "html" => \Blade::renderComponent($widget1)
+                        "html" => Blade::renderComponent($widget1)
                     ],
                     [
                         "data" => $widget2->getData(),
-                        "html" => \Blade::renderComponent($widget2)
+                        "html" => Blade::renderComponent($widget2)
                     ],
                     [
                         "chart" => true,
                         "data" => $widget3->getData(),
-                        "html" => \Blade::renderComponent($widget3)
+                        "html" => Blade::renderComponent($widget3)
                     ],
                 ]
         ]);
@@ -129,12 +190,11 @@ class DashboardController extends Controller
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
 
     public function viewMetaTable(Request $request)
     {
-        $metas = [];
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('identificador', auth()->user()->identificador)->where('excluir_meta', '<>', '1')->get();

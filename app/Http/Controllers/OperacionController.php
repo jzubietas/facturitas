@@ -330,38 +330,38 @@ class OperacionController extends Controller
                 $btn = [];
                 $btn[] = '<div class="row">';
 
-                $btn[] = '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">';
-                $btn[] = '<ul class="text-left list-inline text-left" aria-labelledby="dropdownMenuButton" >';
+                $btn[] = '<div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-center text-left m-0 p-0">';
+                $btn[] = '<ul class="text-left list-inline text-left m-0" aria-labelledby="dropdownMenuButton" >';
                 //$btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
                 if (\auth()->user()->can('operacion.editatender')) {
-                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-atencion=' . $pedido->id . ' data-toggle="modal" >
-                                <i class="fa fa-paperclip text-primary" aria-hidden="true"></i>
+                    $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-editar-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-atencion=' . $pedido->id . ' data-toggle="modal" >
+                                <i class="fa fa-paperclip text-primary mr-1" aria-hidden="true"></i>
                                 Editar Adjuntos
                                </a>';
                 }
-                $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-veradjuntos-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-veradjuntos=' . $pedido->id . ' data-toggle="modal" >
-                                <i class="fa fa-paperclip text-primary" aria-hidden="true"></i>
+                $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-veradjuntos-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-veradjuntos=' . $pedido->id . ' data-toggle="modal" >
+                                <i class="fa fa-paperclip text-primary mr-1" aria-hidden="true"></i>
                                 Ver Adjuntos
                                </a>';
                 if (\auth()->user()->can('operacion.PDF')) {
-                    $btn[] = '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-warning"></i> PDF</a>';
+                    $btn[] = '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn-sm dropdown-item btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-warning mr-1"></i> PDF</a>';
                 }
                 $btn[] = '</ul>';
                 $btn[] = '</div>';
 
-                $btn[] = '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">';
-                $btn[] = '<ul class="list-group text-left">';
+                $btn[] = '<div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-center text-left m-0 p-0">';
+                $btn[] = '<ul class="list-group text-left m-0">';
                 if (\auth()->user()->can('operacion.enviar')) {
                     if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador" || Auth::user()->rol == "Operario") {
-                        $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-pedido_sobre_text="CON SOBRE" data-envio=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i>Envio con sobre</a>';
-                        $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-pedido_sobre_text="SIN SOBRE" data-sinenvio=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i>Envio sin sobre</a>';
+                        $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-envio" data-pedido_sobre_text="CON SOBRE" data-envio=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-envelope text-success mr-2" aria-hidden="true"></i>Envio con sobre</a>';
+                        $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-sinenvio" data-pedido_sobre_text="SIN SOBRE" data-sinenvio=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-times text-danger mr-2" aria-hidden="true"></i>Envio sin sobre</a>';
                     }
                 }
                 if (\auth()->user()->can('operacion.atendidos.revertir')) {
                     if (\Str::contains(\Str::lower($pedido->condicion_envio), 'courier')) {
-                        $btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en courier, solo el courier tiene permiso de revertir" class="btn-sm dropdown-item" disabled><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</button>';
+                        $btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en courier, solo el courier tiene permiso de revertir" class="btn-sm dropdown-item" disabled><i class="fa fa-undo text-danger mr-2" aria-hidden="true"></i> Revertir a por atender</button>';
                     } else {
-                        $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</a>';
+                        $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-revertir-poratender" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger mr-2" aria-hidden="true"></i> Revertir a por atender</a>';
                     }
                 }
                 $btn[] = '</ul>';

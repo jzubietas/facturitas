@@ -24,8 +24,12 @@ body {
     transform-origin: bottom left;
 }
 
-d-none {
+.d-none {
     display: none !important;
+}
+
+.text-warn{
+    color: #983434;
 }
 
 #santa_navidad {
@@ -4234,6 +4238,11 @@ metas_dp .animated-progress {
         font-size: 15px;
     }
 
+    #tablabandejapedidos td:nth-child(10) span{
+        position: initial !important;
+        font-size: 12px !important;
+    }
+
     #tablabandejapedidos td:nth-child(11) span {
         white-space: break-spaces !important;
         padding: 8px !important;
@@ -4676,6 +4685,11 @@ metas_dp .animated-progress {
     width: 100% !important;
 }
 
+#tablaOperacionesBandejadeSobres td:nth-child(6) span{
+    position: initial !important;
+    font-size: 12px !important;
+}
+
 #tablaOperacionesBandejadeSobres td {
     vertical-align: middle !important;
     text-align: center !important;
@@ -4802,12 +4816,121 @@ metas_dp .animated-progress {
     }
 }
 
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesPedidosPorAtender {
+        font-size: 13px !important;
+    }
+}
+
 /*--- /operaciones.atendidos ---*/
+
+#tablaOperacionesPedidosAtendidos{
+    width: 100% !important;
+}
+#tablaOperacionesPedidosAtendidos td{
+    vertical-align: middle !important;
+}
+
+#tablaOperacionesPedidosAtendidos .sorting::before,
+#tablaOperacionesPedidosAtendidos .sorting::after,
+#tablaOperacionesPedidosAtendidos .sorting_desc::before,
+#tablaOperacionesPedidosAtendidos .sorting_desc::after {
+    top: 20px !important;
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesPedidosAtendidos {
+        font-size: 13px !important;
+    }
+}
+
 /*--- /operaciones.entregados ---*/
+
+#tablaOperacionesJefeOperaciones{
+    width: 100% !important;
+}
+
+#tablaOperacionesJefeOperaciones td{
+    vertical-align: middle !important;
+}
+
+#tablaOperacionesJefeOperaciones .sorting::before,
+#tablaOperacionesJefeOperaciones .sorting::after,
+#tablaOperacionesJefeOperaciones .sorting_desc::before,
+#tablaOperacionesJefeOperaciones .sorting_desc::after {
+    top: 20px !important;
+}
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesJefeOperaciones {
+        font-size: 13px !important;
+    }
+}
+
 /*--- /pedidos/estados/anulados ---*/
+#tablaOperacionesPendienteAnulacion{
+    width: 100% !important;
+}
+
+#tablaOperacionesPendienteAnulacion td{
+    vertical-align: middle !important;
+}
+
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(8){
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-direction: column !important;
+    grid-gap: 2px;
+}
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(8) .btn-fontsize{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-width: 75px;
+    width: 100px;
+    font-size: 11px;
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesPendienteAnulacion {
+        font-size: 13px !important;
+    }
+}
 
 /*---------------- MODULO COURRIER ----------------*/
 /*--- /envios.estadosobres ---*/
+#tablaRecepcionados,
+#tablaEntregados,
+#tablaAnulados_courier,
+#tablaAnulados{
+    width: 100% !important;
+}
+
+#tablaRecepcionados td,
+#tablaEntregados td,
+#tablaAnulados_courier td
+#tablaAnulados td{
+    vertical-align: middle !important;
+}
+
+#tablaAnulados_courier td:nth-child(6) span,
+#tablaAnulados td:nth-child(6) span{
+    position: initial !important;
+    font-size: 12px !important;
+}
+
+#tablaEntregados td:nth-child(10) span{
+    white-space: break-spaces !important;
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaRecepcionados,
+    #tablaEntregados,
+    #tablaAnulados_courier,
+    #tablaAnulados {
+        font-size: 13px !important;
+    }
+}
 /*--- /envios.porconfirmar ---*/
 /*--- /envios.distribuirsobres ---*/
 /*--- /envios.sindireccion ---*/

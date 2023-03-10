@@ -17,7 +17,7 @@
           <div style="margin: 10px">
             <div class="card">
               <div class="border rounded card-body border-secondary">
-                <div class="card-body pl-0">
+                <div class="card-body">
                   <div class="form-row">
                     <div class="form-group col-lg-12">
                       <div class="row">

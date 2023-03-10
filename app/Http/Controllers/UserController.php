@@ -426,18 +426,18 @@ class UserController extends Controller
     public function Asesorcombopago(Request $request)
     {
         $mirol = Auth::user()->rol;
-        $users = User::where('estado', '1')->where("rol", "Asesor");
+        $users = User::where('estado', '1')->whereIn("rol", [User::ROL_ASESOR]);
 
         if ($mirol == 'Llamadas') {
-            $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+            $users = $users->where('llamada', Auth::user()->id)->where("rol", User::ROL_ASESOR);
         } elseif ($mirol == 'Jefe de llamadas') {
             $users = $users->WhereNotIn("identificador", ['B']);
         } elseif ($mirol == 'Asesor') {
-            $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
+            $users = $users->where('id', Auth::user()->id)->where("rol", User::ROL_ASESOR);
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
             $users = User::where("rol", "ASESOR ADMINISTRATIVO");
         } else {
-            $usersB = User::whereIn("rol", ["Administrador", "ASESOR ADMINISTRATIVO"]);
+            $usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO",User::ROL_ASESOR]);
             $users = $usersB->union($users);
         }
         $users = $users->orderBy('exidentificador', 'ASC')->get();
