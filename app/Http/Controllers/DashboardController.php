@@ -48,10 +48,10 @@ class DashboardController extends Controller
         $lst_users_vida = $lst_users_vida->get();
 
 
-        $fechametames=Carbon::now()->format('Y-m-d');
+        $fechametames = Carbon::now()->format('Y-m-d');
 
         return view('dashboard.dashboard', compact(
-            'lst_users_vida', 'mirol', 'id','fechametames'
+            'lst_users_vida', 'mirol', 'id', 'fechametames'
         ));
 
     }

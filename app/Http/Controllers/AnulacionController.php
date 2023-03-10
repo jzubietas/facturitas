@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetallePedido;
 use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -34,7 +35,7 @@ class AnulacionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -45,7 +46,7 @@ class AnulacionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -56,7 +57,7 @@ class AnulacionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -67,8 +68,8 @@ class AnulacionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -79,7 +80,7 @@ class AnulacionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -91,6 +92,7 @@ class AnulacionController extends Controller
     {
         return view('pedidos.anulaciones.index');
     }
+
     public function indexanulacionestabla(Request $request)
     {
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -102,7 +104,7 @@ class AnulacionController extends Controller
                     Pedido::ANULADO_INT
                 ]
             )*/
-            ->where('pedidos.pendiente_anulacion','1')
+            ->where('pedidos.pendiente_anulacion', '1')
             //->where('pedidos.estado',1)
             ->select(
                 [
@@ -241,5 +243,27 @@ class AnulacionController extends Controller
             })
             ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color'])
             ->make(true);
+    }
+
+    public function modalsAnulacion(Request $request)
+    {
+
+        /*return $request->all();*/
+        $listado_codigo_pedido = Pedido::query()
+            ->join('detalle_pedidos as dp', 'dp.codigo', 'pedidos.codigo')
+            ->join('users as u', 'u.id', 'pedidos.user_id')
+            ->where('u.rol', 'Asesor')
+            ->where('pedidos.codigo',  $request->codigo)
+            ->select([
+                'pedidos.codigo',
+                'u.name',
+                'pedidos.env_importe',
+                'dp.ruc',
+                'dp.nombre_empresa'
+            ])
+            ->first();
+
+        //return json_encode($listado_codigo_pedido);
+        return response()->json(['data'=>$listado_codigo_pedido]);
     }
 }
