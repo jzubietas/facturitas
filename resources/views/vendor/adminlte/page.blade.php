@@ -72,7 +72,7 @@
 
     @include('pedidos.modal.escanear_estado_sobres')
     @include('modal.AgregarContacto.modalAgregarContacto')
-
+    @include('vendor.adminlte.modal.modal_imagen_cliente')
 @stop
 
 
@@ -115,10 +115,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
-          $('#modal_imagen_cliente').on('show.bs.modal', function (event) {
-            console.log('SAPE');
-          });
 
           tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
             responsive: true,
@@ -184,7 +180,7 @@
                   data: 'nombre_asesor'
                 },
                 {
-                  nane : 'nombres_cliente'
+                  nane : 'celular'
                 },
                 {
                   data: 'foto'
@@ -553,7 +549,6 @@
                 }
               }
             });
-
           }
           function  fnListaCambioNombre(vtipo,vrbnvalue){
             tblCambioNombre.destroy();
@@ -630,7 +625,7 @@
               columns: [
                 {data: 'tipo_insert', name: 'tipo_insert'},
                 {data: 'codigo_asesor', name: 'codigo_asesor'},
-                {data: 'nombres_cliente', name: 'nombres_cliente',},
+                {data: 'celular', name: 'celular',},
                 {data: 'foto', name: 'foto',},
                 {data: 'nombre_contacto', name: 'nombre_contacto',},
                 {data: 'action', name: 'action',},
@@ -778,6 +773,7 @@
             });
 
           })
+
           $('#tablaListadoLlamadas tbody').on('click', 'button.btnConfirmado', function () {
             var data = tblListadoLlamadas.row($(this).parents('tr')).data();
             console.log('datos table',data);
@@ -818,6 +814,8 @@
               }
             });
           })
+
+
 
           $('#tablaCambioNombre tbody').on('click', 'button.btnGuardado', function () {
             var data = tblCambioNombre.row($(this).parents('tr')).data();
@@ -1291,6 +1289,15 @@
                     }
                 }
             }
+            $('#modal-imagen-contacto').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('imagen');
+                var str = "storage/" + idunico;
+                var urlimage = '{{ asset(":id") }}';
+                urlimage = urlimage.replace(':id', str);
+                /*console.table('jaaaa',idunico,'str',str,'urlimage',urlimage)*/
+                $("#modal-imagen .img-thumbnail").attr("src", urlimage);
+            });
 
             $('#modal-escanear-estado-sobre').on('show.bs.modal', function (event) {
                 $('#info-pedido').html('<div class="text-center"><img src="{{asset('imagenes/scan.gif')}}" width="300" class="mr-8"><h5 class="font-weight-bold">Escanee un pedido para saber sus detalles</h5></div>');

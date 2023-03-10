@@ -151,7 +151,7 @@
               <tr>
                 <th scope="col">Tipo</th>
                 <th scope="col">Asesor</th>
-                <th scope="col">Cliente</th>
+                <th scope="col">Numero</th>
                 <th scope="col">Imagen</th>
                 <th scope="col">Sustento</th>
                 <th scope="col">Accion</th>

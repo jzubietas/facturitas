@@ -2144,15 +2144,15 @@ class ClienteController extends Controller
           //return $data->foto;
           $urlimagen1 = \Storage::disk('pstorage')->url($data->foto);
 
-          $data = '<div class="card bg-transparent text-center border-none border-left-0 shadow-none" style="width: 8rem;border: none;">
-                          <a href="" data-target="#modal_imagen_cliente" data-toggle="modal" data-imagen="' . $data->foto . '">
+          $datos = '<div class="card bg-transparent text-center border-none border-left-0 shadow-none" style="width: 8rem;border: none;">
+                          <a href="" data-target="#modal-imagen-contacto" data-toggle="modal" data-imagen="' . $data->foto . '">
                             <img src="' . $urlimagen1 . '" alt="' . $data->foto . '" height="50px" width="50px" id="imagen_' . $data->id . '-1" class=" text-center">
                           </a>
                         <div class="card-body bg-transparent p-0">
                             <h5 class="card-title"></h5>';
-          $data .= '    </div>';
-          $data .= '</div>';
-          return $data;
+            $datos .= '    </div>';
+            $datos .= '</div>';
+          return $datos;
         }  else {
           return '';
         }
