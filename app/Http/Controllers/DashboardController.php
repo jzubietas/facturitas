@@ -60,7 +60,7 @@ class DashboardController extends Controller
         /*----- DIAS POR FECHA -----*/
         $fecha_actual = Carbon::now()->endOfDay(); // dia actual
         $primer_dia = Carbon::now()->startOfMonth()->startOfDay();
-        $diff=abs(diff($primer_dia,$fecha_actual));
+        $diff=abs(($primer_dia->diff($fecha_actual)->format('d'));
 
 
         for ($i = 1; $i <= $diff; $i++)
