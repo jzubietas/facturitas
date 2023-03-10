@@ -395,8 +395,7 @@ ${data.foto3 ? `
     });
 
     /**/
-        $(document).on('click',
-            "button#btn_agregaranulacion_pc,button#btn_agregaranulacion_f",
+        $(document).on('click', "button#btn_agregaranulacion_pc,button#btn_agregaranulacion_f",
             function (e) {
                 console.log(e.target.id);
                 ocultar_div_modal_agregaranulacion();
@@ -487,6 +486,56 @@ ${data.foto3 ? `
         });
 
       });*/
+
+        /*MODAL ANULACION PEDIDOS COMPLETOS*/
+        $('#form-agregaranulacion-f').autocomplete({
+            source: function(request, response){
+                $.ajax({
+                    url: "{{ route('pedidosanulaciones.modal.agregaranulacion_pc') }}",
+                    datatype: 'POST',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data){
+                        response(data)
+                    }
+                });
+            },
+            select: function(evento, selected) {
+                $('#codigoCodigoF').val();
+                $('#asesorCodigoF').val(selected.item.value);
+                $('#importeCodigoF').val(selected.item.value);
+                $('#anularCodigoF').val(selected.item.value);
+                $('#rucCodigoF').val(selected.item.value);
+                $('#razonCodigoF').val(selected.item.value);
+            }
+        });
+
+        /*MODAL ANULACION*/
+        $('#form-agregaranulacion-f').autocomplete({
+            source: function(request, response){
+                $.ajax({
+                    url: "{{ route('pedidosanulaciones.modal.agregaranulacion_f') }}",
+                    datatype: 'POST',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data){
+                        response(data)
+                    }
+                });
+            },
+            select: function(evento, selected) {
+                $('#codigoCodigoF').val();
+                $('#asesorCodigoF').val(selected.item.value);
+                $('#importeCodigoF').val(selected.item.value);
+                $('#anularCodigoF').val(selected.item.value);
+                $('#rucCodigoF').val(selected.item.value);
+                $('#razonCodigoF').val(selected.item.value);
+            }
+        });
+
+
     });
   </script>
 
