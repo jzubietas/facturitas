@@ -68,6 +68,12 @@ class DashboardController extends Controller
             $arr[$i] = (string)($i);
         }
 
+
+        for ($i = 1; $i <= $diff; $i++)
+        {
+            $arr[$i] = (string)($i);
+        }
+
         $contadores_arr=implode(',',$arr);
 
         /*----- Mes Actual - pedidos -----*/
