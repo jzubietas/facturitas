@@ -671,9 +671,9 @@ $banca"
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
                     if ($pedido->pendiente_anulacion == 1) {
-                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm" >EMITIR N/C</button>';
+                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize" >EMITIR N/C</button>';
                     }
-                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item py-2 btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                     $btn .= ' <button class="btn btn-warning btn-sm"
                     data-toggle="jqconfirm"
                     data-target="' . route('pedidos.confirmar.anular', ['pedido_id' => $pedido->id, 'action' => 'confirm_anulled_cancel']) . '"
