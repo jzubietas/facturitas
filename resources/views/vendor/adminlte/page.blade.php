@@ -1295,8 +1295,10 @@
                 var str = "storage/" + idunico;
                 var urlimage = '{{ asset(":id") }}';
                 urlimage = urlimage.replace(':id', str);
-                /*console.table('jaaaa',idunico,'str',str,'urlimage',urlimage)*/
-                $("#modal-imagen .img-thumbnail").attr("src", urlimage);
+                console.table('jaaaa',idunico)
+                console.table('str',str)
+                console.table('urlimage',urlimage)
+                $("#modal-imagen-contacto .img-thumbnail").attr("src", urlimage);
             });
 
             $('#modal-escanear-estado-sobre').on('show.bs.modal', function (event) {
