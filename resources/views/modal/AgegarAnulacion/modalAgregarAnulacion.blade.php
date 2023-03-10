@@ -200,7 +200,7 @@
 
         .input-group-icon .input-icon {
             position: absolute;
-            top: 20px;
+            top: 0px;
             left: 10px;
             width: 3.4em;
             line-height: 3.4em;
