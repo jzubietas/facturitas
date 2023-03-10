@@ -13,6 +13,18 @@ class Ruc extends Model
 
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'id',
+        'num_ruc',
+        'user_id',
+        'cliente_id',
+        'empresa',
+        'estado',
+        'created_at',
+        'updated_at',
+        'porcentaje',
+    ];
+
     public function cliente(){
         return $this->belongsTo(Cliente::class);
     }

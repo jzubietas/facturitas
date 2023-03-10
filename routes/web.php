@@ -221,6 +221,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('updateRuc', [UserController::class, 'updateRuc'])->name('updateRuc');
     Route::post('getPorcClientes', [UserController::class, 'getPorcClientes'])->name('getPorcClientes');
     Route::post('uptPorcClientes', [UserController::class, 'uptPorcClientes'])->name('uptPorcClientes');
+    Route::post('getComboNuevoCliente', [ClienteController::class, 'getComboNuevoCliente'])->name('getComboNuevoCliente');
+    Route::post('getRelacionNuevoCliente', [ClienteController::class, 'getRelacionNuevoCliente'])->name('getRelacionNuevoCliente');
+    Route::post('setDatosNuevoClientes', [ClienteController::class, 'setDatosNuevoClientes'])->name('setDatosNuevoClientes');
 
     Route::get('users.llamadas', [UserController::class, 'Llamadas'])->name('users.llamadas');////llamadas
     Route::get('users.llamadastabla', [UserController::class, 'Llamadastabla'])->name('users.llamadastabla');////llamadas

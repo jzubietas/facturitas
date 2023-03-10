@@ -13,6 +13,7 @@ use App\Models\DireccionEnvio;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
+use App\Models\Ruc;
 use App\Models\SituacionClientes;
 use App\Models\User;
 use App\Models\ListadoResultado;
@@ -2340,4 +2341,53 @@ class ClienteController extends Controller
 
     return response()->json(['nuevoCliente' => $nuevoCliente,'cambioNombre' => $cambioNombre,'contbloqueo' => $contbloqueo,'cambioNumero' => $cambioNumero]);
   }
+
+    public function getComboNuevoCliente(Request $request)
+    {
+        /*return $request->all();*/
+        $html = '<option value="-1">' . trans('---- SELECCIONE NUEVO CLIENTE ----') . '</option>';
+
+        $clientes = Cliente::query()
+            ->where('clientes.estado',  '1')
+            ->where('clientes.tipo',  '1')
+            ->whereNotIn('clientes.id',[$request->cliente_id])
+            ->orderBy('clientes.nombre')
+            ->get();
+
+
+        foreach ($clientes as $cliente) {
+            $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
+
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function getRelacionNuevoCliente(Request $request)
+    {
+        /*return $request->all();*/
+    $nuevarelacion=Ruc::join('users as u', 'rucs.user_id', 'u.id')
+    ->join('clientes as c','rucs.cliente_id','c.id')
+    ->select(['u.identificador','u.exidentificador','rucs.num_ruc','c.icelular','c.celular','c.nombre'])
+    ->where('rucs.cliente_id',$request->cliente_id)->first();
+    ;
+        return response()->json(['html' => $nuevarelacion]);
+    }
+
+    public function setDatosNuevoClientes(Request $request)
+    {
+        /*return $request->all();*/
+        $ejecucion=true;
+        $asesor_id=User::where("identificador",$request->s_asesorant)->first()->id;
+        if ($asesor_id){
+            $updRuc= Ruc::where('cliente_id',$request->s_cliente_ant)->where('user_id',$asesor_id)->where('num_ruc',$request->s_ruc_ant)->first();
+            $updRuc->update([
+                'cliente_id' => $request->s_cliente_nue
+            ]);
+        }else{
+            $ejecucion=false;
+        }
+
+        return response()->json(['datos' => $updRuc,'sucess'=>$ejecucion]);
+    }
 }
