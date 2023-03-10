@@ -64,7 +64,7 @@
     </div>
 
     <div class="card">
-        <div class="card-body pl-0">
+        <div class="card-body">
             <div class="table-responsive">
                 <table id="tablaCourierSobresconDireccion" class="table table-striped">
                     <thead>
@@ -408,7 +408,7 @@
     <div class="card-header">
         <h4>Cliente: <strong>${row.cliente_recibe}</strong> - <i>${row.telefono}</i></h4>
     </div>
-    <div class="card-body pl-0">
+    <div class="card-body">
         <div class="col-md-12">
             <ul class="list-group">
                 <li class="list-group-item">
@@ -505,7 +505,7 @@ ${html.join('')}
 <div class="card-header">
 ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <strong>${row.nombre || ''}</strong> - <i>${row.celular || ''}</i>`}
 </div>
-<div class="card-body pl-0">
+<div class="card-body">
 <ul class="list-group">
     <li class="list-group-item">
         <div class="row">

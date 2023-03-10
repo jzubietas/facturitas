@@ -49,7 +49,7 @@
         }
     </style>
     <div class="card">
-        <div class="card-body pl-0">
+        <div class="card-body">
 
             <div class="row">
                 <div class="col-3 mx-auto">

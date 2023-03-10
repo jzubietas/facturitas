@@ -33,7 +33,7 @@
 @section('content')
 
     <div class="card">
-        <div class="card-body pl-0">
+        <div class="card-body">
             <table cellspacing="5" cellpadding="5" class="d-none">
                 <tbody>
                 <tr>

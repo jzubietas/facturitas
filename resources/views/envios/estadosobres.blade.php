@@ -55,7 +55,7 @@
     </style>
 
     <div class="card">
-        <div class="card-body pl-0">
+        <div class="card-body">
 
             <table class="table-responsive" style="border-collapse: collapse;">
                 <tbody class="table-responsive">
