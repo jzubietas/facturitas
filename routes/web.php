@@ -223,6 +223,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('updateRuc', [UserController::class, 'updateRuc'])->name('updateRuc');
     Route::post('getPorcClientes', [UserController::class, 'getPorcClientes'])->name('getPorcClientes');
     Route::post('uptPorcClientes', [UserController::class, 'uptPorcClientes'])->name('uptPorcClientes');
+    Route::post('getComboNuevoCliente', [ClienteController::class, 'getComboNuevoCliente'])->name('getComboNuevoCliente');
+    Route::post('getRelacionNuevoCliente', [ClienteController::class, 'getRelacionNuevoCliente'])->name('getRelacionNuevoCliente');
+    Route::post('setDatosNuevoClientes', [ClienteController::class, 'setDatosNuevoClientes'])->name('setDatosNuevoClientes');
 
     Route::get('users.llamadas', [UserController::class, 'Llamadas'])->name('users.llamadas');////llamadas
     Route::get('users.llamadastabla', [UserController::class, 'Llamadastabla'])->name('users.llamadastabla');////llamadas
@@ -492,7 +495,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
     Route::get('MisPagosTabla', [PagoController::class, 'MisPagosTabla'])->name('MisPagosTabla');//actualizado para serverside
     Route::get('pedidoscliente', [PagoController::class, 'pedidoscliente'])->name('cargar.pedidoscliente');
-    Route::get('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
+    Route::any('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
     Route::post('pagodetalleUpdate', [PagoController::class, 'pagodetalleUpdate'])->name('pagodetalleUpdate');
 
     Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');

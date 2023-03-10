@@ -8,14 +8,14 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class AutomaticMetasResetAsesorPersonalizado extends Command
+class AutomaticMetasResetAsesorMasivo extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'automatic:metas:reset:asesor:personalizado {fecha}';
+    protected $signature = 'automatic:metas:reset:asesor:masivo';
 
     /**
      * The console command description.
@@ -44,7 +44,7 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
         $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
         $periodo_original=Carbon::parse($fp->created_at)->clone()->startOfMonth();
         //$periodo_actual=Carbon::parse(now())->endOfMonth();
-        $periodo_actual=Carbon::parse($this->argument('fecha'))->clone()->startOfMonth()->endOfMonth()->endOfDay();
+        $periodo_actual=Carbon::parse(now())->clone()->startOfMonth()->endOfMonth()->endOfDay();
 
         $this->warn( $periodo_original );
         $this->info( $periodo_actual );
@@ -102,23 +102,9 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
                             'meta_quincena'=>0
                         ]
                     );
-                    /*User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
-                        [
-                            'meta_pedido'=>0,
-                            'meta_pedido_2'=>0,
-                            'meta_cobro'=>0,
-                            'meta_quincena'=>0
-                        ]
-                    );*/
-
                 }
-
             }
-
         }
-
-
-
 
         return 0;
     }
