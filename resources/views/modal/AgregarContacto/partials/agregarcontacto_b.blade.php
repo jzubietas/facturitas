@@ -1,4 +1,4 @@
-<form id="form-agregarcontacto-b" name="form-agregarcontacto-b" class="agregarcontacto">
+<form id="form-agregarcontacto-b" name="form-agregarcontacto-b" class="agregarcontacto" >
     <input type="hidden" id="agregarcontacto_b" name="agregarcontacto_b">
     <input type="hidden" name="opcion" value="4">
     <ul class="list-group">
@@ -28,7 +28,7 @@
             <span class="text-danger">(Obligatorio)</span>
           </h6>
           <div id="attachmentfiles" class="border border-dark rounded d-flex justify-content-center align-items-center mb-4 position-relative"
-               style="height: 400px">
+               style="height: 400px" >
             <i class="fa fa-upload"></i>
             <div class="result_picture position-absolute" style="display: block;top: 0;left: 0;bottom: 0;right: 0;text-align: center;">
               <img src="" class="h-100 img-fluid" alt="">

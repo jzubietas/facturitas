@@ -270,7 +270,7 @@
                 })
             })
 
-            window.document.onpaste = function (event) {
+            $("#form-agregarcontacto-b").bind("paste", function(event){
                 var items = (event.clipboardData || event.originalEvent.clipboardData).items;
                 console.log(items);
                 console.log((event.clipboardData || event.originalEvent.clipboardData));
@@ -288,7 +288,7 @@
                     $('#form-agregarcontacto-b').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
                     dataForm_agregarcontacto_b.agregarcontacto_b_captura = files[0]
                 }
-            }
+            } );
 
             $(document).on("submit", "form.agregarcontacto", function (e) {
                 e.preventDefault();
