@@ -58,17 +58,13 @@ class DashboardController extends Controller
         $lst_users_vida = $lst_users_vida->get();
 
         /*----- DIAS POR FECHA -----*/
-        $fecha_actual = Carbon::now()->endOfDay(); // dia actual
+        $primer_dia = Carbon::now()->clone()->startOfMonth()->startOfDay();
         $fecha_anterior = Carbon::now()->clone()->subMonth()->endOfDay(); // dia actual
-        $primer_dia = Carbon::now()->startOfMonth()->startOfDay();
+
         $primer_dia_anterior = Carbon::now()->clone()->subMonth()->startOfMonth()->startOfDay();
+        $fecha_actual = Carbon::now()->clone()->endOfDay(); // dia actual
+
         $diff=10;
-
-        for ($i = 1; $i <= $diff; $i++)
-        {
-            $arr[$i] = (string)($i);
-        }
-
 
         for ($i = 1; $i <= $diff; $i++)
         {
