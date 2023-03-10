@@ -4889,6 +4889,38 @@ metas_dp .animated-progress {
 
 /*---------------- MODULO COURRIER ----------------*/
 /*--- /envios.estadosobres ---*/
+#tablaRecepcionados,
+#tablaEntregados,
+#tablaAnulados_courier,
+#tablaAnulados{
+    width: 100% !important;
+}
+
+#tablaRecepcionados td,
+#tablaEntregados td,
+#tablaAnulados_courier td
+#tablaAnulados td{
+    vertical-align: middle !important;
+}
+
+#tablaAnulados_courier td:nth-child(6) span,
+#tablaAnulados td:nth-child(6) span{
+    position: initial !important;
+    font-size: 12px !important;
+}
+
+#tablaEntregados td:nth-child(10) span{
+    white-space: break-spaces !important;
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaRecepcionados,
+    #tablaEntregados,
+    #tablaAnulados_courier,
+    #tablaAnulados {
+        font-size: 13px !important;
+    }
+}
 /*--- /envios.porconfirmar ---*/
 /*--- /envios.distribuirsobres ---*/
 /*--- /envios.sindireccion ---*/

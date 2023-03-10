@@ -54,8 +54,8 @@
         }*/
     </style>
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important">
+        <div class="card-body" style="overflow-x: scroll !important">
 
             <table class="table-responsive" style="border-collapse: collapse;">
                 <tbody class="table-responsive">
@@ -147,20 +147,20 @@
                     <table id="tablaRecepcionados" class="table table-striped w-100" >
                         <thead>
                         <tr>
-                            <th scope="col">Item</th>
-                            <th scope="col">Código</th>
-                            <th scope="col">Asesor</th>
-                            <th scope="col">Razón social</th>
-                            <th scope="col">Dias en Oficina</th>
-                            <th scope="col">Fecha de registro</th>
-                            <th scope="col">Fecha de recepcion courier</th>
-                            <th scope="col">Fecha de entrega</th>
-                            <th scope="col">Destino</th>
-                            <th scope="col">Dirección de envío</th>
-                            <th scope="col">Estado de envio</th>
-                            <th scope="col">Estado de sobre</th>
-                            <th scope="col">Observacion Devolucion</th>
-                            <th scope="col">Acciones</th>
+                            <th scope="col" class="align-middle">Item</th>
+                            <th scope="col" class="align-middle">Código</th>
+                            <th scope="col" class="align-middle">Id</th>
+                            <th scope="col" class="align-middle">Razón social</th>
+                            <th scope="col" class="align-middle">Dias en Oficina</th>
+                            <th scope="col" class="align-middle">Fecha de registro</th>
+                            <th scope="col" class="align-middle">Fecha de recepcion courier</th>
+                            <th scope="col" class="align-middle">Fecha de entrega</th>
+                            <th scope="col" class="align-middle">Destino</th>
+                            <th scope="col" class="align-middle">Dirección de envío</th>
+                            <th scope="col" class="align-middle">Estado de envio</th>
+                            <th scope="col" class="align-middle">Estado de sobre</th>
+                            <th scope="col" class="align-middle">Observacion Devolucion</th>
+                            <th scope="col" class="align-middle">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -173,7 +173,7 @@
                         <thead>
                         <tr>
                             <th scope="col">Item</th>
-                            <th scope="col">Asesor</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Cliente</th>
                             <th scope="col">Código</th>
                             <th scope="col">Razón social</th>
@@ -196,7 +196,7 @@
                         <tr>
                             <th scope="col">Item</th>
                             <th scope="col">Código</th>
-                            <th scope="col">Asesor</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Razón social</th>
                             <th scope="col">Dias en Anulacion</th>
                             <th scope="col">Fecha de registro</th>
@@ -220,7 +220,7 @@
                         <tr>
                             <th scope="col">Item</th>
                             <th scope="col">Código</th>
-                            <th scope="col">Asesor</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Razón social</th>
                             <th scope="col">Dias en Anulacion</th>
                             <th scope="col">Fecha de registro</th>
