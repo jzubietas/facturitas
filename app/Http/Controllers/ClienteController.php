@@ -2380,14 +2380,27 @@ class ClienteController extends Controller
         $ejecucion=true;
         $asesor_id=User::where("identificador",$request->s_asesorant)->first()->id;
         if ($asesor_id){
+            $nuevocliente=Ruc::join('users as u', 'rucs.user_id', 'u.id')
+                ->join('clientes as c','rucs.cliente_id','c.id')
+                ->select(['u.*'])
+                ->where('c.id',$request->s_cliente_nue)->first();
+
             $updRuc= Ruc::where('cliente_id',$request->s_cliente_ant)->where('user_id',$asesor_id)->where('num_ruc',$request->s_ruc_ant)->first();
-            $updRuc->update([
-                'cliente_id' => $request->s_cliente_nue
-            ]);
+            if($nuevocliente){
+                $updRuc->update([
+                    'cliente_id' => $request->s_cliente_nue,
+                    'user_id' => $nuevocliente->id,
+                ]);
+            }else{
+                $updRuc->update([
+                    'cliente_id' => $request->s_cliente_nue,
+                ]);
+            }
+
         }else{
             $ejecucion=false;
         }
 
-        return response()->json(['datos' => $updRuc,'sucess'=>$ejecucion]);
+        return response()->json(['datos' => $updRuc,'sucess'=>$ejecucion,'asesor'=>$nuevocliente]);
     }
 }
