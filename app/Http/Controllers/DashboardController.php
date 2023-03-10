@@ -5,19 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\DetallePedido;
 use App\Models\Meta;
-use App\Models\Pago;
 use App\Models\Pedido;
 use App\Models\Ruc;
 use App\Models\User;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
 use App\View\Components\dashboard\graficos\PedidosMesCountProgressBar;
+use Blade;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use \Yajra\Datatables\Datatables;
-use function Sodium\add;
 
 class DashboardController extends Controller
 {
@@ -27,17 +25,8 @@ class DashboardController extends Controller
             return redirect()->route('envios.motorizados.index'); //->with('info', 'registrado');
         }
 
-        $fechametames = null;
-        if (!request()->has("fechametames")) {
-            $fechametames = Carbon::now();
-        } else {
-            $fechametames = $request->fechametames;
-        }
-
-
         $mirol = Auth::user()->rol;
         $id = Auth::user()->id;
-        $lst_users_vida = null;
         $lst_users_vida = User::where('estado', '1');
 
         if ($mirol == User::ROL_JEFE_LLAMADAS) {
@@ -63,7 +52,7 @@ class DashboardController extends Controller
 
         $primer_dia_anterior = Carbon::now()->clone()->subMonth()->startOfMonth()->startOfDay();
         $fecha_actual = Carbon::now()->clone()->endOfDay(); // dia actual
-
+        $arr[]=0;
         $diff=10;
 
         for ($i = 1; $i <= $diff; $i++)
@@ -82,13 +71,13 @@ class DashboardController extends Controller
             ->select([
                 DB::raw('Date(pedidos.created_at) as fecha'),
                 DB::raw('count(pedidos.created_at) as total')
-            ])->get()->map(function ($pedidoanterior,$key) {
+            ])->get()->map(function ($pedidoanterior) {
                 return ["fecha"=>$pedidoanterior->fecha,"total"=>$pedidoanterior->total];
             })->toArray();
         for($i=1;$i<=count(($arr));$i++)
         {
             $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
-            $id = array_search($dia_calculado, array_column($pedido_del_mes_anterior, 'fecha'));
+            $id = in_array($dia_calculado, array_column($pedido_del_mes_anterior, 'fecha'));
             if($id===false)
             {
                 $pedido_del_mes_anterior[]=["fecha"=>$dia_calculado,"total"=>0];
@@ -106,13 +95,13 @@ class DashboardController extends Controller
             ->select([
                 DB::raw('Date(pedidos.created_at) as fecha'),
                 DB::raw('count(pedidos.created_at) as total')
-            ])->get()->map(function ($pedido,$key) {
+            ])->get()->map(function ($pedido) {
                 return ["fecha"=>$pedido->fecha,"total"=>$pedido->total];
             })->toArray();
         for($i=1;$i<=count(($arr));$i++)
         {
             $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
-            $id = array_search($dia_calculado, array_column($pedido_del_mes, 'fecha'));
+            $id = in_array($dia_calculado, array_column($pedido_del_mes, 'fecha'));
             if($id===false)
             {
                 $pedido_del_mes[]=["fecha"=>$dia_calculado,"total"=>0];
@@ -144,16 +133,16 @@ class DashboardController extends Controller
                 [
                     [
                         "data" => [],
-                        "html" => \Blade::renderComponent($widget1)
+                        "html" => Blade::renderComponent($widget1)
                     ],
                     [
                         "data" => $widget2->getData(),
-                        "html" => \Blade::renderComponent($widget2)
+                        "html" => Blade::renderComponent($widget2)
                     ],
                     [
                         "chart" => true,
                         "data" => $widget3->getData(),
-                        "html" => \Blade::renderComponent($widget3)
+                        "html" => Blade::renderComponent($widget3)
                     ],
                 ]
         ]);
