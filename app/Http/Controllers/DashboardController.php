@@ -120,8 +120,13 @@ class DashboardController extends Controller
             ->whereDate('pedidos.created_at', $fechametames)
             ->where('pendiente_anulacion', '<>', '1')->count();
 
+        $fechametames=Carbon::now()->format('Y-m-d');
 
-        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id','contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual','asesor_pedido_dia'));
+
+        return view('dashboard.dashboard', compact(
+            'fechametames', 'lst_users_vida', 'mirol', 'id'
+            ,'contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual','asesor_pedido_dia','fechametames'
+        ));
 
     }
 
@@ -260,10 +265,10 @@ class DashboardController extends Controller
 
             if (!request()->has("fechametames")) {
                 $fechametames = Carbon::now();
-                $date_pagos = Carbon::parse(now())->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
             } else {
                 $fechametames = Carbon::parse($request->fechametames);
-                $date_pagos = Carbon::parse($request->fechametames)->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
             }
 
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
@@ -642,7 +647,7 @@ class DashboardController extends Controller
                  aria-valuemax="100"></div>';
             $html .= '</div>
     <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-<span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
+<span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
 
             $html .= ' </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
@@ -766,13 +771,13 @@ class DashboardController extends Controller
             if ($count_asesor[46]['total_pedido_mespasado'] == 0) {
                 $html .= '</div>
                       <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  %</b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  %</b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
             } else {
                 $html .= '</div>
                       <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado']) * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  ' . round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado']) * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pagado'] . '/' . $count_asesor[46]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
             }
@@ -835,12 +840,12 @@ class DashboardController extends Controller
             if ($count_asesor[46]['meta'] == 0) {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pedido'] . '/' . $count_asesor[46]['meta'] . '</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pedido'] . '/' . $count_asesor[46]['meta'] . '</span>
     </div>';
             } else {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pedido'] . '/' . $count_asesor[46]['meta'] . '</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[46]['total_pedido'] / $count_asesor[46]['meta']) * 100, 2) . '%</b> - ' . $count_asesor[46]['total_pedido'] . '/' . $count_asesor[46]['meta'] . '</span>
     </div>';
             }
 
@@ -987,7 +992,7 @@ class DashboardController extends Controller
             if ($count_asesor[24]['meta'] == 0) {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px; height: 30px !important;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta'] . '</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta'] . '</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -1010,8 +1015,8 @@ class DashboardController extends Controller
                     <th width="8%">Asesor</th>
                     <th width="11%">Id</th>
                     <th width="8%"><span style="font-size:10px;">Pedidos del día ' . Carbon::now()->day . '  </span></th>
-                    <th width="36%">Cobranza  ' . Carbon::now()->subMonths(1)->monthName . ' </th>
-                    <th width="38%">Pedidos  ' . Carbon::now()->monthName . ' </th>
+                    <th width="36%">Cobranza  ' . Carbon::parse($date_pagos)->monthName . ' </th>
+                    <th width="38%">Pedidos  ' . Carbon::parse($fechametames)->monthName . ' </th>
                 </tr>
                 </thead>
                 <tbody>';
