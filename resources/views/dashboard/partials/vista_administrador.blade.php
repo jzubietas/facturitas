@@ -376,59 +376,5 @@
         });
     </script>
 
-    <script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>
-    <script>
-        $(function () {
-            var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
-            var mode = 'index'
-            var intersect = true
 
-            var $visitorsChart = $('#visitors-chart')
-          
-            ///console.log($arrr);
-            ///console.log($mes_actual);
-            ///console.log($mes_anterior);
-            var visitorsChart = new Chart($visitorsChart, {
-                data: {
-                    /*eje x: dias*/
-                    labels: $arrr,
-                    datasets: [{
-                        /*azul*/
-                        type: 'line',
-                        data: $mes_actual,
-                        backgroundColor: 'transparent',
-                        borderColor: '#007bff',
-                        pointBorderColor: '#007bff',
-                        pointBackgroundColor: '#007bff',
-                        fill: false
-                    }, {
-                        /*plomo*/
-                        type: 'line',
-                        data: $mes_anterior,
-                        backgroundColor: 'tansparent',
-                        borderColor: '#ced4da',
-                        pointBorderColor: '#ced4da',
-                        pointBackgroundColor: '#ced4da',
-                        fill: false
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    tooltips: {mode: mode, intersect: intersect},
-                    hover: {mode: mode, intersect: intersect},
-                    legend: {display: false},
-                    scales: {
-                        yAxes: [{
-                            gridLines: {
-                                display: true,
-                                lineWidth: '4px',
-                                color: 'rgba(0, 0, 0, .2)',
-                                zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 250}, ticksStyle)
-                        }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
-                    }
-                }
-            })
-        })
-    </script>
 @endsection
