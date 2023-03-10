@@ -58,7 +58,7 @@ class DashboardController extends Controller
         $lst_users_vida = $lst_users_vida->get();
 
         /*----- DIAS POR FECHA -----*/
-        $primer_dia = Carbon::now()->clone()->startOfMonth()->startOfDay();
+        /*$primer_dia = Carbon::now()->clone()->startOfMonth()->startOfDay();
         $fecha_anterior = Carbon::now()->clone()->subMonth()->endOfDay(); // dia actual
 
         $primer_dia_anterior = Carbon::now()->clone()->subMonth()->startOfMonth()->startOfDay();
@@ -73,7 +73,6 @@ class DashboardController extends Controller
 
         $contadores_arr=implode(',',$arr);
 
-        /*----- Mes Actual - pedidos -----*/
         $pedido_del_mes_anterior = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
             ->where('u.rol', '=', User::ROL_ASESOR)
             ->where('pedidos.codigo', 'not like', "%-C%")->activo()
@@ -98,8 +97,6 @@ class DashboardController extends Controller
         array_multisort( array_column($pedido_del_mes_anterior, "fecha"), SORT_ASC, $pedido_del_mes_anterior );
         $contadores_mes_anterior = implode(",",array_column($pedido_del_mes_anterior, 'total'));
 
-
-        //
         $pedido_del_mes = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
             ->where('u.rol', '=', User::ROL_ASESOR)
             ->where('pedidos.codigo', 'not like', "%-C%")->activo()
@@ -129,9 +126,9 @@ class DashboardController extends Controller
             ->where('pedidos.codigo', 'not like', "%-C%")->activo()
             ->whereDate('pedidos.created_at', $fechametames)
             ->where('pendiente_anulacion', '<>', '1')->count();
+*/
 
-
-        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id','contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual','asesor_pedido_dia'));
+        return view('dashboard.dashboard', compact('fechametames', 'lst_users_vida', 'mirol', 'id'/*,'contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual','asesor_pedido_dia'*/));
 
     }
 
