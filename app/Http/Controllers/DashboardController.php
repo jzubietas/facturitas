@@ -13,6 +13,7 @@ use App\View\Components\dashboard\graficos\PedidosMesCountProgressBar;
 use Blade;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,7 @@ class DashboardController extends Controller
 
         $primer_dia_anterior = Carbon::now()->clone()->subMonth()->startOfMonth()->startOfDay();
         $fecha_actual = Carbon::now()->clone()->endOfDay(); // dia actual
-        $arr[]=0;
+        $arr=[];
         $diff=10;
 
         for ($i = 1; $i <= $diff; $i++)
@@ -74,16 +75,19 @@ class DashboardController extends Controller
             ])->get()->map(function ($pedidoanterior) {
                 return ["fecha"=>$pedidoanterior->fecha,"total"=>$pedidoanterior->total];
             })->toArray();
+
         for($i=1;$i<=count(($arr));$i++)
         {
-            $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
+            $dia_calculado=Carbon::parse(now())->clone()->subMonth()->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
             $id = in_array($dia_calculado, array_column($pedido_del_mes_anterior, 'fecha'));
             if($id===false)
             {
                 $pedido_del_mes_anterior[]=["fecha"=>$dia_calculado,"total"=>0];
             }
         }
+
         array_multisort( array_column($pedido_del_mes_anterior, "fecha"), SORT_ASC, $pedido_del_mes_anterior );
+
         $contadores_mes_anterior = implode(",",array_column($pedido_del_mes_anterior, 'total'));
 
         $pedido_del_mes = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
@@ -186,12 +190,11 @@ class DashboardController extends Controller
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
 
     public function viewMetaTable(Request $request)
     {
-        $metas = [];
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('identificador', auth()->user()->identificador)->where('excluir_meta', '<>', '1')->get();
