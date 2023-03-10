@@ -4238,6 +4238,11 @@ metas_dp .animated-progress {
         font-size: 15px;
     }
 
+    #tablabandejapedidos td:nth-child(10) span{
+        position: initial !important;
+        font-size: 12px !important;
+    }
+
     #tablabandejapedidos td:nth-child(11) span {
         white-space: break-spaces !important;
         padding: 8px !important;
@@ -4678,6 +4683,11 @@ metas_dp .animated-progress {
 /*--- /operaciones.terminados ---*/
 #tablaOperacionesBandejadeSobres {
     width: 100% !important;
+}
+
+#tablaOperacionesBandejadeSobres td:nth-child(6) span{
+    position: initial !important;
+    font-size: 12px !important;
 }
 
 #tablaOperacionesBandejadeSobres td {

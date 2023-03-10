@@ -205,7 +205,6 @@ class AnulacionController extends Controller
                 $badge_estado = '';
                 if ($pedido->codigo_regularizado == '1') {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">REGULARIZACION</span>';
-
                 }
                 if ($pedido->pendiente_anulacion == '1') {
                     $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
