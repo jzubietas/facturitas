@@ -14,8 +14,12 @@
                     <div class="form-group col-lg-6">
 
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button id="btn_agregaranulacion_pc" type="button" class="btn rounded btn-info ml-2">Pedido Completo</button>
-                            <button id="btn_agregaranulacion_f" type="button" class="btn rounded btn-secondary  ml-2">Facturación</button>
+                            <button id="btn_agregaranulacion_pc" type="button" class="btn rounded btn-info ml-2">Pedido
+                                Completo
+                            </button>
+                            <button id="btn_agregaranulacion_f" type="button" class="btn rounded btn-secondary  ml-2">
+                                Facturación
+                            </button>
                         </div>
 
                     </div>
@@ -26,7 +30,7 @@
                 </div>
 
                 <div id="modal-agregaranulacion-f-container" class="modal-agregaranulacion-f-container">
-                  @include('modal.AgegarAnulacion.partials.agregaranulacion_f')
+                    @include('modal.AgegarAnulacion.partials.agregaranulacion_f')
                 </div>
 
             </div>

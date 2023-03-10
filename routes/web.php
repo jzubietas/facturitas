@@ -144,8 +144,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidos.anulaciones', [AnulacionController::class, 'pedidosanulaciones'])->name('pedidos.anulaciones');
     Route::get('pedidosanulacionestabla', [AnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulacionestabla');//actualizado para serverside
 
-    Route::post('pedidosanulaciones.modal.agregaranulacion_pc', [AnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulaciones.modal.agregaranulacion_pc');
-    Route::post('pedidosanulaciones.modal.agregaranulacion_f', [AnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulaciones.modal.agregaranulacion_f');
+    Route::any('pedidosanulaciones.modal.agregaranulacion_pc', [AnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_pc');
+    Route::any('pedidosanulaciones.modal.agregaranulacion_f', [AnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_f');
 
     Route::get('registros.asesor.lista', [EnvioController::class, 'registrosasesor'])->name('registros.asesor.lista');
 
