@@ -439,7 +439,7 @@
                             break;
                         case 'btn_agregarcontacto_b':
                             $.ajax({
-                                url: "{{ route('clientecomboagregarcontacto') }}",
+                                url: "{{ route('clientecomboagregarcontactobloqueo') }}",
                                 method: 'POST',
                                 success: function (data) {
                                     $('#cbxClienteBloqueo').html(data.html).selectpicker("refresh");
@@ -614,7 +614,7 @@
                     columns: [
                         {data: 'tipo_insert', name: 'tipo_insert'},
                         {data: 'codigo_asesor', name: 'codigo_asesor'},
-                        {data: 'nombres_cliente', name: 'nombres_cliente',},
+                        {data: 'celular', name: 'celular',},
                         {data: 'foto', name: 'foto',},
                         {data: 'nombre_contacto', name: 'nombre_contacto',},
                         {data: 'action', name: 'action',},
