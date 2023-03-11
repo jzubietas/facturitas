@@ -39,6 +39,7 @@ use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesReporteMultiple;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportPedidoMultiple;
+use App\Exports\Templates\PlantillaExportPedidosPerdonarCourierReporteMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
 use App\Exports\Templates\PlantillaRecepcionMotorizadoMultiple;
@@ -181,6 +182,15 @@ class ExcelController extends Controller
         return (new PlantillaExportClientesReporteMultiple('','2022'))
             ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
     }
+
+    public function pedidosPerdonarCourierExcel(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+        return (new PlantillaExportPedidosPerdonarCourierReporteMultiple('','2022'))
+            ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
+    }
+
     public function clientesTwoMonthAgoExcel(Request $request)
     {
         return (new PlantillaExportClientesdosmesesMultiple())

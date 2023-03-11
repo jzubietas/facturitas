@@ -10,6 +10,7 @@ use App\Models\CuentaBancaria;
 use App\Models\DetalleContactos;
 use App\Models\DetallePedido;
 use App\Models\DireccionEnvio;
+use App\Models\ImagenAtencion;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -2403,4 +2404,14 @@ class ClienteController extends Controller
 
         return response()->json(['datos' => $updRuc,'sucess'=>$ejecucion,'asesor'=>$nuevocliente]);
     }
+
+    public function consultarSaldoCliente(Request $request)
+    {
+        $clientesaldo = $request->clientesaldo;
+        $clienteparasaldo = Cliente::where("id", $clientesaldo)->first();
+        $elsaldo=$clienteparasaldo->saldo;
+        return response()->json($elsaldo);
+
+    }
+
 }

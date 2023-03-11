@@ -118,110 +118,96 @@
                 }
             });
 
-            $('#modal_imagen_cliente').on('show.bs.modal', function (event) {
-                console.log('SAPE');
-            });
-
-            tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
-                responsive: true,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                columns:
-                    [
-                        {
-                            data: 'tipo_insert'
-                        },
-                        {
-                            data: 'nombre_asesor'
-                        },
-                        {
-                            nane: 'celular'
-                        },
-                        {
-                            data: 'nombres_cliente'
-                        },
-                        {data: 'nombre_contacto'},
-                        {
-                            data: 'action'
-                        }
-                    ],
-            });
-            tblCambioNombre = $('#tablaCambioNombre').DataTable({
-                responsive: true,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                columns:
-                    [
-                        {
-                            data: 'tipo_insert'
-                        },
-                        {
-                            data: 'nombre_asesor'
-                        },
-                        {
-                            nane: 'celular'
-                        },
-                        {
-                            data: 'nombres_cliente'
-                        },
-                        {data: 'nombre_contacto'},
-                        {
-                            data: 'action'
-                        }
-                    ],
-            });
-            tblBloqueoClientes = $('#tablaBloqueoClientes').DataTable({
-                responsive: true,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                columns:
-                    [
-                        {
-                            data: 'tipo_insert'
-                        },
-                        {
-                            data: 'nombre_asesor'
-                        },
-                        {
-                            nane: 'nombres_cliente'
-                        },
-                        {
-                            data: 'foto'
-                        },
-                        {data: 'nombre_contacto'},
-                        {
-                            data: 'action'
-                        }
-                    ],
-            });
-            tblCambioNumero = $('#tablaCambioNumero').DataTable({
-                responsive: true,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                columns:
-                    [
-                        {
-                            data: 'tipo_insert'
-                        },
-                        {
-                            data: 'nombre_asesor'
-                        },
-                        {
-                            nane: 'celular'
-                        },
-                        {
-                            data: 'nombres_cliente'
-                        },
-                        {data: 'nombre_contacto'},
-                        {
-                            data: 'action'
-                        }
-                    ],
-            });
+          tblListadoLlamadas = $('#tablaListadoLlamadas').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
+          tblCambioNombre = $('#tablaCambioNombre').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
+          tblBloqueoClientes = $('#tablaBloqueoClientes').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {data: 'tipo_insert'},
+                {data: 'nombre_asesor'},
+                {nane : 'celular'},
+                {data: 'foto'},
+                {data: 'nombre_contacto'},
+                {data: 'action'}
+              ],
+          });
+          tblCambioNumero = $('#tablaCambioNumero').DataTable({
+            responsive: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns:
+              [
+                {
+                  data: 'tipo_insert'
+                },
+                {
+                  data: 'nombre_asesor'
+                },
+                {
+                  nane : 'celular'
+                },
+                {
+                  data: 'nombres_cliente'
+                },
+                {data: 'nombre_contacto'},
+                {
+                  data: 'action'
+                }
+              ],
+          });
 
 
             window.ocultar_div_modal1 = function () {
