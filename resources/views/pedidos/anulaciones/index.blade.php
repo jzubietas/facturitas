@@ -498,16 +498,32 @@ ${data.foto3 ? `
                     if (file.files.length > 0) {
                         $('#form-agregaranulacion-pc').find('.result_picture').css('display', 'block');
                         //console.log(URL.createObjectURL(file.files[0]))
-                        dataForm_agregarcontacto_b.agregarcontacto_b_captura = file.files[0]
+                        dataForm_agregaranulacion_pc.agregar_imagen_pc = files[0]= file.files[0]
                         $('#form-agregaranulacion-pc').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
                     }
                 })
             });
 
+            $("#form-agregaranulacion-pc").bind("paste", function(event){
+                var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+                var files = []
+                for (index in items) {
+                    var item = items[index];
+                    if (item.kind === 'file') {
+                        var file = item.getAsFile()
+                        files.push(file)
+                    }
+                }
+                if (files.length > 0) {
+                    $('#form-agregaranulacion-pc').find('.result_picture').css('display', 'block')
+                    $('#form-agregaranulacion-pc').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+                    dataForm_agregaranulacion_f.agregar_imagen_f = files[0]
+                }
+            } );
+
 
             /*MODAL ANULACION - F*/
             $(document).on("keyup", '#codigoCodigoF', function () {
-
                 let tamanio = $.trim($(this).val()).length;
                 if (tamanio > 8 && tamanio < 16) {
                     $.ajax
@@ -546,11 +562,11 @@ ${data.foto3 ? `
                 })
             });
 
-            window.document.onpaste = function (event) {
-                console.log('AQUI PRRO :V ');
+
+            $("#form-agregaranulacion-f").bind("paste", function(event){
                 var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-                console.log("ITEM #|:", items);
-                console.log("ITEM #||:", (event.clipboardData || event.originalEvent.clipboardData));
+                console.log(items);
+                console.log((event.clipboardData || event.originalEvent.clipboardData));
                 var files = []
                 for (index in items) {
                     var item = items[index];
@@ -565,7 +581,9 @@ ${data.foto3 ? `
                     $('#form-agregaranulacion-f').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
                     dataForm_agregaranulacion_f.agregar_imagen_f = files[0]
                 }
-            }
+            } );
+
+
 
 
         });

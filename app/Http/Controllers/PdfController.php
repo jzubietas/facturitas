@@ -147,7 +147,7 @@ class PdfController extends Controller
         DB::raw('count(situacion_clientes.situacion) as total')
       ])->whereNotIn('u.identificador',['15'])
         ->get();
-    dd($situaciones_clientes);
+    /*dd($situaciones_clientes);*/
     $html = [];
     $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
     foreach ($situaciones_clientes as $situacion_cliente)
