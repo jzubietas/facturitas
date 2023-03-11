@@ -47,8 +47,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('automatic:metas:reset')->monthlyOn(1, '00:01');;
 
         //Resetea las vidas en general los dias 15 y el ultimo dia del mes
+        /*
         $schedule->command('automatic:vidas:reset')->monthlyOn(15,'23:59');;
         $schedule->command('automatic:vidas:reset')->monthly();
+        */
 
         /*
          * $schedule->command('command:vidas.admin')->dailyAt('14:40');

@@ -615,10 +615,11 @@ class PedidoController extends Controller
                 'pedidos.envio'
             ])
             /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
-            ->whereIn('pedidos.pagado', ['1'])
-            ->whereIn('pedidos.pago', ['1'])
+            ->where('pedidos.pagado', '=','1')
+            ->where('pedidos.pago','=', '1')
             //->whereNotIn("pedidos.envio", ['3'])
-            ->where('dp.saldo', '>=', 11)->where('dp.saldo', '<=', 13);
+            /*->where('dp.saldo', '>=', 11)->where('dp.saldo', '<=', 13)*/
+            ->whereBetween('dp.saldo',[11,13]);
 
         $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -647,10 +648,11 @@ class PedidoController extends Controller
                 'pedidos.envio'
             ])
             /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
-            ->whereIn('pedidos.pagado', ['1'])
-            ->whereIn('pedidos.pago', ['1'])
+            ->where('pedidos.pagado', '1')
+            ->where('pedidos.pago', '1')
             //->whereNotIn("pedidos.envio", ['3'])
-            ->Where('dp.saldo', '>=', 17)->where('dp.saldo', '<=', 19);
+            /*->Where('dp.saldo', '>=', 17)->where('dp.saldo', '<=', 19)*/
+            ->whereBetween('dp.saldo',[17,19]);
 
         $pedidos = $pedidos->union($pedidos2);
         //->WhereBetween("dp.saldo", ['11', '13'])

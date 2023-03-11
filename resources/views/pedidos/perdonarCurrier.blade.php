@@ -24,7 +24,7 @@
         Exportar
       </button>
       <div class="dropdown-menu">
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}" alt=""> Excel</a>
       </div>
     </div>
       @include('pedidos.modal.exportarPerdonarCourier', ['title' => 'Exportar Perdonar Currier', 'key' => '1'])
@@ -86,7 +86,7 @@
   </div>
 @stop
 
-@section('css')
+@push('css')
   {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
@@ -146,7 +146,7 @@
     }
 
   </style>
-@stop
+@endpush
 
 @section('js')
 
@@ -363,7 +363,7 @@
           data: 'condicion_pa',
           name: 'condicion_pa',
           render: function ( data, type, row, meta ) {
-            if(row.condiciones=='ANULADO'){
+            if(row.condiciones==='ANULADO'){
                 return 'ANULADO';
             }else{
               if(row.condicion_pa==null){
