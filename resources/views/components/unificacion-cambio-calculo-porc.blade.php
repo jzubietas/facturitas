@@ -30,14 +30,14 @@
                     <a class="nav-item nav-link active" id="navCambioPorcentajetab" data-toggle="tab"
                        href="#navCambioPorcentaje"
                        role="tab" aria-controls="navCambioPorcentaje" aria-selected="true">Cambio Porcentaje</a>
-                    <a class="nav-item nav-link" id="navCambioAsesortab" data-toggle="tab" href="#navCambioAsesor"
-                       role="tab" aria-controls="navCambioAsesor" aria-selected="false">Cambio Asesor</a>
+                    <a class="nav-item nav-link disabled" id="navCambioAsesortab" data-toggle="tab" href="#navCambioAsesor"
+                       role="tab" aria-controls="navCambioAsesor" aria-selected="false" >Cambio Asesor</a>
                     <a class="nav-item nav-link" id="navChangeRucClientetab" data-toggle="tab"
                        href="#navChangeRucCliente"
                        role="tab" aria-controls="navChangeRucCliente" aria-selected="false">Cambio RUC</a>
                     <a class="nav-item nav-link" id="navCambioEmresatab" data-toggle="tab" href="#navCambioEmresa"
                        role="tab" aria-controls="navCambioEmresa" aria-selected="false">Cambio Nombre Empresa</a>
-                    <a class="nav-item nav-link" id="navBloqueoRuctab" data-toggle="tab" href="#navBloqueoRuc"
+                    <a class="nav-item nav-link disabled" id="navBloqueoRuctab" data-toggle="tab" href="#navBloqueoRuc"
                        role="tab" aria-controls="navBloqueoRuc" aria-selected="false">Bloqueo RUC</a>
                 </div>
             </nav>
