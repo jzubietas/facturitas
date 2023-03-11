@@ -614,7 +614,7 @@
                     columns: [
                         {data: 'tipo_insert', name: 'tipo_insert'},
                         {data: 'codigo_asesor', name: 'codigo_asesor'},
-                        {data: 'nombres_cliente', name: 'nombres_cliente',},
+                        {data: 'celular', name: 'celular',},
                         {data: 'foto', name: 'foto',},
                         {data: 'nombre_contacto', name: 'nombre_contacto',},
                         {data: 'action', name: 'action',},
