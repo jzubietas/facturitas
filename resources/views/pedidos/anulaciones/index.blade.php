@@ -496,6 +496,29 @@ ${data.foto3 ? `
                 });
             });
             /*CARGA DE ARCHIVOS*/
+
+
+            $(document).on("submit", "#form-agregaranulacion-pc", function (e) {
+                e.preventDefault();
+                var formagregaranulacionpc=new FormData(document.getElementById("agregaranulacion"));
+
+                //fd.append('quitardireccion', $("#quitardireccion").val());
+                $.ajax({
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('envios.quitardireccion') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-quitardireccion .textcode").text('');
+                        $("#modal-quitardireccion").modal("hide");
+                        $('#tablaRecepcionados').DataTable().ajax.reload(null, false);
+                    }
+                });
+
+            });
+
             $(document).on("click", "#form-agregaranulacion-pc #cargaArchivosPC", function () {
                 var file = document.createElement('input');
                 file.type = 'file';

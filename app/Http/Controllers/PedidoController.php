@@ -614,50 +614,17 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             ])
-            /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
             ->where('pedidos.pagado', '=','1')
             ->where('pedidos.pago','=', '1')
-            //->whereNotIn("pedidos.envio", ['3'])
-            /*->where('dp.saldo', '>=', 11)->where('dp.saldo', '<=', 13)*/
-            ->whereBetween('dp.saldo',[11,13]);
-
-        $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select([
-                'pedidos.id',
-                'c.nombre as nombres',
-                'c.icelular as icelulares',
-                'c.celular as celulares',
-                'u.identificador as users',
-                'pedidos.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'pedidos.condicion_envio',
-                'pedidos.condicion as condiciones',
-                'pedidos.pagado as condicion_pa',
-                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
-                'pedidos.motivo',
-                'pedidos.responsable',
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
-                'dp.saldo as diferencia',
-                'pedidos.estado',
-                'pedidos.pago',
-                'pedidos.pagado',
-                'pedidos.envio'
+            ->where([
+                ['dp.saldo', '>=', 11],
+                ['dp.saldo', '<=', 13],
             ])
-            /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
-            ->where('pedidos.pagado', '1')
-            ->where('pedidos.pago', '1')
-            //->whereNotIn("pedidos.envio", ['3'])
-            /*->Where('dp.saldo', '>=', 17)->where('dp.saldo', '<=', 19)*/
-            ->whereBetween('dp.saldo',[17,19]);
-
-        $pedidos = $pedidos->union($pedidos2);
-        //->WhereBetween("dp.saldo", ['11', '13'])
-        //->orWhereBetween("dp.saldo", ['17', '19']);
-
+            ->orwhere([
+                ['dp.saldo', '>=', 17],
+                ['dp.saldo', '<=', 19],
+            ]);
+        
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')

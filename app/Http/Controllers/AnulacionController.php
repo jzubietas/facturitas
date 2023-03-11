@@ -247,8 +247,6 @@ class AnulacionController extends Controller
 
     public function modalsAnulacion(Request $request)
     {
-
-        /*return $request->all();*/
         $listado_codigo_pedido = Pedido::query()
             ->join('detalle_pedidos as dp', 'dp.codigo', 'pedidos.codigo')
             ->join('users as u', 'u.id', 'pedidos.user_id')
@@ -263,8 +261,32 @@ class AnulacionController extends Controller
                 'dp.adjunto'
             ])
             ->first();
+        return response()->json(['data'=>$listado_codigo_pedido]);
+    }
 
-        //return json_encode($listado_codigo_pedido);
+    public function modalsAnulacionPCSave(Request $request)
+    {
+        $codigopedido=$request->codigoCodigoPc;
+        $idpedido=$request->codigoCodigoPcId;
+
+        //grabar imagen
+
+
+
+        $listado_codigo_pedido = Pedido::query()
+            ->join('detalle_pedidos as dp', 'dp.codigo', 'pedidos.codigo')
+            ->join('users as u', 'u.id', 'pedidos.user_id')
+            ->where('u.rol', 'Asesor')
+            ->where('pedidos.codigo',  $request->codigo)
+            ->select([
+                'pedidos.codigo',
+                'u.name',
+                'dp.total',
+                'dp.ruc',
+                'dp.nombre_empresa',
+                'dp.adjunto'
+            ])
+            ->first();
         return response()->json(['data'=>$listado_codigo_pedido]);
     }
 }

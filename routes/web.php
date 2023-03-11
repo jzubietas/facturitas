@@ -148,6 +148,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('pedidosanulaciones.modal.agregaranulacion_pc', [AnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_pc');
     Route::any('pedidosanulaciones.modal.agregaranulacion_f', [AnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_f');
 
+    Route::any('pedidosanulaciones.modal.agregaranulacion_pc.save', [AnulacionController::class, 'modalsAnulacionPCSave'])->name('pedidosanulaciones.modal.agregaranulacion_pc.save');
+    Route::any('pedidosanulaciones.modal.agregaranulacion_f.save', [AnulacionController::class, 'modalsAnulacionFSave'])->name('pedidosanulaciones.modal.agregaranulacion_f.save');
+
     Route::get('registros.asesor.lista', [EnvioController::class, 'registrosasesor'])->name('registros.asesor.lista');
 
     Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');
