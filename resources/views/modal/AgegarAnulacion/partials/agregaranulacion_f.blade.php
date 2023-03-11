@@ -4,7 +4,7 @@
     <div class="row">
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
             <input name="codigoCodigoF" id="codigoCodigoF"
-                   placeholder="Colocar codigo del pedido">
+                   placeholder="Colocar codigo del pedido" class="bg-warning">
             <div class="input-icon">
                 <i class="fa fa-barcode" aria-hidden="true"></i>
             </div>
@@ -25,8 +25,8 @@
             </div>
         </div>
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
-            <input name="anularCodigoF" id="anularCodigoF"
-                   placeholder="Colocar el importe a anular" disabled>
+            <input name="anularCodigoF" id="anularCodigoF" type="number"
+                   placeholder="Colocar el importe a anular" class="bg-warning type_number">
             <div class="input-icon">
                 <i class="fa fa-minus-square" aria-hidden="true"></i>
             </div>

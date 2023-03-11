@@ -257,9 +257,10 @@ class AnulacionController extends Controller
             ->select([
                 'pedidos.codigo',
                 'u.name',
-                'pedidos.env_importe',
+                'dp.total',
                 'dp.ruc',
-                'dp.nombre_empresa'
+                'dp.nombre_empresa',
+                'dp.adjunto'
             ])
             ->first();
 

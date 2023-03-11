@@ -464,7 +464,6 @@ ${data.foto3 ? `
 
             /*MODAL ANULACION PEDIDOS COMPLETOS*/
             $(document).on("keyup", '#codigoCodigoPc', function () {
-
                 let tamanio = $.trim($(this).val()).length;
                 if (tamanio > 8 && tamanio < 16) {
                     $.ajax
@@ -481,15 +480,22 @@ ${data.foto3 ? `
                         success: function (response) {
 
                             $('#asesorCodigoPc').val(response.data.name);
-                            $('#importeCodigoPc').val(response.data.env_importe);
-                            $('#anulacionCodigoPc').val(response.data.env_importe);
+                            $('#importeCodigoPc').val(response.data.total);
+                            $('#anulacionCodigoPc').val(response.data.total);
                             $('#rucCodigoPc').val(response.data.ruc);
                             $('#razonCodigoPc').val(response.data.nombre_empresa);
+                            $('#agregar_imagen_pc').val();
                         }
                     });
                 }
             });
-
+            /*VALIDACION DE NUMERO*/
+            $(document).ready(function (){
+                $('.type_number').keyup(function (){
+                    this.value = (this.value + '').replace(/[^0-9]/g, '');
+                });
+            });
+            /*CARGA DE ARCHIVOS*/
             $(document).on("click", "#form-agregaranulacion-pc #cargaArchivosPC", function () {
                 var file = document.createElement('input');
                 file.type = 'file';
@@ -498,12 +504,12 @@ ${data.foto3 ? `
                     if (file.files.length > 0) {
                         $('#form-agregaranulacion-pc').find('.result_picture').css('display', 'block');
                         //console.log(URL.createObjectURL(file.files[0]))
-                        dataForm_agregaranulacion_pc.agregar_imagen_pc = files[0]= file.files[0]
+                        dataForm_agregaranulacion_pc.agregar_imagen_pc = file.files[0]
                         $('#form-agregaranulacion-pc').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
                     }
                 })
             });
-
+            /*PEGADO DE IMAGEN*/
             $("#form-agregaranulacion-pc").bind("paste", function(event){
                 var items = (event.clipboardData || event.originalEvent.clipboardData).items;
                 var files = []
@@ -539,15 +545,15 @@ ${data.foto3 ? `
                         success: function (response) {
 
                             $('#asesorCodigoF').val(response.data.name);
-                            $('#importeCodigoF').val(response.data.env_importe);
-                            $('#anulacionCodigoF').val(response.data.env_importe);
+                            $('#importeCodigoF').val(response.data.total);
+                            $('#anulacionCodigoF').val(response.data.total);
                             $('#rucCodigoF').val(response.data.ruc);
                             $('#razonCodigoF').val(response.data.nombre_empresa);
                         }
                     });
                 }
             });
-
+            /*CARGA DE ARCHIVOS*/
             $(document).on("click", "#form-agregaranulacion-f #cargaArchivosF", function () {
                 var file = document.createElement('input');
                 file.type = 'file';
@@ -561,8 +567,7 @@ ${data.foto3 ? `
                     }
                 })
             });
-
-
+            /*PEGADO DE IMAGEN*/
             $("#form-agregaranulacion-f").bind("paste", function(event){
                 var items = (event.clipboardData || event.originalEvent.clipboardData).items;
                 console.log(items);
