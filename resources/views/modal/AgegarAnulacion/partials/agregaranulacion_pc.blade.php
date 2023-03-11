@@ -6,7 +6,7 @@
     <div class="row">
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
             <input name="codigoCodigoPc" id="codigoCodigoPc"
-                   placeholder="Colocar codigo del pedido">
+                   placeholder="Colocar codigo del pedido" class="bg-warning">
             <div class="input-icon">
                 <i class="fa fa-barcode" aria-hidden="true"></i>
             </div>

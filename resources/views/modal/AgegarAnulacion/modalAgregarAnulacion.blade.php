@@ -71,15 +71,15 @@
 
         input:focus {
             outline: 0;
-            border-color: #17a2b8;
+            border-color: black;
         }
 
         input:focus + .input-icon i {
-            color: #17a2b8;
+            color: black;
         }
 
         input:focus + .input-icon:after {
-            border-right-color: #17a2b8;
+            border-right-color: black;
         }
 
         input[type="radio"] {
