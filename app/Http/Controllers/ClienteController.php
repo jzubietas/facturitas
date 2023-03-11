@@ -2049,6 +2049,77 @@ class ClienteController extends Controller
     //return response()->json($users);
   }
 
+    public function ClienteAgregarContactobloqueo(Request $request)
+    {
+        //$mirol = Auth::user()->rol;
+        $clientes = Cliente:://CLIENTES SIN PEDIDOS
+        join('users as u', 'clientes.user_id', 'u.id')
+            ->whereIn('clientes.tipo', ['0','1'])->activo()
+            ->select([
+                'clientes.id',
+                'clientes.nombre',
+                'clientes.icelular',
+                'clientes.celular'
+            ]);
+        switch (Auth::user()->rol)
+        {
+            case User::ROL_ASESOR:
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.identificador', Auth::user()->identificador)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+                $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+                break;
+            case User::ROL_LLAMADAS:
+                $clientes = $clientes->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+                break;
+            case User::ROL_JEFE_LLAMADAS:break;
+            case User::ROL_APOYO_ADMINISTRATIVO:
+                $clientes = $clientes->where('identificador', '<>', 'B');
+                break;
+            case User::ROL_ASESOR_ADMINISTRATIVO:
+                $clientes = $clientes->where("rol", User::ROL_ASESOR_ADMINISTRATIVO);
+                break;
+            default:
+                //$usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO"]);
+                //$clientes = $usersB->union($clientes);
+                break;
+        }
+
+        $clientes = $clientes->orderBy('id', 'ASC')->get();
+        $html = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        foreach ($clientes as $cliente) {
+            switch (Auth::user()->rol) {
+                case User::ROL_ASESOR:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                case User::ROL_LLAMADAS:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                case User::ROL_JEFE_LLAMADAS:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                case User::ROL_APOYO_ADMINISTRATIVO:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                case User::ROL_ASESOR_ADMINISTRATIVO:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                default:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+            }
+
+        }
+
+        return response()->json(['html' => $html]);
+
+        //return response()->json($users);
+    }
+
   public function listtablecontactos(Request $request){ //rbnvalue
     $data = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
       ->join('users as u', 'c.user_id', 'u.id')

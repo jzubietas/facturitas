@@ -134,6 +134,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('agregarcontactonuevo', [ClienteController::class,'agregarcontactonuevo'])->name('agregarcontactonuevo');
     Route::post('solicitabloqueocliente', [ClienteController::class,'solicitabloqueocliente'])->name('solicitabloqueocliente');
     Route::post('clientecomboagregarcontacto', [ClienteController::class, 'ClienteAgregarContacto'])->name('clientecomboagregarcontacto');
+    Route::post('clientecomboagregarcontactobloqueo', [ClienteController::class, 'ClienteAgregarContactobloqueo'])->name('clientecomboagregarcontactobloqueo');
     Route::post('cambiarnombrecontacto', [ClienteController::class,'cambiarnombrecontacto'])->name('cambiarnombrecontacto');
     Route::post('cambiarnumerocontacto', [ClienteController::class,'cambiarnumerocontacto'])->name('cambiarnumerocontacto');
     Route::get('listcontadorescontactos', [ClienteController::class,'listcontadorescontactos'])->name('listcontadorescontactos');

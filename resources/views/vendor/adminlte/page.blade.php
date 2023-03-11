@@ -439,7 +439,7 @@
                             break;
                         case 'btn_agregarcontacto_b':
                             $.ajax({
-                                url: "{{ route('clientecomboagregarcontacto') }}",
+                                url: "{{ route('clientecomboagregarcontactobloqueo') }}",
                                 method: 'POST',
                                 success: function (data) {
                                     $('#cbxClienteBloqueo').html(data.html).selectpicker("refresh");
