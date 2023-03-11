@@ -27,7 +27,8 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.modalPerdonarCurrier', ['title' => 'Perdonar deuda', 'key' => '3'])
+      @include('pedidos.modal.exportarPerdonarCourier', ['title' => 'Exportar Perdonar Currier', 'key' => '1'])
+        @include('pedidos.modal.modalPerdonarCurrier', ['title' => 'Perdonar deuda', 'key' => '3'])
   </h1>
   {{--@if($superasesor > 0)--}}
   <br>
