@@ -675,7 +675,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
 
-    Route::post('pedidosPerdonarCourierExcel', [ExcelController::class, 'pedidosPerdonarCourierExcel'])->name('pedidosPerdonarCourierExcel');
+    Route::any('pedidosPerdonarCourierExcel', [ExcelController::class, 'pedidosPerdonarCourierExcel'])->name('pedidosPerdonarCourierExcel');
 
     Route::post('clientesabandonoExcel', [ExcelController::class, 'clientesabandonoExcel'])->name('clientesabandonoExcel');
 

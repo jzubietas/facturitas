@@ -38,147 +38,57 @@ class PagepedidoperdonarcourierReporteMultiple extends Export implements WithSty
     }
     public function collection()
     {
-        $clientes=Cliente::activo()
-            ->join('users as u', 'clientes.user_id', 'u.id')
+        $perdonar = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select([
-                'clientes.id',
-                'clientes.tipo',
-                'u.identificador as asesor',
-                'clientes.nombre',
-                'clientes.dni',
-                'clientes.icelular',
-                'clientes.celular',
-                'clientes.provincia',
-                'clientes.distrito',
-                'clientes.direccion',
-                'clientes.referencia',
-                'clientes.estado',
-                'clientes.deuda',
-                DB::raw(" (CASE WHEN clientes.deuda=1 then 'DEBE' else 'CANCELADO' end) as deposito "),
-                'clientes.pidio',
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id and dp1.estado=1 order by dp1.created_at desc limit 1) as fecha"),
-                DB::raw("(select DATE_FORMAT(dp0.created_at,'%m') from pedidos dp0 where dp0.cliente_id=clientes.id and dp0.estado=1 order by dp0.created_at desc limit 1) as fechaultimopedido_dia"),
-                DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id and dp2.estado=1 order by dp2.created_at desc limit 1) as fechaultimopedido_mes"),
-                DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id and dp3.estado=1 order by dp3.created_at desc limit 1) as fechaultimopedido_anio"),
-                DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id and dp.estado=1 order by dp.created_at desc limit 1) as codigo "),
-                'clientes.situacion',
-                DB::raw("(select dp1.pago from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pago"),
-                DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - sin banca' limit 1) as porcentajefsb"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - banca' limit 1) as porcentajefb"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - sin banca' limit 1) as porcentajeesb"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - banca' limit 1) as porcentajeeb"),
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.icelular as icelulares',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'pedidos.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion_envio',
+                'pedidos.condicion as condiciones',
+                'pedidos.pagado as condicion_pa',
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
+                'pedidos.motivo',
+                'pedidos.responsable',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
+                'dp.saldo as diferencia',
+                'pedidos.estado',
+                'pedidos.pago',
+                'pedidos.pagado',
+                'pedidos.envio'
             ])
-            ->where('clientes.estado','1')
-            ->where('clientes.tipo','1');
-            //->whereNotNull('clientes.situacion');
-        $cal_sit=$this->situacion;
-        //$clientes=$clientes->limit(10);
-        switch($cal_sit)
-            {
-                case 'ABANDONO':
-                    $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO','ABANDONO RECIENTE']);
-                    break;
-                case 'RECURENTE':
-                    $clientes=$clientes->whereIn('clientes.situacion',['RECURRENTE']);
-                    break;
-                case 'NUEVO':
-                    $clientes=$clientes->whereIn('clientes.situacion',['NUEVO']);
-                    break;
-                case 'RECUPERADO':
-                    $clientes=$clientes->whereIn('clientes.situacion',['RECUPERADO']);
-                    break;
-                case 'RECUPERADO ABANDONO':
-                    $clientes=$clientes->whereIn('clientes.situacion',['RECUPERADO ABANDONO']);
-                    break;
-                case 'RECUPERADO RECIENTE':
-                    $clientes=$clientes->whereIn('clientes.situacion',['RECUPERADO RECIENTE']);
-                    break;
-                case 'ABANDONO RECIENTE':
-                    $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO RECIENTE']);
-                    break;
-                default:break;
-            }
+            /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
+            ->whereIn('pedidos.pagado', ['1'])
+            ->whereIn('pedidos.pago', ['1'])
+            //->whereNotIn("pedidos.envio", ['3'])
+            ->where('dp.saldo', '>=', 11)->where('dp.saldo', '<=', 13);
 
-
-        if (Auth::user()->rol == "Llamadas")
-        {
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.llamada', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-            $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
-        }
-        elseif (Auth::user()->rol == "Asesor")
-        {
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.identificador', Auth::user()->identificador)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-            $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
-        }
-        else if (Auth::user()->rol == "Encargado")
-        {
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.supervisor', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-            $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
-        }
-
-        return $clientes->get();
+        return $perdonar->get();
     }
     public function fields(): array
     {
         return [
-            "item"=>"Item"
-            ,"id"=>"Id"
-            ,"asesor"=>"Asesor"
-            ,"nombre"=>"Nombre"
-            ,"dni"=>"DNI"
-            ,"celular"=>"Celular"
-            ,"icelular"=>"Letra Celular"
-            ,"provincia"=>"Provincia"
-            ,"distrito"=>"Distrito"
-            ,"direccion"=>"Direccion"
-            ,"referencia"=>"Referencia"
-            ,"porcentajefsb"=>"Fisico sin banca"
-            ,"porcentajefb"=>"Fisico con banca"
-            ,"porcentajeesb"=>"Electronica sin banca"
-            ,"porcentajeeb"=>"Electronica con banca"
-            ,"deuda"=>"Deuda"
-            ,"deposito"=>"Deposito"
-            ,"fecha"=>"Fecha"
-            ,"fechaultimopedido_dia"=>"Dia"
-            ,"fechaultimopedido_mes"=>"Mes"
-            ,"fechaultimopedido_anio"=>"Año"
-            ,"codigo"=>"Codigo"
-            ,"situacion"=>"Situacion"
-            ,"estadopedido"=>"Estado pedido"
-            ,"pidio"=>"Pidio"
-            ,"estado"=>"Estado"
-            , "eneroa"=> sprintf("Enero %s", ($this->anio))
-            ,"enerob"=>"Enero ".(intval($this->anio)+1)
-            ,"febreroa"=>"Febrero ".($this->anio),"febrerob"=>"Febrero ".(intval($this->anio)+1)
-            ,"marzoa"=>"Marzo ".($this->anio),"marzob"=>"Marzo ".(intval($this->anio)+1)
-            ,"abrila"=>"Abril ".($this->anio),"abrilb"=>"Abril ".(intval($this->anio)+1)
-            ,"mayoa"=>"Mayo ".($this->anio),"mayob"=>"Mayo ".(intval($this->anio)+1)
-            ,"junioa"=>"Junio ".($this->anio),"juniob"=>"Junio ".(intval($this->anio)+1)
-            ,"julioa"=>"Julio ".($this->anio),"juliob"=>"Julio ".(intval($this->anio)+1)
-            ,"agostoa"=>"Agosto ".($this->anio),"agostob"=>"Agosto ".(intval($this->anio)+1)
-            ,"setiembrea"=>"Setiembre ".($this->anio),"setiembreb"=>"Setiembre ".(intval($this->anio)+1)
-            ,"octubrea"=>"Octubre ".($this->anio),"octubreb"=>"Octubre ".(intval($this->anio)+1)
-            ,"noviembrea"=>"Noviembre ".($this->anio),"noviembreb"=>"Noviembre ".(intval($this->anio)+1)
-            ,"diciembrea"=>"Diciembre ".($this->anio),"diciembreb"=>"Diciembre ".(intval($this->anio)+1)
+            "nombres"=>"Nombres"
+            ,"icelulares"=>"Letra celular"
+            ,"celulares"=>"Celular"
+            ,"users"=>"Asesor"
+            ,"codigos"=>"Pedido"
+            ,"empresas"=>"Empresa"
+            ,"total"=>"Total"
+            ,"condicion_envio"=>"Condicion"
+            ,"condicion_pa"=>"Estado Pago"
+            ,"condiciones_aprobado"=>"Estado Administracion"
+            ,"motivo"=>"Motivo"
+            ,"responsable"=>"Responsable"
+            ,"diferencia"=>"Saldo"
+            ,"estado"=>"Estado del pedido"
         ];
     }
     public function columnWidths(): array
@@ -198,11 +108,6 @@ class PagepedidoperdonarcourierReporteMultiple extends Export implements WithSty
             ,'L' => 8//mes
             ,'M' => 8//mes
             ,'N' => 8//mes
-            ,'O' => 8//mes
-            ,'P' => 8//mes
-            ,'Q' => 8//mes
-            ,'R' => 8//mes
-            ,'S' => 8//mes
         ];
     }
     public function columnFormats(): array
@@ -224,110 +129,23 @@ class PagepedidoperdonarcourierReporteMultiple extends Export implements WithSty
     }
     public function title(): string
     {
-        return 'CLIENTES SITUACION '.($this->anio).' '.(intval($this->anio)+1). ' :: '.($this->situacion);
+        return 'PERDONAR DEUDA';
     }
     public function map($model): array
     {
-        $model->deuda=( ($model->deuda==1)? 'SI':'NO' );
-        $model->anioa=$this->anio;
-        $model->aniob=( intval($this->anio) +1);
-        $model->eneroa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '1')
-            ->count();
-        $model->enerob=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '1')
-            ->count();
-        $model->febreroa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '2')
-            ->count();
-        $model->febrerob=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '2')
-            ->count();
-        $model->marzoa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '3')
-            ->count();
-        $model->marzob=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '3')
-            ->count();
-        $model->abrila=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '4')
-            ->count();
-        $model->abrilb=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '4')
-            ->count();
-        $model->mayoa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '5')
-            ->count();
-        $model->mayob=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '5')
-            ->count();
-        $model->junioa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '6')
-            ->count();
-        $model->juniob=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '6')
-            ->count();
-        $model->julioa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '7')
-            ->count();
-        $model->juliob=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '7')
-            ->count();
-        $model->agostoa=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '8')
-            ->count();
-        $model->agostob=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '8')
-            ->count();
-        $model->setiembrea=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '9')
-            ->count();
-        $model->setiembreb=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '9')
-            ->count();
-        $model->octubrea=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '10')
-            ->count();
-        $model->octubreb=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '10')
-            ->count();
-        $model->noviembrea=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '11')
-            ->count();
-        $model->noviembreb=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '11')
-            ->count();
-        $model->diciembrea=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->anioa)
-            ->where(DB::raw('MONTH(created_at)'), '12')
-            ->count();
-        $model->diciembreb=Pedido::where('estado', '1')->where('cliente_id', $model->id)
-            ->whereYear(DB::raw('Date(created_at)'), $model->aniob)
-            ->where(DB::raw('MONTH(created_at)'), '12')
-            ->count();
-
+        switch ($model->condicion_pa)
+        {
+            case '0':
+                $model->condicion_pa='POR PAGAR';
+                break;
+            case '1':
+                $model->condicion_pa='ADELANTO';
+                break;
+            case '2':
+                $model->condicion_pa='PAGADO';
+            break;
+        }
+        $model->estado=( ($model->estado==1)? 'Activo':'Anulado' );
         return parent::map($model);
     }
     public function registerEvents(): array
@@ -339,7 +157,7 @@ class PagepedidoperdonarcourierReporteMultiple extends Export implements WithSty
 
     public static function afterSheet(AfterSheet $event){
 
-        $color_R = 'ff5733';
+        /*$color_R = 'ff5733';
         $color__ = 'fcf8f2';
         $color_A = 'faf01c';
         $color_C = '1cfaf3';
@@ -376,7 +194,7 @@ class PagepedidoperdonarcourierReporteMultiple extends Export implements WithSty
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => array('argb' => $color_V)
             )
-        );
+        );*/
 
         /*$event->sheet->styleCells(
             'A1:AX1',
@@ -391,7 +209,7 @@ class PagepedidoperdonarcourierReporteMultiple extends Export implements WithSty
             ]
         );*/
 
-        $event->sheet->styleCells(
+        /*$event->sheet->styleCells(
             'L1:O1',
             [
                 'alignment' => [
@@ -402,9 +220,9 @@ class PagepedidoperdonarcourierReporteMultiple extends Export implements WithSty
                     'color' => ['rgb' => 'cedb40']
                 ]
             ]
-        );
+        );*/
 
-        $row_cell_=23;
+        /*$row_cell_=23;
         $letter_cell='W';
         foreach ($event->sheet->getRowIterator() as $row)
         {
@@ -427,7 +245,7 @@ class PagepedidoperdonarcourierReporteMultiple extends Export implements WithSty
             }
 
 
-        }
+        }*/
 
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
