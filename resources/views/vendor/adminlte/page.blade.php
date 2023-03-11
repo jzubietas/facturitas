@@ -173,22 +173,12 @@
             "bInfo": false,
             columns:
               [
-                {
-                  data: 'tipo_insert'
-                },
-                {
-                  data: 'nombre_asesor'
-                },
-                {
-                  nane : 'celular'
-                },
-                {
-                  data: 'foto'
-                },
+                {data: 'tipo_insert'},
+                {data: 'nombre_asesor'},
+                {nane : 'celular'},
+                {data: 'foto'},
                 {data: 'nombre_contacto'},
-                {
-                  data: 'action'
-                }
+                {data: 'action'}
               ],
           });
           tblCambioNumero = $('#tablaCambioNumero').DataTable({
