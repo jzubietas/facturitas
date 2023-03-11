@@ -88,6 +88,8 @@
 
     <script>
         let tblListadoRecojo = null;
+        let dataForm_agregaranulacion_f = {};
+        let dataForm_agregaranulacion_pc = {};
 
         $(document).ready(function () {
 
@@ -156,7 +158,6 @@
                                     method: 'get'
                                 })
                                     .done(function (response) {
-                                        console.log(response);
 
                                         self.setContent(response.html);
                                         if (!response.success) {
@@ -164,7 +165,6 @@
                                         }
                                     })
                                     .fail(function (e) {
-                                        console.error(e)
                                         self.setContent('Ocurrio un error');
                                     });
                             },
@@ -174,7 +174,6 @@
                                     btnClass: 'btn-success',
                                     action: function () {
                                         var self = this;
-                                        console.log(self.$content.find('form')[0])
                                         const form = self.$content.find('form')[0];
                                         const data = new FormData(form)
                                         if (data.get('celular').length != 9) {
@@ -209,8 +208,7 @@
                                 var self = this;
                                 const form = self.$content.find('form')[0];
                                 const data = new FormData(form)
-                                console.log("aa")
-                                console.log(form)
+
                                 self.$content.find('select#distrito').selectpicker('refresh');
                             }
                         });
@@ -396,7 +394,6 @@ ${data.foto3 ? `
             /**/
             $(document).on('click', "button#btn_agregaranulacion_pc,button#btn_agregaranulacion_f",
                 function (e) {
-                    console.log(e.target.id);
                     ocultar_div_modal_agregaranulacion();
                     switch (e.target.id) {
                         case 'btn_agregaranulacion_pc':
@@ -445,7 +442,6 @@ ${data.foto3 ? `
                     type: 'POST',
                     url: "{{ route('envios.confirmar-recepcion-recojo') }}",
                     success: function (data) {
-                        console.log(data);
                         $("#modal-envio-recojo .textcode").text('');
                         $("#modal-envio-recojo").modal("hide");
                         Swal.fire('Mensaje', data.mensaje, 'success')
@@ -455,7 +451,6 @@ ${data.foto3 ? `
             });
 
             tblListadoRecojo.on('responsive-display', function (e, datatable, row, showHide, update) {
-                console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
                 if (showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
@@ -484,11 +479,6 @@ ${data.foto3 ? `
                         dataType: 'json',
                         cache: false,
                         success: function (response) {
-                            /*console.log('RESPONSE:',response);
-                            console.log('nombre:',response.data.name);
-                            console.log('Importe:',response.data.env_importe);
-                            console.log('Ruc:',response.data.ruc);
-                            console.log('Razon:',response.data.nombre_empresa);*/
 
                             $('#asesorCodigoPc').val(response.data.name);
                             $('#importeCodigoPc').val(response.data.env_importe);
@@ -505,17 +495,17 @@ ${data.foto3 ? `
                 file.type = 'file';
                 file.click()
                 file.addEventListener('change', function (e) {
-                    console.log("change")
                     if (file.files.length > 0) {
                         $('#form-agregaranulacion-pc').find('.result_picture').css('display', 'block');
-                        console.log(URL.createObjectURL(file.files[0]))
+                        //console.log(URL.createObjectURL(file.files[0]))
                         dataForm_agregarcontacto_b.agregarcontacto_b_captura = file.files[0]
                         $('#form-agregaranulacion-pc').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
                     }
                 })
             });
 
-            /*MODAL ANULACION*/
+
+            /*MODAL ANULACION - F*/
             $(document).on("keyup", '#codigoCodigoF', function () {
 
                 let tamanio = $.trim($(this).val()).length;
@@ -531,11 +521,6 @@ ${data.foto3 ? `
                         dataType: 'json',
                         cache: false,
                         success: function (response) {
-                            /*console.log('RESPONSE:',response);
-                            console.log('nombre:',response.data.name);
-                            console.log('Importe:',response.data.env_importe);
-                            console.log('Ruc:',response.data.ruc);
-                            console.log('Razon:',response.data.nombre_empresa);*/
 
                             $('#asesorCodigoF').val(response.data.name);
                             $('#importeCodigoF').val(response.data.env_importe);
@@ -552,15 +537,36 @@ ${data.foto3 ? `
                 file.type = 'file';
                 file.click()
                 file.addEventListener('change', function (e) {
-                    console.log("change")
                     if (file.files.length > 0) {
                         $('#form-agregaranulacion-f').find('.result_picture').css('display', 'block');
-                        console.log(URL.createObjectURL(file.files[0]))
-                        dataForm_agregarcontacto_b.agregarcontacto_b_captura = file.files[0]
+                        console.log("ADD: ", URL.createObjectURL(file.files[0]))
+                        dataForm_agregaranulacion_f.agregar_imagen_f = file.files[0]
                         $('#form-agregaranulacion-f').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
                     }
                 })
             });
+
+            window.document.onpaste = function (event) {
+                console.log('AQUI PRRO :V ');
+                var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+                console.log("ITEM #|:", items);
+                console.log("ITEM #||:", (event.clipboardData || event.originalEvent.clipboardData));
+                var files = []
+                for (index in items) {
+                    var item = items[index];
+                    if (item.kind === 'file') {
+                        var file = item.getAsFile()
+                        files.push(file)
+                    }
+                }
+                if (files.length > 0) {
+                    $('#form-agregaranulacion-f').find('.result_picture').css('display', 'block')
+                    console.log('DENTRO DE IF: ', URL.createObjectURL(files[0]))
+                    $('#form-agregaranulacion-f').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+                    dataForm_agregaranulacion_f.agregar_imagen_f = files[0]
+                }
+            }
+
 
         });
     </script>
