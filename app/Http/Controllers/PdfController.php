@@ -131,11 +131,11 @@ class PdfController extends Controller
                                                     THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_quincena "),
 
         DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
-                                                  THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                  THEN (select sum(m.cliente_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
-                                                    THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    THEN (select sum(m.cliente_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
+                                                    THEN (select sum(m.cliente_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
 
         DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
@@ -147,9 +147,11 @@ class PdfController extends Controller
         DB::raw('count(situacion_clientes.situacion) as total')
       ])->whereNotIn('u.identificador',['15'])
         ->get();
+    dd($situaciones_clientes);
     $html = [];
     $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
-    foreach ($situaciones_clientes as $situacion_cliente) {
+    foreach ($situaciones_clientes as $situacion_cliente)
+    {
 
       $html[] = '<tr>';
       $html[] = '<td style="width:20%;" class="text-center">';
