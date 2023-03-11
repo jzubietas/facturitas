@@ -61,6 +61,7 @@
                 <img src="" class="h-100 img-fluid" alt="">
             </div>
         </div>
+        <input type="file" name="agregar_imagen_pc" id="agregar_imagen_pc" class="d-none form-control" placeholder="">
     </div>
     <div class="row">
         <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
