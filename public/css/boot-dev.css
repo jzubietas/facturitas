@@ -28,7 +28,7 @@ body {
     display: none !important;
 }
 
-.text-warn{
+.text-warn {
     color: #983434;
 }
 
@@ -4238,7 +4238,7 @@ metas_dp .animated-progress {
         font-size: 15px;
     }
 
-    #tablabandejapedidos td:nth-child(10) span{
+    #tablabandejapedidos td:nth-child(10) span {
         position: initial !important;
         font-size: 12px !important;
     }
@@ -4679,13 +4679,13 @@ metas_dp .animated-progress {
     max-width: 350px !important;
 }
 
-/*---------------- MODULO OPERACIONES ----------------*/
+/*-------------------------------- MODULO OPERACIONES --------------------------------*/
 /*--- /operaciones.terminados ---*/
 #tablaOperacionesBandejadeSobres {
     width: 100% !important;
 }
 
-#tablaOperacionesBandejadeSobres td:nth-child(6) span{
+#tablaOperacionesBandejadeSobres td:nth-child(6) span {
     position: initial !important;
     font-size: 12px !important;
 }
@@ -4744,7 +4744,7 @@ metas_dp .animated-progress {
     text-align: center !important;
 }
 
-#tablaOperacionesBandejadeCorrecciones tbody tr{
+#tablaOperacionesBandejadeCorrecciones tbody tr {
     font-weight: lighter !important;
 }
 
@@ -4782,7 +4782,7 @@ metas_dp .animated-progress {
 /*------------------PENDIENTE*/
 
 /*--- /operaciones.poratender ---*/
-#tablaOperacionesPedidosPorAtender{
+#tablaOperacionesPedidosPorAtender {
     width: 100% !important;
 }
 
@@ -4807,7 +4807,7 @@ metas_dp .animated-progress {
         top: 20px !important;
     }
 
-    #tablaOperacionesPedidosPorAtender tbody td:nth-child(11){
+    #tablaOperacionesPedidosPorAtender tbody td:nth-child(11) {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -4824,10 +4824,11 @@ metas_dp .animated-progress {
 
 /*--- /operaciones.atendidos ---*/
 
-#tablaOperacionesPedidosAtendidos{
+#tablaOperacionesPedidosAtendidos {
     width: 100% !important;
 }
-#tablaOperacionesPedidosAtendidos td{
+
+#tablaOperacionesPedidosAtendidos td {
     vertical-align: middle !important;
 }
 
@@ -4846,11 +4847,11 @@ metas_dp .animated-progress {
 
 /*--- /operaciones.entregados ---*/
 
-#tablaOperacionesJefeOperaciones{
+#tablaOperacionesJefeOperaciones {
     width: 100% !important;
 }
 
-#tablaOperacionesJefeOperaciones td{
+#tablaOperacionesJefeOperaciones td {
     vertical-align: middle !important;
 }
 
@@ -4860,6 +4861,7 @@ metas_dp .animated-progress {
 #tablaOperacionesJefeOperaciones .sorting_desc::after {
     top: 20px !important;
 }
+
 @media screen and (max-width: 1500px) {
     #tablaOperacionesJefeOperaciones {
         font-size: 13px !important;
@@ -4867,22 +4869,23 @@ metas_dp .animated-progress {
 }
 
 /*--- /pedidos/estados/anulados ---*/
-#tablaOperacionesPendienteAnulacion{
+#tablaOperacionesPendienteAnulacion {
     width: 100% !important;
 }
 
-#tablaOperacionesPendienteAnulacion td{
+#tablaOperacionesPendienteAnulacion td {
     vertical-align: middle !important;
 }
 
-#tablaOperacionesPendienteAnulacion tbody td:nth-child(8){
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(8) {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     flex-direction: column !important;
     grid-gap: 2px;
 }
-#tablaOperacionesPendienteAnulacion tbody td:nth-child(8) .btn-fontsize{
+
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(8) .btn-fontsize {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -4897,29 +4900,29 @@ metas_dp .animated-progress {
     }
 }
 
-/*---------------- MODULO COURRIER ----------------*/
+/*-------------------------------- MODULO COURRIER --------------------------------*/
 /*--- /envios.estadosobres ---*/
 #tablaRecepcionados,
 #tablaEntregados,
 #tablaAnulados_courier,
-#tablaAnulados{
+#tablaAnulados {
     width: 100% !important;
 }
 
 #tablaRecepcionados td,
 #tablaEntregados td,
 #tablaAnulados_courier td
-#tablaAnulados td{
+#tablaAnulados td {
     vertical-align: middle !important;
 }
 
 #tablaAnulados_courier td:nth-child(6) span,
-#tablaAnulados td:nth-child(6) span{
+#tablaAnulados td:nth-child(6) span {
     position: initial !important;
     font-size: 12px !important;
 }
 
-#tablaEntregados td:nth-child(10) span{
+#tablaEntregados td:nth-child(10) span {
     white-space: break-spaces !important;
 }
 
@@ -4931,6 +4934,7 @@ metas_dp .animated-progress {
         font-size: 13px !important;
     }
 }
+
 /*--- /envios.porconfirmar ---*/
 /*--- /envios.distribuirsobres ---*/
 /*--- /envios.sindireccion ---*/
@@ -4939,25 +4943,25 @@ metas_dp .animated-progress {
 /*--- /envios/motorizados/confirmar ---*/
 /*--- /envios.seguimientoprovincia ---*/
 
-/*---------------- MODULO MOTORIZADO ----------------*/
+/*-------------------------------- MODULO MOTORIZADO --------------------------------*/
 /*--- /envios.recepcionmotorizado ---*/
 /*--- /envios/motorizados ---*/
 /*--- /envios.devueltos ---*/
 
-/*---------------- MODULO PAGOS ----------------*/
+/*-------------------------------- MODULO PAGOS --------------------------------*/
 /*--- /pagos ---*/
 /*--- /pagos.mispagos ---*/
 /*--- /pagos.pagosincompletos ---*/
 /*--- /pagos.pagosobservados ---*/
 
-/*---------------- MODULO ADMINISTRACION ----------------*/
+/*-------------------------------- MODULO ADMINISTRACION --------------------------------*/
 /*--- /administracion.porrevisar ---*/
 /*--- /administracion.pendientes ---*/
 /*--- /administracion.observados ---*/
 /*--- /administracion.aprobados ---*/
 /*--- /movimientos ---*/
 
-/*---------------- MODULO PERSONAS ----------------*/
+/*-------------------------------- MODULO PERSONAS --------------------------------*/
 /*--- /clientes ---*/
 /*--- /clientes.recurrentes ---*/
 /*--- /clientes.abandonos.recientes ---*/
@@ -4968,14 +4972,15 @@ metas_dp .animated-progress {
 /*--- /clientes.nulos ---*/
 /*--- /basefria ---*/
 
-/*---------------- MODULO REPORTES ----------------*/
+/*-------------------------------- MODULO REPORTES --------------------------------*/
 /*--- /reportes.index ---*/
 /*--- /reportes.operaciones ---*/
 /*--- /reportes.analisis ---*/
 
-/*---------------- MODULO USUARIOS ----------------*/
+/*-------------------------------- MODULO USUARIOS --------------------------------*/
 /*--- /roles ---*/
 /*--- /users ---*/
+
 /*--- /users.encargados ---*/
 /*--- /users.asesores ---*/
 /*--- /users.jefes ---*/
@@ -4983,3 +4988,5 @@ metas_dp .animated-progress {
 /*--- /users.misoperarios ---*/
 /*--- /users.mipersonal ---*/
 /*--- /users.llamadas ---*/
+
+

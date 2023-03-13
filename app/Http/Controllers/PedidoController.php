@@ -321,7 +321,7 @@ class PedidoController extends Controller
                     }
                 }
 
-              $btn []= '<details>';
+              $btn []= '<details style="max-width: 100px !important">';
               $btn []= '<summary class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize font-weight-bold"> <i class="fa fa-sort" aria-hidden="true"></i> Otros  </summary>';
               /*SUMARY*/
               if (can('pedidos.destroy')) {

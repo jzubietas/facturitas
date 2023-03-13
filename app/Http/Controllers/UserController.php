@@ -237,9 +237,9 @@ class UserController extends Controller
 
     public function Llamadastabla(Request $request)
     {
-        $users = User::leftjoin('users as jf','jf.id','users.supervisor')
-            ->leftjoin('users as op','op.id','op.operario')
-            ->whereIn('users.rol', [User::ROL_LLAMADAS,User::ROL_COBRANZAS])
+        $users = User::leftjoin('users as jf', 'jf.id', 'users.supervisor')
+            ->leftjoin('users as op', 'op.id', 'op.operario')
+            ->whereIn('users.rol', [User::ROL_LLAMADAS, User::ROL_COBRANZAS])
             ->where('users.estado', '1')
             ->select([
                 'users.id',
@@ -259,13 +259,12 @@ class UserController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($user) {
                 $btn = "";
-                if($user->rol==User::ROL_LLAMADAS)
-                {
+                if ($user->rol == User::ROL_LLAMADAS) {
                     /*$btn = $btn . '<a href="" data-target="#modal-asignarmetallamada" data-toggle="modal" data-llamada="' . $user->id . '">' .
                         '<button class="btn btn-info btn-sm"> Asignar metas del mes</button>' .
                         '</a>';*/
                     $btn = $btn . '<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
-                }else if($user->rol==User::ROL_COBRANZAS){
+                } else if ($user->rol == User::ROL_COBRANZAS) {
                     $btn = $btn . '<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
                 }
 
@@ -437,7 +436,7 @@ class UserController extends Controller
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
             $users = User::where("rol", "ASESOR ADMINISTRATIVO");
         } else {
-            $usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO",User::ROL_ASESOR]);
+            $usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO", User::ROL_ASESOR]);
             $users = $usersB->union($users);
         }
         $users = $users->orderBy('exidentificador', 'ASC')->get();
@@ -1308,6 +1307,7 @@ class UserController extends Controller
         }
         return response()->json(['html' => $html]);
     }
+
     public function getComboRuc(Request $request)
     {
         $html = '<option value="-1">' . trans('---- SELECCIONE RUC ----') . '</option>';
@@ -1337,8 +1337,8 @@ class UserController extends Controller
                 'celular',
             ]);
         foreach ($clientes as $cliente) {
-                $html .= '<option style="color:black" value="' . $cliente->id . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
-            }
+            $html .= '<option style="color:black" value="' . $cliente->id . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
+        }
 
         return response()->json(['html' => $html]);
     }
@@ -1353,22 +1353,23 @@ class UserController extends Controller
 
         return response()->json(['html' => $clientesporc]);
     }
+
     public function uptPorcClientes(Request $request)
     {
         /*return $request->all();*/
-        $porcentaje1 = Porcentaje::query()->where("cliente_id",  $request->cliente_id)->where("nombre",  Porcentaje::FISICO_SIN_BANCA)->update([
+        $porcentaje1 = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::FISICO_SIN_BANCA)->update([
             'porcentaje' => $request->porcentaje1,
         ]);
 
-        $porcentaje2 = Porcentaje::query()->where("cliente_id",  $request->cliente_id)->where("nombre",  Porcentaje::FISICO_BANCA)->update([
+        $porcentaje2 = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::FISICO_BANCA)->update([
             'porcentaje' => $request->porcentaje2,
         ]);
 
-        $porcentaje3 = Porcentaje::query()->where("cliente_id",  $request->cliente_id)->where("nombre",  Porcentaje::ELECTRONICA_SIN_BANCA)->update([
+        $porcentaje3 = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::ELECTRONICA_SIN_BANCA)->update([
             'porcentaje' => $request->porcentaje3,
         ]);
 
-        $porcentaje4 = Porcentaje::query()->where("cliente_id",  $request->cliente_id)->where("nombre",  Porcentaje::ELECTRONICA_BANCA)->update([
+        $porcentaje4 = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::ELECTRONICA_BANCA)->update([
             'porcentaje' => $request->porcentaje4,
         ]);
 
@@ -1392,6 +1393,7 @@ class UserController extends Controller
             'updated' => $cliente
         ]);
     }
+
     public function updateRuc(Request $request)
     {
         $cliente = Ruc::query()->where("id", '=', $request->cliente_id)->update([
