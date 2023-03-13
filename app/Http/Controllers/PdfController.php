@@ -83,13 +83,13 @@ class PdfController extends Controller
   public function SituacionClientes(Request $request)
   {
 
-    $inicio_s = Carbon::now()->startOfMonth()->format('Y-m-d');
-    $inicio_f = Carbon::now()->endOfMonth()->format('Y-m-d');
-    $periodo_antes = Carbon::now()->subMonth()->startOfMonth()->format('Y-m');
-    $periodo_actual = Carbon::now()->startOfMonth()->format('Y-m');
+    $inicio_s = Carbon::now()->clone()->startOfMonth()->format('Y-m-d');
+    $inicio_f = Carbon::now()->clone()->endOfMonth()->format('Y-m-d');
+    $periodo_antes = Carbon::now()->clone()->subMonth()->startOfMonth()->format('Y-m');
+    $periodo_actual = Carbon::now()->clone()->startOfMonth()->format('Y-m');
 
-    $mes_w = Carbon::now()->startOfMonth()->format('m');
-    $anio_w = Carbon::now()->startOfMonth()->format('Y');
+    $mes_w = Carbon::now()->clone()->startOfMonth()->format('m');
+    $anio_w = Carbon::now()->clone()->startOfMonth()->format('Y');
 
     $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
         ->join('clientes as c','c.id','situacion_clientes.cliente_id')
