@@ -256,7 +256,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-end">
                     <span class="mr-2 text-uppercase">
-                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
+                        <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
                     </span>
                 </div>
             </div>
@@ -420,14 +420,10 @@
             var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
             var mode = 'index'
             var intersect = true
-
             var $visitorsChart = $('#visitors-chart')
             let $arrr = [{{$contadores_arr}}]
             let $mes_actual = [{{$contadores_mes_actual}}]
             let $mes_anterior = [{{$contadores_mes_anterior}}]
-            console.log($arrr);
-            console.log($mes_actual);
-            console.log($mes_anterior);
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
                     /*eje x: dias*/
@@ -478,9 +474,7 @@
 
             var $visitorsChartOlva = $('#visitors-chart-olva')
             let $arrr = [{{$contadores_arr}}]
-
-            let $total_olva = [{{$gasto_total_olva}}]
-            let $gasto_olva_dia = [{{$gasto_por_dia_olva}}]
+            let $gasto_olva_dia = [{{$contadores_mes_actual_olva}}]
 
             var $visitorsChartOlva = new Chart($visitorsChartOlva, {
                 data: {
