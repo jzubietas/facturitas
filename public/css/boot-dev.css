@@ -4213,6 +4213,14 @@ metas_dp .animated-progress {
     }
 }
 
+/*---------------- MODULO ACCESOS RAPIDOS ----------------*/
+/*--- /pedidos/create ---*/
+/*--- /pagos/create ---*/
+/*--- /pedidosperdonarcurrier ---*/
+/*--- /setting/administrador ---*/
+
+
+
 /*---------------- MODULO PEDIDO ----------------*/
 /*--- /pedidos ---*/
 #tablabandejapedidos {
@@ -4936,9 +4944,27 @@ metas_dp .animated-progress {
 }
 
 /*--- /envios.porconfirmar ---*/
+#tablaCourierRecepciondeSobres {
+    width: 100% !important;
+}
+
 /*--- /envios.distribuirsobres ---*/
 /*--- /envios.sindireccion ---*/
+#tablaCourierSobresSinDireccion {
+    width: 100% !important;
+}
+
+#tablaCourierSobresSinDireccion td {
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
 /*--- /envios.parareparto ---*/
+#tablaPrincipal_sur,
+#tablaPrincipal_centro,
+#tablaPrincipal_norte{
+    width: 100% !important;
+}
 /*--- /envios.rutaenvio ---*/
 /*--- /envios/motorizados/confirmar ---*/
 /*--- /envios.seguimientoprovincia ---*/
