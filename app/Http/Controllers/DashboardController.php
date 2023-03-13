@@ -27,7 +27,8 @@ class DashboardController extends Controller
         }
 
         $mirol = Auth::user()->rol;
-        $id = Auth::user()->id;
+        $idEncargado = Auth::user()->id;
+
         $lst_users_vida = User::where('estado', '1');
 
         if ($mirol == User::ROL_JEFE_LLAMADAS) {
@@ -128,7 +129,7 @@ class DashboardController extends Controller
 
 
         return view('dashboard.dashboard', compact(
-            'fechametames', 'lst_users_vida', 'mirol', 'id'
+            'fechametames', 'lst_users_vida', 'mirol', 'idEncargado'
             ,'contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual','asesor_pedido_dia','fechametames'
         ));
 
