@@ -48,7 +48,9 @@
                 <div class="card-body">
                     <span class="text-dark ">SALDO A FAVOR</span>
                     <span class="text-danger font-weight-bold">S/ 10.00</span>
-                    <button class="btn btn-info btn-md">Utilizar saldo</button>
+                    <button class="btn btn-info btn-md" id="btn-utilizar-saldo" type="button">
+                        Utilizar saldo
+                    </button>
 
                 </div>
             </div>
@@ -325,6 +327,43 @@
 
 
             });
+
+            $(document).on("click", "#btn-utilizar-saldo", function () {
+
+                function AgregarPagoTemporalSaldo() {
+
+                    //document.getElementById("picture").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
+                    tabla_pagos.row.add({
+                        "accion": (contPa + 1),
+                        "item": (contPa + 1),
+                        "movimiento": 'TRANSFERENCIA',
+                        "titular": 'EPIFANIO SOLANO HUAMAN',
+                        "banco": 'BCP',
+                        "bancop": 'BCP',
+                        "obanco": '',
+                        "fecha": Date.now(),
+                        "imagen": '',
+                        "monto": 10.00,
+                        "operacion": 'SALDOAFAVOR',
+                        "nota": 'INCLUYE SALDO A FAVOR DEL CLIENTE',
+                    }).draw();
+
+                    contPa++;
+
+                    total_pago = sumatotalpagos();
+
+                    $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
+                    $("#total_pago_pagar").val(total_pago.toLocaleString("en-US"));
+                    evaluarPa();
+                    console.log("total_pago 1 " + total_pago);
+                    diferenciaFaltante();
+                }
+                AgregarPagoTemporalSaldo();
+                $("#btn-utilizar-saldo").prop('disabled',true);
+
+
+
+            })
             $(document).on("click", "#btn-perdonar-deuda", function () {
 
                 $("#btn-accion-perdonar-currier").show();
@@ -831,13 +870,32 @@
                 }
             }
 
+            $('#tabla_pagos tbody').on( 'click', '.elegir', function (e) {
 
-            $('#tabla_pagos').on('click', '.remove', function () {
+                let courierreg = $("#courierreg").val()
+                console.log("idenvio " + data.id)
+            });
+
+
+            $('#tabla_pagos').on('click', '.remove', function (e) {
                 //si elimino pago, recargo datatable pedidos y diferencia vuelvo a calcular con la suma de pagos
+                //
+
+                //
+                //
+                //
+                var data = tabla_pagos.row($(this).closest('tr')).data()
+                console.log(data);
+                e.preventDefault();
+
+
                 var table = $('#tabla_pagos').DataTable();
                 var row = $(this).parents('tr');
                 var item = $(this).attr('item');
                 var subtotal = row.find("td").eq("8").find("span.monto").text();
+                var operacion = row.find("td").eq("9").html();
+                console.log("operacion es "+operacion)
+
                 console.log(subtotal);
                 console.log("item es " + item)
                 let diff = $("#diferencia").val();
