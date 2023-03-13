@@ -37,6 +37,7 @@ use App\Exports\Templates\PlantillaExportBasefriaMultiple;
 use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesReporteMultiple;
+use App\Exports\Templates\PlantillaExportMovimientosReporteMultiple;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportPedidoMultiple;
 use App\Exports\Templates\PlantillaExportPedidosPerdonarCourierReporteMultiple;
@@ -140,12 +141,9 @@ class ExcelController extends Controller
 
     public function movimientosExcel(Request $request)
     {
-        //return (new MovimientosExport)->movimientos($request)->download('Movimientos.xlsx');
-
-
-        return (new MovimientosExport)
-            //->clientes1($request)
-            ->movimientos($request)
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+        return (new PlantillaExportMovimientosReporteMultiple($request->desde,$request->hasta))
             ->download('Lista de Movimientos.xlsx');
     }
 
