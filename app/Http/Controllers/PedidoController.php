@@ -623,8 +623,9 @@ class PedidoController extends Controller
             ->orwhere([
                 ['dp.saldo', '>=', 17],
                 ['dp.saldo', '<=', 19],
-            ]);
-        
+            ])
+        ->where('pedidos.estado','1');
+
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
