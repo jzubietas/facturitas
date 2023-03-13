@@ -700,6 +700,7 @@ class OperacionController extends Controller
                 , Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
                 , Pedido::ATENDIDO_OPE_INT
                 , Pedido::ENVIADO_OPE_INT
+                , Pedido::MOTORIZADO_INT
             ]);
         //->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
 
