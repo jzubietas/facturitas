@@ -53,8 +53,12 @@ class DashboardController extends Controller
 
         $primer_dia_anterior = Carbon::now()->clone()->subMonth()->startOfMonth()->startOfDay();
         $fecha_actual = Carbon::now()->clone()->endOfDay(); // dia actual
+
         $arr=[];
         $diff=10;
+        //dd($fecha_actual);
+        $diff=($primer_dia->diffInDays($fecha_actual))+1;
+        //dd($diff);
 
         for ($i = 1; $i <= $diff; $i++)
         {
