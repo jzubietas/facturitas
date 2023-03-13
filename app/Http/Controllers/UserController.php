@@ -1430,7 +1430,6 @@ class UserController extends Controller
             'email' => $request->txtCorreo,
             'identificador' => $request->txtIdentificador,
             'celular' => $request->txtCelular,
-            'rol' => $request->cbxPerfil,
             'direccion' => $request->txtDireccion,
             'birthday' => $request->txtCumpleanios ,
         ]);

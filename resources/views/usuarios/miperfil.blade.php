@@ -58,7 +58,7 @@
                             <div class="col-md-6">
                                 <label class="small mb-1" for="cbxPerfil">Rol</label>
                                 {{--<input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" value="Luna">--}}
-                                <select name="cbxPerfil" id="cbxPerfil" class="form-control" disabled>
+                                <select name="cbxPerfil" id="cbxPerfil" class="form-control" {{ ((Auth::user()->id==1)?'enabled':'disabled') }} >
                                     <option value=" ">----SELECCIONE----</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->name }}" {{(($role->name==$mirol)?'Selected':'')}}>{{ $role->name }}</option>
@@ -144,10 +144,14 @@
     }
     $("#frmDetallesCuenta").on("submit", function (e) {
         e.preventDefault();
+
         const form = $(e.target);
         const datosfrm = convertFormToJSON(form);
         var datasend = new FormData();
-        datasend.append('cbxPerfil', datosfrm.cbxPerfil);
+        $('#cbxPerfil').prop('disabled',false)
+        var perfil=   $('#cbxPerfil').val();
+        $('#cbxPerfil').prop('disabled',true)
+        /*datasend.append('cbxPerfil', perfil);*/
         datasend.append('txtCelular', datosfrm.txtCelular);
         datasend.append('txtContraseniaAnterior', datosfrm.txtContraseniaAnterior);
         datasend.append('txtContraseniaNueva', datosfrm.txtContraseniaNueva);
@@ -157,6 +161,7 @@
         datasend.append('txtIdentificador', datosfrm.txtIdentificador);
         datasend.append('txtNombresCompletos', datosfrm.txtNombresCompletos);
         datasend.append('txtUserid', datosfrm.txtUserid);
+
         console.log(datosfrm);
         $.ajax({
            data: datasend,
