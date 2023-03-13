@@ -171,7 +171,7 @@
     </div>
 </div>
 
-{{-- SPARKLINE --}}
+{{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
 <div class="conatiner-fluid">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="card">
@@ -223,8 +223,46 @@
     </div>
 </div>
 
-
 <br>
+
+{{-- SPARKLINE OLVA --}}
+<div class="conatiner-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title text-uppercase">TOTAL RECAUDADO DE OLVA POR DÍA</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="d-flex flex-column">
+                        <span class="text-bold text-lg">{{$gasto_total_olva}}</span>
+                        <span>Cantidad total del día</span>
+                    </p>
+                </div>
+
+                <div class="position-relative mb-4">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                    <canvas id="visitors-chart-olva" style="display: block; width: 764px; height: 200px;"
+                            class="chartjs-render-monitor" width="764" height="200"></canvas>
+                </div>
+                <div class="d-flex flex-row justify-content-end">
+                    <span class="mr-2 text-uppercase">
+                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -427,6 +465,49 @@
                                 color: 'rgba(0, 0, 0, .2)',
                                 zeroLineColor: 'transparent'
                             }, ticks: $.extend({beginAtZero: true, suggestedMax: 250}, ticksStyle)
+                        }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
+                    }
+                }
+            })
+        })
+
+        $(function () {
+            var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
+            var mode = 'index'
+            var intersect = true
+
+            var $visitorsChartOlva = $('#visitors-chart-olva')
+            let $arrr = [{{$contadores_arr}}]
+
+            let $total_olva = [{{$gasto_total_olva}}]
+            let $gasto_olva_dia = [{{$gasto_por_dia_olva}}]
+
+            var $visitorsChartOlva = new Chart($visitorsChartOlva, {
+                data: {
+                    labels: $arrr,
+                    datasets: [{
+                        type: 'line',
+                        data: $gasto_olva_dia,
+                        backgroundColor: 'transparent',
+                        borderColor: '#17a2b8',
+                        pointBorderColor: '#17a2b8',
+                        pointBackgroundColor: '#17a2b8',
+                        fill: false
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {mode: mode, intersect: intersect},
+                    hover: {mode: mode, intersect: intersect},
+                    legend: {display: false},
+                    scales: {
+                        yAxes: [{
+                            gridLines: {
+                                display: true,
+                                lineWidth: '4px',
+                                color: 'rgba(0, 0, 0, .2)',
+                                zeroLineColor: 'transparent'
+                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 400}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
                     }
                 }
