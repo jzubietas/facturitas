@@ -5001,27 +5001,60 @@ metas_dp .animated-progress {
 
 /*-------------------------------- MODULO PAGOS --------------------------------*/
 /*--- /pagos ---*/
+
 /*--- /pagos.mispagos ---*/
+
 /*--- /pagos.pagosincompletos ---*/
+
 /*--- /pagos.pagosobservados ---*/
+
 
 /*-------------------------------- MODULO ADMINISTRACION --------------------------------*/
 /*--- /administracion.porrevisar ---*/
+
 /*--- /administracion.pendientes ---*/
+
 /*--- /administracion.observados ---*/
+
 /*--- /administracion.aprobados ---*/
+
 /*--- /movimientos ---*/
+
 
 /*-------------------------------- MODULO PERSONAS --------------------------------*/
 /*--- /clientes ---*/
+
 /*--- /clientes.recurrentes ---*/
+
 /*--- /clientes.abandonos.recientes ---*/
+
 /*--- /clientes.abandonos ---*/
+
 /*--- /clientes.nuevos ---*/
+
 /*--- /clientes.recuperados.recientes ---*/
+
 /*--- /clientes.recuperados ---*/
+
 /*--- /clientes.nulos ---*/
+
 /*--- /basefria ---*/
+#tablaserverside{
+    width: 100% !important;
+}
+
+#tablaserverside td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
+#tablaserverside td:nth-child(5){
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    grid-gap: 5px !important;
+}
 
 /*-------------------------------- MODULO REPORTES --------------------------------*/
 /*--- /reportes.index ---*/

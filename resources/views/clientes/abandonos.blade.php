@@ -37,8 +37,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
@@ -68,7 +68,7 @@
 
 @stop
 
-@section('css')
+@push('css')
 
     <style>
 
@@ -126,8 +126,25 @@
             text-shadow: 10px 2px #6ac7c2;
         }
 
+        #tablaPrincipal{
+            width: 100% !important;
+        }
+
+        #tablaPrincipal td{
+            text-align: start !important;
+            vertical-align: middle !important;
+        }
+
+        #tablaPrincipal td:nth-child(9){
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            grid-gap: 5px !important;
+        }
+
     </style>
-@stop
+@endpush
 
 @section('js')
 
