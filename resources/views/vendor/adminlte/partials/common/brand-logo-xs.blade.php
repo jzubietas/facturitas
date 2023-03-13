@@ -43,7 +43,7 @@
       </p>
 
       {{--PERFIL ROUTE--}}
-      <a href="#" class="ml-2 "
+      <a href="{{ route('users.miperfil') }}" class="ml-2 "
          style="background: #f8f9fa; border: 1px solid #ddd; padding: 5px 9px; border-radius: 100%; cursor: pointer">
         <i class="fa fa-fw fa-user text-lightblue"></i>
       </a>

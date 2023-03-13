@@ -203,6 +203,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::resource('users', UserController::class)->names('users');
 
     Route::get('users.profile', [UserController::class, 'profile'])->name('users.profile');
+    Route::get('users.miperfil', [UserController::class, 'miperfil'])->name('users.miperfil');
+    Route::post('users.updateprofile', [UserController::class, 'updateprofile'])->name('users.updateprofile');
+    Route::post('users.updateimage', [UserController::class, 'updateimage'])->name('users.updateimage');
     //Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
 
     Route::any('correccionesJson', [OperacionController::class, 'correccionesJson'])->name('correccionesJson');

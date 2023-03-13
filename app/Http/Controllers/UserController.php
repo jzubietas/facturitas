@@ -10,9 +10,11 @@ use App\Models\User;
 
 //use App\Models\Meta;
 use Carbon\Carbon;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
 use PhpOffice\PhpSpreadsheet\Writer\Ods\Meta;
 use Spatie\Permission\Models\Role;
@@ -1402,5 +1404,76 @@ class UserController extends Controller
             "success" => true,
             'updated' => $cliente
         ]);
+    }
+
+    public function miperfil()
+    {
+        $mirol = Auth::user()->rol;
+        $roles = Role::get();
+        $users = User::where('estado',1)->where('id',Auth::user()->id )->first();
+        /*dd($users);*/
+        return view('usuarios.miperfil', compact('users','mirol','roles'));
+    }
+
+    public function updateprofile(Request $request)
+    {
+        /*return $request->all();*/
+       /* $errors=$request->validate([
+            'txtNombresCompletos' => 'required',
+            'txtCorreo' => 'required',
+        ]);*/
+        $users=User::where('id',$request->txtUserid)->first();
+        $users->update([
+            'name' => $request->txtNombresCompletos,
+            'email' => $request->txtCorreo,
+            'identificador' => $request->txtIdentificador,
+            'celular' => $request->txtCelular,
+            'rol' => $request->cbxPerfil,
+            'direccion' => $request->txtDireccion,
+            'birthday' => $request->txtCumpleanios ,
+        ]);
+        $validator="Ninguno";
+        if (isset($request->txtContraseniaAnterior) || Hash::check($request->txtContraseniaAnterior, $users->password)) {
+            $validator=" Ingreso...1";
+            if (isset($request->txtContraseniaNueva)) {
+                $validator=" Ingreso...2";
+                $users->update([
+                    'password' => Hash::make($request->txtContraseniaNueva),
+                ]);
+            }
+        }
+        /*if ($request->prole_id != " " && $request->role_name != "") {
+            $user->roles()->sync($request->role_id);
+
+            $user->update([
+                'rol' => $request->role_name
+            ]);
+        }*/
+        return response()->json(['html' => $users,'success'=>true,'request' => $request->all(),'validador'=>$validator]);
+    }
+
+    public function updateimage(Request $request)
+    {
+        /*return $request->all();*/
+
+        $users=User::where('id',$request->userid)->first();
+        $files = $request->file('imagen');
+        $destinationPath = base_path('public/storage/users/');
+
+        if (isset($files)) {
+            foreach ($files as $file) {
+                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                $file->move($destinationPath, $file_name);
+            }
+
+        } else {
+            $file_name = $users->profile_photo_path;
+        }
+
+        $users->update([
+            'profile_photo_path' => $file_name,
+        ]);
+
+        return response()->json(['success'=>true,'request' => $request->all(),'files'=>$files,'file_name'=>$file_name]);
     }
 }
