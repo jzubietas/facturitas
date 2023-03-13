@@ -29,7 +29,7 @@
   @if(config('adminlte.usermenu_image'))
     <img src="{{ Auth::user()->adminlte_image() }}"
          class="brand-image img-circle elevation-3"
-         alt="{{ Auth::user()->name }}">
+         alt="{{ Auth::user()->rol }}">
   @endif
   <span @if(config('adminlte.usermenu_image')) class="brand-text font-weight-light"
         style="position: relative; font-size: 14px; display: flex;"@endif>

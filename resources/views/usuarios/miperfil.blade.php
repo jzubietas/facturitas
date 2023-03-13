@@ -148,10 +148,6 @@
         const form = $(e.target);
         const datosfrm = convertFormToJSON(form);
         var datasend = new FormData();
-        $('#cbxPerfil').prop('disabled',false)
-        var perfil=   $('#cbxPerfil').val();
-        $('#cbxPerfil').prop('disabled',true)
-        /*datasend.append('cbxPerfil', perfil);*/
         datasend.append('txtCelular', datosfrm.txtCelular);
         datasend.append('txtContraseniaAnterior', datosfrm.txtContraseniaAnterior);
         datasend.append('txtContraseniaNueva', datosfrm.txtContraseniaNueva);

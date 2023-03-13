@@ -159,7 +159,7 @@ class User extends Authenticatable
 
         if(file_exists('storage/users/' . $user->profile_photo_path))
         {
-            return 'storage/users/' . $user->profile_photo_path;
+            return '/storage/users/' . $user->profile_photo_path;
         }else{
             switch ($user->id) {
                 case 1:
