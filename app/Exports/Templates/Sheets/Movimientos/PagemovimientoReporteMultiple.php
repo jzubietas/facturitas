@@ -91,7 +91,7 @@ class PagemovimientoReporteMultiple extends Export implements WithStyles, WithCo
             ,'G' => 10//mes
             ,'H' => 15//mes
             ,'I' => 15//mes
-            ,'J' => 6//mes
+            ,'J' => 12//mes
         ];
     }
     public function columnFormats(): array
