@@ -800,15 +800,7 @@ class PagoController extends Controller
 
                 $diferenciasaldocliente = str_replace(',', '', $request->diferencia);
                 $clientesaldo = Cliente::where("id", $request->cliente_id)->first();
-                if (!$request->diferencia) {
 
-                } else {
-                    if ($diferenciasaldocliente > 3) {
-                        $clientesaldo->update([
-                            'saldo' => $diferenciasaldocliente
-                        ]);
-                    }
-                }
 
                 //event(new PagoEvent($pago));
 
@@ -1019,6 +1011,17 @@ class PagoController extends Controller
                         "bank_titular" => $request->bank_titular,
                         "voucher_path" => null,
                     ]);
+                }else if ($request->get('action') == 'saldo')
+                {
+                    if (!$request->diferencia) {
+
+                    } else {
+                        if ($diferenciasaldocliente > 3) {
+                            $clientesaldo->update([
+                                'saldo' => $diferenciasaldocliente
+                            ]);
+                        }
+                    }
                 }
 
                 $fecha_created=Carbon::parse($pago->created_at);

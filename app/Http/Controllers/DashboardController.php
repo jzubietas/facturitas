@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\DetallePedido;
+use App\Models\DireccionGrupo;
 use App\Models\Meta;
 use App\Models\Pedido;
 use App\Models\Ruc;
@@ -27,7 +28,8 @@ class DashboardController extends Controller
         }
 
         $mirol = Auth::user()->rol;
-        $id = Auth::user()->id;
+        $idEncargado = Auth::user()->id;
+
         $lst_users_vida = User::where('estado', '1');
 
         if ($mirol == User::ROL_JEFE_LLAMADAS) {
@@ -53,15 +55,18 @@ class DashboardController extends Controller
 
         $primer_dia_anterior = Carbon::now()->clone()->subMonth()->startOfMonth()->startOfDay();
         $fecha_actual = Carbon::now()->clone()->endOfDay(); // dia actual
-        $arr=[];
-        $diff=10;
 
-        for ($i = 1; $i <= $diff; $i++)
-        {
+        $arr = [];
+        $diff = 10;
+        //dd($fecha_actual);
+        $diff = ($primer_dia->diffInDays($fecha_actual)) + 1;
+        //dd($diff);
+
+        for ($i = 1; $i <= $diff; $i++) {
             $arr[$i] = (string)($i);
         }
 
-        $contadores_arr=implode(',',$arr);
+        $contadores_arr = implode(',', $arr);
 
         $pedido_del_mes_anterior = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
             ->where('u.rol', '=', User::ROL_ASESOR)
@@ -73,22 +78,20 @@ class DashboardController extends Controller
                 DB::raw('Date(pedidos.created_at) as fecha'),
                 DB::raw('count(pedidos.created_at) as total')
             ])->get()->map(function ($pedidoanterior) {
-                return ["fecha"=>$pedidoanterior->fecha,"total"=>$pedidoanterior->total];
+                return ["fecha" => $pedidoanterior->fecha, "total" => $pedidoanterior->total];
             })->toArray();
 
-        for($i=1;$i<=count(($arr));$i++)
-        {
-            $dia_calculado=Carbon::parse(now())->clone()->subMonth()->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
+        for ($i = 1; $i <= count(($arr)); $i++) {
+            $dia_calculado = Carbon::parse(now())->clone()->subMonth()->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
             $id = in_array($dia_calculado, array_column($pedido_del_mes_anterior, 'fecha'));
-            if($id===false)
-            {
-                $pedido_del_mes_anterior[]=["fecha"=>$dia_calculado,"total"=>0];
+            if ($id === false) {
+                $pedido_del_mes_anterior[] = ["fecha" => $dia_calculado, "total" => 0];
             }
         }
 
-        array_multisort( array_column($pedido_del_mes_anterior, "fecha"), SORT_ASC, $pedido_del_mes_anterior );
+        array_multisort(array_column($pedido_del_mes_anterior, "fecha"), SORT_ASC, $pedido_del_mes_anterior);
 
-        $contadores_mes_anterior = implode(",",array_column($pedido_del_mes_anterior, 'total'));
+        $contadores_mes_anterior = implode(",", array_column($pedido_del_mes_anterior, 'total'));
 
         $pedido_del_mes = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
             ->where('u.rol', '=', User::ROL_ASESOR)
@@ -99,20 +102,55 @@ class DashboardController extends Controller
             ->select([
                 DB::raw('Date(pedidos.created_at) as fecha'),
                 DB::raw('count(pedidos.created_at) as total')
-            ])->get()->map(function ($pedido) {
-                return ["fecha"=>$pedido->fecha,"total"=>$pedido->total];
+            ])
+            ->get()
+            ->map(function ($pedido) {
+                return ["fecha" => $pedido->fecha, "total" => $pedido->total];
             })->toArray();
-        for($i=1;$i<=count(($arr));$i++)
-        {
-            $dia_calculado=Carbon::parse(now())->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
-            $id = in_array($dia_calculado, array_column($pedido_del_mes, 'fecha'));
-            if($id===false)
-            {
-                $pedido_del_mes[]=["fecha"=>$dia_calculado,"total"=>0];
+
+        $gasto_total_olva = Pedido::query()
+            ->where('env_direccion', 'OLVA')
+            ->where('estado', 1)
+            ->whereBetween('updated_at', [$primer_dia, $fecha_actual])
+            ->count();
+
+        $gasto_por_dia_olva = Pedido::query()
+            ->where('pedidos.env_direccion', 'OLVA')
+            ->where('pedidos.estado', 1)
+            ->whereBetween(DB::raw('Date(pedidos.updated_at)'), [$primer_dia, $fecha_actual])
+            ->groupBy(DB::raw('Date(pedidos.updated_at)'))
+            ->select([
+                DB::raw('Date(pedidos.updated_at) as fecha'),
+                DB::raw('sum(pedidos.env_importe) as total'),
+            ])
+            ->get()
+            ->map(function ($pedido) {
+                return ["fecha" => $pedido->fecha, "total" => $pedido->total];
+            })->toArray();
+
+        /*OLVA*/
+        for ($i = 1; $i <= count(($arr)); $i++) {
+            $dia_calculado_olva = Carbon::parse(now())->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
+            $idOlva = in_array($dia_calculado_olva, array_column($gasto_por_dia_olva, 'fecha'));
+            if ($idOlva === false) {
+                $gasto_por_dia_olva[] = ["fecha" => $dia_calculado_olva, "total" => 0];
             }
         }
-        array_multisort( array_column($pedido_del_mes, "fecha"), SORT_ASC, $pedido_del_mes );
-        $contadores_mes_actual = implode(",",array_column($pedido_del_mes, 'total'));
+
+        /*PEDIDOS POR DIA*/
+        for ($i = 1; $i <= count(($arr)); $i++) {
+            $dia_calculado = Carbon::parse(now())->setUnitNoOverflow('day', $i, 'month')->format('Y-m-d');
+            $id = in_array($dia_calculado, array_column($pedido_del_mes, 'fecha'));
+            if ($id === false) {
+                $pedido_del_mes[] = ["fecha" => $dia_calculado, "total" => 0];
+            }
+        }
+
+        array_multisort(array_column($pedido_del_mes, "fecha"), SORT_ASC, $pedido_del_mes);
+        $contadores_mes_actual = implode(",", array_column($pedido_del_mes, 'total'));
+
+        array_multisort(array_column($gasto_por_dia_olva, "fecha"), SORT_ASC, $gasto_por_dia_olva);
+        $contadores_mes_actual_olva = implode(",", array_column($gasto_por_dia_olva, 'total'));
 
         $fechametames = Carbon::now();
         $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')
@@ -120,12 +158,12 @@ class DashboardController extends Controller
             ->whereDate('pedidos.created_at', $fechametames)
             ->where('pendiente_anulacion', '<>', '1')->count();
 
-        $fechametames=Carbon::now()->format('Y-m-d');
+        $fechametames = Carbon::now()->format('Y-m-d');
 
 
         return view('dashboard.dashboard', compact(
-            'fechametames', 'lst_users_vida', 'mirol', 'id'
-            ,'contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual','asesor_pedido_dia','fechametames'
+            'fechametames', 'lst_users_vida', 'mirol', 'idEncargado'
+            , 'contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual', 'asesor_pedido_dia', 'fechametames', 'gasto_total_olva', 'contadores_mes_actual_olva'
         ));
 
     }

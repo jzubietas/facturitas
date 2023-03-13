@@ -321,7 +321,7 @@ class PedidoController extends Controller
                     }
                 }
 
-              $btn []= '<details>';
+              $btn []= '<details style="max-width: 100px !important">';
               $btn []= '<summary class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize font-weight-bold"> <i class="fa fa-sort" aria-hidden="true"></i> Otros  </summary>';
               /*SUMARY*/
               if (can('pedidos.destroy')) {
@@ -623,8 +623,9 @@ class PedidoController extends Controller
             ->orwhere([
                 ['dp.saldo', '>=', 17],
                 ['dp.saldo', '<=', 19],
-            ]);
-        
+            ])
+        ->where('pedidos.estado','1');
+
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -684,6 +685,25 @@ class PedidoController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->editColumn('condicion_pa',function($pedido){
+                $return="";
+                if($pedido->condicion_pa===null)
+                {
+                    $return='SIN PAGO REGISTRADO';
+                }else if($pedido->condicion_pa==='ANULADO'){
+                    $return='ANULADO';
+                }else{
+                    switch ($pedido->condicion_pa)
+                    {
+                        case '0':$return='<p>SIN PAGO REGISTRADO</p>';break;
+                        case '1':$return='<p>ADELANTO</p>';break;
+                        case '2':$return='<p>PAGO</p>';break;
+                        case '3':$return='<p>ABONADO</p>';break;
+                    }
+                }
+                return $return;
+
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 

@@ -353,11 +353,15 @@
             cargaNueva(2);
 
 
-            @if($mirol == 'Encargado' && $id == 46)
+            console.log('ROL: ',"{{$mirol}}");
+            console.log('ID: ',"{{$idEncargado}}");
+            @if($mirol == 'Encargado' && $idEncargado == 46)
             cargaNueva(4);
+
             @endif
 
-            @if($mirol == 'Encargado' && $id == 24)
+
+            @if($mirol == 'Encargado' && $idEncargado == 24)
             cargaNueva(5);
             @endif
 
@@ -366,10 +370,10 @@
                 cargaNueva(1);
                 cargaNueva(2);
 
-            @if($mirol == 'Encargado' && $id == 46)
+            @if($mirol == 'Encargado' && $idEncargado == 46)
             cargaNueva(4);
             @endif
-            @if($mirol == 'Encargado' && $id == 24)
+            @if($mirol == 'Encargado' && $idEncargado == 24)
             cargaNueva(5);
                 @endif
             }

@@ -83,45 +83,57 @@ class PdfController extends Controller
   public function SituacionClientes(Request $request)
   {
 
-    $inicio_s = Carbon::now()->startOfMonth()->format('Y-m-d');
-    $inicio_f = Carbon::now()->endOfMonth()->format('Y-m-d');
-    $periodo_antes = Carbon::now()->subMonth()->startOfMonth()->format('Y-m');
-    $periodo_actual = Carbon::now()->startOfMonth()->format('Y-m');
+    $inicio_s = Carbon::now()->clone()->startOfMonth()->format('Y-m-d');
+    $inicio_f = Carbon::now()->clone()->endOfMonth()->format('Y-m-d');
+    $periodo_antes = Carbon::now()->clone()->subMonth()->startOfMonth()->format('Y-m');
+    $periodo_actual = Carbon::now()->clone()->startOfMonth()->format('Y-m');
 
-    $mes_w = Carbon::now()->startOfMonth()->format('m');
-    $anio_w = Carbon::now()->startOfMonth()->format('Y');
+    $mes_w = Carbon::now()->clone()->startOfMonth()->format('m');
+    $anio_w = Carbon::now()->clone()->startOfMonth()->format('Y');
 
     $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
         ->join('clientes as c','c.id','situacion_clientes.cliente_id')
         ->join('users as u','u.id','c.user_id')
-      ->where([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO RECIENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
-        ['a.situacion', '=', 'RECURRENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'NUEVO'],
-        ['a.situacion', '=', 'BASE FRIA'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->groupBy([
+        ->where([
+            ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+            ['a.situacion', '=', 'ABANDONO RECIENTE'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['a.periodo', '=', $periodo_antes],
+            ['u.identificador', '<>', '15'],
+            ['c.estado', '=', '1'],
+            ['c.tipo', '=', '1']
+        ])
+        ->orWhere([
+            ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+            ['a.situacion', '=', 'ABANDONO'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['a.periodo', '=', $periodo_antes],
+            ['u.identificador', '<>', '15'],
+            ['c.estado', '=', '1'],
+            ['c.tipo', '=', '1']
+          ])
+        ->orWhere([
+            ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
+            ['a.situacion', '=', 'RECURRENTE'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['a.periodo', '=', $periodo_antes],
+            ['u.identificador', '<>', '15'],
+            ['c.estado', '=', '1'],
+            ['c.tipo', '=', '1']
+          ])
+        ->orWhere([
+            ['situacion_clientes.situacion', '=', 'NUEVO'],
+            ['a.situacion', '=', 'BASE FRIA'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['a.periodo', '=', $periodo_antes],
+            ['u.identificador', '<>', '15'],
+            ['c.estado', '=', '1'],
+            ['c.tipo', '=', '1']
+          ])
+        ->groupBy([
         'situacion_clientes.situacion'
       ])
-      ->select([
+        ->select([
         'situacion_clientes.situacion',
         DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
@@ -145,7 +157,7 @@ class PdfController extends Controller
                                                     THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
 
         DB::raw('count(situacion_clientes.situacion) as total')
-      ])->whereNotIn('u.identificador',['15'])
+      ])
         ->get();
     /*dd($situaciones_clientes);*/
     $html = [];
