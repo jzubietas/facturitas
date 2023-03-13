@@ -12,16 +12,18 @@
             <a href="{{ route('clientes.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
         @endcan
         @can('clientes.exportar')
-        <div class="float-right btn-group dropleft">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Exportar
-            </button>
-            <div class="dropdown-menu">
-            <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_">
-              <img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
+            <div class="float-right btn-group dropleft">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Exportar
+                </button>
+                <div class="dropdown-menu">
+                    <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item"
+                       target="blank_">
+                        <img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
+                </div>
             </div>
-        </div>
-        @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECURRENTES', 'key' => '2'])
+            @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECURRENTES', 'key' => '2'])
 
         @endcan
     </h1>
@@ -42,21 +44,21 @@
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">COD.</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Celular</th>
-                    <th scope="col">Direccion</th>
-                    <th scope="col">Asesor asignado</th>
-                    <th scope="col">Situacion</th>
-                    <th scope="col">Fec.Ult.Pedido</th>
-                    <th scope="col">Cod.Ult.Pedido</th>
+                    <th scope="col" class="align-middle">COD.</th>
+                    <th scope="col" class="align-middle">Nombre</th>
+                    <th scope="col" class="align-middle">Celular</th>
+                    <th scope="col" class="align-middle">Direccion</th>
+                    <th scope="col" class="align-middle">Asesor asignado</th>
+                    <th scope="col" class="align-middle">Situacion</th>
+                    <th scope="col" class="align-middle">Fec.Ult.Pedido</th>
+                    <th scope="col" class="align-middle">Cod.Ult.Pedido</th>
                     {{--<th scope="col">Cantidad</th>--}}
                     {{--<th scope="col">Año actual</th>
                     <th scope="col">Mes actual</th>
                     <th scope="col">anio pedido</th>
                     <th scope="col">mes pedido</th>
                     <th scope="col">Deuda</th>--}}
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -68,12 +70,12 @@
 
 @stop
 
-@section('css')
+@push('css')
     <style>
 
-      .perla {
-        background-color: #faedcd !important;
-      }
+        .perla {
+            background-color: #faedcd !important;
+        }
 
         .red {
             background-color: red !important;
@@ -86,7 +88,8 @@
         .lighblue {
             background-color: #4ac4e2 !important;
         }
-        .bg-4{
+
+        .bg-4 {
             background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
         }
 
@@ -124,8 +127,25 @@
             text-shadow: 10px 2px #6ac7c2;
         }
 
+        #tablaPrincipal {
+            width: 100% !important;
+        }
+
+        #tablaPrincipal td {
+            text-align: start !important;
+            vertical-align: middle !important;
+        }
+
+        #tablaPrincipal td:nth-child(9) {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            grid-gap: 5px !important;
+        }
+
     </style>
-@stop
+@endpush
 
 @section('js')
 
@@ -140,15 +160,15 @@
                 }
             });
 
-            $(document).on("click","#delete",function(){
+            $(document).on("click", "#delete", function () {
 
                 console.log("action delete action")
                 var formData = $("#formdelete").serialize();
                 console.log(formData);
                 $.ajax({
-                    type:'POST',
-                    url:"{{ route('clientedeleteRequest.post') }}",
-                    data:formData,
+                    type: 'POST',
+                    url: "{{ route('clientedeleteRequest.post') }}",
+                    data: formData,
                 }).done(function (data) {
                     $("#modal-delete").modal("hide");
                     resetearcamposdelete();
@@ -161,43 +181,42 @@
                 var button = $(event.relatedTarget)
                 var idunico = button.data('delete')
                 $("#hiddenClienteId").val(idunico);
-                if(idunico<10){
-                    idunico='PAG000'+idunico;
-                }else if(idunico<100){
-                    idunico= 'PAG00'+idunico;
-                }else if(idunico<1000){
-                    idunico='PAG0'+idunico;
-                }else{
-                    idunico='PAG'+idunico;
+                if (idunico < 10) {
+                    idunico = 'PAG000' + idunico;
+                } else if (idunico < 100) {
+                    idunico = 'PAG00' + idunico;
+                } else if (idunico < 1000) {
+                    idunico = 'PAG0' + idunico;
+                } else {
+                    idunico = 'PAG' + idunico;
                 }
                 $(".textcode").html(idunico);
 
             });
 
 
-
             $('#tablaPrincipal').DataTable({
                 processing: true,
-                responsive:true,
-                autowidth:true,
+                responsive: true,
+                autowidth: true,
                 serverSide: true,
                 ajax: "{{ route('clientesrecurrentetabla') }}",
-                initComplete:function(settings,json){
+                initComplete: function (settings, json) {
 
                 },
                 columns: [
                     {
                         data: 'id',
                         name: 'id',
-                        render: function ( data, type, row, meta ) {
-                            if(row.id<10){
-                                return 'CL'+row.identificador+'000'+row.id;
-                            }else if(row.id<100){
-                                return 'CL'+row.identificador+'00'+row.id;
-                            }else if(row.id<1000){
-                                return 'CL'+row.identificador+'00'+row.id;
-                            }else{
-                                return 'CL'+row.identificador+''+row.id;
+                        render: function (data, type, row, meta) {
+                            if (row.id < 10) {
+                                return 'CL' + row.identificador + '000' + row.id;
+                            } else if (row.id < 100) {
+                                return 'CL' + row.identificador + '00' + row.id;
+                            } else if (row.id < 1000) {
+                                return 'CL' + row.identificador + '00' + row.id;
+                            } else {
+                                return 'CL' + row.identificador + '' + row.id;
                             }
                         }
                     },
@@ -205,11 +224,10 @@
                     {
                         data: 'celular',
                         name: 'celular',
-                        render: function ( data, type, row, meta ) {
-                            if(row.icelular!=null)
-                            {
-                                return row.celular+'-'+row.icelular;
-                            }else{
+                        render: function (data, type, row, meta) {
+                            if (row.icelular != null) {
+                                return row.celular + '-' + row.icelular;
+                            } else {
                                 return row.celular;
                             }
                         }
@@ -221,8 +239,8 @@
                     {
                         data: 'direccion',
                         name: 'direccion',
-                        render: function ( data, type, row, meta ) {
-                            return row.direccion+' - '+row.provincia+' ('+row.distrito+')';
+                        render: function (data, type, row, meta) {
+                            return row.direccion + ' - ' + row.provincia + ' (' + row.distrito + ')';
                         }
                     },
                     //{data: 'direccion', name: 'direccion'},
@@ -241,8 +259,8 @@
                         name: 'action',
                         orderable: false,
                         searchable: false,
-                        sWidth:'20%',
-                        render: function ( data, type, row, meta ) {
+                        sWidth: '20%',
+                        render: function (data, type, row, meta) {
                             var urledit = '{{ route("clientes.edit.recurrente", ":id") }}';
                             urledit = urledit.replace(':id', row.id);
 
@@ -250,42 +268,37 @@
                             urlshow = urlshow.replace(':id', row.id);
 
                             @can('clientes.edit.recurrente')
-                                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
+                                data = data + '<a href="' + urledit + '" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
                             @endcan
 
                                 @if($mirol !='Administradorsdsd')
-                                data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>';
+                                data = data + '<a href="' + urlshow + '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>';
                             @endif
 
                                 @can('clientes.destroy')
-                                data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                                data = data + '<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="' + row.id + '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
 
                             @endcan
                                 return data;
                         }
                     },
                 ],
-                "createdRow": function( row, data, dataIndex){
-                  if(data["situacion"]=='BLOQUEADO')
-                  {
-                    $(row).addClass('textred');
-                  }else{
-                    if(data["pedidos_mes_deuda_antes"]==0)
-                    {
-                      if(data["pedidos_mes_deuda"]==0)
-                      {
-                      }else if(data["pedidos_mes_deuda"]==1)
-                      {
-                        $(row).addClass('perla');
-                      }else{
-                        $(row).addClass('lighblue');
-                      }
-                    }
-                    else{
-                      $(row).addClass('red');
-                    }
+                "createdRow": function (row, data, dataIndex) {
+                    if (data["situacion"] == 'BLOQUEADO') {
+                        $(row).addClass('textred');
+                    } else {
+                        if (data["pedidos_mes_deuda_antes"] == 0) {
+                            if (data["pedidos_mes_deuda"] == 0) {
+                            } else if (data["pedidos_mes_deuda"] == 1) {
+                                $(row).addClass('perla');
+                            } else {
+                                $(row).addClass('lighblue');
+                            }
+                        } else {
+                            $(row).addClass('red');
+                        }
 
-                  }
+                    }
                 },
                 language: {
                     "decimal": "",
@@ -310,28 +323,27 @@
 
             });
 
-            $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
+            $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
                 console.log("aaaaa")
 
-                localStorage.setItem("search_tabla",$(this).val());
-                console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+                localStorage.setItem("search_tabla", $(this).val());
+                console.log("search_tabla es " + localStorage.getItem("search_tabla"));
 
             });
 
-            $('#tablaPrincipal_filter label input').on('paste', function(e) {
+            $('#tablaPrincipal_filter label input').on('paste', function (e) {
                 var pasteData = e.originalEvent.clipboardData.getData('text')
-                localStorage.setItem("search_tabla",pasteData);
+                localStorage.setItem("search_tabla", pasteData);
             });
-            $('#tablaPrincipal_filter label input').on('paste', function(e) {
+            $('#tablaPrincipal_filter label input').on('paste', function (e) {
                 var pasteData = e.originalEvent.clipboardData.getData('text')
-                localStorage.setItem("search_tabla",pasteData);
+                localStorage.setItem("search_tabla", pasteData);
             });
-            $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
-                localStorage.setItem("search_tabla",$(this).val());
-                console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+            $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
+                localStorage.setItem("search_tabla", $(this).val());
+                console.log("search_tabla es " + localStorage.getItem("search_tabla"));
             });
         });
-
 
 
     </script>

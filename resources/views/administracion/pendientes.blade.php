@@ -135,8 +135,21 @@
             text-shadow: 10px 2px #6ac7c2;
         }
 
-        #tablaPrincipal{
+        #tablaPrincipal {
             width: 100% !important;
+        }
+
+        #tablaPrincipal td {
+            text-align: start !important;
+            vertical-align: middle !important;
+        }
+
+        #tablaPrincipal td:nth-child(8) {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            flex-direction: column !important;
+            grid-gap: 5px !important;
         }
 
     </style>
