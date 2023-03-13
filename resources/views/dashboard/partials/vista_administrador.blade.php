@@ -460,7 +460,7 @@
                                 lineWidth: '4px',
                                 color: 'rgba(0, 0, 0, .2)',
                                 zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 250}, ticksStyle)
+                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 100}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
                     }
                 }
