@@ -94,9 +94,9 @@ class OlvaController extends Controller
                 "clientes.nombre as cliente_nombre",
             ]);
         if (user_rol(User::ROL_ASESOR) || user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
-            $pedidos_provincia->where(function ($query){
+            $pedidos_provincia->where(function ($query) {
                 $query->whereNull('direccion_grupos.add_screenshot_at');
-                $query->orWhereDate('direccion_grupos.add_screenshot_at','<',now());
+                $query->orWhereDate('direccion_grupos.add_screenshot_at', '<', now());
             });
         }
 
@@ -150,10 +150,10 @@ class OlvaController extends Controller
                         $pintar = 'danger';
                     } elseif (Carbon::parse($pedido->add_screenshot_at) < now()->startOfDay()) {
                         $pintar = 'danger';
-                    }elseif(Carbon::parse($pedido->add_screenshot_at)->isToday()){
+                    } elseif (Carbon::parse($pedido->add_screenshot_at)->isToday()) {
                         $pintar = 'success';
                     }
-                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . $pintar . ' btn-sm "><i class="fa fa-history"></i> <b class="'.($pedido->add_screenshot_at == null?'text-dark':'').'">Ver Historial</b></button>';
+                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . $pintar . ' btn-sm "><i class="fa fa-history"></i> <b class="' . ($pedido->add_screenshot_at == null ? 'text-dark' : '') . '">Ver Historial</b></button>';
                 }
                 return '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
             })
@@ -362,7 +362,7 @@ class OlvaController extends Controller
                 $html = collect(explode(',', $pedido->referencia))->trim()->map(fn($f) => '<b>' . $f . '</b>')->join('<br>') . '<br>';
 
 
-                $html .= collect(explode(',', $pedido->observacion))->trim()->map(fn($f) => '<a target="_blank" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rutulo</a>')->join('<br>');
+                $html .= collect(explode(',', $pedido->observacion))->trim()->map(fn($f) => '<a target="_blank" class="btn-fontsize text-blue" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rutulo</a>')->join('<br>');
 
                 $html .= '<p>';
                 return $html;

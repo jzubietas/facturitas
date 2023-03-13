@@ -112,19 +112,19 @@
                 <table id="tablaEnmotorizado" class="table table-striped w-100">
                     <thead>
                     <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Código</th>
-                        <th scope="col">Distrito</th>
-                        <th scope="col">Destino</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Fecha de Salida</th>
-                        <th scope="col">Fecha de Entrega</th>
-                        <th scope="col">Razón social</th>
-                        <th scope="col">Google Maps</th>
-                        <th scope="col">Dirección de envío</th>
-                        <th scope="col">Referencia</th>
-                        <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
-                        <th scope="col">Acciones</th>
+                        <th scope="col" class="align-middle">Item</th>
+                        <th scope="col" class="align-middle">Código</th>
+                        <th scope="col" class="align-middle">Distrito</th>
+                        <th scope="col" class="align-middle">Destino</th>
+                        <th scope="col" class="align-middle">Cliente</th>
+                        <th scope="col" class="align-middle">Fecha de Salida</th>
+                        <th scope="col" class="align-middle">Fecha de Entrega</th>
+                        <th scope="col" class="align-middle">Razón social</th>
+                        <th scope="col" class="align-middle">Google Maps</th>
+                        <th scope="col" class="align-middle">Dirección de envío</th>
+                        <th scope="col" class="align-middle">Referencia</th>
+                        <th scope="col" class="align-middle">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
+                        <th scope="col" class="align-middle">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -136,19 +136,19 @@
                 <table id="tablaEntregado" class="table table-striped w-100">
                     <thead>
                     <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Código</th>
-                        <th scope="col">Distrito</th>
-                        <th scope="col">Asesor</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Fecha de Salida</th>
-                        <th scope="col">Fecha de Entrega</th>
-                        <th scope="col">Razón social</th>
-                        <th scope="col">Destino</th>
-                        <th scope="col">Dirección de envío</th>
-                        <th scope="col">Referencia</th>
-                        <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
-                        <th scope="col">Acciones</th>
+                        <th scope="col" class="align-middle">Item</th>
+                        <th scope="col" class="align-middle">Código</th>
+                        <th scope="col" class="align-middle">Distrito</th>
+                        <th scope="col" class="align-middle">Asesor</th>
+                        <th scope="col" class="align-middle">Cliente</th>
+                        <th scope="col" class="align-middle">Fecha de Salida</th>
+                        <th scope="col" class="align-middle">Fecha de Entrega</th>
+                        <th scope="col" class="align-middle">Razón social</th>
+                        <th scope="col" class="align-middle">Destino</th>
+                        <th scope="col" class="align-middle">Dirección de envío</th>
+                        <th scope="col" class="align-middle">Referencia</th>
+                        <th scope="col" class="align-middle">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
+                        <th scope="col" class="align-middle">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -160,19 +160,19 @@
                 <table id="tablaNocontesto" class="table table-striped w-100">
                     <thead>
                     <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Código</th>
-                        <th scope="col">Distrito</th>
-                        <th scope="col">Asesor</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Fecha de Salida</th>
-                        <th scope="col">Fecha de Entrega</th>
-                        <th scope="col">Razón social</th>
-                        <th scope="col">Destino</th>
-                        <th scope="col">Dirección de envío</th>
-                        <th scope="col">Referencia</th>
-                        <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
-                        <th scope="col">Acciones</th>
+                        <th scope="col" class="align-middle">Item</th>
+                        <th scope="col" class="align-middle">Código</th>
+                        <th scope="col" class="align-middle">Distrito</th>
+                        <th scope="col" class="align-middle">Asesor</th>
+                        <th scope="col" class="align-middle">Cliente</th>
+                        <th scope="col" class="align-middle">Fecha de Salida</th>
+                        <th scope="col" class="align-middle">Fecha de Entrega</th>
+                        <th scope="col" class="align-middle">Razón social</th>
+                        <th scope="col" class="align-middle">Destino</th>
+                        <th scope="col" class="align-middle">Dirección de envío</th>
+                        <th scope="col" class="align-middle">Referencia</th>
+                        <th scope="col" class="align-middle">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
+                        <th scope="col" class="align-middle">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -184,19 +184,19 @@
                 <table id="tablaObservado" class="table table-striped w-100">
                     <thead>
                     <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Código</th>
-                        <th scope="col">Distrito</th>
-                        <th scope="col">Asesor</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Fecha de Salida</th>
-                        <th scope="col">Razón social</th>
-                        <th scope="col">Destino</th>
-                        <th scope="col">Dirección de envío</th>
-                        <th scope="col">Referencia</th>
-                        <th scope="col">Observacion Sustento</th>
-                        <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
-                        <th scope="col">Acciones</th>
+                        <th scope="col" class="align-middle">Item</th>
+                        <th scope="col" class="align-middle">Código</th>
+                        <th scope="col" class="align-middle">Distrito</th>
+                        <th scope="col" class="align-middle">Asesor</th>
+                        <th scope="col" class="align-middle">Cliente</th>
+                        <th scope="col" class="align-middle">Fecha de Salida</th>
+                        <th scope="col" class="align-middle">Razón social</th>
+                        <th scope="col" class="align-middle">Destino</th>
+                        <th scope="col" class="align-middle">Dirección de envío</th>
+                        <th scope="col" class="align-middle">Referencia</th>
+                        <th scope="col" class="align-middle">Observacion Sustento</th>
+                        <th scope="col" class="align-middle">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
+                        <th scope="col" class="align-middle">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -231,10 +231,11 @@
         }
 
         .yellow_color_table {
-          background-color: #ffd60a !important;
+            background-color: #ffd60a !important;
         }
+
         .blue_color_table {
-          background-color: #3A98B9 !important;
+            background-color: #3A98B9 !important;
         }
     </style>
     @include('partials.css.time_line_css')
@@ -307,7 +308,7 @@
                 $('[data-jqconfirmcancel]', row).click(function () {
 
                     $.confirm({
-                        theme:'material',
+                        theme: 'material',
                         type: 'red',
                         title: '¡Revertir Envio!',
                         content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
@@ -478,7 +479,7 @@
                                 }*/
                                 if (e.target.adjunto1.files.length === 0) {
                                     $.confirm({
-                                        theme:'material',
+                                        theme: 'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Adjunta la Foto de los sobres</b>',
                                         type: 'orange'
@@ -487,7 +488,7 @@
                                 }
                                 if (e.target.adjunto2.files.length === 0) {
                                     $.confirm({
-                                        theme:'material',
+                                        theme: 'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Adjunta la Foto del domicilio</b>',
                                         type: 'orange'
@@ -496,7 +497,7 @@
                                 }
                                 if (e.target.adjunto3.files.length === 0) {
                                     $.confirm({
-                                        theme:'material',
+                                        theme: 'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Adjunta la Foto de qun recibe</b>',
                                         type: 'orange'
@@ -558,7 +559,7 @@ Enviar</button>
                                 e.preventDefault()
                                 if (!e.target.sustento_text.value) {
                                     $.confirm({
-                                        theme:'material',
+                                        theme: 'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Ingresa el sustento para continuar</b>',
                                         type: 'orange'
@@ -634,7 +635,7 @@ Enviar</button>
                                 e.preventDefault()
                                 if (e.target.sustento_foto.files.length === 0) {
                                     $.confirm({
-                                        theme:'material',
+                                        theme: 'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Adjunta la foto de llamadas realizadas</b>',
                                         type: 'orange'
@@ -663,7 +664,7 @@ Enviar</button>
                 $('[data-motorizado-history]', row).click(function () {
                     const action = $(this).data('jqconfirm-action')
                     $.confirm({
-                        theme:'material',
+                        theme: 'material',
                         title: 'Historial de adjuntos de llamadas',
                         type: 'dark',
                         columnClass: 'xlarge',
@@ -720,7 +721,7 @@ Enviar</button>
                 $('[data-jqconfirm=revertir]', row).click(function () {
                     const action = $(this).data('jqconfirm-action')
                     $.confirm({
-                        theme:'material',
+                        theme: 'material',
                         type: 'red',
                         title: `Confirmación`,
                         content: `¿Estas seguro de revertir el paquete <b>ENV${data.id}</b><br> a <b>RECEPCION - MOTORIZADO</b>?`,
@@ -748,7 +749,7 @@ Enviar</button>
                 $('[data-jqconfirm="reprogramar"]', row).click(function () {
                     const action = $(this).data('jqconfirm-action')
                     $.confirm({
-                        theme:'material',
+                        theme: 'material',
                         title: 'Reprogramar fecha de envio',
                         type: 'orange',
                         columnClass: 'large',
@@ -846,13 +847,11 @@ Enviar</button>
 
                 },
                 createdRow: function (row, data, dataIndex) {
-                  if(data["condicion_envio_code"]==31)
-                  {
-                    $(row).addClass('yellow_color_table');
-                  }else if(data["condicion_envio_code"]==32)
-                  {
-                    $(row).addClass('blue_color_table');
-                  }
+                    if (data["condicion_envio_code"] == 31) {
+                        $(row).addClass('yellow_color_table');
+                    } else if (data["condicion_envio_code"] == 32) {
+                        $(row).addClass('blue_color_table');
+                    }
                 },
                 drawCallback: function (settings) {
                     console.log(settings.json);
@@ -1378,189 +1377,189 @@ Enviar</button>
                 }
             });
 
-          $(document).on("submit", "#form_recojo_motorizado", function (evento) {
-            evento.preventDefault();
+            $(document).on("submit", "#form_recojo_motorizado", function (evento) {
+                evento.preventDefault();
 
-            //validacion
+                //validacion
 
-            var fd2 = new FormData();
-            //let files = $('input[name="pimagen')
-            //var fileitem = $("#DPitem").val();
+                var fd2 = new FormData();
+                //let files = $('input[name="pimagen')
+                //var fileitem = $("#DPitem").val();
 
-            fd2.append('entrega_motorizado_recojo', $('#input_recojomotorizado').val());
-            //fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val());
-            //fd2.append('fecha_recepcion', $('#fecha_recepcion').val());
-            fd2.append('foto1', $('input[type=file][id="pimagen1_recojo"]')[0].files[0]);
-            fd2.append('foto2', $('input[type=file][id="pimagen2_recojo"]')[0].files[0]);
-            fd2.append('foto3', $('input[type=file][id="pimagen3_recojo"]')[0].files[0]);
-            //fd2.append('condicion', $('#condicion').val());
+                fd2.append('entrega_motorizado_recojo', $('#input_recojomotorizado').val());
+                //fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val());
+                //fd2.append('fecha_recepcion', $('#fecha_recepcion').val());
+                fd2.append('foto1', $('input[type=file][id="pimagen1_recojo"]')[0].files[0]);
+                fd2.append('foto2', $('input[type=file][id="pimagen2_recojo"]')[0].files[0]);
+                fd2.append('foto3', $('input[type=file][id="pimagen3_recojo"]')[0].files[0]);
+                //fd2.append('condicion', $('#condicion').val());
 
-            $.ajax({
-              data: fd2,
-              processData: false,
-              contentType: false,
-              type: 'POST',
-              url: "{{ route('motorizado.recojo') }}",
-              success: function (data) {
-                $("#modal_recojomotorizado").modal("hide");
-                $('#tablaEnmotorizado').DataTable().ajax.reload();
+                $.ajax({
+                    data: fd2,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('motorizado.recojo') }}",
+                    success: function (data) {
+                        $("#modal_recojomotorizado").modal("hide");
+                        $('#tablaEnmotorizado').DataTable().ajax.reload();
 
-              }
+                    }
+                });
+
             });
 
-          });
+            $(document).on("change", "#foto1", function (event) {
+                console.log("cambe image")
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    //$("#picture").attr("src",event.target.result);
+                    document.getElementById("picture1").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
 
-          $(document).on("change", "#foto1", function (event) {
-            console.log("cambe image")
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = (event) => {
-              //$("#picture").attr("src",event.target.result);
-              document.getElementById("picture1").setAttribute('src', event.target.result);
-            };
-            reader.readAsDataURL(file);
-
-          });
-
-          $(document).on("change", "#foto2", function (event) {
-            console.log("cambe image")
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = (event) => {
-              //$("#picture").attr("src",event.target.result);
-              document.getElementById("picture2").setAttribute('src', event.target.result);
-            };
-            reader.readAsDataURL(file);
-
-          });
-
-          $(document).on("change", "#foto3", function (event) {
-            console.log("cambe image")
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = (event) => {
-              //$("#picture").attr("src",event.target.result);
-              document.getElementById("picture3").setAttribute('src', event.target.result);
-            };
-            reader.readAsDataURL(file);
-
-          });
-
-          $('#modal_recojomotorizado').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            $("#input_recojomotorizado").val(button.data('direccion_grupo'));
-            //limpiar campos para cargar nuevas fotos
-            $("#pimagen1_recojo").val("");
-            $("#pimagen2_recojo").val("");
-            $("#pimagen3_recojo").val("");
-            $("#picture1_recojo").attr('src','');
-            $("#picture2_recojo").attr('src','');
-            $("#picture3_recojo").attr('src','');
-          });
-
-          $('#modal_recojoenviarcourier').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            $("#input_recojoenviarcourier").val(button.data('direccion_grupo'));
-
-            let foto1 = button.data('imagen1');
-            let foto2 = button.data('imagen2');
-            let foto3 = button.data('imagen3');
-            $(".foto1").attr("src", foto1);
-            $(".foto2").attr("src", foto2);
-            $(".foto3").attr("src", foto3);
-          });
-
-          $('#modal_recojoenviarope').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            $("#input_recojoenviarope").val(button.data('direccion_grupo'));
-
-            let foto1 = button.data('imagen1');
-            let foto2 = button.data('imagen2');
-            let foto3 = button.data('imagen3');
-            $(".foto1").attr("src", foto1);
-            $(".foto2").attr("src", foto2);
-            $(".foto3").attr("src", foto3);
-          });
-
-          $(document).on("change", "#pimagen1_recojo", function (event) {
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = (event) => {
-              document.getElementById("picture1_recojo").setAttribute('src', event.target.result);
-            };
-            reader.readAsDataURL(file);
-          });
-
-          $(document).on("change", "#pimagen2_recojo", function (event) {
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = (event) => {
-              document.getElementById("picture2_recojo").setAttribute('src', event.target.result);
-            };
-            reader.readAsDataURL(file);
-          });
-
-          $(document).on("change", "#pimagen3_recojo", function (event) {
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = (event) => {
-              document.getElementById("picture3_recojo").setAttribute('src', event.target.result);
-            };
-            reader.readAsDataURL(file);
-          });
-
-          $(document).on("click","#trash_adjunto1",function (e) {
-            $("#picture1_recojo").attr('src', $("#picture1_recojo").data('src'))
-            $("#pimagen1_recojo").val(null)
-          })
-
-          $(document).on("click","#trash_adjunto2",function (e) {
-            $("#picture2_recojo").attr('src', $("#picture2_recojo").data('src'))
-            $("#pimagen2_recojo").val(null)
-          })
-
-          $(document).on("click","#trash_adjunto3",function (e) {
-            $("#picture3_recojo").attr('src', $("#picture3_recojo").data('src'))
-            $("#pimagen3_recojo").val(null)
-          })
-
-          $(document).on("submit", "#form_recojo_enviarcourier", function (evento) {
-            evento.preventDefault();
-            var drecojoenviarcourier = new FormData();
-            drecojoenviarcourier.append('input_recojoenviarcourier', $('#input_recojoenviarcourier').val());
-            $.ajax({
-              data: drecojoenviarcourier,
-              processData: false,
-              contentType: false,
-              type: 'POST',
-              url: "{{ route('motorizado.recojoenviarcourier') }}",
-              success: function (data) {
-                $("#modal_recojoenviarcourier").modal("hide");
-                $('#tablaEnmotorizado').DataTable().ajax.reload();
-              }
             });
 
-          });
+            $(document).on("change", "#foto2", function (event) {
+                console.log("cambe image")
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    //$("#picture").attr("src",event.target.result);
+                    document.getElementById("picture2").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
 
-
-          $(document).on("submit", "#form_recojo_enviarope", function (evento) {
-            evento.preventDefault();
-            var data = new FormData();
-            data.append('input_recojoenviarope', $('#input_recojoenviarope').val());
-
-            $.ajax({
-              data: data,
-              processData: false,
-              contentType: false,
-              type: 'POST',
-              url: "{{ route('courier.recojoenviarope') }}",
-              success: function (data) {
-                $("#modal_recojoenviarope").modal("hide");
-                $('#tablaEnmotorizado').DataTable().ajax.reload();
-              }
             });
 
-          });
+            $(document).on("change", "#foto3", function (event) {
+                console.log("cambe image")
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    //$("#picture").attr("src",event.target.result);
+                    document.getElementById("picture3").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+
+            });
+
+            $('#modal_recojomotorizado').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $("#input_recojomotorizado").val(button.data('direccion_grupo'));
+                //limpiar campos para cargar nuevas fotos
+                $("#pimagen1_recojo").val("");
+                $("#pimagen2_recojo").val("");
+                $("#pimagen3_recojo").val("");
+                $("#picture1_recojo").attr('src', '');
+                $("#picture2_recojo").attr('src', '');
+                $("#picture3_recojo").attr('src', '');
+            });
+
+            $('#modal_recojoenviarcourier').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $("#input_recojoenviarcourier").val(button.data('direccion_grupo'));
+
+                let foto1 = button.data('imagen1');
+                let foto2 = button.data('imagen2');
+                let foto3 = button.data('imagen3');
+                $(".foto1").attr("src", foto1);
+                $(".foto2").attr("src", foto2);
+                $(".foto3").attr("src", foto3);
+            });
+
+            $('#modal_recojoenviarope').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $("#input_recojoenviarope").val(button.data('direccion_grupo'));
+
+                let foto1 = button.data('imagen1');
+                let foto2 = button.data('imagen2');
+                let foto3 = button.data('imagen3');
+                $(".foto1").attr("src", foto1);
+                $(".foto2").attr("src", foto2);
+                $(".foto3").attr("src", foto3);
+            });
+
+            $(document).on("change", "#pimagen1_recojo", function (event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById("picture1_recojo").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            $(document).on("change", "#pimagen2_recojo", function (event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById("picture2_recojo").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            $(document).on("change", "#pimagen3_recojo", function (event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById("picture3_recojo").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            $(document).on("click", "#trash_adjunto1", function (e) {
+                $("#picture1_recojo").attr('src', $("#picture1_recojo").data('src'))
+                $("#pimagen1_recojo").val(null)
+            })
+
+            $(document).on("click", "#trash_adjunto2", function (e) {
+                $("#picture2_recojo").attr('src', $("#picture2_recojo").data('src'))
+                $("#pimagen2_recojo").val(null)
+            })
+
+            $(document).on("click", "#trash_adjunto3", function (e) {
+                $("#picture3_recojo").attr('src', $("#picture3_recojo").data('src'))
+                $("#pimagen3_recojo").val(null)
+            })
+
+            $(document).on("submit", "#form_recojo_enviarcourier", function (evento) {
+                evento.preventDefault();
+                var drecojoenviarcourier = new FormData();
+                drecojoenviarcourier.append('input_recojoenviarcourier', $('#input_recojoenviarcourier').val());
+                $.ajax({
+                    data: drecojoenviarcourier,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('motorizado.recojoenviarcourier') }}",
+                    success: function (data) {
+                        $("#modal_recojoenviarcourier").modal("hide");
+                        $('#tablaEnmotorizado').DataTable().ajax.reload();
+                    }
+                });
+
+            });
+
+
+            $(document).on("submit", "#form_recojo_enviarope", function (evento) {
+                evento.preventDefault();
+                var data = new FormData();
+                data.append('input_recojoenviarope', $('#input_recojoenviarope').val());
+
+                $.ajax({
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('courier.recojoenviarope') }}",
+                    success: function (data) {
+                        $("#modal_recojoenviarope").modal("hide");
+                        $('#tablaEnmotorizado').DataTable().ajax.reload();
+                    }
+                });
+
+            });
 
         });
     </script>

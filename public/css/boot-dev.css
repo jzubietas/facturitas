@@ -4949,6 +4949,7 @@ metas_dp .animated-progress {
 }
 
 /*--- /envios.distribuirsobres ---*/
+
 /*--- /envios.sindireccion ---*/
 #tablaCourierSobresSinDireccion {
     width: 100% !important;
@@ -4966,13 +4967,37 @@ metas_dp .animated-progress {
     width: 100% !important;
 }
 /*--- /envios.rutaenvio ---*/
+
 /*--- /envios/motorizados/confirmar ---*/
+#tablaCourierConfirmarFoto{
+    width: 100% !important;
+}
+
+#tablaCourierConfirmarFoto .sorting::before,
+#tablaCourierConfirmarFoto .sorting::after,
+#tablaCourierConfirmarFoto .sorting_desc::before,
+#tablaCourierConfirmarFoto .sorting_desc::after{
+    top: 20px !important;
+}
 /*--- /envios.seguimientoprovincia ---*/
+#tablaCourierSeguimientoProvincia{
+    width: 100% !important;
+}
+
+#tablaCourierSeguimientoProvincia td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
 
 /*-------------------------------- MODULO MOTORIZADO --------------------------------*/
 /*--- /envios.recepcionmotorizado ---*/
+
 /*--- /envios/motorizados ---*/
+#tablaEnmotorizado{
+    width: 100% !important;
+}
 /*--- /envios.devueltos ---*/
+
 
 /*-------------------------------- MODULO PAGOS --------------------------------*/
 /*--- /pagos ---*/
