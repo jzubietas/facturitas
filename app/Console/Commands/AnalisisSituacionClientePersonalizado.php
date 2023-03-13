@@ -45,11 +45,11 @@ class AnalisisSituacionClientePersonalizado extends Command
     //$this->warn("Cargando primer pedido mes anio");
     $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
 
-    $periodo_original=Carbon::parse($fp->created_at);//->format('Y_m');
-    $periodo_actual=Carbon::parse(now());//->format('Y_m');
+    $periodo_original=Carbon::parse($fp->created_at)->clone()->startOfMonth();//->format('Y_m');
+    $periodo_actual=Carbon::parse(now())->clone()->endOfMonth();//->format('Y_m');
 
     $primer_periodo=Carbon::parse($fp->created_at);
-    $diff = ($periodo_original->diffInMonths($periodo_actual))+2;
+    $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
     //$this->info("Diferencia de meses ".$diff);
 
     $where_anio='';
