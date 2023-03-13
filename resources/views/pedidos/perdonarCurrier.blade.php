@@ -88,81 +88,26 @@
 
 @push('css')
   {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
+<link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
   <style>
-
-    .yellow {
-      /*background-color: yellow !important;*/
-      color:#fcd00e !important;
-    }
-    .textred{
-      color: red !important;
-    }
-    .red {
-        background-color: red !important;
-      }
-
-      .white {
-        background-color: white !important;
-      }
-
-    .bg-4{
-      background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
-    }
-
-    .t-stroke {
-        color: transparent;
-        -moz-text-stroke-width: 2px;
-        -webkit-text-stroke-width: 2px;
-        -moz-text-stroke-color: #000000;
-        -webkit-text-stroke-color: #ffffff;
-    }
-
-    .t-shadow-halftone2 {
-        position: relative;
-    }
-
-    .t-shadow-halftone2::after {
-        content: "AWESOME TEXT";
-        font-size: 10rem;
-        letter-spacing: 0px;
-        background-size: 100%;
-        -webkit-text-fill-color: transparent;
-        -moz-text-fill-color: transparent;
-        -webkit-background-clip: text;
-        -moz-background-clip: text;
-        -moz-text-stroke-width: 0;
-        -webkit-text-stroke-width: 0;
-        position: absolute;
-        text-align: center;
-        left: 0px;
-        right: 0;
-        top: 0px;
-        z-index: -1;
-        background-color: #ff4c00;
-        transition: all 0.5s ease;
-        text-shadow: 10px 2px #6ac7c2;
-    }
 
   </style>
 @endpush
 
 @section('js')
 
-
-<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src ="{{ asset('js/jquery.dataTables.min.js')  }}"></script>
+<script src="{{ asset('js/dataTables.bootstrap4.min.js')  }}"></script>
 
 
 {{--<script type="text/javascript" src="https://cdn.datatables.net/searchbuilder/1.0.1/js/dataTables.searchBuilder.min.js"></script>--}}
 {{--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>--}}
 {{--<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.24/sorting/datetime-moment.js"></script>--}}
 
-<script src="https://momentjs.com/downloads/moment.js"></script>
+<script src="{{ asset('js/moment.js')  }}"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
-
-<script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+<script src="{{ asset('js/dataTables.checkboxes.min.js')  }}"></script>
 
 
 <script>
@@ -292,7 +237,7 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('pedidosperdonarcurriertabla') }}",
         "createdRow": function( row, data, dataIndex){
-            if(data["estado"] == "1")
+            if(data["estado"] === "1")
             {
             }else{
               $(row).addClass('textred');
@@ -362,30 +307,6 @@
         {
           data: 'condicion_pa',
           name: 'condicion_pa',
-          render: function ( data, type, row, meta ) {
-            if(row.condiciones==='ANULADO'){
-                return 'ANULADO';
-            }else{
-              if(row.condicion_pa==null){
-                return 'SIN PAGO REGISTRADO';
-              }else{
-                if(row.condicion_pa=='0'){
-                  return '<p>SIN PAGO REGISTRADO</p>'
-                }
-                if(row.condicion_pa=='1'){
-                  return '<p>ADELANTO</p>'
-                }
-                if(row.condicion_pa=='2'){
-                  return '<p>PAGO</p>'
-                }
-                if(row.condicion_pa=='3'){
-                  return '<p>ABONADO</p>'
-                }
-                //return data;
-              }
-            }
-
-          }
         },//estado de pago
         {
           data: 'condiciones_aprobado',

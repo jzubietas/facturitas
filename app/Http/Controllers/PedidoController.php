@@ -685,6 +685,25 @@ class PedidoController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->editColumn('condicion_pa',function($pedido){
+                $return="";
+                if($pedido->condicion_pa===null)
+                {
+                    $return='SIN PAGO REGISTRADO';
+                }else if($pedido->condicion_pa==='ANULADO'){
+                    $return='ANULADO';
+                }else{
+                    switch ($pedido->condicion_pa)
+                    {
+                        case '0':$return='<p>SIN PAGO REGISTRADO</p>';break;
+                        case '1':$return='<p>ADELANTO</p>';break;
+                        case '2':$return='<p>PAGO</p>';break;
+                        case '3':$return='<p>ABONADO</p>';break;
+                    }
+                }
+                return $return;
+
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 

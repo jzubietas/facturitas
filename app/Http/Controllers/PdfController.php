@@ -94,34 +94,36 @@ class PdfController extends Controller
     $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
         ->join('clientes as c','c.id','situacion_clientes.cliente_id')
         ->join('users as u','u.id','c.user_id')
-      ->where([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO RECIENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
-        ['a.situacion', '=', 'ABANDONO'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
-        ['a.situacion', '=', 'RECURRENTE'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->orWhere([
-        ['situacion_clientes.situacion', '=', 'NUEVO'],
-        ['a.situacion', '=', 'BASE FRIA'],
-        ['situacion_clientes.periodo', '=', $periodo_actual],
-        ['a.periodo', '=', $periodo_antes]
-      ])
-      ->groupBy([
+        ->where('c.estado','1')
+        ->where('c.tipo','1')
+        ->where([
+            ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+            ['a.situacion', '=', 'ABANDONO RECIENTE'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['a.periodo', '=', $periodo_antes]
+        ])
+        ->orWhere([
+            ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+            ['a.situacion', '=', 'ABANDONO'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['a.periodo', '=', $periodo_antes]
+          ])
+        ->orWhere([
+            ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
+            ['a.situacion', '=', 'RECURRENTE'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['a.periodo', '=', $periodo_antes]
+          ])
+        ->orWhere([
+            ['situacion_clientes.situacion', '=', 'NUEVO'],
+            ['a.situacion', '=', 'BASE FRIA'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['a.periodo', '=', $periodo_antes]
+          ])
+        ->groupBy([
         'situacion_clientes.situacion'
       ])
-      ->select([
+        ->select([
         'situacion_clientes.situacion',
         DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
