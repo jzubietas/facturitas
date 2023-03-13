@@ -1465,6 +1465,7 @@ class ClienteController extends Controller
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
+            ->whereNotIn('u.identificador',['15'])
             ->whereIn('clientes.situacion', [Cliente::NUEVO])
             ->groupBy(
                 'clientes.id',
