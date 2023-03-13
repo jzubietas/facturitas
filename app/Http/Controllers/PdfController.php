@@ -96,6 +96,7 @@ class PdfController extends Controller
         ->join('users as u','u.id','c.user_id')
         ->where('c.estado','1')
         ->where('c.tipo','1')
+        ->whereNotIn('u.identificador',['15'])
         ->where([
             ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
             ['a.situacion', '=', 'ABANDONO RECIENTE'],
@@ -147,7 +148,7 @@ class PdfController extends Controller
                                                     THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
 
         DB::raw('count(situacion_clientes.situacion) as total')
-      ])->whereNotIn('u.identificador',['15'])
+      ])
         ->get();
     /*dd($situaciones_clientes);*/
     $html = [];
