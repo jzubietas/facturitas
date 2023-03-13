@@ -48,14 +48,15 @@
             border: 0 !important;
         }
     </style>
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
 
             <div class="row">
                 <div class="col-3 mx-auto">
                     <input id="buscador_global" name="buscador_global" value=""
                            type="text" class="form-control" autocomplete="off"
-                           placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                           placeholder="Ingrese su búsqueda" aria-label="Recipient's username"
+                           aria-describedby="basic-addon2">
                 </div>
             </div>
 
@@ -87,19 +88,19 @@
                     <table id="tablaPrincipal_norte" style="width:100%;" class="table table-striped mt-24">
                         <thead>
                         <tr>
-                            <th scope="col">Item</th>
-                            <th scope="col">Zona</th>
-                            <th scope="col">Motorizado</th>
-                            <th scope="col">Código</th>
-                            <th scope="col">Asesor</th>
-                            <th scope="col">Cliente</th>
-                            <th scope="col">Fecha de Envio</th>
-                            <th scope="col">Razón social</th>
-                            <th scope="col">Distrito</th>
-                            <th scope="col">Dirección de envío</th>
-                            <th scope="col">Referencia</th>
-                            <th scope="col">Estado de envio</th>
-                            <th scope="col">Acciones</th>
+                            <th scope="col" class="align-middle">Item</th>
+                            <th scope="col" class="align-middle">Zona</th>
+                            <th scope="col" class="align-middle">Motorizado</th>
+                            <th scope="col" class="align-middle">Código</th>
+                            <th scope="col" class="align-middle">Asesor</th>
+                            <th scope="col" class="align-middle">Cliente</th>
+                            <th scope="col" class="align-middle">Fecha de Envio</th>
+                            <th scope="col" class="align-middle">Razón social</th>
+                            <th scope="col" class="align-middle">Distrito</th>
+                            <th scope="col" class="align-middle">Dirección de envío</th>
+                            <th scope="col" class="align-middle">Referencia</th>
+                            <th scope="col" class="align-middle">Estado de envio</th>
+                            <th scope="col" class="align-middle">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -256,9 +257,9 @@
             <script
                 src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
             <script>
-                let tabla_pedidos_principal_norte=null;
-                let tabla_pedidos_principal_centro=null;
-                let tabla_pedidos_principal_sur=null;
+                let tabla_pedidos_principal_norte = null;
+                let tabla_pedidos_principal_centro = null;
+                let tabla_pedidos_principal_sur = null;
                 moment().format();
 
                 function workingDays(dateFrom, dateTo) {
@@ -287,16 +288,16 @@
                     function applySearch(e) {
                         console.log(e)
                         //console.log("vacio");
-                        let valor=$("#buscador_global").val();
+                        let valor = $("#buscador_global").val();
                         //valor=(valor||'').trim()
-                        tabla_pedidos_principal_norte.search( valor ).draw();
-                        tabla_pedidos_principal_centro.search( valor ).draw();
-                        tabla_pedidos_principal_sur.search( valor ).draw();
+                        tabla_pedidos_principal_norte.search(valor).draw();
+                        tabla_pedidos_principal_centro.search(valor).draw();
+                        tabla_pedidos_principal_sur.search(valor).draw();
                     }
 
                     $('#btn_buscar').click(applySearch);
-                    $("#buscador_global").bind('paste',function () {
-                        setTimeout(applySearch,100)
+                    $("#buscador_global").bind('paste', function () {
+                        setTimeout(applySearch, 100)
                     });
                     $('#buscador_global').change(applySearch);
                     $('#buscador_global').keydown(applySearch);
@@ -583,7 +584,7 @@
                             $("[data-toggle=jqconfirm]", row).click(function (e) {
                                 e.preventDefault()
                                 $.confirm({
-                                    theme:'material',
+                                    theme: 'material',
                                     type: 'green',
                                     title: 'Enviar sobre a Motorizado',
                                     columnClass: 'large',
@@ -592,9 +593,9 @@
                   <div class="col-12">
                     <p>Esta seguro que desea enviar el sobre <strong>${data.codigos}</strong> a Motorizados del <strong class="textzone">${data.distribucion}</strong></p>
                   </div>
-                  ${data.cambio_direccion_at != null?`<div class="col-12">
+                  ${data.cambio_direccion_at != null ? `<div class="col-12">
                     <p class="alert alert-warning"><b>Datos de la dirección fueron modificados, ¿desea continuar?.</b><br> En caso contrario cierre esta ventana y haga click en el boton <b>Retornar a sobres con dirección</b></p>
-                  </div>`:''}
+                  </div>` : ''}
                 </div>
 
                 <div class="row">
@@ -610,14 +611,14 @@
               </div>`,
                                     buttons: {
                                         cerrar: {
-                                            btnClass:'btn-dark'
+                                            btnClass: 'btn-dark'
                                         },
                                         confirmar: {
-                                            btnClass:'btn-success',
+                                            btnClass: 'btn-success',
                                             action: function () {
                                                 const self = this;
                                                 var fd2 = new FormData();
-                                                const fecha=self.$content.find('input.fecha_salida').val();
+                                                const fecha = self.$content.find('input.fecha_salida').val();
                                                 fd2.append('hiddenCodigo', data.id);
                                                 fd2.append('fecha_salida', fecha);
 
@@ -823,7 +824,7 @@
                             $("[data-toggle=jqconfirm]", row).click(function (e) {
                                 e.preventDefault()
                                 $.confirm({
-                                    theme:'material',
+                                    theme: 'material',
                                     type: 'green',
                                     title: 'Enviar sobre a Motorizado',
                                     columnClass: 'large',
@@ -832,9 +833,9 @@
                   <div class="col-12">
                     <p>Esta seguro que desea enviar el sobre <strong>${data.codigos}</strong> a Motorizados del <strong class="textzone">${data.distribucion}</strong></p>
                   </div>
-                  ${data.cambio_direccion_at != null?`<div class="col-12">
+                  ${data.cambio_direccion_at != null ? `<div class="col-12">
                     <p class="alert alert-warning"><b>Datos de la dirección fueron modificados, ¿desea continuar?.</b><br> En caso contrario cierre esta ventana y haga click en el boton <b>Retornar a sobres con dirección</b></p>
-                  </div>`:''}
+                  </div>` : ''}
                 </div>
 
                 <div class="row">
@@ -850,14 +851,14 @@
               </div>`,
                                     buttons: {
                                         cerrar: {
-                                            btnClass:'btn-dark'
+                                            btnClass: 'btn-dark'
                                         },
                                         confirmar: {
-                                            btnClass:'btn-success',
+                                            btnClass: 'btn-success',
                                             action: function () {
                                                 const self = this;
                                                 var fd2 = new FormData();
-                                                const fecha=self.$content.find('input.fecha_salida').val();
+                                                const fecha = self.$content.find('input.fecha_salida').val();
                                                 fd2.append('hiddenCodigo', data.id);
                                                 fd2.append('fecha_salida', fecha);
 
@@ -1067,7 +1068,7 @@
                             $("[data-toggle=jqconfirm]", row).click(function (e) {
                                 e.preventDefault()
                                 $.confirm({
-                                    theme:'material',
+                                    theme: 'material',
                                     type: 'green',
                                     title: 'Enviar sobre a Motorizado 3',
                                     columnClass: 'large',
@@ -1076,9 +1077,9 @@
                                                 <div class="col-12">
                                                   <p>Esta seguro que desea enviar el sobre <strong>${data.codigos}</strong> a Motorizados del <strong class="textzone">${data.distribucion}</strong></p>
                                                 </div>
-                                                ${data.cambio_direccion_at != null?`<div class="col-12">
+                                                ${data.cambio_direccion_at != null ? `<div class="col-12">
                                                   <p class="alert alert-warning"><b>Datos de la dirección fueron modificados, ¿desea continuar?.</b><br> En caso contrario cierre esta ventana y haga click en el boton <b>Retornar a sobres con dirección</b></p>
-                                                </div>`:''}
+                                                </div>` : ''}
                                               </div>
 
                                               <div class="row">
@@ -1094,14 +1095,14 @@
                                             </div>`,
                                     buttons: {
                                         cerrar: {
-                                            btnClass:'btn-dark'
+                                            btnClass: 'btn-dark'
                                         },
                                         confirmar: {
-                                            btnClass:'btn-success',
+                                            btnClass: 'btn-success',
                                             action: function () {
                                                 const self = this;
                                                 var fd2 = new FormData();
-                                                const fecha=self.$content.find('input.fecha_salida').val();
+                                                const fecha = self.$content.find('input.fecha_salida').val();
                                                 fd2.append('hiddenCodigo', data.id);
                                                 fd2.append('fecha_salida', fecha);
 
@@ -1269,19 +1270,19 @@
                         "fnDrawCallback": function () {
                             $('.count_parareparto_sur').html(this.fnSettings().fnRecordsDisplay());
 
-                            let a1=$('#tablaPrincipal_norte').dataTable().fnSettings().fnRecordsDisplay();
-                            let a2=$('#tablaPrincipal_centro').dataTable().fnSettings().fnRecordsDisplay();
-                            let a3=this.fnSettings().fnRecordsDisplay();
+                            let a1 = $('#tablaPrincipal_norte').dataTable().fnSettings().fnRecordsDisplay();
+                            let a2 = $('#tablaPrincipal_centro').dataTable().fnSettings().fnRecordsDisplay();
+                            let a3 = this.fnSettings().fnRecordsDisplay();
 
-                            if(a1>0){
+                            if (a1 > 0) {
                                 //$('.zona-tabla').removeClass("activo").removeClass("active");
                                 //$('#norte-tab').addClass("active").addClass("activo");
                                 $('#myTab a[href="#norte"]').tab('show')
-                            }else if(a2>0){
+                            } else if (a2 > 0) {
                                 //$('.zona-tabla').removeClass("activo").removeClass("active");
                                 //$('#centro-tab').addClass("active").addClass("activo");
                                 $('#myTab a[href="#centro"]').tab('show')
-                            }else if(a3>0){
+                            } else if (a3 > 0) {
                                 //$('.zona-tabla').removeClass("activo").removeClass("active");
                                 //$('#sur-tab').addClass("active").addClass("activo");
                                 $('#myTab a[href="#sur"]').tab('show')
