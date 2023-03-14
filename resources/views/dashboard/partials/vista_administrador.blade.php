@@ -117,7 +117,7 @@
     <div class="" style=" overflow: hidden !important;">
         <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
             <div class="row">
-                <div class="contain-table-dual">
+                <div class="contain-table-dual row" style="width: 100% !important;">
                     <div class="col-lg-6" id="meta"></div>
                     <div class="col-lg-6" id="metas_dp"></div>
                 </div>

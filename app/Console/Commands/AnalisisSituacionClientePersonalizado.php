@@ -45,8 +45,8 @@ class AnalisisSituacionClientePersonalizado extends Command
     //$this->warn("Cargando primer pedido mes anio");
     $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
 
-    $periodo_original=Carbon::parse($fp->created_at)->clone()->startOfMonth();//->format('Y_m');
-    $periodo_actual=Carbon::parse(now())->clone()->endOfMonth();//->format('Y_m');
+      $periodo_original=Carbon::parse($fp->created_at)->clone()->startOfMonth();
+      $periodo_actual=Carbon::parse(now())->clone()->endOfMonth();
 
     $primer_periodo=Carbon::parse($fp->created_at);
     $diff = ($periodo_original->diffInMonths($periodo_actual))+1;
@@ -59,7 +59,7 @@ class AnalisisSituacionClientePersonalizado extends Command
 
 
     $clientes=Cliente::whereIn('tipo',['0','1'])
-      ->whereIn('situacion',['RECUPERADO ABANDONO'])
+      ->whereNull('situacion')
       ->orderBy('id','asc')->get();
 
     $progress = $this->output->createProgressBar($clientes->count());
