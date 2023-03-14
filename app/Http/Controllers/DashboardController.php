@@ -282,17 +282,7 @@ class DashboardController extends Controller
                 ];
         }
 
-        /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
-        $date_pagos = Carbon::parse(now())->subMonth();
-        $fechametames = Carbon::now()->clone();
 
-        if (!request()->has("fechametames")) {
-            $fechametames = Carbon::now()->clone();
-            $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
-        } else {
-            $fechametames = Carbon::parse($request->fechametames)->clone();
-            $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
-        }
 
         foreach ($asesores as $asesor) {
             /*if (!$asesor->identificador == '01') continue;*/
@@ -311,6 +301,18 @@ class DashboardController extends Controller
                 }
             }
 
+            /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
+            $date_pagos = Carbon::parse(now())->subMonth();
+            $fechametames = Carbon::now()->clone();
+
+            if (!request()->has("fechametames")) {
+                $fechametames = Carbon::now()->clone();
+                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+            } else {
+                $fechametames = Carbon::parse($request->fechametames)->clone();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
+            }
+
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
                 ->where('pedidos.codigo', 'not like', "%-C%")->activo()
                 ->whereDate('pedidos.created_at', $fechametames)
@@ -327,14 +329,10 @@ class DashboardController extends Controller
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
             $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
 
-            $total_pedido = Pedido::query()
-                ->where('pedidos.user_id', $asesor->id)
-                ->where('pedidos.codigo', 'not like', "%-C%")
-                ->where('pedidos.estado', '1')
-                ->where('pedidos.pendiente_anulacion', '<>', '1')
-                ->where('pedidos.estado_correccion', '0')
-                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfMonth()->endOfDay()])
-                ->count();
+            $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
+                ->where('codigo', 'not like', "%-C%")->activo()
+                ->where('pendiente_anulacion', '<>', '1'),
+                $fechametames, 'created_at')->count();
 
             $total_pagado = Pedido::query()
                 ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
