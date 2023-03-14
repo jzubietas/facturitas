@@ -44,14 +44,14 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="card">
+            {{--<div class="card">
                 <div class="card-body">
-                    <span class="text-dark ">SALDO A FAVOR</span>
+                    <span class="text-dark ">SALDO A FAVOR sae</span>
                     <span class="text-danger font-weight-bold">S/ 10.00</span>
                     <button class="btn btn-info btn-md">Utilizar saldo</button>
 
                 </div>
-            </div>
+            </div>--}}
 
             <div class="form-row">
 
