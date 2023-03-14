@@ -4372,7 +4372,7 @@ metas_dp .animated-progress {
 
     #tablaBandejaPedidosPorAtender td {
         vertical-align: middle !important;
-        text-align: center !important;
+        text-align: start !important;
     }
 
     #tablaBandejaPedidosPorAtender tbody div ul {
@@ -4524,7 +4524,12 @@ metas_dp .animated-progress {
 
     #tablaPrincipal td {
         vertical-align: middle !important;
-        text-align: center !important;
+        text-align: start !important;
+    }
+
+    #tablaPrincipal td:nth-child(10),
+    #tablaPrincipal td:nth-child(11){
+            text-align: center !important;
     }
 }
 
@@ -4700,7 +4705,10 @@ metas_dp .animated-progress {
 
 #tablaOperacionesBandejadeSobres td {
     vertical-align: middle !important;
-    text-align: center !important;
+    text-align: start !important;
+}
+#tablaOperacionesBandejadeSobres td:nth-child(10) {
+    text-align: start;
 }
 
 @media screen and (max-width: 2249px) {
@@ -4749,7 +4757,7 @@ metas_dp .animated-progress {
 
 #tablaOperacionesBandejadeCorrecciones td {
     vertical-align: middle !important;
-    text-align: center !important;
+    text-align: start !important;
 }
 
 #tablaOperacionesBandejadeCorrecciones tbody tr {
@@ -4861,6 +4869,12 @@ metas_dp .animated-progress {
 
 #tablaOperacionesJefeOperaciones td {
     vertical-align: middle !important;
+    text-align: start !important;
+}
+
+#tablaOperacionesJefeOperaciones td:nth-child(6) span{
+    position: initial !important;
+    padding: 4px !important;
 }
 
 #tablaOperacionesJefeOperaciones .sorting::before,
@@ -4965,6 +4979,13 @@ metas_dp .animated-progress {
 #tablaPrincipal_centro,
 #tablaPrincipal_norte{
     width: 100% !important;
+}
+
+#tablaPrincipal_sur td,
+#tablaPrincipal_centro td,
+#tablaPrincipal_norte td{
+    text-align: start !important;
+    vertical-align: middle !important;
 }
 /*--- /envios.rutaenvio ---*/
 
