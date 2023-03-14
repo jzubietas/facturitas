@@ -30,6 +30,8 @@ class UserController extends Controller
     public function index()
     {
         $mirol = Auth::user()->rol;
+        $roles = Role::whereIn('name',[User::ROL_ASESOR, User::ROL_ENCARGADO])->get();
+
         if (Auth::user()->rol == "Encargado") {
             $users = User::where('users.supervisor', Auth::user()->id)
                 ->where('users.rol', 'Asesor')
@@ -50,9 +52,59 @@ class UserController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('usuarios.index', compact('users', 'superasesor', 'mirol'));
+        return view('usuarios.index', compact('users', 'superasesor', 'mirol','roles'));
     }
 
+    public  function  tableUsuarios(Request $request){
+        if (Auth::user()->rol == "Encargado") {
+            $users = User::where('users.supervisor', Auth::user()->id)
+                ->where('users.rol', 'Asesor')
+                ->get();
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
+            $users = User::where('users.jefe', Auth::user()->id)
+                ->where('users.rol', 'Operario')
+                ->get();
+        } else {
+            $users = User::all();
+        }
+        return datatables()->collection($users)
+            ->addIndexColumn()
+            ->addColumn('id', function ($user) {
+                return "USER".$user->id;
+            })
+            ->addColumn('meta_quincena', function ($user) {
+                /*if ($user->meta_quincena){
+                    return  $user->meta_quincena;
+                }else{
+                    return "/";
+                }*/
+                return  $user->meta_quincena;
+            })
+            ->addColumn('estado', function ($user) {
+                $htmlestado = "";
+                if ($user->estado=='1'){
+                    $htmlestado = $htmlestado . '<a href="" data-target="#modal-desactivar-id" data-user_id="' . $user->id . '" data-user_mame="' . $user->name . '"  data-toggle="modal" title="Desactivar Usuario"><span class="badge badge-success">Activo</span></a>  ';
+                }else{
+                    $htmlestado = $htmlestado . '<a href="" data-target="#modal-activar-id" data-user_id="' . $user->id . '" data-user_mame="' . $user->name . '"  data-toggle="modal" title="Activar Usuario"><span class="badge bg-danger p-2">Inactivo</span></a>  ';
+                }
+
+                return $htmlestado;
+            })
+            ->addColumn('action', function ($user) {
+                $btn = "";
+                $btn = $btn . '<a href="" data-target="#modal-reset-id" data-user_id="' . $user->id . '" data-user_mame="' . $user->name . '"  data-toggle="modal" title="Resetear clave Usuario"><button class="btn btn-info btn-lg"><i class="fas fa-exchange-alt"></i></button></a>  ';
+                $btn = $btn . '<a href="'.route('users.edit', $user).'" class="btn btn-warning btn-lg" title="Editar Usuario"> <i class="fas fa-edit"></i> </a>  ';
+                /*$btn = $btn . '<a href="" data-target="#modal-desactivar-id" data-user_id="' . $user->id . '" data-user_mame="' . $user->name . '"  data-toggle="modal" title="Desactivar Usuario"><button class="btn btn-danger btn-lg"><i class="fas fa-user-slash"></i></button></a>  ';
+
+                $btn = $btn . '<a href="" data-target="#modal-asignarencargado" data-toggle="modal" data-encargado="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Encargado</button></a>';
+                $btn = $btn . '<a href="" data-target="#modal-asignaroperario" data-toggle="modal" data-operario="' . $user->id . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Operario</button></a>';
+                $btn = $btn . '<a href="" data-target="#modal-asignarllamadas" data-toggle="modal" data-llamadas="' . $user->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Asignar Llamadas</button></a>';
+                $btn = $btn . '<a href="" data-target="#modal-asignarmetaasesor" data-toggle="modal" data-asesor="' . $user->id . '">' .'<button class="btn btn-info btn-sm"> Asignar metas del mes</button>' .'</a>';*/
+                return $btn;
+            })
+            ->rawColumns(['action','estado'])
+            ->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -196,13 +248,33 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('info', 'eliminado');
     }
 
-    public function reset(User $user)
+    public function cambiarestado(Request $request)
     {
+        /*return $request->all();*/
+        $estado_s="";
+        $user=User::where('id',$request->user_id)->first();
+        $user->update([
+            'estado' => $request->estado
+        ]);
+        if ($request->estado=="1"){
+            $estado_s="Activado";
+        }
+        if ($request->estado=="0"){
+            $estado_s="Desactivado";
+        }
+        return response()->json(['user' => $user,'info'=> $estado_s]);
+        /*return redirect()->route('users.index')->with('info', 'eliminado');*/
+    }
+
+    public function reset(Request $request)
+    {
+        /*return $request->all();*/
+        $user=User::where('id',$request->hiddenIdUsuario)->first();
         $user->update([
             'password' => bcrypt('123456789')
         ]);
-
-        return redirect()->route('users.index')->with('info', 'reseteado');
+        return response()->json(['user' => $user,'info'=> 'reseteado']);
+        /*return redirect()->route('users.index')->with('info', 'reseteado');*/
     }
 
     public function profile(User $user)
@@ -529,22 +601,9 @@ class UserController extends Controller
                 'operario.name as operario',
                 'llamada.name as llamada',
                 'users.estado',
-                //DB::raw('DATE_FORMAT(users.created_at, "%d/%m/%Y") as fecha'),
             ])
             ->where('users.rol', 'Asesor')
             ->where('users.estado', '1')
-            /*->groupBy(
-                'users.id',
-                'users.name',
-                'users.excluir_meta',
-                'users.email',
-                'encargado.name',
-                'operario.name',
-                'llamada.name',
-                'users.estado',
-                'users.created_at',
-            )*/
-            //->orderBy('users.created_at', 'DESC')
             ->get();
 
         return datatables()->collection($users)
@@ -1142,7 +1201,7 @@ class UserController extends Controller
                 'meta_cobro' => $meta_cobro,
             ]);
         }
-        return redirect()->route('users.encargados')->with('info', 'asignado');
+        return redirect()->route('users.index')->with('info', 'asignado');
     }
 
 
@@ -1433,24 +1492,14 @@ class UserController extends Controller
             'direccion' => $request->txtDireccion,
             'birthday' => $request->txtCumpleanios ,
         ]);
-        $validator="Ninguno";
         if (isset($request->txtContraseniaAnterior) || Hash::check($request->txtContraseniaAnterior, $users->password)) {
-            $validator=" Ingreso...1";
             if (isset($request->txtContraseniaNueva)) {
-                $validator=" Ingreso...2";
                 $users->update([
                     'password' => Hash::make($request->txtContraseniaNueva),
                 ]);
             }
         }
-        /*if ($request->prole_id != " " && $request->role_name != "") {
-            $user->roles()->sync($request->role_id);
-
-            $user->update([
-                'rol' => $request->role_name
-            ]);
-        }*/
-        return response()->json(['html' => $users,'success'=>true,'request' => $request->all(),'validador'=>$validator]);
+        return response()->json(['html' => $users,'success'=>true,'request' => $request->all()]);
     }
 
     public function updateimage(Request $request)

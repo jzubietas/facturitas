@@ -38,143 +38,51 @@
 @section('content')
 
     <div class="card" style="overflow: hidden !important;">
+        <div class="btn-group card-footer" role="group" aria-label="Basic example" id="radioBtnDiv3">
+            <div class="form-check  d-flex gap-5 mr-4">
+                <input class="form-check-input" type="radio" name="rbnTipo3" id="rbnAllUser" checked="" value="1">
+                <label class="form-check-label" for="rbnAllUser"> Todos </label>
+            </div>
+            @foreach ($roles as $rol)
+                <div class="form-check  d-flex gap-5 mr-4">
+                    <input class="form-check-input " type="radio" name="rbnTipo3" id="rbn{{$rol->name}}User"
+                           value="{{$rol->id}}">
+                    <label class="form-check-label" for="rbn{{$rol->name}}User"> {{$rol->name}} </label>
+                </div>
+            @endforeach
+        </div>
         <div class="card-body" style="overflow-x: scroll !important;">
-            <table id="tablaPrincipal" class="table table-striped">
+            <table id="tblUsuariosPrincipal" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col" class="align-middle">CODIGO</th>
-                    <th scope="col" class="align-middle">NOMBRES Y APELLIDOS</th>
-                    <th scope="col" class="align-middle">CORREO</th>
-                    <th scope="col" class="align-middle">ROL</th>
-                    <th scope="col" class="align-middle">ESTADO</th>
-                    <th scope="col" class="align-middle">ACCIONES</th>
+                    <th scope="col" width="1%" class="align-middle">CODIGO</th>
+                    <th scope="col" width="12.5%" class="align-middle">NOMBRES Y APELLIDOS</th>
+                    <th scope="col" width="12.5%" class="align-middle">CORREO</th>
+                    <th scope="col" width="1%" class="align-middle">META QUINCENA</th>
+                    <th scope="col" width="1%" class="align-middle">META PEDIDOS 1</th>
+                    <th scope="col" width="1%" class="align-middle">META PEDIDOS 2</th>
+                    <th scope="col" width="8%" class="align-middle">ROL</th>
+                    <th scope="col" width="3%" class="align-middle">ESTADO</th>
+                    <th scope="col" width="15%" class="align-middle">ACCIONES</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($users as $user)
-                    <tr>
-                        <td>USER{{ $user->id }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->rol }}</td>
-                        <td>
-                            @php
-                                if ($user->estado == '1') {
-                                    echo '<span class="badge badge-success">Activo</span>';
-                                } else {
-                                    echo '<span class="badge badge-danger">Inactivo</span>';
-                                }
-                            @endphp
-                        </td>
-                        <td>
-                            @can('users.reset')
-                                <a href="" data-target="#modal-reset-{{ $user->id }}" data-toggle="modal">
-                                    <button class="btn btn-info btn-sm">Resetear</button>
-                                </a>
-                                {{--<a href="" id="btn_resetear_clave" data-target="#modal-resetclave-usuario" data-toggle="modal" data-userid="{{ $user->id }}" ><button class="btn btn-info btn-sm"><i class="fas fa-researchgate"></i> Resetear</button></a>--}}
-                            @endcan
-                            @can('users.edit')
-                                <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm"><i
-                                        class="fas fa-edit"></i> Editar</a>
-                            @endcan
-                            @can('users.destroy')
-                                @if ($user->estado == '1')
-                                    <a href="" data-target="#modal-desactivar-{{ $user->id }}" data-toggle="modal">
-                                        <button class="btn btn-danger btn-sm"> Desactivar</button>
-                                    </a>
-                                @else
-                                    <a href="" data-target="#modal-activar-{{ $user->id }}" data-toggle="modal">
-                                        <button class="btn btn-success btn-sm"> Activar</button>
-                                    </a>
-                                @endif
-                            @endcan
-                        </td>
-                    </tr>
-                    @include('usuarios.modal.desactivar')
-                    @include('usuarios.modal.activar')
-                    @include('usuarios.modal.reset')
-                @endforeach
                 </tbody>
             </table>
+            @include('usuarios.modal.desactivar')
+            @include('usuarios.modal.activar')
+            @include('usuarios.modal.reset')
+            @include('usuarios.modal.asignarmetaencargado')
         </div>
     </div>
 
 @stop
 
-@push('css')
-    <link rel="stylesheet" href="../css/admin_custom.css">
-    <style>
-        .bg-4 {
-            background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
-        }
 
-        .t-stroke {
-            color: transparent;
-            -moz-text-stroke-width: 2px;
-            -webkit-text-stroke-width: 2px;
-            -moz-text-stroke-color: #000000;
-            -webkit-text-stroke-color: #ffffff;
-        }
-
-        .t-shadow-halftone2 {
-            position: relative;
-        }
-
-        .t-shadow-halftone2::after {
-            content: "AWESOME TEXT";
-            font-size: 10rem;
-            letter-spacing: 0px;
-            background-size: 100%;
-            -webkit-text-fill-color: transparent;
-            -moz-text-fill-color: transparent;
-            -webkit-background-clip: text;
-            -moz-background-clip: text;
-            -moz-text-stroke-width: 0;
-            -webkit-text-stroke-width: 0;
-            position: absolute;
-            text-align: center;
-            left: 0px;
-            right: 0;
-            top: 0px;
-            z-index: -1;
-            background-color: #ff4c00;
-            transition: all 0.5s ease;
-            text-shadow: 10px 2px #6ac7c2;
-        }
-
-        #tablaPrincipal {
-            width: 100% !important;
-        }
-
-        #tablaPrincipal .sorting::before,
-        #tablaPrincipal .sorting::after,
-        #tablaPrincipal .sorting_desc::before,
-        #tablaPrincipal .sorting_desc::after {
-            top: 10px !important;
-        }
-
-        #tablaPrincipal tbody td {
-            vertical-align: middle !important;
-            text-align: start !important;
-        }
-
-        #tablaPrincipal tbody td:nth-child(5) span {
-            padding: 4px !important;
-            position: initial !important;
-        }
-
-        #tablaPrincipal tbody td:nth-child(5) {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-
-    </style>
-@endpush
 
 @section('js')
-    <script src="{{ asset('js/datatables.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
         <script>
@@ -185,33 +93,195 @@
             )
         </script>
     @endif
+
     <script>
-        $(document).on("click", "#btn_resetear_clave", function (event) {
-            var button = $(event.relatedTarget)
-            var idunico = button.data('data-userid')
-            console.log('reseteClave', button, 'idunico', idunico);
+        $(document).ready(function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('#tblUsuariosPrincipal').DataTable({
+                processing: true,
+                serverSide: true,
+                searching: true,
+                "order": [[2, "asc"]],
+                ajax: "{{ route('tableUsuarios') }}",
+                createdRow: function (el, data, dataIndex) {},
+                rowCallback: function (el, data, index) {
+                    /*$(el).find(".meta_checkbox_active").change(function (e) {
+                        console.log($(e.target).data('excluir_meta'))
+                        console.log($(e.target).data('user_id'))
+                        $.post('{{route('users.asesorestabla.updatemeta',':id')}}'.replace(':id',data.id),{
+                            excluir:$(e.target).prop('checked'),
+                            user_id:$(e.target).data('user_id'),
+                        }).always(function () {
+                            $("#tablaPrincipal").DataTable().ajax.reload();
+                        })
+                    })*/
+                },
+                columns: [
+                    {data: 'id',name: 'id',},
+                    {data: 'name',name: 'name',sWidth: '20%',},
+                    {data: 'email', name: 'email',},
+                    {data: 'meta_quincena', name: 'meta_quincena',},
+                    {data: 'meta_pedido', name: 'meta_pedido',},
+                    {data: 'meta_pedido_2',name: 'meta_pedido_2',},
+                    {data: 'rol',name: 'rol',},
+                    {data: 'estado',name: 'estado',
+                        /*render: function (data, type, row, meta) {
+                            if (data == "1") {
+                                return '<a href=""><span class="badge badge-success">Activo</span></a>';
+                            } else if (data == "0") {
+                                return '<span class="badge badge-secondary">Inactivo</span>';
+                            }
+                        },*/
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '20%',
+                        render: function (data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+
+            });
+
+            $('#modal-reset-id').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var user_id = button.data('user_id')
+                var user_name = button.data('user_mame')
+                console.log('userID=',user_id,'userNAME=',user_name)
+                $("#txtIdUsuario").html(user_id);
+                $("#txtNameUsuario").html(user_name);
+                $("#hiddenIdUsuario").val(user_id);
+                $("#hiddenNameUsuario").val(user_name);
+            });
+
+            $(document).on("submit", "#frmResetUser", function (evento) {
+                evento.preventDefault();
+                var formData = $("#frmResetUser").serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('user.reset') }}",
+                    data: formData
+                }).done(function (data) {
+                    $("#modal-reset-id").modal("hide");
+                    Swal.fire(
+                        'Mensaje',
+                        'Se reseteo la clave correctamente',
+                        'success'
+                    )
+                    $('#tblUsuariosPrincipal').DataTable().ajax.reload();
+                });
+            });
+
+            $('#modal-desactivar-id').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var user_id = button.data('user_id')
+                var user_name = button.data('user_mame')
+                console.log('userID=',user_id,'userNAME=',user_name)
+                $("#txtDesIdUsuario").html(user_id);
+                $("#txtDesNameUsuario").html(user_name);
+                $("#hidDesIdUsuario").val(user_id);
+                $("#hidDesNameUsuario").val(user_name);
+            });
+
+            $(document).on("submit", "#frmDesactivarUsuario", function (evento) {
+                evento.preventDefault();
+                /*var formData = $("#frmDesactivarUsuario").serialize();*/
+                var user_id=$("#hidDesIdUsuario").val();
+                var user_name=$("#hidDesNameUsuario").val();
+                var estadoDesact=$("#hidEstado").val();
+
+                var formData = new FormData();
+                formData.append("user_id", user_id);
+                formData.append("user_name", user_name);
+                formData.append("estado", estadoDesact);
+                $.ajax({
+                    async: false,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('user.cambiarestado') }}",
+                }).done(function (data) {
+                    console.log(data);
+                    $("#modal-desactivar-id").modal("hide");
+                    Swal.fire(
+                        'Mensaje',
+                        'Se desactivo el usuario de '+user_name+' correctamente',
+                        'success'
+                    )
+                    $('#tblUsuariosPrincipal').DataTable().ajax.reload();
+                });
+            });
+
+            $('#modal-activar-id').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var user_id = button.data('user_id')
+                var user_name = button.data('user_mame')
+                console.log('userID=',user_id,'userNAME=',user_name)
+                $("#txtActIdUsuario").html(user_id);
+                $("#txtActNameUsuario").html(user_name);
+                $("#hidActIdUsuario").val(user_id);
+                $("#hidActNameUsuario").val(user_name);
+            });
+
+            $(document).on("submit", "#frmActivarUsuario", function (evento) {
+                evento.preventDefault();
+                /*var formData = $("#frmDesactivarUsuario").serialize();*/
+                var user_id=$("#hidActIdUsuario").val();
+                var user_name=$("#hidActNameUsuario").val();
+                var estadoAct=$("#hidActEstado").val();
+
+                var formData = new FormData();
+                formData.append("user_id", user_id);
+                formData.append("user_name", user_name);
+                formData.append("estado", estadoAct);
+                $.ajax({
+                    async: false,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('user.cambiarestado') }}",
+                }).done(function (data) {
+                    console.log(data);
+                    $("#modal-activar-id").modal("hide");
+                    Swal.fire(
+                        'Mensaje',
+                        'Se activo el usuario de '+user_name+' correctamente',
+                        'success'
+                    )
+                    $('#tblUsuariosPrincipal').DataTable().ajax.reload();
+                });
+            });
         });
-
-        /*$(document).ready(function(){
-          $('#modal-resetclave-usuario').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            console.log('reseteClave',button);
-            var button = $(event.relatedTarget)
-            var idunico = button.data('jefellamadas')
-            $("#hiddenIdjefellamadas").val(idunico);
-            if(idunico<10){
-              idunico='USER000'+idunico;
-            }else if(idunico<100){
-              idunico= 'USER00'+idunico;
-            }else if(idunico<1000){
-              idunico='USERG0'+idunico;
-            }else{
-              idunico='USER'+idunico;
-            }
-            $(".textcode").html(idunico);
-          });
-        });*/
-
-
     </script>
 @stop

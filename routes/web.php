@@ -209,7 +209,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::any('correccionesJson', [OperacionController::class, 'correccionesJson'])->name('correccionesJson');
 
-    Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
+    Route::post('user.reset', [UserController::class, 'reset'])->name('user.reset');
+    Route::post('user.cambiarestado', [UserController::class, 'cambiarestado'])->name('user.cambiarestado');
 
     Route::post('asesorcombomodal', [UserController::class, 'AsesorcomboModal'])->name('asesorcombomodal');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
@@ -269,6 +270,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('users.mipersonal', [UserController::class, 'MiPersonal'])->name('users.mipersonal');
     Route::get('personaltablahistorial', [UserController::class, 'personaltablahistorial'])->name('personaltablahistorial');//actualizado para serverside
     Route::get('indextablapersonal', [UserController::class, 'indextablapersonal'])->name('indextablapersonal');
+    Route::get('tableUsuarios', [UserController::class, 'tableUsuarios'])->name('tableUsuarios');
     /*Controller User*/
 
     /*Controller Pedido*/

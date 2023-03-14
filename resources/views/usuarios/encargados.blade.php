@@ -29,7 +29,7 @@
             <th scope="col">NOMBRES Y APELLIDOS</th>
             <th scope="col">CORREO</th>
             <th scope="col">META DE PEDIDOS 1</th>
-              <th scope="col">META DE PEDIDOS 2</th>
+            <th scope="col">META DE PEDIDOS 2</th>
             <th scope="col">META DE COBRO</th>
             <th scope="col">ESTADO</th>
             <th scope="col">ACCIONES</th>
@@ -42,7 +42,7 @@
               <td>{{ $user->name }}</td>
               <td>{{ $user->email }}</td>
               <td>{{ $user->meta_pedido }}</td>
-                <td>{{ $user->meta_pedido_2 }}</td>
+              <td>{{ $user->meta_pedido_2 }}</td>
               <td>{{ $user->meta_cobro }}</td>
               <td>
                 @php
