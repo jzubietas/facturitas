@@ -324,7 +324,6 @@ class DashboardController extends Controller
 
             $metatotal = (float)$meta_calculo_row->meta_pedido;
             $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
-            //$metatotal_cobro = (float)$meta_calculo_row->meta_cobro;
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
             $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
 
@@ -333,7 +332,7 @@ class DashboardController extends Controller
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
-                ->where('estado_correccion', '0')
+                ->where('pedidos.estado_correccion', '0')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfMonth()->endOfDay()])
                 ->count();
 

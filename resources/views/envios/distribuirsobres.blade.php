@@ -21,7 +21,8 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between">
                                 <h5> {{Str::upper($motorizado->zona)}}
-                                    <sup><span class="badge badge-light count_distribuirsobres_{{Str::lower($motorizado->zona)}}">0</span></sup>
+                                    <sup><span
+                                            class="badge badge-light count_distribuirsobres_{{Str::lower($motorizado->zona)}}">0</span></sup>
                                 </h5>
 
                                 <div>
@@ -63,24 +64,24 @@
 
     </div>
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <div class="table-responsive">
                 <table id="tablaCourierSobresconDireccion" class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col" style="font-size:14px;">Sobres</th>
-                        <th scope="col" style="font-size:14px;">Razón social</th>
-                        <th scope="col">Quien recibe</th>
-                        <th scope="col">TELEFONO</th>
-                        <th scope="col">PROV</th>
-                        <th scope="col">DISTRITO</th>
-                        <th scope="col">DIRECCION</th>
-                        <th scope="col">REFERENCIA</th>
-                        <th scope="col">FECHA</th>
-                        <th scope="col">Estado de envio</th>
-                        <th scope="col">ZONA</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col" class="align-middle" style="font-size:14px;">Sobres</th>
+                        <th scope="col" class="align-middle" style="font-size:14px;">Razón social</th>
+                        <th scope="col" class="align-middle">Quien recibe</th>
+                        <th scope="col" class="align-middle">TELEFONO</th>
+                        <th scope="col" class="align-middle">PROV</th>
+                        <th scope="col" class="align-middle">DISTRITO</th>
+                        <th scope="col" class="align-middle">DIRECCION</th>
+                        <th scope="col" class="align-middle">REFERENCIA</th>
+                        <th scope="col" class="align-middle">FECHA</th>
+                        <th scope="col" class="align-middle">Estado de envio</th>
+                        <th scope="col" class="align-middle">ZONA</th>
+                        <th scope="col" class="align-middle">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -115,6 +116,13 @@
 
         .jconfirm-content {
             overflow: hidden !important;
+        }
+        #tablaCourierSobresconDireccion{
+            width: 100% !important;
+        }
+        #tablaCourierSobresconDireccion td{
+            vertical-align: middle !important;
+            text-align: start !important;
         }
     </style>
     <!-- css del time line del historial de motirizado -->
@@ -189,14 +197,14 @@
                         $(tableId).DataTable()
                             .row.add(createZoneRowTable(data, zona)).draw(false);
 
-                        localStorage.setItem(zona + '.envios.distribuirsobres', JSON.stringify(Array.from($("#tablaPrincipal"+zona).DataTable().data())));
+                        localStorage.setItem(zona + '.envios.distribuirsobres', JSON.stringify(Array.from($("#tablaPrincipal" + zona).DataTable().data())));
 
                         self.api().ajax.reload();
                     })
                     $('[data-motorizado-history]', row).click(function () {
                         $.confirm({
                             title: 'Historial de adjuntos de llamadas',
-                            theme:'material',
+                            theme: 'material',
                             type: 'dark',
                             columnClass: 'xlarge',
                             content: function () {
@@ -250,7 +258,7 @@
                     {data: 'distrito', name: 'distrito',},
                     {data: 'direccion', name: 'direccion',},
                     {data: 'referencia', name: 'referencia',},
-                    {data: 'fecha_producto', name: 'fecha_producto',sClass: 'cod_dir'},
+                    {data: 'fecha_producto', name: 'fecha_producto', sClass: 'cod_dir'},
                     {data: 'condicion_envio', name: 'condicion_envio',},
                     {data: 'zona', name: 'zona', sClass: 'bg-zone'},
                     {
@@ -348,7 +356,7 @@
                             title: '¡Detalle del grupo!',
                             columnClass: 'xlarge',
                             content: getHtmlPrevisualizarDesagrupar(data),
-                            theme:'material',
+                            theme: 'material',
                             typeAnimated: true,
                             buttons: {
                                 cancelar: function () {
@@ -394,8 +402,7 @@
                         })
                     })
                 },
-                "fnDrawCallback": function ()
-                {
+                "fnDrawCallback": function () {
                     $(".count_distribuirsobres_{{Str::lower($motorizado->zona)}}").html(this.fnSettings().fnRecordsDisplay());
                 }
             });
@@ -435,7 +442,7 @@
                             ${pedido.pivot.razon_social}
                         </div>
                         <div class="col-4 text-center">
-                            ${(row.pedidos.length > 1 && pedido.env_zona!='OLVA') ? `<button class="btn btn-danger" data-jqdesagrupar="${row.id}" data-pedido_id="${pedido.id}"><i class="fa fa-arrow-down"></i> Desagrupar</button>` : '<button class="btn btn-danger" disabled><i class="fa fa-arrow-down"></i> Desagrupar</button>'}
+                            ${(row.pedidos.length > 1 && pedido.env_zona != 'OLVA') ? `<button class="btn btn-danger" data-jqdesagrupar="${row.id}" data-pedido_id="${pedido.id}"><i class="fa fa-arrow-down"></i> Desagrupar</button>` : '<button class="btn btn-danger" disabled><i class="fa fa-arrow-down"></i> Desagrupar</button>'}
                         </div>
                     </div>
                 </li>`
@@ -564,7 +571,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                                 self.setContent(getHtmlPrevisualizarAgruparData(response))
                             })
                     },
-                    theme:'material',
+                    theme: 'material',
                     type: 'orange',
                     typeAnimated: true,
                     buttons: {
@@ -572,7 +579,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                             text: 'Aceptar y crear paquetes',
                             btnClass: 'btn-success',
                             action: function () {
-                              console.log("iniciar en ajax")
+                                console.log("iniciar en ajax")
                                 buttom.find('.spinner-border').show()
                                 buttom.find('.sr-only').show()
                                 const self = this
@@ -584,7 +591,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                                         /*groups: Array.from(table.data()).map(function (item) {
                                             return item.id
                                         })*/
-                                      groups:grupos
+                                        groups: grupos
                                     },
                                     dataType: 'json',
                                     method: 'post'
@@ -647,14 +654,15 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                     table.draw(false);
                 }
             })
-            function closeIt()
-            {
+
+            function closeIt() {
                 motorizados.forEach(function (motorizado) {
                     const zona = motorizado.zona.toUpperCase()
                     const table = $('#tablaPrincipal' + zona).DataTable();
                     localStorage.setItem(zona + '.envios.distribuirsobres', JSON.stringify(Array.from(table.data())));
                 })
             }
+
             window.onbeforeunload = closeIt;
             $('#tablaCourierSobresconDireccion').DataTable().draw(false);
         });

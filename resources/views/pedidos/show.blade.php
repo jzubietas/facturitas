@@ -44,20 +44,20 @@
                            style="text-align: center">{{-- tablaPrincipal --}}
                         <thead><h4 style="text-align: center"><strong>Detalle de pedido</strong></h4>
                         <tr>
-                            <th scope="col" style="vertical-align: middle">Código</th>
-                            <th scope="col" style="vertical-align: middle">Empresa</th>
-                            <th scope="col" style="vertical-align: middle">Mes</th>
-                            <th scope="col" style="vertical-align: middle">Año</th>
-                            <th scope="col" style="vertical-align: middle">RUC</th>
-                            <th scope="col" style="vertical-align: middle">Cantidad</th>
-                            <th scope="col" style="vertical-align: middle">Tipo de comprobante<br>y banca</th>
-                            <th scope="col" style="vertical-align: middle">Porcentaje</th>
-                            <th scope="col" style="vertical-align: middle">Courier</th>
-                            <th scope="col" style="vertical-align: middle">Descripción</th>
-                            <th scope="col" style="vertical-align: middle">Nota</th>
-                            <th scope="col" style="vertical-align: middle">Adjunto</th>
-                            <th scope="col" style="vertical-align: middle">FT</th>
-                            <th scope="col" style="vertical-align: middle">Opciones</th>
+                            <th scope="col" class="align-middle">Código</th>
+                            <th scope="col" class="align-middle">Empresa</th>
+                            <th scope="col" class="align-middle">Mes</th>
+                            <th scope="col" class="align-middle">Año</th>
+                            <th scope="col" class="align-middle">RUC</th>
+                            <th scope="col" class="align-middle">Cantidad</th>
+                            <th scope="col" class="align-middle">Tipo de comprobante<br>y banca</th>
+                            <th scope="col" class="align-middle">Porcentaje</th>
+                            <th scope="col" class="align-middle">Courier</th>
+                            <th scope="col" class="align-middle">Descripción</th>
+                            <th scope="col" class="align-middle">Nota</th>
+                            <th scope="col" class="align-middle">Adjunto</th>
+                            <th scope="col" class="align-middle">FT</th>
+                            <th scope="col" class="align-middle">Opciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -287,9 +287,20 @@
 
 @stop
 
-@section('css')
+@push('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
-@stop
+    <style>
+        #tabla{
+            width: 100% !important;
+        }
+
+        #tabla td{
+            text-align: start !important;
+            vertical-align: middle !important;
+        }
+    </style>
+
+@endpush
 
 @section('js')
 
