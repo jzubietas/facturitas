@@ -326,7 +326,6 @@ class DashboardController extends Controller
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
             $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
 
-
             $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
                 ->where('codigo', 'not like', "%-C%")->activo()
                 ->where('pendiente_anulacion', '<>', '1'),
@@ -346,6 +345,7 @@ class DashboardController extends Controller
                 ->where('pago_pedidos.estado', 1)
                 ->where('pago_pedidos.pagado', 2)
                 ->count();
+
             $total_pedido_mespasado = Pedido::query()
                 ->where('pedidos.user_id', $asesor->id)
                 ->where('pedidos.codigo', 'not like', "%-C%")
@@ -373,7 +373,6 @@ class DashboardController extends Controller
                 "meta" => $metatotal,
                 "meta_2" => $metatotal_2,
                 "meta_quincena" => $metatotal_quincena,
-                //"meta_cobro" => $metatotal_cobro,
                 "pedidos_totales" => $pedidos_totales,
                 "supervisor" => $supervisor,
             ];
@@ -386,7 +385,6 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['meta'] = $metatotal + $count_asesor[$encargado_asesor]['meta'];
                     $count_asesor[$encargado_asesor]['total_pedido'] = $total_pedido + $count_asesor[$encargado_asesor]['total_pedido'];
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
-                    /*$count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena+$count_asesor[$encargado_asesor]['meta_quincena'];*/
                 } else if ($encargado_asesor == 24) {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
@@ -394,7 +392,6 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['meta'] = $metatotal + $count_asesor[$encargado_asesor]['meta'];
                     $count_asesor[$encargado_asesor]['total_pedido'] = $total_pedido + $count_asesor[$encargado_asesor]['total_pedido'];
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
-                    /*$count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena+$count_asesor[$encargado_asesor]['meta_quincena'];*/
                 } else {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = 0;
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
@@ -402,13 +399,11 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['meta'] = $metatotal + $count_asesor[$encargado_asesor]['meta'];
                     $count_asesor[$encargado_asesor]['total_pedido'] = $total_pedido + $count_asesor[$encargado_asesor]['total_pedido'];
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
-                    /*$count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena+$count_asesor[$encargado_asesor]['meta_quincena'];*/
 
                 }
             }
 
             if ($asesor->excluir_meta) {
-
                 if ($total_pedido_mespasado > 0) {
                     $p_pagos = round(($total_pagado / $total_pedido_mespasado) * 100, 2);
                 } else {
@@ -426,7 +421,6 @@ class DashboardController extends Controller
                 } else {
                     $p_quincena = 0;
                 }
-
                 /*-----------------------*/
                 if ($total_pedido < $metatotal_quincena) {
                     if ($metatotal_quincena > 0) {
@@ -452,15 +446,12 @@ class DashboardController extends Controller
                     /*meta 2*/
                 }
                 /*-----------------------*/
-
                 $item['progress_pagos'] = $p_pagos;
                 $item['progress_pedidos'] = $p_pedidos;
                 $item['meta_quincena'] = $p_quincena;
             } else {
                 $progressData[] = $item;
             }
-
-
         }
 
         $newData = [];
@@ -478,7 +469,6 @@ class DashboardController extends Controller
                     $newData[$identificador]['pedidos_dia'] += data_get($item, 'pedidos_dia');
                     $newData[$identificador]['supervisor'] += data_get($item, 'supervisor');
                     $newData[$identificador]['meta_new'] += data_get($item, 'meta_new');
-
                     $newData[$identificador]['pedidos_totales'] += data_get($item, 'pedidos_totales');
                     $newData[$identificador]['meta_quincena'] += data_get($item, 'meta_quincena');
                 }
@@ -508,7 +498,6 @@ class DashboardController extends Controller
                     $p_pagos = 0;
                 }
             }
-
 
             /*meta quincena = 0*/
             if ($all < $meta_quincena) {
@@ -553,10 +542,7 @@ class DashboardController extends Controller
             $item['pedidos_totales'] = $pedidos_totales;
             $item['meta_new'] = $meta_new;
             return $item;
-
-
         })->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
-
 
         if ($request->ii == 1) {
             if ($total_asesor % 2 == 0) {
@@ -566,10 +552,7 @@ class DashboardController extends Controller
                 $skip = 0;
                 $take = intval($total_asesor / 2) + 1;
             }
-            //return json_encode(array('skip'=>$skip,'take'=>$take)); 0  8
             $progressData->splice($skip, $take)->all();
-            //$progressData=array_slice($progressData, 2);
-            //return $progressData;
         } else if ($request->ii == 2) {
             if ($total_asesor % 2 == 0) {
                 $skip = intval($total_asesor / 2);
@@ -578,16 +561,12 @@ class DashboardController extends Controller
                 $skip = intval($total_asesor / 2) + 1;
                 $take = intval($total_asesor / 2);
             }
-            //return json_encode(array('skip'=>$skip,'take'=>$take));  8   7
             $progressData->splice($skip, $take)->all();
-            //$progressData=array_slice($progressData, 3);
-            //return $progressData;
         } else if ($request->ii == 3) {
             $progressData->all();
         }
 
         //aqui la division de  1  o 2
-
         $all = collect($progressData)->pluck('total_pedido')->sum();
         $all_mespasado = collect($progressData)->pluck('total_pedido_mespasado')->sum();
         $pay = collect($progressData)->pluck('total_pagado')->sum();
@@ -601,8 +580,6 @@ class DashboardController extends Controller
         } else {
             $p_pedidos = 0;
         }
-        //echo '<br> pagado '.$pay." - mespasado ".$all_mespasado.'<br>';
-        //continue;
         if ($all_mespasado == 0) {
             $p_pagos = 0;
         } else {
@@ -1009,12 +986,12 @@ class DashboardController extends Controller
                  aria-valuemax="100"></div>';
                 else if (round(($count_asesor[24]['total_pedido'] / ((($count_asesor[24]['meta'] > 0) ? $count_asesor[24]['meta'] : ''))) * 100, 0) > 40)
                     $html .= '<div class="progress-bar bg-danger height-bar-progress" role="progressbar"
-                 style="width: '.round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta'] * 100), 2).'%; height: 30px !important;"
+                 style="width: ' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta'] * 100), 2) . '%; height: 30px !important;"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
             <div class="progress-bar" role="progressbar"
-                 style="width: ' . (round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta'] * 100), 2)-40) . '%;
+                 style="width: ' . (round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta'] * 100), 2) - 40) . '%;
              background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
                  aria-valuenow="' . (round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta']), 2) - 40) . '"
                  aria-valuemin="0"
@@ -1160,10 +1137,8 @@ class DashboardController extends Controller
                 }
                 /*fin pagos*/
 
-
                 $html .= '</td>';
                 $html .= '   <td>';
-
 
                 /* META - QUINCENA */
                 if ($data["meta_new"] == 0) {
@@ -1308,6 +1283,7 @@ class DashboardController extends Controller
                                   <sub class="top-visible" style="display: none !important;">Meta 2</sub>';
                     }
                 }
+
                 $html .= '  </td>
       </tr> ';
             }
