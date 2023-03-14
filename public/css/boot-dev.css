@@ -4018,7 +4018,7 @@ body {
 
 @media screen and (max-width: 800px) {
     #contenedor-fullscreen {
-        overflow-y: scroll !important;
+        overflow: scroll !important;
     }
 }
 
