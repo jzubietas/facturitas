@@ -2,6 +2,25 @@
 
 @section('title', 'Pedidos - Bandeja de pedidos')
 
+@push('css')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
+    </style>
+    <link rel="stylesheet" href="{{asset('./calendario/jquery-ui.css')}}">
+    <link rel="stylesheet" href="{{asset('./calendario/fullcalendar.min.css')}}">
+    <style>
+        .fc .fc-col-header-cell-cushion {
+            display: inline-block;
+            padding: 2px 4px;
+        }
+        #calendar {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #0c84ff !important;
+        }
+    </style>
+@endpush
+
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
@@ -18,12 +37,7 @@
     </div><!-- /.container-fluid -->
 @stop
 
-
 @section('content')
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
-    </style>
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
@@ -96,30 +110,12 @@
     </div><!-- /.container-fluid -->
 @stop
 
-
-@push('css')
-    <style>
-        .fc .fc-col-header-cell-cushion {
-            display: inline-block;
-            padding: 2px 4px;
-        }
-        #calendar {
-            max-width: 900px;
-            margin: 40px auto;
-            background-color: #0c84ff !important;
-        }
-    </style>
-@endpush
-
-@push('scripts')
-
-
-    <link rel="stylesheet" src="{{asset('calendario/jquery-ui.css')}}">
-    <link rel="stylesheet" src="{{asset('calendario/fullcalendar.min.css')}}">
+@section('js')
     <script src="{{asset('calendario/jquery.min.js')}}"></script>
     <script src="{{asset('calendario/jquery-ui.min.js')}}"></script>
     <script src=" {{asset('calendario/moment.min.js')}}"></script>
     <script src=" {{asset('calendario/fullcalendar.min.js')}}"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/locale/es.js'></script>
 
     <script>
         $(document).ready(function () {
@@ -137,9 +133,10 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay,listMonth'
                 },
+                locale: 'es',
                 weekNumbers: true,
                 eventLimit: true, // allow "more" link when too many events
-                events: {{$events}},
+                events: @json($eventss),
                 eventRender: function (event, element, view) {
                     if (event.allDay === 'true') {
                         event.allDay = true;
@@ -150,5 +147,6 @@
             });
 
         })
-@endpush
+    </script>
+@endsection
 

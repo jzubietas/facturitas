@@ -14,24 +14,25 @@ class FullCalenderController extends Controller
             //dd('ajax');
             $all_events = Event::all();
 
-            $events = [];
+            $eventss = [];
 
             foreach ($all_events as $event)
             {
-                $events[] = [
+                $eventss[] = [
                     'title' => $event->title,
                     'start' => $event->start,
                     'end' => $event->end,
+                    'color'=>'purple'
                 ];
             }
-//dd($events);
+        //dd($eventss);
             /*$data = Event::whereDate('start', '>=', $request->start)
                 ->whereDate('end',   '<=', $request->end)
                 ->get(['id', 'title', 'start', 'end']);*/
             //dd($data);
             //return response()->json($data);
         //}
-            return view('fullcalendar.fullcalendar', compact('events'));
+            return view('fullcalendar.fullcalendar', compact('eventss'));
         //return view('fullcalendar.fullcalendar');
     }
 
