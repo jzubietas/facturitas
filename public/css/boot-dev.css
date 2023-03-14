@@ -4213,6 +4213,14 @@ metas_dp .animated-progress {
     }
 }
 
+/*---------------- MODULO ACCESOS RAPIDOS ----------------*/
+/*--- /pedidos/create ---*/
+/*--- /pagos/create ---*/
+/*--- /pedidosperdonarcurrier ---*/
+/*--- /setting/administrador ---*/
+
+
+
 /*---------------- MODULO PEDIDO ----------------*/
 /*--- /pedidos ---*/
 #tablabandejapedidos {
@@ -4936,41 +4944,117 @@ metas_dp .animated-progress {
 }
 
 /*--- /envios.porconfirmar ---*/
+#tablaCourierRecepciondeSobres {
+    width: 100% !important;
+}
+
 /*--- /envios.distribuirsobres ---*/
+
 /*--- /envios.sindireccion ---*/
+#tablaCourierSobresSinDireccion {
+    width: 100% !important;
+}
+
+#tablaCourierSobresSinDireccion td {
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
 /*--- /envios.parareparto ---*/
+#tablaPrincipal_sur,
+#tablaPrincipal_centro,
+#tablaPrincipal_norte{
+    width: 100% !important;
+}
 /*--- /envios.rutaenvio ---*/
+
 /*--- /envios/motorizados/confirmar ---*/
+#tablaCourierConfirmarFoto{
+    width: 100% !important;
+}
+
+#tablaCourierConfirmarFoto .sorting::before,
+#tablaCourierConfirmarFoto .sorting::after,
+#tablaCourierConfirmarFoto .sorting_desc::before,
+#tablaCourierConfirmarFoto .sorting_desc::after{
+    top: 20px !important;
+}
 /*--- /envios.seguimientoprovincia ---*/
+#tablaCourierSeguimientoProvincia{
+    width: 100% !important;
+}
+
+#tablaCourierSeguimientoProvincia td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
 
 /*-------------------------------- MODULO MOTORIZADO --------------------------------*/
 /*--- /envios.recepcionmotorizado ---*/
+
 /*--- /envios/motorizados ---*/
+#tablaEnmotorizado{
+    width: 100% !important;
+}
 /*--- /envios.devueltos ---*/
+
 
 /*-------------------------------- MODULO PAGOS --------------------------------*/
 /*--- /pagos ---*/
+
 /*--- /pagos.mispagos ---*/
+
 /*--- /pagos.pagosincompletos ---*/
+
 /*--- /pagos.pagosobservados ---*/
+
 
 /*-------------------------------- MODULO ADMINISTRACION --------------------------------*/
 /*--- /administracion.porrevisar ---*/
+
 /*--- /administracion.pendientes ---*/
+
 /*--- /administracion.observados ---*/
+
 /*--- /administracion.aprobados ---*/
+
 /*--- /movimientos ---*/
+
 
 /*-------------------------------- MODULO PERSONAS --------------------------------*/
 /*--- /clientes ---*/
+
 /*--- /clientes.recurrentes ---*/
+
 /*--- /clientes.abandonos.recientes ---*/
+
 /*--- /clientes.abandonos ---*/
+
 /*--- /clientes.nuevos ---*/
+
 /*--- /clientes.recuperados.recientes ---*/
+
 /*--- /clientes.recuperados ---*/
+
 /*--- /clientes.nulos ---*/
+
 /*--- /basefria ---*/
+#tablaserverside{
+    width: 100% !important;
+}
+
+#tablaserverside td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
+#tablaserverside td:nth-child(5){
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    grid-gap: 5px !important;
+}
 
 /*-------------------------------- MODULO REPORTES --------------------------------*/
 /*--- /reportes.index ---*/

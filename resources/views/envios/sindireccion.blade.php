@@ -30,8 +30,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             {{-- <table cellspacing="5" cellpadding="5">
               <tbody>
                 <tr>
@@ -49,19 +49,19 @@
                 <thead>
                 <tr>
 
-                    <th scope="col">Código</th>
-                    <th scope="col">Asesor</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Fecha de Recepcion Courier</th>
-                    <th scope="col">Razón social</th>
+                    <th scope="col" class="align-middle" width="6%">Código</th>
+                    <th scope="col" class="align-middle" width="4%">Id</th>
+                    <th scope="col" class="align-middle" width="24%">Cliente</th>
+                    <th scope="col" class="align-middle" width="10%">Fecha de Recepcion Courier</th>
+                    <th scope="col" class="align-middle" width="22%">Razón social</th>
                     {{--
                     <th scope="col">Destino</th>
                     <th scope="col">Dirección de envío</th>
                     <th scope="col">Referencia</th>
                     --}}
-                    <th scope="col">Dias</th>
-                    <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="align-middle" width="8%">Dias</th>
+                    <th scope="col" class="align-middle" width="13%">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
+                    <th scope="col" class="align-middle" width="13%">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
