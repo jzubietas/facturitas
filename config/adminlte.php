@@ -839,6 +839,20 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'Planificacion',
+            'icon' => 'fas fa-user',
+            'can' => 'configuracion.modulo',
+            'submenu' => [
+                [
+                    'text' => 'Calendario',
+                    'route' => 'fullcalendar',
+                    'can' => 'roles.index',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['roles*'],
+                ],
+            ]
+        ]
     ],
 
     /*

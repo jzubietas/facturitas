@@ -9,6 +9,7 @@ use App\Http\Controllers\Envios\DireccionGrupoController;
 use App\Http\Controllers\Envios\DistribucionController;
 use App\Http\Controllers\Envios\MotorizadoController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\ModalController;
 use App\Http\Controllers\OlvaController;
 use App\Http\Controllers\PagoController;
@@ -807,5 +808,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);
     }); */
+
+    Route::any('fullcalendar', [FullCalenderController::class, 'index'])->name('fullcalendar');
+    Route::any('fullcalendarAjax', [FullCalenderController::class, 'ajax'])->name('fullcalendarAjax');
 
 });
