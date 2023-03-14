@@ -2147,7 +2147,7 @@ class ClienteController extends Controller
       }else{
         $data = $data->whereIn('guardado', [0, 1]);
       }
-    }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS,User::ROL_MOTORIZADO])) {
+    }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS,User::ROL_MOTORIZADO,User::ROL_ASESOR])) {
       if ($request->rbnvalue==1){
         $data = $data->where('guardado',0)
           ->where('confirmado',0);
@@ -2397,21 +2397,77 @@ class ClienteController extends Controller
   }
 
   public function listcontadorescontactos(Request $request){
-    $nuevoCliente = DetalleContactos::where('tipo_insert',1)
-      ->select(['detalle_contactos.*']);
-    $nuevoCliente = $nuevoCliente->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('confirmado', 0)->count();
+    $nuevoCliente = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')->where('detalle_contactos.tipo_insert',1)
+        ->select(['detalle_contactos.*']);
+    $nuevoCliente = $nuevoCliente->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('reconfirmado',  0);
 
-    $cambioNombre = DetalleContactos::where('tipo_insert',2)
+    $cambioNombre = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')->where('detalle_contactos.tipo_insert',2)
       ->select(['detalle_contactos.*']);
-    $cambioNombre = $cambioNombre->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('confirmado', 0)->count();
+    $cambioNombre = $cambioNombre->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('reconfirmado',  0);
 
-    $contbloqueo = DetalleContactos::where('tipo_insert',3)
+    $contbloqueo = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')->where('detalle_contactos.tipo_insert',3)
       ->select(['detalle_contactos.*']);
-    $contbloqueo = $contbloqueo->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('confirmado', 0)->count();
+    $contbloqueo = $contbloqueo->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('reconfirmado',  0);
 
-    $cambioNumero = DetalleContactos::where('tipo_insert',4)
+    $cambioNumero = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')->where('detalle_contactos.tipo_insert',4)
       ->select(['detalle_contactos.*']);
-    $cambioNumero = $cambioNumero->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('confirmado', 0)->count();
+    $cambioNumero = $cambioNumero->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('reconfirmado',  0);
+
+      if (Auth::user()->rol == "Llamadas") {
+          $usersasesores = User::where('users.rol', 'Asesor')
+              ->where('users.estado', '1')
+              ->where('users.llamada', Auth::user()->id)
+              ->select(
+                  DB::raw("users.identificador as identificador")
+              )
+              ->pluck('users.identificador');
+          $nuevoCliente = $nuevoCliente->WhereIn("u.identificador", $usersasesores);
+          $cambioNombre = $cambioNombre->WhereIn("u.identificador", $usersasesores);
+          $contbloqueo = $contbloqueo->WhereIn("u.identificador", $usersasesores);
+          $cambioNumero = $cambioNumero->WhereIn("u.identificador", $usersasesores);
+
+      } else if (Auth::user()->rol == "Jefe de llamadas") {
+      } elseif (Auth::user()->rol == "Asesor") {
+          $usersasesores = User::where('users.rol', 'Asesor')
+              ->where('users.estado', '1')
+              ->where('users.identificador', Auth::user()->identificador)
+              ->select(
+                  DB::raw("users.identificador as identificador")
+              )
+              ->pluck('users.identificador');
+          $nuevoCliente = $nuevoCliente->WhereIn("u.identificador", $usersasesores);
+          $cambioNombre = $cambioNombre->WhereIn("u.identificador", $usersasesores);
+          $contbloqueo = $contbloqueo->WhereIn("u.identificador", $usersasesores);
+          $cambioNumero = $cambioNumero->WhereIn("u.identificador", $usersasesores);
+
+      } else if (Auth::user()->rol == "Encargado") {
+          $usersasesores = User::where('users.rol', 'Asesor')
+              ->where('users.estado', '1')
+              ->where('users.supervisor', Auth::user()->id)
+              ->select(
+                  DB::raw("users.identificador as identificador")
+              )
+              ->pluck('users.identificador');
+
+          $nuevoCliente = $nuevoCliente->WhereIn("u.identificador", $usersasesores);
+          $cambioNombre = $cambioNombre->WhereIn("u.identificador", $usersasesores);
+          $contbloqueo = $contbloqueo->WhereIn("u.identificador", $usersasesores);
+          $cambioNumero = $cambioNumero->WhereIn("u.identificador", $usersasesores);
+      } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+          $nuevoCliente = $nuevoCliente->Where("u.identificador", '=', 'B');
+          $cambioNombre = $cambioNombre->Where("u.identificador", '=', 'B');
+          $contbloqueo = $contbloqueo->Where("u.identificador", '=', 'B');
+          $cambioNumero = $cambioNumero->Where("u.identificador", '=', 'B');
+      }
+
+      $nuevoCliente=$nuevoCliente->count();
+      $cambioNombre=$cambioNombre->count();
+      $contbloqueo=$contbloqueo->count();
+      $cambioNumero=$cambioNumero->count();
 
     return response()->json(['nuevoCliente' => $nuevoCliente,'cambioNombre' => $cambioNombre,'contbloqueo' => $contbloqueo,'cambioNumero' => $cambioNumero]);
   }
