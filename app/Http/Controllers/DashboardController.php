@@ -282,7 +282,20 @@ class DashboardController extends Controller
                 ];
         }
 
+        /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
+        $date_pagos = Carbon::parse(now())->subMonth();
+        $fechametames = Carbon::now()->clone();
+
+        if (!request()->has("fechametames")) {
+            $fechametames = Carbon::now()->clone();
+            $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+        } else {
+            $fechametames = Carbon::parse($request->fechametames)->clone();
+            $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
+        }
+
         foreach ($asesores as $asesor) {
+            /*if (!$asesor->identificador == '01') continue;*/
             if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN, User::ROL_PRESENTACION, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])) {
             } else {
                 if (auth()->user()->rol != User::ROL_ADMIN) {
@@ -297,24 +310,13 @@ class DashboardController extends Controller
                     }
                 }
             }
-            /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
-            $date_pagos = Carbon::parse(now())->subMonth();
-            $fechametames = Carbon::now();
-
-            if (!request()->has("fechametames")) {
-                $fechametames = Carbon::now();
-                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
-            } else {
-                $fechametames = Carbon::parse($request->fechametames);
-                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
-            }
 
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
                 ->where('pedidos.codigo', 'not like', "%-C%")->activo()
                 ->whereDate('pedidos.created_at', $fechametames)
                 ->where('pendiente_anulacion', '<>', '1')->count();
 
-            $fechametames = Carbon::parse($request->fechametames);
+            /*$fechametames = Carbon::parse($request->fechametames);*/
             $meta_calculo_row = Meta::where('rol', User::ROL_ASESOR)
                 ->where('user_id', $asesor->id)
                 ->where('anio', $fechametames->format('Y'))
@@ -326,10 +328,13 @@ class DashboardController extends Controller
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
             $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
 
-            $total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-                ->where('codigo', 'not like', "%-C%")->activo()
-                ->where('pendiente_anulacion', '<>', '1'),
-                $fechametames, 'created_at')
+            $total_pedido = Pedido::query()
+                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.codigo', 'not like', "%-C%")
+                ->where('pedidos.estado', '1')
+                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->where('estado_correccion', '0')
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfMonth()->endOfDay()])
                 ->count();
 
             $total_pagado = Pedido::query()
