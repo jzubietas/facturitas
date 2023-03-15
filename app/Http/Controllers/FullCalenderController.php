@@ -43,9 +43,10 @@ class FullCalenderController extends Controller
         switch ($request->type) {
             case 'add':
                 $event = Event::create([
-                    'title' => $request->title,
-                    'start' => $request->start,
-                    'end' => $request->end,
+                    'title' => $request->calendario_nombre_evento,
+                    'start' => $request->calendario_start_evento,
+                    'end' => $request->calendario_start_evento,
+                    /*'color' => $request->calendario_color_evento,*/
                 ]);
                 return response()->json($event);
             case 'update':
