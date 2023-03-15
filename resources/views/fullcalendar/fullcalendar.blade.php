@@ -41,6 +41,8 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="sticky-top mb-3">
+
+                    {{--Draggable Events--}}
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Draggable Events</h4>
@@ -63,7 +65,8 @@
                         </div>
                         <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
+
+                    {{--Create Event--}}
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Create Event</h3>
@@ -97,6 +100,36 @@
 
                         </div>
                     </div>
+
+                    {{--List Event--}}
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">List Event</h3>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <p>asd</p>
+                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25spx">
+                                        <i class="fas fa-edit text-white" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <p>asd</p>
+                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25spx">
+                                        <i class="fas fa-edit text-white" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <p>asd</p>
+                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25spx">
+                                        <i class="fas fa-edit text-white" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- /.col -->
@@ -248,7 +281,7 @@
 
                     }*/
                 },
-                eventDrop:function(info){
+                eventDrop: function (info) {
                     console.log(info.event.title + " was dropped on " + info.event.start.toISOString());
                     /*if (!confirm("Are you sure about this change?")) {
                         info.revert();
@@ -274,7 +307,7 @@
                     });*/
                 },
                 eventClick: function (event) {
-                    let identify=event.event.id;
+                    let identify = event.event.id;
                     eliminar_evento_calendario.show();
                     $("#eliminar_evento").val(identify);
                 },
@@ -282,8 +315,8 @@
                 themeSystem: 'bootstrap',
                 //events: @json($eventss),
                 events: @json($eventss),
-                editable  : true,
-                droppable : true,
+                editable: true,
+                droppable: true,
             });
 
             function displayMessage(message) {
@@ -386,7 +419,6 @@
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
-                //console.log(formData.get("eliminar_evento"));
                 formData.append('type', 'add');
                 $.ajax({
                     url: "{{route('fullcalendarAjax')}}",
@@ -395,6 +427,7 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        agregar_evento_calendario.hide();
                         displayMessage("Event created.");
                         calendar.addEvent(
                             {
@@ -402,16 +435,12 @@
                                 title: calendario_nombre_evento,
                                 start: calendario_start_evento,
                                 end: calendario_start_evento,
-                               /* allDay: allDay*/
                             }
                         );
-                        agregar_evento_calendario.hide();
+                        calendar.refetchEvents();
                     }
                 });
-
             });
-
-
 
 
         })
