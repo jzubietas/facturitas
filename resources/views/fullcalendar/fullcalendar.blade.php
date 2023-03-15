@@ -7,7 +7,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
     </style>
     <link rel="stylesheet" href="{{asset('plugins/jquery-ui/jquery-ui.css')}}">
-    <link rel="stylesheet" href="{{asset('css/toastr.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/toaster.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/fullcalendar/main.css')}}">
     <style>
         /*.fc .fc-col-header-cell-cushion {
@@ -100,6 +100,7 @@
                     <div class="card-body p-0">
                         <!-- THE CALENDAR -->
                         <div id="calendar" style="width: 100%; display: inline-block;"></div>
+                        @include('fullcalendar.modal.agregar_evento')
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -117,7 +118,7 @@
     <script src=" {{asset('plugins/moment/moment.min.js')}}"></script>
     <script src=" {{asset('./plugins/fullcalendar/main.js')}}"></script>
     <script src=" {{asset('./plugins/fullcalendar/locales/es.js')}}"></script>
-    <script src=" {{asset('./js/toastr.min.js')}}"></script>
+    <script src=" {{asset('./js/toaster.min.js')}}"></script>
     <script>
         $(document).ready(function () {
         //$(function () {
@@ -127,7 +128,12 @@
                 }
             });
 
-            toastr.success('Hola', 'Event');
+            var agregar_evento_calendario = new bootstrap.Modal(document.getElementById('agregar_evento_calendario'), {
+                keyboard: false
+            })
+
+
+            //toastr.success('Hola', 'Event');
 
             function ini_events(ele) {
                 ele.each(function () {
@@ -198,14 +204,17 @@
                 },
                 select: function(info) {
                     //alert('selected ' + info.startStr + ' to ' + info.endStr);
-                    var event_name = prompt('Event Name:');
+                    agregar_evento_calendario.show()
+
+
+                    /*var event_name = prompt('Event Name:');
                     if(event_name)
                     {
                         var event_start = $.fullCalendar.formatDate(info.startStr, "Y-MM-DD HH:mm:ss");
                         var event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD HH:mm:ss");
 
                         $.ajax({
-                            url: "{{route('fullcalendarAjax')}}",
+                            url: "{{--route('fullcalendarAjax')--}}",
                             data: {
                                 event_name: event_name,
                                 event_start: event_start,
@@ -226,7 +235,7 @@
                             }
                         });
 
-                    }
+                    }*/
                 },
                 eventDrop:function(info){
                     //alert(info.event.title + " was dropped on " + info.event.start.toISOString());
@@ -341,7 +350,7 @@
                 //toastr.success(message, 'Event');
             }
 
-            toastr.success('Hola', 'Event');
+            //toastr.success('Hola', 'Event');
 
             calendar.render();
 
@@ -402,6 +411,14 @@
                 },
             });*/
 
+            $('#agregar_evento_calendario').on('show.bs.modal', function (event) {
+
+                $('#demo-input').colorpicker();
+            });
+
+            $(document).on('colorpickerChange','#demo-input-color',function(event){
+                $('#demo-color').css('background-color', event.color.toString());
+            })
 
 
         })
