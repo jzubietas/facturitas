@@ -202,7 +202,7 @@
                     }
                 },
                 initialDate: '2023-03-02',
-                initialView: 'timeGridWeek',
+                initialView: 'dayGridMonth',
                 selectable: true,
                 headerToolbar: {
                     left: 'prev,next today',
