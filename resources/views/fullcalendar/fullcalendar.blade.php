@@ -381,7 +381,6 @@
                     }
                 });
             });
-
             /*ADD*/
             $(document).on("submit", "#frm_add_evento_calendario", function (event) {
                 event.preventDefault();
@@ -406,11 +405,13 @@
                                /* allDay: allDay*/
                             }
                         );
-
+                        agregar_evento_calendario.hide();
                     }
                 });
 
             });
+
+
 
 
         })

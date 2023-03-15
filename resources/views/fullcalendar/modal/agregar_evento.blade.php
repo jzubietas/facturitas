@@ -55,8 +55,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Registrar tarea</button>
+                    <button type="button" id="close_form" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="submit_form" class="btn btn-primary">Registrar tarea</button>
                 </div>
             </form>
         </div>
