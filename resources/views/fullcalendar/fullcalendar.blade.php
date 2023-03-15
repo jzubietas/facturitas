@@ -202,7 +202,7 @@
                     }
                 },
                 initialDate: '2023-03-02',
-                initialView: 'timeGridWeek',
+                initialView: 'dayGridMonth',
                 selectable: true,
                 headerToolbar: {
                     left: 'prev,next today',
@@ -393,16 +393,20 @@
                     url: "{{route('fullcalendarAjax')}}",
                     data: formData,
                     type: "POST",
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
                         displayMessage("Event created.");
-                        calendar.fullCalendar('renderEvent', {
-                            id: data.id,
-                            title: event_name,
-                            start: event_start,
-                            end: event_end,
-                            allDay: allDay
-                        }, true);
-                        calendar.fullCalendar('unselect');
+                        calendar.addEvent(
+                            {
+                                id: data.id,
+                                title: calendario_nombre_evento,
+                                start: calendario_start_evento,
+                                end: calendario_start_evento,
+                               /* allDay: allDay*/
+                            }
+                        );
+
                     }
                 });
 
