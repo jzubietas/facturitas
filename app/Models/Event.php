@@ -14,6 +14,6 @@ class Event extends Model
     use CommonModel;
 
     protected $fillable = [
-        'title', 'start', 'end'
+        'title', 'start', 'end','color'
     ];
 }

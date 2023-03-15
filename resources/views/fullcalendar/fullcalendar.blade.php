@@ -220,10 +220,10 @@
 
             ini_events($('#external-events div.external-event'));
 
-            //let date = new Date()
-            /*let d    = date.getDate(),
+            let date = new Date()
+            let d    = date.getDate(),
                 m    = date.getMonth(),
-                y    = date.getFullYear()*/
+                y    = date.getFullYear()
 
             let Calendar = FullCalendar.Calendar;
             let Draggable = FullCalendar.Draggable;
@@ -338,6 +338,7 @@
                 events: @json($eventss),
                 editable: true,
                 droppable: true,
+                displayEventTime:false,
             });
 
             function displayMessage(message) {
@@ -427,6 +428,7 @@
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
+                console.log(formData.get("calendario_color_evento"));
                 formData.append('type', 'add');
                 $.ajax({
                     url: "{{route('fullcalendarAjax')}}",
@@ -435,30 +437,30 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        //$("#agregar_evento_calendario").modal("hide");
-                        console.log(formData.get("calendario_start_evento"))
-                        let dateStr=formData.get("calendario_start_evento");
-                        var date_iso = (dateStr + 'T00:00:00');
-                        console.log(date_iso);
 
+
+                        let dateStr = moment(data.start).format('YYYY-MM-DD');//calendar.formatDate(data.start, "YYYY-MM-DDTHH:mm:ss");
+                        let dateEnd = moment(data.end).format('YYYY-MM-DD');/*calendar.formatDate(data.end, {
+                            month: '2-digit',
+                            year: 'numeric',
+                            day: '2-digit'
+                        });*/
+
+                        //let dateStr = FullCalendar.formatDate(data.start, "Y-MM-DD HH:mm:ss");
+                        //let dateEnd = FullCalendar.formatDate(data.end  , "Y-MM-DD HH:mm:ss");
+
+                        console.log(dateStr);
+                        console.log(dateEnd);
                         agregar_evento_calendario.hide();
                         displayMessage("Event created.");
-
                         calendar.addEvent({
+                            //start: '2020-08-08T10:30:00',
                             id: data.id,
                             title: data.title,
-                            start: data.start,
-                            end: data.end
+                            start: dateStr,
+                            end: dateEnd,
+                            color: data.color
                         });
-
-                        /*setTimeout(function(){
-                            calendar.destroy();
-                            calendar.render()
-                            //calendar.rerenderEvents();
-                        },50);*/
-                        //$('#calendar').fullCalendar( 'refetchEvents' );
-
-                        //calendar.refetchEvents();
                     }
                 });
             });

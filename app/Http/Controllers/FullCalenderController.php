@@ -24,7 +24,7 @@ class FullCalenderController extends Controller
                     'title' => $event->title,
                     'start' => $event->start,
                     'end' => $event->end,
-                    'color'=>'purple'
+                    'color'=>$event->color
                 ];
             }
         //dd($eventss);
@@ -46,7 +46,7 @@ class FullCalenderController extends Controller
                     'title' => $request->calendario_nombre_evento,
                     'start' => $request->calendario_start_evento,
                     'end' => $request->calendario_start_evento,
-                    /*'color' => $request->calendario_color_evento,*/
+                    'color' => $request->calendario_color_evento,
                 ]);
                 return response()->json($event);
             case 'update':
