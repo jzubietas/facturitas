@@ -604,7 +604,7 @@ $banca"
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->join('imagen_atencions as ia', 'pedidos.id', 'ia.pedido_id')
+                /*->join('imagen_atencions as ia', 'pedidos.id', 'ia.pedido_id')*/
                 ->select([
                     'pedidos.id',
                     DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
@@ -628,8 +628,10 @@ $banca"
                     'dp.fecha_recepcion',
                     'dp.tipo_banca',
                     'pedidos.motivo',
-                    'ia.adjunto',
-                    'ia.id as id_imagen_atenciones',
+                    DB::raw(" ( select ia.adjunto from imagen_atencions ia inner join pedidos pedidoi on pedidoi.id=ia.pedido_id and pedidoi.id=pedidos.id where ia.estado=1 limit 1) as adjunto "),
+                    DB::raw(" ( select ia2.id from imagen_atencions ia2 inner join pedidos pedidoi2 on pedidoi2.id=ia2.pedido_id and pedidoi2.id=pedidos.id where ia2.estado=1 limit 1) as id_imagen_atenciones "),
+                    /*'ia.adjunto',
+                    'dp.tipo_banca as id_imagen_atenciones',*/
                     DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
                 ])
                 ->where('pedidos.estado', '1')
