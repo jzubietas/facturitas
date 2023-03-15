@@ -269,8 +269,11 @@
                 },*/
                 select: function (info) {
                     console.log(info)
-                    //alert('selected ' + info.startStr + ' to ' + info.endStr);
+                    console.log(('selected ' + info.startStr + ' to ' + info.endStr));
                     agregar_evento_calendario.show()
+
+                    $("#calendario_start_evento").val(info.startStr);
+                    $("#calendario_end_evento").val(info.endStr);
 
                     /*let event_name = prompt('Event Name:');
                     if(event_name)

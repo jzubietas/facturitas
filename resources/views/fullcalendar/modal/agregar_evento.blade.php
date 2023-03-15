@@ -27,7 +27,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="calendario_startevento">Inicio</label>
+                                    <label for="calendario_startevento">Inicio del evento</label>
                                     <input type="date" class="form-control is-valid" id="calendario_start_evento"
                                            placeholder="Nombre de evento" value="" name="calendario_start_evento">
                                     <div class="valid-feedback">
@@ -37,9 +37,9 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="calendario_startevento">Inicio</label>
-                                    <input type="date" class="form-control is-valid" id="calendario_start_evento"
-                                           placeholder="Nombre de evento" value="" name="calendario_start_evento">
+                                    <label for="calendario_startevento">Fin del evento</label>
+                                    <input type="date" class="form-control is-valid" id="calendario_end_evento"
+                                           placeholder="Nombre de evento" value="" name="calendario_end_evento">
                                     <div class="valid-feedback">
                                         Valido!
                                     </div>
