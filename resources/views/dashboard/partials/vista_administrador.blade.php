@@ -95,16 +95,31 @@
     </div>
 </div>--}}
 
+<hr>
 {{-- FULLSCREEN --}}
 <div class="col-lg-12 " id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2">
-        <div class="d-flex justify-content-center">
-            <h1 class="text-uppercase justify-center text-center">Metas del mes
-                de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
-            <button style="background: none; border: none" onclick="openFullscreen();">
-                <i class="fas fa-expand-arrows-alt ml-3"
-                   style="font-size: 20px"></i>
-            </button>
+        <div class="d-flex justify-content-center row">
+            <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1">
+                <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                    <h5 class="card-title text-uppercase">Total de cobranzas:</h5>
+                    <p class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2">
+                <h1 class="text-uppercase justify-center text-center">Metas del mes
+                    de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+                <button style="background: none; border: none" onclick="openFullscreen();">
+                    <i class="fas fa-expand-arrows-alt ml-3"
+                       style="font-size: 20px"></i>
+                </button>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
+                <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                    <h5 class="card-title text-uppercase">Total de pedidos:</h5>
+                    <p class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                </div>
+            </div>
         </div>
         <div class="d-flex justify-content-center align-items-center ml-5">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
@@ -112,6 +127,7 @@
                    value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
         </div>
     </div>
+
 
     {{-- TABLA DUAL --}}
     <div class="" style=" overflow: hidden !important;">
@@ -386,7 +402,7 @@
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
 
-            setInterval(myTimer, 5000);
+            setInterval(myTimer, 500000);
 
             function myTimer() {
                 cargaNueva(1);
