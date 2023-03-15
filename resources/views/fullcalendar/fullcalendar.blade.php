@@ -7,6 +7,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
     </style>
     <link rel="stylesheet" href="{{asset('plugins/jquery-ui/jquery-ui.css')}}">
+    <link rel="stylesheet" href="{{asset('css/toastr.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/fullcalendar/main.css')}}">
     <style>
         /*.fc .fc-col-header-cell-cushion {
@@ -116,6 +117,7 @@
     <script src=" {{asset('plugins/moment/moment.min.js')}}"></script>
     <script src=" {{asset('./plugins/fullcalendar/main.js')}}"></script>
     <script src=" {{asset('./plugins/fullcalendar/locales/es.js')}}"></script>
+    <script src=" {{asset('./js/toastr.min.js')}}"></script>
     <script>
         $(document).ready(function () {
         //$(function () {
@@ -124,6 +126,8 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            toastr.success('Hola', 'Event');
 
             function ini_events(ele) {
                 ele.each(function () {
@@ -174,20 +178,102 @@
             });
 
             var calendar = new Calendar(calendarEl, {
+                dayMaxEventRows: true,
+                views: {
+                    timeGrid: {
+                        dayMaxEventRows: 6 // adjust to 6 only for timeGridWeek/timeGridDay
+                    }
+                },
+                initialDate: '2023-03-02',
+                initialView: 'timeGridWeek',
                 selectable: true,
                 headerToolbar: {
                     left  : 'prev,next today',
                     center: 'title',
-                    right : 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right : 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 },
+                weekNumbers:true,
                 dateClick: function(info) {
-                    alert('clicked ' + info.dateStr);
+                    //alert('clicked ' + info.dateStr);
                 },
                 select: function(info) {
-                    alert('selected ' + info.startStr + ' to ' + info.endStr);
+                    //alert('selected ' + info.startStr + ' to ' + info.endStr);
+                    var event_name = prompt('Event Name:');
+                    if(event_name)
+                    {
+                        var event_start = $.fullCalendar.formatDate(info.startStr, "Y-MM-DD HH:mm:ss");
+                        var event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD HH:mm:ss");
+
+                        $.ajax({
+                            url: "{{route('fullcalendarAjax')}}",
+                            data: {
+                                event_name: event_name,
+                                event_start: event_start,
+                                event_end: event_end,
+                                type: 'create'
+                            },
+                            type: "POST",
+                            success: function (data) {
+                                displayMessage("Event created.");
+                                calendar.fullCalendar('renderEvent', {
+                                    id: data.id,
+                                    title: event_name,
+                                    start: event_start,
+                                    end: event_end,
+                                    allDay: allDay
+                                }, true);
+                                calendar.fullCalendar('unselect');
+                            }
+                        });
+
+                    }
+                },
+                eventDrop:function(info){
+                    //alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+
+                    /*if (!confirm("Are you sure about this change?")) {
+                        info.revert();
+                    }*/
+
+                    var event_start = $.fullCalendar.formatDate(info.event.startStr, "Y-MM-DD");
+                    var event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD");
+
+                    $.ajax({
+                        url: "{{route('fullcalendarAjax')}}",
+                        data: {
+                            title: info.name,
+                            start: event_start,
+                            end: event_end,
+                            id: info.id,
+                            type: 'edit',
+                        },
+                        type: "POST",
+                        success: function (response) {
+                            displayMessage("Event updated");
+                        }
+                    });
+
+                },
+                eventClick: function (event) {
+                    var eventDelete = confirm("Are you sure?");
+                    if (eventDelete) {
+                        $.ajax({
+                            type: "POST",
+                            url: "{{route('fullcalendarAjax')}}",
+                            data: {
+                                id: event.id,
+                                type: 'delete',
+                            },
+                            success: function (response) {
+                                calendar.fullCalendar('removeEvents', event.id);
+                                displayMessage("Event removed");
+                            }
+                        });
+                    }
                 },
                 locale: 'es',
                 themeSystem: 'bootstrap',
+                //themeSystem: 'jquery-ui',
                 //Random default events
                 //events: @json($eventss),
                 events: [
@@ -242,14 +328,20 @@
                 ],
                 editable  : true,
                 droppable : true, // this allows things to be dropped onto the calendar !!!
-                drop      : function(info) {
+                //drop      : function(info) {
                     // is the "remove after drop" checkbox checked?
-                    if (checkbox.checked) {
+                    //if (checkbox.checked) {
                         // if so, remove the element from the "Draggable Events" list
-                        info.draggedEl.parentNode.removeChild(info.draggedEl);
-                    }
-                }
+                        //info.draggedEl.parentNode.removeChild(info.draggedEl);
+                    //}
+                //}
             });
+
+            function displayMessage(message) {
+                //toastr.success(message, 'Event');
+            }
+
+            toastr.success('Hola', 'Event');
 
             calendar.render();
 
