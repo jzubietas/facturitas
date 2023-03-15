@@ -24,8 +24,12 @@ body {
     transform-origin: bottom left;
 }
 
-d-none {
+.d-none {
     display: none !important;
+}
+
+.text-warn {
+    color: #983434;
 }
 
 #santa_navidad {
@@ -3357,107 +3361,7 @@ d-none {
 }
 
 
-/* EFECTO NIEVE */
-
-@-moz-keyframes nieve {
-    from {
-        top: -40px;
-    }
-    to {
-        top: 101%;
-    }
-}
-
-@-webkit-keyframes nieve {
-    from {
-        top: -40px;
-    }
-    to {
-        top: 2000px;
-    }
-}
-
-@keyframes nieve {
-    from {
-        top: -40px;
-    }
-    to {
-        top: 2000px;
-    }
-}
-
-@-moz-keyframes horiz2 {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@-webkit-keyframes horiz2 {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@keyframes horiz2 {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(-70px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@-moz-keyframes horiz {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@-webkit-keyframes horiz {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
-@keyframes horiz {
-    20% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(150px);
-    }
-    80% {
-        transform: translateX(0);
-    }
-}
-
+/*---------------- EFECTO NIEVE ----------------*/
 .tpl-snow > div {
     position: fixed;
     -webkit-animation: ease-in infinite normal;
@@ -3468,9 +3372,11 @@ d-none {
 .tpl-snow > div {
     z-index: 9999999999999;
     width: 30px;
-    height: 30px; /*background-image: url('../imagenes/pica.png');*/
+    height: 30px;
+    /*background-image: url('../imagenes/pica.png');*/
     background-repeat: no-repeat;
     background-size: contain;
+    opacity: .2;
     -webkit-animation-name: nieve, horiz;
     -moz-animation-name: nieve, horiz;
     animation-name: nieve, horiz;
@@ -3877,8 +3783,107 @@ d-none {
     animation-delay: .3s;
 }
 
+@-moz-keyframes nieve {
+    from {
+        top: -40px;
+    }
+    to {
+        top: 101%;
+    }
+}
 
-/*ESTILOS RESPONSIVOS*/
+@-webkit-keyframes nieve {
+    from {
+        top: -40px;
+    }
+    to {
+        top: 2000px;
+    }
+}
+
+@keyframes nieve {
+    from {
+        top: -40px;
+    }
+    to {
+        top: 2000px;
+    }
+}
+
+@-moz-keyframes horiz2 {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@-webkit-keyframes horiz2 {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes horiz2 {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-70px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@-moz-keyframes horiz {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@-webkit-keyframes horiz {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes horiz {
+    20% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    80% {
+        transform: translateX(0);
+    }
+}
+
+
+/*---------------- ESTILOS RESPONSIVOS ----------------*/
 
 .h-40 {
     height: 40px !important;
@@ -3950,6 +3955,115 @@ d-none {
 }
 
 /*---------------- MODULO DASHBOARD ----------------*/
+
+
+@media screen and (max-width: 2249px) {
+    .contain-table-dual {
+        display: flex !important;
+        width: 100% !important;
+    }
+
+    #meta,
+    #metas_dp {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    #supervisor_total table tbody tr th:nth-child(n),
+    #supervisor_A table tbody tr th:nth-child(n),
+    #metas_total table tbody tr th:nth-child(n) {
+        width: 33.33333% !important;
+    }
+}
+
+@media screen and (max-width: 1230px) {
+    .contain-table-dual {
+        flex-direction: column !important;
+    }
+
+    #meta,
+    #metas_dp {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    #metas_dp {
+        margin-top: -3px !important;
+    }
+
+    #metas_dp thead {
+        display: none !important;
+    }
+
+    #metas_dp tbody td:nth-child(1) {
+        width: 8% !important;
+    }
+
+    #metas_dp tbody td:nth-child(2) {
+        width: 11% !important;
+    }
+
+    #metas_dp tbody td:nth-child(3) {
+        width: 8% !important;
+    }
+
+    #metas_dp tbody td:nth-child(4) {
+        width: 36% !important;
+    }
+
+    #metas_dp tbody td:nth-child(5) {
+        width: 38% !important;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #contenedor-fullscreen {
+        overflow: scroll !important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #meta,
+    #metas_dp,
+    #supervisor_total,
+    #supervisor_A,
+    #metas_total {
+        max-width: 730px !important;
+        width: 730px !important;
+    }
+}
+
+#meta .height-bar-progress,
+#metas_dp .height-bar-progress,
+#supervisor_total .height-bar-progress,
+#supervisor_A .height-bar-progress,
+#metas_total .height-bar-progress {
+    height: 30px !important;
+}
+
+#supervisor_total .top-progress-bar-total,
+#supervisor_A .top-progress-bar-total,
+#metas_total .top-progress-bar-total {
+    top: 3px !important;
+}
+
+#supervisor_total .top-visible,
+#supervisor_A .top-visible,
+#metas_total .top-visible {
+    display: none !important;
+}
+
+#supervisor_total table,
+#supervisor_A table,
+#metas_total table {
+    margin-bottom: 5px !important;
+}
+
+#meta td,
+#metas_dp td {
+    padding: 10px !important;
+}
+
 #meta .list-group .list-group-item,
 metas_dp .list-group .list-group-item {
     background: #a5770f1a !important;
@@ -4034,6 +4148,15 @@ metas_dp .animated-progress {
     align-items: center !important;
 }
 
+@media screen and (max-width: 1500px) {
+    #meta .height-bar-progress,
+    #metas_dp .height-bar-progress,
+    #supervisor_total .height-bar-progress,
+    #supervisor_A .height-bar-progress,
+    #metas_total .height-bar-progress {
+        height: 30px !important;
+    }
+}
 
 @media screen and (max-width: 1440px) {
     #meta .tabla-metas_pagos_pedidos,
@@ -4061,7 +4184,6 @@ metas_dp .animated-progress {
     #metas_dp .bold-size-total {
         font-size: 11px !important;
     }
-
 }
 
 @media screen and (max-width: 1345px) {
@@ -4083,6 +4205,21 @@ metas_dp .animated-progress {
         margin-right: 4px !important;
     }
 }
+
+@media screen and (max-width: 575px) {
+    #meta .h-60-res,
+    #metas_dp .h-60-res {
+        height: 60px !important;
+    }
+}
+
+/*---------------- MODULO ACCESOS RAPIDOS ----------------*/
+/*--- /pedidos/create ---*/
+/*--- /pagos/create ---*/
+/*--- /pedidosperdonarcurrier ---*/
+/*--- /setting/administrador ---*/
+
+
 
 /*---------------- MODULO PEDIDO ----------------*/
 /*--- /pedidos ---*/
@@ -4109,6 +4246,11 @@ metas_dp .animated-progress {
         font-size: 15px;
     }
 
+    #tablabandejapedidos td:nth-child(10) span {
+        position: initial !important;
+        font-size: 12px !important;
+    }
+
     #tablabandejapedidos td:nth-child(11) span {
         white-space: break-spaces !important;
         padding: 8px !important;
@@ -4126,10 +4268,10 @@ metas_dp .animated-progress {
         margin-left: 2px;
     }
 
-    .sorting:before,
-    .sorting:after,
-    .sorting_desc:before,
-    .sorting_desc:after {
+    #tablabandejapedidos .sorting::before,
+    #tablabandejapedidos .sorting::after,
+    #tablabandejapedidos .sorting_desc::before,
+    #tablabandejapedidos .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4209,28 +4351,28 @@ metas_dp .animated-progress {
         width: 100% !important;
     }
 
-    tablaBandejaPedidosPorAtender thead {
+    #tablaBandejaPedidosPorAtender thead {
         vertical-align: middle;
     }
 
-    tablaBandejaPedidosPorAtender th:nth-child(9) {
+    #tablaBandejaPedidosPorAtender th:nth-child(9) {
         width: 100px !important;
     }
 
-    tablaBandejaPedidosPorAtender th:nth-child(11) {
+    #tablaBandejaPedidosPorAtender th:nth-child(11) {
         width: 130px !important;
     }
 
-    .sorting:before,
-    .sorting:after,
-    .sorting_desc:before,
-    .sorting_desc:after {
+    #tablaBandejaPedidosPorAtender .sorting::before,
+    #tablaBandejaPedidosPorAtender .sorting::after,
+    #tablaBandejaPedidosPorAtender .sorting_desc::before,
+    #tablaBandejaPedidosPorAtender .sorting_desc::after {
         top: 20px !important;
     }
 
-    tablaBandejaPedidosPorAtender td {
+    #tablaBandejaPedidosPorAtender td {
         vertical-align: middle !important;
-        text-align: center !important;
+        text-align: start !important;
     }
 
     #tablaBandejaPedidosPorAtender tbody div ul {
@@ -4315,10 +4457,10 @@ metas_dp .animated-progress {
         max-width: 200px !important;
     }
 
-    tablaBandejaPedidosAtendidos .sorting:before,
-    tablaBandejaPedidosAtendidos .sorting:after,
-    tablaBandejaPedidosAtendidos .sorting_desc:before,
-    tablaBandejaPedidosAtendidos .sorting_desc:after {
+    tablaBandejaPedidosAtendidos .sorting::before,
+    tablaBandejaPedidosAtendidos .sorting::after,
+    tablaBandejaPedidosAtendidos .sorting_desc::before,
+    tablaBandejaPedidosAtendidos .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4373,16 +4515,21 @@ metas_dp .animated-progress {
         max-width: 200px !important;
     }
 
-    #tablaPrincipal .sorting:before,
-    #tablaPrincipal .sorting:after,
-    #tablaPrincipal .sorting_desc:before,
-    #tablaPrincipal .sorting_desc:after {
+    #tablaPrincipal .sorting::before,
+    #tablaPrincipal .sorting::after,
+    #tablaPrincipal .sorting_desc::before,
+    #tablaPrincipal .sorting_desc::after {
         top: 20px !important;
     }
 
     #tablaPrincipal td {
         vertical-align: middle !important;
-        text-align: center !important;
+        text-align: start !important;
+    }
+
+    #tablaPrincipal td:nth-child(10),
+    #tablaPrincipal td:nth-child(11){
+            text-align: center !important;
     }
 }
 
@@ -4431,10 +4578,10 @@ metas_dp .animated-progress {
         width: 130px !important;
     }
 
-    .sorting:before,
-    .sorting:after,
-    .sorting_desc:before,
-    .sorting_desc:after {
+    #tablaSobresPorEnviar .sorting::before,
+    #tablaSobresPorEnviar .sorting::after,
+    #tablaSobresPorEnviar .sorting_desc::before,
+    #tablaSobresPorEnviar .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4476,10 +4623,10 @@ metas_dp .animated-progress {
         vertical-align: middle;
     }
 
-    .sorting:before,
-    .sorting:after,
-    .sorting_desc:before,
-    .sorting_desc:after {
+    #tblListadoRecojo .sorting::before,
+    #tblListadoRecojo .sorting::after,
+    #tblListadoRecojo .sorting_desc::before,
+    #tblListadoRecojo .sorting_desc::after {
         top: 20px !important;
     }
 
@@ -4545,62 +4692,400 @@ metas_dp .animated-progress {
     max-width: 350px !important;
 }
 
-/*---------------- MODULO OPERACIONES ----------------*/
+/*-------------------------------- MODULO OPERACIONES --------------------------------*/
 /*--- /operaciones.terminados ---*/
+#tablaOperacionesBandejadeSobres {
+    width: 100% !important;
+}
+
+#tablaOperacionesBandejadeSobres td:nth-child(6) span {
+    position: initial !important;
+    font-size: 12px !important;
+}
+
+#tablaOperacionesBandejadeSobres td {
+    vertical-align: middle !important;
+    text-align: start !important;
+}
+#tablaOperacionesBandejadeSobres td:nth-child(10) {
+    text-align: start;
+}
+
+@media screen and (max-width: 2249px) {
+    #tablaOperacionesBandejadeSobres {
+        width: 100% !important;
+        font-size: 14px !important;
+    }
+
+    #tablaOperacionesBandejadeSobres .btn-fontsize {
+        font-size: 15px;
+    }
+
+    #tablaOperacionesBandejadeSobres .sorting::before,
+    #tablaOperacionesBandejadeSobres .sorting::after,
+    #tablaOperacionesBandejadeSobres .sorting_desc::before,
+    #tablaOperacionesBandejadeSobres .sorting_desc::after {
+        top: 30px !important;
+    }
+
+}
+
+@media screen and (max-width: 2144px) {
+    #tablaOperacionesBandejadeSobres .btn-fontsize {
+        font-size: 13px;
+        min-width: 85px;
+        max-width: 160px;
+    }
+
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesBandejadeSobres th:nth-child(6) {
+        max-width: 230px !important;
+    }
+
+    #tablaOperacionesBandejadeSobres td:nth-child(6) span {
+        white-space: break-spaces !important;
+        padding: 8px !important;
+    }
+}
+
 /*--- /operaciones.correcciones ---*/
+#tablaOperacionesBandejadeCorrecciones {
+    width: 100% !important;
+}
+
+#tablaOperacionesBandejadeCorrecciones td {
+    vertical-align: middle !important;
+    text-align: start !important;
+}
+
+#tablaOperacionesBandejadeCorrecciones tbody tr {
+    font-weight: lighter !important;
+}
+
+@media screen and (max-width: 2249px) {
+    #tablaOperacionesBandejadeCorrecciones {
+        width: 100% !important;
+        font-size: 14px !important;
+    }
+
+    #tablaOperacionesBandejadeCorrecciones .btn-fontsize {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 2144px) {
+    #tablaOperacionesBandejadeCorrecciones .btn-fontsize {
+        font-size: 13px;
+        min-width: 85px;
+        max-width: 160px;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesBandejadeCorrecciones th:nth-child(6) {
+        max-width: 230px !important;
+    }
+
+    #tablaOperacionesBandejadeCorrecciones td:nth-child(6) span {
+        white-space: break-spaces !important;
+        padding: 8px !important;
+    }
+}
+
 /*--- /operaciones/recojos ---*/
+/*------------------PENDIENTE*/
+
 /*--- /operaciones.poratender ---*/
+#tablaOperacionesPedidosPorAtender {
+    width: 100% !important;
+}
+
+#tablaOperacionesPedidosPorAtender td {
+    vertical-align: middle !important;
+}
+
+@media screen and (max-width: 2249px) {
+    #tablaOperacionesPedidosPorAtender {
+        width: 100% !important;
+        font-size: 14px !important;
+    }
+
+    #tablaOperacionesPedidosPorAtender .btn-fontsize {
+        font-size: 15px;
+    }
+
+    #tablaOperacionesPedidosPorAtender .sorting::before,
+    #tablaOperacionesPedidosPorAtender .sorting::after,
+    #tablaOperacionesPedidosPorAtender .sorting_desc::before,
+    #tablaOperacionesPedidosPorAtender .sorting_desc::after {
+        top: 20px !important;
+    }
+
+    #tablaOperacionesPedidosPorAtender tbody td:nth-child(11) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        grid-gap: 10px;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesPedidosPorAtender {
+        font-size: 13px !important;
+    }
+}
+
 /*--- /operaciones.atendidos ---*/
+
+#tablaOperacionesPedidosAtendidos {
+    width: 100% !important;
+}
+
+#tablaOperacionesPedidosAtendidos td {
+    vertical-align: middle !important;
+}
+
+#tablaOperacionesPedidosAtendidos .sorting::before,
+#tablaOperacionesPedidosAtendidos .sorting::after,
+#tablaOperacionesPedidosAtendidos .sorting_desc::before,
+#tablaOperacionesPedidosAtendidos .sorting_desc::after {
+    top: 20px !important;
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesPedidosAtendidos {
+        font-size: 13px !important;
+    }
+}
+
 /*--- /operaciones.entregados ---*/
+
+#tablaOperacionesJefeOperaciones {
+    width: 100% !important;
+}
+
+#tablaOperacionesJefeOperaciones td {
+    vertical-align: middle !important;
+    text-align: start !important;
+}
+
+#tablaOperacionesJefeOperaciones td:nth-child(6) span{
+    position: initial !important;
+    padding: 4px !important;
+}
+
+#tablaOperacionesJefeOperaciones .sorting::before,
+#tablaOperacionesJefeOperaciones .sorting::after,
+#tablaOperacionesJefeOperaciones .sorting_desc::before,
+#tablaOperacionesJefeOperaciones .sorting_desc::after {
+    top: 20px !important;
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesJefeOperaciones {
+        font-size: 13px !important;
+    }
+}
+
 /*--- /pedidos/estados/anulados ---*/
+#tablaOperacionesPendienteAnulacion {
+    width: 100% !important;
+}
 
-/*---------------- MODULO COURRIER ----------------*/
+#tablaOperacionesPendienteAnulacion td {
+    vertical-align: middle !important;
+}
+
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(9) {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-direction: column !important;
+    grid-gap: 2px;
+}
+
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(9) .btn-fontsize {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-width: 75px;
+    width: 100px;
+    font-size: 11px;
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaOperacionesPendienteAnulacion {
+        font-size: 13px !important;
+    }
+}
+
+/*-------------------------------- MODULO COURRIER --------------------------------*/
 /*--- /envios.estadosobres ---*/
-/*--- /envios.porconfirmar ---*/
-/*--- /envios.distribuirsobres ---*/
-/*--- /envios.sindireccion ---*/
-/*--- /envios.parareparto ---*/
-/*--- /envios.rutaenvio ---*/
-/*--- /envios/motorizados/confirmar ---*/
-/*--- /envios.seguimientoprovincia ---*/
+#tablaRecepcionados,
+#tablaEntregados,
+#tablaAnulados_courier,
+#tablaAnulados {
+    width: 100% !important;
+}
 
-/*---------------- MODULO MOTORIZADO ----------------*/
+#tablaRecepcionados td,
+#tablaEntregados td,
+#tablaAnulados_courier td
+#tablaAnulados td {
+    vertical-align: middle !important;
+}
+
+#tablaAnulados_courier td:nth-child(6) span,
+#tablaAnulados td:nth-child(6) span {
+    position: initial !important;
+    font-size: 12px !important;
+}
+
+#tablaEntregados td:nth-child(10) span {
+    white-space: break-spaces !important;
+}
+
+@media screen and (max-width: 1500px) {
+    #tablaRecepcionados,
+    #tablaEntregados,
+    #tablaAnulados_courier,
+    #tablaAnulados {
+        font-size: 13px !important;
+    }
+}
+
+/*--- /envios.porconfirmar ---*/
+#tablaCourierRecepciondeSobres {
+    width: 100% !important;
+}
+
+/*--- /envios.distribuirsobres ---*/
+
+/*--- /envios.sindireccion ---*/
+#tablaCourierSobresSinDireccion {
+    width: 100% !important;
+}
+
+#tablaCourierSobresSinDireccion td {
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
+/*--- /envios.parareparto ---*/
+#tablaPrincipal_sur,
+#tablaPrincipal_centro,
+#tablaPrincipal_norte{
+    width: 100% !important;
+}
+
+#tablaPrincipal_sur td,
+#tablaPrincipal_centro td,
+#tablaPrincipal_norte td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+/*--- /envios.rutaenvio ---*/
+
+/*--- /envios/motorizados/confirmar ---*/
+#tablaCourierConfirmarFoto{
+    width: 100% !important;
+}
+
+#tablaCourierConfirmarFoto .sorting::before,
+#tablaCourierConfirmarFoto .sorting::after,
+#tablaCourierConfirmarFoto .sorting_desc::before,
+#tablaCourierConfirmarFoto .sorting_desc::after{
+    top: 20px !important;
+}
+/*--- /envios.seguimientoprovincia ---*/
+#tablaCourierSeguimientoProvincia{
+    width: 100% !important;
+}
+
+#tablaCourierSeguimientoProvincia td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
+/*-------------------------------- MODULO MOTORIZADO --------------------------------*/
 /*--- /envios.recepcionmotorizado ---*/
+
 /*--- /envios/motorizados ---*/
+#tablaEnmotorizado{
+    width: 100% !important;
+}
 /*--- /envios.devueltos ---*/
 
-/*---------------- MODULO PAGOS ----------------*/
+
+/*-------------------------------- MODULO PAGOS --------------------------------*/
 /*--- /pagos ---*/
+
 /*--- /pagos.mispagos ---*/
+
 /*--- /pagos.pagosincompletos ---*/
+
 /*--- /pagos.pagosobservados ---*/
 
-/*---------------- MODULO ADMINISTRACION ----------------*/
+
+/*-------------------------------- MODULO ADMINISTRACION --------------------------------*/
 /*--- /administracion.porrevisar ---*/
+
 /*--- /administracion.pendientes ---*/
+
 /*--- /administracion.observados ---*/
+
 /*--- /administracion.aprobados ---*/
+
 /*--- /movimientos ---*/
 
-/*---------------- MODULO PERSONAS ----------------*/
-/*--- /clientes ---*/
-/*--- /clientes.recurrentes ---*/
-/*--- /clientes.abandonos.recientes ---*/
-/*--- /clientes.abandonos ---*/
-/*--- /clientes.nuevos ---*/
-/*--- /clientes.recuperados.recientes ---*/
-/*--- /clientes.recuperados ---*/
-/*--- /clientes.nulos ---*/
-/*--- /basefria ---*/
 
-/*---------------- MODULO REPORTES ----------------*/
+/*-------------------------------- MODULO PERSONAS --------------------------------*/
+/*--- /clientes ---*/
+
+/*--- /clientes.recurrentes ---*/
+
+/*--- /clientes.abandonos.recientes ---*/
+
+/*--- /clientes.abandonos ---*/
+
+/*--- /clientes.nuevos ---*/
+
+/*--- /clientes.recuperados.recientes ---*/
+
+/*--- /clientes.recuperados ---*/
+
+/*--- /clientes.nulos ---*/
+
+/*--- /basefria ---*/
+#tablaserverside{
+    width: 100% !important;
+}
+
+#tablaserverside td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
+#tablaserverside td:nth-child(5){
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    grid-gap: 5px !important;
+}
+
+/*-------------------------------- MODULO REPORTES --------------------------------*/
 /*--- /reportes.index ---*/
 /*--- /reportes.operaciones ---*/
 /*--- /reportes.analisis ---*/
 
-/*---------------- MODULO USUARIOS ----------------*/
+/*-------------------------------- MODULO USUARIOS --------------------------------*/
 /*--- /roles ---*/
 /*--- /users ---*/
+
 /*--- /users.encargados ---*/
 /*--- /users.asesores ---*/
 /*--- /users.jefes ---*/
@@ -4608,3 +5093,5 @@ metas_dp .animated-progress {
 /*--- /users.misoperarios ---*/
 /*--- /users.mipersonal ---*/
 /*--- /users.llamadas ---*/
+
+

@@ -604,6 +604,7 @@ $banca"
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->join('imagen_atencions as ia', 'pedidos.id', 'ia.pedido_id')
                 ->select([
                     'pedidos.id',
                     DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
@@ -627,6 +628,8 @@ $banca"
                     'dp.fecha_recepcion',
                     'dp.tipo_banca',
                     'pedidos.motivo',
+                    'ia.adjunto',
+                    'ia.id as id_imagen_atenciones',
                     DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
                 ])
                 ->where('pedidos.estado', '1')
@@ -634,7 +637,7 @@ $banca"
                 ->where('pedidos.pendiente_anulacion', '1');
 
 
-            if (Auth::user()->rol == "Operario") {
+            if (Auth::user()->rol == User::ROL_OPERARIO) {
 
                 $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador'])
                     ->where('users.estado', '1')
@@ -645,7 +648,7 @@ $banca"
                     ->pluck('users.identificador');
                 $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
 
-            } else if (Auth::user()->rol == "Jefe de operaciones") {
+            } else if (Auth::user()->rol ==User::ROL_JEFE_OPERARIO) {
 
                 $operarios = User::where('users.rol', 'Operario')
                     ->where('users.estado', '1')
@@ -668,12 +671,17 @@ $banca"
 
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
+                ->addColumn('adjunto', function ($pedido) {
+                    $buton = '';
+                    $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
+                    return $buton;
+                })
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
                     if ($pedido->pendiente_anulacion == 1) {
-                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm" >EMITIR N/C</button>';
+                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize" >EMITIR N/C</button>';
                     }
-                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item py-2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item py-2 btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                     $btn .= ' <button class="btn btn-warning btn-sm"
                     data-toggle="jqconfirm"
                     data-target="' . route('pedidos.confirmar.anular', ['pedido_id' => $pedido->id, 'action' => 'confirm_anulled_cancel']) . '"
@@ -683,7 +691,7 @@ $banca"
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'action2'])
+                ->rawColumns(['adjunto','action'])
                 ->toJson();
         }
 

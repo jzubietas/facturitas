@@ -33,8 +33,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <div class="form-group col-lg-6">
 
                 <select name="asesores_pago" class="border form-control selectpicker border-secondary"
@@ -58,19 +58,19 @@
             <table id="tablaPrincipal" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">COD.</th>
-                    <th scope="col">COD.</th>
-                    <th scope="col">COD2</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Codigo pedido</th>
-                    <th scope="col">Fecha Voucher</th>
-                    <th scope="col">Asesor</th>
-                    <th scope="col">Observacion</th>
+                    <th scope="col" class="align-middle">COD.</th>
+                    <th scope="col" class="align-middle">COD.</th>
+                    <th scope="col" class="align-middle">COD2</th>
+                    <th scope="col" class="align-middle">Cliente</th>
+                    <th scope="col" class="align-middle">Codigo pedido</th>
+                    <th scope="col" class="align-middle">Fecha Voucher</th>
+                    <th scope="col" class="align-middle">Asesor</th>
+                    <th scope="col" class="align-middle">Observacion</th>
                     {{--<th scope="col">Total cobro</th>--}}
-                    <th scope="col">Total pagado</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Subcondicion</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="align-middle">Total pagado</th>
+                    <th scope="col" class="align-middle">Estado</th>
+                    <th scope="col" class="align-middle">Subcondicion</th>
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -82,7 +82,7 @@
 
 @stop
 
-@section('css')
+@push('css')
     {{-- <link rel="stylesheet" href="../css/admin_custom.css">--}}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <style>
@@ -136,8 +136,25 @@
             text-shadow: 10px 2px #6ac7c2;
         }
 
+        #tablaPrincipal {
+            width: 100% !important;
+        }
+
+        #tablaPrincipal td {
+            text-align: start !important;
+            vertical-align: center !important;
+        }
+
+        #tablaPrincipal td:nth-child(9) {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            grid-gap: 5px;
+        }
+
     </style>
-@stop
+@endpush
 
 @section('js')
 

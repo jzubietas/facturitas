@@ -88,26 +88,48 @@
       <button style="background: none; border: none" onclick="openFullscreen();"><i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i></button>
     </div>
 
-    {{--TABLA DUAL--}}
-    <div class="">
-      <div class=" ">
-        <div class="row">
-          <div class="col-md-6">
-            <div id="meta"></div>
+      {{-- TABLA DUAL --}}
+      <div class="" style=" overflow: hidden !important;">
+          <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
+              <div class="row">
+                  <div class="contain-table-dual">
+                      <div class="col-lg-6" id="meta"></div>
+                      <div class="col-lg-6" id="metas_dp"></div>
+                  </div>
+
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div id="supervisor_total"></div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div id="supervisor_A"></div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div id="supervisor_B"></div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div id="metas_total"></div>
+                  </div>
+
+              </div>
+
           </div>
-          <div class="col-md-6">
-            <div id="metas_dp"></div>
-          </div>
-          <div class="col-md-12">
-            <div id="metas_total"></div>
-          </div>
-        </div>
       </div>
-    </div>
-    {{--FIN-TABLA-DUAL--}}
+      {{-- FIN-TABLA-DUAL --}}
 
 
   </div>
+
+{{--    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog- modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img alt="Dia de la mujer" src="{{ asset('/img/diaMujer.jpg') }}" style="width: 100%">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin Modal -->--}}
 
   <div class="container-fluid">
     <div class="row">
@@ -184,7 +206,7 @@
       </div>
       <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
         <div class="card">
-          <div class="card-body pl-0">
+          <div class="card-body">
             <div id="pagosxmes" class="w-100" style="height: 550px;"></div>
           </div>
         </div>
@@ -217,16 +239,29 @@
       text-align: end;
       padding-right: 5px;
     }
-    td:nth-child(1),
-    td:nth-child(2),
-    td:nth-child(3){
-      font-weight: bold;
+    .contain-table-dual {
+        display: flex !important;
+        width: 100% !important;
     }
-    td:nth-child(3) {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    @media screen and (max-width: 2249px) {
+        .contain-table-dual {
+            display: flex !important;
+            width: 100% !important;
+        }
+
+        #meta,
+        #metas_dp {
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+
+        #supervisor_total table tbody tr th:nth-child(n),
+        #supervisor_A table tbody tr th:nth-child(n),
+        #metas_total table tbody tr th:nth-child(n) {
+            width: 33.33333% !important;
+        }
     }
+
   </style>
 @endpush
 
@@ -249,6 +284,10 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
+
+        $('#exampleModalCenter').modal('show');
+
       window.cargaNueva = function (entero) {
         console.log(' '+entero)
         var fd=new FormData();

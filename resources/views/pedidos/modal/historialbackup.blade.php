@@ -36,9 +36,9 @@
                   @endforeach
                 </tbody>
               </table>
-            </div>   
+            </div>
           </div>
-        </div>  
+        </div>
         <div class="modal-footer">
           <a href="{{ route('pedidos.sinpagos') }}" class="btn btn-danger btn-sm">Ver deudores</a>
           <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">Cerrar</button>

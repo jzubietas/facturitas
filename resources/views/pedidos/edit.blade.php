@@ -23,9 +23,9 @@
                 {!! Form::model($pedido, ['route' => ['pedidos.update', $pedido], 'method' => 'put','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
 
                 <div class="card">
-                    <div class="card-body pl-0">
+                    <div class="card-body">
                         <div class="border rounded card-body border-secondary">
-                            <div class="card-body pl-0">
+                            <div class="card-body">
                                 <div class="form-row">
                                   <input type="hidden" id="txtValidaSobre" name="txtValidaSobre" value="Si">
                                     @foreach ($pedidos as $pedido)

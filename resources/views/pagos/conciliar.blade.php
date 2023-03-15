@@ -9,7 +9,7 @@
           </button>
         </div>
         <div class="card">
-          <div class="card-body pl-0">
+          <div class="card-body">
             <div class="card-body border border-secondary rounded">
               <table id="tablaPrincipalConciliar" class="table table-striped" style="text-align: center">
                 <thead><h4 style="text-align: center"><strong>Listado de la clientes con pedidos con deuda</strong></h4>

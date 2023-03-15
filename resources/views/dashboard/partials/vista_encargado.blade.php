@@ -100,27 +100,25 @@
             </div>
 
 
-            {{--TABLA DUAL--}}
+            {{-- TABLA DUAL --}}
             <div class="" style=" overflow: hidden !important;">
                 <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div id="meta"></div>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="metas_dp"></div>
+                        <div class="contain-table-dual">
+                            <div class="col-lg-6" id="meta"></div>
+                            <div class="col-lg-6" id="metas_dp"></div>
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div id="supervisor_total"></div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div id="supervisor_A"></div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div id="supervisor_B"></div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div id="metas_total"></div>
                         </div>
 
@@ -128,16 +126,27 @@
 
                 </div>
             </div>
-
-            {{--FIN-TABLA-DUAL--}}
+            {{-- FIN-TABLA-DUAL --}}
         </div>
         {{--FIN-DATATABLE--}}
+
+{{--        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog- modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img alt="Dia de la mujer" src="{{ asset('/img/diaMujer.jpg') }}" style="width: 100%">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Fin Modal -->--}}
 
         <div class="col-md-12">
             <div class="row" id="widget-container">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-body pl-0">
+                        <div class="card-body">
                             <div class="">
                                 <ul class="list-group">
                                     <li class="list-group-item">
@@ -310,6 +319,9 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            $('#exampleModalCenter').modal('show');
+
             window.cargaNueva = function (entero) {
                 console.log(' ' + entero)
                 var fd = new FormData();
@@ -341,11 +353,15 @@
             cargaNueva(2);
 
 
-            @if($mirol == 'Encargado' && $id == 46)
+            console.log('ROL: ',"{{$mirol}}");
+            console.log('ID: ',"{{$idEncargado}}");
+            @if($mirol == 'Encargado' && $idEncargado == 46)
             cargaNueva(4);
+
             @endif
 
-            @if($mirol == 'Encargado' && $id == 24)
+
+            @if($mirol == 'Encargado' && $idEncargado == 24)
             cargaNueva(5);
             @endif
 
@@ -354,10 +370,10 @@
                 cargaNueva(1);
                 cargaNueva(2);
 
-            @if($mirol == 'Encargado' && $id == 46)
+            @if($mirol == 'Encargado' && $idEncargado == 46)
             cargaNueva(4);
             @endif
-            @if($mirol == 'Encargado' && $id == 24)
+            @if($mirol == 'Encargado' && $idEncargado == 24)
             cargaNueva(5);
                 @endif
             }

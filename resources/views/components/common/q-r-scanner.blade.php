@@ -3,7 +3,7 @@
     <i class="fa fa-barcode" aria-hidden="true"></i> Escanear
 </button>
 <style>
-    .switch_box{
+    .switch_box {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -20,7 +20,7 @@
 
     /* Switch 1 Specific Styles Start */
 
-    input[type="checkbox"].switch_1{
+    input[type="checkbox"].switch_1 {
         font-size: 16px;
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -36,19 +36,19 @@
         transition: all .2s ease-in-out;
     }
 
-    input[type="checkbox"].switch_1:checked{
+    input[type="checkbox"].switch_1:checked {
         background: #0ebeff;
     }
 
-    input[type="checkbox"].switch_1:after{
+    input[type="checkbox"].switch_1:after {
         position: absolute;
         content: "";
         width: 1.5em;
         height: 1.5em;
         border-radius: 50%;
         background: #fff;
-        -webkit-box-shadow: 0 0 .25em rgba(0,0,0,.3);
-        box-shadow: 0 0 .25em rgba(0,0,0,.3);
+        -webkit-box-shadow: 0 0 .25em rgba(0, 0, 0, .3);
+        box-shadow: 0 0 .25em rgba(0, 0, 0, .3);
         -webkit-transform: scale(.7);
         transform: scale(.7);
         left: 0;
@@ -56,8 +56,12 @@
         transition: all .2s ease-in-out;
     }
 
-    input[type="checkbox"].switch_1:checked:after{
+    input[type="checkbox"].switch_1:checked:after {
         left: calc(100% - 1.5em);
+    }
+
+    img:hover {
+        transform: initial !important;
     }
 
     /* Switch 1 Specific Style End */
@@ -97,7 +101,8 @@
 
                             <img src="{{asset('imagenes/scan.gif')}}" width="80%"><br>
 
-                            <input type="text" value="" id="codigo_confirmar" placeholder="00-0000-0" name="hiddenCodigo" style="    opacity: 0.5;
+                            <input type="text" value="" id="codigo_confirmar" placeholder="00-0000-0"
+                                   name="hiddenCodigo" style="    opacity: 0.5;
     border: 1px solid #bbbbbb;
     border-radius: 4px;
     padding: 8px;
@@ -144,16 +149,16 @@
             $('#respuesta_barra').html('');
 
 
-            if($('#modo_fast').is(':checked')){
+            if ($('#modo_fast').is(':checked')) {
                 console.log("modo speed");
                 $('#close-scan').fadeOut();
             }
 
-            $('#modo_fast').on('change', function(){
-                if($(this).is(':checked')){
+            $('#modo_fast').on('change', function () {
+                if ($(this).is(':checked')) {
                     console.log("desaparece aceptar");
                     $('#close-scan').fadeOut();
-                }else{
+                } else {
                     console.log("aparece aceptar");
                     $('#close-scan').fadeIn();
                 }
@@ -187,14 +192,14 @@
                 data.fecha_salida = $('#fecha_escaneo').val()
             @endif
 
-             if($('#modo_fast').is(':checked')){
+            if ($('#modo_fast').is(':checked')) {
 
 
                 console.log("Modo fast activado");
 
                 @if($withFecha)
                 var fecha_salida_validacion = $('#fecha_escaneo').val();
-                if(fecha_salida_validacion == ""){
+                if (fecha_salida_validacion == "") {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Debe ingresar una fecha',
@@ -203,7 +208,7 @@
                     })
 
                     return false;
-                }else{
+                } else {
                     data.fecha_salida = $('#fecha_escaneo').val()
                 }
                 @endif
@@ -229,7 +234,7 @@
                     /*****************
                      * VERIFICACIONES DE RESPUESTAS
                      */
-                    if(data.error == 1){
+                    if (data.error == 1) {
 
                         Swal.fire({
                             icon: 'error',
@@ -240,9 +245,9 @@
                             timer: 1500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</b></span>');
 
-                    }else if(data.error == 4){
+                    } else if (data.error == 4) {
 
                         Swal.fire({
                             icon: 'error',
@@ -253,10 +258,9 @@
                             timer: 1500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</span>');
 
-                    }
-                    else if(data.error == 5){
+                    } else if (data.error == 5) {
 
                         Swal.fire({
                             icon: 'error',
@@ -267,9 +271,9 @@
                             timer: 1500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</span>');
 
-                    }else if(data.error == 6){
+                    } else if (data.error == 6) {
 
                         Swal.fire({
                             icon: 'error',
@@ -280,9 +284,9 @@
                             timer: 1500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</span>');
 
-                    }else if(data.error == 0){
+                    } else if (data.error == 0) {
 
                         Swal.fire({
                             icon: 'success',
@@ -301,8 +305,7 @@
                         }).join('')}</ul><br>`);
 
 
-
-                    }else if(data.error == 3){
+                    } else if (data.error == 3) {
 
                         Swal.fire({
                             icon: 'success',
@@ -316,9 +319,8 @@
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
 
-                        $('#pedidos-procesados').append('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
+                        $('#pedidos-procesados').append('<table class="table ' + data.clase_confirmada + ' mb-0"><tr><td class="pb-8 pt-8">' + data.codigo + '</td><td class="pb-8 pt-8">' + data.zona + '</td><td class="pb-8 pt-8">' + data.cantidad_recibida + '/' + data.cantidad + '</td></tr></table>');
                     }
-
 
 
                     /*
@@ -338,7 +340,7 @@
                     @endforeach
                     */
                 }
-            }).always(function(){
+            }).always(function () {
                 //$('#codigo_confirmar').focus();
             });
 
@@ -353,7 +355,7 @@
             var fecha_salida_validacion = $('#fecha_escaneo').val();
 
             @if($withFecha)
-            if(fecha_salida_validacion == ""){
+            if (fecha_salida_validacion == "") {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Debe ingresar una fecha',
@@ -362,7 +364,7 @@
                 })
 
                 return false;
-            }else{
+            } else {
                 data.fecha_salida = $('#fecha_escaneo').val()
             }
             @endif
@@ -378,7 +380,7 @@
         /***********
          * FIN ESCANEAR MOUSE
          */
-function ConfirmarOPBarra(data){
+        function ConfirmarOPBarra(data) {
 
             $.ajax({
                 data: data,
@@ -395,7 +397,7 @@ function ConfirmarOPBarra(data){
                     /*****************
                      * VERIFICACIONES DE RESPUESTAS
                      */
-                    if(data.error == 1){
+                    if (data.error == 1) {
                         $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
@@ -406,9 +408,9 @@ function ConfirmarOPBarra(data){
                             timer: 500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</b></span>');
 
-                    }else if(data.error == 3){
+                    } else if (data.error == 3) {
                         $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'success',
@@ -424,8 +426,8 @@ function ConfirmarOPBarra(data){
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
 
-                        $('#pedidos-procesados').html('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
-                    }else if(data.error == 4){
+                        $('#pedidos-procesados').html('<table class="table ' + data.clase_confirmada + ' mb-0"><tr><td class="pb-8 pt-8">' + data.codigo + '</td><td class="pb-8 pt-8">' + data.zona + '</td><td class="pb-8 pt-8">' + data.cantidad_recibida + '/' + data.cantidad + '</td></tr></table>');
+                    } else if (data.error == 4) {
                         $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
@@ -436,10 +438,9 @@ function ConfirmarOPBarra(data){
                             timer: 500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</span>');
 
-                    }
-                    else if(data.error == 5){
+                    } else if (data.error == 5) {
                         $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
@@ -450,9 +451,9 @@ function ConfirmarOPBarra(data){
                             timer: 500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</span>');
 
-                    }else if(data.error == 6){
+                    } else if (data.error == 6) {
                         $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
@@ -463,11 +464,11 @@ function ConfirmarOPBarra(data){
                             timer: 500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</span>');
 
                         $('#tablaPrincipal').DataTable().ajax.reload();
 
-                    }else if(data.error == 0) {
+                    } else if (data.error == 0) {
                         $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'success',
@@ -478,9 +479,9 @@ function ConfirmarOPBarra(data){
                             timer: 1000
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</span>');
 
-                    }else if(data.error == 7) {
+                    } else if (data.error == 7) {
                         $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
@@ -491,59 +492,59 @@ function ConfirmarOPBarra(data){
                             timer: 500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                        $('#respuesta_barra').html('<span class="' + data.class + '">' + data.html + '</span>');
                     }
-/*
-                    setTimeout(function (){
-                        $('#respuesta_barra').fadeOut();
-                    },2200);
+                    /*
+                                        setTimeout(function (){
+                                            $('#respuesta_barra').fadeOut();
+                                        },2200);
 
- */
+                     */
 
                     /*
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
                         return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
                     }).join('')}</ul><br>`);*/
-/*
-                    if(data.error == 0){
-                        $('#pedidos-procesados').html(`<h2 class="font-weight-bold"><i class="fa fa-check text-success" aria-hidden="true"></i> ${codigos_procesados.length} </h2><h4>Pedidos Procesados</h4><p>Siga Escaneando pedidos</p>`);
+                    /*
+                                        if(data.error == 0){
+                                            $('#pedidos-procesados').html(`<h2 class="font-weight-bold"><i class="fa fa-check text-success" aria-hidden="true"></i> ${codigos_procesados.length} </h2><h4>Pedidos Procesados</h4><p>Siga Escaneando pedidos</p>`);
 
-                        $('#respuesta_barra').removeClass("text-danger");
-                        $('#respuesta_barra').removeClass("text-success");
-                        $('#respuesta_barra').addClass(data.class);
-                        $('#respuesta_barra').html(data.html);
-
-
-                        setTimeout(function(){
-                            console.log("cerrar modal");
-                            //$('#pedidos-procesados').html("");
-                            //$('#modal-escanear').modal('hide');
-                        },300);
+                                            $('#respuesta_barra').removeClass("text-danger");
+                                            $('#respuesta_barra').removeClass("text-success");
+                                            $('#respuesta_barra').addClass(data.class);
+                                            $('#respuesta_barra').html(data.html);
 
 
-                        @foreach($tablesIds as $table)
-                        $('{{$table}}').DataTable().draw(false)
+                                            setTimeout(function(){
+                                                console.log("cerrar modal");
+                                                //$('#pedidos-procesados').html("");
+                                                //$('#modal-escanear').modal('hide');
+                                            },300);
+
+
+@foreach($tablesIds as $table)
+                    $('{{$table}}').DataTable().draw(false)
                         @endforeach
-                        if (codigos_agregados.length === 0) {
-                            //$('#modal-escanear').modal('hide')
-                        }
+                    if (codigos_agregados.length === 0) {
+                        //$('#modal-escanear').modal('hide')
+                    }
 
-                    }else if(data.error == 3){
+                }else if(data.error == 3){
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pedido identificado',
-                            color: '#FFF',
-                            background: '#79b358',
-                            showConfirmButton: false,
-                            timer: 600
-                        })
-                        console.log(data);
-                        codigos_agregados.push(data.codigo);
-                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pedido identificado',
+                        color: '#FFF',
+                        background: '#79b358',
+                        showConfirmButton: false,
+                        timer: 600
+                    })
+                    console.log(data);
+                    codigos_agregados.push(data.codigo);
+                    codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
 
-                        $('#pedidos-procesados').append('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
-                    }*/
+                    $('#pedidos-procesados').append('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
+                }*/
 
                     /*
                                         $('#pedidos-procesados').append(`<p><b class="text-danger w-100">codigos no procesados (${codigos_no_procesados.length}): </b></p><ul>${codigos_no_procesados.map(function (codigo) {
@@ -553,10 +554,8 @@ function ConfirmarOPBarra(data){
                      */
 
 
-
-
                 }
-            }).always(function(){
+            }).always(function () {
                 $('#codigo_confirmar').focus();
             });
 

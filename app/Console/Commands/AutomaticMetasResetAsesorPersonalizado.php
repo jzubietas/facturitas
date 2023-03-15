@@ -42,15 +42,15 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
     public function handle()
     {
         $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
-        $periodo_original=Carbon::parse($fp->created_at)->startOfMonth();
+        $periodo_original=Carbon::parse($fp->created_at)->clone()->startOfMonth();
         //$periodo_actual=Carbon::parse(now())->endOfMonth();
-        $periodo_actual=Carbon::parse($this->argument('fecha'))->endOfMonth();
+        $periodo_actual=Carbon::parse($this->argument('fecha'))->clone()->startOfMonth()->endOfMonth()->endOfDay();
 
         $this->warn( $periodo_original );
         $this->info( $periodo_actual );
 
         $diff = ($periodo_original->diffInMonths($periodo_actual))+1; //Cantodad de recorridos
-        $this->warn( $diff );
+        $this->warn( $diff ." diferencia en meses");
 
         //crear metas este mes para usuarios
 
@@ -60,7 +60,7 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
 
         for ($i=0; $i<$diff; $i++){
 
-            $periodo_actual=Carbon::parse($fp->created_at)->addMonths($i);
+            $periodo_actual=Carbon::parse($fp->created_at)->clone()->addMonths($i);
             $where_anio=$periodo_actual->format('Y');
             $where_mes=$periodo_actual->format('m');
 
@@ -102,14 +102,14 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
                             'meta_quincena'=>0
                         ]
                     );
-                    User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
+                    /*User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
                         [
                             'meta_pedido'=>0,
                             'meta_pedido_2'=>0,
                             'meta_cobro'=>0,
                             'meta_quincena'=>0
                         ]
-                    );
+                    );*/
 
                 }
 

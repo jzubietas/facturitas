@@ -58,10 +58,11 @@ class DireccionGrupo extends Model implements HasMedia
         'fecha_salida_format'
     ];
 
-    protected $casts=[
+    protected $casts = [
         'courier_estado' => 'boolean',
         'courier_data' => 'object',
     ];
+
     protected static function booted()
     {
         parent::booted();
@@ -80,6 +81,7 @@ class DireccionGrupo extends Model implements HasMedia
             Pedido::EN_TIENDA_AGENTE_OLVA_INT,
         ]);
     }
+
     public function scopeInOlva($query)
     {
         return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [
@@ -90,6 +92,7 @@ class DireccionGrupo extends Model implements HasMedia
             //Pedido::ENTREGADO_PROVINCIA_INT,
         ]);
     }
+
     public function scopeInOlvaAll($query)
     {
         return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [
@@ -100,6 +103,7 @@ class DireccionGrupo extends Model implements HasMedia
             Pedido::NO_ENTREGADO_OLVA_INT,
         ]);
     }
+
     public function scopeInOlvaFinalizado($query)
     {
         return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [
@@ -170,71 +174,71 @@ class DireccionGrupo extends Model implements HasMedia
         return $this->reprogramacion_at != null && $this->reprogramacion_accept_at == null;
     }
 
-  protected $fillable = [
-    'id',
-    'correlativo',
-  'destino',
-  'distribucion',
-  'condicion_envio_code',
-  'condicion_envio_at',
-  'condicion_envio',
-  'subcondicion_envio',
-  'condicion_sobre',
-  'foto1',
-  'foto2',
-  'foto3',
-  'fecha_recepcion',
-  'atendido_por',
-  'atendido_por_id',
-  'nombre_cliente',
-  'celular_cliente',
-  'icelular_cliente',
-  'estado',
-  'motorizado_id',
-  'created_at',
-  'updated_at',
-  'cliente_id',
-  'user_id',
-  'codigos',
-  'producto',
-  'identificador',
-  'celular',
-  'nombre',
-  'fecha',
-  'cantidad',
-  'importe',
-  'direccion',
-  'referencia',
-  'observacion',
-  'gmlink',
-  'distrito',
-  'destino2',
-  'pedido_id',
-  'fecha_salida',
-  'motorizado_status',
-  'motorizado_sustento_text',
-  'motorizado_sustento_foto',
-  'codigos_confirmados',
-  'cambio_direccion_sustento',
-  'fecha_recepcion_motorizado',
-  'cambio_direccion_at',
-  'estado_consinsobre',
-  'reprogramacion_at',
-  'reprogramacion_solicitud_user_id',
-  'reprogramacion_solicitud_at',
-  'reprogramacion_accept_user_id',
-  'reprogramacion_accept_at',
-  'fecha_salida_old_at',
-  'relacionado',
-  'courier_sync_at',
-  'courier_failed_sync_at',
-  'courier_sync_finalized',
-  'courier_estado',
-  'courier_data',
-  'add_screenshot_at',
-    'cod_recojo',
-    'env_sustento_recojo'
-  ];
+    protected $fillable = [
+        'id',
+        'correlativo',
+        'destino',
+        'distribucion',
+        'condicion_envio_code',
+        'condicion_envio_at',
+        'condicion_envio',
+        'subcondicion_envio',
+        'condicion_sobre',
+        'foto1',
+        'foto2',
+        'foto3',
+        'fecha_recepcion',
+        'atendido_por',
+        'atendido_por_id',
+        'nombre_cliente',
+        'celular_cliente',
+        'icelular_cliente',
+        'estado',
+        'motorizado_id',
+        'created_at',
+        'updated_at',
+        'cliente_id',
+        'user_id',
+        'codigos',
+        'producto',
+        'identificador',
+        'celular',
+        'nombre',
+        'fecha',
+        'cantidad',
+        'importe',
+        'direccion',
+        'referencia',
+        'observacion',
+        'gmlink',
+        'distrito',
+        'destino2',
+        'pedido_id',
+        'fecha_salida',
+        'motorizado_status',
+        'motorizado_sustento_text',
+        'motorizado_sustento_foto',
+        'codigos_confirmados',
+        'cambio_direccion_sustento',
+        'fecha_recepcion_motorizado',
+        'cambio_direccion_at',
+        'estado_consinsobre',
+        'reprogramacion_at',
+        'reprogramacion_solicitud_user_id',
+        'reprogramacion_solicitud_at',
+        'reprogramacion_accept_user_id',
+        'reprogramacion_accept_at',
+        'fecha_salida_old_at',
+        'relacionado',
+        'courier_sync_at',
+        'courier_failed_sync_at',
+        'courier_sync_finalized',
+        'courier_estado',
+        'courier_data',
+        'add_screenshot_at',
+        'cod_recojo',
+        'env_sustento_recojo'
+    ];
 
     public function getFechaSalidaFormatAttribute()
     {
@@ -561,19 +565,19 @@ class DireccionGrupo extends Model implements HasMedia
     {
         if ($grupo->distribucion == 'OLVA') {
             $data = [
-                'condicion_envio' => ( ($grupo->cod_recojo==1)?  Pedido::$estadosCondicionEnvioCode[Pedido::RECOJO_MOTORIZADO_INT]:Pedido::$estadosCondicionEnvioCode[Pedido::MOTORIZADO_INT])  ,
-                'condicion_envio_code' => ( ($grupo->cod_recojo==1)? Pedido::RECOJO_MOTORIZADO_INT:Pedido::MOTORIZADO_INT),
+                'condicion_envio' => (($grupo->cod_recojo == 1) ? Pedido::$estadosCondicionEnvioCode[Pedido::RECOJO_MOTORIZADO_INT] : Pedido::$estadosCondicionEnvioCode[Pedido::MOTORIZADO_INT]),
+                'condicion_envio_code' => (($grupo->cod_recojo == 1) ? Pedido::RECOJO_MOTORIZADO_INT : Pedido::MOTORIZADO_INT),
                 'condicion_envio_at' => now(),
                 'cambio_direccion_at' => null,
             ];
             $grupoolva = DireccionGrupo::query()->activo()
-                ->where('condicion_envio_code', ( ($grupo->cod_recojo==1)? Pedido::RECOJO_MOTORIZADO_INT:Pedido::MOTORIZADO_INT))
+                ->where('condicion_envio_code', (($grupo->cod_recojo == 1) ? Pedido::RECOJO_MOTORIZADO_INT : Pedido::MOTORIZADO_INT))
                 ->where('distribucion', 'OLVA')
                 ->orderBy('created_at')
                 ->first();
             if ($grupoolva == null) {
                 $grupoolva = $grupo;
-                self::cambiarCondicionEnvio($grupo, ( ($grupo->cod_recojo==1)? Pedido::RECOJO_MOTORIZADO_INT:Pedido::MOTORIZADO_INT));
+                self::cambiarCondicionEnvio($grupo, (($grupo->cod_recojo == 1) ? Pedido::RECOJO_MOTORIZADO_INT : Pedido::MOTORIZADO_INT));
             } else {
                 $data['direccion_grupo'] = $grupoolva->id;
                 $grupo->pedidos()->update($data);
@@ -582,7 +586,7 @@ class DireccionGrupo extends Model implements HasMedia
             }
             return $grupoolva;
         } else {
-            self::cambiarCondicionEnvio($grupo, ( ($grupo->cod_recojo==1)? Pedido::RECOJO_MOTORIZADO_INT:Pedido::MOTORIZADO_INT));
+            self::cambiarCondicionEnvio($grupo, (($grupo->cod_recojo == 1) ? Pedido::RECOJO_MOTORIZADO_INT : Pedido::MOTORIZADO_INT));
         }
         return $grupo;
     }

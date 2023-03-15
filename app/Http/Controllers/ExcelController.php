@@ -36,8 +36,11 @@ use App\Exports\SobresRutaEnvioExport;
 use App\Exports\Templates\PlantillaExportBasefriaMultiple;
 use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
+use App\Exports\Templates\PlantillaExportClientesReporteMultiple;
+use App\Exports\Templates\PlantillaExportMovimientosReporteMultiple;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportPedidoMultiple;
+use App\Exports\Templates\PlantillaExportPedidosPerdonarCourierReporteMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
 use App\Exports\Templates\PlantillaRecepcionMotorizadoMultiple;
@@ -138,12 +141,9 @@ class ExcelController extends Controller
 
     public function movimientosExcel(Request $request)
     {
-        //return (new MovimientosExport)->movimientos($request)->download('Movimientos.xlsx');
-
-
-        return (new MovimientosExport)
-            //->clientes1($request)
-            ->movimientos($request)
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+        return (new PlantillaExportMovimientosReporteMultiple($request->desde,$request->hasta))
             ->download('Lista de Movimientos.xlsx');
     }
 
@@ -175,14 +175,51 @@ class ExcelController extends Controller
     }
     public function clientespedidosExcel(Request $request)
     {
-        return (new PlantillaExportPedidoMultiple($request->anio))
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+        return (new PlantillaExportClientesReporteMultiple('','2022'))
             ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
     }
+
+    public function pedidosPerdonarCourierExcel(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+        return (new PlantillaExportPedidosPerdonarCourierReporteMultiple('','2022'))
+            ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
+    }
+
     public function clientesTwoMonthAgoExcel(Request $request)
     {
         return (new PlantillaExportClientesdosmesesMultiple())
             ->download('Lista de Clientes_pedidos_2_meses.xlsx');
     }
+
+    public function basefriaAllAsesorExcel(Request $request)
+    {
+        if(!$request->user_id)
+        {
+            return (new BaseFriaPorAsesorExport)
+                ->clientes($request)
+                ->download('Lista Base Fria por todos los Asesores.xlsx');
+        }
+        else
+        {
+            return (new BaseFriaPorAsesorExport)
+                ->clientes($request)
+                ->download('Lista Base Fria por Asesor - USER' . $request->user_id . '.xlsx');
+        }
+    }
+
+    public function clientesReporteMultipleExcel(Request $request)
+    {
+        //return $request->all();
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+        return (new PlantillaExportClientesReporteMultiple($request->situacion,'2022'))
+            ->download('Lista de Clientes Reporte.xlsx');
+    }
+
     public function clientesFourMonthAgoExcel(Request $request)
     {
         return (new PlantillaExportClientescuatromesesMultiple())

@@ -42,15 +42,15 @@
       <table id="tablaOperacionesJefeOperaciones" class="table table-striped" style="width:100%">
         <thead>
           <tr>
-            <th scope="col" style="vertical-align: middle">Item</th>
-            <th scope="col" style="vertical-align: middle">Código</th>
-            <th scope="col" style="vertical-align: middle">Razón social</th>
-            <th scope="col" style="vertical-align: middle">Asesor</th>
-            <th scope="col" style="vertical-align: middle">Fecha de registro</th>
-            <th scope="col" style="vertical-align: middle">Estado</th>
-            <th scope="col" style="vertical-align: middle">Atendido por</th>
-            <th scope="col" style="vertical-align: middle">Jefe</th>
-            <th scope="col" style="vertical-align: middle">Acciones</th>
+            <th scope="col" class="align-middle">Item</th>
+            <th scope="col" class="align-middle">Código</th>
+            <th scope="col" class="align-middle">Razón social</th>
+            <th scope="col" class="align-middle">Asesor</th>
+            <th scope="col" class="align-middle">Fecha de registro</th>
+            <th scope="col" class="align-middle">Estado</th>
+            <th scope="col" class="align-middle">Atendido por</th>
+            <th scope="col" class="align-middle">Jefe</th>
+            <th scope="col" class="align-middle">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +65,7 @@
 
 @stop
 
-@section('css')
+@push('css')
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
   <style>
@@ -119,7 +119,7 @@
         text-shadow: 10px 2px #6ac7c2;
     }
   </style>
-@stop
+@endpush
 
 @section('js')
   {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}

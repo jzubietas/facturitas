@@ -86,21 +86,21 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">COD.</th>
-                    <th scope="col">COD.</th>
-                    <th scope="col">Banco</th>
-                    <th scope="col">Titular</th>
-                    <th scope="col">Fecha de movimiento</th>
+                    <th scope="col" class="align-middle">COD.</th>
+                    <th scope="col" class="align-middle">COD.</th>
+                    <th scope="col" class="align-middle">Banco</th>
+                    <th scope="col" class="align-middle">Titular</th>
+                    <th scope="col" class="align-middle">Fecha de movimiento</th>
                     {{--<th scope="col">Fecha2</th>--}}
-                    <th scope="col">Tipo de movimiento</th>
-                    <th scope="col">Importe</th>
-                    <th scope="col">Conciliacion</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="align-middle">Tipo de movimiento</th>
+                    <th scope="col" class="align-middle">Importe</th>
+                    <th scope="col" class="align-middle">Conciliacion</th>
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -112,7 +112,7 @@
 
 @stop
 
-@section('css')
+@push('css')
     <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <style>
@@ -355,8 +355,25 @@
         .form-stepper a {
             cursor: default;
         }
+
+        #tablaPrincipal {
+            width: 100% !important;
+        }
+
+        #tablaPrincipal td {
+            text-align: start !important;
+            vertical-align: middle !important;
+        }
+
+        #tablaPrincipal td:nth-child(8) {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            grid-gap: 5px !important;
+        }
+
     </style>
-@stop
+@endpush
 
 @section('js')
 

@@ -11,12 +11,20 @@
           <div class="form-group mb-0">
 
             <div class="btn-group" role="group" aria-label="Basic example">
-              <button id="btnListNuevoCliente" type="button" class="btn rounded btn-info ml-2"> <i class="fa fa-user"></i> Nuevo Cliente</button>
-              <button id="btnListCambioNombre" type="button" class="btn rounded btn-secondary  ml-2" ><i class="fa fa-user-lock"></i> Cambio Nombre</button>
+              <button id="btnListNuevoCliente" type="button" class="btn rounded btn-info ml-2"> <i class="fa fa-user"></i> Nuevo Cliente
+                  <i class="btnNewClienteCont ml-4" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </button>
+              <button id="btnListCambioNombre" type="button" class="btn rounded btn-secondary  ml-2" ><i class="fa fa-user-lock"></i> Cambio Nombre
+                  <i class="btnChangeNameCont ml-4" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </button>
               @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN]))
-              <button id="btnListBloqueo" type="button" class="btn rounded btn-danger   ml-2" ><i class="fa fa-lock"></i>  Bloqueo</button>
+              <button id="btnListBloqueo" type="button" class="btn rounded btn-danger   ml-2" ><i class="fa fa-lock"></i>  Bloqueo
+                  <i class="btnBloqueoCont ml-4" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </button>
               @endif
-              <button id="btnListCambioNumero" type="button" class="btn rounded btn-warning  ml-2" ><i class="fa fa-phone"></i>  Cambio Numero</button>
+              <button id="btnListCambioNumero" type="button" class="btn rounded btn-warning  ml-2" ><i class="fa fa-phone"></i>  Cambio Numero
+                  <i class="btnChangeNroCont ml-4" aria-hidden="true" ><i class="dot-notify noti-side">0</i></i>
+              </button>
             </div>
           </div>
         </div>
@@ -101,7 +109,7 @@
                 <th scope="col">Asesor</th>
                 <th scope="col">Celular</th>
                 <th scope="col">Nombre Cliente</th>
-                <th scope="col">Contacto</th>
+                <th scope="col">Nvo. Nombre</th>
                 <th scope="col">Accion</th>
               </tr>
               </thead>
@@ -143,9 +151,9 @@
               <tr>
                 <th scope="col">Tipo</th>
                 <th scope="col">Asesor</th>
-                <th scope="col">Celular</th>
-                <th scope="col">Nombre Cliente</th>
-                <th scope="col">Contacto</th>
+                <th scope="col">Numero</th>
+                <th scope="col">Imagen</th>
+                <th scope="col">Sustento</th>
                 <th scope="col">Accion</th>
               </tr>
               </thead>
@@ -189,7 +197,7 @@
                 <th scope="col">Asesor</th>
                 <th scope="col">Celular</th>
                 <th scope="col">Nombre Cliente</th>
-                <th scope="col">Contacto</th>
+                <th scope="col">Nvo. Numero</th>
                 <th scope="col">Accion</th>
               </tr>
               </thead>

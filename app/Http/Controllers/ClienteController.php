@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 /* use Validator; */
 
+use App\Models\AttachCorrection;
 use App\Models\Cliente;
 use App\Models\CuentaBancaria;
 use App\Models\DetalleContactos;
 use App\Models\DetallePedido;
 use App\Models\DireccionEnvio;
+use App\Models\ImagenAtencion;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
+use App\Models\Ruc;
 use App\Models\SituacionClientes;
 use App\Models\User;
 use App\Models\ListadoResultado;
@@ -1462,6 +1465,7 @@ class ClienteController extends Controller
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
+            ->whereNotIn('u.identificador',['15'])
             ->whereIn('clientes.situacion', [Cliente::NUEVO])
             ->groupBy(
                 'clientes.id',
@@ -1685,6 +1689,7 @@ class ClienteController extends Controller
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
+            ->whereNotIn('u.identificador',['15'])
             ->when($request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [$request->situacion]);
             })
@@ -1975,6 +1980,148 @@ class ClienteController extends Controller
         ]);
     }
 
+  public function ClienteAgregarContacto(Request $request)
+  {
+    //$mirol = Auth::user()->rol;
+    $clientes = Cliente:://CLIENTES SIN PEDIDOS
+    join('users as u', 'clientes.user_id', 'u.id')
+      ->where('clientes.tipo', '1')->activo()
+      ->select([
+        'clientes.id',
+        'clientes.nombre',
+        'clientes.icelular',
+        'clientes.celular'
+      ]);
+    switch (Auth::user()->rol)
+    {
+      case User::ROL_ASESOR:
+        $usersasesores = User::where('users.rol', 'Asesor')
+          ->where('users.estado', '1')
+          ->where('users.identificador', Auth::user()->identificador)
+          ->select(
+            DB::raw("users.identificador as identificador")
+          )
+          ->pluck('users.identificador');
+        $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+        break;
+      case User::ROL_LLAMADAS:
+        $clientes = $clientes->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+        break;
+      case User::ROL_JEFE_LLAMADAS:break;
+      case User::ROL_APOYO_ADMINISTRATIVO:
+        $clientes = $clientes->where('identificador', '<>', 'B');
+        break;
+      case User::ROL_ASESOR_ADMINISTRATIVO:
+        $clientes = $clientes->where("rol", User::ROL_ASESOR_ADMINISTRATIVO);
+        break;
+      default:
+        //$usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO"]);
+        //$clientes = $usersB->union($clientes);
+        break;
+    }
+
+    $clientes = $clientes->orderBy('id', 'ASC')->get();
+    $html = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+    foreach ($clientes as $cliente) {
+      switch (Auth::user()->rol) {
+        case User::ROL_ASESOR:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        case User::ROL_LLAMADAS:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        case User::ROL_JEFE_LLAMADAS:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        case User::ROL_APOYO_ADMINISTRATIVO:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        case User::ROL_ASESOR_ADMINISTRATIVO:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+        default:
+          $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+          break;
+      }
+
+    }
+
+    return response()->json(['html' => $html]);
+
+    //return response()->json($users);
+  }
+
+    public function ClienteAgregarContactobloqueo(Request $request)
+    {
+        //$mirol = Auth::user()->rol;
+        $clientes = Cliente:://CLIENTES SIN PEDIDOS
+        join('users as u', 'clientes.user_id', 'u.id')
+            ->whereIn('clientes.tipo', ['0','1'])->activo()
+            ->select([
+                'clientes.id',
+                'clientes.nombre',
+                'clientes.icelular',
+                'clientes.celular'
+            ]);
+        switch (Auth::user()->rol)
+        {
+            case User::ROL_ASESOR:
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.identificador', Auth::user()->identificador)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+                $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+                break;
+            case User::ROL_LLAMADAS:
+                $clientes = $clientes->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+                break;
+            case User::ROL_JEFE_LLAMADAS:break;
+            case User::ROL_APOYO_ADMINISTRATIVO:
+                $clientes = $clientes->where('identificador', '<>', 'B');
+                break;
+            case User::ROL_ASESOR_ADMINISTRATIVO:
+                $clientes = $clientes->where("rol", User::ROL_ASESOR_ADMINISTRATIVO);
+                break;
+            default:
+                //$usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO"]);
+                //$clientes = $usersB->union($clientes);
+                break;
+        }
+
+        $clientes = $clientes->orderBy('id', 'ASC')->get();
+        $html = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        foreach ($clientes as $cliente) {
+            switch (Auth::user()->rol) {
+                case User::ROL_ASESOR:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                case User::ROL_LLAMADAS:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                case User::ROL_JEFE_LLAMADAS:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                case User::ROL_APOYO_ADMINISTRATIVO:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                case User::ROL_ASESOR_ADMINISTRATIVO:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+                default:
+                    $html .= '<option value="' . $cliente->id . '" valcelular="' . $cliente->celular . '">' . $cliente->celular .'-'.$cliente->icelular. '  :  ' . $cliente->nombre . '</option>';
+                    break;
+            }
+
+        }
+
+        return response()->json(['html' => $html]);
+
+        //return response()->json($users);
+    }
+
   public function listtablecontactos(Request $request){ //rbnvalue
     $data = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
       ->join('users as u', 'c.user_id', 'u.id')
@@ -2000,7 +2147,7 @@ class ClienteController extends Controller
       }else{
         $data = $data->whereIn('guardado', [0, 1]);
       }
-    }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS,User::ROL_MOTORIZADO])) {
+    }else if (in_array(auth()->user()->rol, [User::ROL_LLAMADAS,User::ROL_MOTORIZADO,User::ROL_ASESOR])) {
       if ($request->rbnvalue==1){
         $data = $data->where('guardado',0)
           ->where('confirmado',0);
@@ -2066,6 +2213,24 @@ class ClienteController extends Controller
 
     return \Yajra\DataTables\DataTables::of(($data))
       ->addIndexColumn()
+      ->editColumn('foto', function ($data) {
+        if ($data->foto != '') {
+          //return $data->foto;
+          $urlimagen1 = \Storage::disk('pstorage')->url($data->foto);
+
+          $datos = '<div class="card bg-transparent text-center border-none border-left-0 shadow-none" style="width: 8rem;border: none;">
+                          <a href="" data-target="#modal-imagen-contacto" data-toggle="modal" data-imagen="' . $data->foto . '">
+                            <img src="' . $urlimagen1 . '" alt="' . $data->foto . '" height="50px" width="50px" id="imagen_' . $data->id . '-1" class=" text-center">
+                          </a>
+                        <div class="card-body bg-transparent p-0">
+                            <h5 class="card-title"></h5>';
+            $datos .= '    </div>';
+            $datos .= '</div>';
+          return $datos;
+        }  else {
+          return '';
+        }
+      })
       ->addColumn('tipo_insert', function ($data) {
         $vinsert="";;
         if ($data->tipo_insert==1){
@@ -2113,7 +2278,7 @@ class ClienteController extends Controller
         $btn[] = '</ul></div>';
         return join('', $btn);
       })
-      ->rawColumns(['action'])
+      ->rawColumns(['foto','action'])
       ->make(true);
     //return datatables($detallecontactos)->toJson();
   }
@@ -2132,8 +2297,35 @@ class ClienteController extends Controller
       'nombres_cliente' => $cliente->nombre,
       'nombre_contacto' => $request->contacto_nombre,
       'codigo_registra' => auth()->user()->id,
+      'tipo_insert' => 1,
     ]);
     return $detallecontactos;
+  }
+
+  public function solicitabloqueocliente(Request $request)
+  {
+    /*return $request->all();*/
+
+    $cliente=Cliente::where('id',$request->cliente_id)->first();
+    $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+    $asesor=User::where('id',$user_id)->first();
+
+
+    if ($request->hasFile('agregarcontacto_b_captura')) {
+      $captura = $request->file('agregarcontacto_b_captura')->store('pedidos/anulaciones', 'pstorage');
+    }
+    $detallecontactos=DetalleContactos::create([
+      'codigo_asesor' => $asesor->identificador,
+      'nombre_asesor' => $asesor->name,
+      'celular' => $cliente->celular."-". $cliente->icelular,
+      'codigo_cliente' => $cliente->id,
+      'nombres_cliente' => $cliente->nombre,
+      'nombre_contacto' => $request->sustentoBloqueo,
+      'codigo_registra' => auth()->user()->id,
+      'foto' => $captura,
+      'tipo_insert' => 3,
+    ]);
+    return response()->json(['detallecontactos' => $detallecontactos,'captura' => $captura]);
   }
   public function guardado(Request $request)
   {
@@ -2164,4 +2356,191 @@ class ClienteController extends Controller
     ]);
     return $detallecontactos;
   }
+
+  public function cambiarnombrecontacto(Request $request)
+  {
+    /*return $request->all();*/
+    $cliente=Cliente::where('id',$request->cno_cliente_id)->first();
+    $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+    $asesor=User::where('id',$user_id)->first();
+
+    $detallecontactos=DetalleContactos::create([
+      'codigo_asesor' => $asesor->identificador,
+      'nombre_asesor' => $asesor->name,
+      'celular' => $cliente->celular."-". $cliente->icelular,
+      'codigo_cliente' => $cliente->id,
+      'nombres_cliente' => $cliente->nombre,
+      'nombre_contacto' => $request->cno_cambio_nombre,
+      'codigo_registra' => auth()->user()->id,
+      'tipo_insert' => 2,
+    ]);
+    return $detallecontactos;
+  }
+  public function cambiarnumerocontacto(Request $request)
+  {
+    /*return $request->all();*/
+    $cliente=Cliente::where('id',$request->cnu_cliente_id)->first();
+    $user_id=Cliente::where('id',$cliente->id)->first()->user_id;
+    $asesor=User::where('id',$user_id)->first();
+
+    $detallecontactos=DetalleContactos::create([
+      'codigo_asesor' => $asesor->identificador,
+      'nombre_asesor' => $asesor->name,
+      'celular' => $cliente->celular."-". $cliente->icelular,
+      'codigo_cliente' => $cliente->id,
+      'nombres_cliente' => $cliente->nombre,
+      'nombre_contacto' => $request->cnu_cambio_numero,
+      'codigo_registra' => auth()->user()->id,
+      'tipo_insert' => 4,
+    ]);
+    return $detallecontactos;
+  }
+
+  public function listcontadorescontactos(Request $request){
+    $nuevoCliente = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')->where('detalle_contactos.tipo_insert',1)
+        ->select(['detalle_contactos.*']);
+    $nuevoCliente = $nuevoCliente->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('reconfirmado',  0);
+
+    $cambioNombre = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')->where('detalle_contactos.tipo_insert',2)
+      ->select(['detalle_contactos.*']);
+    $cambioNombre = $cambioNombre->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('reconfirmado',  0);
+
+    $contbloqueo = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')->where('detalle_contactos.tipo_insert',3)
+      ->select(['detalle_contactos.*']);
+    $contbloqueo = $contbloqueo->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('reconfirmado',  0);
+
+    $cambioNumero = DetalleContactos::join('clientes as c', 'detalle_contactos.codigo_cliente', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')->where('detalle_contactos.tipo_insert',4)
+      ->select(['detalle_contactos.*']);
+    $cambioNumero = $cambioNumero->whereIn('guardado', [0, 1])->whereIn('confirmado', [0, 1])->where('reconfirmado',  0);
+
+      if (Auth::user()->rol == "Llamadas") {
+          $usersasesores = User::where('users.rol', 'Asesor')
+              ->where('users.estado', '1')
+              ->where('users.llamada', Auth::user()->id)
+              ->select(
+                  DB::raw("users.identificador as identificador")
+              )
+              ->pluck('users.identificador');
+          $nuevoCliente = $nuevoCliente->WhereIn("u.identificador", $usersasesores);
+          $cambioNombre = $cambioNombre->WhereIn("u.identificador", $usersasesores);
+          $contbloqueo = $contbloqueo->WhereIn("u.identificador", $usersasesores);
+          $cambioNumero = $cambioNumero->WhereIn("u.identificador", $usersasesores);
+
+      } else if (Auth::user()->rol == "Jefe de llamadas") {
+      } elseif (Auth::user()->rol == "Asesor") {
+          $usersasesores = User::where('users.rol', 'Asesor')
+              ->where('users.estado', '1')
+              ->where('users.identificador', Auth::user()->identificador)
+              ->select(
+                  DB::raw("users.identificador as identificador")
+              )
+              ->pluck('users.identificador');
+          $nuevoCliente = $nuevoCliente->WhereIn("u.identificador", $usersasesores);
+          $cambioNombre = $cambioNombre->WhereIn("u.identificador", $usersasesores);
+          $contbloqueo = $contbloqueo->WhereIn("u.identificador", $usersasesores);
+          $cambioNumero = $cambioNumero->WhereIn("u.identificador", $usersasesores);
+
+      } else if (Auth::user()->rol == "Encargado") {
+          $usersasesores = User::where('users.rol', 'Asesor')
+              ->where('users.estado', '1')
+              ->where('users.supervisor', Auth::user()->id)
+              ->select(
+                  DB::raw("users.identificador as identificador")
+              )
+              ->pluck('users.identificador');
+
+          $nuevoCliente = $nuevoCliente->WhereIn("u.identificador", $usersasesores);
+          $cambioNombre = $cambioNombre->WhereIn("u.identificador", $usersasesores);
+          $contbloqueo = $contbloqueo->WhereIn("u.identificador", $usersasesores);
+          $cambioNumero = $cambioNumero->WhereIn("u.identificador", $usersasesores);
+      } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+          $nuevoCliente = $nuevoCliente->Where("u.identificador", '=', 'B');
+          $cambioNombre = $cambioNombre->Where("u.identificador", '=', 'B');
+          $contbloqueo = $contbloqueo->Where("u.identificador", '=', 'B');
+          $cambioNumero = $cambioNumero->Where("u.identificador", '=', 'B');
+      }
+
+      $nuevoCliente=$nuevoCliente->count();
+      $cambioNombre=$cambioNombre->count();
+      $contbloqueo=$contbloqueo->count();
+      $cambioNumero=$cambioNumero->count();
+
+    return response()->json(['nuevoCliente' => $nuevoCliente,'cambioNombre' => $cambioNombre,'contbloqueo' => $contbloqueo,'cambioNumero' => $cambioNumero]);
+  }
+
+    public function getComboNuevoCliente(Request $request)
+    {
+        /*return $request->all();*/
+        $html = '<option value="-1">' . trans('---- SELECCIONE NUEVO CLIENTE ----') . '</option>';
+
+        $clientes = Cliente::query()
+            ->where('clientes.estado',  '1')
+            ->where('clientes.tipo',  '1')
+            ->whereNotIn('clientes.id',[$request->cliente_id])
+            ->orderBy('clientes.nombre')
+            ->get();
+
+
+        foreach ($clientes as $cliente) {
+            $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
+
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function getRelacionNuevoCliente(Request $request)
+    {
+        /*return $request->all();*/
+    $nuevarelacion=Ruc::join('users as u', 'rucs.user_id', 'u.id')
+    ->join('clientes as c','rucs.cliente_id','c.id')
+    ->select(['u.identificador','u.exidentificador','rucs.num_ruc','c.icelular','c.celular','c.nombre'])
+    ->where('rucs.cliente_id',$request->cliente_id)->first();
+    ;
+        return response()->json(['html' => $nuevarelacion]);
+    }
+
+    public function setDatosNuevoClientes(Request $request)
+    {
+        /*return $request->all();*/
+        $ejecucion=true;
+        $asesor_id=User::where("identificador",$request->s_asesorant)->first()->id;
+        if ($asesor_id){
+            $nuevocliente=Ruc::join('users as u', 'rucs.user_id', 'u.id')
+                ->join('clientes as c','rucs.cliente_id','c.id')
+                ->select(['u.*'])
+                ->where('c.id',$request->s_cliente_nue)->first();
+
+            $updRuc= Ruc::where('cliente_id',$request->s_cliente_ant)->where('user_id',$asesor_id)->where('num_ruc',$request->s_ruc_ant)->first();
+            if($nuevocliente){
+                $updRuc->update([
+                    'cliente_id' => $request->s_cliente_nue,
+                    'user_id' => $nuevocliente->id,
+                ]);
+            }else{
+                $updRuc->update([
+                    'cliente_id' => $request->s_cliente_nue,
+                ]);
+            }
+
+        }else{
+            $ejecucion=false;
+        }
+
+        return response()->json(['datos' => $updRuc,'sucess'=>$ejecucion,'asesor'=>$nuevocliente]);
+    }
+
+    public function consultarSaldoCliente(Request $request)
+    {
+        $clientesaldo = $request->clientesaldo;
+        $clienteparasaldo = Cliente::where("id", $clientesaldo)->first();
+        $elsaldo=$clienteparasaldo->saldo;
+        return response()->json($elsaldo);
+
+    }
+
 }

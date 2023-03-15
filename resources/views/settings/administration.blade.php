@@ -10,7 +10,7 @@
 @section('content')
     <div class="row m-4">
         @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
-            <div class="col-lg-4">
+            <div class="col-lg-4 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         <h3>Definir contraseña para anular pedidos</h3>
@@ -36,11 +36,13 @@
             </div>
         @endif
 
-        <div class="col-8">
+        <div class="col-lg-8 col-md-12 col-sm-12">
             <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
         </div>
-
-        <div class="col-md-12">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <x-frm-unif-cambio-calculo-porc></x-frm-unif-cambio-calculo-porc>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
             @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
                 @foreach($jefe_operaciones_courier as $jefe_op)
                     <form class="form-group" id="form_direccion_JFO{{$jefe_op->id}}">
@@ -52,22 +54,32 @@
                                 <div class="form-group">
 
                                     <label for="formGroupExampleInput">Distrito</label>
-                                    <input type="text" class="form-control" id="distrito{{$jefe_op->id}}" name="distrito" value="{{$jefe_op->distrito}}" placeholder="Los Olivos">
+                                    <input type="text" class="form-control" id="distrito{{$jefe_op->id}}"
+                                           name="distrito" value="{{$jefe_op->distrito}}" placeholder="Los Olivos">
 
-                                    <label class="mt-2" for="formGroupExampleInput" >Ingresar direccion</label>
-                                    <input type="text" value="{{$jefe_op->direccion_recojo}}" name="direccion" class="form-control" id="ingreso_adminD_{{$jefe_op->id}}" placeholder="Dirección" autocomplete="off">
+                                    <label class="mt-2" for="formGroupExampleInput">Ingresar direccion</label>
+                                    <input type="text" value="{{$jefe_op->direccion_recojo}}" name="direccion"
+                                           class="form-control" id="ingreso_adminD_{{$jefe_op->id}}"
+                                           placeholder="Dirección" autocomplete="off">
 
                                     <label class="mt-2" for="formGroupExampleInput">Celular</label>
-                                    <input type="text" value="{{$jefe_op->numero_recojo}}"   name="numero_jfo" class="form-control" id="ingreso_telefonoA{{$jefe_op->id}}" autocomplete="off" placeholder="Celular">
+                                    <input type="text" value="{{$jefe_op->numero_recojo}}" name="numero_jfo"
+                                           class="form-control" id="ingreso_telefonoA{{$jefe_op->id}}"
+                                           autocomplete="off" placeholder="Celular">
 
                                     <label class="mt-2" for="formGroupExampleInput">Destino</label>
-                                    <input type="text" value="{{$jefe_op->destino}}" name="destino" class="form-control" id="destino{{$jefe_op->id}}" autocomplete="off" placeholder="Destino" disabled>
+                                    <input type="text" value="{{$jefe_op->destino}}" name="destino" class="form-control"
+                                           id="destino{{$jefe_op->id}}" autocomplete="off" placeholder="Destino"
+                                           disabled>
 
                                     <label class="mt-2" for="formGroupExampleInput">Referencia</label>
-                                    <input type="text" value="{{$jefe_op->referencia}}" name="{{$jefe_op->referencia}}" class="form-control" id="referencia{{$jefe_op->id}}" autocomplete="off" placeholder="Referencia">
+                                    <input type="text" value="{{$jefe_op->referencia}}" name="{{$jefe_op->referencia}}"
+                                           class="form-control" id="referencia{{$jefe_op->id}}" autocomplete="off"
+                                           placeholder="Referencia">
 
                                     <label class="mt-2" for="formGroupExampleInput">Cliente</label>
-                                    <input type="text" value="{{$jefe_op->cliente}}" name="cliente" class="form-control" id="cliente{{$jefe_op->id}}" autocomplete="off" placeholder="Cliente">
+                                    <input type="text" value="{{$jefe_op->cliente}}" name="cliente" class="form-control"
+                                           id="cliente{{$jefe_op->id}}" autocomplete="off" placeholder="Cliente">
 
                                 </div>
                             </div>
@@ -89,7 +101,8 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <a href="{{ route("courierregistro") }}" class="btn btn-warning" type="button" id="courierregistros">
+                        <a href="{{ route("courierregistro") }}" class="btn btn-warning" type="button"
+                           id="courierregistros">
                             Bandeja de Registros de Courier
                         </a>
                     </div>
@@ -305,141 +318,141 @@
         }
 
         $(document).ready(function () {
-          $.ajaxSetup({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-          });
-
-          $("#buttom_attachment_save").click(function (event) {
-            event.preventDefault();
-            var file = $("#attachment_file_one")[0].files[0];
-            var file2 = $("#attachment_file_two")[0].files[0];
-            if (!file && !file2) {
-              console.log(!file, !file2)
-              Swal.fire(
-                'Debes adjuntar almenos un archivo en uno de los campos',
-                '',
-                'warning'
-              )
-              return;
-            }
-            var formData = new FormData();
-            if (file) {
-              formData.append("attachment_one", file);
-            }
-            if (file2) {
-              formData.append("attachment_two", file2);
-            }
-
-            $("#attachment_progress").show()
-            $.ajax({
-              url: '{{route('settings.store-admin-settings')}}',
-              method: 'POST',
-              type: 'POST',
-              data: formData,
-              contentType: false,
-              processData: false,
-              xhr: function () {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress",
-                  uploadProgressHandler,
-                  false
-                );
-                xhr.addEventListener("load", loadHandler, false);
-                xhr.addEventListener("error", errorHandler, false);
-                xhr.addEventListener("abort", abortHandler, false);
-
-                return xhr;
-              }
-            }).done(function (data) {
-              if (data.attachment_one) {
-                $("#imagecontent1").html('<img src="' + data.attachment_one + '" class="w-100"/>')
-              }
-              if (data.attachment_two) {
-                $("#imagecontent2").html('<img src="' + data.attachment_two + '" class="w-100"/>')
-              }
-            }).always(function () {
-              $("#attachment_progress").hide()
-              $("#attachment_file_one").val(null)
-              $("#attachment_file_two").val(null)
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
-          });
 
-          $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            $('#Cliente').val(button.data('pedidoid'))
-            $('#Id-Cliente').val(button.data('clienteid'))
-            $('#cod_Cliente').val(button.data('clientenombre'))
-            $('#cod_pedido').val(button.data('pedidocodigo'))
-            console.log(button.data('direccionreco'))
-            $('#direccion_recojo').val(button.data('direccionreco'))
-            $('#nombre_recojo').val(button.data('nombreresiv'))
-            $('#celular_recojo').val(button.data('telefonoresiv'))
-            $('#referencia_recojo').val(button.data('referenciareco'))
-            $('#observacion_recojo').val(button.data('observacionreco'))
-            $('#gmlink_recojo').val(button.data('gmclink'))
+            $("#buttom_attachment_save").click(function (event) {
+                event.preventDefault();
+                var file = $("#attachment_file_one")[0].files[0];
+                var file2 = $("#attachment_file_two")[0].files[0];
+                if (!file && !file2) {
+                    console.log(!file, !file2)
+                    Swal.fire(
+                        'Debes adjuntar almenos un archivo en uno de los campos',
+                        '',
+                        'warning'
+                    )
+                    return;
+                }
+                var formData = new FormData();
+                if (file) {
+                    formData.append("attachment_one", file);
+                }
+                if (file2) {
+                    formData.append("attachment_two", file2);
+                }
 
-            $('button:submit').prop("disabled",false)
-            ocultar_div_modal_correccion_pedidos();
-          })
+                $("#attachment_progress").show()
+                $.ajax({
+                    url: '{{route('settings.store-admin-settings')}}',
+                    method: 'POST',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    xhr: function () {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress",
+                            uploadProgressHandler,
+                            false
+                        );
+                        xhr.addEventListener("load", loadHandler, false);
+                        xhr.addEventListener("error", errorHandler, false);
+                        xhr.addEventListener("abort", abortHandler, false);
 
-          @foreach($jefe_operaciones_courier as $jefe_op)
-
-          $(document).on("submit", "#form_direccion_JFO{{$jefe_op->id}}", function (event) {
-            event.preventDefault();
-
-            var form = $(this)[0];
-            var formData = new FormData(form);
-            let direccion_Joperaciones = $("#ingreso_adminD_{{$jefe_op->id}}").val();
-            let numero_Joperaciones = $("#ingreso_telefonoA{{$jefe_op->id}}").val();
-            let referencia = $("#referencia{{$jefe_op->id}}").val();
-            let cliente = $("#cliente{{$jefe_op->id}}").val();
-            let distrito = $("#distrito{{$jefe_op->id}}").val();
-
-            $("#destino{{$jefe_op->id}}").prop('disableb', false)
-            let destino = $("#destino{{$jefe_op->id}}").val();
-            $("#destino{{$jefe_op->id}}").prop('disableb', false)
-
-            //validaciones
-            if (direccion_Joperaciones == "") {
-              Swal.fire('Debe colocar una direccion de del jefe de operaciones', '', 'warning');
-              return false;
-            } else if (numero_Joperaciones == "") {
-              Swal.fire('Debe colocar el numero del jefe de operaciones', '', 'warning');
-              return false;
-            }
-
-            formData.append('direccion_jfo', direccion_Joperaciones);
-            formData.append('user_id', "{{$jefe_op->id}}");
-            formData.append('referencia_jfo', referencia);
-            formData.append('destino_jfo', destino);
-            formData.append('distrito', distrito);
-            formData.append('cliente_jfo', cliente);
-
-           /* // console.log(formData);
-            return false;*/
-            $.ajax({
-              type: 'POST',
-              url: "{{ route('agregardireccionjefeoperaciones.post') }}",
-              data: formData,
-              processData: false,
-              contentType: false,
-              success: function (value) {
-                console.log(value);
-                Swal.fire(
-                  'Se envio correctamente los datos',
-                  '',
-                  'success'
-                )
-              }
+                        return xhr;
+                    }
+                }).done(function (data) {
+                    if (data.attachment_one) {
+                        $("#imagecontent1").html('<img src="' + data.attachment_one + '" class="w-100"/>')
+                    }
+                    if (data.attachment_two) {
+                        $("#imagecontent2").html('<img src="' + data.attachment_two + '" class="w-100"/>')
+                    }
+                }).always(function () {
+                    $("#attachment_progress").hide()
+                    $("#attachment_file_one").val(null)
+                    $("#attachment_file_two").val(null)
+                });
             });
-          });
 
-          $('#ingreso_telefonoA{{$jefe_op->id}}').on('input', function () {
-            this.value = this.value.replace(/[^0-9]/g, '');
-          });
-          @endforeach
+            $('#modal-recojo-pedidos').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $('#Cliente').val(button.data('pedidoid'))
+                $('#Id-Cliente').val(button.data('clienteid'))
+                $('#cod_Cliente').val(button.data('clientenombre'))
+                $('#cod_pedido').val(button.data('pedidocodigo'))
+                console.log(button.data('direccionreco'))
+                $('#direccion_recojo').val(button.data('direccionreco'))
+                $('#nombre_recojo').val(button.data('nombreresiv'))
+                $('#celular_recojo').val(button.data('telefonoresiv'))
+                $('#referencia_recojo').val(button.data('referenciareco'))
+                $('#observacion_recojo').val(button.data('observacionreco'))
+                $('#gmlink_recojo').val(button.data('gmclink'))
+
+                $('button:submit').prop("disabled", false)
+                ocultar_div_modal_correccion_pedidos();
+            })
+
+            @foreach($jefe_operaciones_courier as $jefe_op)
+
+            $(document).on("submit", "#form_direccion_JFO{{$jefe_op->id}}", function (event) {
+                event.preventDefault();
+
+                var form = $(this)[0];
+                var formData = new FormData(form);
+                let direccion_Joperaciones = $("#ingreso_adminD_{{$jefe_op->id}}").val();
+                let numero_Joperaciones = $("#ingreso_telefonoA{{$jefe_op->id}}").val();
+                let referencia = $("#referencia{{$jefe_op->id}}").val();
+                let cliente = $("#cliente{{$jefe_op->id}}").val();
+                let distrito = $("#distrito{{$jefe_op->id}}").val();
+
+                $("#destino{{$jefe_op->id}}").prop('disableb', false)
+                let destino = $("#destino{{$jefe_op->id}}").val();
+                $("#destino{{$jefe_op->id}}").prop('disableb', false)
+
+                //validaciones
+                if (direccion_Joperaciones == "") {
+                    Swal.fire('Debe colocar una direccion de del jefe de operaciones', '', 'warning');
+                    return false;
+                } else if (numero_Joperaciones == "") {
+                    Swal.fire('Debe colocar el numero del jefe de operaciones', '', 'warning');
+                    return false;
+                }
+
+                formData.append('direccion_jfo', direccion_Joperaciones);
+                formData.append('user_id', "{{$jefe_op->id}}");
+                formData.append('referencia_jfo', referencia);
+                formData.append('destino_jfo', destino);
+                formData.append('distrito', distrito);
+                formData.append('cliente_jfo', cliente);
+
+                /* // console.log(formData);
+                 return false;*/
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('agregardireccionjefeoperaciones.post') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (value) {
+                        console.log(value);
+                        Swal.fire(
+                            'Se envio correctamente los datos',
+                            '',
+                            'success'
+                        )
+                    }
+                });
+            });
+
+            $('#ingreso_telefonoA{{$jefe_op->id}}').on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+            @endforeach
         });
 
     </script>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlertaController;
+use App\Http\Controllers\AnulacionController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CourierRegistrosController;
 use App\Http\Controllers\DashboardController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\PedidoHistoryController;
 use App\Http\Controllers\Pedidos\PedidoStatusController;
 use App\Http\Controllers\RecojoController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ScraperController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PedidoController;
@@ -45,10 +47,9 @@ Route::middleware(['guest'])->get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
-    Route::get('alertas/listtablecontactos', [AlertaController::class,'listtablecontactos'])->name('alertas.listtablecontactos');
-    Route::post('alertas/confirmar', [AlertaController::class,'confirmar'])->name('alertas.confirmar');
+    Route::post('alertas/confirmar', [AlertaController::class, 'confirmar'])->name('alertas.confirmar');
     Route::resource('alertas', AlertaController::class);
-    Route::any('alertas/cargarstore',[AlertaController::class,'cargarstore'])->name('cargarstore');
+    Route::any('alertas/cargarstore', [AlertaController::class, 'cargarstore'])->name('cargarstore');
 
 
     Route::post('escaneo/envio.escaneoqr/{id}', [EscaneoController::class, 'EscaneoQR'])->name('escaneo/envio.escaneoqr');
@@ -69,12 +70,12 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('/search/cliente', [DashboardController::class, 'searchCliente'])->name('dashboard.search-cliente');
     Route::get('/search/ruc', [DashboardController::class, 'searchRuc'])->name('dashboard.search-ruc');
 
-  //Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
-  Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
+    //Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
+    Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
 
-  Route::any('dashboard.viewAnalisis', [PdfController::class, 'Analisisgrafico'])->name('dashboard.viewAnalisis');
-  Route::any('dashboard.graficoSituacionClientes', [PdfController::class, 'SituacionClientes'])->name('dashboard.graficoSituacionClientes');
-  Route::any('dashboard.graficoCobranzasGeneral', [PdfController::class, 'CobranzasGeneral'])->name('dashboard.graficoCobranzasGeneral');
+    Route::any('dashboard.viewAnalisis', [PdfController::class, 'Analisisgrafico'])->name('dashboard.viewAnalisis');
+    Route::any('dashboard.graficoSituacionClientes', [PdfController::class, 'SituacionClientes'])->name('dashboard.graficoSituacionClientes');
+    Route::any('dashboard.graficoCobranzasGeneral', [PdfController::class, 'CobranzasGeneral'])->name('dashboard.graficoCobranzasGeneral');
 
 
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
@@ -102,7 +103,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
 
-
     Route::get('recojolistclientes', [PedidoController::class, 'recojolistclientes'])->name('cargar.recojolistclientes');
     //Route::get('clientes.createbf', [BasefriaController::class, 'createbf'])->name('clientes.createbf');
     //Route::post('clientes.storebf', [BasefriaController::class, 'storebf'])->name('clientes.storebf');
@@ -126,14 +126,29 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidos.recoger.clientes.pedidos', [ClienteController::class, 'pedidosclienteslistarecoger'])->name('pedidos.recoger.clientes.pedidos');
     Route::get('pedidos.recoger.clientes.pedidos.historial', [ClienteController::class, 'historialrecoger'])->name('pedidos.recoger.clientes.pedidos.historial');
     Route::get('clientestablasituacion', [ClienteController::class, 'clientestablasituacion'])->name('clientestablasituacion');
-    Route::get('listtablecontactos', [ClienteController::class,'listtablecontactos'])->name('listtablecontactos');
-    Route::post('alertas/guardado', [ClienteController::class,'guardado'])->name('alertas.guardado');
-    Route::post('alertas/confirmado', [ClienteController::class,'confirmado'])->name('alertas.confirmado');
-    Route::post('enviarconfirmado', [ClienteController::class,'reconfirmado'])->name('enviarreconfirmado');
-    Route::post('agregarcontactonuevo', [ClienteController::class,'agregarcontactonuevo'])->name('agregarcontactonuevo');
+    Route::get('listtablecontactos', [ClienteController::class, 'listtablecontactos'])->name('listtablecontactos');
+    Route::post('alertas/guardado', [ClienteController::class, 'guardado'])->name('alertas.guardado');
+    Route::post('alertas/confirmado', [ClienteController::class, 'confirmado'])->name('alertas.confirmado');
+    Route::post('enviarconfirmado', [ClienteController::class, 'reconfirmado'])->name('enviarreconfirmado');
+    Route::post('agregarcontactonuevo', [ClienteController::class, 'agregarcontactonuevo'])->name('agregarcontactonuevo');
+    Route::post('solicitabloqueocliente', [ClienteController::class, 'solicitabloqueocliente'])->name('solicitabloqueocliente');
+    Route::post('clientecomboagregarcontacto', [ClienteController::class, 'ClienteAgregarContacto'])->name('clientecomboagregarcontacto');
+    Route::post('clientecomboagregarcontactobloqueo', [ClienteController::class, 'ClienteAgregarContactobloqueo'])->name('clientecomboagregarcontactobloqueo');
+    Route::post('cambiarnombrecontacto', [ClienteController::class, 'cambiarnombrecontacto'])->name('cambiarnombrecontacto');
+    Route::post('cambiarnumerocontacto', [ClienteController::class, 'cambiarnumerocontacto'])->name('cambiarnumerocontacto');
+    Route::get('listcontadorescontactos', [ClienteController::class, 'listcontadorescontactos'])->name('listcontadorescontactos');
 
     Route::get('pedidos.recojo', [PedidoController::class, 'pedidosrecojo'])->name('pedidos.recojo');
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside
+
+    Route::get('pedidos.anulaciones', [AnulacionController::class, 'pedidosanulaciones'])->name('pedidos.anulaciones');
+    Route::get('pedidosanulacionestabla', [AnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulacionestabla');//actualizado para serverside
+
+    Route::any('pedidosanulaciones.modal.agregaranulacion_pc', [AnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_pc');
+    Route::any('pedidosanulaciones.modal.agregaranulacion_f', [AnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_f');
+
+    Route::any('pedidosanulaciones.modal.agregaranulacion_pc.save', [AnulacionController::class, 'modalsAnulacionPCSave'])->name('pedidosanulaciones.modal.agregaranulacion_pc.save');
+    Route::any('pedidosanulaciones.modal.agregaranulacion_f.save', [AnulacionController::class, 'modalsAnulacionFSave'])->name('pedidosanulaciones.modal.agregaranulacion_f.save');
 
     Route::get('registros.asesor.lista', [EnvioController::class, 'registrosasesor'])->name('registros.asesor.lista');
 
@@ -187,12 +202,16 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::resource('users', UserController::class)->names('users');
 
     Route::get('users.profile', [UserController::class, 'profile'])->name('users.profile');
+    Route::get('users.miperfil', [UserController::class, 'miperfil'])->name('users.miperfil');
+    Route::post('users.updateprofile', [UserController::class, 'updateprofile'])->name('users.updateprofile');
+    Route::post('users.updateimage', [UserController::class, 'updateimage'])->name('users.updateimage');
     //Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
 
     Route::any('correccionesJson', [OperacionController::class, 'correccionesJson'])->name('correccionesJson');
 
-    Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
-    Route::post('clientecomboagregarcontacto', [UserController::class, 'ClienteAgregarContacto'])->name('clientecomboagregarcontacto');
+    Route::post('user.reset', [UserController::class, 'reset'])->name('user.reset');
+    Route::post('user.cambiarestado', [UserController::class, 'cambiarestado'])->name('user.cambiarestado');
+
     Route::post('asesorcombomodal', [UserController::class, 'AsesorcomboModal'])->name('asesorcombomodal');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
     Route::post('asesorcombopago', [UserController::class, 'Asesorcombopago'])->name('asesorcombopago');
@@ -203,6 +222,17 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('quitarvidasusuario', [UserController::class, 'quitarvidasusuario'])->name('quitarvidasusuario');
     Route::get('getvidasusuario', [UserController::class, 'getvidasusuario'])->name('getvidasusuario');
     Route::get('resetllamadaatencionsusuario', [UserController::class, 'resetllamadaatencionsusuario'])->name('resetllamadaatencionsusuario');
+    Route::get('getComboAsesor', [UserController::class, 'getComboAsesor'])->name('getComboAsesor');
+    Route::get('getComboCliente', [UserController::class, 'getComboCliente'])->name('getComboCliente');
+    Route::get('getComboRuc', [UserController::class, 'getComboRuc'])->name('getComboRuc');
+    Route::get('getComboClientes', [UserController::class, 'getComboClientes'])->name('getComboClientes');
+    Route::post('updateNameEmpresa', [UserController::class, 'updateNameEmpresa'])->name('updateNameEmpresa');
+    Route::post('updateRuc', [UserController::class, 'updateRuc'])->name('updateRuc');
+    Route::post('getPorcClientes', [UserController::class, 'getPorcClientes'])->name('getPorcClientes');
+    Route::post('uptPorcClientes', [UserController::class, 'uptPorcClientes'])->name('uptPorcClientes');
+    Route::post('getComboNuevoCliente', [ClienteController::class, 'getComboNuevoCliente'])->name('getComboNuevoCliente');
+    Route::post('getRelacionNuevoCliente', [ClienteController::class, 'getRelacionNuevoCliente'])->name('getRelacionNuevoCliente');
+    Route::post('setDatosNuevoClientes', [ClienteController::class, 'setDatosNuevoClientes'])->name('setDatosNuevoClientes');
 
     Route::get('users.llamadas', [UserController::class, 'Llamadas'])->name('users.llamadas');////llamadas
     Route::get('users.llamadastabla', [UserController::class, 'Llamadastabla'])->name('users.llamadastabla');////llamadas
@@ -240,6 +270,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('users.mipersonal', [UserController::class, 'MiPersonal'])->name('users.mipersonal');
     Route::get('personaltablahistorial', [UserController::class, 'personaltablahistorial'])->name('personaltablahistorial');//actualizado para serverside
     Route::get('indextablapersonal', [UserController::class, 'indextablapersonal'])->name('indextablapersonal');
+    Route::get('tableUsuarios', [UserController::class, 'tableUsuarios'])->name('tableUsuarios');
     /*Controller User*/
 
     /*Controller Pedido*/
@@ -290,7 +321,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('clientedeasesordeuda', [PedidoController::class, 'clientedeasesordeuda'])->name('cargar.clientedeasesordeuda');
     Route::get('clientedeudaparaactivar', [PedidoController::class, 'clientedeudaparaactivar'])->name('cargar.clientedeudaparaactivar');
-  Route::get('clientemodal1', [PedidoController::class, 'clientemodal1'])->name('cargar.clientemodal1');
+    Route::get('clientemodal1', [PedidoController::class, 'clientemodal1'])->name('cargar.clientemodal1');
     Route::get('tipobanca', [PedidoController::class, 'tipobanca'])->name('cargar.tipobanca');
     Route::post('pedidos.agregarruc', [PedidoController::class, 'AgregarRuc'])->name('pedidos.agregarruc');
     Route::get('pedidos.mispedidos', [PedidoController::class, 'MisPedidos'])->name('pedidos.mispedidos');
@@ -418,6 +449,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('operaciones.correccioncerrarmodal', [OperacionController::class, 'CerarModalCorreccion'])->name('operaciones.correccioncerrarmodal');
 
+    Route::any('cliente.consultasaldo', [ClienteController::class, 'consultarSaldoCliente'])->name('cliente.consultasaldo');
+
     Route::post('operaciones.atenderiddismiss', [OperacionController::class, 'Atenderiddismiss'])->name('operaciones.atenderiddismiss');
     Route::post('operaciones.corregircerrar', [OperacionController::class, 'Corregircerrar'])->name('operaciones.corregircerrar');
     Route::get('operaciones.editatender/{pedido}', [OperacionController::class, 'editAtender'])->name('operaciones.editatender');
@@ -426,6 +459,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.editatencionsinconfirmar/{pedido}', [OperacionController::class, 'editatencionsinconfirmar'])->name('operaciones.editatencionsinconfirmar');
     Route::post('operaciones.datossubidaadj/{pedido}', [OperacionController::class, 'DatosSubidaAdjunto'])->name('operaciones.datossubidaadj');
     Route::post('operaciones.eliminaradjunto', [OperacionController::class, 'eliminarAdjuntoOperaciones'])->name('operaciones.eliminaradjunto');
+    Route::post('operaciones.veratencionanulacion/{pedido}', [OperacionController::class, 'verAtencionAnulacion'])->name('operaciones.veratencionanulacion');
 
     Route::post('operaciones.subircorreccionsinconfirmar', [OperacionController::class, 'subircorreccionsinconfirmar'])->name('operaciones.subircorreccionsinconfirmar');
 
@@ -472,7 +506,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
     Route::get('MisPagosTabla', [PagoController::class, 'MisPagosTabla'])->name('MisPagosTabla');//actualizado para serverside
     Route::get('pedidoscliente', [PagoController::class, 'pedidoscliente'])->name('cargar.pedidoscliente');
-    Route::get('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
+    Route::any('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
     Route::post('pagodetalleUpdate', [PagoController::class, 'pagodetalleUpdate'])->name('pagodetalleUpdate');
 
     Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');
@@ -491,7 +525,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('administracion.updaterevisar/{pago}', [PagoController::class, 'updateRevisar'])->name('administracion.updaterevisar');
     Route::post('administracion.updaterevisar.post', [PagoController::class, 'updateRevisarpost'])->name('administracion.updaterevisar.post');
     Route::get('pagos/{imagen}/descargarimagen', [PagoController::class, 'DescargarImagen'])->name('pagos.descargarimagen');
-  Route::get('pagos/descargarimgdev', [PagoController::class, 'DescargarImgDevolucion'])->name('pagos.descargarimgdev');
+    Route::get('pagos/descargarimgdev', [PagoController::class, 'DescargarImgDevolucion'])->name('pagos.descargarimgdev');
 
     Route::get('asesorespago', [PagoController::class, 'asesorespago'])->name('asesorespago');
 
@@ -642,13 +676,22 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
     Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+
     Route::post('situacionporfechasExcel', [ExcelController::class, 'clientessituacionExcel'])->name('situacionporfechasExcel');
+
 
     Route::post('clientesv2Excel', [ExcelController::class, 'clientesv2Excel'])->name('clientesv2Excel');
 
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
 
+    Route::any('pedidosPerdonarCourierExcel', [ExcelController::class, 'pedidosPerdonarCourierExcel'])->name('pedidosPerdonarCourierExcel');
+
     Route::post('clientesabandonoExcel', [ExcelController::class, 'clientesabandonoExcel'])->name('clientesabandonoExcel');
+
+    Route::any('excel/clientes/reporte_multiple', [ExcelController::class, 'clientesReporteMultipleExcel'])->name('excel.clientes.reporte.multiple');
+
+    Route::get('excel.basefria-all_asesor-excel', [ExcelController::class, 'basefriaAllAsesorExcel'])->name('excel.basefria-all_asesor-excel');
+
 
     Route::get('excel/clientes/two_month_ago', [ExcelController::class, 'clientesTwoMonthAgoExcel'])->name('excel.clientes-two-month-ago-excel');
     Route::get('excel/clientes/four_month_ago', [ExcelController::class, 'clientesFourMonthAgoExcel'])->name('excel.clientes-four-month-ago-excel');
@@ -754,7 +797,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('courier.recojoenviarope', [RecojoController::class, 'courierRecojoenviarope'])->name('courier.recojoenviarope');
 
 
-
     Route::get('direcciongrupo/{grupo}/no_contesto/get_sustentos_adjuntos', [DireccionGrupoController::class, 'get_sustentos_adjuntos'])->name('direcciongrupo.no-contesto.get-sustentos-adjuntos');
 
 
@@ -763,6 +805,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     //Route::post('getdireecionentrega', [SettingsController::class, 'getdireecionentrega'])->name('getdireecionentrega');
     Route::post('getdireecionentrega', [PedidoController::class, 'getdireecionentrega'])->name('getdireecionentrega');
 
+    //Ruta par usar scraping, con el paquete weidner/goutte
+    Route::get('scraper', [ScraperController::class, 'getscraper'])->name('scraper');
 
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);

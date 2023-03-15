@@ -9,6 +9,7 @@ use App\Events\PedidoEvent;
 use App\Jobs\PostUpdateSituacion;
 use App\Models\AttachCorrection;
 use App\Models\Cliente;
+use App\Models\Correction;
 use App\Models\Departamento;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
@@ -320,7 +321,7 @@ class PedidoController extends Controller
                     }
                 }
 
-              $btn []= '<details>';
+              $btn []= '<details style="max-width: 100px !important">';
               $btn []= '<summary class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize font-weight-bold"> <i class="fa fa-sort" aria-hidden="true"></i> Otros  </summary>';
               /*SUMARY*/
               if (can('pedidos.destroy')) {
@@ -433,6 +434,7 @@ class PedidoController extends Controller
           Pedido::ENTREGADO_RECOJO_COURIER_INT,
           Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
           ])
+        ->where('pedidos.estado',1)
       ->select(
         [
           'pedidos.*',
@@ -572,6 +574,7 @@ class PedidoController extends Controller
       ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color'])
       ->make(true);
   }
+
   public function pedidosrecojo()
   {
     return view('pedidos.recojo.index');
@@ -611,47 +614,17 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             ])
-            /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
-            ->whereIn('pedidos.pagado', ['1'])
-            ->whereIn('pedidos.pago', ['1'])
-            //->whereNotIn("pedidos.envio", ['3'])
-            ->where('dp.saldo', '>=', 11)->where('dp.saldo', '<=', 13);
-
-        $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select([
-                'pedidos.id',
-                'c.nombre as nombres',
-                'c.icelular as icelulares',
-                'c.celular as celulares',
-                'u.identificador as users',
-                'pedidos.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'pedidos.condicion_envio',
-                'pedidos.condicion as condiciones',
-                'pedidos.pagado as condicion_pa',
-                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
-                'pedidos.motivo',
-                'pedidos.responsable',
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
-                'dp.saldo as diferencia',
-                'pedidos.estado',
-                'pedidos.pago',
-                'pedidos.pagado',
-                'pedidos.envio'
+            ->where('pedidos.pagado', '=','1')
+            ->where('pedidos.pago','=', '1')
+            ->where([
+                ['dp.saldo', '>=', 11],
+                ['dp.saldo', '<=', 13],
             ])
-            /*->whereNotIn('pedidos.condicion_code', [Pedido::ANULADO_INT])*/
-            ->whereIn('pedidos.pagado', ['1'])
-            ->whereIn('pedidos.pago', ['1'])
-            //->whereNotIn("pedidos.envio", ['3'])
-            ->Where('dp.saldo', '>=', 17)->where('dp.saldo', '<=', 19);
-
-        $pedidos = $pedidos->union($pedidos2);
-        //->WhereBetween("dp.saldo", ['11', '13'])
-        //->orWhereBetween("dp.saldo", ['17', '19']);
+            ->orwhere([
+                ['dp.saldo', '>=', 17],
+                ['dp.saldo', '<=', 19],
+            ])
+        ->where('pedidos.estado','1');
 
 
         if (Auth::user()->rol == "Llamadas") {
@@ -712,6 +685,25 @@ class PedidoController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->editColumn('condicion_pa',function($pedido){
+                $return="";
+                if($pedido->condicion_pa===null)
+                {
+                    $return='SIN PAGO REGISTRADO';
+                }else if($pedido->condicion_pa==='ANULADO'){
+                    $return='ANULADO';
+                }else{
+                    switch ($pedido->condicion_pa)
+                    {
+                        case '0':$return='<p>SIN PAGO REGISTRADO</p>';break;
+                        case '1':$return='<p>ADELANTO</p>';break;
+                        case '2':$return='<p>PAGO</p>';break;
+                        case '3':$return='<p>ABONADO</p>';break;
+                    }
+                }
+                return $return;
+
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
@@ -1933,6 +1925,16 @@ class PedidoController extends Controller
                 $detalle_pedidos = $pedido->detallePedidos()->update([
                     'estado' => '0'
                 ]);
+                //anular correciones tbm
+                //->where('celular', 'like', '%' . $q . '%')
+                $correct=Correction::where('code', 'like', '' . $pedido->codigo . '%')->get();
+                foreach ($correct as $correction)
+                {
+                    $correction->update(
+                        ['estado'=>0]
+                    );
+                }
+
                 $html = $detalle_pedidos;
             }
             //Cliente::createSituacionByCliente($pedido->cliente_id);
@@ -3264,6 +3266,14 @@ class PedidoController extends Controller
         $pedido->detallePedidos()->update([
             'estado' => '0'
         ]);
+
+        $correct=Correction::where('code', 'like', '' . $pedido->codigo . '-C%')->get();
+        foreach ($correct as $correction)
+        {
+            $correction->update(
+                ['estado'=>0]
+            );
+        }
 
         event(new PedidoAnulledEvent($pedido));
 

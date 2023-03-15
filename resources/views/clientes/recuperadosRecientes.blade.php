@@ -37,26 +37,26 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">COD.</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Celular</th>
-                    <th scope="col">Direccion</th>
-                    <th scope="col">Asesor asignado</th>
-                    <th scope="col">Situacion</th>
-                    <th scope="col">Fec.Ult.Pedido</th>
-                    <th scope="col">Cod.Ult.Pedido</th>
+                    <th scope="col" class="align-middle">COD.</th>
+                    <th scope="col" class="align-middle">Nombre</th>
+                    <th scope="col" class="align-middle">Celular</th>
+                    <th scope="col" class="align-middle">Direccion</th>
+                    <th scope="col" class="align-middle">Asesor asignado</th>
+                    <th scope="col" class="align-middle">Situacion</th>
+                    <th scope="col" class="align-middle">Fec.Ult.Pedido</th>
+                    <th scope="col" class="align-middle">Cod.Ult.Pedido</th>
                     {{--<th scope="col">Cantidad</th>--}}
                     {{--<th scope="col">Año actual</th>
                     <th scope="col">Mes actual</th>
                     <th scope="col">anio pedido</th>
                     <th scope="col">mes pedido</th>
                     <th scope="col">Deuda</th>--}}
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -68,12 +68,12 @@
 
 @stop
 
-@section('css')
+@push('css')
 
     <style>
-      .perla {
-        background-color: #faedcd !important;
-      }
+        .perla {
+            background-color: #faedcd !important;
+        }
 
         .red {
             background-color: red !important;
@@ -125,8 +125,24 @@
             text-shadow: 10px 2px #6ac7c2;
         }
 
+        #tablaPrincipal {
+            width: 100% !important;
+        }
+
+        #tablaPrincipal td {
+            text-align: start !important;
+            vertical-align: middle !important;
+        }
+
+        #tablaPrincipal td:nth-child(9) {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            grid-gap: 5px !important;
+        }
     </style>
-@stop
+@endpush
 
 @section('js')
 
@@ -265,25 +281,20 @@
                     },
                 ],
                 "createdRow": function (row, data, dataIndex) {
-                  if(data["situacion"]=='BLOQUEADO')
-                  {
-                    $(row).addClass('textred');
-                  }else{
-                    if(data["pedidos_mes_deuda_antes"]==0)
-                    {
-                      if(data["pedidos_mes_deuda"]==0)
-                      {
-                      }else if(data["pedidos_mes_deuda"]==1)
-                      {
-                        $(row).addClass('perla');
-                      }else{
-                        $(row).addClass('lighblue');
-                      }
+                    if (data["situacion"] == 'BLOQUEADO') {
+                        $(row).addClass('textred');
+                    } else {
+                        if (data["pedidos_mes_deuda_antes"] == 0) {
+                            if (data["pedidos_mes_deuda"] == 0) {
+                            } else if (data["pedidos_mes_deuda"] == 1) {
+                                $(row).addClass('perla');
+                            } else {
+                                $(row).addClass('lighblue');
+                            }
+                        } else {
+                            $(row).addClass('red');
+                        }
                     }
-                    else{
-                      $(row).addClass('red');
-                    }
-                  }
                 },
                 language: {
                     "decimal": "",

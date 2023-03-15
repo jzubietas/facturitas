@@ -16,8 +16,8 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body pl-0">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             {{-- <table cellspacing="5" cellpadding="5">
               <tbody>
                 <tr>
@@ -379,7 +379,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
 
                             if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::NO_ENTREGADO_OLVA_INT}}') {
                                 $.confirm({
-                                    theme:'material',
+                                    theme: 'material',
                                     title: '¡Confirmación!',
                                     content: `ESTAS SEGURO QUE EL SOBRE <b>${data.codigos}</b> NO A SIDO RECIVIDO POR EL CLIENTE`,
                                     buttons: {
@@ -387,7 +387,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                                             btnClass: 'btn-success',
                                             action: function () {
                                                 $.confirm({
-                                                    theme:'material',
+                                                    theme: 'material',
                                                     title: '¡Confirmación!',
                                                     content: `YA REVISASTE SI VERDADERAMENTE EL SOBRE <b>${data.codigos}</b> NO A SIDO RECIBIDO`,
                                                     buttons: {
@@ -412,7 +412,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                                 });
                             } else if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::ENTREGADO_PROVINCIA_INT}}') {
                                 $.confirm({
-                                    theme:'material',
+                                    theme: 'material',
                                     title: '¡Confirmación!',
                                     content: `ESTAS SEGURO QUE EL SOBRE <b>${data.codigos}</b> A SIDO RECIVIDO POR EL CLIENTE`,
                                     buttons: {
@@ -443,7 +443,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
             $('[data-jqconfirm="edit_tracking"]', row).click(function () {
                 const action = $(this).data('action');
                 $.confirm({
-                    theme:'material',
+                    theme: 'material',
                     title: 'Editar Tracking',
                     type: 'red',
                     content: `<div class="p-2">
@@ -509,19 +509,19 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
             })
         }
 
-            /*
+        /*
 
-            document.onpaste = function(event){
-          var items = (event.clipboardData || event.originalEvent.clipboardData).items;console.log(items);
-          for (index in items) {
-            var item = items[index];
-            if (item.kind === 'file') {
-              // adds the file to your dropzone instance
-              console.log(item.getAsFile())
-            }
-          }
+        document.onpaste = function(event){
+      var items = (event.clipboardData || event.originalEvent.clipboardData).items;console.log(items);
+      for (index in items) {
+        var item = items[index];
+        if (item.kind === 'file') {
+          // adds the file to your dropzone instance
+          console.log(item.getAsFile())
         }
-             */
+      }
+    }
+         */
     </script>
 
     @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
