@@ -1,7 +1,7 @@
 <!---- para hacer referencia al modal puedes ponerle id con un nombre
  o llamarlo por su clase
 ---->
-<div class="modal fade" id="agregar_evento_calendario"   role="dialog">
+<div class="modal fade" id="agregar_evento_calendario" role="dialog">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -50,22 +50,22 @@
                             </div>
 
                             <div class="col-md-4 demo-color">
-                                <h1>Bootstrap Colorpicker Demo (with Bootstrap)</h1>
-                                <input id="demo-input-color" type="text" value="rgb(255, 128, 0)" />
+
+
+                                <div class="form-group">
+                                    <label>Color picker:</label>
+                                    <input type="color" class="form-control">
+                                </div>
                             </div>
+
                         </div>
                     </form>
-
-                    <div class="row">
-                        <div class="col-md-4">.col-md-4</div>
-                        <div class="col-md-4 ml-auto">.col-md-4 .ml-auto</div>
-                    </div>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Registrar tarea</button>
             </div>
         </div>
     </div>

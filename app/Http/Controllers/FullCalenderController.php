@@ -10,15 +10,17 @@ class FullCalenderController extends Controller
 {
     public function index(Request $request)
     {
+        $eventss = [];
         //if($request->ajax()) {
             //dd('ajax');
             $all_events = Event::all();
 
-            $eventss = [];
+
 
             foreach ($all_events as $event)
             {
                 $eventss[] = [
+                    'id'=>$event->id,
                     'title' => $event->title,
                     'start' => $event->start,
                     'end' => $event->end,
@@ -54,8 +56,8 @@ class FullCalenderController extends Controller
                 ]);
                 return response()->json($event);
             case 'delete':
-                $event = Event::find($request->id)->delete();
-                return response()->json($event);
+                $event = Event::find($request->eliminar_evento)->delete();
+                return response()->json($request->eliminar_evento);
             default:
                 # code...
                 break;

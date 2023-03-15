@@ -3,12 +3,10 @@
 @section('title', 'Pedidos - Bandeja de pedidos')
 
 @push('css')
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
-    </style>
     <link rel="stylesheet" href="{{asset('plugins/jquery-ui/jquery-ui.css')}}">
     <link rel="stylesheet" href="{{asset('css/toaster.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/fullcalendar/main.css')}}">
+
     <style>
         /*.fc .fc-col-header-cell-cushion {
             display: inline-block;
@@ -82,6 +80,7 @@
                             </div>
                             <!-- /btn-group -->
                             <div class="input-group">
+                                <label for="new-event"></label>
                                 <input id="new-event" type="text" class="form-control" placeholder="Event Title">
 
                                 <div class="input-group-append">
@@ -90,6 +89,8 @@
                                 <!-- /btn-group -->
                             </div>
                             <!-- /input-group -->
+                            <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
+
                         </div>
                     </div>
                 </div>
@@ -101,6 +102,9 @@
                         <!-- THE CALENDAR -->
                         <div id="calendar" style="width: 100%; display: inline-block;"></div>
                         @include('fullcalendar.modal.agregar_evento')
+                        @include('fullcalendar.modal.eliminar_evento')
+
+
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -113,14 +117,18 @@
 @stop
 
 @section('js')
-    <script src="{{asset('./plugins/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <script src=" {{asset('plugins/moment/moment.min.js')}}"></script>
-    <script src=" {{asset('./plugins/fullcalendar/main.js')}}"></script>
-    <script src=" {{asset('./plugins/fullcalendar/locales/es.js')}}"></script>
-    <script src=" {{asset('./js/toaster.min.js')}}"></script>
+    <script src=" {{asset('plugins/fullcalendar/main.js')}}"></script>
+    <script src=" {{asset('plugins/fullcalendar/locales/es.js')}}"></script>
+    <script src=" {{asset('js/toaster.min.js')}}"></script>
+    <script src=" {{asset('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js')}}"></script>
+
+
     <script>
         $(document).ready(function () {
+
         //$(function () {
             $.ajaxSetup({
                 headers: {
@@ -128,23 +136,22 @@
                 }
             });
 
-            var agregar_evento_calendario = new bootstrap.Modal(document.getElementById('agregar_evento_calendario'), {
+            let agregar_evento_calendario = new bootstrap.Modal(document.getElementById('agregar_evento_calendario'), {
                 keyboard: false
             })
-
-
-            //toastr.success('Hola', 'Event');
+            let eliminar_evento_calendario = new bootstrap.Modal(document.getElementById('eliminar_evento_calendario'), {
+                keyboard: false
+            })
 
             function ini_events(ele) {
                 ele.each(function () {
 
                     // create an Event Object (https://fullcalendar.io/docs/event-object)
                     // it doesn't need to have a start or end
-                    var eventObject = {
+                    let eventObject = {
                         title: $.trim($(this).text()) // use the element's text as the event title
                     }
 
-                    // store the Event Object in the DOM element so we can get to it later
                     $(this).data('eventObject', eventObject)
 
                     // make the event draggable using jQuery UI
@@ -159,17 +166,17 @@
 
             ini_events($('#external-events div.external-event'));
 
-            var date = new Date()
-            var d    = date.getDate(),
+            //let date = new Date()
+            /*let d    = date.getDate(),
                 m    = date.getMonth(),
-                y    = date.getFullYear()
+                y    = date.getFullYear()*/
 
-            var Calendar = FullCalendar.Calendar;
-            var Draggable = FullCalendar.Draggable;
+            let Calendar = FullCalendar.Calendar;
+            let Draggable = FullCalendar.Draggable;
 
-            var containerEl = document.getElementById('external-events');
-            var checkbox = document.getElementById('drop-remove');
-            var calendarEl = document.getElementById('calendar');
+            let containerEl = document.getElementById('external-events');
+            //let checkbox = document.getElementById('drop-remove');
+            let calendarEl = document.getElementById('calendar');
 
             new Draggable(containerEl, {
                 itemSelector: '.external-event',
@@ -183,7 +190,7 @@
                 }
             });
 
-            var calendar = new Calendar(calendarEl, {
+            let calendar = new Calendar(calendarEl, {
                 dayMaxEventRows: true,
                 views: {
                     timeGrid: {
@@ -203,15 +210,16 @@
                     //alert('clicked ' + info.dateStr);
                 },
                 select: function(info) {
+                    console.log(info)
                     //alert('selected ' + info.startStr + ' to ' + info.endStr);
                     agregar_evento_calendario.show()
 
 
-                    /*var event_name = prompt('Event Name:');
+                    /*let event_name = prompt('Event Name:');
                     if(event_name)
                     {
-                        var event_start = $.fullCalendar.formatDate(info.startStr, "Y-MM-DD HH:mm:ss");
-                        var event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD HH:mm:ss");
+                        let event_start = $.fullCalendar.formatDate(info.startStr, "Y-MM-DD HH:mm:ss");
+                        let event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD HH:mm:ss");
 
                         $.ajax({
                             url: "{{--route('fullcalendarAjax')--}}",
@@ -244,8 +252,8 @@
                         info.revert();
                     }*/
 
-                    var event_start = $.fullCalendar.formatDate(info.event.startStr, "Y-MM-DD");
-                    var event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD");
+                    let event_start = $.fullCalendar.formatDate(info.event.startStr, "Y-MM-DD");
+                    let event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD");
 
                     $.ajax({
                         url: "{{route('fullcalendarAjax')}}",
@@ -258,85 +266,41 @@
                         },
                         type: "POST",
                         success: function (response) {
+                            console.log(response)
                             displayMessage("Event updated");
                         }
                     });
 
                 },
                 eventClick: function (event) {
-                    var eventDelete = confirm("Are you sure?");
+                    console.log("eve")
+                    let identify=event.event.id;
+                    eliminar_evento_calendario.show();
+                    $("#eliminar_evento").val(identify);
+
+                    /*let eventDelete = confirm("Are you sure?");
                     if (eventDelete) {
                         $.ajax({
                             type: "POST",
-                            url: "{{route('fullcalendarAjax')}}",
+                            url: "{{--route('fullcalendarAjax')--}}",
                             data: {
                                 id: event.id,
                                 type: 'delete',
                             },
                             success: function (response) {
+                                console.log(response)
                                 calendar.fullCalendar('removeEvents', event.id);
                                 displayMessage("Event removed");
                             }
                         });
-                    }
+                    }*/
                 },
                 locale: 'es',
                 themeSystem: 'bootstrap',
-                //themeSystem: 'jquery-ui',
-                //Random default events
                 //events: @json($eventss),
-                events: [
-                    {
-                        title          : 'All Day Event',
-                        start          : new Date(y, m, 1),
-                        backgroundColor: '#f56954', //red
-                        borderColor    : '#f56954', //red
-                        allDay         : true,
-                        overlap: true,
-                        //display: 'inverse-background',
-                        display: 'background',
-                    },
-                    {
-                        title          : 'Long Event',
-                        start          : new Date(y, m, d - 5),
-                        end            : new Date(y, m, d - 2),
-                        backgroundColor: '#f39c12', //orange
-                        borderColor    : '#f39c12' //yellow
-                    },
-                    {
-                        title          : 'Meeting',
-                        start          : new Date(y, m, d, 10, 30),
-                        allDay         : false,
-                        backgroundColor: '#0073b7', //Blue
-                        borderColor    : '#0073b7' //Blue
-                    },
-                    {
-                        title          : 'Lunch',
-                        start          : new Date(y, m, d, 12, 0),
-                        end            : new Date(y, m, d, 14, 0),
-                        allDay         : false,
-                        backgroundColor: '#00c0ef', //Info (aqua)
-                        borderColor    : '#00c0ef' //Info (aqua)
-                    },
-                    {
-                        title          : 'Birthday Party',
-                        start          : new Date(y, m, d + 1, 19, 0),
-                        end            : new Date(y, m, d + 1, 22, 30),
-                        allDay         : false,
-                        backgroundColor: '#00a65a', //Success (green)
-                        borderColor    : '#00a65a' //Success (green)
-                    },
-                    {
-                        title          : 'Click for Google',
-                        start          : new Date(y, m, 28),
-                        end            : new Date(y, m, 29),
-                        url            : 'https://www.google.com/',
-                        backgroundColor: '#3c8dbc', //Primary (light-blue)
-                        borderColor    : '#3c8dbc' //Primary (light-blue)
-                    }
-                ],
+                events: @json($eventss),
                 editable  : true,
-                droppable : true, // this allows things to be dropped onto the calendar !!!
+                droppable : true,
                 //drop      : function(info) {
                     // is the "remove after drop" checkbox checked?
                     //if (checkbox.checked) {
@@ -350,11 +314,9 @@
                 //toastr.success(message, 'Event');
             }
 
-            //toastr.success('Hola', 'Event');
-
             calendar.render();
 
-            var currColor = '#3c8dbc'
+            let currColor = '#3c8dbc'
             $('#color-chooser > li > a').click(function (e) {
                 e.preventDefault()
                 // Save color
@@ -369,13 +331,13 @@
             $('#add-new-event').click(function (e) {
                 e.preventDefault()
                 // Get value and make sure it is not null
-                var val = $('#new-event').val()
-                if (val.length == 0) {
+                let val = $('#new-event').val()
+                if (val.length === 0) {
                     return
                 }
 
                 // Create events
-                var event = $('<div />')
+                let event = $('<div />')
                 event.css({
                     'background-color': currColor,
                     'border-color'    : currColor,
@@ -384,7 +346,6 @@
                 event.text(val)
                 $('#external-events').prepend(event)
 
-                // Add draggable funtionality
                 ini_events(event)
 
                 // Remove event from text input
@@ -412,13 +373,43 @@
             });*/
 
             $('#agregar_evento_calendario').on('show.bs.modal', function (event) {
-
-                $('#demo-input').colorpicker();
+                event.preventDefault();
+                //$('#color').colorpicker({});
             });
 
-            $(document).on('colorpickerChange','#demo-input-color',function(event){
-                $('#demo-color').css('background-color', event.color.toString());
-            })
+            $('#eliminar_evento_calendario').on('show.bs.modal', function (e) {
+                //var idevento = $(e.relatedTarget).data('eliminaEvento');
+                //$("#eliminar_evento").val(idevento);
+                //$("#thanks").attr("src", img);
+            });
+
+            $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
+                event.preventDefault();
+                var form = $(this)[0];
+                var formData = new FormData(form);
+                //console.log(formData.get("eliminar_evento"));
+                formData.append('type','delete')
+                $.ajax({
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url:"{{ route('fullcalendarAjax') }}",
+                    success:function(data){
+                        eliminar_evento_calendario.hide();
+                        let eventDelete=calendar.getEventById(formData.get("eliminar_evento"))
+                        eventDelete.remove();
+                        //calendar.fullCalendar('removeEvents', formData.eliminar_evento );
+                        //$('#tablaPrincipal').DataTable().ajax.reload();
+
+                    }
+                });
+
+
+
+            });
+
+
 
 
         })
