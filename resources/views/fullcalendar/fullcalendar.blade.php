@@ -173,12 +173,29 @@
                 }
             });
 
+
             let agregar_evento_calendario = new bootstrap.Modal(document.getElementById('agregar_evento_calendario'), {
                 keyboard: false
             })
             let eliminar_evento_calendario = new bootstrap.Modal(document.getElementById('eliminar_evento_calendario'), {
                 keyboard: false
             })
+
+            //agregar_evento_calendario.addEventListener('hidden.bs.modal', function (event) {
+                // do something...
+                //console.log("465")
+            //});
+
+            //eliminar_evento_calendario.addEventListener('hidden.bs.modal', function (event) {
+                // do something...
+                //console.log("123")
+            //});
+
+            $('#agregar_evento_calendario').on('hidden.bs.modal', function () {
+                console.log('hidden event fired!');
+            })
+
+
 
             function ini_events(ele) {
                 ele.each(function () {
@@ -246,6 +263,10 @@
                 dateClick: function (info) {
                     //alert('clicked ' + info.dateStr);
                 },
+                /*refresh: function(info) {
+                    console.warn(info);
+                    console.log('events refreshed')
+                },*/
                 select: function (info) {
                     console.log(info)
                     //alert('selected ' + info.startStr + ' to ' + info.endStr);
@@ -381,17 +402,6 @@
                 },
             });*/
 
-            $('#agregar_evento_calendario').on('show.bs.modal', function (event) {
-                event.preventDefault();
-                //$('#color').colorpicker({});
-            });
-
-            $('#eliminar_evento_calendario').on('show.bs.modal', function (e) {
-                //var idevento = $(e.relatedTarget).data('eliminaEvento');
-                //$("#eliminar_evento").val(idevento);
-                //$("#thanks").attr("src", img);
-            });
-
             $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();
                 var form = $(this)[0];
@@ -408,8 +418,6 @@
                         eliminar_evento_calendario.hide();
                         let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
                         eventDelete.remove();
-                        //calendar.fullCalendar('removeEvents', formData.eliminar_evento );
-                        //$('#tablaPrincipal').DataTable().ajax.reload();
 
                     }
                 });
@@ -427,21 +435,40 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        //$("#agregar_evento_calendario").modal("hide");
+                        console.log(formData.get("calendario_start_evento"))
+                        let dateStr=formData.get("calendario_start_evento");
+                        var date_iso = (dateStr + 'T00:00:00');
+                        console.log(date_iso);
+
                         agregar_evento_calendario.hide();
                         displayMessage("Event created.");
-                        calendar.addEvent(
+                        /*calendar.addEvent(
                             {
                                 id: data.id,
                                 title: calendario_nombre_evento,
                                 start: calendario_start_evento,
                                 end: calendario_start_evento,
                             }
-                        );
-                        calendar.refetchEvents();
+                        );*/
+
+                        calendar.addEvent({
+                            title: 'aaaaaaaaaa',
+                            start: date_iso,
+                            end: date_iso
+                        });
+
+                        /*setTimeout(function(){
+                            calendar.destroy();
+                            calendar.render()
+                            //calendar.rerenderEvents();
+                        },50);*/
+                        //$('#calendar').fullCalendar( 'refetchEvents' );
+
+                        //calendar.refetchEvents();
                     }
                 });
             });
-
 
         })
     </script>
