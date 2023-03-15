@@ -4899,7 +4899,7 @@ metas_dp .animated-progress {
     vertical-align: middle !important;
 }
 
-#tablaOperacionesPendienteAnulacion tbody td:nth-child(8) {
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(9) {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -4907,7 +4907,7 @@ metas_dp .animated-progress {
     grid-gap: 2px;
 }
 
-#tablaOperacionesPendienteAnulacion tbody td:nth-child(8) .btn-fontsize {
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(9) .btn-fontsize {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;

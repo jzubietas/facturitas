@@ -459,6 +459,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.editatencionsinconfirmar/{pedido}', [OperacionController::class, 'editatencionsinconfirmar'])->name('operaciones.editatencionsinconfirmar');
     Route::post('operaciones.datossubidaadj/{pedido}', [OperacionController::class, 'DatosSubidaAdjunto'])->name('operaciones.datossubidaadj');
     Route::post('operaciones.eliminaradjunto', [OperacionController::class, 'eliminarAdjuntoOperaciones'])->name('operaciones.eliminaradjunto');
+    Route::post('operaciones.veratencionanulacion/{pedido}', [OperacionController::class, 'verAtencionAnulacion'])->name('operaciones.veratencionanulacion');
 
     Route::post('operaciones.subircorreccionsinconfirmar', [OperacionController::class, 'subircorreccionsinconfirmar'])->name('operaciones.subircorreccionsinconfirmar');
 

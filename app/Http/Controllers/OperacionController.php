@@ -1396,6 +1396,14 @@ class OperacionController extends Controller
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 
+    public function verAtencionAnulacion(Pedido $pedido)
+    {
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '1')->get();
+
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes'));
+        //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+    }
+
     public function editatencionsinconfirmar(Pedido $pedido)
     {
 
