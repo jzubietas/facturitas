@@ -3958,6 +3958,15 @@ body {
 
 
 @media screen and (max-width: 2249px) {
+    #contenedor-fullscreen .order-change-1{
+        order: 1;
+    }
+    #contenedor-fullscreen .order-change-2{
+        order: 2;
+    }
+    #contenedor-fullscreen .order-change-3{
+        order: 3;
+    }
     .contain-table-dual {
         display: flex !important;
         width: 100% !important;
@@ -4030,6 +4039,13 @@ body {
     #metas_total {
         max-width: 730px !important;
         width: 730px !important;
+    }
+
+    #contenedor-fullscreen .order-change-2{
+        order: 3;
+    }
+    #contenedor-fullscreen .order-change-3{
+        order: 2;
     }
 }
 
