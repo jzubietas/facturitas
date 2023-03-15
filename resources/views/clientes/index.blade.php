@@ -43,26 +43,25 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">COD.</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Celular</th>
-                    <th scope="col">Direccion</th>
-                    <th scope="col">Asesor asignado</th>
-                    <th scope="col">Situacion</th>
+                    <th scope="col" class="align-middle">COD.</th>
+                    <th scope="col" class="align-middle">Nombre</th>
+                    <th scope="col" class="align-middle">Celular</th>
+                    <th scope="col" class="align-middle">Direccion</th>
+                    <th scope="col" class="align-middle">Asesor asignado</th>
+                    <th scope="col" class="align-middle">Situacion</th>
                     {{--<th scope="col">Cantidad</th>--}}
                     {{--<th scope="col">Año actual</th>
                     <th scope="col">Mes actual</th>
                     <th scope="col">anio pedido</th>
                     <th scope="col">mes pedido</th>
                     <th scope="col">Deuda</th>--}}
-                    <th scope="col">Cod Ult. Pedido</th>
-
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="align-middle">Cod Ult. Pedido</th>
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -77,7 +76,7 @@
 
 @stop
 
-@section('css')
+@push('css')
     <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
     <style>
 
@@ -94,7 +93,7 @@
         }
 
         .perla {
-          background-color: #faedcd !important;
+            background-color: #faedcd !important;
         }
 
         .textred {
@@ -143,17 +142,34 @@
             max-width: 80% !important;
         }
 
+        #tablaPrincipal {
+            width: 100% !important;
+        }
+
+        #tablaPrincipal td {
+            text-align: start !important;
+            vertical-align: middle !important;
+        }
+
+        #tablaPrincipal td:nth-child(8) {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            grid-gap: 5px !important;
+        }
+
 
     </style>
+
+@endpush
+
+@section('js')
     <script>
-        window.copyElement=function (el) {
+        window.copyElement = function (el) {
             $(el).select();
             window.document.execCommand("copy");
         }
     </script>
-@stop
-
-@section('js')
 
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
@@ -245,12 +261,12 @@
             $('#modal-historial-situacion-cliente').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idcliente = button.data('cliente')
-                console.log("cliente "+idcliente);
+                console.log("cliente " + idcliente);
 
 
                 $('#tablaPrincipalHistorialSituacion').DataTable().clear().destroy();
 
-              tabla_historial_cliente=$('#tablaPrincipalHistorialSituacion').DataTable({
+                tabla_historial_cliente = $('#tablaPrincipalHistorialSituacion').DataTable({
                     processing: true,
                     serverSide: true,
                     searching: true,
@@ -396,24 +412,19 @@
                     },
                 ],
                 "createdRow": function (row, data, dataIndex) {
-                    if(data["situacion"]=='BLOQUEADO')
-                    {
+                    if (data["situacion"] == 'BLOQUEADO') {
                         $(row).addClass('textred');
 
-                    }else{
-                        if(data["pedidos_mes_deuda_antes"]==0)
-                        {
-                          if(data["pedidos_mes_deuda"]==0)
-                          {
-                          }else if(data["pedidos_mes_deuda"]==1)
-                          {
-                            $(row).addClass('perla');
-                          }else{
-                            $(row).addClass('lighblue');
-                          }
-                        }
-                        else{
-                          $(row).addClass('red');
+                    } else {
+                        if (data["pedidos_mes_deuda_antes"] == 0) {
+                            if (data["pedidos_mes_deuda"] == 0) {
+                            } else if (data["pedidos_mes_deuda"] == 1) {
+                                $(row).addClass('perla');
+                            } else {
+                                $(row).addClass('lighblue');
+                            }
+                        } else {
+                            $(row).addClass('red');
                         }
 
                     }
@@ -456,13 +467,13 @@
                 //console.log(idunico);
                 $("#hiddenIDdelete").val(idunico);
                 if (idcodigo < 10) {
-                    idcodigo = 'CL' + idcodigo+'000'+idunico;
+                    idcodigo = 'CL' + idcodigo + '000' + idunico;
                 } else if (idcodigo < 100) {
-                    idcodigo = 'CL' + idcodigo+'00'+idunico;
+                    idcodigo = 'CL' + idcodigo + '00' + idunico;
                 } else if (idunico < 1000) {
-                    idcodigo = 'CL' + idcodigo+'0'+idunico;
+                    idcodigo = 'CL' + idcodigo + '0' + idunico;
                 } else {
-                    idcodigo = 'CL' + idcodigo+''+idunico;
+                    idcodigo = 'CL' + idcodigo + '' + idunico;
                 }
                 //solo completo datos
                 //hiddenId

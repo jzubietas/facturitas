@@ -576,7 +576,7 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['pagos'],
                 ],
-                [
+                /*[
                     'text' => 'Mis pagos',
                     'route' => 'pagos.mispagos',
                     'can' => 'pagos.mispagos',
@@ -589,7 +589,7 @@ return [
                     'can' => 'pagos.pagosincompletos',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['pagos incompletos'],
-                ],
+                ],*/
                 [
                     'text' => 'Pagos observados',
                     'route' => 'pagos.pagosobservados',
@@ -781,13 +781,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['users'],
                 ],
-                [
+                /*[
                     'text' => 'Encargados',
                     'route' => 'users.encargados',
                     'can' => 'users.encargados',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['encargados'],
-                ],
+                ],*/
                 [
                     'text' => 'Asesores',
                     'route' => 'users.asesores',

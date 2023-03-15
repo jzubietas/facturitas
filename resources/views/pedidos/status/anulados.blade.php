@@ -19,6 +19,7 @@
                     <th scope="col" class="align-middle">Fecha de Anulacion</th>
                     <th scope="col" class="align-middle">Tipo de Banca</th>
                     <th scope="col" class="align-middle">Adjuntos</th>
+                    <th scope="col" class="align-middle">Atencion</th>
                     <th scope="col" class="align-middle">Estado</th>
                     <th scope="col" class="align-middle">Acciones</th>
                 </tr>
@@ -29,6 +30,7 @@
         </div>
     </div>
     @include('operaciones.modal.confirmarAnular')
+    @include('pedidos.modal.Verimagenatenciones')
 @endsection
 
 @section('css')
@@ -146,7 +148,7 @@
                         name: 'imagenes',
                         orderable: false,
                         searchable: false,
-                        sWidth: '20%',
+                        sWidth: '10%',
                         render: function (data, type, row, meta) {
                             if (data == null) {
                                 return '';
@@ -161,6 +163,7 @@
 
                         }
                     },
+                    {data: 'adjunto', name: 'adjunto',},
                     {
                         data: 'condicion_code',
                         name: 'condicion_code',
@@ -210,6 +213,27 @@
                 $("#motivo_anulacion_text").html(button.data('pedido_motivo'))
                 $("#anular_pedido_id").val(button.data('pedido_id'))
             })
+
+            $('#modal_imagen_atenciones').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                console.log(event.relatedTarget)
+                console.log(button.data('id_imagen_atencion'))
+                var idunico = button.data('pedido_id')
+                //recupera imagenes adjuntas
+                $.ajax({
+                    url: "{{ route('operaciones.veratencionanulacion',':id') }}".replace(':id', idunico),
+                    data: idunico,
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos_ver').html("");
+                        $('#listado_adjuntos_antes_ver').html(data);
+                        console.log(data);
+                    }
+                });
+            })
+
             $('#attachmentsButtom').click(function (event) {
                 var files = Array.from($("#anularAttachments")[0].files);
                 if (files.length == 0) {

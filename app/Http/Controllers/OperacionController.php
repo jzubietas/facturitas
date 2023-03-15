@@ -698,6 +698,7 @@ class OperacionController extends Controller
                 , Pedido::ENTREGADO_SIN_SOBRE_OPE_INT
                 , Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT
                 , Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
+                , Pedido::ENTREGADO_PROVINCIA_INT
                 , Pedido::ATENDIDO_OPE_INT
                 , Pedido::ENVIADO_OPE_INT
                 , Pedido::MOTORIZADO_INT
@@ -1393,6 +1394,14 @@ class OperacionController extends Controller
         $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '1')->get();
 
         return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
+        //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+    }
+
+    public function verAtencionAnulacion(Pedido $pedido)
+    {
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '1')->get();
+
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes'));
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 

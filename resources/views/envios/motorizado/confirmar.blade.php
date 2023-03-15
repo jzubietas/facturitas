@@ -28,22 +28,22 @@
     @include('envios.motorizado.modal.entregar_confirm_recojo')
     @include('envios.motorizado.modal.recojo_enviarope')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="overflow: hidden !important;">
+        <div class="card-body" style="overflow-x: scroll !important;">
             <table id="tablaCourierConfirmarFoto" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Asesor</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Fecha de Envio</th>
-                    <th scope="col">Razón social</th>
-                    <th scope="col">Destino</th>
-                    <th scope="col">Dirección de envío</th>
-                    <th scope="col">Referencia</th>
-                    <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="align-middle">Item</th>
+                    <th scope="col" class="align-middle">Código</th>
+                    <th scope="col" class="align-middle">Asesor</th>
+                    <th scope="col" class="align-middle">Cliente</th>
+                    <th scope="col" class="align-middle">Fecha de Envio</th>
+                    <th scope="col" class="align-middle">Razón social</th>
+                    <th scope="col" class="align-middle">Destino</th>
+                    <th scope="col" class="align-middle">Dirección de envío</th>
+                    <th scope="col" class="align-middle">Referencia</th>
+                    <th scope="col" class="align-middle">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
+                    <th scope="col" class="align-middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,7 +86,7 @@
                     }
                     $('[data-jqconfirm]', row).click(function () {
                         $.confirm({
-                            theme:'material',
+                            theme: 'material',
                             type: 'red',
                             title: '¡Revertir Envio!',
                             content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
@@ -123,7 +123,7 @@
                         const imagen2 = $(this).data('imagen2')
                         const imagen3 = $(this).data('imagen3')
                         $.confirm({
-                            theme:'material',
+                            theme: 'material',
                             title: 'Entregas de motorizado Confirmaciones',
                             type: 'green',
                             columnClass: 'xlarge',
@@ -159,7 +159,7 @@
                                 confirmar: {
                                     btnClass: 'btn-info',
                                     action: function () {
-                                        const self=this
+                                        const self = this
                                         self.showLoading(true)
                                         $.post(targetLink)
                                             .done(function () {
@@ -278,42 +278,42 @@
                 $(".foto3").attr("src", foto3);
             })
 
-          $('#modal_confirmrecojomotorizado').on('show.bs.modal', function (event) {
-            //adjunta dos fotos
-            var button = $(event.relatedTarget)
-            var idunico = button.data('direccion_grupo')
-            //var idcodigo = button.data('codigos')
-            //$(".textcode").html(idcodigo);
-            $("#input_confirmrecojomotorizado").val(idunico)
+            $('#modal_confirmrecojomotorizado').on('show.bs.modal', function (event) {
+                //adjunta dos fotos
+                var button = $(event.relatedTarget)
+                var idunico = button.data('direccion_grupo')
+                //var idcodigo = button.data('codigos')
+                //$(".textcode").html(idcodigo);
+                $("#input_confirmrecojomotorizado").val(idunico)
 
-            let foto1 = button.data('imagen1');
-            console.log("foto 1");
-            console.log(foto1)
-            let foto2 = button.data('imagen2');
-            let foto3 = button.data('imagen3');
-            $(".foto1").attr("src", foto1);
-            $(".foto2").attr("src", foto2);
-            $(".foto3").attr("src", foto3);
-          })
+                let foto1 = button.data('imagen1');
+                console.log("foto 1");
+                console.log(foto1)
+                let foto2 = button.data('imagen2');
+                let foto3 = button.data('imagen3');
+                $(".foto1").attr("src", foto1);
+                $(".foto2").attr("src", foto2);
+                $(".foto3").attr("src", foto3);
+            })
 
-          $(document).on("submit", "#form_confirmrecojo_motorizado", function (evento) {
-            evento.preventDefault();
-            var dconfirmrecojo = new FormData();
-            dconfirmrecojo.append('input_confirmrecojomotorizado', $('#input_confirmrecojomotorizado').val());
-            $.ajax({
-              data: dconfirmrecojo,
-              processData: false,
-              contentType: false,
-              type: 'POST',
-              url: "{{ route('courier.confirmrecojo') }}",
-              success: function (data) {
-                $("#modal_confirmrecojomotorizado").modal("hide");
-                $('#tablaCourierConfirmarFoto').DataTable().ajax.reload();
+            $(document).on("submit", "#form_confirmrecojo_motorizado", function (evento) {
+                evento.preventDefault();
+                var dconfirmrecojo = new FormData();
+                dconfirmrecojo.append('input_confirmrecojomotorizado', $('#input_confirmrecojomotorizado').val());
+                $.ajax({
+                    data: dconfirmrecojo,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('courier.confirmrecojo') }}",
+                    success: function (data) {
+                        $("#modal_confirmrecojomotorizado").modal("hide");
+                        $('#tablaCourierConfirmarFoto').DataTable().ajax.reload();
 
-              }
-            });
+                    }
+                });
 
-          })
+            })
 
             $(document).on("submit", "#formulariomotorizadoentregarconfirm", function (evento) {
                 evento.preventDefault();
@@ -353,9 +353,6 @@
                     }
                 });
             });
-
-
-
 
 
         });

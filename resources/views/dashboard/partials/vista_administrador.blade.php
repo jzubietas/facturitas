@@ -95,16 +95,31 @@
     </div>
 </div>--}}
 
+<hr>
 {{-- FULLSCREEN --}}
 <div class="col-lg-12 " id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2">
-        <div class="d-flex justify-content-center">
-            <h1 class="text-uppercase justify-center text-center">Metas del mes
-                de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
-            <button style="background: none; border: none" onclick="openFullscreen();">
-                <i class="fas fa-expand-arrows-alt ml-3"
-                   style="font-size: 20px"></i>
-            </button>
+        <div class="d-flex justify-content-center row">
+            <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1">
+                <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                    <h5 class="card-title text-uppercase">Total de cobranzas:</h5>
+                    <p class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2">
+                <h1 class="text-uppercase justify-center text-center">Metas del mes
+                    de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+                <button style="background: none; border: none" onclick="openFullscreen();">
+                    <i class="fas fa-expand-arrows-alt ml-3"
+                       style="font-size: 20px"></i>
+                </button>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
+                <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                    <h5 class="card-title text-uppercase">Total de pedidos:</h5>
+                    <p class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                </div>
+            </div>
         </div>
         <div class="d-flex justify-content-center align-items-center ml-5">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
@@ -113,11 +128,12 @@
         </div>
     </div>
 
+
     {{-- TABLA DUAL --}}
     <div class="" style=" overflow: hidden !important;">
         <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
             <div class="row">
-                <div class="contain-table-dual">
+                <div class="contain-table-dual row" style="width: 100% !important;">
                     <div class="col-lg-6" id="meta"></div>
                     <div class="col-lg-6" id="metas_dp"></div>
                 </div>
@@ -171,7 +187,7 @@
     </div>
 </div>
 
-{{-- SPARKLINE --}}
+{{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
 <div class="conatiner-fluid">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="card">
@@ -223,8 +239,46 @@
     </div>
 </div>
 
-
 <br>
+
+{{-- SPARKLINE OLVA --}}
+<div class="conatiner-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title text-uppercase">TOTAL RECAUDADO DE OLVA POR DÍA</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="d-flex flex-column">
+                        <span class="text-bold text-lg">{{$gasto_total_olva}}</span>
+                        <span>Cantidad total del día</span>
+                    </p>
+                </div>
+
+                <div class="position-relative mb-4">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                    <canvas id="visitors-chart-olva" style="display: block; width: 764px; height: 200px;"
+                            class="chartjs-render-monitor" width="764" height="200"></canvas>
+                </div>
+                <div class="d-flex flex-row justify-content-end">
+                    <span class="mr-2 text-uppercase">
+                        <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -348,7 +402,7 @@
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
 
-            setInterval(myTimer, 5000);
+            setInterval(myTimer, 500000);
 
             function myTimer() {
                 cargaNueva(1);
@@ -382,14 +436,10 @@
             var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
             var mode = 'index'
             var intersect = true
-
             var $visitorsChart = $('#visitors-chart')
             let $arrr = [{{$contadores_arr}}]
             let $mes_actual = [{{$contadores_mes_actual}}]
             let $mes_anterior = [{{$contadores_mes_anterior}}]
-            console.log($arrr);
-            console.log($mes_actual);
-            console.log($mes_anterior);
             var visitorsChart = new Chart($visitorsChart, {
                 data: {
                     /*eje x: dias*/
@@ -426,7 +476,48 @@
                                 lineWidth: '4px',
                                 color: 'rgba(0, 0, 0, .2)',
                                 zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 250}, ticksStyle)
+                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 100}, ticksStyle)
+                        }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
+                    }
+                }
+            })
+        })
+
+        $(function () {
+            var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
+            var mode = 'index'
+            var intersect = true
+
+            var $visitorsChartOlva = $('#visitors-chart-olva')
+            let $arrr = [{{$contadores_arr}}]
+            let $gasto_olva_dia = [{{$contadores_mes_actual_olva}}]
+
+            var $visitorsChartOlva = new Chart($visitorsChartOlva, {
+                data: {
+                    labels: $arrr,
+                    datasets: [{
+                        type: 'line',
+                        data: $gasto_olva_dia,
+                        backgroundColor: 'transparent',
+                        borderColor: '#17a2b8',
+                        pointBorderColor: '#17a2b8',
+                        pointBackgroundColor: '#17a2b8',
+                        fill: false
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {mode: mode, intersect: intersect},
+                    hover: {mode: mode, intersect: intersect},
+                    legend: {display: false},
+                    scales: {
+                        yAxes: [{
+                            gridLines: {
+                                display: true,
+                                lineWidth: '4px',
+                                color: 'rgba(0, 0, 0, .2)',
+                                zeroLineColor: 'transparent'
+                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 400}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
                     }
                 }

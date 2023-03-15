@@ -13,7 +13,7 @@
     <form id="formperfil" name="formperfil">
 
       <div class="card-body">
-        
+
           <div class="row">
             <div class="col-6">
               <h5 class="card-title">Información de Perfil</h5>
@@ -33,7 +33,7 @@
                   {!! Form::text('email', null, ['class' => 'form-control', 'placeholder' => 'Ingrese email', 'enabled']) !!}
                 </div>
               </div>
-            </div>          
+            </div>
           </div>
       </div>
       <div class="card-footer">
@@ -41,16 +41,16 @@
         <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
       </div>
     </form>
-    
+
   </div>
 
-  
+
   <div class="card">
 
     <form id="formperfilclave" name="formperfilclave">
 
       <div class="card-body">
-        
+
           <div class="row">
             <div class="col-6">
               <h5 class="card-title">Actualiza la contraseña</h5>
@@ -70,7 +70,7 @@
                   {!! Form::text('passconfirm', null, ['class' => 'form-control', 'placeholder' => 'Confirmar contraseña', 'enabled']) !!}
                 </div>
               </div>
-            </div>          
+            </div>
           </div>
       </div>
       <div class="card-footer">
@@ -78,7 +78,7 @@
         <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
       </div>
     </form>
-    
+
   </div>
 
   <div class="card">
@@ -86,7 +86,7 @@
     <form id="formperfilavatar" name="formperfilavatar">
 
       <div class="card-body">
-        
+
           <div class="row">
             <div class="col-6">
               <h5 class="card-title">Actualiza el avatar</h5>
@@ -106,7 +106,7 @@
                   {!! Form::text('passconfirm', null, ['class' => 'form-control', 'placeholder' => 'Confirmar contraseña', 'enabled']) !!}
                 </div>
               </div>
-            </div>          
+            </div>
           </div>
       </div>
       <div class="card-footer">
@@ -114,11 +114,15 @@
         <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
       </div>
     </form>
-    
+
   </div>
 
 @stop
+@push('css')
+    <style>
 
+    </style>
+@endpush
 @section('js')
-  
+
 @endsection

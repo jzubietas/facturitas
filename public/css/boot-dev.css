@@ -28,7 +28,7 @@ body {
     display: none !important;
 }
 
-.text-warn{
+.text-warn {
     color: #983434;
 }
 
@@ -3958,6 +3958,15 @@ body {
 
 
 @media screen and (max-width: 2249px) {
+    #contenedor-fullscreen .order-change-1{
+        order: 1;
+    }
+    #contenedor-fullscreen .order-change-2{
+        order: 2;
+    }
+    #contenedor-fullscreen .order-change-3{
+        order: 3;
+    }
     .contain-table-dual {
         display: flex !important;
         width: 100% !important;
@@ -4018,7 +4027,7 @@ body {
 
 @media screen and (max-width: 800px) {
     #contenedor-fullscreen {
-        overflow-y: scroll !important;
+        overflow: scroll !important;
     }
 }
 
@@ -4030,6 +4039,13 @@ body {
     #metas_total {
         max-width: 730px !important;
         width: 730px !important;
+    }
+
+    #contenedor-fullscreen .order-change-2{
+        order: 3;
+    }
+    #contenedor-fullscreen .order-change-3{
+        order: 2;
     }
 }
 
@@ -4213,6 +4229,14 @@ metas_dp .animated-progress {
     }
 }
 
+/*---------------- MODULO ACCESOS RAPIDOS ----------------*/
+/*--- /pedidos/create ---*/
+/*--- /pagos/create ---*/
+/*--- /pedidosperdonarcurrier ---*/
+/*--- /setting/administrador ---*/
+
+
+
 /*---------------- MODULO PEDIDO ----------------*/
 /*--- /pedidos ---*/
 #tablabandejapedidos {
@@ -4238,7 +4262,7 @@ metas_dp .animated-progress {
         font-size: 15px;
     }
 
-    #tablabandejapedidos td:nth-child(10) span{
+    #tablabandejapedidos td:nth-child(10) span {
         position: initial !important;
         font-size: 12px !important;
     }
@@ -4364,7 +4388,7 @@ metas_dp .animated-progress {
 
     #tablaBandejaPedidosPorAtender td {
         vertical-align: middle !important;
-        text-align: center !important;
+        text-align: start !important;
     }
 
     #tablaBandejaPedidosPorAtender tbody div ul {
@@ -4516,7 +4540,12 @@ metas_dp .animated-progress {
 
     #tablaPrincipal td {
         vertical-align: middle !important;
-        text-align: center !important;
+        text-align: start !important;
+    }
+
+    #tablaPrincipal td:nth-child(10),
+    #tablaPrincipal td:nth-child(11){
+            text-align: center !important;
     }
 }
 
@@ -4679,20 +4708,23 @@ metas_dp .animated-progress {
     max-width: 350px !important;
 }
 
-/*---------------- MODULO OPERACIONES ----------------*/
+/*-------------------------------- MODULO OPERACIONES --------------------------------*/
 /*--- /operaciones.terminados ---*/
 #tablaOperacionesBandejadeSobres {
     width: 100% !important;
 }
 
-#tablaOperacionesBandejadeSobres td:nth-child(6) span{
+#tablaOperacionesBandejadeSobres td:nth-child(6) span {
     position: initial !important;
     font-size: 12px !important;
 }
 
 #tablaOperacionesBandejadeSobres td {
     vertical-align: middle !important;
-    text-align: center !important;
+    text-align: start !important;
+}
+#tablaOperacionesBandejadeSobres td:nth-child(10) {
+    text-align: start;
 }
 
 @media screen and (max-width: 2249px) {
@@ -4741,10 +4773,10 @@ metas_dp .animated-progress {
 
 #tablaOperacionesBandejadeCorrecciones td {
     vertical-align: middle !important;
-    text-align: center !important;
+    text-align: start !important;
 }
 
-#tablaOperacionesBandejadeCorrecciones tbody tr{
+#tablaOperacionesBandejadeCorrecciones tbody tr {
     font-weight: lighter !important;
 }
 
@@ -4782,7 +4814,7 @@ metas_dp .animated-progress {
 /*------------------PENDIENTE*/
 
 /*--- /operaciones.poratender ---*/
-#tablaOperacionesPedidosPorAtender{
+#tablaOperacionesPedidosPorAtender {
     width: 100% !important;
 }
 
@@ -4807,7 +4839,7 @@ metas_dp .animated-progress {
         top: 20px !important;
     }
 
-    #tablaOperacionesPedidosPorAtender tbody td:nth-child(11){
+    #tablaOperacionesPedidosPorAtender tbody td:nth-child(11) {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -4824,10 +4856,11 @@ metas_dp .animated-progress {
 
 /*--- /operaciones.atendidos ---*/
 
-#tablaOperacionesPedidosAtendidos{
+#tablaOperacionesPedidosAtendidos {
     width: 100% !important;
 }
-#tablaOperacionesPedidosAtendidos td{
+
+#tablaOperacionesPedidosAtendidos td {
     vertical-align: middle !important;
 }
 
@@ -4846,12 +4879,18 @@ metas_dp .animated-progress {
 
 /*--- /operaciones.entregados ---*/
 
-#tablaOperacionesJefeOperaciones{
+#tablaOperacionesJefeOperaciones {
     width: 100% !important;
 }
 
-#tablaOperacionesJefeOperaciones td{
+#tablaOperacionesJefeOperaciones td {
     vertical-align: middle !important;
+    text-align: start !important;
+}
+
+#tablaOperacionesJefeOperaciones td:nth-child(6) span{
+    position: initial !important;
+    padding: 4px !important;
 }
 
 #tablaOperacionesJefeOperaciones .sorting::before,
@@ -4860,6 +4899,7 @@ metas_dp .animated-progress {
 #tablaOperacionesJefeOperaciones .sorting_desc::after {
     top: 20px !important;
 }
+
 @media screen and (max-width: 1500px) {
     #tablaOperacionesJefeOperaciones {
         font-size: 13px !important;
@@ -4867,22 +4907,23 @@ metas_dp .animated-progress {
 }
 
 /*--- /pedidos/estados/anulados ---*/
-#tablaOperacionesPendienteAnulacion{
+#tablaOperacionesPendienteAnulacion {
     width: 100% !important;
 }
 
-#tablaOperacionesPendienteAnulacion td{
+#tablaOperacionesPendienteAnulacion td {
     vertical-align: middle !important;
 }
 
-#tablaOperacionesPendienteAnulacion tbody td:nth-child(8){
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(9) {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     flex-direction: column !important;
     grid-gap: 2px;
 }
-#tablaOperacionesPendienteAnulacion tbody td:nth-child(8) .btn-fontsize{
+
+#tablaOperacionesPendienteAnulacion tbody td:nth-child(9) .btn-fontsize {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -4897,29 +4938,29 @@ metas_dp .animated-progress {
     }
 }
 
-/*---------------- MODULO COURRIER ----------------*/
+/*-------------------------------- MODULO COURRIER --------------------------------*/
 /*--- /envios.estadosobres ---*/
 #tablaRecepcionados,
 #tablaEntregados,
 #tablaAnulados_courier,
-#tablaAnulados{
+#tablaAnulados {
     width: 100% !important;
 }
 
 #tablaRecepcionados td,
 #tablaEntregados td,
 #tablaAnulados_courier td
-#tablaAnulados td{
+#tablaAnulados td {
     vertical-align: middle !important;
 }
 
 #tablaAnulados_courier td:nth-child(6) span,
-#tablaAnulados td:nth-child(6) span{
+#tablaAnulados td:nth-child(6) span {
     position: initial !important;
     font-size: 12px !important;
 }
 
-#tablaEntregados td:nth-child(10) span{
+#tablaEntregados td:nth-child(10) span {
     white-space: break-spaces !important;
 }
 
@@ -4931,51 +4972,136 @@ metas_dp .animated-progress {
         font-size: 13px !important;
     }
 }
-/*--- /envios.porconfirmar ---*/
-/*--- /envios.distribuirsobres ---*/
-/*--- /envios.sindireccion ---*/
-/*--- /envios.parareparto ---*/
-/*--- /envios.rutaenvio ---*/
-/*--- /envios/motorizados/confirmar ---*/
-/*--- /envios.seguimientoprovincia ---*/
 
-/*---------------- MODULO MOTORIZADO ----------------*/
+/*--- /envios.porconfirmar ---*/
+#tablaCourierRecepciondeSobres {
+    width: 100% !important;
+}
+
+/*--- /envios.distribuirsobres ---*/
+
+/*--- /envios.sindireccion ---*/
+#tablaCourierSobresSinDireccion {
+    width: 100% !important;
+}
+
+#tablaCourierSobresSinDireccion td {
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
+/*--- /envios.parareparto ---*/
+#tablaPrincipal_sur,
+#tablaPrincipal_centro,
+#tablaPrincipal_norte{
+    width: 100% !important;
+}
+
+#tablaPrincipal_sur td,
+#tablaPrincipal_centro td,
+#tablaPrincipal_norte td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+/*--- /envios.rutaenvio ---*/
+
+/*--- /envios/motorizados/confirmar ---*/
+#tablaCourierConfirmarFoto{
+    width: 100% !important;
+}
+
+#tablaCourierConfirmarFoto .sorting::before,
+#tablaCourierConfirmarFoto .sorting::after,
+#tablaCourierConfirmarFoto .sorting_desc::before,
+#tablaCourierConfirmarFoto .sorting_desc::after{
+    top: 20px !important;
+}
+/*--- /envios.seguimientoprovincia ---*/
+#tablaCourierSeguimientoProvincia{
+    width: 100% !important;
+}
+
+#tablaCourierSeguimientoProvincia td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
+/*-------------------------------- MODULO MOTORIZADO --------------------------------*/
 /*--- /envios.recepcionmotorizado ---*/
+
 /*--- /envios/motorizados ---*/
+#tablaEnmotorizado{
+    width: 100% !important;
+}
 /*--- /envios.devueltos ---*/
 
-/*---------------- MODULO PAGOS ----------------*/
+
+/*-------------------------------- MODULO PAGOS --------------------------------*/
 /*--- /pagos ---*/
+
 /*--- /pagos.mispagos ---*/
+
 /*--- /pagos.pagosincompletos ---*/
+
 /*--- /pagos.pagosobservados ---*/
 
-/*---------------- MODULO ADMINISTRACION ----------------*/
+
+/*-------------------------------- MODULO ADMINISTRACION --------------------------------*/
 /*--- /administracion.porrevisar ---*/
+
 /*--- /administracion.pendientes ---*/
+
 /*--- /administracion.observados ---*/
+
 /*--- /administracion.aprobados ---*/
+
 /*--- /movimientos ---*/
 
-/*---------------- MODULO PERSONAS ----------------*/
-/*--- /clientes ---*/
-/*--- /clientes.recurrentes ---*/
-/*--- /clientes.abandonos.recientes ---*/
-/*--- /clientes.abandonos ---*/
-/*--- /clientes.nuevos ---*/
-/*--- /clientes.recuperados.recientes ---*/
-/*--- /clientes.recuperados ---*/
-/*--- /clientes.nulos ---*/
-/*--- /basefria ---*/
 
-/*---------------- MODULO REPORTES ----------------*/
+/*-------------------------------- MODULO PERSONAS --------------------------------*/
+/*--- /clientes ---*/
+
+/*--- /clientes.recurrentes ---*/
+
+/*--- /clientes.abandonos.recientes ---*/
+
+/*--- /clientes.abandonos ---*/
+
+/*--- /clientes.nuevos ---*/
+
+/*--- /clientes.recuperados.recientes ---*/
+
+/*--- /clientes.recuperados ---*/
+
+/*--- /clientes.nulos ---*/
+
+/*--- /basefria ---*/
+#tablaserverside{
+    width: 100% !important;
+}
+
+#tablaserverside td{
+    text-align: start !important;
+    vertical-align: middle !important;
+}
+
+#tablaserverside td:nth-child(5){
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    grid-gap: 5px !important;
+}
+
+/*-------------------------------- MODULO REPORTES --------------------------------*/
 /*--- /reportes.index ---*/
 /*--- /reportes.operaciones ---*/
 /*--- /reportes.analisis ---*/
 
-/*---------------- MODULO USUARIOS ----------------*/
+/*-------------------------------- MODULO USUARIOS --------------------------------*/
 /*--- /roles ---*/
 /*--- /users ---*/
+
 /*--- /users.encargados ---*/
 /*--- /users.asesores ---*/
 /*--- /users.jefes ---*/
@@ -4983,3 +5109,5 @@ metas_dp .animated-progress {
 /*--- /users.misoperarios ---*/
 /*--- /users.mipersonal ---*/
 /*--- /users.llamadas ---*/
+
+

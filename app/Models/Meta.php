@@ -37,7 +37,7 @@ class Meta extends Model
         'cliente_recuperado_reciente_2',
         'meta_quincena_nuevo',
         'meta_quincena_recuperado_abandono',
-        'meta_quincena_recuperado_reciente'
+        'meta_quincena_recuperado_reciente',
+        'meta_intermedia'
     ];
-
 }

@@ -89,7 +89,11 @@
                                 <!-- /btn-group -->
                             </div>
                             <!-- /input-group -->
-                            <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
+                            <button type="button" class="btn btn-lg btn-danger" data-toggle="popover"
+                                    title="Popover title"
+                                    data-content="And here's some amazing content. It's very engaging. Right?">Click to
+                                toggle popover
+                            </button>
 
                         </div>
                     </div>
@@ -129,7 +133,7 @@
     <script>
         $(document).ready(function () {
 
-        //$(function () {
+            //$(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -156,8 +160,8 @@
 
                     // make the event draggable using jQuery UI
                     $(this).draggable({
-                        zIndex        : 1070,
-                        revert        : true, // will cause the event to go back to its
+                        zIndex: 1070,
+                        revert: true, // will cause the event to go back to its
                         revertDuration: 0  //  original position after the drag
                     })
 
@@ -180,12 +184,12 @@
 
             new Draggable(containerEl, {
                 itemSelector: '.external-event',
-                eventData: function(eventEl) {
+                eventData: function (eventEl) {
                     return {
                         title: eventEl.innerText,
-                        backgroundColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
-                        borderColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
-                        textColor: window.getComputedStyle( eventEl ,null).getPropertyValue('color'),
+                        backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
+                        borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
+                        textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
                     };
                 }
             });
@@ -201,15 +205,15 @@
                 initialView: 'timeGridWeek',
                 selectable: true,
                 headerToolbar: {
-                    left  : 'prev,next today',
+                    left: 'prev,next today',
                     center: 'title',
-                    right : 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 },
-                weekNumbers:true,
-                dateClick: function(info) {
+                weekNumbers: true,
+                dateClick: function (info) {
                     //alert('clicked ' + info.dateStr);
                 },
-                select: function(info) {
+                select: function (info) {
                     console.log(info)
                     //alert('selected ' + info.startStr + ' to ' + info.endStr);
                     agregar_evento_calendario.show()
@@ -296,7 +300,7 @@
                 // Add color effect to button
                 $('#add-new-event').css({
                     'background-color': currColor,
-                    'border-color'    : currColor
+                    'border-color': currColor
                 })
             })
 
@@ -312,8 +316,8 @@
                 let event = $('<div />')
                 event.css({
                     'background-color': currColor,
-                    'border-color'    : currColor,
-                    'color'           : '#fff'
+                    'border-color': currColor,
+                    'color': '#fff'
                 }).addClass('external-event')
                 event.text(val)
                 $('#external-events').prepend(event)
@@ -360,28 +364,49 @@
                 var form = $(this)[0];
                 var formData = new FormData(form);
                 //console.log(formData.get("eliminar_evento"));
-                formData.append('type','delete')
+                formData.append('type', 'delete')
                 $.ajax({
                     data: formData,
                     processData: false,
                     contentType: false,
                     type: 'POST',
-                    url:"{{ route('fullcalendarAjax') }}",
-                    success:function(data){
+                    url: "{{ route('fullcalendarAjax') }}",
+                    success: function (data) {
                         eliminar_evento_calendario.hide();
-                        let eventDelete=calendar.getEventById(formData.get("eliminar_evento"))
+                        let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
                         eventDelete.remove();
                         //calendar.fullCalendar('removeEvents', formData.eliminar_evento );
                         //$('#tablaPrincipal').DataTable().ajax.reload();
 
                     }
                 });
-
-
-
             });
 
+            /*ADD*/
+            $(document).on("submit", "#frm_add_evento_calendario", function (event) {
+                event.preventDefault();
+                var form = $(this)[0];
+                var formData = new FormData(form);
+                //console.log(formData.get("eliminar_evento"));
+                formData.append('type', 'add');
+                $.ajax({
+                    url: "{{route('fullcalendarAjax')}}",
+                    data: formData,
+                    type: "POST",
+                    success: function (data) {
+                        displayMessage("Event created.");
+                        calendar.fullCalendar('renderEvent', {
+                            id: data.id,
+                            title: event_name,
+                            start: event_start,
+                            end: event_end,
+                            allDay: allDay
+                        }, true);
+                        calendar.fullCalendar('unselect');
+                    }
+                });
 
+            });
 
 
         })

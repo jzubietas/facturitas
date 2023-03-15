@@ -101,7 +101,7 @@ class PdfController extends Controller
             ['a.periodo', '=', $periodo_antes],
             ['u.identificador', '<>', '15'],
             ['c.estado', '=', '1'],
-            ['c.tipo', '<>', '1']
+            ['c.tipo', '=', '1']
         ])
         ->orWhere([
             ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
@@ -110,7 +110,7 @@ class PdfController extends Controller
             ['a.periodo', '=', $periodo_antes],
             ['u.identificador', '<>', '15'],
             ['c.estado', '=', '1'],
-            ['c.tipo', '<>', '1']
+            ['c.tipo', '=', '1']
           ])
         ->orWhere([
             ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
@@ -119,7 +119,7 @@ class PdfController extends Controller
             ['a.periodo', '=', $periodo_antes],
             ['u.identificador', '<>', '15'],
             ['c.estado', '=', '1'],
-            ['c.tipo', '<>', '1']
+            ['c.tipo', '=', '1']
           ])
         ->orWhere([
             ['situacion_clientes.situacion', '=', 'NUEVO'],
@@ -128,7 +128,7 @@ class PdfController extends Controller
             ['a.periodo', '=', $periodo_antes],
             ['u.identificador', '<>', '15'],
             ['c.estado', '=', '1'],
-            ['c.tipo', '<>', '1']
+            ['c.tipo', '=', '1']
           ])
         ->groupBy([
         'situacion_clientes.situacion'

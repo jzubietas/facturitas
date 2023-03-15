@@ -29,7 +29,7 @@
   @if(config('adminlte.usermenu_image'))
     <img src="{{ Auth::user()->adminlte_image() }}"
          class="brand-image img-circle elevation-3"
-         alt="{{ Auth::user()->name }}">
+         alt="{{ Auth::user()->rol }}">
   @endif
   <span @if(config('adminlte.usermenu_image')) class="brand-text font-weight-light"
         style="position: relative; font-size: 14px; display: flex;"@endif>
@@ -43,7 +43,7 @@
       </p>
 
       {{--PERFIL ROUTE--}}
-      <a href="#" class="ml-2 "
+      <a href="{{ route('users.miperfil') }}" class="ml-2 "
          style="background: #f8f9fa; border: 1px solid #ddd; padding: 5px 9px; border-radius: 100%; cursor: pointer">
         <i class="fa fa-fw fa-user text-lightblue"></i>
       </a>

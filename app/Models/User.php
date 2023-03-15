@@ -78,6 +78,7 @@ class User extends Authenticatable
         'vidas_restantes',
         'cant_vidas_cero',
         'meta_quincena',
+        'birthday',
     ];
 
     /**
@@ -156,17 +157,20 @@ class User extends Authenticatable
     {
         $user = User::find(Auth()->user()->id);
 
-        switch ($user->id) {
-            case 1:
-                return asset('/imagenes/avatar-admin.png');
-                break;
-            case 13:
-                return asset('/imagenes/avatar-jefe-asesor.png');
-            default:
-                return asset('/imagenes/avatar-asesor.png');
+        if(file_exists('storage/users/' . $user->profile_photo_path))
+        {
+            return '/storage/users/' . $user->profile_photo_path;
+        }else{
+            switch ($user->id) {
+                case 1:
+                    return asset('/imagenes/avatar-admin.png');
+                    break;
+                case 13:
+                    return asset('/imagenes/avatar-jefe-asesor.png');
+                default:
+                    return asset('/imagenes/avatar-asesor.png');
+            }
         }
-
-        return '/../storage/users/' . $user->profile_photo_path;
     }
 
     /* public function pedidos()

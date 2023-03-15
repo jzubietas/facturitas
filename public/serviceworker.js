@@ -28,7 +28,7 @@ self.addEventListener("install", event => {
 });
 
 // Clear cache on activate
-self.addEventListener('activate', event => {
+/*self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
@@ -39,10 +39,9 @@ self.addEventListener('activate', event => {
             );
         })
     );
-});
+});*/
 
 // Serve from Cache
-
 /*self.addEventListener("fetch", event => {
     event.respondWith(
         caches.match(event.request)
