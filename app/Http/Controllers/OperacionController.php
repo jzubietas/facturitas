@@ -698,6 +698,7 @@ class OperacionController extends Controller
                 , Pedido::ENTREGADO_SIN_SOBRE_OPE_INT
                 , Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT
                 , Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
+                , Pedido::ENTREGADO_PROVINCIA_INT
                 , Pedido::ATENDIDO_OPE_INT
                 , Pedido::ENVIADO_OPE_INT
                 , Pedido::MOTORIZADO_INT
