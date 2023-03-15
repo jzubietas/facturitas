@@ -502,20 +502,20 @@ class DashboardController extends Controller
             }
 
             /*meta quincena = 0*/
-/*            if ($all < $meta_quincena) {
-                if ($meta_quincena > 0) {
-                    $p_quincena = round(($all / $meta_quincena) * 100, 2);
-                    $meta_new = 0;
-                    $item['progress_pedidos'] = $p_quincena;
-                } else {
-                    $p_quincena = 0;
-                    $meta_new = 0;
-                    $item['progress_pedidos'] = $p_quincena;
-                }
+            /*            if ($all < $meta_quincena) {
+                            if ($meta_quincena > 0) {
+                                $p_quincena = round(($all / $meta_quincena) * 100, 2);
+                                $meta_new = 0;
+                                $item['progress_pedidos'] = $p_quincena;
+                            } else {
+                                $p_quincena = 0;
+                                $meta_new = 0;
+                                $item['progress_pedidos'] = $p_quincena;
+                            }
 
-            } else*/
-                /*meta 1*/
-                if ($all < $allmeta) {
+                        } else*/
+            /*meta 1*/
+            if ($all < $allmeta) {
                 if ($allmeta > 0) {
                     $p_pedidos = round(($all / $allmeta) * 100, 2);
                     $meta_new = 1;
@@ -1145,49 +1145,49 @@ class DashboardController extends Controller
                 $html .= '   <td>';
 
                 /* META - QUINCENA */
-/*                if ($data["meta_new"] == 0) {
-                    if ($data["progress_pedidos"] < 90) {
-                        $html .= '<div class="w-100 bg-white rounded">
-                                    <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                          <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                          </div>
-                                          <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                              <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
-                                          </div>
-                                    </div>
-                                  </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
-                    } elseif ($data["progress_pedidos"] < 99) {
-                        $html .= '<div class="w-100 bg-white rounded">
-                                    <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                          </div>
-                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
-                    } else {
-                        $html .= '<div class="w-100 bg-white rounded">
-                              <div class="position-relative rounded">
-                                  <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                      </div>
-                                  <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
-                                  </div>
-                              </div>
-                            </div>
-                            <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
-                    }
-                }
+                /*                if ($data["meta_new"] == 0) {
+                                    if ($data["progress_pedidos"] < 90) {
+                                        $html .= '<div class="w-100 bg-white rounded">
+                                                    <div class="position-relative rounded">
+                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                                          <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                          </div>
+                                                          <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                              <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                          </div>
+                                                    </div>
+                                                  </div>
+                                                  <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
+                                    } elseif ($data["progress_pedidos"] < 99) {
+                                        $html .= '<div class="w-100 bg-white rounded">
+                                                    <div class="position-relative rounded">
+                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                          </div>
+                                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                        </div>
+                                                    </div>
+                                                  </div>
+                                                  <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
+                                    } else {
+                                        $html .= '<div class="w-100 bg-white rounded">
+                                              <div class="position-relative rounded">
+                                                  <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                      </div>
+                                                  <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                  </div>
+                                              </div>
+                                            </div>
+                                            <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
+                                    }
+                                }
 
-                else*/
-                    /*META-1*/
-                    if ($data["meta_new"] == 1) {
+                                else*/
+                /*META-1*/
+                if ($data["meta_new"] == 1) {
                     if ($data["progress_pedidos"] >= 90) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
