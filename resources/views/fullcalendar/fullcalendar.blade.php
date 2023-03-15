@@ -110,19 +110,19 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <p>asd</p>
-                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25spx">
+                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25px">
                                         <i class="fas fa-edit text-white" aria-hidden="true"></i>
                                     </a>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <p>asd</p>
-                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25spx">
+                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25px">
                                         <i class="fas fa-edit text-white" aria-hidden="true"></i>
                                     </a>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <p>asd</p>
-                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25spx">
+                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25px">
                                         <i class="fas fa-edit text-white" aria-hidden="true"></i>
                                     </a>
                                 </li>
