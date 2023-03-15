@@ -48,6 +48,12 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'storage/anulaciones' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/storage/anulaciones'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
         'pedidos/correcciones' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
