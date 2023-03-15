@@ -158,7 +158,6 @@
         datasend.append('txtNombresCompletos', datosfrm.txtNombresCompletos);
         datasend.append('txtUserid', datosfrm.txtUserid);
 
-        console.log(datosfrm);
         $.ajax({
            data: datasend,
            processData: false,
@@ -166,7 +165,6 @@
            type: 'POST',
            url: "{{ route('users.updateprofile') }}",
             success: function (respuesta) {
-                console.log('respuesta',respuesta);
                 if (respuesta.success){
                     Swal.fire(
                         'Notificacion',
@@ -184,13 +182,6 @@
         });
     });
 
-    $("#frmNewImage").on("submit", function (e) {
-        e.preventDefault();
-        const formulario = $(e.target);
-        const datosImg = convertFormToJSON(formulario);
-        /*var datasend = new FormData();*/
-        console.log('FrmImage',datosImg);
-    });
     $(document).on("click", "#btnCargarNuevaImagen", function () {
         var imagen = $('#imagen').val();
         var userid = $('#txtUserid').val();
@@ -202,7 +193,6 @@
             );
             return false;
         }
-        console.log('imagen',imagen);
         var dataimg = new FormData();
         dataimg.append('img', imagen);
         dataimg.append('userid', userid);
@@ -219,7 +209,6 @@
             type: 'POST',
             url: "{{ route('users.updateimage') }}",
             success: function (respuesta) {
-                console.log('respuesta',respuesta);
                 if (respuesta.success){
                     Swal.fire(
                         'Notificacion',

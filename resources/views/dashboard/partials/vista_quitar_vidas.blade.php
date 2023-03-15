@@ -9,7 +9,7 @@
             @if(count($lst_users_vida)>0)
               @foreach($lst_users_vida as $usuario)
                 <option style="color:black"
-                        value="{{$usuario->id}}">{{$usuario->identificador." - ". $usuario->name}}</option>
+                        value="{{$usuario->id}}">{{$usuario->identificador." - ". $usuario->name." (Vidas restantes: ". $usuario->vidas_restantes.")"}}</option>
               @endforeach
             @else
               <option style="color:black" value="">---- NO EXISTEN DATOS ----</option>
