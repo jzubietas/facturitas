@@ -443,19 +443,12 @@
 
                         agregar_evento_calendario.hide();
                         displayMessage("Event created.");
-                        /*calendar.addEvent(
-                            {
-                                id: data.id,
-                                title: calendario_nombre_evento,
-                                start: calendario_start_evento,
-                                end: calendario_start_evento,
-                            }
-                        );*/
 
                         calendar.addEvent({
-                            title: 'aaaaaaaaaa',
-                            start: date_iso,
-                            end: date_iso
+                            id: data.id,
+                            title: data.title,
+                            start: data.start,
+                            end: data.end
                         });
 
                         /*setTimeout(function(){
