@@ -283,6 +283,7 @@ class DashboardController extends Controller
         }
 
 
+
         foreach ($asesores as $asesor) {
             /*if (!$asesor->identificador == '01') continue;*/
             if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN, User::ROL_PRESENTACION, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])) {
@@ -501,31 +502,20 @@ class DashboardController extends Controller
             }
 
             /*meta quincena = 0*/
-            if ($all < $meta_quincena) {
-                if ($meta_quincena > 0) {
-                    $p_quincena = round(($all / $meta_quincena) * 100, 2);
-                    $meta_new = 0;
-                    $item['progress_pedidos'] = $p_quincena;
-                } else {
-                    $p_quincena = 0;
-                    $meta_new = 0;
-                    $item['progress_pedidos'] = $p_quincena;
-                }
-                /*meta intermedia*/
-            }/*else if ($all < $allmeta) {
-                if ($allmeta > 0) {
-                    $p_pedidos = round(($all / $allmeta) * 100, 2);
-                    $meta_new = 1;
-                    $item['progress_pedidos'] = $p_pedidos;
-                } else {
-                    $p_pedidos = 0;
-                    $meta_new = 1;
-                    $item['progress_pedidos'] = $p_pedidos;
-                }
+            /*            if ($all < $meta_quincena) {
+                            if ($meta_quincena > 0) {
+                                $p_quincena = round(($all / $meta_quincena) * 100, 2);
+                                $meta_new = 0;
+                                $item['progress_pedidos'] = $p_quincena;
+                            } else {
+                                $p_quincena = 0;
+                                $meta_new = 0;
+                                $item['progress_pedidos'] = $p_quincena;
+                            }
 
-            }*/
+                        } else*/
             /*meta 1*/
-            else if ($all < $allmeta) {
+            if ($all < $allmeta) {
                 if ($allmeta > 0) {
                     $p_pedidos = round(($all / $allmeta) * 100, 2);
                     $meta_new = 1;
@@ -1259,7 +1249,8 @@ class DashboardController extends Controller
                                   </div>
                                   <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
 
-                    } /*ROSADO*/
+                    }
+                    /*ROSADO*/
                     elseif ($data["progress_pedidos"] >= 37) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1273,7 +1264,8 @@ class DashboardController extends Controller
                                   </div>
                                   <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
 
-                    } elseif ($data["progress_pedidos"] >= 34) {
+                    }
+                    elseif ($data["progress_pedidos"] >= 34) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important;">
@@ -1286,7 +1278,8 @@ class DashboardController extends Controller
                                   </div>
                                   <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
 
-                    } else {
+                    }
+                    else {
                         $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
                                   <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
