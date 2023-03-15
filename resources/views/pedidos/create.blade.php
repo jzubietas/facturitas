@@ -42,7 +42,7 @@
 
 @endsection
 
-@section('css')
+@push('css')
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> --}}
 
     <style>
@@ -62,7 +62,7 @@
             window.document.execCommand("copy");
         }
     </script>
-@stop
+@endpush
 
 @section('js')
     {{-- <script src="{{ asset('js/datatables.js') }}"></script> --}}
@@ -74,15 +74,15 @@
     <script>
         $(document).ready(function () {
 
-          $(document).on('paste','.bs-searchbox input.form-control',function(e){
-            /*console.log("sadsaad")
-            var variable = e.target.id;
-            console.log("variable", variable)
-            var pastedData = e.originalEvent.clipboardData.getData('text');
-            pastedData=pastedData.replace(/ /g, "");
-            $(this).val(pastedData)
-            console.log("sadsaad")*/
-          })
+            $(document).on('paste', '.bs-searchbox input.form-control', function (e) {
+                /*console.log("sadsaad")
+                var variable = e.target.id;
+                console.log("variable", variable)
+                var pastedData = e.originalEvent.clipboardData.getData('text');
+                pastedData=pastedData.replace(/ /g, "");
+                $(this).val(pastedData)
+                console.log("sadsaad")*/
+            })
 
             $(document).on('click', '[data-toggle=jqconfirm][data-type=previsualizar]', function () {
                 let pruc = $('#pruc').val();
@@ -518,7 +518,7 @@ ${data.map(function (data, index) {
                     }
                 })
 
-            validasobre=$("#txtValidaSobre").val(); //
+            validasobre = $("#txtValidaSobre").val(); //
             if (nombre_empresa != "" && mes != "") {
                 subtotal[cont] = (cantidad * porcentaje) / 100;
                 total = Number(courier) + subtotal[cont];
@@ -985,7 +985,7 @@ ${files.map(function (file) {
                     fd.append("nota[]", this.value);
                 });
                 $('[name="validasobres[]"]').each(function () {
-                  fd.append("validasobres[]", this.value);
+                    fd.append("validasobres[]", this.value);
                 });
                 let files = $('[name="adjunto[]');
                 if (files[0].files.length > 0) {
@@ -1072,25 +1072,25 @@ ${files.map(function (file) {
 
             $(document).on("change", "#user_id", function () {
                 var uid = $(this).val();
-                console.log('uid '+ uid)
+                console.log('uid ' + uid)
 
-              var clientedeasesor = new FormData();
-              clientedeasesor.append('user_id', uid);
-              $.ajax({
-                data: clientedeasesor,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                url: "{{ route('cargar.clientedeasesor') }}",
-                success: function (data) {
-                  $('#cliente_id').html(data.html);
-                  $("#cliente_id").selectpicker("refresh");
-                  $('#cliente_id_ruc').html(data.html);
-                  let c_cliente_id = $('#cliente_id').val();
-                  $('#cliente_id_ruc').selectpicker('refresh');
-                  $('#cliente_id_ruc').val(c_cliente_id);
-                }
-              });
+                var clientedeasesor = new FormData();
+                clientedeasesor.append('user_id', uid);
+                $.ajax({
+                    data: clientedeasesor,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('cargar.clientedeasesor') }}",
+                    success: function (data) {
+                        $('#cliente_id').html(data.html);
+                        $("#cliente_id").selectpicker("refresh");
+                        $('#cliente_id_ruc').html(data.html);
+                        let c_cliente_id = $('#cliente_id').val();
+                        $('#cliente_id_ruc').selectpicker('refresh');
+                        $('#cliente_id_ruc').val(c_cliente_id);
+                    }
+                });
 
             });
 
@@ -1134,11 +1134,11 @@ ${files.map(function (file) {
 
             $(document).on("click", "#bt_add", function () {
                 const swalWithBootstrapButtons = Swal.mixin({
-                  customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                  },
-                  buttonsStyling: false
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
                 })
                 if ($('#pcliente_id').val() == '') {
                     Swal.fire(
@@ -1243,68 +1243,68 @@ ${files.map(function (file) {
                         'warning'
                     )
                 } else {
-                  const arrayCombo = ['{{\App\Models\DetallePedido::ELECTRONICA_SIN_BANCA_DESC}}'];
-                  const valorTipoBanca=$('#ptipo_banca').val().split('_')[0];
-                  if (arrayCombo.includes(valorTipoBanca)) {
-                    swalWithBootstrapButtons.fire({
-                      title: 'EL SIGUIENTE PEDIDO SE VA A REALIZAR <b>SIN SOBRE</b>',
-                      text: "ESTAS DE ACUERDO",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      cancelButtonText: 'SI, SIN SOBRE',
-                      confirmButtonText: 'NO, CON SOBRE',
-
-                      reverseButtons: true
-                    }).then((result) => {
-                      if (result.isConfirmed) {
+                    const arrayCombo = ['{{\App\Models\DetallePedido::ELECTRONICA_SIN_BANCA_DESC}}'];
+                    const valorTipoBanca = $('#ptipo_banca').val().split('_')[0];
+                    if (arrayCombo.includes(valorTipoBanca)) {
                         swalWithBootstrapButtons.fire({
-                          title: 'ESTAS SEGURO DE CREAR UN PEDIDO <b>CON SOBRE</b>',
-                          text: "¿Estás seguro (a)? Revisa antes de Continuar.",
-                          icon: 'warning',
-                          showCancelButton: true,
-                          cancelButtonText: 'NO',
-                          confirmButtonText: 'SI',
-                          reverseButtons: true
+                            title: 'EL SIGUIENTE PEDIDO SE VA A REALIZAR <b>SIN SOBRE</b>',
+                            text: "ESTAS DE ACUERDO",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            cancelButtonText: 'SI, SIN SOBRE',
+                            confirmButtonText: 'NO, CON SOBRE',
+
+                            reverseButtons: true
                         }).then((result) => {
-                          if (result.isConfirmed) {
-                            $("#txtValidaSobre").val('Si');
-                            swalWithBootstrapButtons.fire(
-                              'Confirmado',
-                              'Pedido agregado correctamente',
-                              'success'
-                            )
-                            cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-                            ValidarDatosPedido();
-                          } else if (
-                            result.dismiss === Swal.DismissReason.cancel
-                          ) {
-                            $("#txtValidaSobre").val('No');
-                            swalWithBootstrapButtons.fire(
-                              'No',
-                              'Hiciste lo correcto, al revisar.',
-                              'success'
-                            )
-                            cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-                            ValidarDatosPedido();
-                          }
+                            if (result.isConfirmed) {
+                                swalWithBootstrapButtons.fire({
+                                    title: 'ESTAS SEGURO DE CREAR UN PEDIDO <b>CON SOBRE</b>',
+                                    text: "¿Estás seguro (a)? Revisa antes de Continuar.",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    cancelButtonText: 'NO',
+                                    confirmButtonText: 'SI',
+                                    reverseButtons: true
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $("#txtValidaSobre").val('Si');
+                                        swalWithBootstrapButtons.fire(
+                                            'Confirmado',
+                                            'Pedido agregado correctamente',
+                                            'success'
+                                        )
+                                        cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                                        ValidarDatosPedido();
+                                    } else if (
+                                        result.dismiss === Swal.DismissReason.cancel
+                                    ) {
+                                        $("#txtValidaSobre").val('No');
+                                        swalWithBootstrapButtons.fire(
+                                            'No',
+                                            'Hiciste lo correcto, al revisar.',
+                                            'success'
+                                        )
+                                        cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                                        ValidarDatosPedido();
+                                    }
+                                })
+                            } else if (
+                                result.dismiss === Swal.DismissReason.cancel
+                            ) {
+                                $("#txtValidaSobre").val('No');
+                                swalWithBootstrapButtons.fire(
+                                    'No',
+                                    'Se agrega pedido sin sobre.',
+                                    'success'
+                                )
+                                cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                                ValidarDatosPedido();
+                            }
                         })
-                      } else if (
-                        result.dismiss === Swal.DismissReason.cancel
-                      ) {
-                        $("#txtValidaSobre").val('No');
-                        swalWithBootstrapButtons.fire(
-                          'No',
-                          'Se agrega pedido sin sobre.',
-                          'success'
-                        )
+                    } else {
                         cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
                         ValidarDatosPedido();
-                      }
-                    })
-                  }else {
-                    cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-                    ValidarDatosPedido();
-                  }
+                    }
                 }
             });
 

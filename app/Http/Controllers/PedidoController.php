@@ -64,16 +64,16 @@ class PedidoController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        $distritos = Distrito::whereIn('provincia', ['LIMA','CALLAO'])
-          ->where('estado', '1')
-          //->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
-          ->select([
-            'distrito',
-            DB::raw("concat(distrito,' - ',zona) as distritonam"),
-            'zona'
-          ])->orderBy('distrito')->get();
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            //->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+            ->select([
+                'distrito',
+                DB::raw("concat(distrito,' - ',zona) as distritonam"),
+                'zona'
+            ])->orderBy('distrito')->get();
 
-        return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor', 'mirol', 'miidentificador','distritos'));
+        return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor', 'mirol', 'miidentificador', 'distritos'));
     }
 
     public function indexperdonarcurrier()
@@ -281,8 +281,8 @@ class PedidoController extends Controller
                     font-size: 8px;
                     color: black !important;">Con ruta</span>';
                 }
-              $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-              $badge_estado .= '<span class="rounded etiquetas_asignacion" style="margin: 0px !important; background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado .= '<span class="rounded etiquetas_asignacion" style="margin: 0px !important; background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) use ($miidentificador) {
@@ -321,10 +321,10 @@ class PedidoController extends Controller
                     }
                 }
 
-              $btn []= '<details style="max-width: 100px !important">';
-              $btn []= '<summary class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize font-weight-bold"> <i class="fa fa-sort" aria-hidden="true"></i> Otros  </summary>';
-              /*SUMARY*/
-              if (can('pedidos.destroy')) {
+                $btn [] = '<details style="max-width: 100px !important">';
+                $btn [] = '<summary class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize font-weight-bold"> <i class="fa fa-sort" aria-hidden="true"></i> Otros  </summary>';
+                /*SUMARY*/
+                if (can('pedidos.destroy')) {
                     if ($pedido->estado == 0) {
                         $btn[] = '<a href="#" class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' . $pedido->id . '" data-codigo=' . $pedido->codigo . '><i class="fas fa-check text-secondary"></i> Restaurar</a>';
                     } else {
@@ -355,9 +355,8 @@ class PedidoController extends Controller
                 }
 
                 if ($pedido->da_confirmar_descarga) {
-                    if ($pedido->estado == 1)
-                    {
-                      $btn[] = '<button data-jqconfirmdetalle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
+                    if ($pedido->estado == 1) {
+                        $btn[] = '<button data-jqconfirmdetalle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
                                     data-idc="' . $pedido->id . '"
                                     data-codigo="' . $pedido->codigos . '"
 
@@ -366,7 +365,7 @@ class PedidoController extends Controller
                                      >
                                     <i class="fa fa-file"></i> Adjuntos
                                 </button>';
-                    }else{
+                    } else {
 
                     }
 
@@ -387,26 +386,24 @@ class PedidoController extends Controller
                 }
 
 
-
-
                 if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
 
                     $codigo_p = trim($pedido->codigos);
 
                     $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item text-center btn-fontsize"
                                 data-target="#modal-recojo-pedidos"
-                                data-pedidoid="' . $pedido->id . '" data-pedidocodigo="' . $codigo_p. '" data-toggle="modal"
-                                data-clienteid="'. $pedido->cliente_id . '" data-clientenombre="' . $pedido->nombres . '"
-                                data-nombreResiv="'. $pedido->env_nombre_cliente_recibe . '" data-telefonoResiv="' . $pedido->env_celular_cliente_recibe . '"
-                                data-direccionReco="'. $pedido->env_direccion . '" data-referenciaReco="' . $pedido->env_referencia . '"
-                                data-observacionReco="'. $pedido->env_observacion . '" data-gmclink="' . $pedido->env_gmlink . '"
+                                data-pedidoid="' . $pedido->id . '" data-pedidocodigo="' . $codigo_p . '" data-toggle="modal"
+                                data-clienteid="' . $pedido->cliente_id . '" data-clientenombre="' . $pedido->nombres . '"
+                                data-nombreResiv="' . $pedido->env_nombre_cliente_recibe . '" data-telefonoResiv="' . $pedido->env_celular_cliente_recibe . '"
+                                data-direccionReco="' . $pedido->env_direccion . '" data-referenciaReco="' . $pedido->env_referencia . '"
+                                data-observacionReco="' . $pedido->env_observacion . '" data-gmclink="' . $pedido->env_gmlink . '"
                                 >
                                 <i class="fa fa-check-circle text-warning"></i>
                                 Recojo</a>';
                 }
 
-              $btn []= '</details>';
-              /*SUMARY*/
+                $btn [] = '</details>';
+                /*SUMARY*/
 
 
                 $btn[] = '</ul></div>';
@@ -416,40 +413,40 @@ class PedidoController extends Controller
             ->make(true);
     }
 
-  public function indexrecojotabla(Request $request)
-  {
-    $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-      ->join('users as u', 'pedidos.user_id', 'u.id')
-      ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-      ->leftJoin('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
-      ->whereIn('pedidos.condicion_envio_code',
-        [
-          Pedido::RECOJO_COURIER_INT,
-          Pedido::REPARTO_RECOJO_COURIER_INT,
-          Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT,
-          Pedido::RECEPCION_RECOJO_MOTORIZADO_INT,
-          Pedido::RECOJO_MOTORIZADO_INT,
-          Pedido::RECIBIDO_RECOJO_CLIENTE_INT,
-          Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT,
-          Pedido::ENTREGADO_RECOJO_COURIER_INT,
-          Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
-          ])
-        ->where('pedidos.estado',1)
-      ->select(
-        [
-          'pedidos.*',
-          'pedidos.codigo as codigos',
-          'pedidos.condicion as condiciones',
-          'pedidos.pagado as condicion_pa',
-          'c.nombre as nombres',
-          'c.icelular as icelulares',
-          'c.celular as celulares',
-          'u.identificador as users',
-          'dp.nombre_empresa as empresas',
-          'dp.total as total',
-          'dp.cantidad as cantidad',
-          'dp.ruc as ruc',
-          DB::raw("
+    public function indexrecojotabla(Request $request)
+    {
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->leftJoin('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
+            ->whereIn('pedidos.condicion_envio_code',
+                [
+                    Pedido::RECOJO_COURIER_INT,
+                    Pedido::REPARTO_RECOJO_COURIER_INT,
+                    Pedido::ENVIO_RECOJO_MOTORIZADO_COURIER_INT,
+                    Pedido::RECEPCION_RECOJO_MOTORIZADO_INT,
+                    Pedido::RECOJO_MOTORIZADO_INT,
+                    Pedido::RECIBIDO_RECOJO_CLIENTE_INT,
+                    Pedido::CONFIRMAR_RECOJO_MOTORIZADO_INT,
+                    Pedido::ENTREGADO_RECOJO_COURIER_INT,
+                    Pedido::ENTREGADO_RECOJO_JEFE_OPE_INT,
+                ])
+            ->where('pedidos.estado', 1)
+            ->select(
+                [
+                    'pedidos.*',
+                    'pedidos.codigo as codigos',
+                    'pedidos.condicion as condiciones',
+                    'pedidos.pagado as condicion_pa',
+                    'c.nombre as nombres',
+                    'c.icelular as icelulares',
+                    'c.celular as celulares',
+                    'u.identificador as users',
+                    'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'dp.cantidad as cantidad',
+                    'dp.ruc as ruc',
+                    DB::raw("
                     concat(
                         (case when pedidos.pago=1 and pedidos.pagado=1 then 'ADELANTO' when pedidos.pago=1 and pedidos.pagado=2 then 'PAGO' else '' end),
                         ' ',
@@ -458,129 +455,130 @@ class PedidoController extends Controller
                         )
                     )  as condiciones_aprobado"),
 
-          DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
-          DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
-          DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha2_up'),
-          DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
-          'dp.saldo as diferencia',
-          'direccion_grupos.motorizado_status'
-        ]
-      );
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
+                    DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha2_up'),
+                    DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
+                    'dp.saldo as diferencia',
+                    'direccion_grupos.motorizado_status'
+                ]
+            );
 
 
-    if (Auth::user()->rol == "Llamadas") {
-      $usersasesores = User::where('users.rol', 'Asesor')
-        ->where('users.estado', '1')
-        ->where('users.llamada', Auth::user()->id)
-        ->select(
-          DB::raw("users.identificador as identificador")
-        )
-        ->pluck('users.identificador');
+        if (Auth::user()->rol == "Llamadas") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
 
-      $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-    } else if (Auth::user()->rol == "Jefe de llamadas") {
-      $pedidos = $pedidos->where('u.identificador', '<>', 'B');
-    } else if (Auth::user()->rol == "Asesor") {
-      $usersasesores = User::where('users.rol', 'Asesor')
-        ->where('users.estado', '1')
-        ->where('users.identificador', Auth::user()->identificador)
-        ->select(
-          DB::raw("users.identificador as identificador")
-        )
-        ->pluck('users.identificador');
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+        } else if (Auth::user()->rol == "Jefe de llamadas") {
+            $pedidos = $pedidos->where('u.identificador', '<>', 'B');
+        } else if (Auth::user()->rol == "Asesor") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
 
-      $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-    } else if (Auth::user()->rol == "Super asesor") {
-      $usersasesores = User::where('users.rol', 'Asesor')
-        ->where('users.estado', '1')
-        ->where('users.identificador', Auth::user()->identificador)
-        ->select(
-          DB::raw("users.identificador as identificador")
-        )
-        ->pluck('users.identificador');
+        } else if (Auth::user()->rol == "Super asesor") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
 
-      $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-    } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
-      $usersasesores = User::where('users.rol', User::ROL_ASESOR_ADMINISTRATIVO)
-        ->where('users.estado', '1')
-        ->where('users.identificador', Auth::user()->identificador)
-        ->select(
-          DB::raw("users.identificador as identificador")
-        )
-        ->pluck('users.identificador');
+        } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+            $usersasesores = User::where('users.rol', User::ROL_ASESOR_ADMINISTRATIVO)
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
 
-      $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-    } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
+        } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
 
-      $usersasesores = User::where('users.rol', 'Asesor')
-        ->where('users.estado', '1')
-        ->where('users.supervisor', Auth::user()->id)
-        ->select(
-          DB::raw("users.identificador as identificador")
-        )
-        ->pluck('users.identificador');
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
 
-      $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-    }
-
-    $miidentificador = Auth::user()->name;
-    return Datatables::of(DB::table($pedidos))
-      ->addIndexColumn()
-      ->addColumn('condicion_envio_color', function ($pedido) {
-        return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-      })
-      ->editColumn('condicion_envio', function ($pedido) {
-        $badge_estado = '';
-        if ($pedido->codigo_regularizado == '1') {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">REGULARIZACION</span>';
-
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
         }
-        if ($pedido->pendiente_anulacion == '1') {
-          $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
-          return $badge_estado;
-        }
-        if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
-          return '<span class="badge badge-danger">ANULADO</span>';
-        }
-        if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #cd11af; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; ">Observado</span>';
-        } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #ff0014; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Contesto</span>';
-        } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #00b972; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Recibido</span>';
-        }
-        if ($pedido->estado_sobre == '1') {
-          $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
-        }
-        if ($pedido->estado_ruta == '1') {
-          $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
+
+        $miidentificador = Auth::user()->name;
+        return Datatables::of(DB::table($pedidos))
+            ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado = '';
+                if ($pedido->codigo_regularizado == '1') {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">REGULARIZACION</span>';
+
+                }
+                if ($pedido->pendiente_anulacion == '1') {
+                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
+                    return $badge_estado;
+                }
+                if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
+                    return '<span class="badge badge-danger">ANULADO</span>';
+                }
+                if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #cd11af; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; ">Observado</span>';
+                } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #ff0014; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Contesto</span>';
+                } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #00b972; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Recibido</span>';
+                }
+                if ($pedido->estado_sobre == '1') {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
+                }
+                if ($pedido->estado_ruta == '1') {
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
-        }
-        $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-        $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
-        return $badge_estado;
-      })
-      ->addColumn('action', function ($pedido) use ($miidentificador) {
-        $btn = [];
-        $btn[] = '';
-        return join('', $btn);
-      })
-      ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color'])
-      ->make(true);
-  }
+                }
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
+            })
+            ->addColumn('action', function ($pedido) use ($miidentificador) {
+                $btn = [];
+                $btn[] = '';
+                return join('', $btn);
+            })
+            ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color'])
+            ->make(true);
+    }
 
-  public function pedidosrecojo()
-  {
-    return view('pedidos.recojo.index');
-  }
-/*    data-nombreResiv="' . $pedido->env_nombre_cliente_recibe . '" data-telefonoResiv="' . $pedido->env_celular_cliente_recibe . '" data-toggle="modal"
-        data-clienteid="'. $pedido->cliente_id . '" data-clientenombre="' . $pedido->nombres . '"*/
+    public function pedidosrecojo()
+    {
+        return view('pedidos.recojo.index');
+    }
+
+    /*    data-nombreResiv="' . $pedido->env_nombre_cliente_recibe . '" data-telefonoResiv="' . $pedido->env_celular_cliente_recibe . '" data-toggle="modal"
+            data-clienteid="'. $pedido->cliente_id . '" data-clientenombre="' . $pedido->nombres . '"*/
 
 
     public function indexperdonarcurriertabla(Request $request)
@@ -614,8 +612,8 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             ])
-            ->where('pedidos.pagado', '=','1')
-            ->where('pedidos.pago','=', '1')
+            ->where('pedidos.pagado', '=', '1')
+            ->where('pedidos.pago', '=', '1')
             ->where([
                 ['dp.saldo', '>=', 11],
                 ['dp.saldo', '<=', 13],
@@ -624,7 +622,7 @@ class PedidoController extends Controller
                 ['dp.saldo', '>=', 17],
                 ['dp.saldo', '<=', 19],
             ])
-        ->where('pedidos.estado','1');
+            ->where('pedidos.estado', '1');
 
 
         if (Auth::user()->rol == "Llamadas") {
@@ -685,20 +683,26 @@ class PedidoController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
-            ->editColumn('condicion_pa',function($pedido){
-                $return="";
-                if($pedido->condicion_pa===null)
-                {
-                    $return='SIN PAGO REGISTRADO';
-                }else if($pedido->condicion_pa==='ANULADO'){
-                    $return='ANULADO';
-                }else{
-                    switch ($pedido->condicion_pa)
-                    {
-                        case '0':$return='<p>SIN PAGO REGISTRADO</p>';break;
-                        case '1':$return='<p>ADELANTO</p>';break;
-                        case '2':$return='<p>PAGO</p>';break;
-                        case '3':$return='<p>ABONADO</p>';break;
+            ->editColumn('condicion_pa', function ($pedido) {
+                $return = "";
+                if ($pedido->condicion_pa === null) {
+                    $return = 'SIN PAGO REGISTRADO';
+                } else if ($pedido->condicion_pa === 'ANULADO') {
+                    $return = 'ANULADO';
+                } else {
+                    switch ($pedido->condicion_pa) {
+                        case '0':
+                            $return = '<p>SIN PAGO REGISTRADO</p>';
+                            break;
+                        case '1':
+                            $return = '<p>ADELANTO</p>';
+                            break;
+                        case '2':
+                            $return = '<p>PAGO</p>';
+                            break;
+                        case '3':
+                            $return = '<p>ABONADO</p>';
+                            break;
                     }
                 }
                 return $return;
@@ -875,7 +879,7 @@ class PedidoController extends Controller
         ];
 
         $anios = [
-
+            "2021" => '2021',
             "2022" => '2022',
             "2023" => '2023',
         ];
@@ -1099,40 +1103,41 @@ class PedidoController extends Controller
         }
         return response()->json(['html' => $html]);
     }
-  public function clientemodal1(Request $request)
-  {
-    $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-    if (!empty($request->user_id)) {
-      $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')
-        ->where('clientes.tipo', '1')
-        ->where('clientes.estado', '1');
-      if ($request->rol != User::ROL_ADMIN) {
-        $clientes->where('u.identificador', $request->user_id);
-      }
 
-      $clientes = $clientes->get([
-        'clientes.id',
-        'clientes.celular',
-        'clientes.icelular',
-        'clientes.nombre',
-        'clientes.crea_temporal',
-        'clientes.activado_tiempo',
-        'clientes.activado_pedido',
-        'clientes.temporal_update',
-        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and cast(ped.created_at as date) >='" . now()->startOfMonth()->format('Y-m-d') . "' and ped.estado=1) as pedidos_mes_deuda "),
-        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and cast(ped2.created_at as date) <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d') . "'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
-      ]);
-      foreach ($clientes as $cliente) {
-        //if ($cliente->pedidos_mes_deuda > 0 || $cliente->pedidos_mes_deuda_antes > 0) {
-        $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
-        //}
-      }
+    public function clientemodal1(Request $request)
+    {
+        $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        if (!empty($request->user_id)) {
+            $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')
+                ->where('clientes.tipo', '1')
+                ->where('clientes.estado', '1');
+            if ($request->rol != User::ROL_ADMIN) {
+                $clientes->where('u.identificador', $request->user_id);
+            }
+
+            $clientes = $clientes->get([
+                'clientes.id',
+                'clientes.celular',
+                'clientes.icelular',
+                'clientes.nombre',
+                'clientes.crea_temporal',
+                'clientes.activado_tiempo',
+                'clientes.activado_pedido',
+                'clientes.temporal_update',
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and cast(ped.created_at as date) >='" . now()->startOfMonth()->format('Y-m-d') . "' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and cast(ped2.created_at as date) <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d') . "'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+            ]);
+            foreach ($clientes as $cliente) {
+                //if ($cliente->pedidos_mes_deuda > 0 || $cliente->pedidos_mes_deuda_antes > 0) {
+                $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
+                //}
+            }
+        }
+        return response()->json(['html' => $html]);
     }
-    return response()->json(['html' => $html]);
-  }
 
 
-  public function clientedeudaparaactivar(Request $request)//clientes
+    public function clientedeudaparaactivar(Request $request)//clientes
     {
         if (!$request->user_id || $request->user_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
@@ -1150,8 +1155,8 @@ class PedidoController extends Controller
                     'clientes.activado_tiempo',
                     'clientes.activado_pedido',
                     'clientes.temporal_update',
-                  DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and cast(ped.created_at as date) >='" . now()->startOfMonth()->format('Y-m-d') . "' and ped.estado=1) as pedidos_mes_deuda "),
-                  DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and cast(ped2.created_at as date) <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d') . "'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and cast(ped.created_at as date) >='" . now()->startOfMonth()->format('Y-m-d') . "' and ped.estado=1) as pedidos_mes_deuda "),
+                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and cast(ped2.created_at as date) <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d') . "'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                 ]);
             foreach ($clientes as $cliente) {
                 if ($cliente->pedidos_mes_deuda > 0 || $cliente->pedidos_mes_deuda_antes > 0) {
@@ -1927,11 +1932,10 @@ class PedidoController extends Controller
                 ]);
                 //anular correciones tbm
                 //->where('celular', 'like', '%' . $q . '%')
-                $correct=Correction::where('code', 'like', '' . $pedido->codigo . '%')->get();
-                foreach ($correct as $correction)
-                {
+                $correct = Correction::where('code', 'like', '' . $pedido->codigo . '%')->get();
+                foreach ($correct as $correction) {
                     $correction->update(
-                        ['estado'=>0]
+                        ['estado' => 0]
                     );
                 }
 
@@ -3267,11 +3271,10 @@ class PedidoController extends Controller
             'estado' => '0'
         ]);
 
-        $correct=Correction::where('code', 'like', '' . $pedido->codigo . '-C%')->get();
-        foreach ($correct as $correction)
-        {
+        $correct = Correction::where('code', 'like', '' . $pedido->codigo . '-C%')->get();
+        foreach ($correct as $correction) {
             $correction->update(
-                ['estado'=>0]
+                ['estado' => 0]
             );
         }
 
@@ -3367,80 +3370,80 @@ class PedidoController extends Controller
     }
 
 
-  public function recojolistclientes(Request $request)
-  {
-    $pedidos = null;
+    public function recojolistclientes(Request $request)
+    {
+        $pedidos = null;
 
-    $idrequest = $request->cliente_id;
-    $idpedido = $request->pedido;
-    $consultaPedido = Pedido::where('id', $idpedido)->first();
-    $direccion_grupo=$consultaPedido->direccion_grupo;
-    /*$celularClienteRecibe=$consultaPedido->env_celular_cliente_recibe;
-    $cantidad=$consultaPedido->env_cantidad;
-    $tracking=$consultaPedido->env_tracking;
-    $referencia=$consultaPedido->env_referencia;
-    $numRegistro=$consultaPedido->env_numregistro;
-    $rotulo=$consultaPedido->env_rotulo;
-    $observacion=$consultaPedido->env_observacion;
-    $gmLink=$consultaPedido->env_gmlink;
-    $importe=$consultaPedido->env_importe;
-    $zona=$consultaPedido->env_zona_asignada;
-    $destino=$consultaPedido->env_destino;
-    $direction=$consultaPedido->env_direccion;
-    $nombredecliente=$consultaPedido->env_nombre_cliente_recibe;
-    $distrito=$consultaPedido->env_distrito;*/
+        $idrequest = $request->cliente_id;
+        $idpedido = $request->pedido;
+        $consultaPedido = Pedido::where('id', $idpedido)->first();
+        $direccion_grupo = $consultaPedido->direccion_grupo;
+        /*$celularClienteRecibe=$consultaPedido->env_celular_cliente_recibe;
+        $cantidad=$consultaPedido->env_cantidad;
+        $tracking=$consultaPedido->env_tracking;
+        $referencia=$consultaPedido->env_referencia;
+        $numRegistro=$consultaPedido->env_numregistro;
+        $rotulo=$consultaPedido->env_rotulo;
+        $observacion=$consultaPedido->env_observacion;
+        $gmLink=$consultaPedido->env_gmlink;
+        $importe=$consultaPedido->env_importe;
+        $zona=$consultaPedido->env_zona_asignada;
+        $destino=$consultaPedido->env_destino;
+        $direction=$consultaPedido->env_direccion;
+        $nombredecliente=$consultaPedido->env_nombre_cliente_recibe;
+        $distrito=$consultaPedido->env_distrito;*/
 
-    $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-      ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
-      ->select(
-        [
-          'pedidos.id as pedidoid',
-          'c.id as clienteid',
-          'dp.codigo',
-          'dp.nombre_empresa',
-        ]
-      )
-      ->where('pedidos.cliente_id', $idrequest)->where('pedidos.condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);
+        $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->select(
+                [
+                    'pedidos.id as pedidoid',
+                    'c.id as clienteid',
+                    'dp.codigo',
+                    'dp.nombre_empresa',
+                ]
+            )
+            ->where('pedidos.cliente_id', $idrequest)->where('pedidos.condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT);
         //->where('pedidos.cliente_id', $idrequest)->where('direccion_grupo',$direccion_grupo);
-      //->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito)//;
-    if($request->pedidosNotIn){
-      $pedidos = $pedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
+        //->consultarecojo($celularClienteRecibe,$cantidad,$tracking,$referencia,$numRegistro, $rotulo,$observacion,$gmLink,$importe, $zona,$destino, $direction,$nombredecliente,$distrito)//;
+        if ($request->pedidosNotIn) {
+            $pedidos = $pedidos->whereNotIn('pedidos.id', [$request->pedidosNotIn]);
+        }
+
+        return Datatables::of(DB::table($pedidos))
+            ->addIndexColumn()
+            ->make(true);
     }
 
-    return Datatables::of(DB::table($pedidos))
-      ->addIndexColumn()
-      ->make(true);
-  }
+    public function getdireecionentrega(Request $request)
+    {
+        $codigo_pedido = $request->codigo_pedido;//userid de asesor
+        $pedido = Pedido::where('id', $codigo_pedido)->first();
 
-  public function getdireecionentrega(Request $request)
-  {
-    $codigo_pedido= $request->codigo_pedido;//userid de asesor
-    $pedido=Pedido::where('id',$codigo_pedido)->first();
+        $operario = User::where('id', $pedido->user_id)->first()->operario;
+        $jefeop = User::where('id', $operario)->first()->jefe;
 
-    $operario=User::where('id',$pedido->user_id)->first()->operario;
-    $jefeop=User::where('id',$operario)->first()->jefe;
+        //$result_direccion=User::where('id',$jefeop)->first()->id;
+        $result_direccion = Directions::query()->where('user_id', $jefeop)->first()->direccion_recojo;
 
-    //$result_direccion=User::where('id',$jefeop)->first()->id;
-    $result_direccion=Directions::query()->where('user_id',$jefeop)->first()->direccion_recojo;
+        $totalpedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->select(
+                [
+                    'pedidos.id as pedidoid',
+                    'c.id as clienteid',
+                    'dp.codigo',
+                    'dp.nombre_empresa',
+                ]
+            )
+            //->where('pedidos.cliente_id', $request->codigo_cliente)->where('direccion_grupo',$pedido->direccion_grupo)
+            ->where('pedidos.cliente_id', $request->codigo_cliente)
+            ->where('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT);
+        if (!!$request->pedidosNotIn)
+            $totalpedidos = $totalpedidos->whereNotIn('pedidos.id', [$request->pedidosNotIn]);
+        $totalpedidos = $totalpedidos->count();
 
-    $totalpedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-      ->join('clientes as c', 'pedidos.cliente_id', 'c.id')
-      ->select(
-        [
-          'pedidos.id as pedidoid',
-          'c.id as clienteid',
-          'dp.codigo',
-          'dp.nombre_empresa',
-        ]
-      )
-      //->where('pedidos.cliente_id', $request->codigo_cliente)->where('direccion_grupo',$pedido->direccion_grupo)
-      ->where('pedidos.cliente_id', $request->codigo_cliente)
-      ->where('condicion_envio_code',Pedido::ENTREGADO_CLIENTE_INT);
-    if (!!$request->pedidosNotIn)
-      $totalpedidos =  $totalpedidos->whereNotIn('pedidos.id',[$request->pedidosNotIn]);
-      $totalpedidos =  $totalpedidos->count();
+        return $result_direccion . '|' . $totalpedidos;
 
-    return $result_direccion .'|'.$totalpedidos;
-
-  }
+    }
 }
