@@ -214,7 +214,6 @@
                     //alert('selected ' + info.startStr + ' to ' + info.endStr);
                     agregar_evento_calendario.show()
 
-
                     /*let event_name = prompt('Event Name:');
                     if(event_name)
                     {
@@ -246,17 +245,16 @@
                     }*/
                 },
                 eventDrop:function(info){
-                    //alert(info.event.title + " was dropped on " + info.event.start.toISOString());
-
+                    console.log(info.event.title + " was dropped on " + info.event.start.toISOString());
                     /*if (!confirm("Are you sure about this change?")) {
                         info.revert();
                     }*/
 
-                    let event_start = $.fullCalendar.formatDate(info.event.startStr, "Y-MM-DD");
+                    /*let event_start = $.fullCalendar.formatDate(info.event.startStr, "Y-MM-DD");
                     let event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD");
 
                     $.ajax({
-                        url: "{{route('fullcalendarAjax')}}",
+                        url: "{{--route('fullcalendarAjax')--}}",
                         data: {
                             title: info.name,
                             start: event_start,
@@ -269,31 +267,12 @@
                             console.log(response)
                             displayMessage("Event updated");
                         }
-                    });
-
+                    });*/
                 },
                 eventClick: function (event) {
-                    console.log("eve")
                     let identify=event.event.id;
                     eliminar_evento_calendario.show();
                     $("#eliminar_evento").val(identify);
-
-                    /*let eventDelete = confirm("Are you sure?");
-                    if (eventDelete) {
-                        $.ajax({
-                            type: "POST",
-                            url: "{{--route('fullcalendarAjax')--}}",
-                            data: {
-                                id: event.id,
-                                type: 'delete',
-                            },
-                            success: function (response) {
-                                console.log(response)
-                                calendar.fullCalendar('removeEvents', event.id);
-                                displayMessage("Event removed");
-                            }
-                        });
-                    }*/
                 },
                 locale: 'es',
                 themeSystem: 'bootstrap',
@@ -301,13 +280,6 @@
                 events: @json($eventss),
                 editable  : true,
                 droppable : true,
-                //drop      : function(info) {
-                    // is the "remove after drop" checkbox checked?
-                    //if (checkbox.checked) {
-                        // if so, remove the element from the "Draggable Events" list
-                        //info.draggedEl.parentNode.removeChild(info.draggedEl);
-                    //}
-                //}
             });
 
             function displayMessage(message) {
