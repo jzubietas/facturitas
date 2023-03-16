@@ -1226,12 +1226,13 @@ class DashboardController extends Controller
 
                                 else*/
                 /*META-1*/
+                $font_size_sub=11;
 
                 $sub_html='<sub class="top-visible" style="display: block !important;">
-                                      <span class="badge bg-info font-14">MQ. '.$data["meta_quincena"].'</span>
-                                      <span class="badge bg-gradient-warning font-14">MI. '.$data["meta_intermedia"].'</span>
-                                      <span class="badge bg-gradient-purple font-14">M1. '.$data["meta"].'</span>
-                                      <span class="badge bg-gradient-info font-14">M2. '.$data["meta_2"].'</span>
+                                      <span class="badge bg-info font-'.$font_size_sub.'">MQ. '.$data["meta_quincena"].'</span>
+                                      <span class="badge bg-gradient-warning font-'.$font_size_sub.'">MI. '.$data["meta_intermedia"].'</span>
+                                      <span class="badge bg-gradient-purple font-'.$font_size_sub.'"">M1. '.$data["meta"].'</span>
+                                      <span class="badge bg-gradient-info font-'.$font_size_sub.'"">M2. '.$data["meta_2"].'</span>
                                   </sub>';
                 if($data["meta_new"]=='0')
                 {
