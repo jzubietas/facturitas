@@ -1,23 +1,23 @@
 {{--pedidos.recojo--}}
 @extends('adminlte::page')
 
-@section('title', 'ANULACIONES')
+@section('title', 'Anulaciones')
 
 @section('content_header')
-
-    @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_JEFE_OPERARIO  )
-        <a class="btn btn-info btn-sm m-0" href="#" data-target="#modal-agregar-anulacion" data-toggle="modal">
-            <b class="text-white font-weight-bold d-flex align-items-center justify-content-center">
-                <i class="fas fa-user-plus p-1"></i>
-                <p class="m-0 text-card-navbar">Agregar Anulacion</p>
-            </b>
-        </a>
-    @endif
-
-    <h1 class="text-center">
-        <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Bandeja de Anulaciones
-    </h1>
-
+    <div class="row p-0">
+        <div class="form-group col-md-3">
+            <h3>Bandeja de Anulaciones</h3>
+        </div>
+        <div class="form-group col-md-6">
+            @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_JEFE_OPERARIO  )
+                <a class="btn btn-danger btn-sm m-0" href="#" data-target="#modal-agregar-anulacion" data-toggle="modal">
+                    <b class="text-white font-weight-bold d-flex align-items-center justify-content-center">
+                        <i class="fa fa-ban mr-1" aria-hidden="true"></i><p class="m-0 text-card-navbar">  Solicitar Anulacion</p>
+                    </b>
+                </a>
+            @endif
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -122,10 +122,10 @@
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
                         if (data.pendiente_anulacion == 1) {
-                            $('td', row).css('background', 'red').css('font-weight', 'bold');
+                            $('td', row).css('background', '#E57373').css('font-weight', 'bold');
                         }
                     } else {
-                        $(row).addClass('textred');
+                        $(row).addClass('#E57373');
                     }
                 },
                 rowCallback: function (row, data, index) {

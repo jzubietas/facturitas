@@ -99,11 +99,6 @@ class AnulacionController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftJoin('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
-            /*->whereIn('pedidos.condicion_code',
-                [
-                    Pedido::ANULADO_INT
-                ]
-            )*/
             ->where('pedidos.pendiente_anulacion', '1')
             //->where('pedidos.estado',1)
             ->select(
