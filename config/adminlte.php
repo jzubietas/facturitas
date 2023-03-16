@@ -847,7 +847,7 @@ return [
                 [
                     'text' => 'Calendario',
                     'route' => 'fullcalendar',
-                    'can' => 'roles.index',
+                    'can' => 'planificacion.calendario',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['roles*'],
                 ],
