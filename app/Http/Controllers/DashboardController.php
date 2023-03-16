@@ -1308,7 +1308,7 @@ class DashboardController extends Controller
                         $html .= '<div class="w-100 bg-white rounded">
                                               <div class="position-relative rounded">
                                                   <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                                      <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                      <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                       </div>
                                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                                       <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
@@ -1323,7 +1323,7 @@ class DashboardController extends Controller
                         $html .= '<div class="w-100 bg-white rounded">
                                               <div class="position-relative rounded">
                                                   <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                                      <div class="rounded" role="progressbar" style="background: #f0ed32 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                      <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                       </div>
                                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                                       <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
