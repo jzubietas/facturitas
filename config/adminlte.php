@@ -763,7 +763,7 @@ return [
         ],
 
         [
-            'text' => 'Usuarios',
+            'text' => 'Accesos y Permisos',
             'icon' => 'fas fa-user',
             'can' => 'configuracion.modulo',
             'submenu' => [
@@ -842,12 +842,12 @@ return [
         [
             'text' => 'Planificacion',
             'icon' => 'fas fa-user',
-            'can' => 'configuracion.modulo',
+            'can' => 'planificacion.modulo',
             'submenu' => [
                 [
                     'text' => 'Calendario',
                     'route' => 'fullcalendar',
-                    'can' => 'roles.index',
+                    'can' => 'planificacion.calendario',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['roles*'],
                 ],

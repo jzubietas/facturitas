@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{asset('css/toaster.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/fullcalendar/main.css')}}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         /*.fc .fc-col-header-cell-cushion {
             display: inline-block;
@@ -17,6 +19,120 @@
             margin: 40px auto;
             background-color: #0c84ff !important;
         }*/
+    </style>
+    <style>
+
+        /*
+        i wish this required CSS was better documented :(
+        https://github.com/FezVrasta/popper.js/issues/674
+        derived from this CSS on this page: https://popper.js.org/tooltip-examples.html
+        */
+
+        .popper,
+        .tooltip {
+            position: absolute;
+            z-index: 9999;
+            background: #FFC107;
+            color: black;
+            width: 150px;
+            border-radius: 3px;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+            padding: 10px;
+            text-align: center;
+        }
+        .style5 .tooltip {
+            background: #1E252B;
+            color: #FFFFFF;
+            max-width: 200px;
+            width: auto;
+            font-size: .8rem;
+            padding: .5em 1em;
+        }
+        .popper .popper__arrow,
+        .tooltip .tooltip-arrow {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            position: absolute;
+            margin: 5px;
+        }
+
+        .tooltip .tooltip-arrow,
+        .popper .popper__arrow {
+            border-color: #FFC107;
+        }
+        .style5 .tooltip .tooltip-arrow {
+            border-color: #1E252B;
+        }
+        .popper[x-placement^="top"],
+        .tooltip[x-placement^="top"] {
+            margin-bottom: 5px;
+        }
+        .popper[x-placement^="top"] .popper__arrow,
+        .tooltip[x-placement^="top"] .tooltip-arrow {
+            border-width: 5px 5px 0 5px;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            bottom: -5px;
+            left: calc(50% - 5px);
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .popper[x-placement^="bottom"],
+        .tooltip[x-placement^="bottom"] {
+            margin-top: 5px;
+        }
+        .tooltip[x-placement^="bottom"] .tooltip-arrow,
+        .popper[x-placement^="bottom"] .popper__arrow {
+            border-width: 0 5px 5px 5px;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-top-color: transparent;
+            top: -5px;
+            left: calc(50% - 5px);
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .tooltip[x-placement^="right"],
+        .popper[x-placement^="right"] {
+            margin-left: 5px;
+        }
+        .popper[x-placement^="right"] .popper__arrow,
+        .tooltip[x-placement^="right"] .tooltip-arrow {
+            border-width: 5px 5px 5px 0;
+            border-left-color: transparent;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+            left: -5px;
+            top: calc(50% - 5px);
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .popper[x-placement^="left"],
+        .tooltip[x-placement^="left"] {
+            margin-right: 5px;
+        }
+        .popper[x-placement^="left"] .popper__arrow,
+        .tooltip[x-placement^="left"] .tooltip-arrow {
+            border-width: 5px 0 5px 5px;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            right: -5px;
+            top: calc(50% - 5px);
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .btn-custon-calendario:hover {
+            text-decoration: none !important;
+        }
+
+        .bg-transparent{;
+            background-color: transparent !important;
+        }
+
     </style>
 @endpush
 
@@ -45,22 +161,26 @@
                     {{--Draggable Events--}}
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Draggable Events</h4>
+                            <h4 class="card-title">Eventos para asignar</h4>
                         </div>
                         <div class="card-body">
                             <!-- the events -->
                             <div id="external-events">
-                                <div class="external-event bg-success">Lunch</div>
-                                <div class="external-event bg-warning">Go home</div>
-                                <div class="external-event bg-info">Do homework</div>
-                                <div class="external-event bg-primary">Work on UI design</div>
-                                <div class="external-event bg-danger">Sleep tight</div>
-                                <div class="checkbox">
+                                 @foreach($all_eventsunsigned as $eventunsigned)
+                                    <div class="external-event {{ $eventunsigned->color }}">
+                                        <h4 class="d-inline-block">{{ $eventunsigned->title }}</h4>
+                                        <button type="button" class="bg-white btn btn-custon-calendario btn-light float-right">
+                                            <i class="fa fa-close text-danger"></i>
+                                        </button>
+                                    </div>
+                                 @endforeach
+
+                                {{--<div class="checkbox">
                                     <label for="drop-remove">
                                         <input type="checkbox" id="drop-remove">
                                         remove after drop
                                     </label>
-                                </div>
+                                </div>--}}
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -92,11 +212,6 @@
                                 <!-- /btn-group -->
                             </div>
                             <!-- /input-group -->
-                            <button type="button" class="btn btn-lg btn-danger" data-toggle="popover"
-                                    title="Popover title"
-                                    data-content="And here's some amazing content. It's very engaging. Right?">Click to
-                                toggle popover
-                            </button>
 
                         </div>
                     </div>
@@ -162,6 +277,8 @@
     <script src=" {{asset('js/toaster.min.js')}}"></script>
     <script src=" {{asset('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js')}}"></script>
 
+    <script src='https://unpkg.com/popper.js/dist/umd/popper.min.js'></script>
+    <script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script>
 
     <script>
         $(document).ready(function () {
@@ -253,27 +370,59 @@
                 },
                 initialDate: '2023-03-02',
                 initialView: 'dayGridMonth',
-                selectable: true,
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 },
                 weekNumbers: true,
-                dateClick: function (info) {
-                    //alert('clicked ' + info.dateStr);
-                },
-                /*refresh: function(info) {
-                    console.warn(info);
-                    console.log('events refreshed')
+                /*dateClick: function (info) {
+                    console.log('clicked ' + info.dateStr);
+                    agregar_evento_calendario.show()
                 },*/
+                /*eventRender: function(eventObj, $el) {
+                    $el.popover({
+                        title: eventObj.title,
+                        content: eventObj.description,
+                        trigger: 'hover',
+                        placement: 'top',
+                        container: 'body'
+                    });
+                },*/
+                eventColor: 'green',
+                events: @json($eventss),
+                eventDidMount: function(info) {
+                    var tooltip = new Tooltip(info.el, {
+                        title: info.event.extendedProps.description,
+                        placement: 'top',
+                        trigger: 'hover',
+                        container: 'body'
+                    });
+                },
+                eventDisplay: function(event, element, view) {
+                    if (event.allDay === 'true') {
+                        event.allDay = true;
+                    } else {
+                        event.allDay = false;
+                    }
+                },
+                selectable: true,
+                //selectHelper:true,
                 select: function (info) {
-                    console.log(info)
-                    console.log(('selected ' + info.startStr + ' to ' + info.endStr));
+                    console.log("nuevo evento")
+                    //console.log(('selected ' + info.startStr + ' to ' + info.endStr));
+
+                    /*$('#agregar_evento_calendario').find('input[name=evtStart]').val(
+                        info.startStr.format('YYYY-MM-DD HH:mm:ss')
+                    );
+                    $('#agregar_evento_calendario').find('input[name=evtEnd]').val(
+                        info.endStr.format('YYYY-MM-DD HH:mm:ss')
+                    );*/
                     agregar_evento_calendario.show()
 
-                    $("#calendario_start_evento").val(info.startStr);
-                    $("#calendario_end_evento").val(info.endStr);
+
+                    //$("#calendario_start_evento").val(info.startStr);
+                    //$("#calendario_end_evento").val(info.endStr);
 
                     /*let event_name = prompt('Event Name:');
                     if(event_name)
@@ -305,8 +454,10 @@
 
                     }*/
                 },
+                editable: true,
                 eventDrop: function (info) {
-                    console.log(info.event.title + " was dropped on " + info.event.start.toISOString());
+                    console.log("actualizar evento")
+                    //console.log(info.event.title + " was dropped on " + info.event.start.toISOString());
                     /*if (!confirm("Are you sure about this change?")) {
                         info.revert();
                     }*/
@@ -331,15 +482,13 @@
                     });*/
                 },
                 eventClick: function (event) {
+                    console.log("eliminar evento")
                     let identify = event.event.id;
                     eliminar_evento_calendario.show();
                     $("#eliminar_evento").val(identify);
                 },
                 locale: 'es',
                 themeSystem: 'bootstrap',
-                //events: @json($eventss),
-                events: @json($eventss),
-                editable: true,
                 droppable: true,
                 displayEventTime:false,
             });
@@ -378,7 +527,22 @@
                     'color': '#fff'
                 }).addClass('external-event')
                 event.text(val)
-                $('#external-events').prepend(event)
+
+                var formUnsigned = new FormData();
+                formUnsigned.append('calendario_nombre_evento', val);
+                formUnsigned.append('calendario_color_evento', currColor);
+                formUnsigned.append('type', 'add');
+                $.ajax({
+                    url: "{{route('fullcalendarAjaxUnsigned')}}",
+                    data: formUnsigned,
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#external-events').prepend(event)
+                    }
+                });
+
 
                 ini_events(event)
 
