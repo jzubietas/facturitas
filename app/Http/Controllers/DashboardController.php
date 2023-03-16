@@ -1264,6 +1264,7 @@ class DashboardController extends Controller
                                 else*/
                 /*META-1*/
                 if ($data["meta_new"] == 1) {
+
                     if ($data["progress_pedidos"] >= 90) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
