@@ -43,17 +43,17 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            {{--<div class="card">
+        <div class="card-body" >
+            <div class="card">
                 <div class="card-body">
-                    <span class="text-dark ">SALDO A FAVOR sae</span>
-                    <span class="text-danger font-weight-bold">S/ 10.00</span>
-                    <button class="btn btn-info btn-md" id="btn-utilizar-saldo" type="button">
-                        Utilizar saldo
-                    </button>
-
+                    <strong>
+                        <span class="text-dark ">SALDO A FAVOR</span>
+                        <span class="text-danger font-weight-bold" id="lblValorSaldo">S/ 0.00</span>
+                    </strong>
+                    <input type="hidden" id="txtValorSaldo" name="txtValorSaldo">
+                    <a href="#" class="btn btn-info btn-md" id="btnUtilizarSaldo" name="btnUtilizarSaldo"><i class="fa fa-money-bill"></i> Utilizar saldo</a>
                 </div>
-            </div>--}}
+            </div>
 
             <div class="form-row">
 
@@ -187,6 +187,9 @@
                             <i class="fas fa-save"></i>
                             Guardar
                         </button>
+                        {{--<a class="btn btn-app bg-success" id="registrar_pagos">
+                            <i class="fa fa-save" aria-hidden="true"></i> Guardar
+                        </a>--}}
                     </div>
                 </div>
 
@@ -222,7 +225,10 @@
 
                 <div class="form-group col-lg-1" style="text-align:center;">
                     <div id="considerasaldo" class="d-none">
-                        <button class="btn btn-danger" type="button" id="btnSaldo"> Saldo</button>
+                        {{--<button class="btn btn-app btn-danger" type="button" id="btnSaldo"><i class="fa fa-save" aria-hidden="true"></i> Guardar con Saldo a favor</button>--}}
+                        <a class="btn btn-app bg-danger" id="btnSaldo" style="height: 80px;">
+                            <i class="fa fa-save" aria-hidden="true"></i> Guardar con Saldo a favor
+                        </a>
                     </div>
                 </div>
 
@@ -269,6 +275,7 @@
         $("#guardar").hide();
         $("#addpedido").hide();
         $("#addpago").hide();
+        $("#btnUtilizarSaldo").hide();
         $("#btn-accion-perdonar-currier").hide();
         $("#btn-perdonar-deuda").hide();
         $("#pcliente_id").change(mostrarBotones);
@@ -368,7 +375,7 @@
 
                 $("#btn-accion-perdonar-currier").show();
                 $("#addpago").hide();
-
+                $("#btnUtilizarSaldo").hide();
                 console.log("btn-perdonar-deuda")
                 tabla_pedidos.destroy();
 
@@ -565,6 +572,7 @@
             $(document).on("submit", "#formulario", function (event) {
                 event.preventDefault();
                 console.log("nuevo formulario")
+
                 //validarFormulario();
 
                 var accion_perdonar = $("#accion_perdonar").val();
@@ -1405,8 +1413,16 @@
             });
 
             $(document).on("change", "#pcliente_id", function () {
-                console.log("d")
-
+                var valsaldo = $("option[value=" + $(this).val() + "]", this).attr('data-saldo');
+                if (valsaldo!=0.00){
+                    $("#lblValorSaldo").html(valsaldo)
+                    $("#txtValorSaldo").val(valsaldo)
+                    $("#btnUtilizarSaldo").show();
+                }else {
+                    $("#lblValorSaldo").html(0.00)
+                    $("#txtValorSaldo").val(0.00)
+                    $("#btnUtilizarSaldo").hide();
+                }
                 $('#tabla_pagos').DataTable().clear().destroy();
                 tabla_pagos = $('#tabla_pagos').DataTable({
                     "bPaginate": false,
@@ -1589,8 +1605,9 @@
                 tabla_pedidos.destroy();
 
                 datosCliente = $(this).val().split('-');
+
                 cliente_id = datosCliente[0];
-                saldo = datosCliente[1];
+
 
                 $("#diferencia").prop("disabled", false);
                 let diferenciaval = $("#diferencia").val();
@@ -1648,7 +1665,7 @@
                         {
                             "data": null,
                             "render": function (data, type, row, meta) {
-                                return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal[' + row.id + ']" value="0">';
+                                return '<input type="checkbox" disabled class="form-control radiototal pocoapoco" name="checktotal[' + row.id + ']" value="0">';
                             }
                         },
                         {
@@ -2030,11 +2047,23 @@
                 window.validar_marca_saldo_devolucion = function () {
                     var total_check_count__ = $(".radiototal").length;
                     var total_check_si_ = $('.radiototal').filter(':checked').length;
+                    var txtDiferencia = $("#diferencia").val();
+
+                    console.log('total_check_count',total_check_count__);
+                    console.log('total_check_si',total_check_si_,' =>txtDiferencia=',txtDiferencia);
 
                     if (total_check_count__ != total_check_si_) {
-                        if (!$("#considerasaldo").hasClass("d-none")) {
-                            $("#considerasaldo").addClass("d-none");
+                        console.log('Distinto')
+                        if (txtDiferencia>3){
+                            if (!$("#considerasaldo").hasClass("d-none")) {
+                                $("#considerasaldo").addClass("d-none");
+                                $("#guardar").show();
+                                console.log('por 1')
+                            }
+                        }else{
+                            $("#guardar").hide();
                         }
+
 
                         if (!$("#consideradevolucion").hasClass("d-none")) {
                             $("#consideradevolucion").addClass("d-none");
@@ -2045,9 +2074,19 @@
                 'warning')*/
                     } else {
 //$("#form").trigger("submit")
+                        console.log('ELSE')
                         if (total_check_count__ > 0) {
-                            if ($("#considerasaldo").hasClass("d-none")) {
-                                $("#considerasaldo").removeClass("d-none");
+                            console.log('checkout >0')
+                            if (txtDiferencia>3){
+                                console.log('mayor a 3')
+                                if ($("#considerasaldo").hasClass("d-none")) {
+                                    $("#considerasaldo").removeClass("d-none");
+                                    $("#guardar").hide();
+                                    console.log('aqui 3')
+                                }
+                            }else{
+                                console.log('menor a 3')
+                                $("#guardar").show();
                             }
 
                             if ($("#consideradevolucion").hasClass("d-none")) {
@@ -2145,7 +2184,7 @@
                             url: "{{ route('pagos.store',['action'=>'saldo']) }}",
                             success: function (data) {
                                 console.log("grabado");
-                                window.location.href = "{{ route('pagos.index')}}";
+                                window.location.href = "{{ route('pagos.create')}}";
 
                             }
                         })
@@ -2521,6 +2560,100 @@
 
             }
 
+            $(document).on("click", "#btnUtilizarSaldo", function () {
+                var iSaldo=$('#txtValorSaldo').val();
+                if (iSaldo!=0){
+                    /*console.log("btnUtilizarSaldo : ",iSaldo);
+                    return false;*/
+
+                    var cliente_id=$("#pcliente_id").val();
+                    var formData = new FormData();
+                    formData.append("cliente_id", cliente_id);
+
+                    $.ajax({
+                        async: false,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        url: "{{ route('getDataPagoReciente') }}",
+                        success: function (res) {
+                            console.log(res);
+                            console.log(res.det_pagos[0].cuenta);
+                            /*return false;*/
+                            $("#accion_perdonar").val("");
+                            iSaldo = iSaldo.replace(",", "");
+                            var ival_numFinal = parseFloat(iSaldo);
+                            var ival_monto = ival_numFinal;
+                            var ival_tipomovimiento =   res.det_pagos[0].cuenta;
+                            var ival_titular =          res.det_pagos[0].titular;
+                            var ival_banco =            res.det_pagos[0].banco;
+                            var ival_bancop =           res.det_pagos[0].bancop;
+                            var ival_otherbanco =       res.det_pagos[0].obanco;
+                            var ival_fecha =            res.det_pagos[0].fecha;
+                            var ival_operacion =        '';
+                            var ival_nota =             '';
+                            var ival_imagen=            res.det_pagos[0].imagen;
+                            if ($.trim(res.det_pagos[0].nota) != '' ) {
+                                ival_operacion=res.det_pagos[0].nota;
+                                ival_nota=res.det_pagos[0].nota;
+                            }
+
+                            tabla_pagos.row.add({
+                                "accion": (contPa + 1),
+                                "item": (contPa + 1),
+                                "movimiento": ival_tipomovimiento,
+                                "titular": ival_titular,
+                                "banco": ival_banco,
+                                "bancop": ival_bancop,
+                                "obanco": ival_otherbanco,
+                                "fecha": ival_fecha,
+                                "imagen": ival_imagen,
+                                "monto": ival_monto,
+                                "operacion": 'Saldo a Favor',
+                                "nota": 'Saldo a Favor' ,
+                            }).draw();
+
+                            /*const fileInput = $("#pimagen");
+                            const fileInputdestino = $("#imagen" + (contPa + 1));//aca que se carga la imagen
+                            const myFile = new File(['Hello World!'], 'myFile.txt', {
+                                type: 'text/plain',
+                                lastModified: new Date(),
+                            });
+
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(myFile);
+                            fileInputdestino.files = dataTransfer.files;
+
+                            //ahora cerrar modal
+                            $("#modal-add-pagos").modal("hide");*/
+
+                            contPa++;
+
+                            console.log("sumatotalpagos <4")
+                            total_pago = sumatotalpagos();
+
+                            limpiarPa();
+                            $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
+                            $("#total_pago_pagar").val(total_pago.toLocaleString("en-US"));
+                            evaluarPa();
+                            console.log("total_pago 1 " + total_pago);
+                            diferenciaFaltante();
+                        }
+                    });
+
+                }else {
+                    Swal.fire(
+                        'Error',
+                        'No se puede agregar un pago con saldo 0',
+                        'warning'
+                    )
+                    return false;
+                }
+
+
+
+            });
         });
 
         $(document).ready(function () {
