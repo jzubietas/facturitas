@@ -12,6 +12,6 @@ class EventsUnsigned extends Model
     use CommonModel;
 
     protected $fillable = [
-        'title', 'start', 'end','color'
+        'title', 'color'
     ];
 }

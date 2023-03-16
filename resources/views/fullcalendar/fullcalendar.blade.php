@@ -533,7 +533,7 @@
                 formUnsigned.append('calendario_color_evento', currColor);
                 formUnsigned.append('type', 'add');
                 $.ajax({
-                    url: "{{route('fullcalendarAjax')}}",
+                    url: "{{route('fullcalendarAjaxUnsigned')}}",
                     data: formUnsigned,
                     type: "POST",
                     processData: false,
