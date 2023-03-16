@@ -25,11 +25,11 @@ class ListaUsuariosLlamadasAtencion extends Component
     $users = User::where('cant_vidas_cero', '>', 0)
       ->select([
         'users.*',
-        DB::raw("(CASE WHEN users.rol ='Asesor' THEN (select u.name  from users u where u.id=users.supervisor limit 1) ELSE
+        DB::raw("(CASE WHEN users.rol in ('Asesor','COBRANZAS','Llamadas') THEN (select u.name  from users u where u.id=users.supervisor limit 1) ELSE
         (select us.name  from users us where us.id=users.jefe limit 1)
          END) AS nombre_jefe"),
       ]);
-    if ($mirol == User::ROL_JEFE_LLAMADAS) {
+    if ($mirol == User::ROL_JEFE_LLAMADAS) { User::ROL_LLAMADAS;
       $users = $users->where('jefe', Auth::user()->id)->where("rol", User::ROL_LLAMADAS);
       $users = $users->orderBy('name', 'ASC')->get();
     } else if ($mirol == User::ROL_JEFE_OPERARIO) {
