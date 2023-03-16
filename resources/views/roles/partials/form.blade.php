@@ -634,6 +634,132 @@
           </div>
       </div>
 
+      {{-- MODULO CONTABILIDAD --}}
+      <div class="form-group col-lg-4">
+          <div class="mb-3 card border-secondary">
+              <div class="card-header">
+                  @foreach ($permissions as $permission)
+                      @if ($permission->modulo == 'moduloContabilidad')
+                          <div>
+                              <label>
+                                  {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
+                                  {{ $permission->description }}
+                              </label>
+                          </div>
+                      @endif
+                  @endforeach
+              </div>
+              <div class="card-body text-secondary">
+                  <div class="form-row">
+                      {{-- CONTABILIDAD --}}
+                      <div class="form-group col-lg-12">
+                          <div class="mb-3 card border-secondary">
+                              <div class="card-header">
+
+                              </div>
+                              <div class="card-body text-secondary">
+                                  @foreach ($permissions as $permission)
+                                      @if ($permission->modulo == 'Contabilidad')
+                                          <div>
+                                              <label>
+                                                  {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
+                                                  {{ $permission->description }}
+                                              </label>
+                                          </div>
+                                      @endif
+                                  @endforeach
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      {{-- MODULO FINANZAS --}}
+      <div class="form-group col-lg-4">
+          <div class="mb-3 card border-secondary">
+              <div class="card-header">
+                  @foreach ($permissions as $permission)
+                      @if ($permission->modulo == 'moduloFinanzas')
+                          <div>
+                              <label>
+                                  {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
+                                  {{ $permission->description }}
+                              </label>
+                          </div>
+                      @endif
+                  @endforeach
+              </div>
+              <div class="card-body text-secondary">
+                  <div class="form-row">
+                      {{-- CONTABILIDAD --}}
+                      <div class="form-group col-lg-12">
+                          <div class="mb-3 card border-secondary">
+                              <div class="card-header">
+
+                              </div>
+                              <div class="card-body text-secondary">
+                                  @foreach ($permissions as $permission)
+                                      @if ($permission->modulo == 'Finanzas')
+                                          <div>
+                                              <label>
+                                                  {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
+                                                  {{ $permission->description }}
+                                              </label>
+                                          </div>
+                                      @endif
+                                  @endforeach
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      {{-- MODULO PLANILLA --}}
+      <div class="form-group col-lg-4">
+          <div class="mb-3 card border-secondary">
+              <div class="card-header">
+                  @foreach ($permissions as $permission)
+                      @if ($permission->modulo == 'moduloPlanilla')
+                          <div>
+                              <label>
+                                  {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
+                                  {{ $permission->description }}
+                              </label>
+                          </div>
+                      @endif
+                  @endforeach
+              </div>
+              <div class="card-body text-secondary">
+                  <div class="form-row">
+                      {{-- PLANILLA --}}
+                      <div class="form-group col-lg-12">
+                          <div class="mb-3 card border-secondary">
+                              <div class="card-header">
+
+                              </div>
+                              <div class="card-body text-secondary">
+                                  @foreach ($permissions as $permission)
+                                      @if ($permission->modulo == 'Planilla')
+                                          <div>
+                                              <label>
+                                                  {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
+                                                  {{ $permission->description }}
+                                              </label>
+                                          </div>
+                                      @endif
+                                  @endforeach
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
 
   </div>
 
