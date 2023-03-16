@@ -2347,7 +2347,15 @@ class PagoController extends Controller
                     'imagen' => '',
                     'estado' => '1'
                 ]);
-
+                $identi_asesor = User::where("id", $cliente_perdondarcourier->user_id)->where("unificado", "NO")->first();
+                $fecha_created=Carbon::parse($pago->created_at);
+                $dd=$fecha_created->format('d');
+                $mm=$fecha_created->format('m');
+                $unido=$dd.$mm;
+                $valorcorrelativo='PAG'.$identi_asesor->identificador.'-'.$unido.'-'.$pago->id;
+                $pago->update([
+                    "correlativo" => 'PAG'.$identi_asesor->identificador.'-'.$unido.'-'.$pago->id
+                ]);
 
                 DB::commit();
             } catch (\Throwable $th) {
@@ -2356,7 +2364,7 @@ class PagoController extends Controller
                 dd($th);*/
             }
 
-            return response()->json(['html' => $pago->id]);
+            return response()->json(['html' => $pago->id,'pagos' => $pago,'valorcorrelativo'=>$valorcorrelativo]);
 
 
         }
