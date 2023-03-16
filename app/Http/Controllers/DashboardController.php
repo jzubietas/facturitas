@@ -603,6 +603,7 @@ class DashboardController extends Controller
             $item['pedidos_dia'] = $pedidos_dia;
             $item['pedidos_totales'] = $pedidos_totales;
             $item['meta_new'] = $meta_new;
+            $item['porcentaje_general']=($all/$allmeta_2);
             return $item;
         })->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
 
