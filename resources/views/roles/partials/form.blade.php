@@ -721,7 +721,7 @@
       {{-- MODULO PLANILLA --}}
       <div class="form-group col-lg-4">
           <div class="mb-3 card border-secondary">
-              <div class="card-header">
+              <div class="card-header bg-success">
                   @foreach ($permissions as $permission)
                       @if ($permission->modulo == 'moduloPlanilla')
                           <div>
@@ -733,7 +733,7 @@
                       @endif
                   @endforeach
               </div>
-              <div class="card-body text-secondary">
+              <div class="card-body text-secondary bg-info">
                   <div class="form-row">
                       {{-- PLANILLA --}}
                       <div class="form-group col-lg-12">
