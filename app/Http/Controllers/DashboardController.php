@@ -506,6 +506,7 @@ class DashboardController extends Controller
             $all_mespasado = data_get($item, 'total_pedido_mespasado');
             $pay = data_get($item, 'total_pagado');
             $meta_quincena = data_get($item, 'meta_quincena');
+            $meta_intermedia = data_get($item, 'meta_intermedia');
             $allmeta = data_get($item, 'meta');
             $allmeta_2 = data_get($item, 'meta_2');
             $pedidos_dia = data_get($item, 'pedidos_dia');
@@ -595,6 +596,8 @@ class DashboardController extends Controller
         $all = collect($progressData)->pluck('total_pedido')->sum();
         $all_mespasado = collect($progressData)->pluck('total_pedido_mespasado')->sum();
         $pay = collect($progressData)->pluck('total_pagado')->sum();
+        $meta_quincena = collect($progressData)->pluck('meta_quincena')->sum();
+        $meta_intermedia = collect($progressData)->pluck('meta_intermedia')->sum();
         $meta = collect($progressData)->pluck('meta')->sum();
         $meta_2 = collect($progressData)->pluck('meta_2')->sum();
         $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
@@ -695,7 +698,58 @@ class DashboardController extends Controller
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
 
-            if ($object_totales['progress_pedidos'] >= 80)
+            //40 50 70 80 100 <
+            if($object_totales['progress_pedidos']<=40)
+            {
+                $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                 style="width: ' . ($object_totales['progress_pedidos']) . '%"
+                 aria-valuenow="' . ($object_totales['progress_pedidos']) . '"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+            }else if($object_totales['progress_pedidos']>40 && $object_totales['progress_pedidos']<=50 )
+            {
+                $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                 style="height: 30px !important;width: 40%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>
+            <div class="progress-bar" role="progressbar"
+                 style="width: ' . ($object_totales['progress_pedidos'] - 40) . '%;
+             background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
+                 aria-valuenow="' . ($object_totales['progress_pedidos'] - 40) . '"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+            }else if($object_totales['progress_pedidos']>50 && $object_totales['progress_pedidos']<=70 )
+            {
+                $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
+                 style="height: 30px !important;width: 70%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+            }else if($object_totales['progress_pedidos']>70 && $object_totales['progress_pedidos']<=80 )
+            {
+                $html .= '<div class="progress-bar bg-warning rounded height-bar-progress" role="progressbar"
+                 style="height: 30px !important;width: 70%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>
+            <div class="progress-bar rounded height-bar-progress" role="progressbar"
+                 style="height: 30px !important;width: ' . ($object_totales['progress_pedidos'] - 70) . '%;
+             background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
+                 aria-valuenow="' . ($object_totales['progress_pedidos'] - 70) . '"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+            }else if($object_totales['progress_pedidos']>80 )
+            {
+                $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
+                 style="width: ' . $object_totales['progress_pagos'] . '%;background: #03af03;"
+                 aria-valuenow="' . $object_totales['progress_pagos'] . '"
+                 aria-valuemin="0" aria-valuemax="100"></div>';
+            }
+
+
+
+            /*if ($object_totales['progress_pedidos'] >= 80)
                 $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
                  style="width: ' . $object_totales['progress_pagos'] . '%;background: #03af03;"
                  aria-valuenow="' . $object_totales['progress_pagos'] . '"
@@ -735,7 +789,7 @@ class DashboardController extends Controller
                  style="width: ' . ($object_totales['progress_pedidos']) . '%"
                  aria-valuenow="' . ($object_totales['progress_pedidos']) . '"
                  aria-valuemin="0"
-                 aria-valuemax="100"></div>';
+                 aria-valuemax="100"></div>';*/
             $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>    </div>';
