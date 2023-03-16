@@ -2061,7 +2061,7 @@
                                 console.log('por 1')
                             }
                         }else{
-                            $("#guardar").hide();
+                            $("#guardar").show();
                         }
 
 
