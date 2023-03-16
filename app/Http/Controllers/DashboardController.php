@@ -1243,7 +1243,7 @@ class DashboardController extends Controller
                                                   </div>
                                               </div>
                                             </div>
-                                            <sub class="top-visible" style="display: block !important;">Meta Quincenal</sub>';
+                                            <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if (90<=$data["progress_pedidos"] && $data["progress_pedidos"]<99)
                     {
@@ -1257,7 +1257,7 @@ class DashboardController extends Controller
                                                           </div>
                                                     </div>
                                                   </div>
-                                                  <sub class="top-visible" style="display: block !important;">Meta Quincenal</sub>';
+                                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if(99<=$data["progress_pedidos"])
                     {
@@ -1271,7 +1271,7 @@ class DashboardController extends Controller
                                                         </div>
                                                     </div>
                                                   </div>
-                                                  <sub class="top-visible" style="display: block !important;">Meta Quincenal</sub>';
+                                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
 
                 }
@@ -1291,7 +1291,7 @@ class DashboardController extends Controller
                                                   </div>
                                               </div>
                                             </div>
-                                            <sub class="top-visible" style="display: block !important;">Meta Intermedia</sub>';
+                                            <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if (90<=$data["progress_pedidos"] && $data["progress_pedidos"]<99)
                     {
@@ -1305,7 +1305,7 @@ class DashboardController extends Controller
                                                           </div>
                                                     </div>
                                                   </div>
-                                                  <sub class="top-visible" style="display: block !important;">Meta Intermedia</sub>';
+                                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if(99<=$data["progress_pedidos"])
                     {
@@ -1319,7 +1319,7 @@ class DashboardController extends Controller
                                                         </div>
                                                     </div>
                                                   </div>
-                                                  <sub class="top-visible" style="display: block !important;">Meta Intermedia</sub>';
+                                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                 }
                 if ($data["meta_new"] == '1') {
@@ -1336,7 +1336,7 @@ class DashboardController extends Controller
                                   </div>
                               </div>
                             </div>
-                            <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                            <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if (34<=$data["progress_pedidos"] && $data["progress_pedidos"] < 37)
                     {
@@ -1350,7 +1350,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
 
                     }
                     else if (37<=$data["progress_pedidos"] && $data["progress_pedidos"] < 55)
@@ -1365,7 +1365,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
 
                     }
                     else if (55<=$data["progress_pedidos"] && $data["progress_pedidos"] < 60)
@@ -1380,7 +1380,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if (60<=$data["progress_pedidos"] && $data["progress_pedidos"] < 75)
                     {
@@ -1394,7 +1394,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if (75<=$data["progress_pedidos"] && $data["progress_pedidos"] < 85)
                     {
@@ -1408,7 +1408,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if (85<=$data["progress_pedidos"] && $data["progress_pedidos"] < 90)
                     {
@@ -1422,7 +1422,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else if (90<=$data["progress_pedidos"])
                     {
@@ -1436,7 +1436,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }else{
                         $html .=' el progreso de pedidos '.$data["progress_pedidos"];
                     }
@@ -1454,7 +1454,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 2</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                     else {
                         $html .= '<div class="w-100 bg-white rounded">
@@ -1467,7 +1467,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">Meta 2</sub>';
+                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
                     }
                 }
 
