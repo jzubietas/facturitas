@@ -5,7 +5,7 @@
 
 @section('content_header')
 
-    @if(Auth::user()->rol == 'Administrador')
+    @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_JEFE_OPERARIO  )
         <a class="btn btn-info btn-sm m-0" href="#" data-target="#modal-agregar-anulacion" data-toggle="modal">
             <b class="text-white font-weight-bold d-flex align-items-center justify-content-center">
                 <i class="fas fa-user-plus p-1"></i>
