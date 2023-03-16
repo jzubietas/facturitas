@@ -842,7 +842,7 @@ return [
         [
             'text' => 'Planificacion',
             'icon' => 'fas fa-user',
-            'can' => 'configuracion.modulo',
+            'can' => 'planificacion.modulo',
             'submenu' => [
                 [
                     'text' => 'Calendario',
