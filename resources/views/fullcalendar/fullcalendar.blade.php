@@ -167,9 +167,9 @@
                             <!-- the events -->
                             <div id="external-events">
                                  @foreach($all_eventsunsigned as $eventunsigned)
-                                    <div class="external-event {{ $eventunsigned->color }}">
+                                    <div id="unsigned_{{ $eventunsigned->id }}" class="external-event {{ $eventunsigned->color }}">
                                         <h4 class="d-inline-block">{{ $eventunsigned->title }}</h4>
-                                        <button type="button" class="bg-white btn btn-custon-calendario btn-light float-right">
+                                        <button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light float-right">
                                             <i class="fa fa-close text-danger"></i>
                                         </button>
                                     </div>
@@ -189,7 +189,7 @@
                     {{--Create Event--}}
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Create Event</h3>
+                            <h3 class="card-title">Crear tarea</h3>
                         </div>
                         <div class="card-body">
                             <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
@@ -216,34 +216,6 @@
                         </div>
                     </div>
 
-                    {{--List Event--}}
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">List Event</h3>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <p>asd</p>
-                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25px">
-                                        <i class="fas fa-edit text-white" aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <p>asd</p>
-                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25px">
-                                        <i class="fas fa-edit text-white" aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <p>asd</p>
-                                    <a class="text-decoration-none rounded px-3 py-2 bg-success d-flex justify-content-center align-items-center" href="#" style="width: 25px">
-                                        <i class="fas fa-edit text-white" aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
 
                 </div>
             </div>
@@ -511,6 +483,30 @@
                 })
             })
 
+            $(document).on('click','.delete-unsigned-event',function(){
+                let contenerEliminar=$(this).parents('div');
+                let eventEliminar = contenerEliminar.attr('id').split('_')[1];
+                console.log(eventEliminar)
+                var formData = new FormData();
+                formData.append('eliminar_evento', eventEliminar)
+                formData.append('type', 'delete')
+                $.ajax({
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('fullcalendarAjaxUnsigned') }}",
+                    success: function (data) {
+                        //eliminar_evento_calendario.hide();
+                        let eventDeleteUnsigned = $("#unsigned_"+eventEliminar);
+                        eventDeleteUnsigned.fadeOut("normal", function() {
+                            $(this).remove();
+                        });
+                    }
+                });
+
+            });
+
             $('#add-new-event').click(function (e) {
                 e.preventDefault()
                 // Get value and make sure it is not null
@@ -526,7 +522,21 @@
                     'border-color': currColor,
                     'color': '#fff'
                 }).addClass('external-event')
-                event.text(val)
+                event.html('<h4 class="d-inline-block">'+val+'</h4>'+
+                    '<button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light float-right">'+
+                        '<i class="fa fa-close text-danger"></i>'+
+                    '</button>'
+                        )
+
+                switch(currColor)
+                {
+                    case 'rgb(0, 86, 179)':currColor='bg-info';break;
+                    case 'rgb(186, 139, 0)':currColor='bg-warning';break;
+                    case 'rgb(25, 105, 44)':currColor='bg-success';break;
+                    case 'rgb(167, 29, 42)':currColor='bg-danger';break;
+                    case 'rgb(0, 123, 255)':currColor='bg-grey';break;
+                    default:currColor='bg-info';break;
+                }
 
                 var formUnsigned = new FormData();
                 formUnsigned.append('calendario_nombre_evento', val);
