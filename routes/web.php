@@ -815,5 +815,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::any('fullcalendar', [FullCalenderController::class, 'index'])->name('fullcalendar');
     Route::any('fullcalendarAjax', [FullCalenderController::class, 'ajax'])->name('fullcalendarAjax');
+    Route::any('fullcalendarAjaxUnsigned', [FullCalenderController::class, 'ajaxunsigned'])->name('fullcalendarAjaxUnsigned');
 
 });
