@@ -763,7 +763,7 @@ return [
         ],
 
         [
-            'text' => 'Usuarios',
+            'text' => 'Accesos y Permisos',
             'icon' => 'fas fa-user',
             'can' => 'configuracion.modulo',
             'submenu' => [
