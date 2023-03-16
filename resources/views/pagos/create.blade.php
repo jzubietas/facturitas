@@ -46,8 +46,10 @@
         <div class="card-body" >
             <div class="card">
                 <div class="card-body">
-                    <span class="text-dark ">SALDO A FAVOR</span>
-                    <span class="text-danger font-weight-bold" id="lblValorSaldo">S/ 0.00</span>
+                    <strong>
+                        <span class="text-dark ">SALDO A FAVOR</span>
+                        <span class="text-danger font-weight-bold" id="lblValorSaldo">S/ 0.00</span>
+                    </strong>
                     <input type="hidden" id="txtValorSaldo" name="txtValorSaldo">
                     <a href="#" class="btn btn-info btn-md" id="btnUtilizarSaldo" name="btnUtilizarSaldo"><i class="fa fa-money-bill"></i> Utilizar saldo</a>
                 </div>
@@ -2182,7 +2184,7 @@
                             url: "{{ route('pagos.store',['action'=>'saldo']) }}",
                             success: function (data) {
                                 console.log("grabado");
-                                window.location.href = "{{ route('pagos.index')}}";
+                                window.location.href = "{{ route('pagos.create')}}";
 
                             }
                         })
