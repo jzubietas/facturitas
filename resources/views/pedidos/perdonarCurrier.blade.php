@@ -126,6 +126,7 @@
 
     <script>
         var tabla_pedidos = null;
+        let dataForm_perdonarcurrier = {};
         $(document).ready(function () {
 
             //moment.updateLocale(moment.locale(), { invalidDate: "Invalid Date Example" });
@@ -179,11 +180,13 @@
                     )
                     return false;
                 }
-
+                if (dataForm_perdonarcurrier.perdonar_currier_captura === undefined) {
+                    Swal.fire('Error', 'No se puede ingresar una captura vacia', 'warning');
+                    return false;
+                }
                 var rows_selected_2 = tabla_pedidos.column(0).checkboxes.selected();
-                //console.log(rows_selected);
+
                 let cantt_2 = rows_selected_2.length;
-                //console.log(cantt);
 
                 pedidos = null;
                 pedidos = [];
@@ -197,6 +200,7 @@
                 var fd3 = new FormData();
                 fd3.append('pedidos', $pedidos);
                 fd3.append('observacion', motivov);
+                fd3.append("perdonar_currier_captura", dataForm_perdonarcurrier.perdonar_currier_captura);
 
                 $.ajax({
                     data: fd3,
@@ -605,7 +609,6 @@
     <script>
         /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
-
             /*$.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -631,6 +634,40 @@
             $('#min, #max').change(function () {
                 table.draw();
             });*/
+            $(document).on("click", "#formperdonarcurrier #attachmentfiles", function () {
+                var file = document.createElement('input');
+                file.type = 'file';
+                file.click()
+                file.addEventListener('change', function (e) {
+                    console.log("change")
+                    if (file.files.length > 0) {
+                        $('#formperdonarcurrier').find('.result_picture').css('display', 'block');
+                        console.log(URL.createObjectURL(file.files[0]))
+                        dataForm_perdonarcurrier.perdonar_currier_captura = file.files[0]
+                        $('#formperdonarcurrier').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
+                    }
+                })
+            })
+
+            $("#formperdonarcurrier").bind("paste", function(event){
+                var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+                console.log(items);
+                console.log((event.clipboardData || event.originalEvent.clipboardData));
+                var files = []
+                for (index in items) {
+                    var item = items[index];
+                    if (item.kind === 'file') {
+                        var file = item.getAsFile()
+                        files.push(file)
+                    }
+                }
+                if (files.length > 0) {
+                    $('#formperdonarcurrier').find('.result_picture').css('display', 'block')
+                    console.log(URL.createObjectURL(files[0]))
+                    $('#formperdonarcurrier').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+                    dataForm_perdonarcurrier.perdonar_currier_captura = files[0]
+                }
+            } );
         });
     </script>
 @stop

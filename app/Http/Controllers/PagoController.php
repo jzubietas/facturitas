@@ -2333,7 +2333,9 @@ class PagoController extends Controller
                     ]);
 
                 }
-
+                if ($request->hasFile('perdonar_currier_captura')) {
+                    $capturapercur = $request->file('perdonar_currier_captura')->store('pagos', 'pstorage');
+                }
                 DetallePago::create([
                     'pago_id' => $pago->id,
                     'cuenta' => '',
@@ -2344,7 +2346,7 @@ class PagoController extends Controller
                     'obanco' => '',
                     'fecha' => Carbon::now(),
                     'fecha_deposito' => Carbon::now(),
-                    'imagen' => '',
+                    'imagen' => $capturapercur,
                     'estado' => '1'
                 ]);
                 $identi_asesor = User::where("id", $cliente_perdondarcourier->user_id)->where("unificado", "NO")->first();
