@@ -1436,7 +1436,12 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: block !important;">MQ. '.$data["meta_quincena"].' . MI. '.$data["meta_intermedia"].' . M1. '.$data["meta"].' . M2. '.$data["meta_2"].'</sub>';
+                                  <sub class="top-visible" style="display: block !important;">
+                                  <a class="btn btn-app bg-secondary">
+                  <span class="badge bg-success">300</span>
+                  <i class="fas fa-barcode"></i> Products
+                </a>
+                                  </sub>';
                     }else{
                         $html .=' el progreso de pedidos '.$data["progress_pedidos"];
                     }
