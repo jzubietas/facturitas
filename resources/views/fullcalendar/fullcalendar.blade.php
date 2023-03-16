@@ -204,7 +204,7 @@
                             <!-- /btn-group -->
                             <div class="input-group">
                                 <label for="new-event"></label>
-                                <input id="new-event" type="text" class="form-control" placeholder="Event Title">
+                                <input id="new-event" type="text" class="form-control" placeholder="Nombre de tarea">
 
                                 <div class="input-group-append">
                                     <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
