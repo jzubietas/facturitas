@@ -1264,61 +1264,7 @@ class DashboardController extends Controller
                                 else*/
                 /*META-1*/
                 if ($data["meta_new"] == 1) {
-<<<<<<< HEAD
 
-
-                    if ($data["progress_pedidos"] >= 90) {
-                        $html .= '<div class="w-100 bg-white rounded">
-                                    <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(3,175,3,1) 0%, rgba(24,150,24,1) 60%, rgba(0,143,251,1) 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                          </div>
-                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta"] - $data["total_pedido"]) : '0') . '</p></span>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
-                    } elseif ($data["progress_pedidos"] >= 85) {
-                        $html .= '<div class="w-100 bg-white rounded">
-                                    <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                          <div class="rounded" role="progressbar" style="background: #8ec117 ; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                          </div>
-                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : ($data["meta"] - $data["total_pedido"])) . '</p></span>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
-                    } elseif ($data["progress_pedidos"] >= 75) {
-                        $html .= '<div class="w-100 bg-white rounded">
-                                    <div class="position-relative rounded">
-                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                          </div>
-                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : ($data["meta"] - $data["total_pedido"])) . '</p></span>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
-                    } elseif ($data["progress_pedidos"] >= 60) {
-
-                    } elseif ($data["progress_pedidos"] >= 55) {
-
-
-                    } /*ROSADO*/
-                    elseif ($data["progress_pedidos"] >= 37) {
-
-                    } elseif ($data["progress_pedidos"] >= 34) {
-
-                    } else {
-
-                    }
-
-
-=======
                     if ($data["progress_pedidos"] >= 90) {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1420,7 +1366,6 @@ class DashboardController extends Controller
                             </div>
                             <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
                     }
->>>>>>> parent of fea59730 (carga)
                 } /*META-2*/
                 else if ($data["meta_new"] == 2) {
                     if ($data["progress_pedidos"] <= 100) {
