@@ -1976,8 +1976,15 @@ class ClienteController extends Controller
             $data = 'NO PUEDE CONTINUAR';
         }
 
+        $datoscelular= Cliente::join('users as u','clientes.user_id','u.id')
+            ->select([
+                'u.name as nombreAsesor',
+                'clientes.tipo',
+                DB::raw("case when clientes.tipo=1 then 'Cliente' when clientes.tipo=0 then 'Base fria' else '-' end  as condiciones_tipo"),
+            ])
+            ->where('clientes.celular',$request->celular)->first();
         return response()->json([
-            "html" => array('status' => $status, 'data' => $data)
+            "html" => array('status' => $status, 'data' => $data),'datoscelular'=>$datoscelular
         ]);
     }
 
