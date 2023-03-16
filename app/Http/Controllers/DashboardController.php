@@ -1232,7 +1232,7 @@ class DashboardController extends Controller
                                       <span class="badge bg-info font-'.$font_size_sub.'">M.Qui. '.$data["meta_quincena"].'</span>
                                       <span class="badge bg-gradient-warning font-'.$font_size_sub.'">M.Int. '.$data["meta_intermedia"].'</span>
                                       <span class="badge bg-gradient-purple font-'.$font_size_sub.'"">M.Pri. '.$data["meta"].'</span>
-                                      <span class="badge bg-gradient-info font-'.$font_size_sub.'"">M.Seg. '.$data["meta_2"].'</span>
+                                      <span class="badge bg-gradient-success font-'.$font_size_sub.'"">M.Seg. '.$data["meta_2"].'</span>
                                   </sub>';
                 if($data["meta_new"]=='0')
                 {
