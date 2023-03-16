@@ -1229,10 +1229,10 @@ class DashboardController extends Controller
                 $font_size_sub=11;
 
                 $sub_html='<sub class="top-visible" style="display: block !important;">
-                                      <span class="badge bg-info font-'.$font_size_sub.'">M.Qui. '.$data["meta_quincena"].'</span>
-                                      <span class="badge bg-gradient-warning font-'.$font_size_sub.'">M.Int. '.$data["meta_intermedia"].'</span>
-                                      <span class="badge bg-gradient-purple font-'.$font_size_sub.'"">M.Pri. '.$data["meta"].'</span>
-                                      <span class="badge bg-gradient-success font-'.$font_size_sub.'"">M.Seg. '.$data["meta_2"].'</span>
+                                      <span style="background:#FFD4D4  !important;" class="badge font-'.$font_size_sub.'">M.Qui. '.$data["meta_quincena"].'</span>
+                                      <span class="badge bg-warning font-'.$font_size_sub.'">M.Int. '.$data["meta_intermedia"].'</span>
+                                      <span class="badge bg-success font-'.$font_size_sub.'"">M.Pri. '.$data["meta"].'</span>
+                                      <span class="badge bg-primary font-'.$font_size_sub.'"">M.Seg. '.$data["meta_2"].'</span>
                                   </sub>';
                 if($data["meta_new"]=='0')
                 {
