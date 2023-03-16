@@ -1221,32 +1221,19 @@ class DashboardController extends Controller
 
                 /* META - QUINCENA */
                 /*                if ($data["meta_new"] == 0) {
-                                    if ($data["progress_pedidos"] < 90) {
-                                        $html .= '<div class="w-100 bg-white rounded">
-                                                    <div class="position-relative rounded">
-                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                                          <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                                          </div>
-                                                          <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                              <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
-                                                          </div>
-                                                    </div>
-                                                  </div>
-                                                  <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
-                                    } elseif ($data["progress_pedidos"] < 99) {
-                                        $html .= '<div class="w-100 bg-white rounded">
-                                                    <div class="position-relative rounded">
-                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                                          </div>
-                                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
-                                                        </div>
-                                                    </div>
-                                                  </div>
-                                                  <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
-                                    } else {
-                                        $html .= '<div class="w-100 bg-white rounded">
+
+                                }
+
+                                else*/
+                /*META-1*/
+                if($data["meta_new"]=='0')
+                {
+                    //quincena
+                    //$html .=' el progreso de pedidos quicena '.$data["progress_pedidos"];
+
+                    if (0<=$data["progress_pedidos"] && $data["progress_pedidos"]<90)
+                    {
+                        $html .= '<div class="w-100 bg-white rounded">
                                               <div class="position-relative rounded">
                                                   <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
                                                       <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
@@ -1256,24 +1243,88 @@ class DashboardController extends Controller
                                                   </div>
                                               </div>
                                             </div>
-                                            <sub class="top-visible" style="display: none !important;">Meta Quincenal</sub>';
-                                    }
-                                }
+                                            <sub class="top-visible" style="display: block !important;">Meta Quincenal</sub>';
+                    }
+                    else if (90<=$data["progress_pedidos"] && $data["progress_pedidos"]<99)
+                    {
+                        $html .= '<div class="w-100 bg-white rounded">
+                                                    <div class="position-relative rounded">
+                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                                          <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                          </div>
+                                                          <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                              <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                          </div>
+                                                    </div>
+                                                  </div>
+                                                  <sub class="top-visible" style="display: block !important;">Meta Quincenal</sub>';
+                    }
+                    else if(99<=$data["progress_pedidos"])
+                    {
+                        $html .= '<div class="w-100 bg-white rounded">
+                                                    <div class="position-relative rounded">
+                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                          </div>
+                                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                        </div>
+                                                    </div>
+                                                  </div>
+                                                  <sub class="top-visible" style="display: block !important;">Meta Quincenal</sub>';
+                    }
 
-                                else*/
-                /*META-1*/
-                if($data["meta_new"]=='0')
-                {
-                    //quincena
                 }
                 else if($data["meta_new"]=='0.5')
                 {
                     //intermedio
-
+                    //$html .=' el progreso de pedidos  0.5 '.$data["progress_pedidos"];
+                    if (0<=$data["progress_pedidos"] && $data["progress_pedidos"]<90)
+                    {
+                        $html .= '<div class="w-100 bg-white rounded">
+                                              <div class="position-relative rounded">
+                                                  <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                      </div>
+                                                  <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                  </div>
+                                              </div>
+                                            </div>
+                                            <sub class="top-visible" style="display: block !important;">Meta Intermedia</sub>';
+                    }
+                    else if (90<=$data["progress_pedidos"] && $data["progress_pedidos"]<99)
+                    {
+                        $html .= '<div class="w-100 bg-white rounded">
+                                                    <div class="position-relative rounded">
+                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                                          <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                          </div>
+                                                          <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                              <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_intermedia"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                          </div>
+                                                    </div>
+                                                  </div>
+                                                  <sub class="top-visible" style="display: block !important;">Meta Intermedia</sub>';
+                    }
+                    else if(99<=$data["progress_pedidos"])
+                    {
+                        $html .= '<div class="w-100 bg-white rounded">
+                                                    <div class="position-relative rounded">
+                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                                          </div>
+                                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                        </div>
+                                                    </div>
+                                                  </div>
+                                                  <sub class="top-visible" style="display: block !important;">Meta Intermedia</sub>';
+                    }
                 }
                 if ($data["meta_new"] == '1') {
 
-                    if ($data["progress_pedidos"] >= 0 && $data["progress_pedidos"] < 34)
+                    if (  0<=$data["progress_pedidos"] && $data["progress_pedidos"] < 34)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
@@ -1285,9 +1336,9 @@ class DashboardController extends Controller
                                   </div>
                               </div>
                             </div>
-                            <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
+                            <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
                     }
-                    else if ($data["progress_pedidos"] >= 34 && $data["progress_pedidos"] < 37)
+                    else if (34<=$data["progress_pedidos"] && $data["progress_pedidos"] < 37)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1299,10 +1350,10 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
 
                     }
-                    else if ($data["progress_pedidos"] >= 37 && $data["progress_pedidos"] < 55)
+                    else if (37<=$data["progress_pedidos"] && $data["progress_pedidos"] < 55)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1314,10 +1365,10 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
 
                     }
-                    else if ($data["progress_pedidos"] >= 55 && $data["progress_pedidos"] < 60)
+                    else if (55<=$data["progress_pedidos"] && $data["progress_pedidos"] < 60)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1329,9 +1380,9 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
                     }
-                    else if ($data["progress_pedidos"] >= 60 && $data["progress_pedidos"] < 75)
+                    else if (60<=$data["progress_pedidos"] && $data["progress_pedidos"] < 75)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1343,9 +1394,9 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
                     }
-                    else if ($data["progress_pedidos"] >= 75 && $data["progress_pedidos"] < 85)
+                    else if (75<=$data["progress_pedidos"] && $data["progress_pedidos"] < 85)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1357,9 +1408,9 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
                     }
-                    else if ($data["progress_pedidos"] >= 85 && $data["progress_pedidos"] < 90)
+                    else if (85<=$data["progress_pedidos"] && $data["progress_pedidos"] < 90)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1371,9 +1422,9 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
                     }
-                    else if ($data["progress_pedidos"] >= 90)
+                    else if (90<=$data["progress_pedidos"])
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -1385,7 +1436,9 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 1</sub>';
+                                  <sub class="top-visible" style="display: block !important;">Meta 1</sub>';
+                    }else{
+                        $html .=' el progreso de pedidos '.$data["progress_pedidos"];
                     }
 
                 } /*META-2*/
@@ -1401,8 +1454,9 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 2</sub>';
-                    } else {
+                                  <sub class="top-visible" style="display: block !important;">Meta 2</sub>';
+                    }
+                    else {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
@@ -1413,7 +1467,7 @@ class DashboardController extends Controller
                                         </div>
                                     </div>
                                   </div>
-                                  <sub class="top-visible" style="display: none !important;">Meta 2</sub>';
+                                  <sub class="top-visible" style="display: block !important;">Meta 2</sub>';
                     }
                 }
 
