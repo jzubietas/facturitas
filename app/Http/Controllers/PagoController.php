@@ -1041,7 +1041,7 @@ class PagoController extends Controller
 
         }
 
-        return redirect()->route('pagos.index')->with('info', 'registrado');
+        return redirect()->route('pagos.create')->with('info', 'registrado');
 
     }
 
@@ -2520,4 +2520,15 @@ class PagoController extends Controller
         ]);
     }
 
+    public  function getDataPagoReciente(Request $request){
+        /*return $request->all();*/
+        $detalle_pagos=DetallePago::join('pedidos as pe','detalle_pagos.pago_id','pe.id')
+        ->join('clientes as cl','pe.cliente_id','cl.id')
+        ->select(['detalle_pagos.*'])
+        ->where('cl.id',$request->cliente_id)
+        ->orderby('detalle_pagos.created_at','DESC')
+        ->limit(1)
+        ->get();
+        return response()->json(['det_pagos' => $detalle_pagos]);
+    }
 }

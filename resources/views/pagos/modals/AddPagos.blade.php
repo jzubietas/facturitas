@@ -24,10 +24,10 @@
             </div>
 
             <div class="form-group col-lg-4">
-              {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}              
-              {!! Form::select('tipotransferencia[]', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
+              {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}
+              {!! Form::select('tipotransferencia[]', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
             </div>
-            
+
 
             <div class="form-group col-lg-6 banco_procedencia">
               {!! Form::label('pbancoprocedencia', 'Banco Procedencia') !!}
@@ -39,16 +39,16 @@
               {!! Form::textarea('otro_bancoprocedencia', '', ['class' => 'form-control', 'rows' => '1', 'placeholder' => 'Otro banco de procedencia']) !!} {{--, 'required' => 'required'--}}
             </div>
 
-            
 
-            
+
+
           </div>
           <div class="form-row">
             <div class="form-group col-lg-4">
               {!! Form::label('pmonto', 'Monto pagado') !!}
               <input type="text" name="pmonto" id="pmonto" class="form-control number" placeholder="Monto pagado...">
             </div>
-            
+
             <div class="form-group col lg-4">
               {!! Form::label('pfecha', 'Fecha de voucher') !!}
               {!! Form::date('pfecha', '', ['class' => 'form-control']) !!}
@@ -66,7 +66,7 @@
               {!! Form::label('pnota', 'Nota') !!}
                 <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota...">
             </div>
-             
+
             <div class="form-group col-lg-6">
               <div class="image-wrapper">
                 <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" width="250px">
@@ -76,10 +76,10 @@
             <div class="form-group col-lg-6">
               {!! Form::label('pimagen', 'Imagen') !!}
               {{--<input type="file" id="pimagen" name="pimagen[]" multiple=""/>--}}
-              
+
               {!! Form::file('pimagen', ['class' => 'form-control-file', 'accept' => 'image/*']) !!}
             </div>
-            
+
           </div>
 
         </div>

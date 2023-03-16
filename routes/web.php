@@ -502,6 +502,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('titulares.banco', [PagoController::class, 'TitularesBanco'])->name('titulares.banco');
     Route::get('pagos/devolucion/{devolucion}', [PagoController::class, 'devolucion'])->name('pagos.devolucion');
     Route::post('pagos/devolucion/{devolucion}', [PagoController::class, 'devolucionUpdate'])->name('pagos.devolucion.update');
+    Route::post('getDataPagoReciente', [PagoController::class, 'getDataPagoReciente'])->name('getDataPagoReciente');
 
     Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
     Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
