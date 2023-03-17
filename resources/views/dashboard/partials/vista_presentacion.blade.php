@@ -47,6 +47,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     <i class="fas fa-expand-arrows-alt ml-3"
                        style="font-size: 20px"></i>
                 </button>
+                <div class="d-flex justify-content-center align-items-center ml-5">
+                    <label class="p-0 m-0" for="ingresar">Fecha: </label>
+                    <input type="date" id="fechametames" class="border-0 ml-3" value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
+                </div>
             </div>
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
