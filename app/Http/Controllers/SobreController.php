@@ -156,7 +156,7 @@ class SobreController extends Controller
                 //Pedido::EN_ATENCION_OPE_INT,
                 //Pedido::POR_ATENDER_OPE_INT,
                 //Pedido::ATENDIDO_OPE_INT,
-                Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                //Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                 Pedido::RECIBIDO_JEFE_OPE_INT,
                 Pedido::RECEPCION_COURIER_INT,
             ])
