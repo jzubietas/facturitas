@@ -1182,7 +1182,7 @@ class DashboardController extends Controller
                 <tr>
                     <th width="8%">Asesor</th>
                     <th width="11%">Id</th>
-                    <th width="8%"><span style="font-size:10px;">Pedidos del día ' . Carbon::parse($fechametames)->day . '  </span></th>
+                    <th width="8%"><span style="font-size:10px;">Pedidos del día ' . Carbon::now()->day . '  </span></th>
                     <th width="33%">Cobranza  ' . Carbon::parse($date_pagos)->monthName . ' </th>
                     <th width="40%">Pedidos  ' . Carbon::parse($fechametames)->monthName . ' </th>
                 </tr>
