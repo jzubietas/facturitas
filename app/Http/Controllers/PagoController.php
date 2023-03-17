@@ -360,43 +360,51 @@ class PagoController extends Controller
         } else {
             $idrequest = explode("_", $request->cliente_id);
             $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select('pedidos.id',
+                ->select(['pedidos.id','pedidos.correlativo',
                     'dp.codigo',
                     'dp.total',
                     'dp.saldo',
                     'dp.saldo as diferencia'
-                )
+                ])
                 ->where('pedidos.cliente_id', $idrequest)
                 ->where('pedidos.pagado', '<>', '2')
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '0')
                 ->where('dp.estado', '1')
                 ->where('dp.total', '>', '0')
-                ->where('dp.saldo', '>', '0');
-            //->get();
-            //return $request->perdonar_deuda;
-            if (!$request->perdonar_deuda) {
+                ->where('dp.saldo', '>', '0')
+                ->when($request->has("perdonar_deuda"), function ($query) use ($request) {
+                    $query->where("pedidos.pago", "1")
+                        ->where("pedidos.pagado", "1");
+                })
+                ->when($request->has("perdonar_currier"), function ($query) use ($request) {
+                    $query->where("pedidos.pago", "1")
+                        ->where("pedidos.pagado", "1")
+                        ->WhereBetween("dp.saldo", ['11', '13'])
+                        ->orWhereBetween("dp.saldo", ['17', '19']);
+                });
 
-            } else {
-                $pedidos->where("pedidos.pago", "1")
-                    ->where("pedidos.pagado", "1");
+            //$pedidos = $pedidos->get();
 
-            }
-
-            if (!$request->perdonar_currier) {
-
-            } else {
-
-                $pedidos->where("pedidos.pago", "1")
-                    ->where("pedidos.pagado", "1")
-                    ->WhereBetween("dp.saldo", ['11', '13'])
-                    ->orWhereBetween("dp.saldo", ['17', '19']);
-            }
-
-            $pedidos = $pedidos->get();
-
-            return Datatables::of($pedidos)
+            return Datatables::of(DB::table($pedidos))
                 ->addIndexColumn()
+                ->editColumn('id', function ($pedido) {
+                    return '<input type="hidden" name="pedido_id[' . $pedido->id . ']" value="' . $pedido->id . '">' . $pedido->correlativo . '</td>';
+                })
+                ->editColumn('saldo', function ($pedido) {
+                    return '<input type="hidden" name="numbersaldo[' . $pedido->id . ']" value="' . $pedido->saldo . '"><span class="numbersaldo">' . $pedido->saldo . '</span></td>';
+                })
+                ->editColumn('diferencia', function ($pedido) {
+                    return '<input data-diferencia type="hidden" name="numberdiferencia[' . $pedido->id . ']" value="' . $pedido->diferencia . '"><span class="numberdiferencia">' . $pedido->diferencia . '</span></td>' .
+                        '<input data-total type="hidden" name="numbertotal[' . $pedido->id . ']" value="' . $pedido->diferencia . '"><span class="numbertotal"></span></td>';
+                })
+                ->addColumn('radiototal',function($pedido){
+                    return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal[' . $pedido->id . ']" value="0">';
+                })
+                ->addColumn('radioadelanto',function($pedido){
+                    return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto[' . $pedido->id . ']" value="0">';
+                })
+                ->rawColumns(['id','saldo','diferencia','radiototal','radioadelanto'])
                 ->make(true);
         }
     }
