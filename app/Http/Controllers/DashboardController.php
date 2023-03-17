@@ -598,7 +598,8 @@ class DashboardController extends Controller
             $item['meta_new'] = $meta_new;
             $item['porcentaje_general']=($all/$allmeta_2);
             return $item;
-        })->sortBy('porcentaje_general', SORT_NUMERIC, true);//->all();
+        })->sortBy('meta_new', SORT_NUMERIC, true)
+            ->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
 
         if ($request->ii == 1) {
             if ($total_asesor % 2 == 0) {
@@ -609,7 +610,8 @@ class DashboardController extends Controller
                 $take = intval($total_asesor / 2) + 1;
             }
             $progressData->splice($skip, $take)->all();
-        } else if ($request->ii == 2) {
+        }
+        else if ($request->ii == 2) {
             if ($total_asesor % 2 == 0) {
                 $skip = intval($total_asesor / 2);
                 $take = intval($total_asesor / 2);
@@ -618,7 +620,8 @@ class DashboardController extends Controller
                 $take = intval($total_asesor / 2);
             }
             $progressData->splice($skip, $take)->all();
-        } else if ($request->ii == 3) {
+        }
+        else if ($request->ii == 3) {
             $progressData->all();
         }
 
@@ -1179,7 +1182,7 @@ class DashboardController extends Controller
                 <tr>
                     <th width="8%">Asesor</th>
                     <th width="11%">Id</th>
-                    <th width="8%"><span style="font-size:10px;">Pedidos del día ' . Carbon::now()->day . '  </span></th>
+                    <th width="8%"><span style="font-size:10px;">Pedidos del día ' . Carbon::parse($fechametames)->day . '  </span></th>
                     <th width="33%">Cobranza  ' . Carbon::parse($date_pagos)->monthName . ' </th>
                     <th width="40%">Pedidos  ' . Carbon::parse($fechametames)->monthName . ' </th>
                 </tr>
