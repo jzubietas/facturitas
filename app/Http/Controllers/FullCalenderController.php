@@ -56,6 +56,16 @@ class FullCalenderController extends Controller
     public function ajax(Request $request)
     {
         switch ($request->type) {
+            case 'adddrop':
+                //info de unsigned eventunsigned
+                $eventUnsigned=EventsUnsigned::where('id',$request->eventunsigned)->first();
+                $event = Event::create([
+                    'title' => $eventUnsigned->title,
+                    'start' => $request->dateStr,
+                    'end' => $request->dateStr,
+                    'color' => $eventUnsigned->color,
+                ]);
+                return response()->json($event);
             case 'add':
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,

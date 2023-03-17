@@ -301,7 +301,13 @@
                     $(this).draggable({
                         zIndex: 1070,
                         revert: true, // will cause the event to go back to its
-                        revertDuration: 0  //  original position after the drag
+                        revertDuration: 0,  //  original position after the drag
+                        stop:function(event,ui)
+                        {
+                            //console.log(event);
+                            //console.log($(ui.helper[0]).attr('id'));//unsigned_2
+                            //let eventEliminar = contenerEliminar.attr('id').split('_')[1];
+                        }
                     })
 
                 })
@@ -427,8 +433,47 @@
                     }*/
                 },
                 editable: true,
+                drop:function(dropInfo){
+                    console.log("drop")
+                    console.log(dropInfo)
+                    console.log(dropInfo.dateStr)//dia en que solto
+                    let uielement=dropInfo.draggedEl;
+                    let uiid=$(uielement).attr("id").split('_')[1];
+                    console.log(uiid)
+                    var formData = new FormData();
+                    formData.append('eventunsigned', uiid);
+                    formData.append('dateStr', dropInfo.dateStr);
+                    formData.append('type', 'adddrop');
+                    $.ajax({
+                        url: "{{route('fullcalendarAjax')}}",
+                        data: formData,
+                        type: "POST",
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            displayMessage("Evento creado.");
+                        }
+                    });
+
+                    /*console.log("crear evento")
+                    console.log(dropInfo);
+                    console.log(dropInfo.dateStr);
+                    console.log(dropInfo.draggedEl)*/
+                    //console.log($(ui.helper[0]).attr('id'));//unsigned_2
+                },
+                eventDragStop:function(info){
+                    console.log("eventDragStop")
+                    console.log(info)
+                },
+                eventReceive:function(info){
+                  /*console.log("eventReceive")
+                  console.log(info.relatedEvents)
+                  let uielement=info.draggedEl;
+                  let uiid=$(uielement).attr("id");
+                  console.log(uiid)*/
+                },
                 eventDrop: function (info) {
-                    console.log("actualizar evento")
+                    //console.log("actualizar evento")
                     //console.log(info.event.title + " was dropped on " + info.event.start.toISOString());
                     /*if (!confirm("Are you sure about this change?")) {
                         info.revert();
@@ -559,26 +604,6 @@
                 // Remove event from text input
                 $('#new-event').val('')
             })
-
-            /*$('#calendar').fullCalendar({
-                themeSystem: 'jquery-ui',
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay,listMonth'
-                },
-                locale: 'es',
-                weekNumbers: true,
-                eventLimit: true,
-                events: @json($eventss),
-                eventRender: function (event, element, view) {
-                    if (event.allDay === 'true') {
-                        event.allDay = true;
-                    } else {
-                        event.allDay = false;
-                    }
-                },
-            });*/
 
             $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();
