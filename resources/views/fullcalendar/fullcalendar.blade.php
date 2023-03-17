@@ -175,12 +175,12 @@
                                     </div>
                                  @endforeach
 
-                                {{--<div class="checkbox">
+                                <div class="checkbox d-none">
                                     <label for="drop-remove">
                                         <input type="checkbox" id="drop-remove">
                                         remove after drop
                                     </label>
-                                </div>--}}
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -327,10 +327,18 @@
             //let checkbox = document.getElementById('drop-remove');
             let calendarEl = document.getElementById('calendar');
 
-            new Draggable(containerEl, {
+            let draggable=new Draggable(containerEl, {
                 itemSelector: '.external-event',
                 eventData: function (eventEl) {
+<<<<<<< Updated upstream
+                    console.log($(eventEl).attr("id").split('_')[1]);
                     return {
+                        id:$(eventEl).attr("id").split('_')[1],
+=======
+                    //return true;
+                    return {
+                        id:eventEl.id,
+>>>>>>> Stashed changes
                         title: eventEl.innerText,
                         backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
@@ -354,19 +362,6 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 },
                 weekNumbers: true,
-                /*dateClick: function (info) {
-                    console.log('clicked ' + info.dateStr);
-                    agregar_evento_calendario.show()
-                },*/
-                /*eventRender: function(eventObj, $el) {
-                    $el.popover({
-                        title: eventObj.title,
-                        content: eventObj.description,
-                        trigger: 'hover',
-                        placement: 'top',
-                        container: 'body'
-                    });
-                },*/
                 eventColor: 'green',
                 events: @json($eventss),
                 eventDidMount: function(info) {
@@ -388,61 +383,45 @@
                 //selectHelper:true,
                 select: function (info) {
                     console.log("nuevo evento")
-                    //console.log(('selected ' + info.startStr + ' to ' + info.endStr));
-
-                    /*$('#agregar_evento_calendario').find('input[name=evtStart]').val(
-                        info.startStr.format('YYYY-MM-DD HH:mm:ss')
-                    );
-                    $('#agregar_evento_calendario').find('input[name=evtEnd]').val(
-                        info.endStr.format('YYYY-MM-DD HH:mm:ss')
-                    );*/
                     agregar_evento_calendario.show()
 
-
-                    //$("#calendario_start_evento").val(info.startStr);
-                    //$("#calendario_end_evento").val(info.endStr);
-
-                    /*let event_name = prompt('Event Name:');
-                    if(event_name)
-                    {
-                        let event_start = $.fullCalendar.formatDate(info.startStr, "Y-MM-DD HH:mm:ss");
-                        let event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD HH:mm:ss");
-
-                        $.ajax({
-                            url: "{{--route('fullcalendarAjax')--}}",
-                            data: {
-                                event_name: event_name,
-                                event_start: event_start,
-                                event_end: event_end,
-                                type: 'create'
-                            },
-                            type: "POST",
-                            success: function (data) {
-                                displayMessage("Event created.");
-                                calendar.fullCalendar('renderEvent', {
-                                    id: data.id,
-                                    title: event_name,
-                                    start: event_start,
-                                    end: event_end,
-                                    allDay: allDay
-                                }, true);
-                                calendar.fullCalendar('unselect');
-                            }
-                        });
-
-                    }*/
                 },
                 editable: true,
-                drop:function(dropInfo){
-                    console.log("drop")
-                    console.log(dropInfo)
-                    console.log(dropInfo.dateStr)//dia en que solto
-                    let uielement=dropInfo.draggedEl;
+                drop:function(info){
+
+                    info.draggedEl.parentNode.removeChild(info.draggedEl);
+                    /*var eventData = {
+                        title: info.event.title,
+                        start: info.event.start,
+                        end: info.event.end
+                    };*/
+
+
+
+                    //if ($('#drop-remove').is(':checked')) {
+                        // if so, remove the element from the "Draggable Events" list
+                        //$(this).remove();
+                    //}
+                },
+                eventDragStop:function(event){
+                    //event//jsEvent//view
+                    //console.log("eventDragStop")
+                    //console.log(info)
+                    console.log("eventDragStop")
+                    console.log(event);
+                    calendar.fullCalendar('removeEvents', event.event.id);
+                },
+                eventReceive:function(info){
+                    console.log("eventreceive")
+                    //calendar.fullCalendar('removeEvents', event.event.id);
+                },
+                eventDrop: function (info) {
+                    console.log("eventDrop")
+                    /*let uielement=info.draggedEl;
                     let uiid=$(uielement).attr("id").split('_')[1];
-                    console.log(uiid)
                     var formData = new FormData();
                     formData.append('eventunsigned', uiid);
-                    formData.append('dateStr', dropInfo.dateStr);
+                    formData.append('dateStr', info.dateStr);
                     formData.append('type', 'adddrop');
                     $.ajax({
                         url: "{{route('fullcalendarAjax')}}",
@@ -451,55 +430,12 @@
                         processData: false,
                         contentType: false,
                         success: function (data) {
-                            displayMessage("Evento creado.");
-                        }
-                    });
-
-                    /*console.log("crear evento")
-                    console.log(dropInfo);
-                    console.log(dropInfo.dateStr);
-                    console.log(dropInfo.draggedEl)*/
-                    //console.log($(ui.helper[0]).attr('id'));//unsigned_2
-                },
-                eventDragStop:function(info){
-                    console.log("eventDragStop")
-                    console.log(info)
-                },
-                eventReceive:function(info){
-                  /*console.log("eventReceive")
-                  console.log(info.relatedEvents)
-                  let uielement=info.draggedEl;
-                  let uiid=$(uielement).attr("id");
-                  console.log(uiid)*/
-                },
-                eventDrop: function (info) {
-                    //console.log("actualizar evento")
-                    //console.log(info.event.title + " was dropped on " + info.event.start.toISOString());
-                    /*if (!confirm("Are you sure about this change?")) {
-                        info.revert();
-                    }*/
-
-                    /*let event_start = $.fullCalendar.formatDate(info.event.startStr, "Y-MM-DD");
-                    let event_end = $.fullCalendar.formatDate(info.endStr, "Y-MM-DD");
-
-                    $.ajax({
-                        url: "{{--route('fullcalendarAjax')--}}",
-                        data: {
-                            title: info.name,
-                            start: event_start,
-                            end: event_end,
-                            id: info.id,
-                            type: 'edit',
-                        },
-                        type: "POST",
-                        success: function (response) {
-                            console.log(response)
-                            displayMessage("Event updated");
                         }
                     });*/
                 },
                 eventClick: function (event) {
                     console.log("eliminar evento")
+                    console.log(event);
                     let identify = event.event.id;
                     eliminar_evento_calendario.show();
                     $("#eliminar_evento").val(identify);
