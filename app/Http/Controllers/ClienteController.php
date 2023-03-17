@@ -780,7 +780,7 @@ class ClienteController extends Controller
                 'clientes.celular',
                 'clientes.nombre',
                 'clientes.saldo',
-                DB::raw("(select count(pesup.id) from pedidos pesup where pesup.cliente_id=clientes.id ) as solo_un_pedido"),
+                DB::raw(" (select count(pedsud.id) from pedidos pedsud where pedsud.cliente_id=clientes.id and pedsud.pago in (1) and pedsud.pagado in (1) and pedsud.estado=1) as pedidos_con_deuda "),
                 DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and cast(ped.created_at as date) >='" . now()->startOfMonth()->format('Y-m-d') . "' and ped.estado=1) as pedidos_mes_deuda "),
                 DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and cast(ped2.created_at as date) <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d') . "'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
             ]);
@@ -793,7 +793,7 @@ class ClienteController extends Controller
         foreach ($clientes as $cliente) {
             //Auth::user()->rol=='Administrador'
             if ($mirol == 'Administrador') {
-                $html .= '<option style="color:black" value="' . $cliente->id . '" data-saldo="'. $cliente->saldo .'" >' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
+                $html .= '<option style="color:black" value="' . $cliente->id . '" data-perdonardeuda="'.$cliente->pedidos_con_deuda.'" data-saldo="'. $cliente->saldo .'" >' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
             } else {
                 /*if($cliente->crea_temporal==1)
                 {
@@ -809,11 +809,11 @@ class ClienteController extends Controller
 
                     //considerar deuda real
                     if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes == 0) {
-                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . ' style="color:' . ($saldo == 0 ? 'green' : 'lightblue') . '" value="' . $cliente->id . '" data-saldo="'. $cliente->saldo .'">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : '') . ')</option>';
+                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . ' style="color:' . ($saldo == 0 ? 'green' : 'lightblue') . '" value="' . $cliente->id . '" data-perdonardeuda="'.$cliente->pedidos_con_deuda.'"  data-saldo="'. $cliente->saldo .'">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : '') . ')</option>';
                     } else if (($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes > 0) || ($cliente->pedidos_mes_deuda == 0 && $cliente->pedidos_mes_deuda_antes > 0)) {
-                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . ' style="color:' . ($saldo == 0 ? 'green' : 'black') . '" value="' . $cliente->id . '" data-saldo="'. $cliente->saldo .'">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . ' style="color:' . ($saldo == 0 ? 'green' : 'black') . '" value="' . $cliente->id . '" data-perdonardeuda="'.$cliente->pedidos_con_deuda.'" data-saldo="'. $cliente->saldo .'">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                     } else {
-                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . '  style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '" data-saldo="'. $cliente->saldo .'">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : '') . ')</option>';
+                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . '  style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '" data-perdonardeuda="'.$cliente->pedidos_con_deuda.'" data-saldo="'. $cliente->saldo .'">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : '') . ')</option>';
                     }
                 }
             }
