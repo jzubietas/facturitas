@@ -1310,7 +1310,7 @@ class DashboardController extends Controller
                                       <span class="badge bg-success text-dark font-'.$font_size_sub.'"">Pri. . '.$data["meta"].'</span>
                                       <span class="badge bg-primary text-dark font-'.$font_size_sub.'"">Seg. . '.$data["meta_2"].'</span>
                                   </sub>';
-
+                $sub_html='';
 
                 /*calculo para la diferencia en color rojo a la derecha*/
                 $diferencia_mostrar=0;
