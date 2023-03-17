@@ -567,7 +567,7 @@ class DashboardController extends Controller
                 }
                 $meta_new = 0;
                 $item['progress_pedidos'] = $p_quincena;
-            } else */if ($all>=$allmeta__quincena  &&  $all < $allmeta_intermedia) {
+            } else *//*if ($all>=$allmeta__quincena  &&  $all < $allmeta_intermedia) {
                 //meta intermedia
                 if ($allmeta_intermedia > 0) {
                     $p_intermedia = round(($all / $allmeta_intermedia) * 100, 2);
@@ -576,7 +576,7 @@ class DashboardController extends Controller
                 }
                 $meta_new = 0.5;
                 $item['progress_pedidos'] = $p_intermedia;
-            }else if ($all>=$allmeta_intermedia  && $all < $allmeta) {
+            }else */if ($all>=$allmeta_intermedia  && $all < $allmeta) {
                 //meta 1
                 if ($allmeta > 0) {
                     $p_pedidos = round(($all / $allmeta) * 100, 2);
