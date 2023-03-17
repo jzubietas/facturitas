@@ -330,7 +330,9 @@
             new Draggable(containerEl, {
                 itemSelector: '.external-event',
                 eventData: function (eventEl) {
+                    console.log($(eventEl).attr("id").split('_')[1]);
                     return {
+                        id:$(eventEl).attr("id").split('_')[1],
                         title: eventEl.innerText,
                         backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
