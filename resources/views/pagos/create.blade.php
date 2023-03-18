@@ -399,23 +399,48 @@
                         {
                             data: 'id',
                             name: 'id',
+                            render: function (data, type, row, meta) {
+                                if (row.id < 10) {
+                                    return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED000' + data + '</td>';
+                                } else if (row.id < 100) {
+                                    return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED00' + data + '</td>';
+                                } else if (row.id < 1000) {
+                                    return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED0' + data + '</td>';
+                                } else {
+                                    return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED' + data + '</td>';
+                                }
+                            }
                         },
                         {data: 'codigo', name: 'codigo',},
+
                         {
                             data: 'saldo',
                             name: 'saldo',
+                            render: function (data, type, row, meta) {
+                                return '<input type="hidden" name="numbersaldo[' + row.id + ']" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
+                            },
+                            "visible": true
                         },
                         {
                             data: 'diferencia',
                             name: 'diferencia',
+                            render: function (data, type, row, meta) {
+                                return '<input data-diferencia type="hidden" name="numberdiferencia[' + row.id + ']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>' +
+                                    '<input data-total type="hidden" name="numbertotal[' + row.id + ']" value="' + data + '"><span class="numbertotal"></span></td>';
+                            },
+                            "visible": true
                         },
                         {
-                            data: "radiototal",
-                            name: "radiototal",
+                            "data": null,
+                            "render": function (data, type, row, meta) {
+                                return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal[' + row.id + ']" value="0">';
+                            }
                         },
                         {
-                            data: "radioadelanto",
-                            name: "radioadelanto",
+                            "data": null,
+                            "render": function (data, type, row, meta) {
+                                return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto[' + row.id + ']" value="0">';
+                            }
                         }
                     ],
                     "footerCallback": function (row, data, start, end, display) {
@@ -474,38 +499,6 @@
                 });//fin datatable
 
             });
-
-
-            $('#tabla_pedidos').on('click', 'input[type="checkbox"].radiototal', function () {
-                console.log("checkBox radiototal");
-                var cell = $(this).closest('td');
-                var data = table.row( cell ).data();
-                console.log('Using TD:', data)
-                var cell = $(this).parent();
-                var data = table.row( cell ).data();
-                console.log('Using Parent:', data)
-                var row = $(this).closest('tr');
-                var data = table.row( row ).data();
-                console.log('Using TR:', data)
-                console.log('Checked name from TR:', data[0]);
-            });
-
-            $('#tabla_pedidos').on('click', 'input[type="checkbox"].radioadelanto', function () {
-                console.log("checkBox radiototal");
-                var cell = $(this).closest('td');
-                var data = tabla_pedidos.row( cell ).data();
-                console.log('Using TD:', data)
-                var cell = $(this).parent();
-                var data = tabla_pedidos.row( cell ).data();
-                console.log('Using Parent:', data)
-                var row = $(this).closest('tr');
-                var data = tabla_pedidos.row( row ).data();
-                console.log('Using TR:', data)
-                console.log('Checked name from TR:', data[0]);
-                console.log('Checked name from TR:', data["id"])
-                console.log('Checked name from TR:', data["saldo"])
-            });
-
 
 
             $(document).on("click", "#btn-accion-perdonar-currier", function () {
@@ -1647,24 +1640,48 @@
                         {
                             data: 'id',
                             name: 'id',
+                            render: function (data, type, row, meta) {
+                                if (row.id < 10) {
+                                    return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED000' + data + '</td>';
+                                } else if (row.id < 100) {
+                                    return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED00' + data + '</td>';
+                                } else if (row.id < 1000) {
+                                    return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED0' + data + '</td>';
+                                } else {
+                                    return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED' + data + '</td>';
+                                }
+                            }
                         },
                         {data: 'codigo', name: 'codigo',},
 
                         {
                             data: 'saldo',
                             name: 'saldo',
+                            render: function (data, type, row, meta) {
+                                return '<input type="hidden" name="numbersaldo[' + row.id + ']" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
+                            },
+                            "visible": true
                         },
                         {
                             data: 'diferencia',
                             name: 'diferencia',
+                            render: function (data, type, row, meta) {
+                                return '<input data-diferencia type="hidden" name="numberdiferencia[' + row.id + ']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>' +
+                                    '<input data-total type="hidden" name="numbertotal[' + row.id + ']" value="' + data + '"><span class="numbertotal"></span></td>';
+                            },
+                            "visible": true
                         },
                         {
-                            data: "radiototal",
-                            name: "radiototal",
+                            "data": null,
+                            "render": function (data, type, row, meta) {
+                                return '<input type="checkbox" disabled class="form-control radiototal pocoapoco" name="checktotal[' + row.id + ']" value="0">';
+                            }
                         },
                         {
-                            data: "radioadelanto",
-                            name: "radioadelanto",
+                            "data": null,
+                            "render": function (data, type, row, meta) {
+                                return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto[' + row.id + ']" value="0">';
+                            }
                         }
                     ],
                     "footerCallback": function (row, data, start, end, display) {
