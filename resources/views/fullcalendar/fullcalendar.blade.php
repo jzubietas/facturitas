@@ -331,7 +331,8 @@
                 itemSelector: '.external-event',
                 eventData: function (eventEl) {
                     return {
-                        id:$(eventEl).attr("id").split('_')[1],
+                        //id:$(eventEl).attr("id").split('_')[1],
+                        id:eventEl.id,
                         title: eventEl.innerText,
                         backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
@@ -534,7 +535,7 @@
                 $('#new-event').val('')
             })
 
-            $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
+            $(document).on("click", "#frm_eliminarevento_calendario", function (event) {
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
@@ -548,9 +549,27 @@
                     url: "{{ route('fullcalendarAjax') }}",
                     success: function (data) {
                         eliminar_evento_calendario.hide();
-                        let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
+                        let eventDelete = calendar.getEventById(formData.get("editar_evento"))
                         eventDelete.remove();
+                    }
+                });
+            });
 
+            $(document).on("submit", "#frm_editar_evento_calendario", function (event) {
+                event.preventDefault();
+                var form = $(this)[0];
+                var formData = new FormData(form);
+                formData.append('type', 'update')
+                $.ajax({
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('fullcalendarAjax') }}",
+                    success: function (data) {
+                        editar_evento_calendario.hide();
+                        let eventUpdate = calendar.getEventById(formData.get("editar_evento"))
+                        //eventUpdate.remove();
                     }
                 });
             });
