@@ -163,6 +163,12 @@
 @stop
 
 @section('content')
+
+    @include('fullcalendar.modal.agregar_evento')
+    @include('fullcalendar.modal.eliminar_evento')
+    @include('fullcalendar.modal.editar_evento')
+    @include('fullcalendar.modal.form_evento')
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
@@ -180,34 +186,25 @@
                                 <div id='listaeventospredefinidos'>
 
                                 </div>
-                                @foreach($all_eventsunsigned as $eventunsigned)
-                                    <div id="unsigned_{{ $eventunsigned->id }}"
-                                         class="fc-event" data-titulo="{{ $eventunsigned->titulo }}"
-                                         data-horafin="{{ $eventunsigned->horafin }}"
-                                         data-horainicio="{{ $eventunsigned->horainicio }}"
-                                         data-colorfondo="{{ $eventunsigned->colorfondo }}"
-                                         data-colortexto="{{ $eventunsigned->colortexto }}"
-                                         data-codigo="{{ $eventunsigned->codigo }}"
-                                         style="border-color:{{ $eventunsigned->colorfondo }};color:{{ $eventunsigned->colortexto }};background-color:{{ $eventunsigned->colorfondo }};margin:10px">
-                                        {{ $eventunsigned->titulo }}  [" . {{substr($eventunsigned->horainicio, 0, 5)}} . " a " . {{substr($eventunsigned->horafin, 0, 5)}} . "]
-                                        <button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light float-right">
+                                @foreach($uneventss as $eventunsigned)
+
+
+                                    <div id="unsigned_{{ $eventunsigned["id"] }}"
+                                         class="fc-event btn btn-md d-flex rounded" data-titulo="{{ $eventunsigned["titulo"] }}"
+                                         data-horafin="{{ $eventunsigned["horafin"] }}"
+                                         data-horainicio="{{ $eventunsigned["horainicio"] }}"
+                                         data-colorfondo="{{ $eventunsigned["colorfondo"] }}"
+                                         data-colortexto="{{ $eventunsigned["colortexto"] }}"
+                                         data-codigo="{{ $eventunsigned["id"] }}"
+                                         style="border-color:{{ $eventunsigned["colorfondo"] }};color:{{ $eventunsigned["colortexto"] }};background-color:{{ $eventunsigned["colorfondo"] }};">
+
+                                        <span clas="">{{ $eventunsigned["titulo"] }}</span>
+                                        <button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light btn-sm d-flex justify-content-end">
                                             <i class="fa fa-close text-danger"></i>
                                         </button>
                                     </div>
                                 @endforeach
 
-                                <div style="text-align:center">
-                                    <button type="button" id="BotonEventosPredefinidos" class="btn btn-success">
-                                        Administrar eventos predefinidos
-                                    </button>
-                                </div>
-
-                                <div class="checkbox d-none">
-                                    <label for="drop-remove">
-                                        <input type="checkbox" id="drop-remove">
-                                        remove after drop
-                                    </label>
-                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -250,12 +247,7 @@
             <div class="col-md-9">
                 <div class="card card-primary">
                     <div class="card-body p-0">
-                        <!-- THE CALENDAR -->
                         <div id="calendario1" style="width: 100%;border: 1px solid #000;padding:2px"></div>
-                        @include('fullcalendar.modal.agregar_evento')
-                        @include('fullcalendar.modal.eliminar_evento')
-                        @include('fullcalendar.modal.editar_evento')
-
 
                     </div>
                     <!-- /.card-body -->
@@ -298,30 +290,6 @@
                 }
             });
 
-
-            /*let agregar_evento_calendario = new bootstrap.Modal(document.getElementById('agregar_evento_calendario'), {
-                keyboard: false
-            })*/
-            /*let eliminar_evento_calendario = new bootstrap.Modal(document.getElementById('eliminar_evento_calendario'), {
-                keyboard: false
-            })*
-
-            /*let editar_evento_calendario = new bootstrap.Modal(document.getElementById('editar_evento_calendario'), {
-                keyboard: false
-            })*/
-
-            //agregar_evento_calendario.addEventListener('hidden.bs.modal', function (event) {
-            // do something...
-            //console.log("465")
-            //});
-
-            //eliminar_evento_calendario.addEventListener('hidden.bs.modal', function (event) {
-            // do something...
-            //console.log("123")
-            //});
-
-
-
             function ini_events(ele) {
                 ele.each(function () {
                     let eventObject = {
@@ -347,6 +315,11 @@
             }
 
             ini_events($('#external-events div.external-event'));
+
+            let agregar_evento_calendario = new bootstrap.Modal(document.getElementById('agregar_evento_calendario'), {keyboard: false})
+            let editar_evento_calendario = new bootstrap.Modal(document.getElementById('editar_evento_calendario'), {keyboard: false})
+            let eliminar_evento_calendario = new bootstrap.Modal(document.getElementById('eliminar_evento_calendario'), {keyboard: false})
+            let form_evento_calendario = new bootstrap.Modal(document.getElementById('FormularioEventos'), {keyboard: false})
 
             let date = new Date()
             let d    = date.getDate(),
@@ -385,13 +358,45 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 editable: true,
-                events: @json($eventss),
+                events:function(fetchInfo, successCallback, failureCallback) {
+                    let formData = new FormData();
+                    formData.append('type', 'load')
+                    $.ajax({
+                        url: "{{ route('fullcalendarAjax') }}",
+                        type: 'POST',
+                        dataType:'json',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            console.log(res);
+                            let events = [];
+                            res.forEach(function (evt) {
+                                events.push({
+                                    title: evt.title,
+                                    start: evt.start,
+                                    end: evt.end,
+                                });
+                            });
+                            successCallback(events);
+                        }
+                    });
+                },
                 dateClick: function(info) {
+                    console.log("dateClick")
+                    console.log(info.dateStr)
+                    //$("#modal_agregar_evento_calendario").modal()
+                    //let dateStr = moment(info.dateStr).format('YYYY-MM-DD 00:00:01');
+                    //console.log(dateStr)
+                    //let dateEnd = moment(info.dateStr).format('YYYY-MM-DD 23:59:59');
 
-                    //agregar_evento_calendario.show()
+                    $("#calendario_start_evento").val(moment().format('YYYY-MM-DD'));
+                    $("#calendario_end_evento").val(moment().format('YYYY-MM-DD'));
 
-                    /*limpiarFormulario();
-                    $('#BotonAgregar').show();
+                    agregar_evento_calendario.show()
+
+                    limpiarFormulario();
+                    /*$('#BotonAgregar').show();
                     $('#BotonModificar').hide();
                     $('#BotonBorrar').hide();
                     if (info.allDay) {
@@ -406,6 +411,7 @@
                     $("#FormularioEventos").modal();*/
                 },
                 eventClick: function(info) {
+                    console.log("eventclick")
                     /*$('#BotonModificar').show();
                     $('#BotonBorrar').show();
                     $('#BotonAgregar').hide();
@@ -421,6 +427,7 @@
                     $("#FormularioEventos").modal();*/
                 },
                 eventResize: function(info) {
+                    console.log("eventresize")
                     /*$('#Codigo').val(info.event.id);
                     $('#Titulo').val(info.event.title);
                     $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
@@ -434,6 +441,7 @@
                     modificarRegistro(registro);*/
                 },
                 eventDrop: function(info) {
+                    console.log("eventdrop")
                     /*$('#Codigo').val(info.event.id);
                     $('#Titulo').val(info.event.title);
                     $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
@@ -447,6 +455,7 @@
                     modificarRegistro(registro);*/
                 },
                 drop: function(info) {
+                    console.log("drop")
                     /*limpiarFormulario();
                     $('#ColorFondo').val(info.draggedEl.dataset.colorfondo);
                     $('#ColorTexto').val(info.draggedEl.dataset.colortexto);
@@ -567,7 +576,8 @@
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
-                console.log(formData.get("calendario_color_evento"));
+                //console.log(formData.get("calendario_color_evento"));
+                //console.log(formData.get("calendario_fondo_evento"));
                 formData.append('type', 'add');
                 $.ajax({
                     url: "{{route('fullcalendarAjax')}}",
@@ -580,13 +590,15 @@
                         let dateEnd = moment(data.end).format('YYYY-MM-DD');
                         agregar_evento_calendario.hide();
                         displayMessage("Event created.");
-                        calendario.addEvent({
+                        /*calendario.addEvent({
                             id: data.id,
                             title: data.title,
                             start: dateStr,
                             end: dateEnd,
                             color: data.color
-                        });
+                        });*/
+                        //calendario1.fullCalendar( 'refetchEvents')
+                        calendario1.refetchEvents();
                     }
                 });
             });
@@ -703,15 +715,11 @@
             }
 
             window.limpiarFormulario=function(){
-                $('#Codigo').val('');
-                $('#Titulo').val('');
-                $('#Descripcion').val('');
-                $('#FechaInicio').val('');
-                $('#FechaFin').val('');
-                $('#HoraInicio').val('');
-                $('#HoraFin').val('');
-                $('#ColorFondo').val('#3788D8');
-                $('#ColorTexto').val('#ffffff');
+                $('#calendario_nombre_evento').val('');
+                $('#calendario_start_evento').val('');
+                $('#calendario_end_evento').val('');
+                $('#calendario_fondo_evento').val('#3788D8');
+                $('#calendario_color_evento').val('#ffffff');
             }
 
             window.recuperarDatosFormulario=function(){

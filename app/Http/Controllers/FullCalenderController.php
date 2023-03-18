@@ -12,6 +12,7 @@ class FullCalenderController extends Controller
     public function index(Request $request)
     {
         $eventss = [];
+        $uneventss = [];
 
         $all_events = Event::all();
 
@@ -30,20 +31,52 @@ class FullCalenderController extends Controller
         }
 
         $all_eventsunsigned = EventsUnsigned::all();
-        return view('fullcalendar.fullcalendar', compact('eventss','all_eventsunsigned'));
+        foreach ($all_eventsunsigned as $eventsunsigned)
+        {
+            $uneventss[] = [
+                'id'=>$eventsunsigned->id,
+                'titulo' => $eventsunsigned->title,
+                'horainicio' => $eventsunsigned->created_at,
+                'horafin' => $eventsunsigned->updated_at,
+                'color'=>$eventsunsigned->color,
+                'colortexto'=>$eventsunsigned->color,
+                'colorfondo'=>$eventsunsigned->color,
+                //'description' => 'description for All Day Event',
+            ];
+        }
+        //dd($uneventss);
+        return view('fullcalendar.fullcalendar', compact('eventss','uneventss'));
 
     }
 
     public function ajax(Request $request)
     {
         switch ($request->type) {
+            case 'load':
+                $events = [];
+                $all_events = Event::all();
+                foreach ($all_events as $event)
+                {
+                    $events[] = [
+                        'id'=>$event->id,
+                        'title' => $event->title,
+                        'start' => $event->start,
+                        'end' => $event->end,
+                        'color'=>$event->color,
+                        'textColor'=>$event->color,
+                        'backgroundColor'=>$event->color,
+                        'description' => 'description for All Day Event',
+                    ];
+                }
+                return response()->json($events);
+                break;
             case 'updatetitle':
                 $event=Event::where('id',$request->editar_evento)->first();
                 $event->update([
                     'title'=>$request->calendario_nombre_evento_editar,
                 ]);
                 return response()->json($event);
-            break;
+                break;
             case 'adddrop':
                 //info de unsigned eventunsigned
                 $eventUnsigned=EventsUnsigned::where('id',$request->eventunsigned)->first();
@@ -54,7 +87,7 @@ class FullCalenderController extends Controller
                     'color' => $eventUnsigned->color,
                 ]);
                 return response()->json($event);
-            case 'agregar':
+            case 'add':
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
                     'description' => 'descripcion',
