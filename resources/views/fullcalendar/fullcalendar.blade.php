@@ -3,9 +3,19 @@
 @section('title', 'Pedidos - Bandeja de pedidos')
 
 @push('css')
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons"
+          rel="stylesheet">
     <link rel="stylesheet" href="{{asset('plugins/jquery-ui/jquery-ui.css')}}">
     <link rel="stylesheet" href="{{asset('css/toaster.min.css')}}">
-    <link rel="stylesheet" href="{{asset('plugins/fullcalendar/main.css')}}">
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" rel="stylesheet" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" rel="stylesheet" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" rel="stylesheet" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -165,15 +175,32 @@
                         </div>
                         <div class="card-body">
                             <!-- the events -->
-                            <div id="external-events">
+                            <div id='external-events' style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em">
+                                <h4 class="text-center">Eventos predefinidos</h4>
+                                <div id='listaeventospredefinidos'>
+
+                                </div>
                                 @foreach($all_eventsunsigned as $eventunsigned)
-                                    <div id="unsigned_{{ $eventunsigned->id }}" class="external-event {{ $eventunsigned->color }}">
-                                        <h4 class="d-inline-block">{{ $eventunsigned->title }}</h4>
+                                    <div id="unsigned_{{ $eventunsigned->id }}"
+                                         class="fc-event" data-titulo="{{ $eventunsigned->titulo }}"
+                                         data-horafin="{{ $eventunsigned->horafin }}"
+                                         data-horainicio="{{ $eventunsigned->horainicio }}"
+                                         data-colorfondo="{{ $eventunsigned->colorfondo }}"
+                                         data-colortexto="{{ $eventunsigned->colortexto }}"
+                                         data-codigo="{{ $eventunsigned->codigo }}"
+                                         style="border-color:{{ $eventunsigned->colorfondo }};color:{{ $eventunsigned->colortexto }};background-color:{{ $eventunsigned->colorfondo }};margin:10px">
+                                        {{ $eventunsigned->titulo }}  [" . {{substr($eventunsigned->horainicio, 0, 5)}} . " a " . {{substr($eventunsigned->horafin, 0, 5)}} . "]
                                         <button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light float-right">
                                             <i class="fa fa-close text-danger"></i>
                                         </button>
                                     </div>
                                 @endforeach
+
+                                <div style="text-align:center">
+                                    <button type="button" id="BotonEventosPredefinidos" class="btn btn-success">
+                                        Administrar eventos predefinidos
+                                    </button>
+                                </div>
 
                                 <div class="checkbox d-none">
                                     <label for="drop-remove">
@@ -224,9 +251,10 @@
                 <div class="card card-primary">
                     <div class="card-body p-0">
                         <!-- THE CALENDAR -->
-                        <div id="calendar" style="width: 100%; display: inline-block;"></div>
+                        <div id="calendario1" style="width: 100%;border: 1px solid #000;padding:2px"></div>
                         @include('fullcalendar.modal.agregar_evento')
                         @include('fullcalendar.modal.eliminar_evento')
+                        @include('fullcalendar.modal.editar_evento')
 
 
                     </div>
@@ -244,8 +272,16 @@
     <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <script src=" {{asset('plugins/moment/moment.min.js')}}"></script>
-    <script src=" {{asset('plugins/fullcalendar/main.js')}}"></script>
-    <script src=" {{asset('plugins/fullcalendar/locales/es.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js"></script>
+
     <script src=" {{asset('js/toaster.min.js')}}"></script>
     <script src=" {{asset('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js')}}"></script>
 
@@ -263,12 +299,16 @@
             });
 
 
-            let agregar_evento_calendario = new bootstrap.Modal(document.getElementById('agregar_evento_calendario'), {
+            /*let agregar_evento_calendario = new bootstrap.Modal(document.getElementById('agregar_evento_calendario'), {
                 keyboard: false
-            })
-            let eliminar_evento_calendario = new bootstrap.Modal(document.getElementById('eliminar_evento_calendario'), {
+            })*/
+            /*let eliminar_evento_calendario = new bootstrap.Modal(document.getElementById('eliminar_evento_calendario'), {
                 keyboard: false
-            })
+            })*
+
+            /*let editar_evento_calendario = new bootstrap.Modal(document.getElementById('editar_evento_calendario'), {
+                keyboard: false
+            })*/
 
             //agregar_evento_calendario.addEventListener('hidden.bs.modal', function (event) {
             // do something...
@@ -280,17 +320,10 @@
             //console.log("123")
             //});
 
-            $('#agregar_evento_calendario').on('hidden.bs.modal', function () {
-                console.log('hidden event fired!');
-            })
-
 
 
             function ini_events(ele) {
                 ele.each(function () {
-
-                    // create an Event Object (https://fullcalendar.io/docs/event-object)
-                    // it doesn't need to have a start or end
                     let eventObject = {
                         title: $.trim($(this).text()) // use the element's text as the event title
                     }
@@ -325,132 +358,121 @@
 
             let containerEl = document.getElementById('external-events');
             //let checkbox = document.getElementById('drop-remove');
-            let calendarEl = document.getElementById('calendar');
+            let calendarEl = document.getElementById('calendario1');
 
-            let draggable=new Draggable(containerEl, {
-                itemSelector: '.external-event',
-                eventData: function (eventEl) {
-                    <<<<<<< Updated upstream
-                                    console.log($(eventEl).attr("id").split('_')[1]);
+            new FullCalendarInteraction.Draggable(containerEl, {
+                itemSelector: '.fc-event',
+                eventData: function(eventEl) {
                     return {
-                        id:$(eventEl).attr("id").split('_')[1],
-                    =======
-                    //return true;
-                    return {
-                            id:eventEl.id,
-                        >>>>>>> Stashed changes
-                    title: eventEl.innerText,
+                        id:eventEl.id,
+                        title: eventEl.innerText.trim(),
                         backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
-                };
+                    }
                 }
-                });
+            });
 
-            let calendar = new Calendar(calendarEl, {
-                dayMaxEventRows: true,
-                views: {
-                    timeGrid: {
-                        dayMaxEventRows: 6 // adjust to 6 only for timeGridWeek/timeGridDay
-                    }
-                },
-                initialDate: '2023-03-02',
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next today',
+            let calendario1 = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid', 'timeGrid', 'interaction'],
+                height: 800,
+                droppable: true,
+                locale: 'es',
+                showNonCurrentDates: false,
+                header: {
+                    left: 'today,prev,next',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-                },
-                weekNumbers: true,
-                eventColor: 'green',
-                events: @json($eventss),
-                eventDidMount: function(info) {
-                    var tooltip = new Tooltip(info.el, {
-                        title: info.event.extendedProps.description,
-                        placement: 'top',
-                        trigger: 'hover',
-                        container: 'body'
-                    });
-                },
-                eventDisplay: function(event, element, view) {
-                    if (event.allDay === 'true') {
-                        event.allDay = true;
-                    } else {
-                        event.allDay = false;
-                    }
-                },
-                selectable: true,
-                //selectHelper:true,
-                select: function (info) {
-                    console.log("nuevo evento")
-                    agregar_evento_calendario.show()
-
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 editable: true,
-                drop:function(info){
+                events: @json($eventss),
+                dateClick: function(info) {
 
-                    info.draggedEl.parentNode.removeChild(info.draggedEl);
-                    /*var eventData = {
-                        title: info.event.title,
-                        start: info.event.start,
-                        end: info.event.end
-                    };*/
+                    //agregar_evento_calendario.show()
 
-
-
-                    //if ($('#drop-remove').is(':checked')) {
-                    // if so, remove the element from the "Draggable Events" list
-                    //$(this).remove();
-                    //}
+                    /*limpiarFormulario();
+                    $('#BotonAgregar').show();
+                    $('#BotonModificar').hide();
+                    $('#BotonBorrar').hide();
+                    if (info.allDay) {
+                        $('#FechaInicio').val(info.dateStr);
+                        $('#FechaFin').val(info.dateStr);
+                    } else {
+                        let fechaHora = info.dateStr.split("T");
+                        $('#FechaInicio').val(fechaHora[0]);
+                        $('#FechaFin').val(fechaHora[0]);
+                        $('#HoraInicio').val(fechaHora[1].substring(0, 5));
+                    }
+                    $("#FormularioEventos").modal();*/
                 },
-                eventDragStop:function(event){
-                    //event//jsEvent//view
-                    //console.log("eventDragStop")
-                    //console.log(info)
-                    console.log("eventDragStop")
-                    console.log(event);
-                    calendar.fullCalendar('removeEvents', event.event.id);
+                eventClick: function(info) {
+                    /*$('#BotonModificar').show();
+                    $('#BotonBorrar').show();
+                    $('#BotonAgregar').hide();
+                    $('#Codigo').val(info.event.id);
+                    $('#Titulo').val(info.event.title);
+                    $('#Descripcion').val(info.event.extendedProps.descripcion);
+                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
+                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
+                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
+                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
+                    $('#ColorFondo').val(info.event.backgroundColor);
+                    $('#ColorTexto').val(info.event.textColor);
+                    $("#FormularioEventos").modal();*/
                 },
-                eventReceive:function(info){
-                    console.log("eventreceive")
-                    //calendar.fullCalendar('removeEvents', event.event.id);
+                eventResize: function(info) {
+                    /*$('#Codigo').val(info.event.id);
+                    $('#Titulo').val(info.event.title);
+                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
+                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
+                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
+                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
+                    $('#ColorFondo').val(info.event.backgroundColor);
+                    $('#ColorTexto').val(info.event.textColor);
+                    $('#Descripcion').val(info.event.extendedProps.descripcion);
+                    let registro = recuperarDatosFormulario();
+                    modificarRegistro(registro);*/
                 },
-                eventDrop: function (info) {
-                    console.log("eventDrop")
-                    /*let uielement=info.draggedEl;
-                    let uiid=$(uielement).attr("id").split('_')[1];
-                    var formData = new FormData();
-                    formData.append('eventunsigned', uiid);
-                    formData.append('dateStr', info.dateStr);
-                    formData.append('type', 'adddrop');
-                    $.ajax({
-                        url: "{{route('fullcalendarAjax')}}",
-                        data: formData,
-                        type: "POST",
-                        processData: false,
-                        contentType: false,
-                        success: function (data) {
-                        }
-                    });*/
+                eventDrop: function(info) {
+                    /*$('#Codigo').val(info.event.id);
+                    $('#Titulo').val(info.event.title);
+                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
+                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
+                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
+                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
+                    $('#ColorFondo').val(info.event.backgroundColor);
+                    $('#ColorTexto').val(info.event.textColor);
+                    $('#Descripcion').val(info.event.extendedProps.descripcion);
+                    let registro = recuperarDatosFormulario();
+                    modificarRegistro(registro);*/
                 },
-                eventClick: function (event) {
-                    console.log("eliminar evento")
-                    console.log(event);
-                    let identify = event.event.id;
-                    eliminar_evento_calendario.show();
-                    $("#eliminar_evento").val(identify);
-                },
-                locale: 'es',
-                themeSystem: 'bootstrap',
-                droppable: true,
-                displayEventTime:false,
+                drop: function(info) {
+                    /*limpiarFormulario();
+                    $('#ColorFondo').val(info.draggedEl.dataset.colorfondo);
+                    $('#ColorTexto').val(info.draggedEl.dataset.colortexto);
+                    $('#Titulo').val(info.draggedEl.dataset.titulo);
+                    let fechaHora = info.dateStr.split("T");
+                    $('#FechaInicio').val(fechaHora[0]);
+                    $('#FechaFin').val(fechaHora[0]);
+                    if (info.allDay) { //verdadero si el calendario esta en vista de mes
+                        $('#HoraInicio').val(info.draggedEl.dataset.horainicio);
+                        $('#HoraFin').val(info.draggedEl.dataset.horafin);
+                    } else {
+                        $('#HoraInicio').val(fechaHora[1].substring(0, 5));
+                        $('#HoraFin').val(moment(fechaHora[1].substring(0, 5)).add(1, 'hours'));
+                    }
+                    let registro = recuperarDatosFormulario();
+                    agregarEventoPredefinido(registro);*/
+                }
             });
 
             function displayMessage(message) {
-                //toastr.success(message, 'Event');
+                toastr.success(message, 'Event');
             }
 
-            calendar.render();
+            calendario1.render();
+
+
 
             let currColor = '#3c8dbc'
             $('#color-chooser > li > a').click(function (e) {
@@ -541,6 +563,67 @@
                 $('#new-event').val('')
             })
 
+            $(document).on("submit", "#frm_add_evento_calendario", function (event) {
+                event.preventDefault();
+                var form = $(this)[0];
+                var formData = new FormData(form);
+                console.log(formData.get("calendario_color_evento"));
+                formData.append('type', 'add');
+                $.ajax({
+                    url: "{{route('fullcalendarAjax')}}",
+                    data: formData,
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        let dateStr = moment(data.start).format('YYYY-MM-DD');
+                        let dateEnd = moment(data.end).format('YYYY-MM-DD');
+                        agregar_evento_calendario.hide();
+                        displayMessage("Event created.");
+                        calendario.addEvent({
+                            id: data.id,
+                            title: data.title,
+                            start: dateStr,
+                            end: dateEnd,
+                            color: data.color
+                        });
+                    }
+                });
+            });
+
+            $(document).on('click','#editar_evento_calendario .btn-edit',function(){
+                $('i',this).removeClass('text-warning').addClass('text-dark');
+                console.log("aa")
+                $('#calendario_nombre_evento_editar').removeClass('border').removeClass('border-0');
+                $("#calendario_nombre_evento_editar").prop('readonly',false).focus();
+                $('.btn-edit-check').removeClass('d-none');
+            });
+
+            $(document).on("click", "#frm_editar_evento_calendario .btn-edit-check", function (event) {
+                event.preventDefault();
+                let eleme=$(this).parents('form').attr('id');
+                console.log(eleme);
+                var form = $('#'+eleme)[0];
+                var formData = new FormData(form);
+                //console.log(formData.get("eliminar_evento"));
+                formData.append('type', 'updatetitle')
+                $.ajax({
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('fullcalendarAjax') }}",
+                    success: function (data) {
+                        editar_evento_calendario.hide();
+                        var events = [ ];
+                        calendario.addEventSource(events);
+                        calendario.refetchEvents();
+                        //let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
+                        //eventDelete.remove();
+                    }
+                });
+            });
+
             $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();
                 var form = $(this)[0];
@@ -555,53 +638,94 @@
                     url: "{{ route('fullcalendarAjax') }}",
                     success: function (data) {
                         eliminar_evento_calendario.hide();
-                        let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
+                        let eventDelete = calendario.getEventById(formData.get("eliminar_evento"))
                         eventDelete.remove();
 
                     }
                 });
             });
-            /*ADD*/
-            $(document).on("submit", "#frm_add_evento_calendario", function (event) {
-                event.preventDefault();
-                var form = $(this)[0];
-                var formData = new FormData(form);
-                console.log(formData.get("calendario_color_evento"));
-                formData.append('type', 'add');
+
+            window.agregarRegistro=function(registro){
                 $.ajax({
-                    url: "{{route('fullcalendarAjax')}}",
-                    data: formData,
-                    type: "POST",
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-
-
-                        let dateStr = moment(data.start).format('YYYY-MM-DD');//calendar.formatDate(data.start, "YYYY-MM-DDTHH:mm:ss");
-                        let dateEnd = moment(data.end).format('YYYY-MM-DD');/*calendar.formatDate(data.end, {
-                            month: '2-digit',
-                            year: 'numeric',
-                            day: '2-digit'
-                        });*/
-
-                        //let dateStr = FullCalendar.formatDate(data.start, "Y-MM-DD HH:mm:ss");
-                        //let dateEnd = FullCalendar.formatDate(data.end  , "Y-MM-DD HH:mm:ss");
-
-                        console.log(dateStr);
-                        console.log(dateEnd);
-                        agregar_evento_calendario.hide();
-                        displayMessage("Event created.");
-                        calendar.addEvent({
-                            //start: '2020-08-08T10:30:00',
-                            id: data.id,
-                            title: data.title,
-                            start: dateStr,
-                            end: dateEnd,
-                            color: data.color
-                        });
+                    type: 'POST',
+                    url: 'datoseventos.php?accion=agregar',
+                    data: registro,
+                    success: function(msg) {
+                        calendario1.refetchEvents();
+                    },
+                    error: function(error) {
+                        alert("Hay un problema:" + error);
                     }
                 });
-            });
+            };
+
+            window.modificarRegistro=function(registro){
+                $.ajax({
+                    type: 'POST',
+                    url: 'datoseventos.php?accion=modificar',
+                    data: registro,
+                    success: function(msg) {
+                        calendario1.refetchEvents();
+                    },
+                    error: function(error) {
+                        alert("Hay un problema:" + error);
+                    }
+                });
+            }
+
+            window.borrarRegistro=function(registro){
+                $.ajax({
+                    type: 'POST',
+                    url: 'datoseventos.php?accion=borrar',
+                    data: registro,
+                    success: function(msg) {
+                        calendario1.refetchEvents();
+                    },
+                    error: function(error) {
+                        alert("Hay un problema:" + error);
+                    }
+                });
+            }
+
+            window.agregarEventoPredefinido=function(registro){
+                $.ajax({
+                    type: 'POST',
+                    url: 'datoseventos.php?accion=agregar',
+                    data: registro,
+                    success: function(msg) {
+                        calendario1.removeAllEvents();
+                        calendario1.refetchEvents();
+                    },
+                    error: function(error) {
+                        alert("Hay un problema:" + error);
+                    }
+                });
+            }
+
+            window.limpiarFormulario=function(){
+                $('#Codigo').val('');
+                $('#Titulo').val('');
+                $('#Descripcion').val('');
+                $('#FechaInicio').val('');
+                $('#FechaFin').val('');
+                $('#HoraInicio').val('');
+                $('#HoraFin').val('');
+                $('#ColorFondo').val('#3788D8');
+                $('#ColorTexto').val('#ffffff');
+            }
+
+            window.recuperarDatosFormulario=function(){
+                let registro = {
+                    codigo: $('#Codigo').val(),
+                    titulo: $('#Titulo').val(),
+                    descripcion: $('#Descripcion').val(),
+                    inicio: $('#FechaInicio').val() + ' ' + $('#HoraInicio').val(),
+                    fin: $('#FechaFin').val() + ' ' + $('#HoraFin').val(),
+                    colorfondo: $('#ColorFondo').val(),
+                    colortexto: $('#ColorTexto').val()
+                };
+                return registro;
+            }
 
         })
     </script>

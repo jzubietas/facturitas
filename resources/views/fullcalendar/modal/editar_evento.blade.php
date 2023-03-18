@@ -8,31 +8,46 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Nombre evento</h5>
 
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-edit"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-danger btn-delete-event" aria-label="Close">
-                        <i class="fa fa-trash"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-light btn-edit">
+                            <i class="fa fa-edit text-warning"></i>
+                        </button>
+                        <button type="button" class="btn btn-light btn-delete" aria-label="Close">
+                            <i class="fa fa-trash text-danger"></i>
+                        </button>
+                        <button type="button" class="btn btn-light btn-delete-check d-none" aria-label="Close">
+                            <i class="fa fa-trash text-success"></i>
+                        </button>
+                        <button type="button" class="btn btn-light" data-dismiss="modal">
+                            <i class="fa fa-close text-info"></i>
+                        </button>
+                    </div>
 
                 </div>
                 <div class="modal-body">
 
                     <div class="container-fluid">
-                        <input type="text" id="editar_evento" name="editar_evento">
+
                         <form id="frm_editar_evento_calendario" name="frm_editar_evento_calendario">
+                            <input type="hidden" id="editar_evento" name="editar_evento">
                             <div class="row">
                                 <div class="col-md-12">
-
-                                    <div class="form-group">
-                                        <label for="calendario_nombre_evento">Nombre de evento</label>
-                                        <input type="text" class="form-control is-valid" id="calendario_nombre_evento"
-                                               placeholder="Nombre de evento" value="" name="calendario_nombre_evento">
+                                    <div class="form-row">
+                                        <div class="form-group mr-2">
+                                            <a class="text-primary" href="#"><i class="fas fa-square"></i></a>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control border border-0" id="calendario_nombre_evento_editar"
+                                                   placeholder="Nombre de evento" value="" name="calendario_nombre_evento_editar">
+                                        </div>
+                                        <button type="button" class="btn btn-light btn-edit-check d-none">
+                                            <i class="fa fa-check text-success"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-groupa">
+                                        <span>Miércoles, 8 de marzo</span>
                                         <div class="valid-feedback">
-                                            Valido!
+                                            a
                                         </div>
                                     </div>
 
@@ -44,12 +59,18 @@
 
                 </div>
                 <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <i class="google-material-icons meh4fc hggPq" aria-hidden="true">event</i>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12 text-left">
+
+                                <h1 class="float-left">
+                                    <i class="fa fa-calendar text-dark"></i>
+                                    Autor: Autor
+                                </h1>
+
+                            </div>
                         </div>
                     </div>
-
 
                 </div>
 

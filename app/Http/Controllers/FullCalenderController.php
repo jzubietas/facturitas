@@ -12,50 +12,38 @@ class FullCalenderController extends Controller
     public function index(Request $request)
     {
         $eventss = [];
-        //if($request->ajax()) {
-            //dd('ajax');
-            $all_events = Event::all();
 
-            foreach ($all_events as $event)
-            {
-                $eventss[] = [
-                    'id'=>$event->id,
-                    'title' => $event->title,
-                    'start' => $event->start,
-                    'end' => $event->end,
-                    'color'=>$event->color,
-                    'description' => 'description for All Day Event',
-                ];
-            }
-        //dd($eventss);
-            /*$data = Event::whereDate('start', '>=', $request->start)
-                ->whereDate('end',   '<=', $request->end)
-                ->get(['id', 'title', 'start', 'end']);*/
-            //dd($data);
-            //return response()->json($data);
-        //}
+        $all_events = Event::all();
 
-
-        //$eventssunsigned = [];
-        $all_eventsunsigned = EventsUnsigned::all();
-        /*foreach ($all_eventsunsigned as $eventunsigned)
+        foreach ($all_events as $event)
         {
-            $eventssunsigned[] = [
-                'id'=>$eventunsigned->id,
-                'title' => $eventunsigned->title,
-                'start' => $eventunsigned->start,
-                'end' => $eventunsigned->end,
-                'color'=>$eventunsigned->color,
+            $eventss[] = [
+                'id'=>$event->id,
+                'title' => $event->title,
+                'start' => $event->start,
+                'end' => $event->end,
+                'color'=>$event->color,
+                'textColor'=>$event->color,
+                'backgroundColor'=>$event->color,
+                'description' => 'description for All Day Event',
             ];
-        }*/
-        //dd($eventssunsigned);
-            return view('fullcalendar.fullcalendar', compact('eventss','all_eventsunsigned'));
-        //return view('fullcalendar.fullcalendar');
+        }
+
+        $all_eventsunsigned = EventsUnsigned::all();
+        return view('fullcalendar.fullcalendar', compact('eventss','all_eventsunsigned'));
+
     }
 
     public function ajax(Request $request)
     {
         switch ($request->type) {
+            case 'updatetitle':
+                $event=Event::where('id',$request->editar_evento)->first();
+                $event->update([
+                    'title'=>$request->calendario_nombre_evento_editar,
+                ]);
+                return response()->json($event);
+            break;
             case 'adddrop':
                 //info de unsigned eventunsigned
                 $eventUnsigned=EventsUnsigned::where('id',$request->eventunsigned)->first();
@@ -66,22 +54,29 @@ class FullCalenderController extends Controller
                     'color' => $eventUnsigned->color,
                 ]);
                 return response()->json($event);
-            case 'add':
+            case 'agregar':
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
+                    'description' => 'descripcion',
                     'start' => $request->calendario_start_evento,
                     'end' => $request->calendario_start_evento,
                     'color' => $request->calendario_color_evento,
+                    'colorTexto' => $request->calendario_color_evento,
+                    'colorBackground' => $request->calendario_color_evento,
                 ]);
                 return response()->json($event);
-            case 'update':
+            case 'modificar':
                 $event = Event::find($request->id)->update([
                     'title' => $request->title,
+                    'description' => 'descripcion',
                     'start' => $request->start,
                     'end' => $request->end,
+                    'color' => $request->calendario_color_evento,
+                    'colorTexto' => $request->calendario_color_evento,
+                    'colorBackground' => $request->calendario_color_evento,
                 ]);
                 return response()->json($event);
-            case 'delete':
+            case 'borrar':
                 $event = Event::find($request->eliminar_evento)->delete();
                 return response()->json($request->eliminar_evento);
             default:
