@@ -3,7 +3,6 @@
 @section('title', 'Pedidos - Bandeja de pedidos')
 
 @push('css')
-    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('plugins/jquery-ui/jquery-ui.css')}}">
     <link rel="stylesheet" href="{{asset('css/toaster.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/fullcalendar/main.css')}}">
@@ -167,14 +166,14 @@
                         <div class="card-body">
                             <!-- the events -->
                             <div id="external-events">
-                                 @foreach($all_eventsunsigned as $eventunsigned)
+                                @foreach($all_eventsunsigned as $eventunsigned)
                                     <div id="unsigned_{{ $eventunsigned->id }}" class="external-event {{ $eventunsigned->color }}">
                                         <h4 class="d-inline-block">{{ $eventunsigned->title }}</h4>
                                         <button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light float-right">
                                             <i class="fa fa-close text-danger"></i>
                                         </button>
                                     </div>
-                                 @endforeach
+                                @endforeach
 
                                 <div class="checkbox d-none">
                                     <label for="drop-remove">
@@ -227,7 +226,8 @@
                         <!-- THE CALENDAR -->
                         <div id="calendar" style="width: 100%; display: inline-block;"></div>
                         @include('fullcalendar.modal.agregar_evento')
-                        @include('fullcalendar.modal.editar_evento')
+                        @include('fullcalendar.modal.eliminar_evento')
+
 
                     </div>
                     <!-- /.card-body -->
@@ -271,13 +271,13 @@
             })
 
             //agregar_evento_calendario.addEventListener('hidden.bs.modal', function (event) {
-                // do something...
-                //console.log("465")
+            // do something...
+            //console.log("465")
             //});
 
             //eliminar_evento_calendario.addEventListener('hidden.bs.modal', function (event) {
-                // do something...
-                //console.log("123")
+            // do something...
+            //console.log("123")
             //});
 
             $('#agregar_evento_calendario').on('hidden.bs.modal', function () {
@@ -330,16 +330,22 @@
             let draggable=new Draggable(containerEl, {
                 itemSelector: '.external-event',
                 eventData: function (eventEl) {
+                    <<<<<<< Updated upstream
+                                    console.log($(eventEl).attr("id").split('_')[1]);
                     return {
-                        //id:$(eventEl).attr("id").split('_')[1],
-                        id:eventEl.id,
-                        title: eventEl.innerText,
+                        id:$(eventEl).attr("id").split('_')[1],
+                    =======
+                    //return true;
+                    return {
+                            id:eventEl.id,
+                        >>>>>>> Stashed changes
+                    title: eventEl.innerText,
                         backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
-                    };
+                };
                 }
-            });
+                });
 
             let calendar = new Calendar(calendarEl, {
                 dayMaxEventRows: true,
@@ -393,8 +399,8 @@
 
 
                     //if ($('#drop-remove').is(':checked')) {
-                        // if so, remove the element from the "Draggable Events" list
-                        //$(this).remove();
+                    // if so, remove the element from the "Draggable Events" list
+                    //$(this).remove();
                     //}
                 },
                 eventDragStop:function(event){
@@ -499,9 +505,9 @@
                 }).addClass('external-event')
                 event.html('<h4 class="d-inline-block">'+val+'</h4>'+
                     '<button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light float-right">'+
-                        '<i class="fa fa-close text-danger"></i>'+
+                    '<i class="fa fa-close text-danger"></i>'+
                     '</button>'
-                        )
+                )
 
                 switch(currColor)
                 {
@@ -535,7 +541,7 @@
                 $('#new-event').val('')
             })
 
-            $(document).on("click", "#frm_eliminarevento_calendario", function (event) {
+            $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
@@ -549,27 +555,9 @@
                     url: "{{ route('fullcalendarAjax') }}",
                     success: function (data) {
                         eliminar_evento_calendario.hide();
-                        let eventDelete = calendar.getEventById(formData.get("editar_evento"))
+                        let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
                         eventDelete.remove();
-                    }
-                });
-            });
 
-            $(document).on("submit", "#frm_editar_evento_calendario", function (event) {
-                event.preventDefault();
-                var form = $(this)[0];
-                var formData = new FormData(form);
-                formData.append('type', 'update')
-                $.ajax({
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('fullcalendarAjax') }}",
-                    success: function (data) {
-                        editar_evento_calendario.hide();
-                        let eventUpdate = calendar.getEventById(formData.get("editar_evento"))
-                        //eventUpdate.remove();
                     }
                 });
             });
