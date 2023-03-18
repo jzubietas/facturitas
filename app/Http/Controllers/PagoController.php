@@ -392,7 +392,10 @@ class PagoController extends Controller
                     return '<input type="hidden" name="pedido_id[' . $pedido->id . ']" value="' . $pedido->id . '">' . $pedido->correlativo . '</td>';
                 })
                 ->editColumn('saldo', function ($pedido) {
-                    return '<input type="hidden" name="numbersaldo[' . $pedido->id . ']" value="' . $pedido->saldo . '"><span class="numbersaldo">' . $pedido->saldo . '</span></td>';
+                    return '<span class="numbersaldo" name="numbersaldo['.$pedido->id.']">' . $pedido->saldo . '</span>';
+                })
+                ->addColumn('saldo_oculto', function ($pedido) {
+                    return '<input type="hidden" name="numbersaldo_oculto[' . $pedido->id . ']" value="' . $pedido->saldo . '">';
                 })
                 ->editColumn('diferencia', function ($pedido) {
                     return '<input data-diferencia type="hidden" name="numberdiferencia[' . $pedido->id . ']" value="' . $pedido->diferencia . '"><span class="numberdiferencia">' . $pedido->diferencia . '</span></td>' .

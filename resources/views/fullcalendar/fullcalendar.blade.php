@@ -3,6 +3,7 @@
 @section('title', 'Pedidos - Bandeja de pedidos')
 
 @push('css')
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('plugins/jquery-ui/jquery-ui.css')}}">
     <link rel="stylesheet" href="{{asset('css/toaster.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/fullcalendar/main.css')}}">
@@ -226,8 +227,7 @@
                         <!-- THE CALENDAR -->
                         <div id="calendar" style="width: 100%; display: inline-block;"></div>
                         @include('fullcalendar.modal.agregar_evento')
-                        @include('fullcalendar.modal.eliminar_evento')
-
+                        @include('fullcalendar.modal.editar_evento')
 
                     </div>
                     <!-- /.card-body -->
@@ -330,15 +330,8 @@
             let draggable=new Draggable(containerEl, {
                 itemSelector: '.external-event',
                 eventData: function (eventEl) {
-<<<<<<< Updated upstream
-                    console.log($(eventEl).attr("id").split('_')[1]);
                     return {
                         id:$(eventEl).attr("id").split('_')[1],
-=======
-                    //return true;
-                    return {
-                        id:eventEl.id,
->>>>>>> Stashed changes
                         title: eventEl.innerText,
                         backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
