@@ -181,23 +181,17 @@
                         </div>
                         <div class="card-body">
                             <!-- the events -->
-                            <div id='external-events' style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em">
-                                <h4 class="text-center">Eventos predefinidos</h4>
-                                <div id='listaeventospredefinidos'>
-
-                                </div>
+                            <h4 class="text-center">Eventos predefinidos</h4>
+                            <div id="external-events" style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em">
                                 @foreach($uneventss as $eventunsigned)
-
-
                                     <div id="unsigned_{{ $eventunsigned["id"] }}"
-                                         class="fc-event btn btn-md d-flex rounded" data-titulo="{{ $eventunsigned["titulo"] }}"
+                                         class="external-event btn btn-md d-flex rounded {{ $eventunsigned["colorfondo"] }}" data-titulo="{{ $eventunsigned["titulo"] }}"
                                          data-horafin="{{ $eventunsigned["horafin"] }}"
                                          data-horainicio="{{ $eventunsigned["horainicio"] }}"
                                          data-colorfondo="{{ $eventunsigned["colorfondo"] }}"
                                          data-colortexto="{{ $eventunsigned["colortexto"] }}"
                                          data-codigo="{{ $eventunsigned["id"] }}"
                                          style="border-color:{{ $eventunsigned["colorfondo"] }};color:{{ $eventunsigned["colortexto"] }};background-color:{{ $eventunsigned["colorfondo"] }};">
-
                                         <span clas="">{{ $eventunsigned["titulo"] }}</span>
                                         <button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light btn-sm d-flex justify-content-end">
                                             <i class="fa fa-close text-danger"></i>
@@ -334,7 +328,7 @@
             let calendarEl = document.getElementById('calendario1');
 
             new FullCalendarInteraction.Draggable(containerEl, {
-                itemSelector: '.fc-event',
+                itemSelector: '.external-event',
                 eventData: function(eventEl) {
                     return {
                         id:eventEl.id,
@@ -411,7 +405,7 @@
                     $("#FormularioEventos").modal();*/
                 },
                 eventClick: function(info) {
-                    console.log("eventclick")
+                    console.log("eventclick editar en evento")
                     /*$('#BotonModificar').show();
                     $('#BotonBorrar').show();
                     $('#BotonAgregar').hide();
@@ -427,7 +421,7 @@
                     $("#FormularioEventos").modal();*/
                 },
                 eventResize: function(info) {
-                    console.log("eventresize")
+                    console.log("eventresize modificar en evento")
                     /*$('#Codigo').val(info.event.id);
                     $('#Titulo').val(info.event.title);
                     $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
@@ -439,9 +433,10 @@
                     $('#Descripcion').val(info.event.extendedProps.descripcion);
                     let registro = recuperarDatosFormulario();
                     modificarRegistro(registro);*/
+                    //calendario1.refetchEvents();
                 },
                 eventDrop: function(info) {
-                    console.log("eventdrop")
+                    console.log("eventdrop soltar drop")
                     /*$('#Codigo').val(info.event.id);
                     $('#Titulo').val(info.event.title);
                     $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
@@ -456,6 +451,61 @@
                 },
                 drop: function(info) {
                     console.log("drop")
+                    info.draggedEl.parentNode.removeChild(info.draggedEl);
+
+                    let contenerEliminar=info.draggedEl;
+                    let eventEliminar = $(contenerEliminar).attr('id').split('_')[1];
+
+                    let formData = new FormData();
+                    formData.append('eliminar_evento', eventEliminar)
+                    formData.append('type', 'delete')
+                    $.ajax({
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        url: "{{ route('fullcalendarAjaxUnsigned') }}",
+                        success: function (data) {
+                            //aqui elimino el evento temporal
+                            //eliminar_evento_calendario.hide();
+                            let eventDeleteUnsigned = $("#unsigned_"+eventEliminar);
+                            eventDeleteUnsigned.fadeOut("normal", function() {
+                                $(this).remove();
+                            });
+
+                            //aqui registro el evento temporal a evento oficial
+                            var formData = new FormData();
+                            //console.log(formData.get("calendario_color_evento"));
+                            //console.log(formData.get("calendario_fondo_evento"));
+                            formData.append('calendario_nombre_evento', 'calendario_nombre_evento');
+                            formData.append('descripcion', 'descripcion');
+                            formData.append('start', 'start');
+                            formData.append('color', 'color');
+                            formData.append('colorTexto', 'colorTexto');
+                            formData.append('colorBackground', 'colorBackground');
+                            formData.append('end', 'end');
+
+                            formData.append('type', 'add');
+                            $.ajax({
+                                url: "{{route('fullcalendarAjax')}}",
+                                data: formData,
+                                type: "POST",
+                                processData: false,
+                                contentType: false,
+                                success: function (data) {
+                                    let dateStr = moment(data.start).format('YYYY-MM-DD');
+                                    let dateEnd = moment(data.end).format('YYYY-MM-DD');
+                                    agregar_evento_calendario.hide();
+                                    displayMessage("Event created.");
+                                    calendario1.refetchEvents();
+                                }
+                            });
+
+                        }
+                    });
+                    //update id a 0
+
+                    calendario1.refetchEvents();
                     /*limpiarFormulario();
                     $('#ColorFondo').val(info.draggedEl.dataset.colorfondo);
                     $('#ColorTexto').val(info.draggedEl.dataset.colortexto);
@@ -570,6 +620,8 @@
 
                 // Remove event from text input
                 $('#new-event').val('')
+                window.location.reload()
+
             })
 
             $(document).on("submit", "#frm_add_evento_calendario", function (event) {
