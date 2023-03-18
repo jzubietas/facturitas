@@ -397,29 +397,6 @@ class PagoController extends Controller
 
             return Datatables::of($pedidos)
                 ->addIndexColumn()
-<<<<<<< HEAD
-                ->editColumn('id', function ($pedido) {
-                    return '<input type="hidden" name="pedido_id[' . $pedido->id . ']" value="' . $pedido->id . '">' . $pedido->correlativo . '</td>';
-                })
-                ->editColumn('saldo', function ($pedido) {
-                    return '<span class="numbersaldo" name="numbersaldo['.$pedido->id.']">' . $pedido->saldo . '</span>';
-                })
-                ->addColumn('saldo_oculto', function ($pedido) {
-                    return '<input type="hidden" name="numbersaldo_oculto[' . $pedido->id . ']" value="' . $pedido->saldo . '">';
-                })
-                ->editColumn('diferencia', function ($pedido) {
-                    return '<input data-diferencia type="hidden" name="numberdiferencia[' . $pedido->id . ']" value="' . $pedido->diferencia . '"><span class="numberdiferencia">' . $pedido->diferencia . '</span></td>' .
-                        '<input data-total type="hidden" name="numbertotal[' . $pedido->id . ']" value="' . $pedido->diferencia . '"><span class="numbertotal"></span></td>';
-                })
-                ->addColumn('radiototal',function($pedido){
-                    return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal[' . $pedido->id . ']" value="0">';
-                })
-                ->addColumn('radioadelanto',function($pedido){
-                    return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto[' . $pedido->id . ']" value="0">';
-                })
-                ->rawColumns(['id','saldo','diferencia','radiototal','radioadelanto'])
-=======
->>>>>>> parent of 3b6f90f1 (carga)
                 ->make(true);
         }
     }
@@ -1956,24 +1933,24 @@ class PagoController extends Controller
             return datatables()
                 ->query(DB::table($pagos))
                 //->editColumn('code', function ($pago) {
-                    //$cv=$pago->cantidad_voucher;
-                    //$cp=$pago->cantidad_pedido;
-                    //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
-                    /*$fecha_created=Carbon::parse($pago->created_at);
-                    $dd=$fecha_created->format('d');
-                    $mm=$fecha_created->format('m');
+                //$cv=$pago->cantidad_voucher;
+                //$cp=$pago->cantidad_pedido;
+                //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
+                /*$fecha_created=Carbon::parse($pago->created_at);
+                $dd=$fecha_created->format('d');
+                $mm=$fecha_created->format('m');
 
-                    $unido=$dd.$mm;
-                    if($pago->id<10){
-                        return 'PAG000'.$pago->identifica.'-'.$unido.'-'.$pago->id;
-                    }else if($pago->id<100){
-                        return 'PAG00'.$pago->identifica.'-'.$unido.'-'.$pago->id;
-                    }else if($pago->id<1000){
-                        return 'PAG0'.$pago->identifica.'-'.$unido.'-'.$pago->id;
-                    }else{
-                        return 'PAG'.$pago->identifica.'-'.$unido.'-'.$pago->id;
-                    }
-                })*/
+                $unido=$dd.$mm;
+                if($pago->id<10){
+                    return 'PAG000'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<100){
+                    return 'PAG00'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<1000){
+                    return 'PAG0'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                }else{
+                    return 'PAG'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                }
+            })*/
                 ->addIndexColumn()
                 ->addColumn('action', function ($pago) {
                     $btn = '';
@@ -2295,8 +2272,8 @@ class PagoController extends Controller
 
     public function DescargarImgDevolucion(Request $request)
     {
-      $destinationPath = base_path("storage/app/public/" . $request->imagen);
-      return response()->download($destinationPath);
+        $destinationPath = base_path("storage/app/public/" . $request->imagen);
+        return response()->download($destinationPath);
     }
 
     public function perdonardeuda(Request $request)
@@ -2533,8 +2510,8 @@ class PagoController extends Controller
         //return $titular_c;
         //return $request->fecha;
         $pagos_repetidos = DetallePago::
-            //->with(['pago', 'pago.user'])
-            where('banco', $request->banco)
+        //->with(['pago', 'pago.user'])
+        where('banco', $request->banco)
             ->where('titular', $request->titular)
             ->where('detalle_pagos.monto', $monto_c)
             ->where('detalle_pagos.fecha', $fecha_c)//2023-01-18
@@ -2556,12 +2533,12 @@ class PagoController extends Controller
     public  function getDataPagoReciente(Request $request){
         /*return $request->all();*/
         $detalle_pagos=DetallePago::join('pedidos as pe','detalle_pagos.pago_id','pe.id')
-        ->join('clientes as cl','pe.cliente_id','cl.id')
-        ->select(['detalle_pagos.*'])
-        ->where('cl.id',$request->cliente_id)
-        ->orderby('detalle_pagos.created_at','DESC')
-        ->limit(1)
-        ->get();
+            ->join('clientes as cl','pe.cliente_id','cl.id')
+            ->select(['detalle_pagos.*'])
+            ->where('cl.id',$request->cliente_id)
+            ->orderby('detalle_pagos.created_at','DESC')
+            ->limit(1)
+            ->get();
         return response()->json(['det_pagos' => $detalle_pagos]);
     }
 }
