@@ -16,6 +16,7 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PedidoHistoryController;
 use App\Http\Controllers\Pedidos\PedidoStatusController;
+use App\Http\Controllers\PedidosAnulacionController;
 use App\Http\Controllers\RecojoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScraperController;
@@ -143,10 +144,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidosrecojotabla', [PedidoController::class, 'indexrecojotabla'])->name('pedidosrecojotabla');//actualizado para serverside
 
     Route::get('pedidos.anulaciones', [AnulacionController::class, 'pedidosanulaciones'])->name('pedidos.anulaciones');
-    Route::get('pedidosanulacionestabla', [AnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulacionestabla');//actualizado para serverside
-
-    Route::any('pedidosanulaciones.modal.agregaranulacion_pc', [AnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_pc');
-    Route::any('pedidosanulaciones.modal.agregaranulacion_f', [AnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_f');
 
     Route::any('pedidosanulaciones.modal.agregaranulacion_pc.save', [AnulacionController::class, 'modalsAnulacionPCSave'])->name('pedidosanulaciones.modal.agregaranulacion_pc.save');
     Route::any('pedidosanulaciones.modal.agregaranulacion_f.save', [AnulacionController::class, 'modalsAnulacionFSave'])->name('pedidosanulaciones.modal.agregaranulacion_f.save');
@@ -817,5 +814,17 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('fullcalendar', [FullCalenderController::class, 'index'])->name('fullcalendar');
     Route::any('fullcalendarAjax', [FullCalenderController::class, 'ajax'])->name('fullcalendarAjax');
     Route::any('fullcalendarAjaxUnsigned', [FullCalenderController::class, 'ajaxunsigned'])->name('fullcalendarAjaxUnsigned');
+
+    Route::any('pedidosanulaciones.modal.agregaranulacion_pc', [PedidosAnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_pc');
+    Route::any('pedidosanulaciones.modal.agregaranulacion_f', [PedidosAnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_f');
+
+    Route::get('pedidosanulacionestabla', [PedidosAnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulacionestabla');
+    Route::post('solicita_anulacion_pedido', [PedidosAnulacionController::class, 'solicitaAnulacionPedido'])->name('solicita_anulacion_pedido');
+    Route::post('solicita_anulacion_pedidof', [PedidosAnulacionController::class, 'solicitaAnulacionPedidof'])->name('solicita_anulacion_pedidof');
+    Route::post('anulacionAprobacionAsesor', [PedidosAnulacionController::class, 'anulacionAprobacionAsesor'])->name('anulacionAprobacionAsesor');
+    Route::post('anulacionAprobacionEncargado', [PedidosAnulacionController::class, 'anulacionAprobacionEncargado'])->name('anulacionAprobacionEncargado');
+    Route::post('anulacionAprobacionAdmin', [PedidosAnulacionController::class, 'anulacionAprobacionAdmin'])->name('anulacionAprobacionAdmin');
+    Route::post('anulacionAprobacionJefeOp', [PedidosAnulacionController::class, 'anulacionAprobacionJefeOp'])->name('anulacionAprobacionJefeOp');
+    Route::post('confirmaSolicitudAnulacion', [PedidosAnulacionController::class, 'confirmaSolicitudAnulacion'])->name('confirmaSolicitudAnulacion');
 
 });
