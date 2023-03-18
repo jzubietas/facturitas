@@ -285,7 +285,7 @@
             $("#addpago").show();
 
             $("#btn-perdonar-currier").show();
-
+            $("#btn-perdonar-deuda").show();
 
         }
 
@@ -1413,15 +1413,6 @@
             });
 
             $(document).on("change", "#pcliente_id", function () {
-
-                let btnperdonar=$("option[value=" + $(this).val() + "]", this).attr('data-perdonardeuda');
-                console.log(btnperdonar)
-                if(btnperdonar==1)
-                {
-                    $("#btn-perdonar-deuda").show();
-                }
-
-
                 var valsaldo = $("option[value=" + $(this).val() + "]", this).attr('data-saldo');
                 if (valsaldo!=0.00){
                     $("#lblValorSaldo").html(valsaldo)
