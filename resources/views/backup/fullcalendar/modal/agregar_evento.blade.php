@@ -45,16 +45,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 demo-color-texto">
+                            <div class="col-md-4 demo-color">
                                 <div class="form-group">
                                     <label>Color picker:</label>
                                     <input id="calendario_color_evento" type="color" class="form-control" name="calendario_color_evento">
-                                </div>
-                            </div>
-                            <div class="col-md-4 demo-color-fondo">
-                                <div class="form-group">
-                                    <label>Color picker:</label>
-                                    <input id="calendario_fondo_evento" type="color" class="form-control" name="calendario_fondo_evento">
                                 </div>
                             </div>
                         </div>
