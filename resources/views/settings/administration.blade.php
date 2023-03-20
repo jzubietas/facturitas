@@ -237,10 +237,43 @@
     </div>
 
 @endsection
-@section('js')
+@push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <script>
+        $(document).ready(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
+
+            $("#pedido_change_password").click(function () {
+                 var password = $("#pedido_password").val();
+                 if (!password) {
+                     Swal.fire(
+                         'El campo de contraseña no debe estar vacio',
+                         '',
+                         'warning'
+                     )
+                 }
+                 $.post('{{route('settings.store-setting')}}', {
+                key: 'pedido_password',
+                value: password
+            }).done(function (a, b, c) {
+                if (c.status === 200) {
+                    Swal.fire(
+                        'Contraseña cambiada',
+                        '',
+                        'success'
+                    )
+                }
+            }).always(function () {
+                $("#pedido_password").val("");
+            })
+        })
+
+        });
 
         {{--
         $(document).on("submit", "#formulariotiempo", function (evento) {
@@ -263,30 +296,6 @@
         });
         --}}
 
-        $("#pedido_change_password").click(function () {
-            var password = $("#pedido_password").val();
-            if (!password) {
-                Swal.fire(
-                    'El campo de contraseña no debe estar vacio',
-                    '',
-                    'warning'
-                )
-            }
-            $.post('{{route('settings.store-setting')}}', {
-                key: 'pedido_password',
-                value: password
-            }).done(function (a, b, c) {
-                if (c.status === 200) {
-                    Swal.fire(
-                        'Contraseña cambiada',
-                        '',
-                        'success'
-                    )
-                }
-            }).always(function () {
-                $("#pedido_password").val("");
-            })
-        })
     </script>
     <script>
         function uploadProgressHandler(event) {
@@ -456,4 +465,5 @@
         });
 
     </script>
-@endsection
+
+@endpush

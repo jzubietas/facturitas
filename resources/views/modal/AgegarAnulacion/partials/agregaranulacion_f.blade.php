@@ -56,6 +56,12 @@
         </div>
     </div>
     <div class="row">
+        <div class="form-group col lg-12">
+            {!! Form::label('txtMotivoFactura', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
+            {!! Form::textarea('txtMotivoFactura', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Motivo', 'required' => 'required', 'id'=>'txtMotivoFactura']) !!}
+        </div>
+    </div>
+    <div class="row">
         <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
             <button type="submit" class="float-right btn btn-success btnEnviarFactura">Enviar</button>
         </div>

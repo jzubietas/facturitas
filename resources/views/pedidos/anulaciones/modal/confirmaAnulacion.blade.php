@@ -2,7 +2,7 @@
 <div class="modal fade" id="modal-confirma-anulacion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 800px!important;">
         <div class="modal-content">
-            <div class="modal-header bg-danger">
+            <div class="modal-header bg-success">
                 <h5 class="modal-title" id="exampleModalLabel">Confirmar Anulacion Pedido</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -39,7 +39,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-danger btnConfirmaSolicitudAdmin">Confirmar</button>
+                    <button type="submit" class="btn btn-success btnConfirmaSolicitudAdmin">Confirmar</button>
                 </div>
                 <!--{{-- Form::Close() --}}-->
             </form>

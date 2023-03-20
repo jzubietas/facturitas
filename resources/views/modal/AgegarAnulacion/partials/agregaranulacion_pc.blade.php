@@ -58,6 +58,12 @@
         </div>
     </div>
     <div class="row">
+        <div class="form-group col lg-12">
+            {!! Form::label('txtMotivoPedComplet', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
+            {!! Form::textarea('txtMotivoPedComplet', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Motivo', 'required' => 'required', 'id'=>'txtMotivoPedComplet']) !!}
+        </div>
+    </div>
+    <div class="row">
         <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
             <button type="submit" class="float-right btn btn-success btnEnviarPagoCompleto">Enviar</button>
         </div>

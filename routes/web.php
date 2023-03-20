@@ -825,6 +825,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('anulacionAprobacionEncargado', [PedidosAnulacionController::class, 'anulacionAprobacionEncargado'])->name('anulacionAprobacionEncargado');
     Route::post('anulacionAprobacionAdmin', [PedidosAnulacionController::class, 'anulacionAprobacionAdmin'])->name('anulacionAprobacionAdmin');
     Route::post('anulacionAprobacionJefeOp', [PedidosAnulacionController::class, 'anulacionAprobacionJefeOp'])->name('anulacionAprobacionJefeOp');
-    Route::post('confirmaSolicitudAnulacion', [PedidosAnulacionController::class, 'confirmaSolicitudAnulacion'])->name('confirmaSolicitudAnulacion');
-
+    Route::middleware('authorize.pedido.anulled')
+        ->post('confirmaSolicitudAnulacion', [PedidosAnulacionController::class, 'confirmaSolicitudAnulacion'])
+        ->name('confirmaSolicitudAnulacion');
 });

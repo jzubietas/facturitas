@@ -24,6 +24,7 @@
 
     @include('modal.AgegarAnulacion.modalAgregarAnulacion')
     @include('pedidos.anulaciones.modal.confirmaAnulacion')
+    @include('pedidos.anulaciones.modal.verMotivoAnulacion')
     <div class="card p-0" style="overflow: hidden !important;">
 
         <div class="tab-content" id="myTabContent" style="overflow-x: scroll !important;">
@@ -33,13 +34,13 @@
                     <thead>
                     <tr>
                         <th></th>
+                        <th scope="col" class="align-middle">Tipo</th>
                         <th scope="col" class="align-middle">Código</th>
                         <th scope="col" class="align-middle">Cliente</th>
                         <th scope="col" class="align-middle">Razón social</th>
                         <th scope="col" class="align-middle">Total</th>
                         <th scope="col" class="align-middle">F. Registro</th>
                         <th scope="col" class="align-middle">Eliminar (S/)</th>
-                        <th scope="col" class="align-middle">Tipo</th>
                         <th scope="col" class="align-middle">Accion</th>
                     </tr>
                     </thead>
@@ -111,7 +112,7 @@
                 serverSide: true,
                 searching: true,
                 //stateSave: true,
-                order: [[5, "desc"]],
+                order: [[4, "desc"]],
                 ajax: "{{ route('pedidosanulacionestabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
@@ -142,6 +143,10 @@
                         defaultContent: '',
                         "searchable": false
                     },
+                    {
+                        data: 'tipoanulacion',
+                        name: 'tipoanulacion',
+                    },
                     {data: 'codigos', name: 'codigos',},
                     {
                         data: 'celulares',
@@ -165,19 +170,6 @@
                         data: 'total_anular',
                         name: 'total_anular',
                         render: $.fn.dataTable.render.number(',', '.', 2, '')
-                    },
-                    {
-                        data: 'tipoanulacion',
-                        name: 'tipoanulacion',
-                        render: function (data, type, row, meta) {
-
-                            if (row.tipoanulacion == 'C' ) {
-                                return 'PEDIDO COMPLETO';
-                            } else if (row.tipoanulacion == 'F' ) {
-                                return 'FACTURA';
-                            }
-
-                        }
                     },
                     {data: 'action', name: 'action',sWidth: '15%',},
                 ],
@@ -291,13 +283,17 @@
                         success: function (response) {
                             console.log(response);
                             if (response.contador>=1){
-                                $('#tipoAnulacion').val("C");
-                                $('#txtIdPedidoCompleto').val(response.data.id);
-                                $('#asesorCodigoPc').val(response.data.name);
-                                $('#importeCodigoPc').val(response.data.total);
-                                $('#anulacionCodigoPc').val(response.data.total);
-                                $('#rucCodigoPc').val(response.data.ruc);
-                                $('#razonCodigoPc').val(response.data.nombre_empresa);
+                                if (response.data.estado!=0){
+                                    $('#tipoAnulacion').val("C");
+                                    $('#txtIdPedidoCompleto').val(response.data.id);
+                                    $('#asesorCodigoPc').val(response.data.name);
+                                    $('#importeCodigoPc').val(response.data.total);
+                                    $('#anulacionCodigoPc').val(response.data.total);
+                                    $('#rucCodigoPc').val(response.data.ruc);
+                                    $('#razonCodigoPc').val(response.data.nombre_empresa);
+                                }else{
+                                    Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
+                                }
                             }else{
                                 Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
                             }
@@ -318,6 +314,7 @@
                 $(".btnEnviarPagoCompleto").attr('disabled', 'disabled');
                 var txtIdPedidoCompleto     =$('#txtIdPedidoCompleto').val();
                 var asesorCodigoPc          =$('#asesorCodigoPc').val();
+                var txtMotivoPedComplet     =$('#txtMotivoPedComplet').val();
 
                 if (txtIdPedidoCompleto == '') {
                     Swal.fire('Error', 'No se puede ingresar una solicitud sin un pedido', 'warning');
@@ -335,7 +332,13 @@
                     $(".btnEnviarPagoCompleto").attr('disabled', false);
                     return false;
                 }
-
+                if (txtMotivoPedComplet.length < 1) {
+                    Swal.fire('Error','Ingrese el motivo para solicitar la anulacion del pedido','warning'
+                    ).then(function () {
+                        $("#txtMotivoPedComplet").focus()
+                    });
+                    return false;
+                }
                 var data = new FormData(document.getElementById("form-agregaranulacion-pc"));
 
                 $.ajax({
@@ -401,13 +404,17 @@
                         cache: false,
                         success: function (response) {
                             if (response.contador>=1){
-                                $('#tipoAnulacion2').val("F");
-                                $('#txtIdPedidoFactura').val(response.data.id);
-                                $('#asesorCodigoF').val(response.data.name);
-                                $('#importeCodigoF').val(response.data.total);
-                                $('#anulacionCodigoF').val(response.data.total);
-                                $('#rucCodigoF').val(response.data.ruc);
-                                $('#razonCodigoF').val(response.data.nombre_empresa);
+                                if (response.data.estado!=0){
+                                    $('#tipoAnulacion2').val("F");
+                                    $('#txtIdPedidoFactura').val(response.data.id);
+                                    $('#asesorCodigoF').val(response.data.name);
+                                    $('#importeCodigoF').val(response.data.total);
+                                    $('#anulacionCodigoF').val(response.data.total);
+                                    $('#rucCodigoF').val(response.data.ruc);
+                                    $('#razonCodigoF').val(response.data.nombre_empresa);
+                                }else{
+                                    Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
+                                }
                             }else{
                                 Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
                             }
@@ -439,6 +446,8 @@
                 var asesorCodigoF          =$('#asesorCodigoF').val();
                 var btotal                 =$('#importeCodigoF').val();
                 var bimporte               =$('#anularCodigoF').val();
+                var txtMotivoFactura    =$('#txtMotivoFactura').val();
+
                 if (txtIdPedidoFactura == '') {
                     Swal.fire('Error', 'No se puede ingresar una solicitud sin un pedido', 'warning');
                     $(".btnEnviarFactura").attr('disabled', false);
@@ -470,6 +479,13 @@
                     $(".btnEnviarFactura").attr('disabled', false);
                     return false;
                 }
+                if (txtMotivoFactura.length < 1) {
+                    Swal.fire('Error','Ingrese el motivo para solicitar la anulacion del pedido','warning'
+                    ).then(function () {
+                        $("#txtMotivoFactura").focus()
+                    });
+                    return false;
+                }
                 var datas = new FormData(document.getElementById("form-agregaranulacion-f"));
                 /*console.log('FActuras',datas); return false;*/
                 $.ajax({
@@ -481,9 +497,13 @@
                     success: function (data) {
                         /*console.log('Solicitando Anulacion', data);*/
                         if (data.countpedidosanul==0){
-                            Swal.fire('Notificacion', 'Se registró la solicitud de anulacion, correctamente.', 'success');
-                            limpiarFormSolAnulFact();
-                            $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                            if (data.pedidosinpago==1){
+                                Swal.fire('Notificacion', 'Se registró la solicitud de anulacion, correctamente.', 'success');
+                                limpiarFormSolAnulFact();
+                                $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                            }else {
+                                Swal.fire('Error', 'El pago tiene pagos o adelantos, verifique.', 'warning');
+                            }
                         }else {
                             Swal.fire('Error', 'Ya existe un registro con los mismos datos, verifique.', 'warning');
                         }
@@ -496,52 +516,75 @@
 
             $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaAsesor', function () {
                 var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
-                aprobacionAnulacion(data.idanulacion,1);
+                aprobacionAnulacion(data.idanulacion,1,1);
             })
             $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaEncargado', function () {
                 var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
-                aprobacionAnulacion(data.idanulacion,2);
+                aprobacionAnulacion(data.idanulacion,2,1);
             })
             $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaAdmin', function () {
                 var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
-                aprobacionAnulacion(data.idanulacion,3);
+                aprobacionAnulacion(data.idanulacion,3,1);
             })
             $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaJefeOp', function () {
                 var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
-                aprobacionAnulacion(data.idanulacion,4);
+                aprobacionAnulacion(data.idanulacion,4,1);
             })
 
-            function aprobacionAnulacion(idAnulacion,accion){
+            $('#tblListadoAnulaciones tbody').on('click', 'button.btnDesapruebaEncargado', function () {
+                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+                aprobacionAnulacion(data.idanulacion,2,2);
+            })
+
+            $('#tblListadoAnulaciones tbody').on('click', 'button.btnDesapruebaAdministrador', function () {
+                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+                aprobacionAnulacion(data.idanulacion,3,2);
+            })
+
+            function aprobacionAnulacion(idAnulacion,accion,estado){
                 var v_url="";
                 var v_text="";
+                var v_estado="";
+                var v_button="";
+                var v_respuesta="";
+                if (estado==1){
+                    v_estado="Aprobando "
+                    v_button="Si, aprobar"
+                    v_respuesta=" aprobó "
+                }else  if (estado==2){
+                    v_estado="Rechazando "
+                    v_button="Si, rechazar"
+                    v_respuesta=" rechazó "
+                }
                 if (accion==1){
                     v_url="{{ route('anulacionAprobacionAsesor') }}";
-                    v_text="Aprobando del Asesor";
+                    v_text=v_estado+"- Asesor";
                 }
                 if (accion==2){
                     v_url="{{ route('anulacionAprobacionEncargado') }}";
-                    v_text="Aprobando del Encargado";
+                    v_text=v_estado+"- Encargado";
                 }
                 if (accion==3){
                     v_url="{{ route('anulacionAprobacionAdmin') }}";
-                    v_text="Aprobando del Administrador";
+                    v_text=v_estado+"- Administrador";
                 }
                 if (accion==4){
                     v_url="{{ route('anulacionAprobacionJefeOp') }}";
-                    v_text="Aprobando del Jefe de Operaciones";
+                    v_text=v_estado+"- Jefe de Operaciones";
                 }
                 Swal.fire({
                     icon: 'warning',
                     title: '¿Estás seguro?',
                     text: v_text,
                     showDenyButton: true,
-                    confirmButtonText: 'Si, aprobar',
+                    confirmButtonText: v_button,
                     denyButtonText: 'No, cancelar',
                 }).then((result) => {
                     if (result.isConfirmed) {
                         if (result.isConfirmed) {
                             var formIdAnulacion = new FormData();
                             formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
+                            formIdAnulacion.append("estado", estado);
                             $.ajax({
                                 processData: false,
                                 contentType: false,
@@ -550,7 +593,7 @@
                                 data: formIdAnulacion,
                                 success: function (data) {
                                     console.log(data);
-                                    Swal.fire('Notificacion', 'Se aprobo1 correctamente.', 'success');
+                                    Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
                                     $('#tblListadoAnulaciones').DataTable().ajax.reload();
                                 }
                             });
@@ -602,12 +645,11 @@
                     $(".btnEnviarPagoCompleto").attr('disabled', false);
                     return false;
                 } else {
-                    //this.submit();
-                    ejecutarForDelete();
+                    ejecutarForSolicituAnulacion();
                 }
             })
 
-            function ejecutarForDelete() {
+            function ejecutarForSolicituAnulacion() {
                 var datafrmanula = new FormData(document.getElementById("frmConfirmaAnulacion"));
                 /*console.log('FActuras',datas); return false;*/
                 $.ajax({
@@ -628,9 +670,48 @@
                         $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
 
                     }
+                }).done(function (data) {
+
+                    console.log('Confirmacion Admin Anulacion', data);
+                    if (data.contpedanulacions==1){
+                        Swal.fire('Notificacion', 'Se confirmo la solicitud de anulacion, correctamente.', 'success');
+                        $("#modal-confirma-anulacion").modal("hide");
+                        resetearcampossolanu();
+                        $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                    }else {
+                        Swal.fire('Error', 'No existe la anulacion para confirmar, verifique.', 'warning');
+                    }
+                    $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
+                }).fail(function (err, error, errMsg) {
+                    console.log(arguments, err, errMsg)
+                    if (err.status == 401) {
+                        Swal.fire(
+                            'Error',
+                            'No autorizado para poder anular el pedido, ingrese una contraseña correcta',
+                            'error'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            'Ocurrio un error: ' + errMsg,
+                            'error'
+                        )
+                    }
                 });
 
             }
+
+            function resetearcampossolanu() {
+                $('#motivo').val("");
+                $('#responsable').val("");
+                $('#inputFilesAdmin').val("");
+            }
+
+            $('#modal-ver_motivoanulacion').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var pedido_motivo= button.data('pedido-motivo')
+                $("#txtMotivoAnulacion").html(pedido_motivo);
+            });
             /*FIN DEL SCRIPT*/
         });
     </script>
