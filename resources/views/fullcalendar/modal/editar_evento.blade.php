@@ -5,8 +5,8 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
 
-                <div class="modal-header">
-                    <h5 class="modal-title">Nombre evento</h5>
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title ">Editar evento</h5>
 
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-light btn-edit">
@@ -38,19 +38,24 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="text" class="form-control border border-0" id="calendario_nombre_evento_editar"
-                                                   placeholder="Nombre de evento" value="" name="calendario_nombre_evento_editar">
+                                                   placeholder="Nombre de evento" value="" name="calendario_nombre_evento_editar" readonly>
                                         </div>
-                                        <button type="button" class="btn btn-light btn-edit-check d-none">
-                                            <i class="fa fa-check text-success"></i>
-                                        </button>
-                                    </div>
-                                    <div class="form-groupa">
-                                        <span>Miércoles, 8 de marzo</span>
-                                        <div class="valid-feedback">
-                                            a
-                                        </div>
-                                    </div>
 
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="calendario_descripcion_evento_editar">Descripcion</label>
+                                            <textarea class="form-control border border-0" id="calendario_descripcion_evento_editar"
+                                                     name="calendario_descripcion_evento_editar" rows="3" readonly></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 text-center">
+                                            <button type="button" class="btn btn-light btn-edit-check d-none">
+                                                <i class="fa fa-check text-success"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -64,8 +69,9 @@
                             <div class="col-md-12 text-left">
 
                                 <h1 class="float-left">
-                                    <i class="fa fa-calendar text-dark"></i>
-                                    Autor: Autor
+                                    <i class="fa fa-calendar text-dark font-9"></i>
+                                    <span class="fecha_lectura_start text-info font-9"></span>:
+                                    <span class="fecha_lectura_end text-success font-9"></span>
                                 </h1>
 
                             </div>

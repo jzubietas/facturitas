@@ -75,6 +75,7 @@ class FullCalenderController extends Controller
                 $event=Event::where('id',$request->editar_evento)->first();
                 $event->update([
                     'title'=>$request->calendario_nombre_evento_editar,
+                    'description'=>$request->calendario_descripcion_evento_editar,
                 ]);
                 return response()->json($event);
                 break;

@@ -381,21 +381,12 @@
                 dateClick: function(info) {
                     console.log("dateClick")
                     console.log(info.dateStr)
-                    //$("#modal_agregar_evento_calendario").modal()
-                    //let dateStr = moment(info.dateStr).format('YYYY-MM-DD 00:00:01');
-                    //console.log(dateStr)
-                    //let dateEnd = moment(info.dateStr).format('YYYY-MM-DD 23:59:59');
-
-                    $("#calendario_start_evento").val(moment().format('YYYY-MM-DD'));
-                    $("#calendario_end_evento").val(moment().format('YYYY-MM-DD'));
-
-                    agregar_evento_calendario.show()
-
+                    $("#calendario_start_evento").val(moment(info.dateStr).format('YYYY-MM-DD hh:mm:ss'));
+                    $("#calendario_end_evento").val(moment(info.dateStr).format('YYYY-MM-DD hh:mm:ss'));
+                    $('.btn-edit-check').addClass('d-none');
+                    agregar_evento_calendario.show();
                     limpiarFormulario();
-                    /*$('#BotonAgregar').show();
-                    $('#BotonModificar').hide();
-                    $('#BotonBorrar').hide();
-                    if (info.allDay) {
+                    /*if (info.allDay) {
                         $('#FechaInicio').val(info.dateStr);
                         $('#FechaFin').val(info.dateStr);
                     } else {
@@ -403,52 +394,24 @@
                         $('#FechaInicio').val(fechaHora[0]);
                         $('#FechaFin').val(fechaHora[0]);
                         $('#HoraInicio').val(fechaHora[1].substring(0, 5));
-                    }
-                    $("#FormularioEventos").modal();*/
+                    }*/
                 },
                 eventClick: function(info) {
                     console.log("eventclick editar en evento")
+                    $('#editar_evento_calendario .btn-edit i').removeClass('text-dark').addClass('text-warning');
                     console.log(info.event);
                     $("#editar_evento").val(info.event.id);
+
+                    $(".fecha_lectura_start").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
+                    $(".fecha_lectura_end").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $('#calendario_nombre_evento_editar').val(info.event.title);
                     editar_evento_calendario.show();
-                    /*$('#Titulo').val(info.event.title);
-                    $('#Descripcion').val(info.event.extendedProps.descripcion);
-                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
-                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
-                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
-                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
-                    $('#ColorFondo').val(info.event.backgroundColor);
-                    $('#ColorTexto').val(info.event.textColor);*/
                 },
                 eventResize: function(info) {
                     console.log("eventresize modificar en evento")
-                    /*$('#Codigo').val(info.event.id);
-                    $('#Titulo').val(info.event.title);
-                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
-                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
-                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
-                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
-                    $('#ColorFondo').val(info.event.backgroundColor);
-                    $('#ColorTexto').val(info.event.textColor);
-                    $('#Descripcion').val(info.event.extendedProps.descripcion);
-                    let registro = recuperarDatosFormulario();
-                    modificarRegistro(registro);*/
-                    //calendario1.refetchEvents();
                 },
                 eventDrop: function(info) {
                     console.log("eventdrop soltar drop")
-                    /*$('#Codigo').val(info.event.id);
-                    $('#Titulo').val(info.event.title);
-                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
-                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
-                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
-                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
-                    $('#ColorFondo').val(info.event.backgroundColor);
-                    $('#ColorTexto').val(info.event.textColor);
-                    $('#Descripcion').val(info.event.extendedProps.descripcion);
-                    let registro = recuperarDatosFormulario();
-                    modificarRegistro(registro);*/
                 },
                 drop: function(info) {
                     console.log("drop")
@@ -647,7 +610,10 @@
                 $('i',this).removeClass('text-warning').addClass('text-dark');
                 console.log("aa")
                 $('#calendario_nombre_evento_editar').removeClass('border').removeClass('border-0');
+                $('#calendario_descripcion_evento_editar').removeClass('border').removeClass('border-0');
+                $("#calendario_descripcion_evento_editar").prop('readonly',false);
                 $("#calendario_nombre_evento_editar").prop('readonly',false).focus();
+
                 $('.btn-edit-check').removeClass('d-none');
             });
 
