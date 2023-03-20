@@ -52,6 +52,10 @@ class FullCalenderController extends Controller
     public function ajax(Request $request)
     {
         switch ($request->type) {
+            case 'validate':
+                $json=array('ok'=>true);
+                return response()->json();
+                break;
             case 'load':
                 $events = [];
                 $all_events = Event::all();
@@ -60,15 +64,16 @@ class FullCalenderController extends Controller
                     $events[] = [
                         'id'=>$event->id,
                         'title' => $event->title,
+                        'description' => $event->description,
                         'start' => $event->start,
                         'end' => $event->end,
                         'color'=>$event->color,
-                        'textColor'=>$event->color,
-                        'backgroundColor'=>$event->color,
-                        'description' => $event->description,
+                        'colorEvento'=>$event->colorEvento,
+                        'fondoEvento'=>$event->fondoEvento,
+                        'tipo'=>$event->tipo,
+                        'frecuencia'=>$event->frecuencia,
                     ];
                 }
-                //dd($events);
                 return response()->json($events);
                 break;
             case 'updatetitle':
@@ -90,15 +95,19 @@ class FullCalenderController extends Controller
                 ]);
                 return response()->json($event);
             case 'add':
+                $color='';$colorFondo='';
+                if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='white';}
+                else if($request->tipo=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
                     'description' => $request->calendario_descripcion_evento_nuevo,
                     'start' => $request->calendario_start_evento,
                     'end' => $request->calendario_end_evento,
-                    'color' => $request->calendario_color_evento,
-                    'colorEvento' => $request->calendario_color_evento,
-                    'colorBackground' => $request->calendario_fondo_evento,
+                    'color' => $colorFondo,
+                    'colorEvento' => $color,
+                    'fondoEvento' => $colorFondo,
                     'tipo'=>$request->calendario_tipo_evento,
+                    'frecuencia'=>$request->calendario_frecuencia_evento,
                 ]);
                 return response()->json($event);
             case 'modificar':
