@@ -52,13 +52,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 demo-color-texto">
+                            <div class="col-md-6 d-none demo-color-texto">
                                 <div class="form-group">
                                     <label>Color de Texto:</label>
                                     <input id="calendario_color_evento" type="color" class="form-control" name="calendario_color_evento">
                                 </div>
                             </div>
-                            <div class="col-md-6 demo-color-fondo">
+                            <div class="col-md-6 d-none demo-color-fondo">
                                 <div class="form-group">
                                     <label>Color de Fondo:</label>
                                     <input id="calendario_fondo_evento" type="color" class="form-control" name="calendario_fondo_evento">
