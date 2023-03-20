@@ -462,7 +462,7 @@
                 ini_events(event);
 
                 $('#new-event').val('')
-                window.location.reload();
+                //window.location.reload();
             })
 
             $(document).on("submit", "#frm_add_evento_calendario", function (event) {

@@ -147,11 +147,18 @@ class FullCalenderController extends Controller
                         if (!$date->day == 1) {
                             $date->addMonth();
                         }
+                        $endDate = $date->clone()->addYear()->startOfYear()->subDay();
+
                         $firstDayOfNextMonth = $date->firstOfMonth();
                         $monthsRemaining = 12 - $date->month + 1;
-                        for ($i = 1; $i < $monthsRemaining; $i++) {
-                            //meses restantes
-                            $fecha = $firstDayOfNextMonth->clone()->addMonths($i)->firstOfMonth()->format('Y-m-d');
+
+                        for ($date = $firstDayOfNextMonth; $date->lte($endDate); $firstDayOfNextMonth->addMonth())
+                        {
+                            echo "date ".$date."--firstDayOfNextMonth ".$firstDayOfNextMonth."--endDate ".$endDate."<br>.";
+
+                        }
+                        /*for ($i = 1; $i < $monthsRemaining; $i++) {
+                            $fecha = $firstDayOfNextMonth->clone()->addMonths($i)->firstOfMonth()->format('Y-m-d');$fecha = $firstDayOfNextMonth->clone()->addMonths($i)->firstOfMonth()->format('Y-m-d');
                             $event = Event::create([
                                 'title' => $request->calendario_nombre_evento,
                                 'description' => $request->calendario_descripcion_evento_nuevo,
@@ -163,36 +170,44 @@ class FullCalenderController extends Controller
                                 'tipo' => $request->calendario_tipo_evento,
                                 'frecuencia' => $request->calendario_frecuencia_evento,
                             ]);
-                        }
+                        }*/
                         break;
                     case 'fin_mes':
                         $startDate = Carbon::parse($request->calendario_start_evento);
                         if (!$startDate->isLastOfMonth()) {
                             //$date->addMonth();
-                            $startDate->lastOfMonth();
+                            $startDate=$startDate->clone()->lastOfMonth();
                         }
-                        $lastDayOfNextMonth = $startDate->lastOfMonth();
-                        $monthsRemaining = 12 - $startDate->month + 1;
                         $endDate = $startDate->clone()->addYear()->startOfYear()->subDay();
+                        $monthsRemaining = 12 - $startDate->month + 1;
+
+                        /*for($i=0;$i<$monthsRemaining;$i++)
+                        {
+                            $fecha = $startDate->clone()->addMonths($i)->endOfMon()->format('Y-m-d');
+                            $fecha = $firstDayOfNextMonth->clone()->addMonths($i)->firstOfMonth()->format('Y-m-d');
+                        }*/
 
                         for ($date = $startDate; $date->lte($endDate); $date->addMonth()) {
                             //echo "El último día de " . $date->format('F Y') . " es " . $date->endOfMonth()->format('Y-m-d') . "\n";
+                            echo "date ".$date."--startDate ".$startDate."--endDate ".$endDate."<br>.";
 
-                            $event = Event::create([
+
+                            /*$event = Event::create([
                                 'title' => $request->calendario_nombre_evento,
                                 'description' => $request->calendario_descripcion_evento_nuevo,
-                                'start' => $date->endOfMonth()->format('Y-m-d'),
-                                'end' => $date->endOfMonth()->format('Y-m-d'),
+                                'start' => $date->clone()->endOfMonth()->startOfDay()->format('Y-m-d'),
+                                'end' => $date->clone()->endOfMonth()->endOfDay()->format('Y-m-d'),
                                 'color' => $colorFondo,
                                 'colorEvento' => $color,
                                 'fondoEvento' => $colorFondo,
                                 'tipo' => $request->calendario_tipo_evento,
                                 'frecuencia' => $request->calendario_frecuencia_evento,
-                            ]);
+                            ]);*/
                         }
                         break;
                     //return response()->json($event);
                 }
+                break;
             case 'modificar':
                 $event = Event::find($request->id)->update([
                     'title' => $request->title,
