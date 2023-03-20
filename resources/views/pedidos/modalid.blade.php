@@ -23,7 +23,7 @@
                     </div>
                     <div class="form-group col lg-12">
                         {!! Form::label('attachments', 'Adjuntar Foto') !!}
-                        {!! Form::file('attachments[]', ['class' => 'form-control','multiple','id'=>'attachments','accept'=>"image/*"]) !!}
+                        {!! Form::file('attachments[]', ['class' => 'form-control-file','multiple','id'=>'attachments','accept'=>"image/*"]) !!}
                     </div>
                     <div class="form-group col lg-12">
                         {!! Form::label('responsable', 'Responsable de la anulación') !!}

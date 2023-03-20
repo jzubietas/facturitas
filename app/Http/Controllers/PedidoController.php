@@ -26,6 +26,7 @@ use App\Models\ImagenPedido;
 use App\Models\Pago;
 use App\Models\PagoPedido;
 use App\Models\PedidoHistory;
+use App\Models\PedidosAnulacion;
 use App\Models\User;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -173,7 +174,11 @@ class PedidoController extends Controller
                     DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha2_up'),
                     DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
                     'dp.saldo as diferencia',
-                    'direccion_grupos.motorizado_status'
+                    'direccion_grupos.motorizado_status',
+                    DB::raw("(case when (select count(1) from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0)=1 then 'Pend. Anulacion Parcial' else '' end) as mensajeAnulacion"),
+                    DB::raw("(case when (select count(1) from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=1)=1 then 'Anulado Parcial' else '' end) as msjConfirmaAnulacion"),
                 ]
             );
 
@@ -273,6 +278,12 @@ class PedidoController extends Controller
                 }
                 if ($pedido->estado_sobre == '1') {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
+                }
+                if (strlen(rtrim(ltrim($pedido->mensajeAnulacion)))>0  ) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.$pedido->mensajeAnulacion.'</span>';
+                }
+                if (strlen(rtrim(ltrim($pedido->msjConfirmaAnulacion)))>0  ) {
+                    $badge_estado .= '<span class="badge badge-warning p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.$pedido->msjConfirmaAnulacion.'</span>';
                 }
                 if ($pedido->estado_ruta == '1') {
                     $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
@@ -1878,6 +1889,14 @@ class PedidoController extends Controller
                         $filePaths[] = $file->store("pedidos_adjuntos", "pstorage");
                     }
                 }
+            }
+
+            $pedidosanulacion=PedidosAnulacion::where('pedido_id',$pedido->id);
+            $contpedanulacions=$pedidosanulacion->count();
+            if ($contpedanulacions==1){
+                $pedidosanulacion->update([
+                    'estado_aprueba_jefeop' => 1,
+                ]);
             }
 
             setting()->load();

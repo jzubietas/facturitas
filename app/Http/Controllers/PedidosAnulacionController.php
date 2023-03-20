@@ -488,22 +488,23 @@ class PedidosAnulacionController extends Controller
                 'estado_aprueba_administrador' => 1,
             ]);
         }
-        if ($contpedidos==1){
+        if ($pedidosanulacion->tipo!='F'){
+            if ($contpedidos==1){
+                $pedidos=$pedidos->clone()->first();
+                $pedidos->update([
+                    'motivo' => $request->motivo,
+                    'responsable' => $request->responsable,
+                    'pendiente_anulacion' => 1,
+                    'path_adjunto_anular' => null,
+                    'path_adjunto_anular_disk' => 'pstorage',
+                    'modificador' => 'USER' . Auth::user()->id,
+                    'fecha_anulacion' => now(),
+                ]);
 
-            $pedidos=$pedidos->clone()->first();
-            $pedidos->update([
-                'motivo' => $request->motivo,
-                'responsable' => $request->responsable,
-                'pendiente_anulacion' => 1,
-                'path_adjunto_anular' => null,
-                'path_adjunto_anular_disk' => 'pstorage',
-                'modificador' => 'USER' . Auth::user()->id,
-                'fecha_anulacion' => now(),
-            ]);
-
-            $pedidosanulacion->update([
-                'pendiente_anulacion' => 1,
-            ]);
+                $pedidosanulacion->update([
+                    'pendiente_anulacion' => 1,
+                ]);
+            }
         }
         return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulacion))?$pedidosanulacion:0) ,'IDsFiles: ' => $idsfiles,'pedidos: '  => $pedidos,'contpedanulacions'=>$contpedanulacions,'$contpedidos'=>$contpedidos]);
     }

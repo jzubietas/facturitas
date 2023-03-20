@@ -196,6 +196,8 @@
             });
 
             window.ocultar_div_modal_agregaranulacion = function () {
+                limpiarFormSolAnulFact();
+                limpiarFormSolAnulCompl();
                 $("#modal-agregaranulacion-pc-container").hide();
                 $("#form-agregaranulacion-pc input").val("");
 
@@ -375,6 +377,7 @@
                 $('#rucCodigoPc').val('');
                 $('#razonCodigoPc').val('');
                 $('#inputArchivoSubir').val('');
+                $('#txtMotivoPedComplet').val('');
             }
 
             function limpiarFormSolAnulFact(){
@@ -386,6 +389,7 @@
                 $('#rucCodigoF').val('');
                 $('#razonCodigoF').val('');
                 $('#inputArchivoSubirf').val('');
+                $('#txtMotivoFactura').val('');
             }
 
             /*MODAL ANULACION - F*/
@@ -423,6 +427,7 @@
                     });
                 }
             });
+
             /*CARGA DE ARCHIVOS*/
             $(document).on("click", "#form-agregaranulacion-f #cargaArchivosF", function () {
                 var file = document.createElement('input');
