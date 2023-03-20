@@ -111,8 +111,8 @@ class FullCalenderController extends Controller
                 ]);
                 return response()->json($event);
             case 'borrar':
-                $event = Event::find($request->eliminar_evento)->delete();
-                return response()->json($request->eliminar_evento);
+                $event = Event::find($request->editar_evento)->delete();
+                return response()->json($request->editar_evento);
             default:
                 # code...
                 break;

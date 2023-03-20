@@ -573,7 +573,6 @@
 
             $('#add-new-event').click(function (e) {
                 e.preventDefault()
-                // Get value and make sure it is not null
                 let val = $('#new-event').val()
                 if (val.length === 0) {
                     return
@@ -602,7 +601,7 @@
                     default:currColor='bg-info';break;
                 }
 
-                var formUnsigned = new FormData();
+                let formUnsigned = new FormData();
                 formUnsigned.append('calendario_nombre_evento', val);
                 formUnsigned.append('calendario_color_evento', currColor);
                 formUnsigned.append('type', 'add');
@@ -658,7 +657,6 @@
                 console.log(eleme);
                 var form = $('#'+eleme)[0];
                 var formData = new FormData(form);
-                //console.log(formData.get("eliminar_evento"));
                 formData.append('type', 'updatetitle')
                 $.ajax({
                     data: formData,
@@ -675,15 +673,29 @@
                 });
             });
 
-            $(document).on('click','#frm_editar_evento_calendario .btn-delete',function(){
-
+            $(document).on('click','.btn-delete',function(){
+                event.preventDefault();
+                let eleme="frm_editar_evento_calendario";
+                var form = $('#'+eleme)[0];
+                var formData = new FormData(form);
+                formData.append('type', 'borrar')
+                $.ajax({
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('fullcalendarAjax') }}",
+                    success: function (data) {
+                        editar_evento_calendario.hide();
+                        calendario1.refetchEvents();
+                    }
+                });
             })
 
             $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
-                //console.log(formData.get("eliminar_evento"));
                 formData.append('type', 'delete')
                 $.ajax({
                     data: formData,
@@ -695,52 +707,9 @@
                         eliminar_evento_calendario.hide();
                         let eventDelete = calendario.getEventById(formData.get("eliminar_evento"))
                         eventDelete.remove();
-
                     }
                 });
             });
-
-            window.agregarRegistro=function(registro){
-                $.ajax({
-                    type: 'POST',
-                    url: 'datoseventos.php?accion=agregar',
-                    data: registro,
-                    success: function(msg) {
-                        calendario1.refetchEvents();
-                    },
-                    error: function(error) {
-                        alert("Hay un problema:" + error);
-                    }
-                });
-            };
-
-            window.modificarRegistro=function(registro){
-                $.ajax({
-                    type: 'POST',
-                    url: 'datoseventos.php?accion=modificar',
-                    data: registro,
-                    success: function(msg) {
-                        calendario1.refetchEvents();
-                    },
-                    error: function(error) {
-                        alert("Hay un problema:" + error);
-                    }
-                });
-            }
-
-            window.borrarRegistro=function(registro){
-                $.ajax({
-                    type: 'POST',
-                    url: 'datoseventos.php?accion=borrar',
-                    data: registro,
-                    success: function(msg) {
-                        calendario1.refetchEvents();
-                    },
-                    error: function(error) {
-                        alert("Hay un problema:" + error);
-                    }
-                });
-            }
 
             window.agregarEventoPredefinido=function(registro){
                 $.ajax({
@@ -763,19 +732,6 @@
                 $('#calendario_end_evento').val('');
                 $('#calendario_fondo_evento').val('#3788D8');
                 $('#calendario_color_evento').val('#ffffff');
-            }
-
-            window.recuperarDatosFormulario=function(){
-                let registro = {
-                    codigo: $('#Codigo').val(),
-                    titulo: $('#Titulo').val(),
-                    descripcion: $('#Descripcion').val(),
-                    inicio: $('#FechaInicio').val() + ' ' + $('#HoraInicio').val(),
-                    fin: $('#FechaFin').val() + ' ' + $('#HoraFin').val(),
-                    colorfondo: $('#ColorFondo').val(),
-                    colortexto: $('#ColorTexto').val()
-                };
-                return registro;
             }
 
         })
