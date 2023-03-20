@@ -25,6 +25,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="calendario_descripcion_evento_nuevo">Descripcion</label>
+                                    <textarea class="form-control border border-success" id="calendario_descripcion_evento_nuevo"
+                                              name="calendario_descripcion_evento_nuevo" rows="3"></textarea>
+                                </div>
+                            </div>
                             <div class="col-md-6 d-none">
                                 <div class="form-group">
                                     <label for="calendario_startevento">Inicio del evento</label>
@@ -57,13 +64,7 @@
                                     <input id="calendario_fondo_evento" type="color" class="form-control" name="calendario_fondo_evento">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="calendario_descripcion_evento_nuevo">Descripcion</label>
-                                    <textarea class="form-control border border-success" id="calendario_descripcion_evento_nuevo"
-                                              name="calendario_descripcion_evento_nuevo" rows="3"></textarea>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
