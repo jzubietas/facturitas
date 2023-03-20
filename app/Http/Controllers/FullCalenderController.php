@@ -100,26 +100,102 @@ class FullCalenderController extends Controller
                 else if($request->tipo=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
 
                 //analisis frecuencia
+            $frecuencia_recorrido=null;
                 switch($request->calendario_frecuencia_evento)
                 {
-                    case 'una_vez':break;
-                    case 'diario':break;
-                    case 'ini_mes':break;
-                    case 'fin_mes':break;
+                    case 'una_vez':
+                        $frecuencia_recorrido=$request->calendario_start_evento;
+                        $event = Event::create([
+                            'title' => $request->calendario_nombre_evento,
+                            'description' => $request->calendario_descripcion_evento_nuevo,
+                            'start' => $request->calendario_start_evento,
+                            'end' => $request->calendario_end_evento,
+                            'color' => $colorFondo,
+                            'colorEvento' => $color,
+                            'fondoEvento' => $colorFondo,
+                            'tipo'=>$request->calendario_tipo_evento,
+                            'frecuencia'=>$request->calendario_frecuencia_evento,
+                        ]);
+                        break;
+                    case 'diario':
+                        $inidia=Carbon::parse($request->calendario_start_evento)->clone()->startOfDay();
+                        $findia=Carbon::parse($request->calendario_start_evento)->clone()->endOfMonth()->endOfDay();
+                        $difference = ($inidia->diff($findia)->days < 1)
+                            ? 'today'
+                            : $inidia->diffForHumans($findia);
+                        //dd($difference);
+                        for($i=0;$i<=$difference;$i++)
+                        {
+                            //llevar al dia
+                            $fecha=$inidia->clone()->addDays($i)->format('Y-m-d');
+
+                            $event = Event::create([
+                                'title' => $request->calendario_nombre_evento,
+                                'description' => $request->calendario_descripcion_evento_nuevo,
+                                'start' => $fecha,
+                                'end' => $fecha,
+                                'color' => $colorFondo,
+                                'colorEvento' => $color,
+                                'fondoEvento' => $colorFondo,
+                                'tipo'=>$request->calendario_tipo_evento,
+                                'frecuencia'=>$request->calendario_frecuencia_evento,
+                            ]);
+
+                        }
+                        break;
+                    case 'ini_mes':
+                        $date = Carbon::parse($request->calendario_start_evento)
+                        if (!$date->isFirstOfMonth()) {
+                            $date->addMonth();
+                        }
+                        $firstDayOfNextMonth = $date->firstOfMonth();
+                        $monthsRemaining = 12 - $date->month + 1;
+                        for($i=0;$i<=$monthsRemaining;$i++)
+                        {
+                            //meses restantes
+                            $fecha=$firstDayOfNextMonth->clone()->addMonths($i)->firstOfMonth()->format('Y-m-d');
+                            $event = Event::create([
+                                'title' => $request->calendario_nombre_evento,
+                                'description' => $request->calendario_descripcion_evento_nuevo,
+                                'start' => $fecha,
+                                'end' => $fecha,
+                                'color' => $colorFondo,
+                                'colorEvento' => $color,
+                                'fondoEvento' => $colorFondo,
+                                'tipo'=>$request->calendario_tipo_evento,
+                                'frecuencia'=>$request->calendario_frecuencia_evento,
+                            ]);
+                        }
+                        break;
+                    case 'fin_mes':
+                        $date = Carbon::parse($request->calendario_start_evento)
+                        if (!$date->isLastOfMonth()) {
+                            //$date->addMonth();
+                            $date->lastOfMonth();
+                        }
+                        $lastDayOfNextMonth = $date->lastOfMonth();
+                        $monthsRemaining = 12 - $date->month + 1;
+                        for($i=0;$i<=$monthsRemaining;$i++)
+                        {
+                            //meses restantes
+                            $fecha=$lastDayOfNextMonth->clone()->addMonths($i)->lastOfMonth()->format('Y-m-d');
+                            $event = Event::create([
+                                'title' => $request->calendario_nombre_evento,
+                                'description' => $request->calendario_descripcion_evento_nuevo,
+                                'start' => $fecha,
+                                'end' => $fecha,
+                                'color' => $colorFondo,
+                                'colorEvento' => $color,
+                                'fondoEvento' => $colorFondo,
+                                'tipo'=>$request->calendario_tipo_evento,
+                                'frecuencia'=>$request->calendario_frecuencia_evento,
+                            ]);
+                        }
+                        break;
                 }
 
 
-                $event = Event::create([
-                    'title' => $request->calendario_nombre_evento,
-                    'description' => $request->calendario_descripcion_evento_nuevo,
-                    'start' => $request->calendario_start_evento,
-                    'end' => $request->calendario_end_evento,
-                    'color' => $colorFondo,
-                    'colorEvento' => $color,
-                    'fondoEvento' => $colorFondo,
-                    'tipo'=>$request->calendario_tipo_evento,
-                    'frecuencia'=>$request->calendario_frecuencia_evento,
-                ]);
+
                 return response()->json($event);
             case 'modificar':
                 $event = Event::find($request->id)->update([
