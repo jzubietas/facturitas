@@ -15,7 +15,7 @@ class AlterEventsTableGrupoTipo extends Migration
     {
         //
         Schema::table('events', function (Blueprint $table) {
-            $table->integer('grupo')->after('fondoEvento')->default('')->nullable();
+            $table->integer('grupo')->after('fondoEvento')->default(0)->nullable();
             $table->string('tipo')->after('grupo')->default('')->nullable();
         });
     }
