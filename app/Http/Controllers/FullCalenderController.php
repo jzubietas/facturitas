@@ -68,9 +68,10 @@ class FullCalenderController extends Controller
                         'start' => $event->start,
                         'end' => $event->end,
                         'color'=>$event->color,
-                        'textColor'=>$event->color,
-                        'backgroundColor'=>$event->color,
-
+                        'colorEvento'=>$event->colorEvento,
+                        'fondoEvento'=>$event->fondoEvento,
+                        'tipo'=>$event->tipo,
+                        'frecuencia'=>$event->frecuencia,
                     ];
                 }
                 return response()->json($events);
@@ -94,14 +95,17 @@ class FullCalenderController extends Controller
                 ]);
                 return response()->json($event);
             case 'add':
+                $color='';$colorFondo='';
+                if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='white';}
+                else if($request->tipo=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
                     'description' => $request->calendario_descripcion_evento_nuevo,
                     'start' => $request->calendario_start_evento,
                     'end' => $request->calendario_end_evento,
-                    'color' => $request->calendario_color_evento,
-                    'colorEvento' => $request->calendario_color_evento,
-                    'fondoEvento' => $request->calendario_fondo_evento,
+                    'color' => $colorFondo,
+                    'colorEvento' => $color,
+                    'fondoEvento' => $colorFondo,
                     'tipo'=>$request->calendario_tipo_evento,
                     'frecuencia'=>$request->calendario_frecuencia_evento,
                 ]);
