@@ -151,7 +151,7 @@ class FullCalenderController extends Controller
                         }
                         $firstDayOfNextMonth = $date->firstOfMonth();
                         $monthsRemaining = 12 - $date->month + 1;
-                        for($i=0;$i<=$monthsRemaining;$i++)
+                        for($i=0;$i<$monthsRemaining;$i++)
                         {
                             //meses restantes
                             $fecha=$firstDayOfNextMonth->clone()->addMonths($i)->firstOfMonth()->format('Y-m-d');
@@ -176,7 +176,7 @@ class FullCalenderController extends Controller
                         }
                         $lastDayOfNextMonth = $date->lastOfMonth();
                         $monthsRemaining = 12 - $date->month + 1;
-                        for($i=0;$i<=$monthsRemaining;$i++)
+                        for($i=0;$i<$monthsRemaining;$i++)
                         {
                             //meses restantes
                             $fecha=$lastDayOfNextMonth->clone()->addMonths($i)->lastOfMonth()->format('Y-m-d');
