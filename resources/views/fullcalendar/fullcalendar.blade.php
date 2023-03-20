@@ -336,6 +336,7 @@
                         backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
+                        create:false,
                     }
                 }
             });
@@ -367,6 +368,7 @@
                             let events = [];
                             res.forEach(function (evt) {
                                 events.push({
+                                    id:evt.id,
                                     title: evt.title,
                                     start: evt.start,
                                     end: evt.end,
@@ -406,19 +408,18 @@
                 },
                 eventClick: function(info) {
                     console.log("eventclick editar en evento")
-                    /*$('#BotonModificar').show();
-                    $('#BotonBorrar').show();
-                    $('#BotonAgregar').hide();
-                    $('#Codigo').val(info.event.id);
-                    $('#Titulo').val(info.event.title);
+                    console.log(info.event);
+                    $("#editar_evento").val(info.event.id);
+                    $('#calendario_nombre_evento_editar').val(info.event.title);
+                    editar_evento_calendario.show();
+                    /*$('#Titulo').val(info.event.title);
                     $('#Descripcion').val(info.event.extendedProps.descripcion);
                     $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
                     $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
                     $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
                     $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
                     $('#ColorFondo').val(info.event.backgroundColor);
-                    $('#ColorTexto').val(info.event.textColor);
-                    $("#FormularioEventos").modal();*/
+                    $('#ColorTexto').val(info.event.textColor);*/
                 },
                 eventResize: function(info) {
                     console.log("eventresize modificar en evento")
@@ -452,9 +453,16 @@
                 drop: function(info) {
                     console.log("drop")
                     info.draggedEl.parentNode.removeChild(info.draggedEl);
-
+                    console.log(info.dateStr);
                     let contenerEliminar=info.draggedEl;
                     let eventEliminar = $(contenerEliminar).attr('id').split('_')[1];
+                    let color=$(contenerEliminar).data("colorfondo");
+                    let titulo=$(contenerEliminar).data("titulo");
+                    let start_=info.dateStr;
+                    let end_=info.dateStr;
+                    console.log(start_);
+                    start_=moment(info.dateStr).format('YYYY-MM-DD hh:mm:ss');
+                    end_=moment(info.dateStr).format('YYYY-MM-DD hh:mm:ss');
 
                     let formData = new FormData();
                     formData.append('eliminar_evento', eventEliminar)
@@ -466,8 +474,6 @@
                         type: 'POST',
                         url: "{{ route('fullcalendarAjaxUnsigned') }}",
                         success: function (data) {
-                            //aqui elimino el evento temporal
-                            //eliminar_evento_calendario.hide();
                             let eventDeleteUnsigned = $("#unsigned_"+eventEliminar);
                             eventDeleteUnsigned.fadeOut("normal", function() {
                                 $(this).remove();
@@ -475,15 +481,13 @@
 
                             //aqui registro el evento temporal a evento oficial
                             var formData = new FormData();
-                            //console.log(formData.get("calendario_color_evento"));
-                            //console.log(formData.get("calendario_fondo_evento"));
-                            formData.append('calendario_nombre_evento', 'calendario_nombre_evento');
+                            formData.append('calendario_nombre_evento', titulo);
                             formData.append('descripcion', 'descripcion');
-                            formData.append('start', 'start');
-                            formData.append('color', 'color');
-                            formData.append('colorTexto', 'colorTexto');
-                            formData.append('colorBackground', 'colorBackground');
-                            formData.append('end', 'end');
+                            formData.append('calendario_start_evento', start_);
+                            formData.append('calendario_color_evento', color);
+                            formData.append('colorTexto', color);
+                            formData.append('colorBackground', color);
+                            formData.append('calendario_end_evento', end_);
 
                             formData.append('type', 'add');
                             $.ajax({
@@ -493,19 +497,16 @@
                                 processData: false,
                                 contentType: false,
                                 success: function (data) {
-                                    let dateStr = moment(data.start).format('YYYY-MM-DD');
-                                    let dateEnd = moment(data.end).format('YYYY-MM-DD');
                                     agregar_evento_calendario.hide();
-                                    displayMessage("Event created.");
+                                    displayMessage("Evento creado.");
                                     calendario1.refetchEvents();
                                 }
                             });
-
                         }
                     });
                     //update id a 0
 
-                    calendario1.refetchEvents();
+                    //calendario1.refetchEvents();
                     /*limpiarFormulario();
                     $('#ColorFondo').val(info.draggedEl.dataset.colorfondo);
                     $('#ColorTexto').val(info.draggedEl.dataset.colortexto);
@@ -520,18 +521,19 @@
                         $('#HoraInicio').val(fechaHora[1].substring(0, 5));
                         $('#HoraFin').val(moment(fechaHora[1].substring(0, 5)).add(1, 'hours'));
                     }
-                    let registro = recuperarDatosFormulario();
-                    agregarEventoPredefinido(registro);*/
+                    */
                 }
             });
+
+            $(document).on('focus',"input[type=text]",function(){
+                this.select()
+            })
 
             function displayMessage(message) {
                 toastr.success(message, 'Event');
             }
 
             calendario1.render();
-
-
 
             let currColor = '#3c8dbc'
             $('#color-chooser > li > a').click(function (e) {
@@ -615,13 +617,10 @@
                     }
                 });
 
+                ini_events(event);
 
-                ini_events(event)
-
-                // Remove event from text input
                 $('#new-event').val('')
-                window.location.reload()
-
+                window.location.reload();
             })
 
             $(document).on("submit", "#frm_add_evento_calendario", function (event) {
@@ -638,18 +637,8 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        let dateStr = moment(data.start).format('YYYY-MM-DD');
-                        let dateEnd = moment(data.end).format('YYYY-MM-DD');
                         agregar_evento_calendario.hide();
-                        displayMessage("Event created.");
-                        /*calendario.addEvent({
-                            id: data.id,
-                            title: data.title,
-                            start: dateStr,
-                            end: dateEnd,
-                            color: data.color
-                        });*/
-                        //calendario1.fullCalendar( 'refetchEvents')
+                        displayMessage("Evento creadp.");
                         calendario1.refetchEvents();
                     }
                 });
@@ -679,14 +668,16 @@
                     url: "{{ route('fullcalendarAjax') }}",
                     success: function (data) {
                         editar_evento_calendario.hide();
-                        var events = [ ];
-                        calendario.addEventSource(events);
-                        calendario.refetchEvents();
+                        calendario1.refetchEvents();
                         //let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
                         //eventDelete.remove();
                     }
                 });
             });
+
+            $(document).on('click','#frm_editar_evento_calendario .btn-delete',function(){
+
+            })
 
             $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();

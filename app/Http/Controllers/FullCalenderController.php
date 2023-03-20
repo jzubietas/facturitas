@@ -68,6 +68,7 @@ class FullCalenderController extends Controller
                         'description' => 'description for All Day Event',
                     ];
                 }
+                //dd($events);
                 return response()->json($events);
                 break;
             case 'updatetitle':
@@ -92,7 +93,7 @@ class FullCalenderController extends Controller
                     'title' => $request->calendario_nombre_evento,
                     'description' => 'descripcion',
                     'start' => $request->calendario_start_evento,
-                    'end' => $request->calendario_start_evento,
+                    'end' => $request->calendario_end_evento,
                     'color' => $request->calendario_color_evento,
                     'colorTexto' => $request->calendario_color_evento,
                     'colorBackground' => $request->calendario_color_evento,
