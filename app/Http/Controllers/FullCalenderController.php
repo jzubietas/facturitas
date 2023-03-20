@@ -65,15 +65,17 @@ class FullCalenderController extends Controller
                         'color'=>$event->color,
                         'textColor'=>$event->color,
                         'backgroundColor'=>$event->color,
-                        'description' => 'description for All Day Event',
+                        'description' => $event->description,
                     ];
                 }
+                //dd($events);
                 return response()->json($events);
                 break;
             case 'updatetitle':
                 $event=Event::where('id',$request->editar_evento)->first();
                 $event->update([
                     'title'=>$request->calendario_nombre_evento_editar,
+                    'description'=>$request->calendario_descripcion_evento_editar,
                 ]);
                 return response()->json($event);
                 break;
@@ -90,12 +92,13 @@ class FullCalenderController extends Controller
             case 'add':
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
-                    'description' => 'descripcion',
+                    'description' => $request->calendario_descripcion_evento_nuevo,
                     'start' => $request->calendario_start_evento,
-                    'end' => $request->calendario_start_evento,
+                    'end' => $request->calendario_end_evento,
                     'color' => $request->calendario_color_evento,
-                    'colorTexto' => $request->calendario_color_evento,
-                    'colorBackground' => $request->calendario_color_evento,
+                    'colorEvento' => $request->calendario_color_evento,
+                    'colorBackground' => $request->calendario_fondo_evento,
+                    'tipo'=>$request->calendario_tipo_evento,
                 ]);
                 return response()->json($event);
             case 'modificar':
@@ -105,13 +108,13 @@ class FullCalenderController extends Controller
                     'start' => $request->start,
                     'end' => $request->end,
                     'color' => $request->calendario_color_evento,
-                    'colorTexto' => $request->calendario_color_evento,
+                    'colorEvento' => $request->calendario_color_evento,
                     'colorBackground' => $request->calendario_color_evento,
                 ]);
                 return response()->json($event);
             case 'borrar':
-                $event = Event::find($request->eliminar_evento)->delete();
-                return response()->json($request->eliminar_evento);
+                $event = Event::find($request->editar_evento)->delete();
+                return response()->json($request->editar_evento);
             default:
                 # code...
                 break;

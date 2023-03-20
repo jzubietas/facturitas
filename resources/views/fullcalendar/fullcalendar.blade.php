@@ -181,23 +181,17 @@
                         </div>
                         <div class="card-body">
                             <!-- the events -->
-                            <div id='external-events' style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em">
-                                <h4 class="text-center">Eventos predefinidos</h4>
-                                <div id='listaeventospredefinidos'>
-
-                                </div>
+                            <h4 class="text-center">Eventos predefinidos</h4>
+                            <div id="external-events" style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em">
                                 @foreach($uneventss as $eventunsigned)
-
-
                                     <div id="unsigned_{{ $eventunsigned["id"] }}"
-                                         class="fc-event btn btn-md d-flex rounded" data-titulo="{{ $eventunsigned["titulo"] }}"
+                                         class="external-event btn btn-md d-flex rounded {{ $eventunsigned["colorfondo"] }}" data-titulo="{{ $eventunsigned["titulo"] }}"
                                          data-horafin="{{ $eventunsigned["horafin"] }}"
                                          data-horainicio="{{ $eventunsigned["horainicio"] }}"
                                          data-colorfondo="{{ $eventunsigned["colorfondo"] }}"
                                          data-colortexto="{{ $eventunsigned["colortexto"] }}"
                                          data-codigo="{{ $eventunsigned["id"] }}"
                                          style="border-color:{{ $eventunsigned["colorfondo"] }};color:{{ $eventunsigned["colortexto"] }};background-color:{{ $eventunsigned["colorfondo"] }};">
-
                                         <span clas="">{{ $eventunsigned["titulo"] }}</span>
                                         <button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light btn-sm d-flex justify-content-end">
                                             <i class="fa fa-close text-danger"></i>
@@ -334,7 +328,7 @@
             let calendarEl = document.getElementById('calendario1');
 
             new FullCalendarInteraction.Draggable(containerEl, {
-                itemSelector: '.fc-event',
+                itemSelector: '.external-event',
                 eventData: function(eventEl) {
                     return {
                         id:eventEl.id,
@@ -342,6 +336,7 @@
                         backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
                         textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
+                        create:false,
                     }
                 }
             });
@@ -373,11 +368,15 @@
                             let events = [];
                             res.forEach(function (evt) {
                                 events.push({
+                                    id:evt.id,
+                                    description:evt.description,
                                     title: evt.title,
                                     start: evt.start,
                                     end: evt.end,
+                                    color:evt.color,
                                 });
                             });
+                            console.log(events);
                             successCallback(events);
                         }
                     });
@@ -385,77 +384,89 @@
                 dateClick: function(info) {
                     console.log("dateClick")
                     console.log(info.dateStr)
-                    //$("#modal_agregar_evento_calendario").modal()
-                    //let dateStr = moment(info.dateStr).format('YYYY-MM-DD 00:00:01');
-                    //console.log(dateStr)
-                    //let dateEnd = moment(info.dateStr).format('YYYY-MM-DD 23:59:59');
-
-                    $("#calendario_start_evento").val(moment().format('YYYY-MM-DD'));
-                    $("#calendario_end_evento").val(moment().format('YYYY-MM-DD'));
-
-                    agregar_evento_calendario.show()
-
                     limpiarFormulario();
-                    /*$('#BotonAgregar').show();
-                    $('#BotonModificar').hide();
-                    $('#BotonBorrar').hide();
-                    if (info.allDay) {
-                        $('#FechaInicio').val(info.dateStr);
-                        $('#FechaFin').val(info.dateStr);
-                    } else {
-                        let fechaHora = info.dateStr.split("T");
-                        $('#FechaInicio').val(fechaHora[0]);
-                        $('#FechaFin').val(fechaHora[0]);
-                        $('#HoraInicio').val(fechaHora[1].substring(0, 5));
-                    }
-                    $("#FormularioEventos").modal();*/
+                    $("#calendario_start_evento").val(info.dateStr);
+                    $("#calendario_end_evento").val(info.dateStr);
+                    $('.btn-edit-check').addClass('d-none');
+                    agregar_evento_calendario.show();
                 },
                 eventClick: function(info) {
-                    console.log("eventclick")
-                    /*$('#BotonModificar').show();
-                    $('#BotonBorrar').show();
-                    $('#BotonAgregar').hide();
-                    $('#Codigo').val(info.event.id);
-                    $('#Titulo').val(info.event.title);
-                    $('#Descripcion').val(info.event.extendedProps.descripcion);
-                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
-                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
-                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
-                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
-                    $('#ColorFondo').val(info.event.backgroundColor);
-                    $('#ColorTexto').val(info.event.textColor);
-                    $("#FormularioEventos").modal();*/
+                    console.log("eventclick editar en evento")
+                    $('#editar_evento_calendario .btn-edit i').removeClass('text-dark').addClass('text-warning');
+                    console.warn(info);
+                    console.log(info.event);
+                    $("#editar_evento").val(info.event.id);
+                    console.log(info.event.description);
+//description
+                    $(".fecha_lectura_start").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
+                    $(".fecha_lectura_end").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
+                    $('#calendario_nombre_evento_editar').val(info.event.title);
+                    $('#calendario_descripcion_evento_editar').val(info.event.description);
+                    editar_evento_calendario.show();
                 },
                 eventResize: function(info) {
-                    console.log("eventresize")
-                    /*$('#Codigo').val(info.event.id);
-                    $('#Titulo').val(info.event.title);
-                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
-                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
-                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
-                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
-                    $('#ColorFondo').val(info.event.backgroundColor);
-                    $('#ColorTexto').val(info.event.textColor);
-                    $('#Descripcion').val(info.event.extendedProps.descripcion);
-                    let registro = recuperarDatosFormulario();
-                    modificarRegistro(registro);*/
+                    console.log("eventresize modificar en evento")
                 },
                 eventDrop: function(info) {
-                    console.log("eventdrop")
-                    /*$('#Codigo').val(info.event.id);
-                    $('#Titulo').val(info.event.title);
-                    $('#FechaInicio').val(moment(info.event.start).format("YYYY-MM-DD"));
-                    $('#FechaFin').val(moment(info.event.end).format("YYYY-MM-DD"));
-                    $('#HoraInicio').val(moment(info.event.start).format("HH:mm"));
-                    $('#HoraFin').val(moment(info.event.end).format("HH:mm"));
-                    $('#ColorFondo').val(info.event.backgroundColor);
-                    $('#ColorTexto').val(info.event.textColor);
-                    $('#Descripcion').val(info.event.extendedProps.descripcion);
-                    let registro = recuperarDatosFormulario();
-                    modificarRegistro(registro);*/
+                    console.log("eventdrop soltar drop")
                 },
                 drop: function(info) {
                     console.log("drop")
+                    info.draggedEl.parentNode.removeChild(info.draggedEl);
+                    console.log(info.dateStr);
+                    let contenerEliminar=info.draggedEl;
+                    let eventEliminar = $(contenerEliminar).attr('id').split('_')[1];
+                    let color=$(contenerEliminar).data("colorfondo");
+                    let titulo=$(contenerEliminar).data("titulo");
+                    let start_=info.dateStr;
+                    let end_=info.dateStr;
+                    console.log(start_);
+                    start_=moment(info.dateStr).format('YYYY-MM-DD hh:mm:ss');
+                    end_=moment(info.dateStr).format('YYYY-MM-DD hh:mm:ss');
+
+                    let formData = new FormData();
+                    formData.append('eliminar_evento', eventEliminar)
+                    formData.append('type', 'delete')
+                    $.ajax({
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        url: "{{ route('fullcalendarAjaxUnsigned') }}",
+                        success: function (data) {
+                            let eventDeleteUnsigned = $("#unsigned_"+eventEliminar);
+                            eventDeleteUnsigned.fadeOut("normal", function() {
+                                $(this).remove();
+                            });
+
+                            //aqui registro el evento temporal a evento oficial
+                            var formData = new FormData();
+                            formData.append('calendario_nombre_evento', titulo);
+                            formData.append('descripcion', 'descripcion');
+                            formData.append('calendario_start_evento', start_);
+                            formData.append('calendario_color_evento', color);
+                            formData.append('colorTexto', color);
+                            formData.append('colorBackground', color);
+                            formData.append('calendario_end_evento', end_);
+
+                            formData.append('type', 'add');
+                            $.ajax({
+                                url: "{{route('fullcalendarAjax')}}",
+                                data: formData,
+                                type: "POST",
+                                processData: false,
+                                contentType: false,
+                                success: function (data) {
+                                    agregar_evento_calendario.hide();
+                                    displayMessage("Evento creado.");
+                                    calendario1.refetchEvents();
+                                }
+                            });
+                        }
+                    });
+                    //update id a 0
+
+                    //calendario1.refetchEvents();
                     /*limpiarFormulario();
                     $('#ColorFondo').val(info.draggedEl.dataset.colorfondo);
                     $('#ColorTexto').val(info.draggedEl.dataset.colortexto);
@@ -470,18 +481,19 @@
                         $('#HoraInicio').val(fechaHora[1].substring(0, 5));
                         $('#HoraFin').val(moment(fechaHora[1].substring(0, 5)).add(1, 'hours'));
                     }
-                    let registro = recuperarDatosFormulario();
-                    agregarEventoPredefinido(registro);*/
+                    */
                 }
             });
+
+            $(document).on('focus',"input[type=text]",function(){
+                this.select()
+            })
 
             function displayMessage(message) {
                 toastr.success(message, 'Event');
             }
 
             calendario1.render();
-
-
 
             let currColor = '#3c8dbc'
             $('#color-chooser > li > a').click(function (e) {
@@ -521,7 +533,6 @@
 
             $('#add-new-event').click(function (e) {
                 e.preventDefault()
-                // Get value and make sure it is not null
                 let val = $('#new-event').val()
                 if (val.length === 0) {
                     return
@@ -550,7 +561,7 @@
                     default:currColor='bg-info';break;
                 }
 
-                var formUnsigned = new FormData();
+                let formUnsigned = new FormData();
                 formUnsigned.append('calendario_nombre_evento', val);
                 formUnsigned.append('calendario_color_evento', currColor);
                 formUnsigned.append('type', 'add');
@@ -565,11 +576,10 @@
                     }
                 });
 
+                ini_events(event);
 
-                ini_events(event)
-
-                // Remove event from text input
                 $('#new-event').val('')
+                window.location.reload();
             })
 
             $(document).on("submit", "#frm_add_evento_calendario", function (event) {
@@ -586,18 +596,8 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        let dateStr = moment(data.start).format('YYYY-MM-DD');
-                        let dateEnd = moment(data.end).format('YYYY-MM-DD');
                         agregar_evento_calendario.hide();
-                        displayMessage("Event created.");
-                        /*calendario.addEvent({
-                            id: data.id,
-                            title: data.title,
-                            start: dateStr,
-                            end: dateEnd,
-                            color: data.color
-                        });*/
-                        //calendario1.fullCalendar( 'refetchEvents')
+                        displayMessage("Evento creadp.");
                         calendario1.refetchEvents();
                     }
                 });
@@ -607,7 +607,10 @@
                 $('i',this).removeClass('text-warning').addClass('text-dark');
                 console.log("aa")
                 $('#calendario_nombre_evento_editar').removeClass('border').removeClass('border-0');
+                $('#calendario_descripcion_evento_editar').removeClass('border').removeClass('border-0');
+                $("#calendario_descripcion_evento_editar").prop('readonly',false);
                 $("#calendario_nombre_evento_editar").prop('readonly',false).focus();
+
                 $('.btn-edit-check').removeClass('d-none');
             });
 
@@ -617,7 +620,6 @@
                 console.log(eleme);
                 var form = $('#'+eleme)[0];
                 var formData = new FormData(form);
-                //console.log(formData.get("eliminar_evento"));
                 formData.append('type', 'updatetitle')
                 $.ajax({
                     data: formData,
@@ -627,20 +629,36 @@
                     url: "{{ route('fullcalendarAjax') }}",
                     success: function (data) {
                         editar_evento_calendario.hide();
-                        var events = [ ];
-                        calendario.addEventSource(events);
-                        calendario.refetchEvents();
+                        calendario1.refetchEvents();
                         //let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
                         //eventDelete.remove();
                     }
                 });
             });
 
+            $(document).on('click','.btn-delete',function(){
+                event.preventDefault();
+                let eleme="frm_editar_evento_calendario";
+                var form = $('#'+eleme)[0];
+                var formData = new FormData(form);
+                formData.append('type', 'borrar')
+                $.ajax({
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('fullcalendarAjax') }}",
+                    success: function (data) {
+                        editar_evento_calendario.hide();
+                        calendario1.refetchEvents();
+                    }
+                });
+            })
+
             $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
-                //console.log(formData.get("eliminar_evento"));
                 formData.append('type', 'delete')
                 $.ajax({
                     data: formData,
@@ -652,52 +670,9 @@
                         eliminar_evento_calendario.hide();
                         let eventDelete = calendario.getEventById(formData.get("eliminar_evento"))
                         eventDelete.remove();
-
                     }
                 });
             });
-
-            window.agregarRegistro=function(registro){
-                $.ajax({
-                    type: 'POST',
-                    url: 'datoseventos.php?accion=agregar',
-                    data: registro,
-                    success: function(msg) {
-                        calendario1.refetchEvents();
-                    },
-                    error: function(error) {
-                        alert("Hay un problema:" + error);
-                    }
-                });
-            };
-
-            window.modificarRegistro=function(registro){
-                $.ajax({
-                    type: 'POST',
-                    url: 'datoseventos.php?accion=modificar',
-                    data: registro,
-                    success: function(msg) {
-                        calendario1.refetchEvents();
-                    },
-                    error: function(error) {
-                        alert("Hay un problema:" + error);
-                    }
-                });
-            }
-
-            window.borrarRegistro=function(registro){
-                $.ajax({
-                    type: 'POST',
-                    url: 'datoseventos.php?accion=borrar',
-                    data: registro,
-                    success: function(msg) {
-                        calendario1.refetchEvents();
-                    },
-                    error: function(error) {
-                        alert("Hay un problema:" + error);
-                    }
-                });
-            }
 
             window.agregarEventoPredefinido=function(registro){
                 $.ajax({
@@ -720,19 +695,6 @@
                 $('#calendario_end_evento').val('');
                 $('#calendario_fondo_evento').val('#3788D8');
                 $('#calendario_color_evento').val('#ffffff');
-            }
-
-            window.recuperarDatosFormulario=function(){
-                let registro = {
-                    codigo: $('#Codigo').val(),
-                    titulo: $('#Titulo').val(),
-                    descripcion: $('#Descripcion').val(),
-                    inicio: $('#FechaInicio').val() + ' ' + $('#HoraInicio').val(),
-                    fin: $('#FechaFin').val() + ' ' + $('#HoraFin').val(),
-                    colorfondo: $('#ColorFondo').val(),
-                    colortexto: $('#ColorTexto').val()
-                };
-                return registro;
             }
 
         })
