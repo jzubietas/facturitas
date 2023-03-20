@@ -34,7 +34,7 @@
                                 <div class="col-md-12">
                                     <div class="form-row">
                                         <div class="form-group mr-2">
-                                            <a class="text-primary" href="#"><i class="fas fa-square"></i></a>
+                                            <a class="text-dark" href="#"><i class="fas fa-square"></i></a>
                                         </div>
                                         <div class="form-group">
                                             <input type="text" class="form-control border border-0" id="calendario_nombre_evento_editar"
@@ -67,12 +67,17 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-12 text-left">
-
-                                <h1 class="float-left">
-                                    <i class="fa fa-calendar text-dark font-9"></i>
-                                    <span class="fecha_lectura_start text-info font-9"></span>:
-                                    <span class="fecha_lectura_end text-success font-9"></span>
-                                </h1>
+                                <div class="row">
+                                    <div class="col-md-2 text-center">
+                                        <i class="fa fa-calendar text-danger font-24"></i>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <span class="font-weight-bold bagde fecha_lectura_start text-info font-24"></span>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <span class="font-weight-bold bagde fecha_lectura_end text-success font-24"></span>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>

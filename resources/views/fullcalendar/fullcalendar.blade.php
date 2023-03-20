@@ -280,14 +280,11 @@
                 eventClick: function(info) {
                     console.log("eventclick editar en evento")
                     $('#editar_evento_calendario .btn-edit i').removeClass('text-dark').addClass('text-warning');
-                    console.log(info.event);
                     $("#editar_evento").val(info.event.id);
-                    console.log(info.event.description);
-//description
                     $(".fecha_lectura_start").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $(".fecha_lectura_end").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $('#calendario_nombre_evento_editar').val(info.event.title);
-                    $('#calendario_descripcion_evento_editar').val(info.event.description);
+                    $('#calendario_descripcion_evento_editar').val(info.event._def.extendedProps.description);
                     editar_evento_calendario.show();
                 },
                 eventResize: function(info) {
