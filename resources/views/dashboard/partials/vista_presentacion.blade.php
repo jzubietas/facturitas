@@ -162,6 +162,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
       cargaNueva(1);
       cargaNueva(2);
       cargaNueva(3);
+        cargaNueva(4);
+        cargaNueva(5);
         cargaNueva(6);//totales porcentajes arriba de metas cobranzas
         cargaNueva(7);//totales porcentajes arriba de metas pedidos
 
@@ -171,6 +173,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         cargaNueva(1);
         cargaNueva(2);
         cargaNueva(3);
+          cargaNueva(4);
+          cargaNueva(5);
           cargaNueva(6);//totales porcentajes arriba de metas cobranzas
           cargaNueva(7);//totales porcentajes arriba de metas pedidos
       }
