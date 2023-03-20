@@ -9,7 +9,7 @@
             <h3>Bandeja de Anulaciones</h3>
         </div>
         <div class="form-group col-md-6">
-            @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_JEFE_OPERARIO  )
+            @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ENCARGADO || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_JEFE_OPERARIO  )
                 <a class="btn btn-danger btn-sm m-0" href="#" data-target="#modal-agregar-anulacion" data-toggle="modal">
                     <b class="text-white font-weight-bold d-flex align-items-center justify-content-center">
                         <i class="fa fa-ban mr-1" aria-hidden="true"></i><p class="m-0 text-card-navbar">  Solicitar Anulacion</p>
@@ -23,28 +23,24 @@
 @section('content')
 
     @include('modal.AgegarAnulacion.modalAgregarAnulacion')
-
+    @include('pedidos.anulaciones.modal.confirmaAnulacion')
     <div class="card p-0" style="overflow: hidden !important;">
 
         <div class="tab-content" id="myTabContent" style="overflow-x: scroll !important;">
 
             <div class="tab-pane fade show active" id="enmotorizado" role="tabpanel" aria-labelledby="enmotorizado-tab">
-                <table id="tblListadoRecojo" class="table table-striped">{{-- display nowrap  --}}
+                <table id="tblListadoAnulaciones" class="table table-striped">{{-- display nowrap  --}}
                     <thead>
                     <tr>
                         <th></th>
                         <th scope="col" class="align-middle">Código</th>
                         <th scope="col" class="align-middle">Cliente</th>
                         <th scope="col" class="align-middle">Razón social</th>
-                        <th scope="col" class="align-middle">Cantidad</th>
-                        <th scope="col" class="align-middle">Id</th>
-                        <th scope="col" class="align-middle">RUC</th>
+                        <th scope="col" class="align-middle">Total</th>
                         <th scope="col" class="align-middle">F. Registro</th>
-                        <th scope="col" class="align-middle">F. Actualizacion</th>
-                        <th scope="col" class="align-middle">Total (S/)</th>
-                        <th scope="col" class="align-middle">Est. pago</th>
-                        <th scope="col" class="align-middle">Con. pago</th>
-                        <th scope="col" class="align-middle">Est. Sobre</th>
+                        <th scope="col" class="align-middle">Eliminar (S/)</th>
+                        <th scope="col" class="align-middle">Tipo</th>
+                        <th scope="col" class="align-middle">Accion</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -87,7 +83,7 @@
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
     <script>
-        let tblListadoRecojo = null;
+        let tblListadoAnulaciones = null;
         let dataForm_agregaranulacion_f = {};
         let dataForm_agregaranulacion_pc = {};
 
@@ -109,15 +105,13 @@
 
             }
 
-            var detailRows = [];
-
-            tblListadoRecojo = $('#tblListadoRecojo').DataTable({
+            tblListadoAnulaciones = $('#tblListadoAnulaciones').DataTable({
                 dom: 'Blfrtip',
                 processing: true,
                 serverSide: true,
                 searching: true,
                 //stateSave: true,
-                order: [[8, "desc"]],
+                order: [[5, "desc"]],
                 ajax: "{{ route('pedidosanulacionestabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
@@ -134,133 +128,9 @@
                     if (data.condicion_code == 4 || data.estado == 0) {
                         $('td:eq(13)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                     } else {
-                        if (pedidodiferencia == null) {
-                            $('td:eq(13)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
-                        } else {
-                            if (pedidodiferencia > 3) {
-                                $('td:eq(13)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
-                            } else {
-                                $('td:eq(13)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
-                            }
-                        }
+                        $('td:eq(13)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                     }
 
-                    $('[data-jqconfirm]', row).click(function () {
-                        $.confirm({
-                            theme: 'material',
-                            columnClass: 'large',
-                            title: 'Editar direccion de envio',
-                            content: function () {
-                                var self = this;
-                                return $.ajax({
-                                    url: '{{route('pedidos.envios.get-direccion')}}?pedido_id=' + data.id,
-                                    dataType: 'json',
-                                    method: 'get'
-                                })
-                                    .done(function (response) {
-
-                                        self.setContent(response.html);
-                                        if (!response.success) {
-                                            self.$$confirm.hide();
-                                        }
-                                    })
-                                    .fail(function (e) {
-                                        self.setContent('Ocurrio un error');
-                                    });
-                            },
-                            buttons: {
-                                confirm: {
-                                    text: 'Actualizar',
-                                    btnClass: 'btn-success',
-                                    action: function () {
-                                        var self = this;
-                                        const form = self.$content.find('form')[0];
-                                        const data = new FormData(form)
-                                        if (data.get('celular').length != 9) {
-                                            $.alert({
-                                                title: 'Alerta!',
-                                                content: '¡El numero de celular debe tener 9 digitos!',
-                                            });
-                                            return false
-
-                                        }
-
-                                        self.showLoading(true)
-                                        $.ajax({
-                                            data: data,
-                                            processData: false,
-                                            contentType: false,
-                                            type: 'POST',
-                                            url: "{{route('pedidos.envios.update-direccion')}}",
-                                        }).always(function () {
-                                            self.close();
-                                            $('#tblListadoRecojo').DataTable().ajax.reload();
-                                        });
-                                        return false
-                                    }
-                                },
-                                cancel: function () {
-
-                                },
-                            },
-                            onContentReady: function () {
-
-                                var self = this;
-                                const form = self.$content.find('form')[0];
-                                const data = new FormData(form)
-
-                                self.$content.find('select#distrito').selectpicker('refresh');
-                            }
-                        });
-                    })
-
-                    $('[data-verforotos]', row).click(function () {
-                        var data = $(this).data('verforotos')
-                        $.dialog({
-                            columnClass: 'xlarge',
-                            title: 'Fotos confirmadas',
-                            type: 'green',
-                            content: function () {
-                                return `<div class="row">
-${data.foto1 ? `
-<div class="col-md-4">
-<div class="card">
-<div class="card-header d-none"><h5>Foto de los sobres</h5></div>
-<div class="card-body">
-<img src="${data.foto1}" class="w-100">
-</div>
-</div>
-</div>
-` : ''}
-${data.foto2 ? `
-<div class="col-md-4">
-<div class="card">
-<div class="card-header d-none"><h5>Foto del domicilio</h5></div>
-<div class="card-body">
-<img src="${data.foto2}" class="w-100">
-</div>
-</div>
-</div>
-` : ''}
-${data.foto3 ? `
-<div class="col-md-4">
-<div class="card">
-<div class="card-header d-none"><h5>Foto de quien recibe</h5></div>
-<div class="card-body">
-<img src="${data.foto3}" class="w-100">
-</div>
-</div>
-</div>
-` : ''}
-</div>`
-                            }
-                        })
-
-                    })
-
-                    $("[data-jqconfirmdetalle=jqConfirm]", row).on('click', function (e) {
-                        openConfirmDownloadDocuments($(e.target).data('target'), $(e.target).data('idc'), $(e.target).data('codigo'))
-                    })
                 },
                 initComplete: function (settings, json) {
                 },
@@ -286,73 +156,30 @@ ${data.foto3 ? `
                         },
                     },
                     {data: 'empresas', name: 'empresas',},
-                    {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
-                    {data: 'users', name: 'users',},
-                    {data: 'ruc', name: 'ruc',},
+                    {data: 'total', name: 'total', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
                     {
-                        data: 'fecha',
-                        name: 'fecha',
+                        data: 'fechacreaanula',
+                        name: 'fechacreaanula',
                     },
                     {
-                        data: 'fecha_up',
-                        name: 'fecha_up',
-                        "visible": false,
-                    },
-                    {
-                        data: 'total',
-                        name: 'total',
+                        data: 'total_anular',
+                        name: 'total_anular',
                         render: $.fn.dataTable.render.number(',', '.', 2, '')
                     },
                     {
-                        data: 'condicion_pa',
-                        name: 'condicion_pa',
+                        data: 'tipoanulacion',
+                        name: 'tipoanulacion',
                         render: function (data, type, row, meta) {
 
-                            if (row.condiciones == 'ANULADO' || row.condicion_code == 4 || row.estado == 0) {
-                                return 'ANULADO';
-                            } else {
-                                if (row.condicion_pa == null) {
-                                    return 'SIN PAGO REGISTRADO';
-                                } else {
-                                    if (row.condicion_pa == '0') {
-                                        return '<p>SIN PAGO REGISTRADO</p>'
-                                    }
-                                    if (row.condicion_pa == '1') {
-                                        return '<p>ADELANTO</p>'
-                                    }
-                                    if (row.condicion_pa == '2') {
-                                        return '<p>PAGO</p>'
-                                    }
-                                    if (row.condicion_pa == '3') {
-                                        return '<p>ABONADO</p>'
-                                    }
-                                    //return data;
-                                }
+                            if (row.tipoanulacion == 'C' ) {
+                                return 'PEDIDO COMPLETO';
+                            } else if (row.tipoanulacion == 'F' ) {
+                                return 'FACTURA';
                             }
 
                         }
                     },
-                    {
-                        data: 'condiciones_aprobado',
-                        name: 'condiciones_aprobado',
-                        render: function (data, type, row, meta) {
-                            if (row.condicion_code == 4 || row.estado == 0) {
-                                return 'ANULADO';
-                            }
-                            if (data != null) {
-                                return data;
-                            } else {
-                                return 'SIN REVISAR';
-                            }
-
-                        }
-                    },
-                    {
-                        data: 'condicion_envio',
-                        name: 'condicion_envio',
-                    },
-
-
+                    {data: 'action', name: 'action',sWidth: '15%',},
                 ],
                 language: {
                     "decimal": "",
@@ -397,28 +224,13 @@ ${data.foto3 ? `
                     ocultar_div_modal_agregaranulacion();
                     switch (e.target.id) {
                         case 'btn_agregaranulacion_pc':
-                            $.ajax({
-                                url: "{{ route('clientecomboagregarcontacto') }}",
-                                method: 'POST',
-                                success: function (data) {
-                                    $('#cbxClienteAgregaNuevo').html(data.html).selectpicker("refresh");
-                                    $("#modal-agregaranulacion-pc-container").show();
-                                }
-                            });
+                            $("#modal-agregaranulacion-pc-container").show();
                             break;
                         case 'btn_agregaranulacion_f':
-                            $.ajax({
-                                url: "{{ route('clientecomboagregarcontacto') }}",
-                                method: 'POST',
-                                success: function (data) {
-                                    $('#cbxCambiaNombre').html(data.html).selectpicker("refresh");
-                                    $("#modal-agregaranulacion-f-container").show();
-                                }
-                            });
+                            $("#modal-agregaranulacion-f-container").show();
                             break;
                     }
-                })
-            /**/
+            })
 
             $('#modal-envio-recojo').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
@@ -445,12 +257,12 @@ ${data.foto3 ? `
                         $("#modal-envio-recojo .textcode").text('');
                         $("#modal-envio-recojo").modal("hide");
                         Swal.fire('Mensaje', data.mensaje, 'success')
-                        $('#tblListadoRecojo').DataTable().ajax.reload();
+                        $('#tblListadoAnulaciones').DataTable().ajax.reload();
                     }
                 });
             });
 
-            tblListadoRecojo.on('responsive-display', function (e, datatable, row, showHide, update) {
+            tblListadoAnulaciones.on('responsive-display', function (e, datatable, row, showHide, update) {
                 if (showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
@@ -473,18 +285,23 @@ ${data.foto3 ? `
                         url: "{{ route('pedidosanulaciones.modal.agregaranulacion_pc') }}",
                         data: {
                             codigo: $(this).val(),
-
                         },
                         dataType: 'json',
                         cache: false,
                         success: function (response) {
+                            console.log(response);
+                            if (response.contador>=1){
+                                $('#tipoAnulacion').val("C");
+                                $('#txtIdPedidoCompleto').val(response.data.id);
+                                $('#asesorCodigoPc').val(response.data.name);
+                                $('#importeCodigoPc').val(response.data.total);
+                                $('#anulacionCodigoPc').val(response.data.total);
+                                $('#rucCodigoPc').val(response.data.ruc);
+                                $('#razonCodigoPc').val(response.data.nombre_empresa);
+                            }else{
+                                Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
+                            }
 
-                            $('#asesorCodigoPc').val(response.data.name);
-                            $('#importeCodigoPc').val(response.data.total);
-                            $('#anulacionCodigoPc').val(response.data.total);
-                            $('#rucCodigoPc').val(response.data.ruc);
-                            $('#razonCodigoPc').val(response.data.nombre_empresa);
-                            $('#agregar_imagen_pc').val();
                         }
                     });
                 }
@@ -495,61 +312,78 @@ ${data.foto3 ? `
                     this.value = (this.value + '').replace(/[^0-9]/g, '');
                 });
             });
-            /*CARGA DE ARCHIVOS*/
-
 
             $(document).on("submit", "#form-agregaranulacion-pc", function (e) {
                 e.preventDefault();
-                var formagregaranulacionpc=new FormData(document.getElementById("agregaranulacion"));
+                $(".btnEnviarPagoCompleto").attr('disabled', 'disabled');
+                var txtIdPedidoCompleto     =$('#txtIdPedidoCompleto').val();
+                var asesorCodigoPc          =$('#asesorCodigoPc').val();
 
-                //fd.append('quitardireccion', $("#quitardireccion").val());
+                if (txtIdPedidoCompleto == '') {
+                    Swal.fire('Error', 'No se puede ingresar una solicitud sin un pedido', 'warning');
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    return false;
+                }
+                if (asesorCodigoPc == '') {
+                    Swal.fire('Error', 'No se puede ingresar un codigo vacio', 'warning');
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    return false;
+                }
+
+                if ($('#inputArchivoSubir').val() == '') {
+                    Swal.fire('Error', 'No se puede ingresar sin archivos', 'warning');
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    return false;
+                }
+
+                var data = new FormData(document.getElementById("form-agregaranulacion-pc"));
+
                 $.ajax({
-                    data: data,
-                    processData: false,
                     contentType: false,
+                    processData: false,
                     type: 'POST',
-                    url: "{{ route('envios.quitardireccion') }}",
+                    url: "{{ route('solicita_anulacion_pedido') }}",
+                    data: data,
                     success: function (data) {
-                        console.log(data);
-                        $("#modal-quitardireccion .textcode").text('');
-                        $("#modal-quitardireccion").modal("hide");
-                        $('#tablaRecepcionados').DataTable().ajax.reload(null, false);
+                        /*console.log('Solicitando Anulacion', data);*/
+                        if (data.countpedidosanul==0){
+                            if (data.pedidosinpago==1){
+                                Swal.fire('Notificacion', 'Se registró la solicitud de anulacion, correctamente.', 'success');
+                                limpiarFormSolAnulCompl();
+                                $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                            }else {
+                                Swal.fire('Error', 'El pago tiene pagos o adelantos, verifique.', 'warning');
+                            }
+                        }else {
+                            Swal.fire('Error', 'Ya existe un registro con los mismos datos, verifique.', 'warning');
+                        }
+                        $(".btnEnviarPagoCompleto").attr('disabled', false);
                     }
                 });
 
             });
 
-            $(document).on("click", "#form-agregaranulacion-pc #cargaArchivosPC", function () {
-                var file = document.createElement('input');
-                file.type = 'file';
-                file.click()
-                file.addEventListener('change', function (e) {
-                    if (file.files.length > 0) {
-                        $('#form-agregaranulacion-pc').find('.result_picture').css('display', 'block');
-                        //console.log(URL.createObjectURL(file.files[0]))
-                        dataForm_agregaranulacion_pc.agregar_imagen_pc = file.files[0]
-                        $('#form-agregaranulacion-pc').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
-                    }
-                })
-            });
-            /*PEGADO DE IMAGEN*/
-            $("#form-agregaranulacion-pc").bind("paste", function(event){
-                var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-                var files = []
-                for (index in items) {
-                    var item = items[index];
-                    if (item.kind === 'file') {
-                        var file = item.getAsFile()
-                        files.push(file)
-                    }
-                }
-                if (files.length > 0) {
-                    $('#form-agregaranulacion-pc').find('.result_picture').css('display', 'block')
-                    $('#form-agregaranulacion-pc').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
-                    dataForm_agregaranulacion_f.agregar_imagen_f = files[0]
-                }
-            } );
+            function limpiarFormSolAnulCompl(){
+                $('#txtIdPedidoCompleto').val('');
+                $('#codigoCodigoPc').val('');
+                $('#asesorCodigoPc').val('');
+                $('#importeCodigoPc').val('');
+                $('#anulacionCodigoPc').val('');
+                $('#rucCodigoPc').val('');
+                $('#razonCodigoPc').val('');
+                $('#inputArchivoSubir').val('');
+            }
 
+            function limpiarFormSolAnulFact(){
+                $('#txtIdPedidoFactura').val('');
+                $('#codigoCodigoF').val('');
+                $('#asesorCodigoF').val('');
+                $('#importeCodigoF').val('');
+                $('#anularCodigoF').val('');
+                $('#rucCodigoF').val('');
+                $('#razonCodigoF').val('');
+                $('#inputArchivoSubirf').val('');
+            }
 
             /*MODAL ANULACION - F*/
             $(document).on("keyup", '#codigoCodigoF', function () {
@@ -566,12 +400,18 @@ ${data.foto3 ? `
                         dataType: 'json',
                         cache: false,
                         success: function (response) {
+                            if (response.contador>=1){
+                                $('#tipoAnulacion2').val("F");
+                                $('#txtIdPedidoFactura').val(response.data.id);
+                                $('#asesorCodigoF').val(response.data.name);
+                                $('#importeCodigoF').val(response.data.total);
+                                $('#anulacionCodigoF').val(response.data.total);
+                                $('#rucCodigoF').val(response.data.ruc);
+                                $('#razonCodigoF').val(response.data.nombre_empresa);
+                            }else{
+                                Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
+                            }
 
-                            $('#asesorCodigoF').val(response.data.name);
-                            $('#importeCodigoF').val(response.data.total);
-                            $('#anulacionCodigoF').val(response.data.total);
-                            $('#rucCodigoF').val(response.data.ruc);
-                            $('#razonCodigoF').val(response.data.nombre_empresa);
                         }
                     });
                 }
@@ -590,30 +430,208 @@ ${data.foto3 ? `
                     }
                 })
             });
-            /*PEGADO DE IMAGEN*/
-            $("#form-agregaranulacion-f").bind("paste", function(event){
-                var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-                console.log(items);
-                console.log((event.clipboardData || event.originalEvent.clipboardData));
-                var files = []
-                for (index in items) {
-                    var item = items[index];
-                    if (item.kind === 'file') {
-                        var file = item.getAsFile()
-                        files.push(file)
+
+
+            $(document).on("submit", "#form-agregaranulacion-f", function (e) {
+                e.preventDefault();
+                $(".btnEnviarFactura").attr('disabled', 'disabled')
+                var txtIdPedidoFactura     =$('#txtIdPedidoFactura').val();
+                var asesorCodigoF          =$('#asesorCodigoF').val();
+                var btotal                 =$('#importeCodigoF').val();
+                var bimporte               =$('#anularCodigoF').val();
+                if (txtIdPedidoFactura == '') {
+                    Swal.fire('Error', 'No se puede ingresar una solicitud sin un pedido', 'warning');
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
+                if (asesorCodigoF == '') {
+                    Swal.fire('Error', 'No se puede ingresar un codigo vacio', 'warning');
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
+
+                if (bimporte== '') {
+                    Swal.fire('Error', 'Debe ingresar el importe a la solicitud.', 'warning').then(function () {
+                        $("#anularCodigoF").focus()
+                    });
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
+                if (parseFloat(bimporte) >=parseFloat(btotal)) {
+                    Swal.fire('Error', 'El valor del importe a eliminar debe ser menor al total.', 'warning').then(function () {
+                        $("#anularCodigoF").focus()
+                    });
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
+
+                if ($('#inputArchivoSubirf').val() == '') {
+                    Swal.fire('Error', 'No se puede ingresar sin archivos', 'warning');
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
+                var datas = new FormData(document.getElementById("form-agregaranulacion-f"));
+                /*console.log('FActuras',datas); return false;*/
+                $.ajax({
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    url: "{{ route('solicita_anulacion_pedidof') }}",
+                    data: datas,
+                    success: function (data) {
+                        /*console.log('Solicitando Anulacion', data);*/
+                        if (data.countpedidosanul==0){
+                            Swal.fire('Notificacion', 'Se registró la solicitud de anulacion, correctamente.', 'success');
+                            limpiarFormSolAnulFact();
+                            $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                        }else {
+                            Swal.fire('Error', 'Ya existe un registro con los mismos datos, verifique.', 'warning');
+                        }
+                        $(".btnEnviarFactura").attr('disabled', false);
+
                     }
+                });
+
+            });
+
+            $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaAsesor', function () {
+                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+                aprobacionAnulacion(data.idanulacion,1);
+            })
+            $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaEncargado', function () {
+                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+                aprobacionAnulacion(data.idanulacion,2);
+            })
+            $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaAdmin', function () {
+                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+                aprobacionAnulacion(data.idanulacion,3);
+            })
+            $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaJefeOp', function () {
+                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+                aprobacionAnulacion(data.idanulacion,4);
+            })
+
+            function aprobacionAnulacion(idAnulacion,accion){
+                var v_url="";
+                var v_text="";
+                if (accion==1){
+                    v_url="{{ route('anulacionAprobacionAsesor') }}";
+                    v_text="Aprobando del Asesor";
                 }
-                if (files.length > 0) {
-                    $('#form-agregaranulacion-f').find('.result_picture').css('display', 'block')
-                    console.log('DENTRO DE IF: ', URL.createObjectURL(files[0]))
-                    $('#form-agregaranulacion-f').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
-                    dataForm_agregaranulacion_f.agregar_imagen_f = files[0]
+                if (accion==2){
+                    v_url="{{ route('anulacionAprobacionEncargado') }}";
+                    v_text="Aprobando del Encargado";
                 }
-            } );
+                if (accion==3){
+                    v_url="{{ route('anulacionAprobacionAdmin') }}";
+                    v_text="Aprobando del Administrador";
+                }
+                if (accion==4){
+                    v_url="{{ route('anulacionAprobacionJefeOp') }}";
+                    v_text="Aprobando del Jefe de Operaciones";
+                }
+                Swal.fire({
+                    icon: 'warning',
+                    title: '¿Estás seguro?',
+                    text: v_text,
+                    showDenyButton: true,
+                    confirmButtonText: 'Si, aprobar',
+                    denyButtonText: 'No, cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        if (result.isConfirmed) {
+                            var formIdAnulacion = new FormData();
+                            formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
+                            $.ajax({
+                                processData: false,
+                                contentType: false,
+                                type: 'POST',
+                                url: v_url,
+                                data: formIdAnulacion,
+                                success: function (data) {
+                                    console.log(data);
+                                    Swal.fire('Notificacion', 'Se aprobo1 correctamente.', 'success');
+                                    $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                }
+                            });
+                        }
+                    }
+                })
+            }
 
+            $('#modal-confirma-anulacion').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var pedido_id = button.data('pedido-id');
+                var idanulacion = button.data('idanulacion');
+                var codigopedido= button.data('codigo-pedido');
+                var nameresponsable= button.data('responsable-anula');
+                console.log('idanulacion => ',idanulacion,'codigoanulacion => ',codigopedido);
+                $("#motivo").val('');
+                $("#responsable").val(nameresponsable);
+                $("#txtPedidoId").val(pedido_id );
+                $("#txtPedidoAnulacionId").val(idanulacion );
+                $(".textcodepedido").html(codigopedido);
+            });
 
+            $(document).on("submit", "#frmConfirmaAnulacion", function (evento) {
+                evento.preventDefault();
+                var motivo = $("#motivo").val();
+                var responsable = $("#responsable").val();
+                var anulacion_password = $("#anulacion_password").val();
+                var inputFilesAdmin = $('#inputFilesAdmin').val();
+                if (motivo.length < 1) {
+                    Swal.fire(
+                        'Error',
+                        'Ingrese el motivo para confirmar la solicitud la anulacion del pedido',
+                        'warning'
+                    )
+                } else if (responsable == '') {
+                    Swal.fire(
+                        'Error',
+                        'Ingrese el responsable de la anulación',
+                        'warning'
+                    )
+                } else if (!anulacion_password) {
+                    Swal.fire(
+                        'Error',
+                        'Ingrese la contraseña para autorizar la anulación',
+                        'warning'
+                    )
+                }else if (inputFilesAdmin == '') {
+                    Swal.fire('Error', 'No se puede confirmar la anulacion sin archivos', 'warning');
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    return false;
+                } else {
+                    //this.submit();
+                    ejecutarForDelete();
+                }
+            })
 
+            function ejecutarForDelete() {
+                var datafrmanula = new FormData(document.getElementById("frmConfirmaAnulacion"));
+                /*console.log('FActuras',datas); return false;*/
+                $.ajax({
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    url: "{{ route('confirmaSolicitudAnulacion') }}",
+                    data: datafrmanula,
+                    success: function (data) {
+                        console.log('Confirmacion Admin Anulacion', data);
+                        if (data.contpedanulacions==1){
+                            Swal.fire('Notificacion', 'Se confirmo la solicitud de anulacion, correctamente.', 'success');
+                            $("#modal-confirma-anulacion").modal("hide");
+                            $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                        }else {
+                            Swal.fire('Error', 'No existe la anulacion para confirmar, verifique.', 'warning');
+                        }
+                        $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
 
+                    }
+                });
+
+            }
+            /*FIN DEL SCRIPT*/
         });
     </script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>

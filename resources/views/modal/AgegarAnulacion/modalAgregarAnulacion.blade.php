@@ -2,7 +2,7 @@
     <div class="modal-dialog" style="max-width: 800px!important;">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Anulacion</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Solicitud de Anulacion</h5>
 
                 <button class="float-right btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
@@ -14,12 +14,8 @@
                     <div class="form-group col-lg-6">
 
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button id="btn_agregaranulacion_pc" type="button" class="btn rounded btn-info ml-2">Pedido
-                                Completo
-                            </button>
-                            <button id="btn_agregaranulacion_f" type="button" class="btn rounded btn-secondary  ml-2">
-                                Facturación
-                            </button>
+                            <button id="btn_agregaranulacion_pc" type="button" class="btn rounded btn-info ml-2"> Pedido Completo</button>
+                            <button id="btn_agregaranulacion_f" type="button" class="btn rounded btn-secondary  ml-2"> Factura</button>
                         </div>
 
                     </div>
