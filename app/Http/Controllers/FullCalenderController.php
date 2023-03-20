@@ -144,8 +144,9 @@ class FullCalenderController extends Controller
                         }
                         break;
                     case 'ini_mes':
-                        $date = Carbon::parse($request->calendario_start_evento)
-                        if (!$date->isFirstOfMonth()) {
+                        $date = \Carbon\Carbon::parse($request->calendario_start_evento);
+                        //$date=Carbon::now();
+                        if(!$date->day==1 ) {
                             $date->addMonth();
                         }
                         $firstDayOfNextMonth = $date->firstOfMonth();
@@ -168,8 +169,8 @@ class FullCalenderController extends Controller
                         }
                         break;
                     case 'fin_mes':
-                        $date = Carbon::parse($request->calendario_start_evento)
-                        if (!$date->isLastOfMonth()) {
+                        $date = Carbon::parse($request->calendario_start_evento);
+                        if(!$date->isLastOfMonth()) {
                             //$date->addMonth();
                             $date->lastOfMonth();
                         }

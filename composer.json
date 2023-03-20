@@ -24,6 +24,7 @@
         "maatwebsite/excel": "^3.1",
         "mike42/escpos-php": "^3.0",
         "moment/moment": "^2.29",
+        "nesbot/carbon": "^2.66",
         "silviolleite/laravelpwa": "^2.0",
         "spatie/laravel-medialibrary": "9.0",
         "spatie/laravel-permission": "^5.3",
