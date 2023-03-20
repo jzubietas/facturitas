@@ -98,6 +98,7 @@ class FullCalenderController extends Controller
                     'color' => $request->calendario_color_evento,
                     'colorEvento' => $request->calendario_color_evento,
                     'colorBackground' => $request->calendario_fondo_evento,
+                    'tipo'=>$request->calendario_tipo_evento,
                 ]);
                 return response()->json($event);
             case 'modificar':
