@@ -98,6 +98,17 @@ class FullCalenderController extends Controller
                 $color='';$colorFondo='';
                 if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='white';}
                 else if($request->tipo=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
+
+                //analisis frecuencia
+                switch($request->calendario_frecuencia_evento)
+                {
+                    case 'una_vez':break;
+                    case 'diario':break;
+                    case 'ini_mes':break;
+                    case 'fin_mes':break;
+                }
+
+
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
                     'description' => $request->calendario_descripcion_evento_nuevo,
