@@ -96,7 +96,7 @@ class FullCalenderController extends Controller
                     'start' => $request->calendario_start_evento,
                     'end' => $request->calendario_end_evento,
                     'color' => $request->calendario_color_evento,
-                    'colorTexto' => $request->calendario_color_evento,
+                    'colorEvento' => $request->calendario_color_evento,
                     'colorBackground' => $request->calendario_fondo_evento,
                 ]);
                 return response()->json($event);
@@ -107,7 +107,7 @@ class FullCalenderController extends Controller
                     'start' => $request->start,
                     'end' => $request->end,
                     'color' => $request->calendario_color_evento,
-                    'colorTexto' => $request->calendario_color_evento,
+                    'colorEvento' => $request->calendario_color_evento,
                     'colorBackground' => $request->calendario_color_evento,
                 ]);
                 return response()->json($event);
