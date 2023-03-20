@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Calendario')
+@section('title', 'Pedidos - Bandeja de pedidos')
 
 @push('css')
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons"
@@ -393,7 +393,6 @@
                 eventClick: function(info) {
                     console.log("eventclick editar en evento")
                     $('#editar_evento_calendario .btn-edit i').removeClass('text-dark').addClass('text-warning');
-                    console.warn(info);
                     console.log(info.event);
                     $("#editar_evento").val(info.event.id);
                     console.log(info.event.description);

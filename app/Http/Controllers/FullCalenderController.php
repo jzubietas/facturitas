@@ -64,15 +64,15 @@ class FullCalenderController extends Controller
                     $events[] = [
                         'id'=>$event->id,
                         'title' => $event->title,
+                        'description' => $event->description,
                         'start' => $event->start,
                         'end' => $event->end,
                         'color'=>$event->color,
                         'textColor'=>$event->color,
                         'backgroundColor'=>$event->color,
-                        'description' => $event->description,
+
                     ];
                 }
-                //dd($events);
                 return response()->json($events);
                 break;
             case 'updatetitle':
