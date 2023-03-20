@@ -24,14 +24,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="calendario_tipo_evento">Tipo de evento</label>
+                                    <label for="calendario_tipo_evento">Tipo</label>
                                     <select id="calendario_tipo_evento" name="calendario_tipo_evento" class="form-control">
                                         <option value="PAGO">PAGO</option>
                                         <option value="OTROS">OTROS</option>
                                     </select>
 
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="calendario_frecuencia_evento">Frecuencia</label>
+                                    <select id="calendario_frecuencia_evento" name="calendario_frecuencia_evento" class="form-control">
+                                        <option value="diario">Diario</option>
+                                        <option value="ini_mes">Inicio de Mes</option>
+                                        <option value="fin_mes">Fin de Mes</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-12">

@@ -52,6 +52,10 @@ class FullCalenderController extends Controller
     public function ajax(Request $request)
     {
         switch ($request->type) {
+            case 'validate':
+                $json=array('ok'=>true);
+                return response()->json();
+                break;
             case 'load':
                 $events = [];
                 $all_events = Event::all();
@@ -97,8 +101,9 @@ class FullCalenderController extends Controller
                     'end' => $request->calendario_end_evento,
                     'color' => $request->calendario_color_evento,
                     'colorEvento' => $request->calendario_color_evento,
-                    'colorBackground' => $request->calendario_fondo_evento,
+                    'fondoEvento' => $request->calendario_fondo_evento,
                     'tipo'=>$request->calendario_tipo_evento,
+                    'frecuencia'=>$request->calendario_frecuencia_evento,
                 ]);
                 return response()->json($event);
             case 'modificar':
