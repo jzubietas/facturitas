@@ -369,11 +369,14 @@
                             res.forEach(function (evt) {
                                 events.push({
                                     id:evt.id,
+                                    description:evt.description,
                                     title: evt.title,
                                     start: evt.start,
                                     end: evt.end,
+                                    color:evt.color,
                                 });
                             });
+                            console.log(events);
                             successCallback(events);
                         }
                     });
@@ -386,25 +389,19 @@
                     $("#calendario_end_evento").val(info.dateStr);
                     $('.btn-edit-check').addClass('d-none');
                     agregar_evento_calendario.show();
-                    /*if (info.allDay) {
-                        $('#FechaInicio').val(info.dateStr);
-                        $('#FechaFin').val(info.dateStr);
-                    } else {
-                        let fechaHora = info.dateStr.split("T");
-                        $('#FechaInicio').val(fechaHora[0]);
-                        $('#FechaFin').val(fechaHora[0]);
-                        $('#HoraInicio').val(fechaHora[1].substring(0, 5));
-                    }*/
                 },
                 eventClick: function(info) {
                     console.log("eventclick editar en evento")
                     $('#editar_evento_calendario .btn-edit i').removeClass('text-dark').addClass('text-warning');
+                    console.warn(info);
                     console.log(info.event);
                     $("#editar_evento").val(info.event.id);
-
+                    console.log(info.event.description);
+//description
                     $(".fecha_lectura_start").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $(".fecha_lectura_end").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $('#calendario_nombre_evento_editar').val(info.event.title);
+                    $('#calendario_descripcion_evento_editar').val(info.event.description);
                     editar_evento_calendario.show();
                 },
                 eventResize: function(info) {

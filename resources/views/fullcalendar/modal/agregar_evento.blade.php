@@ -4,7 +4,7 @@
 <div class="modal fade" id="agregar_evento_calendario" role="dialog">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form id="frm_add_evento_calendario" name="frm_add_evento_calendario">
+            <form id="frm_add_evento_calendario" name="frm_add_evento_calendario" autocomplete="off">
                 <div class="modal-header">
                     <h5 class="modal-title">Agregar Evento</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -25,7 +25,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6 d-none">
                                 <div class="form-group">
                                     <label for="calendario_startevento">Inicio del evento</label>
                                     <input type="date" class="form-control is-valid" id="calendario_start_evento"
@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6 d-none">
                                 <div class="form-group">
                                     <label for="calendario_startevento">Fin del evento</label>
                                     <input type="date" class="form-control is-valid" id="calendario_end_evento"
@@ -45,16 +45,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 demo-color-texto">
+                            <div class="col-md-6 demo-color-texto">
                                 <div class="form-group">
-                                    <label>Color picker:</label>
+                                    <label>Color de Texto:</label>
                                     <input id="calendario_color_evento" type="color" class="form-control" name="calendario_color_evento">
                                 </div>
                             </div>
-                            <div class="col-md-4 demo-color-fondo">
+                            <div class="col-md-6 demo-color-fondo">
                                 <div class="form-group">
-                                    <label>Color picker:</label>
+                                    <label>Color de Fondo:</label>
                                     <input id="calendario_fondo_evento" type="color" class="form-control" name="calendario_fondo_evento">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="calendario_descripcion_evento_nuevo">Descripcion</label>
+                                    <textarea class="form-control border border-success" id="calendario_descripcion_evento_nuevo"
+                                              name="calendario_descripcion_evento_nuevo" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>

@@ -65,7 +65,7 @@ class FullCalenderController extends Controller
                         'color'=>$event->color,
                         'textColor'=>$event->color,
                         'backgroundColor'=>$event->color,
-                        'description' => 'description for All Day Event',
+                        'description' => $event->description,
                     ];
                 }
                 //dd($events);
@@ -92,12 +92,12 @@ class FullCalenderController extends Controller
             case 'add':
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
-                    'description' => 'descripcion',
+                    'description' => $request->calendario_descripcion_evento_nuevo,
                     'start' => $request->calendario_start_evento,
                     'end' => $request->calendario_end_evento,
                     'color' => $request->calendario_color_evento,
                     'colorTexto' => $request->calendario_color_evento,
-                    'colorBackground' => $request->calendario_color_evento,
+                    'colorBackground' => $request->calendario_fondo_evento,
                 ]);
                 return response()->json($event);
             case 'modificar':
