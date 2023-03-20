@@ -381,11 +381,11 @@
                 dateClick: function(info) {
                     console.log("dateClick")
                     console.log(info.dateStr)
-                    $("#calendario_start_evento").val(moment(info.dateStr).format('YYYY-MM-DD hh:mm:ss'));
-                    $("#calendario_end_evento").val(moment(info.dateStr).format('YYYY-MM-DD hh:mm:ss'));
+                    limpiarFormulario();
+                    $("#calendario_start_evento").val(info.dateStr);
+                    $("#calendario_end_evento").val(info.dateStr);
                     $('.btn-edit-check').addClass('d-none');
                     agregar_evento_calendario.show();
-                    limpiarFormulario();
                     /*if (info.allDay) {
                         $('#FechaInicio').val(info.dateStr);
                         $('#FechaFin').val(info.dateStr);
