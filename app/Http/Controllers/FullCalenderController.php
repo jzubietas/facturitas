@@ -47,7 +47,8 @@ class FullCalenderController extends Controller
                 'color'=>$event->color,
                 'textColor'=>$event->color,
                 'backgroundColor'=>$event->color,
-                'description' => 'description for All Day Event',
+                'description' => $event->description,
+                'attach'=>$event->attach,
             ];
         }
 
@@ -63,10 +64,9 @@ class FullCalenderController extends Controller
                 'color'=>$eventsunsigned->color,
                 'colortexto'=>$eventsunsigned->color,
                 'colorfondo'=>$eventsunsigned->color,
-                //'description' => 'description for All Day Event',
+                'attach'=>$eventsunsigned->attach,
             ];
         }
-        //dd($uneventss);
         return view('fullcalendar.fullcalendar', compact('eventss','uneventss'));
 
     }
@@ -94,6 +94,7 @@ class FullCalenderController extends Controller
                         'fondoEvento'=>$event->fondoEvento,
                         'tipo'=>$event->tipo,
                         'frecuencia'=>$event->frecuencia,
+                        'adjunto'=>$file->store("administracion/adjuntos", "pstorage"),
                     ];
                 }
                 return response()->json($events);

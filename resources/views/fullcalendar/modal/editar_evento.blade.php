@@ -49,9 +49,14 @@
                                                      name="calendario_descripcion_evento_editar" rows="3" readonly></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group col lg-12">
+                                    <div class="form-group col-lg-6">
                                         {!! Form::label('attachments', 'Adjuntar Archivos') !!}
-                                        {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','id'=>'inputFilesEvent','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
+                                        {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','id'=>'inputFilesEventE','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <div class="image-wrapper">
+                                            <img id="picturee" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del adjunto" width="250px">
+                                        </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-12 text-center">
@@ -59,6 +64,7 @@
                                                 <i class="fa fa-check text-success"></i>
                                             </button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
