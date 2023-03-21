@@ -1118,7 +1118,7 @@
                 serverSide: true,
                 searching: true,
                 //stateSave: true,
-                order: [[9, "desc"]],
+                order: [[10, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
