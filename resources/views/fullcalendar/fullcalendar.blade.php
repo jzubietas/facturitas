@@ -339,10 +339,6 @@
                     $(".fecha_lectura_end").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $('#calendario_nombre_evento_editar').val(info.event.title);
                     $('#calendario_descripcion_evento_editar').val(info.event._def.extendedProps.description);
-                    console.log(info.event._def.extendedProps.adjunto);
-                    var urlimg = "{{asset('logo_facturas.png')}}";
-                    urlimg = urlimg.replace('logo_facturas.png', 'storage/agenda/'+info.event._def.extendedProps.adjunto);
-                    console.log(info.event._def.extendedProps.adjunto);
                     $('#picturee').attr('src',info.event._def.extendedProps.adjunto);
                     editar_evento_calendario.show();
                 },
