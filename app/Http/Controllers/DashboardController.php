@@ -875,14 +875,14 @@ class DashboardController extends Controller
                 else if(70<$round && $round<=80)
                 {
                     $html .= '<div class="progress-bar bg-warning rounded  h-60-res height-bar-progress" role="progressbar"
-                         style="height: 30px !important;width: ' . round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado'] * 100), 2) . '"
+                         style="height: 30px !important;width: ' . round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado'] * 100), 2) . '%"
                          aria-valuenow="70"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
                     <div class="progress-bar rounded h-60-res" role="progressbar"
                          style="width: ' . (round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado'] * 100), 2) - 70) . '%;
                      background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                         aria-valuenow="' . (round($count_asesor[46]['total_pedido_mespasado'] / $count_asesor[46]['total_pagado'], 2) - 70) . '"
+                         aria-valuenow="' . (round(($count_asesor[46]['total_pagado'] / $count_asesor[46]['total_pedido_mespasado']), 2) - 70) . '"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
                 }
