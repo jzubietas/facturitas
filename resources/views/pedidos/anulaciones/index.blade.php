@@ -112,15 +112,13 @@
                 serverSide: true,
                 searching: true,
                 //stateSave: true,
-                order: [[4, "desc"]],
+                order: [[6, "desc"]],
                 ajax: "{{ route('pedidosanulacionestabla') }}",
                 createdRow: function (row, data, dataIndex) {
-                    if (data["estado"] == "1") {
-                        if (data.pendiente_anulacion == 1) {
-                            $('td', row).css('background', '#E57373').css('font-weight', 'bold');
-                        }
-                    } else {
-                        $(row).addClass('#E57373');
+                    if (data.itipoanulacion=='C') {
+                        $('td', row).css('background', '#E57373').css('font-weight', 'bold');
+                    }else if (data.itipoanulacion=='F'){
+                        $('td', row).css('background', 'RosyBrown').css('font-weight', 'bold');
                     }
                 },
                 rowCallback: function (row, data, index) {
@@ -196,6 +194,8 @@
             });
 
             window.ocultar_div_modal_agregaranulacion = function () {
+                limpiarFormSolAnulFact();
+                limpiarFormSolAnulCompl();
                 $("#modal-agregaranulacion-pc-container").hide();
                 $("#form-agregaranulacion-pc input").val("");
 
@@ -375,6 +375,7 @@
                 $('#rucCodigoPc').val('');
                 $('#razonCodigoPc').val('');
                 $('#inputArchivoSubir').val('');
+                $('#txtMotivoPedComplet').val('');
             }
 
             function limpiarFormSolAnulFact(){
@@ -386,6 +387,7 @@
                 $('#rucCodigoF').val('');
                 $('#razonCodigoF').val('');
                 $('#inputArchivoSubirf').val('');
+                $('#txtMotivoFactura').val('');
             }
 
             /*MODAL ANULACION - F*/
@@ -423,6 +425,7 @@
                     });
                 }
             });
+
             /*CARGA DE ARCHIVOS*/
             $(document).on("click", "#form-agregaranulacion-f #cargaArchivosF", function () {
                 var file = document.createElement('input');
