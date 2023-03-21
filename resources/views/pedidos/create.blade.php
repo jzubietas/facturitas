@@ -852,11 +852,12 @@ ${files.map(function (file) {
 
                 if (ptipo_banca == '') {
                 } else {
-                    if (ptipo_banca == 'FISICO') {
+                    if (ptipo_banca == 'FISICO ') {
                         if (isNaN(anno_filter)) {
                             console.log("anno is nan")
                         } else {
                             if (anno_filter != '') {
+                                console.log({{$anno_selected}});
                                 if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1)) {
                                 } else {
                                     Swal.fire(
