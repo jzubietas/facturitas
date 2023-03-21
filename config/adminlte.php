@@ -846,7 +846,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Calendario',
-                    'route' => 'fullcalendar',
+                    'route' => 'fullcalendarindex',
                     'can' => 'planificacion.calendario',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['roles*'],

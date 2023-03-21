@@ -9,6 +9,11 @@ use Carbon\Carbon;
 
 class FullCalenderController extends Controller
 {
+    public function indexcalendario(Request $request)
+    {
+        return view('fullcalendar.index');
+    }
+
     public function index(Request $request)
     {
         $eventss = [];
@@ -30,7 +35,7 @@ class FullCalenderController extends Controller
             ];
         }
 
-        $all_eventsunsigned = EventsUnsigned::all();
+        $all_eventsunsigned = EventsUnsigned::orderBy('id','desc')->get();
         foreach ($all_eventsunsigned as $eventsunsigned)
         {
             $uneventss[] = [
@@ -259,7 +264,7 @@ class FullCalenderController extends Controller
                 # code...
                 break;
         }
-        return 0;
+        //return 0;
     }
 
 

@@ -63,23 +63,25 @@
                         <div class="card-body">
                             <!-- the events -->
                             <h4 class="text-center">Eventos predefinidos</h4>
-                            <div id="external-events" style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em">
-                                @foreach($uneventss as $eventunsigned)
-                                    <div id="unsigned_{{ $eventunsigned["id"] }}"
-                                         class="external-event btn btn-md d-flex rounded {{ $eventunsigned["colorfondo"] }}" data-titulo="{{ $eventunsigned["titulo"] }}"
-                                         data-horafin="{{ $eventunsigned["horafin"] }}"
-                                         data-horainicio="{{ $eventunsigned["horainicio"] }}"
-                                         data-colorfondo="{{ $eventunsigned["colorfondo"] }}"
-                                         data-colortexto="{{ $eventunsigned["colortexto"] }}"
-                                         data-codigo="{{ $eventunsigned["id"] }}"
-                                         style="border-color:{{ $eventunsigned["colorfondo"] }};color:{{ $eventunsigned["colortexto"] }};background-color:{{ $eventunsigned["colorfondo"] }};">
-                                        <span clas="">{{ $eventunsigned["titulo"] }}</span>
-                                        <button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light btn-sm d-flex justify-content-end">
-                                            <i class="fa fa-close text-danger"></i>
-                                        </button>
-                                    </div>
-                                @endforeach
+                            <div class="row">
+                                <div id="external-events" style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em" class="col-md-12">
+                                    @foreach($uneventss as $eventunsigned)
+                                        <div id="unsigned_{{ $eventunsigned["id"] }}"
+                                             class="external-event btn btn-md d-flex justify-content-between rounded {{ $eventunsigned["colorfondo"] }}" data-titulo="{{ $eventunsigned["titulo"] }}"
+                                             data-horafin="{{ $eventunsigned["horafin"] }}"
+                                             data-horainicio="{{ $eventunsigned["horainicio"] }}"
+                                             data-colorfondo="{{ $eventunsigned["colorfondo"] }}"
+                                             data-colortexto="{{ $eventunsigned["colortexto"] }}"
+                                             data-codigo="{{ $eventunsigned["id"] }}"
+                                             style="border-color:{{ $eventunsigned["colorfondo"] }};color:{{ $eventunsigned["colortexto"] }};background-color:{{ $eventunsigned["colorfondo"] }};">
+                                            <span clas="">{{ $eventunsigned["titulo"] }}</span>
+                                            <button type="button" class="btn delete-unsigned-event btn btn-light btn-sm">
+                                                <i class="fa fa-close text-danger"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
 
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -427,10 +429,10 @@
                     'background-color': currColor,
                     'border-color': currColor,
                     'color': '#fff'
-                }).addClass('external-event btn btn-md d-flex rounded bg-info')
+                }).addClass('external-event btn btn-md rounded d-flex justify-content-between ')
 
-                event.html('<h4 class="d-inline-block">'+val+'</h4>'+
-                    '<button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light float-right">'+
+                event.html('<span class="">'+val+'</span>'+
+                    '<button type="button" class="btn delete-unsigned-event btn btn-light btn-sm">'+
                     '<i class="fa fa-close text-danger"></i>'+
                     '</button>'
                 )
@@ -456,6 +458,15 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        event.addClass(data.color);
+                        event.attr('id','unsigned_'+data.id)
+                        event.data('titulo',data.title)
+                        event.data('horainicio',data.created_at)
+                        event.data('horafin',data.updated_at)
+                        event.data('colorfondo',data.color)
+                        event.data('colortexto',data.color)
+                        event.data('codigo',data.id)
+
                         $('#external-events').prepend(event)
                     }
                 });
