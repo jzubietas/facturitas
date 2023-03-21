@@ -256,6 +256,24 @@
                 }
             });
 
+            $(document).on("change", "#inputFilesEventA", function (event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById("picturea").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            $(document).on("change", "#inputFilesEventE", function (event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById("picturee").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+
             let calendario1 = new FullCalendar.Calendar(calendarEl, {
                 plugins: ['dayGrid', 'timeGrid', 'interaction'],
                 height: 800,
@@ -295,6 +313,7 @@
                                     fondoEvento:evt.fondoEvento,
                                     tipo:evt.tipo,
                                     frecuencia:evt.frecuencia,
+                                    adjunto:evt.adjunto,
                                 });
                             });
                             console.log(events);
@@ -312,6 +331,7 @@
                     agregar_evento_calendario.show();
                 },
                 eventClick: function(info) {
+                    console.log(info)
                     console.log("eventclick editar en evento")
                     $('#editar_evento_calendario .btn-edit i').removeClass('text-dark').addClass('text-warning');
                     $("#editar_evento").val(info.event.id);
@@ -319,6 +339,7 @@
                     $(".fecha_lectura_end").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $('#calendario_nombre_evento_editar').val(info.event.title);
                     $('#calendario_descripcion_evento_editar').val(info.event._def.extendedProps.description);
+                    $('#picturee').attr('src',info.event._def.extendedProps.adjunto);
                     editar_evento_calendario.show();
                 },
                 eventResize: function(info) {

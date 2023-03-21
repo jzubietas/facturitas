@@ -84,9 +84,14 @@
                                     <input id="calendario_fondo_evento" type="color" class="form-control" name="calendario_fondo_evento">
                                 </div>
                             </div>
-                            <div class="form-group col lg-12">
+                            <div class="form-group col lg-6">
                                 {!! Form::label('attachments', 'Adjuntar Archivos') !!}
-                                {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','id'=>'inputFilesEvent','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
+                                {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','id'=>'inputFilesEventA','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <div class="image-wrapper">
+                                    <img id="picturea" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del adjunto" width="250px">
+                                </div>
                             </div>
                         </div>
                     </div>

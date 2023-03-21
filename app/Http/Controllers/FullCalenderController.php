@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\EventsUnsigned;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class FullCalenderController extends Controller
 {
@@ -47,7 +48,8 @@ class FullCalenderController extends Controller
                 'color'=>$event->color,
                 'textColor'=>$event->color,
                 'backgroundColor'=>$event->color,
-                'description' => 'description for All Day Event',
+                'description' => $event->description,
+                'attach'=>$event->attach,
             ];
         }
 
@@ -63,10 +65,9 @@ class FullCalenderController extends Controller
                 'color'=>$eventsunsigned->color,
                 'colortexto'=>$eventsunsigned->color,
                 'colorfondo'=>$eventsunsigned->color,
-                //'description' => 'description for All Day Event',
+                'attach'=>$eventsunsigned->attach,
             ];
         }
-        //dd($uneventss);
         return view('fullcalendar.fullcalendar', compact('eventss','uneventss'));
 
     }
@@ -94,6 +95,7 @@ class FullCalenderController extends Controller
                         'fondoEvento'=>$event->fondoEvento,
                         'tipo'=>$event->tipo,
                         'frecuencia'=>$event->frecuencia,
+                        'adjunto'=>Storage::disk('public')->url($event->attach),
                     ];
                 }
                 return response()->json($events);
@@ -106,11 +108,12 @@ class FullCalenderController extends Controller
                 ]);
                 $files = $request->file('inputFilesEvent');
                 if (isset($files)){
+
                     foreach($files as $file){
-                        $file->store('agenda', 'pstorage');
+                        $fileattach=$file->store('agenda', 'pstorage');
                         $fileEvent =Event::where('id',$request->editar_evento)->first();
                         $fileEvent->update([
-                            'attach'=> $file->getClientOriginalName(),
+                            'attach'=> $fileattach,
                         ]);
                     }
                 }
@@ -157,10 +160,10 @@ class FullCalenderController extends Controller
                         $files = $request->file('inputFilesEvent');
                         if (isset($files) ){
                             foreach($files as $file){
-                                $file->store('agenda', 'pstorage');
+                                $fileattach=$file->store('agenda', 'pstorage');
                                 $fileEvent =Event::where('id',$event->id)->first();
                                 $fileEvent->update([
-                                    'attach'=> $file->getClientOriginalName(),
+                                    'attach'=> $fileattach,
                                 ]);
                             }
                         }
@@ -193,10 +196,10 @@ class FullCalenderController extends Controller
 
                         if (isset($files) ){
                             foreach($files as $file){
-                                $file->store('agenda', 'pstorage');
+                                $fileattach=$file->store('agenda', 'pstorage');
                                 $fileEvent =Event::where('id',$event->id)->first();
                                 $fileEvent->update([
-                                    'attach'=> $file->getClientOriginalName(),
+                                    'attach'=> $fileattach,
                                 ]);
                             }
                         }
@@ -228,10 +231,10 @@ class FullCalenderController extends Controller
                         $files = $request->file('inputFilesEvent');
                         if (isset($files) ){
                             foreach($files as $file){
-                                $file->store('agenda', 'pstorage');
+                                $fileattach=$file->store('agenda', 'pstorage');
                                 $fileEvent =Event::where('id',$event->id)->first();
                                 $fileEvent->update([
-                                    'attach'=> $file->getClientOriginalName(),
+                                    'attach'=> $fileattach,
                                 ]);
                             }
                         }
@@ -264,10 +267,10 @@ class FullCalenderController extends Controller
 
                         if (isset($files) ){
                             foreach($files as $file){
-                                $file->store('agenda', 'pstorage');
+                                $fileattach=$file->store('agenda', 'pstorage');
                                 $fileEvent =Event::where('id',$event->id)->first();
                                 $fileEvent->update([
-                                    'attach'=> $file->getClientOriginalName(),
+                                    'attach'=> $fileattach,
                                 ]);
                             }
                         }

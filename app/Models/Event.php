@@ -26,6 +26,7 @@ class Event extends Model
         'grupo',
         'tipo',
         'frecuencia',
+        'attach',
         'status',
         'created_at',
         'updated_at'
