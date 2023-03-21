@@ -101,8 +101,14 @@ class FullCalenderController extends Controller
                 return response()->json($event);
             case 'add':
                 $color='';$colorFondo='';
-                if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='white';}
-                else if($request->tipo=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
+                if($request->colorBackground!='')
+                {
+                    $colorFondo=$request->colorBackground;$color='white';
+                }else{
+                    if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='white';}
+                    else if($request->calendario_tipo_evento=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
+                }
+
 
                 //analisis frecuencia
             $frecuencia_recorrido=null;

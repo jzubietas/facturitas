@@ -58,11 +58,11 @@
                     {{--Draggable Events--}}
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Eventos para asignar</h4>
+                            <h4 class="card-title">Notas para asignar</h4>
                         </div>
                         <div class="card-body">
                             <!-- the events -->
-                            <h4 class="text-center">Eventos predefinidos</h4>
+                            <h4 class="text-center">Notas predefinidas</h4>
                             <div class="row">
                                 <div id="external-events" style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em" class="col-md-12">
                                     @foreach($uneventss as $eventunsigned)
@@ -304,11 +304,11 @@
                     console.log(color);
                     switch(color)
                     {
-                        case 'bg-primary':color='blue';break;
-                        case 'bg-warning':color='yellow';break;
-                        case 'bg-success':color='green';break;
-                        case 'bg-danger':color='red';break;
-                        default:color='blue';break;
+                        case 'bg-primary':color='rgb(0, 86, 179)';break;
+                        case 'bg-warning':color='rgb(186, 139, 0)';break;
+                        case 'bg-success':color='rgb(25, 105, 44)';break;
+                        case 'bg-danger':color='rgb(167, 29, 42)';break;
+                        default:color='rgb(0, 86, 179)';break;
                     }
 
                     let titulo=$(contenerEliminar).data("titulo");
@@ -342,6 +342,8 @@
                             formData.append('colorTexto', color);
                             formData.append('colorBackground', color);
                             formData.append('calendario_end_evento', end_);
+                            formData.append('calendario_frecuencia_evento', 'una_vez');
+                            formData.append('calendario_tipo_evento', 'OTROS');
 
                             formData.append('type', 'add');
                             $.ajax({
@@ -352,7 +354,7 @@
                                 contentType: false,
                                 success: function (data) {
                                     agregar_evento_calendario.hide();
-                                    displayMessage("Evento creado.");
+                                    displayMessage("Nota creada.");
                                     calendario1.refetchEvents();
                                 }
                             });
@@ -483,7 +485,7 @@
                     contentType: false,
                     success: function (data) {
                         agregar_evento_calendario.hide();
-                        displayMessage("Evento creadp.");
+                        displayMessage("Nota creada.");
                         calendario1.refetchEvents();
                     }
                 });
