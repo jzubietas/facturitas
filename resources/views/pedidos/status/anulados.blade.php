@@ -73,9 +73,9 @@
                 },
                 rowCallback: function (row, data, index) {
                     if (  data.vtipoAnulacion!='F') {
-                        $('td', row).css('background', 'red').css('font-weight', 'bold');
+                        $('td', row).css('background', '#F51646').css('font-weight', 'bold').css('color', '#ffffff');
                     }else{
-                        $('td', row).css('background', 'RosyBrown').css('font-weight', 'bold');
+                        $('td', row).css('background', '#F5B8BF').css('font-weight', 'bold');
                     }
                     $("[data-toggle=jqconfirm]", row).click(function () {
                         const action = $(this).data('target')

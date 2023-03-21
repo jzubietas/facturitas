@@ -22,6 +22,7 @@ class Pedido extends Model
     const ATENDIDO = 'ATENDIDO - OPE';//3
     const ANULADO = 'ANULADO';//4
     const PENDIENTE_ANULACION = 'PENDIENTE ANULACION';//
+    const PENDIENTE_ANULACION_PARCIAL = 'PTE. ANULACION PARCIAL';//
     const ANULADO_PARCIAL = 'ANULADO PARCIAL';//5
     /**************
      * CONSTANTES PEDIDO NUMERICO

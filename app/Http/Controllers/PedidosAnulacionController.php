@@ -489,7 +489,7 @@ class PedidosAnulacionController extends Controller
                 'estado_aprueba_administrador' => 1,
             ]);
         }
-        /*if ($pedidosanulacion->tipo!='F'){*/
+        if ($pedidosanulacion->tipo=='C'){
             if ($contpedidos==1){
                 $pedidos=$pedidos->clone()->first();
                 $pedidos->update([
@@ -506,7 +506,13 @@ class PedidosAnulacionController extends Controller
                     'pendiente_anulacion' => 1,
                 ]);
             }
-        /*}*/
+        }else if ($pedidosanulacion->tipo=='F'){
+            $pedidos=$pedidos->clone()->first();
+            $pedidos->update([
+                'motivo' => $request->motivo,
+                'condicion' => Pedido::PENDIENTE_ANULACION_PARCIAL,
+            ]);
+        }
         return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulacion))?$pedidosanulacion:0) ,'IDsFiles: ' => $idsfiles,'pedidos: '  => $pedidos,'contpedanulacions'=>$contpedanulacions,'$contpedidos'=>$contpedidos]);
     }
 }
