@@ -73,6 +73,7 @@
                                              data-codigo="{{ $eventunsigned["id"] }}"
                                              style="border-color:{{ $eventunsigned["colorfondo"] }};color:{{ $eventunsigned["colortexto"] }};background-color:{{ $eventunsigned["colorfondo"] }};">
                                             <span clas="">{{ $eventunsigned["titulo"] }}</span>
+                                            <span clas="">{{ $eventunsigned["descripcion"] }}</span>
                                             <button type="button" class="btn delete-unsigned-event btn btn-light btn-sm">
                                                 <i class="fa fa-close text-danger"></i>
                                             </button>
@@ -134,7 +135,7 @@
             <div class="col-md-9">
                 <div class="card card-primary">
                     <div class="card-body p-0">
-                        <div id="calendario1" style="width: 100%;border: 1px solid #000;padding:2px"></div>
+                        <div id="calendario1" style="width: 100%;padding:2px"></div>
 
                     </div>
                     <!-- /.card-body -->
@@ -455,7 +456,7 @@
 
                 let formUnsigned = new FormData();
                 formUnsigned.append('calendario_nombre_evento', val);
-                formUnsigned.append('calendario_descripcion_evento', val);
+                formUnsigned.append('calendario_descripcion_evento', valtext);
                 formUnsigned.append('calendario_color_evento', currColor);
                 formUnsigned.append('type', 'add');
                 $.ajax({
