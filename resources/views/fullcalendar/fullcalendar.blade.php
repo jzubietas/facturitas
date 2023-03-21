@@ -145,6 +145,27 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                            </div>
+                            <div class="card-body">
+                            </div>
+                            <div class="card-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
     </div><!-- /.container-fluid -->
 @stop
 
@@ -324,6 +345,7 @@
                     }
 
                     let titulo=$(contenerEliminar).data("titulo");
+                    let descripcion=$(contenerEliminar).data("descripcion");
                     let start_=info.dateStr;
                     let end_=info.dateStr;
                     console.log(start_);
@@ -348,7 +370,7 @@
                             //aqui registro el evento temporal a evento oficial
                             var formData = new FormData();
                             formData.append('calendario_nombre_evento', titulo);
-                            formData.append('descripcion', 'descripcion');
+                            formData.append('calendario_descripcion_evento_nuevo', descripcion);
                             formData.append('calendario_start_evento', start_);
                             formData.append('calendario_color_evento', color);
                             formData.append('colorTexto', color);
