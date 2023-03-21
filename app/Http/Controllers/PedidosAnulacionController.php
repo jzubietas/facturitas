@@ -116,6 +116,7 @@ class PedidosAnulacionController extends Controller
                     'dp.saldo as diferencia',
                     'direccion_grupos.motorizado_status',
                     'pea.tipo as tipoanulacion',
+                    'pea.tipo as itipoanulacion',
                     'pea.total_anular',
                     'pea.created_at as fechacreaanula',
                     'pea.id as idanulacion',
@@ -488,7 +489,7 @@ class PedidosAnulacionController extends Controller
                 'estado_aprueba_administrador' => 1,
             ]);
         }
-        if ($pedidosanulacion->tipo!='F'){
+        /*if ($pedidosanulacion->tipo!='F'){*/
             if ($contpedidos==1){
                 $pedidos=$pedidos->clone()->first();
                 $pedidos->update([
@@ -505,7 +506,7 @@ class PedidosAnulacionController extends Controller
                     'pendiente_anulacion' => 1,
                 ]);
             }
-        }
+        /*}*/
         return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulacion))?$pedidosanulacion:0) ,'IDsFiles: ' => $idsfiles,'pedidos: '  => $pedidos,'contpedanulacions'=>$contpedanulacions,'$contpedidos'=>$contpedidos]);
     }
 }

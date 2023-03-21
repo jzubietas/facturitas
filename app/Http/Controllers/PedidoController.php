@@ -176,9 +176,11 @@ class PedidoController extends Controller
                     'dp.saldo as diferencia',
                     'direccion_grupos.motorizado_status',
                     DB::raw("(case when (select count(1) from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
-                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0)=1 then 'Pend. Anulacion Parcial' else '' end) as mensajeAnulacion"),
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0 and pea.tipo='F')=1 then 'Pend. Anulacion Parcial' else '' end) as mensajeAnulacion"),
                     DB::raw("(case when (select count(1) from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
-                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=1)=1 then 'Anulado Parcial' else '' end) as msjConfirmaAnulacion"),
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=1 and pea.tipo='F')=1 then 'Anulado Parcial' else '' end) as msjConfirmaAnulacion"),
+                    DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' limit 1) as vtipoAnulacion"),
                 ]
             );
 
@@ -263,11 +265,21 @@ class PedidoController extends Controller
 
                 }
                 if ($pedido->pendiente_anulacion == '1') {
-                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
+                    if (strlen(rtrim(ltrim($pedido->mensajeAnulacion)))>0  ) {
+                        $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.$pedido->mensajeAnulacion.'</span>';
+                    }
+                    if (strlen(rtrim(ltrim($pedido->msjConfirmaAnulacion)))>0  ) {
+                        $badge_estado .= '<span class="badge badge-warning p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.$pedido->msjConfirmaAnulacion.'</span>';
+                    }
+                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION. '</span>';
                     return $badge_estado;
                 }
                 if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
-                    return '<span class="badge badge-danger">ANULADO</span>';
+                    if ($pedido->estado == '0' && $pedido->condicion_code != '5'){
+                        return '<span class="badge badge-danger">ANULADO</span>';
+                    }else if($pedido->condicion_code == '5' ){
+                        return '<span class="badge badge-danger">'.Pedido::ANULADO_PARCIAL .'</span>';
+                    }
                 }
                 if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #cd11af; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; ">Observado</span>';
@@ -3276,31 +3288,67 @@ class PedidoController extends Controller
             ]);
         }
         setting()->save();
+        $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id);
+        $contpedanulacions=$pedidosanulacion->count();
+        $validar="";
+        if ($contpedanulacions==1){
+            $pedidosanulacion=$pedidosanulacion->first();
+            if ($pedidosanulacion->tipo=='C'){
+                $validar=$validar." CORRE ";
+                /*$pedido->update([
+                    'condicion' => 'ANULADO',
+                    'condicion_code' => Pedido::ANULADO_INT,
+                    'user_anulacion_id' => Auth::user()->id,
+                    'fecha_anulacion_confirm' => now(),
+                    'estado' => '0',
+                    'pendiente_anulacion' => '0',
+                ]);
+                $pedido->detallePedidos()->update([
+                    'estado' => '0'
+                ]);*/
+            }else if ($pedidosanulacion->tipo=='F'){
+                $pedidosdetanul=Pedido::where('id',$request->pedido_id)->first();
 
-        $pedido->update([
-            'condicion' => 'ANULADO',
-            'condicion_code' => Pedido::ANULADO_INT,
-            'user_anulacion_id' => Auth::user()->id,
-            'fecha_anulacion_confirm' => now(),
-            'estado' => '0',
-            'pendiente_anulacion' => '0',
-        ]);
+                $validar=$validar." FORESDT ";
+                $pedidosdetanul->update([
+                    'condicion' => Pedido::ANULADO_PARCIAL,
+                    'condicion_code' => Pedido::ANULADO_PARCIAL_INT,
+                    'user_anulacion_id' => Auth::user()->id,
+                    'fecha_anulacion_confirm' => now(),
+                    'estado' => '0',
+                    'pendiente_anulacion' => '0',
+                ]);
+                $pedido->detallePedidos()->update([
+                    'estado' => '0'
+                ]);
+            }
+        }else{
+            $validar=$validar." CHICHICO";
+           /* $pedido->update([
+                'condicion' => 'ANULADO',
+                'condicion_code' => Pedido::ANULADO_INT,
+                'user_anulacion_id' => Auth::user()->id,
+                'fecha_anulacion_confirm' => now(),
+                'estado' => '0',
+                'pendiente_anulacion' => '0',
+            ]);
+            $pedido->detallePedidos()->update([
+                'estado' => '0'
+            ]);*/
+        }
 
-        $pedido->detallePedidos()->update([
-            'estado' => '0'
-        ]);
 
-        $correct = Correction::where('code', 'like', '' . $pedido->codigo . '-C%')->get();
+        /*$correct = Correction::where('code', 'like', '' . $pedido->codigo . '-C%')->get();
         foreach ($correct as $correction) {
             $correction->update(
                 ['estado' => 0]
             );
         }
 
-        event(new PedidoAnulledEvent($pedido));
+        event(new PedidoAnulledEvent($pedido));*/
 
         return response()->json([
-            "success" => 1
+            "success" => 1,"contpedanulacions"=>$contpedanulacions,"validar"=>$validar
         ]);
     }
 

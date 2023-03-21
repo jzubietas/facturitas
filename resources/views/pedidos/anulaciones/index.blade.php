@@ -112,15 +112,13 @@
                 serverSide: true,
                 searching: true,
                 //stateSave: true,
-                order: [[4, "desc"]],
+                order: [[6, "desc"]],
                 ajax: "{{ route('pedidosanulacionestabla') }}",
                 createdRow: function (row, data, dataIndex) {
-                    if (data["estado"] == "1") {
-                        if (data.pendiente_anulacion == 1) {
-                            $('td', row).css('background', '#E57373').css('font-weight', 'bold');
-                        }
-                    } else {
-                        $(row).addClass('#E57373');
+                    if (data.itipoanulacion=='C') {
+                        $('td', row).css('background', '#E57373').css('font-weight', 'bold');
+                    }else if (data.itipoanulacion=='F'){
+                        $('td', row).css('background', 'RosyBrown').css('font-weight', 'bold');
                     }
                 },
                 rowCallback: function (row, data, index) {

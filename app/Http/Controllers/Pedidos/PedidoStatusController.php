@@ -632,7 +632,14 @@ $banca"
                     DB::raw(" ( select ia2.id from imagen_atencions ia2 inner join pedidos pedidoi2 on pedidoi2.id=ia2.pedido_id and pedidoi2.id=pedidos.id where ia2.estado=1 limit 1) as id_imagen_atenciones "),
                     /*'ia.adjunto',
                     'dp.tipo_banca as id_imagen_atenciones',*/
-                    DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
+                    DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes "),
+                    DB::raw("(case when (select count(1) from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0 and pea.tipo='F')=1 then 'Pend. Anulacion Parcial' else '' end) as mensajeAnulacion"),
+                    DB::raw("(case when (select count(1) from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=1 and pea.tipo='F')=1 then 'Anulado Parcial' else '' end) as msjConfirmaAnulacion"),
+                    DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' limit 1) as vtipoAnulacion"),
+                    DB::raw("(select  pea.total_anular from pedidos_anulacions as pea where pea.pedido_id= pedidos.id  limit 1) as dMontoAnular"),
                 ])
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -678,10 +685,23 @@ $banca"
                     $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
                     return $buton;
                 })
+                ->addColumn('condicion_code', function ($pedido) {
+                    $badge_estado = '';
+                    if ($pedido->pendiente_anulacion == '1') {
+                        if (strlen(rtrim(ltrim($pedido->mensajeAnulacion)))>0  ) {
+                            $badge_estado .= '<span class="badge bg-danger p-8" >'.$pedido->mensajeAnulacion.'</span>';
+                        }
+                        if (strlen(rtrim(ltrim($pedido->msjConfirmaAnulacion)))>0  ) {
+                            $badge_estado .= '<span class="badge badge-warning p-8" >'.$pedido->msjConfirmaAnulacion.'</span>';
+                        }
+                        $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION. '</span>';
+                        return $badge_estado;
+                    }
+                })
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
                     if ($pedido->pendiente_anulacion == 1) {
-                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize" >EMITIR N/C</button>';
+                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-tatal_pedido="' . $pedido->total . '" data-tatal_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize" >EMITIR N/C</button>';
                     }
                     $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item py-2 btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                     $btn .= ' <button class="btn btn-warning btn-sm"
@@ -690,10 +710,9 @@ $banca"
                     data-method="POST">
                         Rechazar
                     </button>';
-
                     return $btn;
                 })
-                ->rawColumns(['adjunto','action'])
+                ->rawColumns(['adjunto','condicion_code','action'])
                 ->toJson();
         }
 

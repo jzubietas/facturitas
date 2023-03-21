@@ -72,7 +72,11 @@
 
                 },
                 rowCallback: function (row, data, index) {
-                    $('td', row).css('background', 'red').css('font-weight', 'bold');
+                    if (  data.vtipoAnulacion!='F') {
+                        $('td', row).css('background', 'red').css('font-weight', 'bold');
+                    }else{
+                        $('td', row).css('background', 'RosyBrown').css('font-weight', 'bold');
+                    }
                     $("[data-toggle=jqconfirm]", row).click(function () {
                         const action = $(this).data('target')
                         const method = $(this).data('method')
@@ -167,12 +171,7 @@
                     {
                         data: 'condicion_code',
                         name: 'condicion_code',
-                        render: function (data, type, row, meta) {
-                            if (row.pendiente_anulacion == 1) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
-                            }
-                            return ''
-                        }
+                        sWidth: '10%',
                     },
                     {
                         data: 'action',
@@ -212,6 +211,13 @@
                 $("#anular_pedido_id").html(button.data('pedido_id_code'))
                 $("#motivo_anulacion_text").html(button.data('pedido_motivo'))
                 $("#anular_pedido_id").val(button.data('pedido_id'))
+                $("#montot_anulacion_text").html(button.data('tatal_pedido'))
+                $("#montoa_anulacion_text").html(button.data('tatal_anular'))
+                var myString = button.data('tatal_anular');
+                var stringLength = myString.length;
+                if (stringLength<1){
+                    $(".lblMontoAnular, .txtMontoAnular").hide();
+                }
             })
 
             $('#modal_imagen_atenciones').on('show.bs.modal', function (event) {
@@ -259,6 +265,7 @@
                     processData: false,
                     contentType: false,
                 }).done(function (data) {
+                    console.log('CONFIRMA N-C = ',data)
                     if (data.success) {
                         Swal.fire(
                             'Mensaje',
