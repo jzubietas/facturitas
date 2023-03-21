@@ -9,6 +9,11 @@ use Carbon\Carbon;
 
 class FullCalenderController extends Controller
 {
+    public function indexcalendario(Request $request)
+    {
+        return view('fullcalendar.index');
+    }
+
     public function index(Request $request)
     {
         $eventss = [];
@@ -30,7 +35,7 @@ class FullCalenderController extends Controller
             ];
         }
 
-        $all_eventsunsigned = EventsUnsigned::all();
+        $all_eventsunsigned = EventsUnsigned::orderBy('id','desc')->get();
         foreach ($all_eventsunsigned as $eventsunsigned)
         {
             $uneventss[] = [
@@ -122,7 +127,6 @@ class FullCalenderController extends Controller
                         $difference = ($inidia->diff($findia)->days < 1)
                             ? 'today'
                             : $inidia->diffForHumans($findia);
-                        //dd($difference);
                         for ($i = 0; $i <= $difference; $i++) {
                             //llevar al dia
                             $fecha = $inidia->clone()->addDays($i)->format('Y-m-d');
@@ -142,26 +146,27 @@ class FullCalenderController extends Controller
                         }
                         break;
                     case 'ini_mes':
-                        $date = \Carbon\Carbon::parse($request->calendario_start_evento);
-                        //$date=Carbon::now();
-                        if (!$date->day == 1) {
-                            $date->addMonth();
+                        $startDate = Carbon::parse($request->calendario_start_evento);
+                        if (!$startDate->day == 1) {
+                            $startDate->addMonth();
                         }
-                        $firstDayOfNextMonth = $date->firstOfMonth();
-                        $monthsRemaining = 12 - $date->month + 1;
-                        for ($i = 1; $i < $monthsRemaining; $i++) {
-                            //meses restantes
-                            $fecha = $firstDayOfNextMonth->clone()->addMonths($i)->firstOfMonth()->format('Y-m-d');
-                            $event = Event::create([
-                                'title' => $request->calendario_nombre_evento,
-                                'description' => $request->calendario_descripcion_evento_nuevo,
-                                'start' => $fecha,
-                                'end' => $fecha,
+                        $endDate = $startDate->clone()->addYear()->startOfYear()->subDay();
+                        //$monthsRemaining = 12 - $startDate->month + 1;
+                        $firstDayOfNextMonth = $startDate->clone()->firstOfMonth();
+
+                        for ($date = $firstDayOfNextMonth; $date->lte($endDate); $date->addMonthsNoOverflow())
+                        {
+                            $fullmes=$date->clone()->firstOfMonth();
+                            Event::create([
+                                'title' => $request->get('calendario_nombre_evento'),
+                                'description' => $request->get('calendario_descripcion_evento_nuevo'),
+                                'start' => $fullmes->startOfDay(),
+                                'end' => $fullmes->endOfDay(),
                                 'color' => $colorFondo,
                                 'colorEvento' => $color,
                                 'fondoEvento' => $colorFondo,
-                                'tipo' => $request->calendario_tipo_evento,
-                                'frecuencia' => $request->calendario_frecuencia_evento,
+                                'tipo' => $request->get('calendario_tipo_evento'),
+                                'frecuencia' => $request->get('calendario_frecuencia_evento'),
                             ]);
                         }
                         break;
@@ -169,30 +174,30 @@ class FullCalenderController extends Controller
                         $startDate = Carbon::parse($request->calendario_start_evento);
                         if (!$startDate->isLastOfMonth()) {
                             //$date->addMonth();
-                            $startDate->lastOfMonth();
+                            //$startDate=$startDate->clone()->lastOfMonth();
                         }
-                        $lastDayOfNextMonth = $startDate->lastOfMonth();
-                        $monthsRemaining = 12 - $startDate->month + 1;
                         $endDate = $startDate->clone()->addYear()->startOfYear()->subDay();
+                        $lastDayOfNextMonth = $startDate->clone()->lastOfMonth();
 
-                        for ($date = $startDate; $date->lte($endDate); $date->addMonth()) {
-                            //echo "El último día de " . $date->format('F Y') . " es " . $date->endOfMonth()->format('Y-m-d') . "\n";
-
-                            $event = Event::create([
-                                'title' => $request->calendario_nombre_evento,
-                                'description' => $request->calendario_descripcion_evento_nuevo,
-                                'start' => $date->endOfMonth()->format('Y-m-d'),
-                                'end' => $date->endOfMonth()->format('Y-m-d'),
+                        for ($date = $lastDayOfNextMonth; $date->lte($endDate); $date->addMonthsNoOverflow())
+                        {
+                            $fullmes=$date->clone()->lastOfMonth();
+                            Event::create([
+                                'title' => $request->get('calendario_nombre_evento'),
+                                'description' => $request->get('calendario_descripcion_evento_nuevo'),
+                                'start' => $fullmes->startOfDay(),
+                                'end' => $fullmes->endOfDay(),
                                 'color' => $colorFondo,
                                 'colorEvento' => $color,
                                 'fondoEvento' => $colorFondo,
-                                'tipo' => $request->calendario_tipo_evento,
-                                'frecuencia' => $request->calendario_frecuencia_evento,
+                                'tipo' => $request->get('calendario_tipo_evento'),
+                                'frecuencia' => $request->get('calendario_frecuencia_evento'),
                             ]);
                         }
                         break;
                     //return response()->json($event);
                 }
+                break;
             case 'modificar':
                 $event = Event::find($request->id)->update([
                     'title' => $request->title,
@@ -259,7 +264,7 @@ class FullCalenderController extends Controller
                 # code...
                 break;
         }
-        return 0;
+        //return 0;
     }
 
 
