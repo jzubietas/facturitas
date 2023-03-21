@@ -811,6 +811,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
         Route::get('pedidos.index', [PedidoController::class, 'index']);
     }); */
 
+    Route::any('agenda_token', [FullCalenderController::class, 'token'])->name('agenda_token');
+
     Route::any('fullcalendarindex', [FullCalenderController::class, 'indexcalendario'])->name('fullcalendarindex');
     Route::any('fullcalendar', [FullCalenderController::class, 'index'])->name('fullcalendar');
     Route::any('fullcalendarAjax', [FullCalenderController::class, 'ajax'])->name('fullcalendarAjax');

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Pedidos - Bandeja de pedidos')
+@section('title', 'Agenda')
 
 @push('css')
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons"

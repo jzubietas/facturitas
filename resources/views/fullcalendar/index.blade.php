@@ -71,27 +71,61 @@
     <script>
         $(document).ready(function () {
 
-            //$(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
-            $(document).ready(function() {
-                $("#show_hide_password a").on('click', function(event) {
-                    event.preventDefault();
-                    if($('#show_hide_password input').attr("type") == "text"){
-                        $('#show_hide_password input').attr('type', 'password');
-                        $('#show_hide_password i').addClass( "fa-eye-slash" );
-                        $('#show_hide_password i').removeClass( "fa-eye" );
-                    }else if($('#show_hide_password input').attr("type") == "password"){
-                        $('#show_hide_password input').attr('type', 'text');
-                        $('#show_hide_password i').removeClass( "fa-eye-slash" );
-                        $('#show_hide_password i').addClass( "fa-eye" );
+            $("#show_hide_password a").on('click', function(event) {
+                event.preventDefault();
+                if($('#show_hide_password input').attr("type") == "text"){
+                    $('#show_hide_password input').attr('type', 'password');
+                    $('#show_hide_password i').addClass( "fa-eye-slash" );
+                    $('#show_hide_password i').removeClass( "fa-eye" );
+                }else if($('#show_hide_password input').attr("type") == "password"){
+                    $('#show_hide_password input').attr('type', 'text');
+                    $('#show_hide_password i').removeClass( "fa-eye-slash" );
+                    $('#show_hide_password i').addClass( "fa-eye" );
+                }
+            });
+
+            $(document).on('click','form button.btn-primary',function(){
+                //validar clave
+
+                let formData = new FormData();
+                let clave=$('form input[type="password"]').val();
+                if(clave=='')
+                {
+                    Swal.fire('Error', 'Debe ingresar una contraseña.', 'error');
+                    return false;
+                }
+                formData.append('clave',clave);
+                formData.append('type', 'load');
+                $.ajax({
+                    url: "{{ route('agenda_token') }}",
+                    type: 'POST',
+                    dataType:'json',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        if(res=='1')
+                        {
+                            window.location = "/fullcalendar";
+                        }
+                        else
+                        {
+                            Swal.fire('Error', 'Debe ingresar una contraseña correcta.', 'error');
+                        }
+
+
                     }
                 });
-            });
+
+
+            })
+
         });
     </script>
 @endsection

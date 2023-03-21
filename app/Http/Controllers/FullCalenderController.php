@@ -14,6 +14,22 @@ class FullCalenderController extends Controller
         return view('fullcalendar.index');
     }
 
+    public function token(Request $request)
+    {
+        if(!$request->clave)
+        {
+            return 0;
+        }else{
+            $clave=$request->clave;
+            if($clave=='123456789')
+            {
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+    }
+
     public function index(Request $request)
     {
         $eventss = [];
