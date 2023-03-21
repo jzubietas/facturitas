@@ -58,13 +58,11 @@
                     {{--Draggable Events--}}
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Eventos para asignar</h4>
+                            <h4 class="card-title">Notas para asignar</h4>
                         </div>
                         <div class="card-body">
-                            <!-- the events -->
-                            <h4 class="text-center">Eventos predefinidos</h4>
                             <div class="row">
-                                <div id="external-events" style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em" class="col-md-12">
+                                <div id="external-events" style="margin-bottom:1em; height: 350px; overflow: auto;padding:1em" class="col-md-12">
                                     @foreach($uneventss as $eventunsigned)
                                         <div id="unsigned_{{ $eventunsigned["id"] }}"
                                              class="external-event btn btn-md d-flex justify-content-between rounded {{ $eventunsigned["colorfondo"] }}" data-titulo="{{ $eventunsigned["titulo"] }}"
@@ -75,6 +73,7 @@
                                              data-codigo="{{ $eventunsigned["id"] }}"
                                              style="border-color:{{ $eventunsigned["colorfondo"] }};color:{{ $eventunsigned["colortexto"] }};background-color:{{ $eventunsigned["colorfondo"] }};">
                                             <span clas="">{{ $eventunsigned["titulo"] }}</span>
+                                            <span clas="">{{ $eventunsigned["descripcion"] }}</span>
                                             <button type="button" class="btn delete-unsigned-event btn btn-light btn-sm">
                                                 <i class="fa fa-close text-danger"></i>
                                             </button>
@@ -99,21 +98,33 @@
                                     <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
                                     <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
                                     <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                                    <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
                                 </ul>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="new-event"></label>
+                                        <input id="new-event" type="text" class="form-control" placeholder="Nombre de tarea">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="text-new-event" name="text-new-event"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button id="add-new-event" type="button" class="btn btn-primary float-right">Agregar</button>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /btn-group -->
                             <div class="input-group">
-                                <label for="new-event"></label>
-                                <input id="new-event" type="text" class="form-control" placeholder="Nombre de tarea">
-
                                 <div class="input-group-append">
-                                    <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
                                 </div>
                                 <!-- /btn-group -->
                             </div>
                             <!-- /input-group -->
-
                         </div>
                     </div>
 
@@ -124,7 +135,7 @@
             <div class="col-md-9">
                 <div class="card card-primary">
                     <div class="card-body p-0">
-                        <div id="calendario1" style="width: 100%;border: 1px solid #000;padding:2px"></div>
+                        <div id="calendario1" style="width: 100%;padding:2px"></div>
 
                     </div>
                     <!-- /.card-body -->
@@ -302,6 +313,16 @@
                     let contenerEliminar=info.draggedEl;
                     let eventEliminar = $(contenerEliminar).attr('id').split('_')[1];
                     let color=$(contenerEliminar).data("colorfondo");
+                    console.log(color);
+                    switch(color)
+                    {
+                        case 'bg-primary':color='rgb(0, 86, 179)';break;
+                        case 'bg-warning':color='rgb(186, 139, 0)';break;
+                        case 'bg-success':color='rgb(25, 105, 44)';break;
+                        case 'bg-danger':color='rgb(167, 29, 42)';break;
+                        default:color='rgb(0, 86, 179)';break;
+                    }
+
                     let titulo=$(contenerEliminar).data("titulo");
                     let start_=info.dateStr;
                     let end_=info.dateStr;
@@ -333,6 +354,8 @@
                             formData.append('colorTexto', color);
                             formData.append('colorBackground', color);
                             formData.append('calendario_end_evento', end_);
+                            formData.append('calendario_frecuencia_evento', 'una_vez');
+                            formData.append('calendario_tipo_evento', 'OTROS');
 
                             formData.append('type', 'add');
                             $.ajax({
@@ -343,30 +366,12 @@
                                 contentType: false,
                                 success: function (data) {
                                     agregar_evento_calendario.hide();
-                                    displayMessage("Evento creado.");
+                                    displayMessage("Nota creada.");
                                     calendario1.refetchEvents();
                                 }
                             });
                         }
                     });
-                    //update id a 0
-
-                    //calendario1.refetchEvents();
-                    /*limpiarFormulario();
-                    $('#ColorFondo').val(info.draggedEl.dataset.colorfondo);
-                    $('#ColorTexto').val(info.draggedEl.dataset.colortexto);
-                    $('#Titulo').val(info.draggedEl.dataset.titulo);
-                    let fechaHora = info.dateStr.split("T");
-                    $('#FechaInicio').val(fechaHora[0]);
-                    $('#FechaFin').val(fechaHora[0]);
-                    if (info.allDay) { //verdadero si el calendario esta en vista de mes
-                        $('#HoraInicio').val(info.draggedEl.dataset.horainicio);
-                        $('#HoraFin').val(info.draggedEl.dataset.horafin);
-                    } else {
-                        $('#HoraInicio').val(fechaHora[1].substring(0, 5));
-                        $('#HoraFin').val(moment(fechaHora[1].substring(0, 5)).add(1, 'hours'));
-                    }
-                    */
                 }
             });
 
@@ -419,6 +424,7 @@
             $('#add-new-event').click(function (e) {
                 e.preventDefault()
                 let val = $('#new-event').val()
+                let valtext = $('#text-new-event').val()
                 if (val.length === 0) {
                     return
                 }
@@ -432,6 +438,7 @@
                 }).addClass('external-event btn btn-md rounded d-flex justify-content-between ')
 
                 event.html('<span class="">'+val+'</span>'+
+                    '<span>'+valtext+'</span>'+
                     '<button type="button" class="btn delete-unsigned-event btn btn-light btn-sm">'+
                     '<i class="fa fa-close text-danger"></i>'+
                     '</button>'
@@ -439,16 +446,17 @@
 
                 switch(currColor)
                 {
-                    case 'rgb(0, 86, 179)':currColor='bg-info';break;
+                    case 'rgb(0, 86, 179)':currColor='bg-primary';break;
                     case 'rgb(186, 139, 0)':currColor='bg-warning';break;
                     case 'rgb(25, 105, 44)':currColor='bg-success';break;
                     case 'rgb(167, 29, 42)':currColor='bg-danger';break;
-                    case 'rgb(0, 123, 255)':currColor='bg-grey';break;
+                    //case 'rgb(0, 123, 255)':currColor='bg-grey';break;
                     default:currColor='bg-info';break;
                 }
 
                 let formUnsigned = new FormData();
                 formUnsigned.append('calendario_nombre_evento', val);
+                formUnsigned.append('calendario_descripcion_evento', valtext);
                 formUnsigned.append('calendario_color_evento', currColor);
                 formUnsigned.append('type', 'add');
                 $.ajax({
@@ -461,6 +469,7 @@
                         event.addClass(data.color);
                         event.attr('id','unsigned_'+data.id)
                         event.data('titulo',data.title)
+                        event.data('descripcion',data.description)
                         event.data('horainicio',data.created_at)
                         event.data('horafin',data.updated_at)
                         event.data('colorfondo',data.color)
@@ -474,6 +483,7 @@
                 ini_events(event);
 
                 $('#new-event').val('')
+                $('#text-new-event').val('')
                 //window.location.reload();
             })
 
@@ -492,7 +502,7 @@
                     contentType: false,
                     success: function (data) {
                         agregar_evento_calendario.hide();
-                        displayMessage("Evento creadp.");
+                        displayMessage("Nota creada.");
                         calendario1.refetchEvents();
                     }
                 });

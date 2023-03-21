@@ -41,6 +41,7 @@ class FullCalenderController extends Controller
             $uneventss[] = [
                 'id'=>$eventsunsigned->id,
                 'titulo' => $eventsunsigned->title,
+                'descripcion' => $eventsunsigned->description,
                 'horainicio' => $eventsunsigned->created_at,
                 'horafin' => $eventsunsigned->updated_at,
                 'color'=>$eventsunsigned->color,
@@ -101,8 +102,14 @@ class FullCalenderController extends Controller
                 return response()->json($event);
             case 'add':
                 $color='';$colorFondo='';
-                if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='white';}
-                else if($request->tipo=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
+                if($request->colorBackground!='')
+                {
+                    $colorFondo=$request->colorBackground;$color='white';
+                }else{
+                    if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='white';}
+                    else if($request->calendario_tipo_evento=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
+                }
+
 
                 //analisis frecuencia
             $frecuencia_recorrido=null;
@@ -245,6 +252,7 @@ class FullCalenderController extends Controller
             case 'add':
                 $event = EventsUnsigned::create([
                     'title' => $request->calendario_nombre_evento,
+                    'description'=>$request->calendario_descripcion_evento,
                     //'start' => $request->calendario_start_evento,
                     //'end' => $request->calendario_start_evento,
                     'color' => $request->calendario_color_evento,
