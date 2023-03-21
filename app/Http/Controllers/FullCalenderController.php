@@ -164,7 +164,6 @@ class FullCalenderController extends Controller
                                 'frecuencia' => $request->get('calendario_frecuencia_evento'),
                             ]);
                         }
-
                         break;
                     case 'fin_mes':
                         $startDate = Carbon::parse($request->calendario_start_evento);
