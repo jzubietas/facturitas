@@ -99,7 +99,6 @@
                                     <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
                                     <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
                                     <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                                    <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
                                 </ul>
                             </div>
                             <!-- /btn-group -->
@@ -302,6 +301,16 @@
                     let contenerEliminar=info.draggedEl;
                     let eventEliminar = $(contenerEliminar).attr('id').split('_')[1];
                     let color=$(contenerEliminar).data("colorfondo");
+                    console.log(color);
+                    switch(color)
+                    {
+                        case 'bg-primary':color='blue';break;
+                        case 'bg-warning':color='yellow';break;
+                        case 'bg-success':color='green';break;
+                        case 'bg-danger':color='red';break;
+                        default:color='blue';break;
+                    }
+
                     let titulo=$(contenerEliminar).data("titulo");
                     let start_=info.dateStr;
                     let end_=info.dateStr;
@@ -349,24 +358,6 @@
                             });
                         }
                     });
-                    //update id a 0
-
-                    //calendario1.refetchEvents();
-                    /*limpiarFormulario();
-                    $('#ColorFondo').val(info.draggedEl.dataset.colorfondo);
-                    $('#ColorTexto').val(info.draggedEl.dataset.colortexto);
-                    $('#Titulo').val(info.draggedEl.dataset.titulo);
-                    let fechaHora = info.dateStr.split("T");
-                    $('#FechaInicio').val(fechaHora[0]);
-                    $('#FechaFin').val(fechaHora[0]);
-                    if (info.allDay) { //verdadero si el calendario esta en vista de mes
-                        $('#HoraInicio').val(info.draggedEl.dataset.horainicio);
-                        $('#HoraFin').val(info.draggedEl.dataset.horafin);
-                    } else {
-                        $('#HoraInicio').val(fechaHora[1].substring(0, 5));
-                        $('#HoraFin').val(moment(fechaHora[1].substring(0, 5)).add(1, 'hours'));
-                    }
-                    */
                 }
             });
 
@@ -439,11 +430,11 @@
 
                 switch(currColor)
                 {
-                    case 'rgb(0, 86, 179)':currColor='bg-info';break;
+                    case 'rgb(0, 86, 179)':currColor='bg-primary';break;
                     case 'rgb(186, 139, 0)':currColor='bg-warning';break;
                     case 'rgb(25, 105, 44)':currColor='bg-success';break;
                     case 'rgb(167, 29, 42)':currColor='bg-danger';break;
-                    case 'rgb(0, 123, 255)':currColor='bg-grey';break;
+                    //case 'rgb(0, 123, 255)':currColor='bg-grey';break;
                     default:currColor='bg-info';break;
                 }
 
