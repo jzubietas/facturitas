@@ -61,10 +61,8 @@
                             <h4 class="card-title">Notas para asignar</h4>
                         </div>
                         <div class="card-body">
-                            <!-- the events -->
-                            <h4 class="text-center">Notas predefinidas</h4>
                             <div class="row">
-                                <div id="external-events" style="margin-bottom:1em; height: 350px; border: 1px solid #000; overflow: auto;padding:1em" class="col-md-12">
+                                <div id="external-events" style="margin-bottom:1em; height: 350px; overflow: auto;padding:1em" class="col-md-12">
                                     @foreach($uneventss as $eventunsigned)
                                         <div id="unsigned_{{ $eventunsigned["id"] }}"
                                              class="external-event btn btn-md d-flex justify-content-between rounded {{ $eventunsigned["colorfondo"] }}" data-titulo="{{ $eventunsigned["titulo"] }}"
@@ -457,6 +455,7 @@
 
                 let formUnsigned = new FormData();
                 formUnsigned.append('calendario_nombre_evento', val);
+                formUnsigned.append('calendario_descripcion_evento', val);
                 formUnsigned.append('calendario_color_evento', currColor);
                 formUnsigned.append('type', 'add');
                 $.ajax({
@@ -469,6 +468,7 @@
                         event.addClass(data.color);
                         event.attr('id','unsigned_'+data.id)
                         event.data('titulo',data.title)
+                        event.data('descripcion',data.description)
                         event.data('horainicio',data.created_at)
                         event.data('horafin',data.updated_at)
                         event.data('colorfondo',data.color)
@@ -482,6 +482,7 @@
                 ini_events(event);
 
                 $('#new-event').val('')
+                $('#text-new-event').val('')
                 //window.location.reload();
             })
 
