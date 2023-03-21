@@ -101,18 +101,31 @@
                                     <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
                                 </ul>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="new-event"></label>
+                                        <input id="new-event" type="text" class="form-control" placeholder="Nombre de tarea">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="text-new-event" name="text-new-event"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button id="add-new-event" type="button" class="btn btn-primary float-right">Agregar</button>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- /btn-group -->
                             <div class="input-group">
-                                <label for="new-event"></label>
-                                <input id="new-event" type="text" class="form-control" placeholder="Nombre de tarea">
-
                                 <div class="input-group-append">
-                                    <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
                                 </div>
                                 <!-- /btn-group -->
                             </div>
                             <!-- /input-group -->
-
                         </div>
                     </div>
 
@@ -412,6 +425,7 @@
             $('#add-new-event').click(function (e) {
                 e.preventDefault()
                 let val = $('#new-event').val()
+                let valtext = $('#text-new-event').val()
                 if (val.length === 0) {
                     return
                 }
@@ -425,6 +439,7 @@
                 }).addClass('external-event btn btn-md rounded d-flex justify-content-between ')
 
                 event.html('<span class="">'+val+'</span>'+
+                    '<span>'+valtext+'</span>'+
                     '<button type="button" class="btn delete-unsigned-event btn btn-light btn-sm">'+
                     '<i class="fa fa-close text-danger"></i>'+
                     '</button>'
