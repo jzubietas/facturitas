@@ -28,7 +28,7 @@
 
                     <div class="container-fluid">
 
-                        <form id="frm_editar_evento_calendario" name="frm_editar_evento_calendario">
+                        <form id="frm_editar_evento_calendario" name="frm_editar_evento_calendario" enctype="multipart/form-data">
                             <input type="hidden" id="editar_evento" name="editar_evento">
                             <div class="row">
                                 <div class="col-md-12">
@@ -48,6 +48,10 @@
                                             <textarea class="form-control border border-0" id="calendario_descripcion_evento_editar"
                                                      name="calendario_descripcion_evento_editar" rows="3" readonly></textarea>
                                         </div>
+                                    </div>
+                                    <div class="form-group col lg-12">
+                                        {!! Form::label('attachments', 'Adjuntar Archivos') !!}
+                                        {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','id'=>'inputFilesEvent','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-12 text-center">

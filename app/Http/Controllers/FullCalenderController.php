@@ -98,12 +98,23 @@ class FullCalenderController extends Controller
                 }
                 return response()->json($events);
                 break;
-            case 'updatetitle':
+            case 'modificar':
                 $event=Event::where('id',$request->editar_evento)->first();
                 $event->update([
                     'title'=>$request->calendario_nombre_evento_editar,
                     'description'=>$request->calendario_descripcion_evento_editar,
                 ]);
+                $files = $request->file('inputFilesEvent');
+                if (isset($files)){
+                    foreach($files as $file){
+                        $file->store('agenda', 'pstorage');
+                        $fileEvent =Event::where('id',$request->editar_evento)->first();
+                        $fileEvent->update([
+                            'attach'=> $file->getClientOriginalName(),
+                        ]);
+                    }
+                }
+
                 return response()->json($event);
                 break;
             case 'adddrop':
@@ -143,6 +154,17 @@ class FullCalenderController extends Controller
                             'tipo' => $request->calendario_tipo_evento,
                             'frecuencia' => $request->calendario_frecuencia_evento,
                         ]);
+                        $files = $request->file('inputFilesEvent');
+                        if (isset($files) ){
+                            foreach($files as $file){
+                                $file->store('agenda', 'pstorage');
+                                $fileEvent =Event::where('id',$event->id)->first();
+                                $fileEvent->update([
+                                    'attach'=> $file->getClientOriginalName(),
+                                ]);
+                            }
+                        }
+
                         break;
                     case 'diario':
                         $inidia = Carbon::parse($request->calendario_start_evento)->clone()->startOfDay();
@@ -167,6 +189,17 @@ class FullCalenderController extends Controller
                             ]);
 
                         }
+                        $files = $request->file('inputFilesEvent');
+
+                        if (isset($files) ){
+                            foreach($files as $file){
+                                $file->store('agenda', 'pstorage');
+                                $fileEvent =Event::where('id',$event->id)->first();
+                                $fileEvent->update([
+                                    'attach'=> $file->getClientOriginalName(),
+                                ]);
+                            }
+                        }
                         break;
                     case 'ini_mes':
                         $startDate = Carbon::parse($request->calendario_start_evento);
@@ -180,7 +213,7 @@ class FullCalenderController extends Controller
                         for ($date = $firstDayOfNextMonth; $date->lte($endDate); $date->addMonthsNoOverflow())
                         {
                             $fullmes=$date->clone()->firstOfMonth();
-                            Event::create([
+                            $event =Event::create([
                                 'title' => $request->get('calendario_nombre_evento'),
                                 'description' => $request->get('calendario_descripcion_evento_nuevo'),
                                 'start' => $fullmes->startOfDay(),
@@ -191,6 +224,16 @@ class FullCalenderController extends Controller
                                 'tipo' => $request->get('calendario_tipo_evento'),
                                 'frecuencia' => $request->get('calendario_frecuencia_evento'),
                             ]);
+                        }
+                        $files = $request->file('inputFilesEvent');
+                        if (isset($files) ){
+                            foreach($files as $file){
+                                $file->store('agenda', 'pstorage');
+                                $fileEvent =Event::where('id',$event->id)->first();
+                                $fileEvent->update([
+                                    'attach'=> $file->getClientOriginalName(),
+                                ]);
+                            }
                         }
                         break;
                     case 'fin_mes':
@@ -205,7 +248,7 @@ class FullCalenderController extends Controller
                         for ($date = $lastDayOfNextMonth; $date->lte($endDate); $date->addMonthsNoOverflow())
                         {
                             $fullmes=$date->clone()->lastOfMonth();
-                            Event::create([
+                            $event =Event::create([
                                 'title' => $request->get('calendario_nombre_evento'),
                                 'description' => $request->get('calendario_descripcion_evento_nuevo'),
                                 'start' => $fullmes->startOfDay(),
@@ -217,21 +260,21 @@ class FullCalenderController extends Controller
                                 'frecuencia' => $request->get('calendario_frecuencia_evento'),
                             ]);
                         }
+                        $files = $request->file('inputFilesEvent');
+
+                        if (isset($files) ){
+                            foreach($files as $file){
+                                $file->store('agenda', 'pstorage');
+                                $fileEvent =Event::where('id',$event->id)->first();
+                                $fileEvent->update([
+                                    'attach'=> $file->getClientOriginalName(),
+                                ]);
+                            }
+                        }
                         break;
                     //return response()->json($event);
                 }
                 break;
-            case 'modificar':
-                $event = Event::find($request->id)->update([
-                    'title' => $request->title,
-                    'description' => 'descripcion',
-                    'start' => $request->start,
-                    'end' => $request->end,
-                    'color' => $request->calendario_color_evento,
-                    'colorEvento' => $request->calendario_color_evento,
-                    'colorBackground' => $request->calendario_color_evento,
-                ]);
-                return response()->json($event);
             case 'borrar':
                 $event = Event::find($request->editar_evento)->delete();
                 return response()->json($request->editar_evento);

@@ -513,8 +513,6 @@
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
-                //console.log(formData.get("calendario_color_evento"));
-                //console.log(formData.get("calendario_fondo_evento"));
                 formData.append('type', 'add');
                 $.ajax({
                     url: "{{route('fullcalendarAjax')}}",
@@ -547,7 +545,7 @@
                 console.log(eleme);
                 var form = $('#'+eleme)[0];
                 var formData = new FormData(form);
-                formData.append('type', 'updatetitle')
+                formData.append('type', 'modificar')
                 $.ajax({
                     data: formData,
                     processData: false,

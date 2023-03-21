@@ -4,7 +4,7 @@
 <div class="modal fade" id="agregar_evento_calendario" role="dialog">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form id="frm_add_evento_calendario" name="frm_add_evento_calendario" autocomplete="off">
+            <form id="frm_add_evento_calendario" name="frm_add_evento_calendario" autocomplete="off" enctype="multipart/form-data">
                 <div class="modal-header bg-success">
                     <h5 class="modal-title">Agregar Nota</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -84,7 +84,10 @@
                                     <input id="calendario_fondo_evento" type="color" class="form-control" name="calendario_fondo_evento">
                                 </div>
                             </div>
-
+                            <div class="form-group col lg-12">
+                                {!! Form::label('attachments', 'Adjuntar Archivos') !!}
+                                {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','id'=>'inputFilesEvent','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
+                            </div>
                         </div>
                     </div>
                 </div>
