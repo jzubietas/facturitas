@@ -427,7 +427,8 @@
                     'background-color': currColor,
                     'border-color': currColor,
                     'color': '#fff'
-                }).addClass('external-event')
+                }).addClass('external-event btn btn-md d-flex rounded bg-info')
+
                 event.html('<h4 class="d-inline-block">'+val+'</h4>'+
                     '<button type="button" class="delete-unsigned-event bg-white btn btn-custon-calendario btn-light float-right">'+
                     '<i class="fa fa-close text-danger"></i>'+
