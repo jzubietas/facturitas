@@ -718,16 +718,16 @@ class DashboardController extends Controller
             else if(70<$round && $round<=80)
             {
                 $html .= '<div class="progress-bar bg-warning rounded  h-60-res height-bar-progress" role="progressbar"
-                 style="height: 30px !important;width: ' . ($object_totales['progress_pagos']) . '"
-                 aria-valuenow="70"
-                 aria-valuemin="0"
-                 aria-valuemax="100"></div>
-            <div class="progress-bar rounded h-60-res" role="progressbar"
-                 style="height: 30px !important;width: ' . ($object_totales['progress_pagos'] - 70) . '%;
-             background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                 aria-valuenow="' . ($object_totales['progress_pagos'] - 70) . '"
-                 aria-valuemin="0"
-                 aria-valuemax="100"></div>';
+                         style="height: 30px !important;width: ' . ($object_totales['progress_pagos']) . '%"
+                         aria-valuenow="70"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>
+                    <div class="progress-bar rounded h-60-res" role="progressbar"
+                         style="width: ' . ($object_totales['progress_pagos'] - 70) . '%;
+                     background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
+                         aria-valuenow="' . ($object_totales['progress_pagos'] - 70) . '"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>';
             }
             else if(80<$round && $round<=100)
             {
