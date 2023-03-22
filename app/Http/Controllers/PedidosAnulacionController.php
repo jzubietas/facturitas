@@ -256,7 +256,7 @@ class PedidosAnulacionController extends Controller
             ->addColumn('tipoanulacion', function ($pedido) use ($miidentificador) {
                 $htmltipoanul = "";
                 $deshabilitar="";
-                if (Auth::user()->rol == User::ROL_ADMIN) {
+                if (in_array(Auth::user()->rol,[User::ROL_ADMIN,User::ROL_ASESOR,User::ROL_ENCARGADO])) {
                     if ($pedido->tipoanulacion=='C'){
                         $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-info bg-info">PEDIDO COMPLETO</span></a>  ';
                     }else  if ($pedido->tipoanulacion=='F'){
