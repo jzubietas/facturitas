@@ -67,7 +67,7 @@ class FullCalenderController extends Controller
                 'horainicio' => $eventsunsigned->created_at,
                 'horafin' => $eventsunsigned->updated_at,
                 'color'=>$eventsunsigned->color,
-                'colortexto'=>$eventsunsigned->color,
+                'colortexto'=>"black",
                 'colorfondo'=>$eventsunsigned->color,
                 'attach'=>$eventsunsigned->attach,
             ];
@@ -148,10 +148,10 @@ class FullCalenderController extends Controller
                 $color='';$colorFondo='';
                 if($request->colorBackground!='')
                 {
-                    $colorFondo=$request->colorBackground;$color='white';
+                    $colorFondo=$request->colorBackground;$color='black';
                 }else{
-                    if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='white';}
-                    else if($request->calendario_tipo_evento=='OTROS'){$colorFondo='#5F9F9F';$color="white";}
+                    if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='black';}
+                    else if($request->calendario_tipo_evento=='OTROS'){$colorFondo='#5F9F9F';$color="black";}
                 }
 
 

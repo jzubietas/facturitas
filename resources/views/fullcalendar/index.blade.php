@@ -2,7 +2,7 @@
 
 @section('title', 'Pagina sin Accesso')
 @section('content_header')
-    <div class="container-fluid">
+    {{--<div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1>Calendar</h1>
@@ -14,7 +14,7 @@
                 </ol>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>--}}
 @stop
 
 @push('css')
@@ -27,40 +27,53 @@
 
 @section('content')
 
-    <div class="container ">
+   {{-- <div class="container ">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="card p-3 mb-2">
-                    <div class="mt-2">
-                        <h3 class="heading">Usted no tiene acceso a esta pagina.<br>Ingrese su contraseña si desea ingresar</h3>
+                <div class="card p-3 mt-10">
+                    <div class="mt-4">
                         <div class="mt-2">
-                            <form>
-                                <div class="form-group">
-                                    <label>Usuario</label>
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control " readonly name="txtUser" id="txtUser">
-                                        <div class="input-group-append">
-                                            <button class="btn" type="button"><i class="fa fa-user" aria-hidden="true"></i></button>
-                                        </div>
-                                    </div>
 
-                                    <label>Password</label>
-                                    <div class="input-group mb-3">
-                                        <input class="form-control" type="password">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">Acceder</button>
-                                            <button class="btn btn-danger" type="button">Cancelar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-    </div>
+    </div>--}}
+
+    <section id="cover">
+        <div id="cover-caption">
+            <div id="container" class="container">
+                <div class="row">
+                    <div class="col-sm-10 offset-sm-1 text-center">
+                        <div class="info-form">
+                            <form class="mt-60">
+                                <div class="form-group">
+                                    {{--<label>Usuario</label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control " readonly name="txtUser" id="txtUser">
+                                        <div class="input-group-append">
+                                            <button class="btn" type="button"><i class="fa fa-user" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>--}}
+
+                                    <label class="float-left">Contraseña de accesso</label>
+                                    <div class="input-group mb-3">
+                                        <input class="form-control" type="password">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">Acceder</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 @stop
 
 @section('js')
