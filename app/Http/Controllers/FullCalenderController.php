@@ -205,19 +205,21 @@ class FullCalenderController extends Controller
                         break;
                     case 'diario':
                         $inidia = Carbon::parse($request->calendario_start_evento)->clone()->startOfDay();
-                        $findia = Carbon::parse($request->calendario_start_evento)->clone()->endOfMonth()->endOfDay();
-                        $difference = ($inidia->diff($findia)->days < 1)
+                        //$findia = Carbon::parse($request->calendario_start_evento)->clone()->endOfMonth()->endOfDay();
+                        //$difference = $inidia->daysInMonth - $inidia->day;
+                        /*$difference = ($inidia->diff($findia)->days < 1)
                             ? 'today'
-                            : $inidia->diffForHumans($findia);
-                        for ($i = 0; $i <= $difference; $i++) {
+                            : $inidia->diffForHumans($findia);*/
+                        for ($i = $inidia->day; $i <= $inidia->daysInMonth; $i++) {
                             //llevar al dia
-                            $fecha = $inidia->clone()->addDays($i)->format('Y-m-d');
+                            $fecha = $inidia->clone()->setUnitNoOverflow('day', $i, 'month');
+                            //->addDays($i)->format('Y-m-d');
 
                             $event = Event::create([
                                 'title' => $request->calendario_nombre_evento,
                                 'description' => $request->calendario_descripcion_evento_nuevo,
-                                'start' => $fecha,
-                                'end' => $fecha,
+                                'start' => $fecha/*->startOfDay()*/->format('Y-m-d'),
+                                'end' => $fecha/*->endOfDay()*/->format('Y-m-d'),
                                 'color' => $colorFondo,
                                 'colorEvento' => $color,
                                 'fondoEvento' => $colorFondo,
