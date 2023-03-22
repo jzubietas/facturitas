@@ -535,7 +535,7 @@
                 var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
                 aprobacionAnulacion(data.idanulacion,4,1);
             })
-
+0
             $('#tblListadoAnulaciones tbody').on('click', 'button.btnDesapruebaEncargado', function () {
                 var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
                 aprobacionAnulacion(data.idanulacion,2,2);
@@ -578,6 +578,15 @@
                     v_text=v_estado+"- Jefe de Operaciones";
                 }
                 Swal.fire({
+                    title:'Cancelar',
+                    html:'<textarea id="txt_sustento" placeholder="Sustento"></textarea>',
+                    preConfirm: () => {
+                        const sustento = Swal.getPopup().querySelector('#txt_sustento').value
+                        if(!sustento){
+                            Swal.showValidationMessage(`Por favor ingrese sustento`);
+                        }
+                        return { sustento:sustento }
+                    },
                     icon: 'warning',
                     title: '¿Estás seguro?',
                     text: v_text,
@@ -587,21 +596,28 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         if (result.isConfirmed) {
-                            var formIdAnulacion = new FormData();
-                            formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
-                            formIdAnulacion.append("estado", estado);
-                            $.ajax({
-                                processData: false,
-                                contentType: false,
-                                type: 'POST',
-                                url: v_url,
-                                data: formIdAnulacion,
-                                success: function (data) {
-                                    console.log(data);
-                                    Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
-                                    $('#tblListadoAnulaciones').DataTable().ajax.reload();
-                                }
-                            });
+                            console.log(result.value.sustento);
+                            if(result.value.sustento!='')
+                            {
+                                var formIdAnulacion = new FormData();
+                                formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
+                                formIdAnulacion.append("estado", estado);
+                                $.ajax({
+                                    processData: false,
+                                    contentType: false,
+                                    type: 'POST',
+                                    url: v_url,
+                                    data: formIdAnulacion,
+                                    success: function (data) {
+                                        console.log(data);
+                                        Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
+                                        $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                    }
+                                });
+                            }else{
+                                Swal.fire('Notificacion', 'Sustento no puede estar vacio.', 'danger');
+                            }
+
                         }
                     }
                 })
