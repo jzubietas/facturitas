@@ -341,6 +341,13 @@
                     $('#picturea').attr('src','');
                     $('.demo-color-texto').addClass('d-none');
                     $('.demo-color-fondo').addClass('d-none');
+                    $("#calendario_tipo_evento").val('PAGO');
+
+                    //if(val=='PAGO')
+                    //{
+                        //$('.demo-color-texto').addClass('d-none');
+                        //$('.demo-color-fondo').removeClass('d-none');
+                    //}
 
                     agregar_evento_calendario.show();
                 },
