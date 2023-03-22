@@ -164,7 +164,9 @@ class FullCalenderController extends Controller
 
                         }
                         break;
-                    case 'diario':
+                    case 'repetir':
+
+
                         $inidia = Carbon::parse($request->calendario_start_evento)->clone()->startOfDay();
                         $grupo=0;
                         for ($i = $inidia->day; $i <= $inidia->daysInMonth; $i++)
@@ -374,7 +376,7 @@ class FullCalenderController extends Controller
 
                         }
                         break;
-                    case 'diario':
+                    case 'repetir':
                         $inidia = Carbon::parse($request->calendario_start_evento)->clone()->startOfDay();
                         //$findia = Carbon::parse($request->calendario_start_evento)->clone()->endOfMonth()->endOfDay();
                         //$difference = $inidia->daysInMonth - $inidia->day;
