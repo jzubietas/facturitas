@@ -100,7 +100,7 @@
                                     <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
                                 </ul>
                                 {{--<input type="text" class="form-control colorpicker-input" value="#007bff">--}}
-                                <input type="color" class="form-control form-control-color"  id="color-selector" value="#ffffff">
+                                <input type="color" class="form-control form-control-color"  id="color-selector" value="#3c8dbc">
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -436,10 +436,13 @@
             calendario1.render();
 
             let currColor = '#3c8dbc'
+            $('#new-event').css('background-color', currColor);
+            $('#text-new-event').css('background-color', currColor);
             $('#color-chooser > li > a').click(function (e) {
                 e.preventDefault()
                 // Save color
                 currColor = $(this).css('color')
+                /*console.log('currColor cuad:',currColor); return false;*/
                 // Add color effect to button
                 $('#add-new-event').css({
                     'background-color': currColor,
@@ -447,6 +450,18 @@
                 })
                 $('#new-event').css('background-color', currColor);
                 $('#text-new-event').css('background-color', currColor);
+
+                switch(currColor)
+                {
+                    case 'rgb(153, 190, 230)':currColor='#007bff';break;
+                    case 'rgb(230, 210, 153)':currColor='#ffc107';break;
+                    case 'rgb(153, 230, 171)':currColor='#28a745';break;
+                    case 'rgb(230, 153, 161)':currColor='#dc3545';break;
+                    default:currColor=currColor;break;
+                }
+                console.log('currColor cuad:',currColor);
+                $('#color-selector').val(currColor)
+
             })
 
             $('#color-selector').change(function() {
@@ -554,6 +569,9 @@
 
                 $('#new-event').val('')
                 $('#text-new-event').val('')
+                $('#new-event').css('background-color', '#3c8dbc');
+                $('#text-new-event').css('background-color', '#3c8dbc');
+                $('#color-selector').val('#3c8dbc')
                 //window.location.reload();
             })
 
