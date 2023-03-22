@@ -93,14 +93,14 @@
                         </div>
                         <div class="card-body">
                             <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                                <ul class="fc-color-picker" id="color-chooser">
+                                {{--<ul class="fc-color-picker" id="color-chooser">
                                     <li><a class="text-primary" href="#"><i class="fas fa-square"></i></a></li>
                                     <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
                                     <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
                                     <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                                </ul>
+                                </ul>--}}
                                 {{--<input type="text" class="form-control colorpicker-input" value="#007bff">--}}
-                                <input type="color" class="form-control form-control-color"  id="color-selector" value="#3c8dbc">
+                                <input type="color" class="form-control form-control-color"  id="color-selector" value="#ece63c">
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -435,15 +435,12 @@
 
             calendario1.render();
 
-            let currColor = '#3c8dbc'
+            let currColor = '#ece63c'
             $('#new-event').css('background-color', currColor);
             $('#text-new-event').css('background-color', currColor);
-            $('#color-chooser > li > a').click(function (e) {
+            /*$('#color-chooser > li > a').click(function (e) {
                 e.preventDefault()
-                // Save color
                 currColor = $(this).css('color')
-                /*console.log('currColor cuad:',currColor); return false;*/
-                // Add color effect to button
                 $('#add-new-event').css({
                     'background-color': currColor,
                     'border-color': currColor
@@ -462,7 +459,7 @@
                 console.log('currColor cuad:',currColor);
                 $('#color-selector').val(currColor)
 
-            })
+            })*/
 
             $('#color-selector').change(function() {
                 var color = $(this).val();
@@ -569,9 +566,9 @@
 
                 $('#new-event').val('')
                 $('#text-new-event').val('')
-                $('#new-event').css('background-color', '#3c8dbc');
-                $('#text-new-event').css('background-color', '#3c8dbc');
-                $('#color-selector').val('#3c8dbc')
+                $('#new-event').css('background-color', '#ece63c');
+                $('#text-new-event').css('background-color', '#ece63c');
+                $('#color-selector').val('#ece63c')
                 //window.location.reload();
             })
 
@@ -621,6 +618,7 @@
                     success: function (data) {
                         editar_evento_calendario.hide();
                         calendario1.refetchEvents();
+                        $('.btn-edit-check').addClass('d-none');
                         //let eventDelete = calendar.getEventById(formData.get("eliminar_evento"))
                         //eventDelete.remove();
                     }
