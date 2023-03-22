@@ -34,6 +34,31 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Definir contraseña para agenda</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input id="agenda_password" name="agenda_password" type="password" class="form-control"
+                                           placeholder="Generar contraseña">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button class="btn btn-success" type="button" id="agenda_change_password">
+                                        Guardar contraseña
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
 
         <div class="col-lg-8 col-md-12 col-sm-12">
@@ -258,20 +283,45 @@
                      )
                  }
                  $.post('{{route('settings.store-setting')}}', {
-                key: 'pedido_password',
-                value: password
-            }).done(function (a, b, c) {
-                if (c.status === 200) {
+                     key: 'pedido_password',
+                     value: password
+                 }).done(function (a, b, c) {
+                     if (c.status === 200) {
+                         Swal.fire(
+                             'Contraseña cambiada',
+                             '',
+                             'success'
+                         )
+                     }
+                 }).always(function () {
+                     $("#pedido_password").val("");
+                 })
+            })
+
+            $("#agenda_change_password").click(function () {
+                let password = $("#agenda_password").val();
+                if (!password) {
                     Swal.fire(
-                        'Contraseña cambiada',
+                        'El campo de contraseña no debe estar vacio',
                         '',
-                        'success'
+                        'warning'
                     )
                 }
-            }).always(function () {
-                $("#pedido_password").val("");
+                $.post('{{route('settings.store.agenda-setting')}}', {
+                    key: 'agenda_password',
+                    value: password
+                }).done(function (a, b, c) {
+                    if (c.status === 200) {
+                        Swal.fire(
+                            'Contraseña cambiada',
+                            '',
+                            'success'
+                        )
+                    }
+                }).always(function () {
+                    $("#agenda_password").val("");
+                })
             })
-        })
 
         });
 

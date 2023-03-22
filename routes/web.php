@@ -66,6 +66,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('/setting/administrador/time-clientes', [SettingsController::class, 'settingTimeClienteStore'])->name('settings.store-time-clientes');
 
     Route::post('/setting/store', [SettingsController::class, 'settingStore'])->name('settings.store-setting');
+    Route::post('/setting/store/agenda', [SettingsController::class, 'settingStoreAgenda'])->name('settings.store.agenda-setting');
     Route::post('/setting/authorizar/motorizado/{user}', [SettingsController::class, 'authorizationMotorizado'])->name('settings.authorization-motorizado');
 
 
@@ -831,4 +832,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::middleware('authorize.pedido.anulled')
         ->post('confirmaSolicitudAnulacion', [PedidosAnulacionController::class, 'confirmaSolicitudAnulacion'])
         ->name('confirmaSolicitudAnulacion');
+
+    /*Route::middleware('authorize.agenda')
+        ->post('confirmaSolicitudAnulacion', [FullCalenderController::class, 'confirmaSolicitudAnulacion'])
+        ->name('autorizarAgenda');*/
+
 });
