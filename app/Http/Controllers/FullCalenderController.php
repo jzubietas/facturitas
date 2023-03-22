@@ -17,16 +17,18 @@ class FullCalenderController extends Controller
 
     public function token(Request $request)
     {
+        setting()->load();
         if(!$request->clave)
         {
             return 0;
         }else{
             $clave=$request->clave;
-            if($clave=='123456789')
+
+            if(!\Hash::check($clave,setting("agenda_password")))
             {
-                return 1;
-            }else{
                 return 0;
+            }else{
+                return 1;
             }
         }
     }
