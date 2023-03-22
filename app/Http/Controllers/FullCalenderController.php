@@ -85,7 +85,7 @@ class FullCalenderController extends Controller
                 break;
             case 'load':
                 $events = [];
-                $all_events = Event::where('status','=','1')->get();
+                $all_events = Event::where('status','=','1')->where('unsigned','=','0')->get();
                 foreach ($all_events as $event)
                 {
                     $events[] = [
@@ -314,8 +314,9 @@ class FullCalenderController extends Controller
                 }
                 break;
             case 'borrar':
-                $event = Event::find($request->editar_evento)->delete();
-                return response()->json($request->editar_evento);
+                $event = Event::find($request->editar_evento)->update(['status'=>'0']);
+                //delete();
+                return response()->json($event);
             default:
                 # code...
                 break;
@@ -346,6 +347,17 @@ class FullCalenderController extends Controller
     public function ajaxunsigned(Request $request)
     {
         switch ($request->type) {
+            case 'traslado':
+                $event = Event::find($request->eliminar_evento)->update(
+                    [
+                        'unsigned'=>'0',
+                        'start'=>$request->start,
+                        'end'=>$request->end,
+                        'colorEvento'=>'white',
+                    ]
+                );
+                return response()->json($event);
+                break;
             case 'add':
                 $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
@@ -378,8 +390,11 @@ class FullCalenderController extends Controller
                 return response()->json($event);
 
             case 'delete':
-                $event = Event::find($request->eliminar_evento)->delete();
-                return response()->json($request->eliminar_evento);
+                $event = Event::find($request->eliminar_evento)->update([
+                    'status'=>'0'
+                ]);
+                //delete();
+                return response()->json($event);
             default:
                 # code...
                 break;

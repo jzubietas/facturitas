@@ -382,7 +382,9 @@
 
                     let formData = new FormData();
                     formData.append('eliminar_evento', eventEliminar)
-                    formData.append('type', 'delete')
+                    formData.append('start', start_)
+                    formData.append('end', end_)
+                    formData.append('type', 'traslado')
                     $.ajax({
                         data: formData,
                         processData: false,
@@ -390,36 +392,9 @@
                         type: 'POST',
                         url: "{{ route('fullcalendarAjaxUnsigned') }}",
                         success: function (data) {
-                            let eventDeleteUnsigned = $("#unsigned_"+eventEliminar);
-                            eventDeleteUnsigned.fadeOut("normal", function() {
-                                $(this).remove();
-                            });
-
-                            //aqui registro el evento temporal a evento oficial
-                            var formData = new FormData();
-                            formData.append('calendario_nombre_evento', titulo);
-                            formData.append('calendario_descripcion_evento_nuevo', descripcion);
-                            formData.append('calendario_start_evento', start_);
-                            formData.append('calendario_color_evento', color);
-                            formData.append('colorTexto', color);
-                            formData.append('colorBackground', color);
-                            formData.append('calendario_end_evento', end_);
-                            formData.append('calendario_frecuencia_evento', 'una_vez');
-                            formData.append('calendario_tipo_evento', 'OTROS');
-                            formData.append('id_unsigned_event', eventEliminar)
-                            formData.append('type', 'add');
-                            $.ajax({
-                                url: "{{route('fullcalendarAjax')}}",
-                                data: formData,
-                                type: "POST",
-                                processData: false,
-                                contentType: false,
-                                success: function (data) {
-                                    agregar_evento_calendario.hide();
-                                    displayMessage("Nota creada.");
-                                    calendario1.refetchEvents();
-                                }
-                            });
+                            agregar_evento_calendario.hide();
+                            displayMessage("Nota creada.");
+                            calendario1.refetchEvents();
                         }
                     });
                 }
@@ -598,6 +573,7 @@
                 $('#calendario_descripcion_evento_editar').removeClass('border').removeClass('border-0');
                 $("#calendario_descripcion_evento_editar").prop('readonly',false);
                 $("#calendario_nombre_evento_editar").prop('readonly',false).focus();
+                $(".contenedor_adjunto").removeClass('d-none');
 
                 $('.btn-edit-check').removeClass('d-none');
             });
@@ -648,7 +624,7 @@
                 event.preventDefault();
                 var form = $(this)[0];
                 var formData = new FormData(form);
-                formData.append('type', 'delete')
+                formData.append('type', 'borrar')
                 $.ajax({
                     data: formData,
                     processData: false,
