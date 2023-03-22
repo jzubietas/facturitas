@@ -338,6 +338,8 @@
                     $("#calendario_end_evento").val(info.dateStr);
                     $('.btn-edit-check').addClass('d-none');
                     $('#inputFilesEventA').val('');
+                    $("#calendario_nombre_evento").val("");
+                    $("·calendario_descripcion_evento_nuevo").val("");
                     $('#picturea').attr('src','');
                     $('.demo-color-texto').addClass('d-none');
                     $('.demo-color-fondo').addClass('d-none');
