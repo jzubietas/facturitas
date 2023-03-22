@@ -114,7 +114,7 @@ class AnulacionController extends Controller
             ->select([
                 'pedidos.codigo',
                 'u.name',
-                'dp.total',
+                'dp.cantidad as total',
                 'dp.ruc',
                 'dp.nombre_empresa',
                 'dp.adjunto'

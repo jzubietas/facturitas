@@ -1618,7 +1618,49 @@ class PedidoController extends Controller
             ->orderByDesc('estado')
             ->get();
 
-        return view('pedidos.show', compact('pedido', 'imagenes', 'imagenesatencion', 'adelanto', 'deudaTotal'));
+        $motivo_anulado_parcial=[];
+        if($pedido->condicion_code==Pedido::ANULADO_PARCIAL_INT)
+        {
+            $pedidos_a=PedidosAnulacion::where('pedido_id','=',$pedido->id)->get();
+            foreach ($pedidos_a as $anulacion_p)
+            {
+                $estado_a_asesor=$anulacion_p->estado_aprueba_asesor;
+                $estado_a_encargado=$anulacion_p->estado_aprueba_encargado;
+                $estado_a_administrador=$anulacion_p->estado_aprueba_administrador;
+                $estado_a_jefeop=$anulacion_p->estado_aprueba_jefeop;
+                if($estado_a_asesor=='1')
+                {
+                    $motivo_anulado_parcial[] = [
+                        'usu_motivo'=>'Asesor',
+                        'motivo'=>$anulacion_p->motivo_solicitud,
+                    ];
+                }
+                if($estado_a_encargado=='1')
+                {
+                    $motivo_anulado_parcial[] = [
+                        'usu_motivo'=>'Encargado',
+                        'motivo'=>$anulacion_p->motivo_sol_encargado,
+                    ];
+                }
+                if($estado_a_administrador=='1')
+                {
+                    $motivo_anulado_parcial[] = [
+                        'usu_motivo'=>'Administrador',
+                        'motivo'=>$anulacion_p->motivo_sol_admin,
+                    ];
+                }
+                if($estado_a_jefeop=='1')
+                {
+                    $motivo_anulado_parcial[] = [
+                        'usu_motivo'=>'Jefe Operaciones',
+                        'motivo'=>$anulacion_p->motivo_jefeop_admin,
+                    ];
+                }
+            }
+        }
+        //dd($motivo_anulado_parcial);
+
+        return view('pedidos.show', compact('pedido', 'imagenes', 'imagenesatencion', 'adelanto', 'deudaTotal','motivo_anulado_parcial'));
     }
 
     /**
