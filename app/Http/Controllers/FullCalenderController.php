@@ -106,31 +106,201 @@ class FullCalenderController extends Controller
                 break;
             case 'modificar':
                 $event=Event::where('id',$request->editar_evento)->first();
-                $event->update([
-                    'title'=>$request->calendario_nombre_evento_editar,
-                    'description'=>$request->calendario_descripcion_evento_editar,
-                ]);
-                $files = $request->file('inputFilesEvent');
-                if (isset($files)){
-                    foreach($files as $file){
-                        $fileattach=$file->store('agenda', 'pstorage');
-                        $imageevent= ImageAgenda::create([
-                            'unsigned' =>   1,
-                            'event_id' =>   $event->id ,
-                            'filename' =>   $file->getClientOriginalName() ,
-                            'filepath' =>    $fileattach ,
-                            'filetype' =>   $file->getClientOriginalExtension() ,
-                            'status'   =>   1 ,
-                        ]);
+                $color=$event->color;
+                $colorEvento=$event->colorEvento;
+                $fondoEvento=$event->fondoEvento;
 
-                        /*$fileattach=$file->store('agenda', 'pstorage');
-                        $fileEvent =Event::where('id',$request->editar_evento)->first();
-                        $fileEvent->update([
-                            'attach'=> $fileattach,
-                        ]);*/
-                    }
+                Event::where('grupo','=',$event->id)->update(['status'=>'0']);
+
+                switch($request->calendario_frecuencia_evento)
+                {
+                    case 'una_vez':
+                        $frecuencia_recorrido = $request->calendario_start_evento;
+                        $event = Event::create([
+                            'title' => $request->calendario_nombre_evento,
+                            'description' => $request->calendario_descripcion_evento_nuevo,
+                            'start' => $request->calendario_start_evento,
+                            'end' => $request->calendario_end_evento,
+                            'color' => $color,
+                            'colorEvento' => $colorEvento,
+                            'fondoEvento' => $fondoEvento,
+                            'tipo' => $request->calendario_tipo_evento,
+                            'frecuencia' => $request->calendario_frecuencia_evento,
+                            'unsigned'=>'0',
+                            'status'=>'1'
+                        ]);
+                        $event->update(['grupo'=>$event->id]);
+                        $files = $request->file('inputFilesEvent');
+                        if (isset($files) ){
+                            foreach($files as $file){
+                                $fileattach=$file->store('agenda', 'pstorage');
+                                $imageevent= ImageAgenda::create([
+                                    'unsigned' =>   1 ,
+                                    'event_id' =>   $event->id ,
+                                    'filename' =>   $file->getClientOriginalName() ,
+                                    'filepath' =>    $fileattach ,
+                                    'filetype' =>   $file->getClientOriginalExtension() ,
+                                    'status'   =>   1 ,
+                                ]);
+                            }
+                        }
+                        if (isset($request->id_unsigned_event)){
+                            $imagenesagendas=ImageAgenda::where('event_id',$request->id_unsigned_event)
+                                ->where('unsigned',0)->where('status',1)->get();
+                            foreach($imagenesagendas as $archivo){
+                                $imageevent= ImageAgenda::create([
+                                    'unsigned' =>   1 ,
+                                    'event_id' =>   $event->id ,
+                                    'filename' =>   $archivo->filename ,
+                                    'filepath' =>   $archivo->filepath ,
+                                    'filetype' =>   $archivo->filetype ,
+                                    'status'   =>   1 ,
+                                ]);
+                                $archivo->update([
+                                    'status'=> 0,
+                                    'updated_at' => now(),
+                                ]);
+                            }
+
+                        }
+                        break;
+                    case 'diario':
+                        $inidia = Carbon::parse($request->calendario_start_evento)->clone()->startOfDay();
+                        $grupo=0;
+                        for ($i = $inidia->day; $i <= $inidia->daysInMonth; $i++)
+                        {
+                            $fecha = $inidia->clone()->setUnitNoOverflow('day', $i, 'month');
+                            $event = Event::create([
+                                'title' => $request->calendario_nombre_evento,
+                                'description' => $request->calendario_descripcion_evento_nuevo,
+                                'start' => $fecha/*->startOfDay()*/->format('Y-m-d'),
+                                'end' => $fecha/*->endOfDay()*/->format('Y-m-d'),
+                                'color' => $color,
+                                'colorEvento' => $colorEvento,
+                                'fondoEvento' => $fondoEvento,
+                                'tipo' => $request->calendario_tipo_evento,
+                                'frecuencia' => $request->calendario_frecuencia_evento,
+                                'unsigned'=>'0',
+                                'status'=>'1'
+                            ]);
+                            if($i==$inidia->day)
+                            {
+                                $grupo=$event->id;
+                                $event->update(['grupo'=>$grupo]);
+                            }else{
+                                $event->update(['grupo'=>$grupo]);
+                            }
+
+                        }
+                        $files = $request->file('inputFilesEvent');
+                        if (isset($files) ){
+                            foreach($files as $file){
+                                $fileattach=$file->store('agenda', 'pstorage');
+                                $fileEvent =Event::where('id',$event->id)->first();
+                                $fileEvent->update([
+                                    'attach'=> $fileattach,
+                                ]);
+                            }
+                        }
+                        break;
+                    case 'ini_mes':
+                        $startDate = Carbon::parse($request->calendario_start_evento);
+                        if (!$startDate->day == 1) {
+                            $startDate->addMonth();
+                        }
+                        $endDate = $startDate->clone()->addYear()->startOfYear()->subDay();
+                        //$monthsRemaining = 12 - $startDate->month + 1;
+                        $firstDayOfNextMonth = $startDate->clone()->firstOfMonth();
+                        $grupo=0;
+                        for ($date = $firstDayOfNextMonth; $date->lte($endDate); $date->addMonthsNoOverflow())
+                        {
+                            $fullmes=$date->clone()->firstOfMonth();
+                            $event =Event::create([
+                                'title' => $request->get('calendario_nombre_evento'),
+                                'description' => $request->get('calendario_descripcion_evento_nuevo'),
+                                'start' => $fullmes->startOfDay(),
+                                'end' => $fullmes->endOfDay(),
+                                'color' => $color,
+                                'colorEvento' => $colorEvento,
+                                'fondoEvento' => $fondoEvento,
+                                'tipo' => $request->get('calendario_tipo_evento'),
+                                'frecuencia' => $request->get('calendario_frecuencia_evento'),
+                                'unsigned'=>'0',
+                                'status'=>'1'
+                            ]);
+
+                            if($date==$firstDayOfNextMonth)
+                            {
+                                $grupo=$event->id;
+                                $event->update(['grupo'=>$grupo]);
+                            }else{
+                                $event->update(['grupo'=>$grupo]);
+                            }
+
+                        }
+                        $files = $request->file('inputFilesEvent');
+                        if (isset($files) ){
+                            foreach($files as $file){
+                                $fileattach=$file->store('agenda', 'pstorage');
+                                $fileEvent =Event::where('id',$event->id)->first();
+                                $fileEvent->update([
+                                    'attach'=> $fileattach,
+                                ]);
+                            }
+                        }
+                        break;
+                    case 'fin_mes':
+                        $startDate = Carbon::parse($request->calendario_start_evento);
+                        if (!$startDate->isLastOfMonth()) {
+                            //$date->addMonth();
+                            //$startDate=$startDate->clone()->lastOfMonth();
+                        }
+                        $endDate = $startDate->clone()->addYear()->startOfYear()->subDay();
+                        $lastDayOfNextMonth = $startDate->clone()->lastOfMonth();
+                        $grupo=0;
+                        for ($date = $lastDayOfNextMonth; $date->lte($endDate); $date->addMonthsNoOverflow())
+                        {
+                            $fullmes=$date->clone()->lastOfMonth();
+                            $event =Event::create([
+                                'title' => $request->get('calendario_nombre_evento'),
+                                'description' => $request->get('calendario_descripcion_evento_nuevo'),
+                                'start' => $fullmes->startOfDay(),
+                                'end' => $fullmes->endOfDay(),
+                                'color' => $color,
+                                'colorEvento' => $colorEvento,
+                                'fondoEvento' => $fondoEvento,
+                                'tipo' => $request->get('calendario_tipo_evento'),
+                                'frecuencia' => $request->get('calendario_frecuencia_evento'),
+                                'unsigned'=>'0',
+                                'status'=>'1'
+                            ]);
+
+                            if($date==$lastDayOfNextMonth)
+                            {
+                                $grupo=$event->id;
+                                $event->update(['grupo'=>$grupo]);
+                            }else{
+                                $event->update(['grupo'=>$grupo]);
+                            }
+                        }
+                        $files = $request->file('inputFilesEvent');
+
+                        if (isset($files) ){
+                            foreach($files as $file){
+                                $fileattach=$file->store('agenda', 'pstorage');
+                                $imageevent= ImageAgenda::create([
+                                    'unsigned' =>   1,
+                                    'event_id' =>   $event->id ,
+                                    'filename' =>   $file->getClientOriginalName() ,
+                                    'filepath' =>    $fileattach ,
+                                    'filetype' =>   $file->getClientOriginalExtension() ,
+                                    'status'   =>   1 ,
+                                ]);
+                            }
+                        }
+                        return response()->json($event);
                 }
-                return response()->json($event);
+                //return response()->json($event);
                 break;
             case 'adddrop':
                 //info de unsigned eventunsigned

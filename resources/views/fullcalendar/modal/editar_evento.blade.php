@@ -31,36 +31,35 @@
                         <form id="frm_editar_evento_calendario" name="frm_editar_evento_calendario" enctype="multipart/form-data">
                             <input type="hidden" id="editar_evento" name="editar_evento">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-row">
-                                        <div class="form-group mr-2">
-                                            <a class="text-dark" href="#"><i class="fas fa-square"></i></a>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control border border-0" id="calendario_nombre_evento_editar"
-                                                   placeholder="Nombre de evento" value="" name="calendario_nombre_evento_editar" readonly>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="calendario_tipo_evento">Tipo</label>
-                                            <select id="calendario_tipo_evento" name="calendario_tipo_evento" class="form-control">
-                                                <option value="PAGO">PAGO</option>
-                                                <option value="OTROS">OTROS</option>
-                                            </select>
-
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="calendario_frecuencia_evento">Frecuencia</label>
-                                            <select id="calendario_frecuencia_evento" name="calendario_frecuencia_evento" class="form-control">
-                                                <option value="una_vez">Una vez</option>
-                                                <option value="diario">Diario</option>
-                                                <option value="ini_mes">Inicio de Mes</option>
-                                                <option value="fin_mes">Fin de Mes</option>
-                                            </select>
-                                        </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="calendario_nombre_evento_editar">Nombre</label>
+                                        <input type="text" class="form-control border border-0" id="calendario_nombre_evento_editar"
+                                               placeholder="Nombre de evento" value="" name="calendario_nombre_evento_editar" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="calendario_tipo_evento">Tipo</label>
+                                        <select id="calendario_tipo_evento" name="calendario_tipo_evento" class="form-control">
+                                            <option value="PAGO">PAGO</option>
+                                            <option value="OTROS">OTROS</option>
+                                        </select>
 
                                     </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="calendario_frecuencia_evento">Frecuencia</label>
+                                        <select id="calendario_frecuencia_evento" name="calendario_frecuencia_evento" class="form-control">
+                                            <option value="una_vez">Una vez</option>
+                                            <option value="diario">Diario</option>
+                                            <option value="ini_mes">Inicio de Mes</option>
+                                            <option value="fin_mes">Fin de Mes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
 
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
