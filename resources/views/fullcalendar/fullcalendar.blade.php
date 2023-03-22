@@ -488,7 +488,7 @@
                 event.css({
                     'background-color': currColor,
                     'border-color': currColor,
-                    'color': '#fff'
+                    'color': '#000'
                 }).addClass('external-event btn btn-md rounded d-flex justify-content-between ')
 
                 event.html('<span class="">'+val+'</span>'+
