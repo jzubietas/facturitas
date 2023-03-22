@@ -611,6 +611,12 @@
                 $('.btn-edit-check').removeClass('d-none');
                 $("#calendario_tipo_evento_editar").prop('disabled',false);
                 $("#calendario_frecuencia_evento_editar").prop('disabled',false);
+                let val=$("#calendario_tipo_evento_editar").val();
+                if(val=='OTROS')
+                {
+                    $('.demo-color-texto').addClass('d-none');
+                    $('.demo-color-fondo').removeClass('d-none');
+                }
             });
 
             $(document).on("click", "#frm_editar_evento_calendario .btn-edit-check", function (event) {
