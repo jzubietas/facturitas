@@ -117,8 +117,8 @@ class FullCalenderController extends Controller
                     case 'una_vez':
                         $frecuencia_recorrido = $request->calendario_start_evento;
                         $event = Event::create([
-                            'title' => $request->calendario_nombre_evento,
-                            'description' => $request->calendario_descripcion_evento_nuevo,
+                            'title' => $request->calendario_nombre_evento_editar,
+                            'description' => $request->calendario_descripcion_evento_editar,
                             'start' => $request->calendario_start_evento,
                             'end' => $request->calendario_end_evento,
                             'color' => $color,
@@ -171,8 +171,8 @@ class FullCalenderController extends Controller
                         {
                             $fecha = $inidia->clone()->setUnitNoOverflow('day', $i, 'month');
                             $event = Event::create([
-                                'title' => $request->calendario_nombre_evento,
-                                'description' => $request->calendario_descripcion_evento_nuevo,
+                                'title' => $request->calendario_nombre_evento_editar,
+                                'description' => $request->calendario_descripcion_evento_editar,
                                 'start' => $fecha/*->startOfDay()*/->format('Y-m-d'),
                                 'end' => $fecha/*->endOfDay()*/->format('Y-m-d'),
                                 'color' => $color,
@@ -216,8 +216,8 @@ class FullCalenderController extends Controller
                         {
                             $fullmes=$date->clone()->firstOfMonth();
                             $event =Event::create([
-                                'title' => $request->get('calendario_nombre_evento'),
-                                'description' => $request->get('calendario_descripcion_evento_nuevo'),
+                                'title' => $request->calendario_nombre_evento_editar,
+                                'description' => $request->calendario_descripcion_evento_editar,
                                 'start' => $fullmes->startOfDay(),
                                 'end' => $fullmes->endOfDay(),
                                 'color' => $color,
@@ -262,8 +262,8 @@ class FullCalenderController extends Controller
                         {
                             $fullmes=$date->clone()->lastOfMonth();
                             $event =Event::create([
-                                'title' => $request->get('calendario_nombre_evento'),
-                                'description' => $request->get('calendario_descripcion_evento_nuevo'),
+                                'title' => $request->calendario_nombre_evento_editar,
+                                'description' => $request->calendario_descripcion_evento_editar,
                                 'start' => $fullmes->startOfDay(),
                                 'end' => $fullmes->endOfDay(),
                                 'color' => $color,
