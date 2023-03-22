@@ -40,7 +40,7 @@ class FullCalenderController extends Controller
         $eventss = [];
         $uneventss = [];
 
-        $all_events = Event::all();
+        $all_events = Event::where('status','=','1')->where('unsigned','=','0')->get();
 
         foreach ($all_events as $event)
         {
@@ -57,7 +57,7 @@ class FullCalenderController extends Controller
             ];
         }
 
-        $all_eventsunsigned = EventsUnsigned::orderBy('id','desc')->get();
+        $all_eventsunsigned = Event::where('status','=','1')->where('unsigned','=','1')->get();
         foreach ($all_eventsunsigned as $eventsunsigned)
         {
             $uneventss[] = [
@@ -85,7 +85,7 @@ class FullCalenderController extends Controller
                 break;
             case 'load':
                 $events = [];
-                $all_events = Event::all();
+                $all_events = Event::where('status','=','1')->get();
                 foreach ($all_events as $event)
                 {
                     $events[] = [
@@ -310,8 +310,7 @@ class FullCalenderController extends Controller
                                 ]);
                             }
                         }
-                        break;
-                    //return response()->json($event);
+                        return response()->json($event);
                 }
                 break;
             case 'borrar':
@@ -348,12 +347,19 @@ class FullCalenderController extends Controller
     {
         switch ($request->type) {
             case 'add':
-                $event = EventsUnsigned::create([
+                $event = Event::create([
                     'title' => $request->calendario_nombre_evento,
                     'description'=>$request->calendario_descripcion_evento,
-                    //'start' => $request->calendario_start_evento,
-                    //'end' => $request->calendario_start_evento,
+                    'start' => Carbon::parse(now())->format('Y-m-d'),
+                    'end' => Carbon::parse(now())->format('Y-m-d'),
                     'color' => $request->calendario_color_evento,
+                    'colorEvento' => $request->calendario_color_evento,
+                    'fondoEvento' => $request->calendario_color_evento,
+                    'grupo'=>'0',
+                    'tipo'=>'OTROS',
+                    'frecuencia'=>'una_vez',
+                    'unsigned'=>'1',
+                    'status'=>'1'
                 ]);
                 $files = $request->file('inputFilesEventU');
                 if (isset($files)){
@@ -370,15 +376,9 @@ class FullCalenderController extends Controller
                     }
                 }
                 return response()->json($event);
-            case 'update':
-                $event = EventsUnsigned::find($request->id)->update([
-                    'title' => $request->title,
-                    'start' => $request->start,
-                    'end' => $request->end,
-                ]);
-                return response()->json($event);
+
             case 'delete':
-                $event = EventsUnsigned::find($request->eliminar_evento)->delete();
+                $event = Event::find($request->eliminar_evento)->delete();
                 return response()->json($request->eliminar_evento);
             default:
                 # code...
