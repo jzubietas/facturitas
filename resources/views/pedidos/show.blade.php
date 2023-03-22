@@ -15,264 +15,290 @@
 @stop
 
 @section('content')
+
     <div class="card">
-        <div class="card-body">
-            <div class="border rounded card-body border-secondary" style="text-align: center">
-                <div class="card-body">
-                    <div class="form-row">
-                        <div class="form-group col-lg-4">
-                            <label for="id_ingresomaterial">Cliente</label>
-                            <p>{{ $pedido->nombres }} - {{ $pedido->celulares }}</p>
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="id_ingresomaterial">Asesor</label>
-                            <p>{{ $pedido->users }}</p>
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="id_ingresomaterial">Estado</label>
-                            <p>{{ $pedido->condiciones }}</p>
-                        </div>
-                    </div>
+        <div class="border rounded card-body border-secondary">
+            <div class="form-row">
+                <div class="form-group col-lg-4">
+                    <label for="id_ingresomaterial">Cliente</label>
+                    <p>{{ $pedido->nombres }} - {{ $pedido->celulares }}</p>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="id_ingresomaterial">Asesor</label>
+                    <p>{{ $pedido->users }}</p>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="id_ingresomaterial">Estado</label>
+                    <p>{{ $pedido->condiciones }}</p>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <br>
-
-            <div class="border rounded card-body border-secondary">
-                <div class="table-responsive">
-                    <table id="tabla" class="table table-striped"
-                           style="text-align: center">{{-- tablaPrincipal --}}
-                        <thead><h4 style="text-align: center"><strong>Detalle de pedido</strong></h4>
-                        <tr>
-                            <th scope="col" class="align-middle">Código</th>
-                            <th scope="col" class="align-middle">Empresa</th>
-                            <th scope="col" class="align-middle">Mes</th>
-                            <th scope="col" class="align-middle">Año</th>
-                            <th scope="col" class="align-middle">RUC</th>
-                            <th scope="col" class="align-middle">Cantidad</th>
-                            <th scope="col" class="align-middle">Tipo de comprobante<br>y banca</th>
-                            <th scope="col" class="align-middle">Porcentaje</th>
-                            <th scope="col" class="align-middle">Courier</th>
-                            <th scope="col" class="align-middle">Descripción</th>
-                            <th scope="col" class="align-middle">Nota</th>
-                            <th scope="col" class="align-middle">Adjunto</th>
-                            <th scope="col" class="align-middle">FT</th>
-                            <th scope="col" class="align-middle">Opciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{ $pedido->codigos }}</td>
-                            <td>{{ $pedido->empresas }}</td>
-                            <td>{{ $pedido->mes }}</td>
-                            <td>{{ $pedido->anio }}</td>
-                            <td>{{ $pedido->ruc }}</td>
-                            <td>@php echo number_format($pedido->cantidad,2) @endphp</td>
-                            <td>{{ $pedido->tipo_banca }}</td>
-                            <td>{{ $pedido->porcentaje }}</td>
-                            <td>{{ $pedido->courier }}</td>
-                            <td>{{ $pedido->descripcion }}</td>
-                            <td>{{ $pedido->nota }}</td>
-                            <td>
-                                @foreach ($imagenes as $img)
-                                    <p>
-                                        {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
-                                        <a target="_blank" download
-                                           href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
-                                    </p>
-                                @endforeach
-                            </td>
-                            {{-- <td><a href="{{ route('pedidos.descargaradjunto', $pedido->adjunto) }}">{{ $pedido->adjunto }}</a></td> --}}
-                            <td>@php echo number_format($pedido->ft,2) @endphp</td>
-                            <td>
-                                {{--@can('pedidos.edit')
-                                  <a href="{{ route('pedidos.edit', $pedido) }}" class="btn btn-warning btn-sm">Editar</a>
-                                @endcan--}}
-                            </td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td><b><h3>TOTAL</h3></b></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><h3>{{ $pedido->total }}</h3></td>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
+    <div class="card">
+        <div class="border rounded card-body border-secondary">
+            <div class="table-responsive">
+                <table id="tabla" class="table table-striped"
+                       style="text-align: center">{{-- tablaPrincipal --}}
+                    <thead><h4 style="text-align: center"><strong>Detalle de pedido</strong></h4>
+                    <tr>
+                        <th scope="col" class="align-middle">Código</th>
+                        <th scope="col" class="align-middle">Empresa</th>
+                        <th scope="col" class="align-middle">Mes</th>
+                        <th scope="col" class="align-middle">Año</th>
+                        <th scope="col" class="align-middle">RUC</th>
+                        <th scope="col" class="align-middle">Cantidad</th>
+                        <th scope="col" class="align-middle">Tipo de comprobante<br>y banca</th>
+                        <th scope="col" class="align-middle">Porcentaje</th>
+                        <th scope="col" class="align-middle">Courier</th>
+                        <th scope="col" class="align-middle">Descripción</th>
+                        <th scope="col" class="align-middle">Nota</th>
+                        <th scope="col" class="align-middle">Adjunto</th>
+                        <th scope="col" class="align-middle">FT</th>
+                        <th scope="col" class="align-middle">Opciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ $pedido->codigos }}</td>
+                        <td>{{ $pedido->empresas }}</td>
+                        <td>{{ $pedido->mes }}</td>
+                        <td>{{ $pedido->anio }}</td>
+                        <td>{{ $pedido->ruc }}</td>
+                        <td>@php echo number_format($pedido->cantidad,2) @endphp</td>
+                        <td>{{ $pedido->tipo_banca }}</td>
+                        <td>{{ $pedido->porcentaje }}</td>
+                        <td>{{ $pedido->courier }}</td>
+                        <td>{{ $pedido->descripcion }}</td>
+                        <td>{{ $pedido->nota }}</td>
+                        <td>
+                            @foreach ($imagenes as $img)
+                                <p>
+                                    {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+                                    <a target="_blank" download
+                                       href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                </p>
+                            @endforeach
+                        </td>
+                        {{-- <td><a href="{{ route('pedidos.descargaradjunto', $pedido->adjunto) }}">{{ $pedido->adjunto }}</a></td> --}}
+                        <td>@php echo number_format($pedido->ft,2) @endphp</td>
+                        <td>
+                            {{--@can('pedidos.edit')
+                              <a href="{{ route('pedidos.edit', $pedido) }}" class="btn btn-warning btn-sm">Editar</a>
+                            @endcan--}}
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td><b><h3>TOTAL</h3></b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><h3>{{ $pedido->total }}</h3></td>
+                    </tr>
+                    </tfoot>
+                </table>
             </div>
+        </div>
+    </div>
 
-            <br>
+    @if ($pedido->condiciones == "3")
+    <div class="card">
+        <div class="border rounded card-body  border-secondary">
+            <table id="tabla" class="table table-striped" style="text-align: center">
+                <thead><h4 style="text-align: center"><strong>Detalle de atención</strong></h4>
+                <tr>
+                    <th scope="col">Documentos</th>
+                    <th scope="col">Fecha de registro</th>
+                    <th scope="col">Cantidad de comprobantes</th>
+                    <th scope="col">Fecha de envío</th>
+                    <th scope="col">Fecha de recepción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        @foreach($imagenesatencion as $img)
+                            <p>
+                                {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
 
-            @if ($pedido->condiciones == "3")
-                <div class="border rounded card-body border-secondary">
-                    <table id="tabla" class="table table-striped" style="text-align: center">
-                        <thead><h4 style="text-align: center"><strong>Detalle de atención</strong></h4>
-                        <tr>
-                            <th scope="col">Documentos</th>
-                            <th scope="col">Fecha de registro</th>
-                            <th scope="col">Cantidad de comprobantes</th>
-                            <th scope="col">Fecha de envío</th>
-                            <th scope="col">Fecha de recepción</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                @foreach($imagenesatencion as $img)
+                                <a target="_blank" download
+                                   href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
+                            </p>
+                        @endforeach
+                    </td>
+                    <td>{{ $pedido->fecha_envio_doc }}</td>
+                    <td>{{ $pedido->cant_compro }}</td>
+                    <td>{{ $pedido->fecha_envio_doc_fis }}</td>
+                    <td>{{ $pedido->fecha_recepcion }}</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    @endif
+
+    <div class="row">
+        <div class="card col-md-6">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <h4 style="font-weight:bold;">Detalle de atención</h4>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <p><b>Cantidad de comprobantes enviados:</b></p>
+                                <b class="h4">{{ $pedido->cant_compro }}</b>
+                            </div>
+                            <div class="col-lg-6">
+                                <p><b>Archivos Adjuntados:</b></p>
+                                @foreach($imagenesatencion as $img_at)
                                     <p>
-                                        {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
-
-                                        <a target="_blank" download
-                                           href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                        <a class="{{$img_at->estado==0?'text-danger':''}}" target="_blank"
+                                           download
+                                           href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img_at->adjunto) }}">
+                                            {{ $img_at->adjunto }}
+                                        </a>
                                     </p>
                                 @endforeach
-                            </td>
-                            <td>{{ $pedido->fecha_envio_doc }}</td>
-                            <td>{{ $pedido->cant_compro }}</td>
-                            <td>{{ $pedido->fecha_envio_doc_fis }}</td>
-                            <td>{{ $pedido->fecha_recepcion }}</td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        </tfoot>
-                    </table>
-                </div>
-            @endif
-
-            <div class="border rounded card-body border-secondary">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                            <h4 style="font-weight:bold;">Detalle de atención</h4>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <p><b>Cantidad de comprobantes enviados:</b></p>
-                                    <b class="h4">{{ $pedido->cant_compro }}</b>
-                                </div>
-                                <div class="col-lg-6">
-                                    <p><b>Archivos Adjuntados:</b></p>
-                                    @foreach($imagenesatencion as $img_at)
-                                        <p>
-                                            <a class="{{$img_at->estado==0?'text-danger':''}}" target="_blank"
-                                               download
-                                               href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img_at->adjunto) }}">
-                                                {{ $img_at->adjunto }}
-                                            </a>
-                                        </p>
-                                    @endforeach
-                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"></div>
                     </div>
+
+                    <div class=""></div>
                 </div>
             </div>
+        </div>
 
-            @if($pedido->condicion_code==\App\Models\Pedido::ANULADO_INT)
-                <div class="card mt-4 border rounded card-body border-secondary">
-                    <div class="card-header">
-                        <h4 class="text-bold">Detalle de anulación</h4>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                Responsable <B>{{$pedido->responsable}}</B>
-                            </li>
-                            <li class="list-group-item">
-                                Fecha de anulacion
-                                <b>{{optional($pedido->fecha_anulacion)->format('d-m-Y h:i')}}</b>
-                            </li>
-                            <li class="list-group-item">
-                                Fecha de anulacion
-                                confirmada
-                                <b>{{optional($pedido->fecha_anulacion_confirm)->format('d-m-Y h:i')}}</b>
-                            </li>
-                            <li class="list-group-item">
-                                Motivo de anulacion:
-                                <b>{{$pedido->motivo}}</b>
-                            </li>
-                            @if(count($pedido->adjuntosFiles())>0)
-                                <li class="list-group-item bg-danger">
-                                    Adjuntos
-                                </li>
-                            @endif
-                            <li class="list-group-item">
-                                <div class="row">
-                                    @foreach($pedido->adjuntosFiles() as $file)
-                                        <div class="col-md-3">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <a target="_blank"
-                                                       href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                                        @if(!Str::contains(Str::lower($file),'.pdf'))
-                                                            <img class="w-100"
-                                                                 src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                                        @else
-                                                            <i class="fa fa-file-pdf"></i>
-                                                        @endif
-                                                        {{basename($file)}}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </li>
-
-                            @if(count($pedido->notasCreditoFiles())>0)
-                                <li class="list-group-item bg-danger">
-                                    Notas de Credito
-                                </li>
-                            @endif
-
-                            <li class="list-group-item">
-                                <div class="row">
-                                    @foreach($pedido->notasCreditoFiles() as $file)
-                                        <div class="col-md-3">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <a target="_blank"
-                                                       href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                                        @if(!Str::contains(Str::lower($file),'.pdf'))
-                                                            <img class="w-100"
-                                                                 src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                                        @else
-                                                            <i class="fa fa-file-pdf"></i>
-                                                        @endif
-                                                        {{basename($file)}}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+        @if($pedido->condicion_code==\App\Models\Pedido::ANULADO_PARCIAL_INT)
+            <div class="card col-md-6">
+                <div class="card-header bg-danger text-white">
+                    Motivos Anulado Parcial
                 </div>
-            @endif
-            <br>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach($motivo_anulado_parcial as $motivo_anulado_p)
+                            <li class="list-group-item">
+                                {{$motivo_anulado_p["usu_motivo"]}}: {{$motivo_anulado_p["motivo"]}}
+                            </li>
+                        @endforeach
 
-            <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50"
-                      id="copiar_cotizacion"></textarea>
+                    </ul>
 
 
-            <br>
+                </div>
+            </div>
+        @endif
+
+    </div>
 
 
-            <!--<a href="{{ route('pedidos.index', $pedido) }}" class="btn btn-danger btn-sm">Cancelar</a>-->
-            <div class="card-footer">
+
+
+    @if($pedido->condicion_code==\App\Models\Pedido::ANULADO_INT)
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-bold">Detalle de anulación</h4>
+            </div>
+            <div class="border rounded card-body border-secondary">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        Responsable <B>{{$pedido->responsable}}</B>
+                    </li>
+                    <li class="list-group-item">
+                        Fecha de anulacion
+                        <b>{{optional($pedido->fecha_anulacion)->format('d-m-Y h:i')}}</b>
+                    </li>
+                    <li class="list-group-item">
+                        Fecha de anulacion
+                        confirmada
+                        <b>{{optional($pedido->fecha_anulacion_confirm)->format('d-m-Y h:i')}}</b>
+                    </li>
+                    <li class="list-group-item">
+                        Motivo de anulacion:
+                        <b>{{$pedido->motivo}}</b>
+                    </li>
+                    @if(count($pedido->adjuntosFiles())>0)
+                        <li class="list-group-item bg-danger">
+                            Adjuntos
+                        </li>
+                    @endif
+                    <li class="list-group-item">
+                        <div class="row">
+                            @foreach($pedido->adjuntosFiles() as $file)
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <a target="_blank"
+                                               href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                @if(!Str::contains(Str::lower($file),'.pdf'))
+                                                    <img class="w-100"
+                                                         src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                @else
+                                                    <i class="fa fa-file-pdf"></i>
+                                                @endif
+                                                {{basename($file)}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </li>
+
+                    @if(count($pedido->notasCreditoFiles())>0)
+                        <li class="list-group-item bg-danger">
+                            Notas de Credito
+                        </li>
+                    @endif
+
+                    <li class="list-group-item">
+                        <div class="row">
+                            @foreach($pedido->notasCreditoFiles() as $file)
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <a target="_blank"
+                                               href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                @if(!Str::contains(Str::lower($file),'.pdf'))
+                                                    <img class="w-100"
+                                                         src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                @else
+                                                    <i class="fa fa-file-pdf"></i>
+                                                @endif
+                                                {{basename($file)}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    @endif
+
+        <div class="card">
+            <div class="card-body">
+                <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50"
+                          id="copiar_cotizacion"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <button type="button" onClick="history.back()" class="btn btn-danger btn-lg"><i
                             class="fas fa-arrow-left"></i>ATRAS
@@ -283,7 +309,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
 @stop
 
