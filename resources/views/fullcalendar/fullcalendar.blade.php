@@ -621,6 +621,8 @@
                     $('.demo-color-texto').addClass('d-none');
                     $('.demo-color-fondo').removeClass('d-none');
                 }
+                $("#calendario_nombre_evento_editar").prop('disabled',false);
+                $("#calendario_descripcion_evento_editar").prop('disabled',false);
             });
 
             $(document).on("click", "#frm_editar_evento_calendario .btn-edit-check", function (event) {
