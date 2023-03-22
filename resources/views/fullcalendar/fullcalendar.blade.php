@@ -362,7 +362,7 @@
                     let contenerEliminar=info.draggedEl;
                     let eventEliminar = $(contenerEliminar).attr('id').split('_')[1];
                     let color=$(contenerEliminar).data("colorfondo");
-                    console.log(color);
+                    /*console.log(color);return false;
                     switch(color)
                     {
                         case 'bg-primary':color='rgb(0, 86, 179)';break;
@@ -370,7 +370,7 @@
                         case 'bg-success':color='rgb(25, 105, 44)';break;
                         case 'bg-danger':color='rgb(167, 29, 42)';break;
                         default:color='rgb(0, 86, 179)';break;
-                    }
+                    }*/
 
                     let titulo=$(contenerEliminar).data("titulo");
                     let descripcion=$(contenerEliminar).data("descripcion");
@@ -406,7 +406,7 @@
                             formData.append('calendario_end_evento', end_);
                             formData.append('calendario_frecuencia_evento', 'una_vez');
                             formData.append('calendario_tipo_evento', 'OTROS');
-
+                            formData.append('id_unsigned_event', eventEliminar)
                             formData.append('type', 'add');
                             $.ajax({
                                 url: "{{route('fullcalendarAjax')}}",

@@ -183,13 +183,27 @@ class FullCalenderController extends Controller
                                     'filetype' =>   $file->getClientOriginalExtension() ,
                                     'status'   =>   1 ,
                                 ]);
-                                /*$fileEvent =Event::where('id',$event->id)->first();
-                                $fileEvent->update([
-                                    'attach'=> $fileattach,
-                                ]);*/
                             }
                         }
+                        if (isset($request->id_unsigned_event)){
+                            $imagenesagendas=ImageAgenda::where('event_id',$request->id_unsigned_event)
+                            ->where('unsigned',0)->where('status',1)->get();
+                            foreach($imagenesagendas as $archivo){
+                                $imageevent= ImageAgenda::create([
+                                    'unsigned' =>   1 ,
+                                    'event_id' =>   $event->id ,
+                                    'filename' =>   $archivo->filename ,
+                                    'filepath' =>   $archivo->filepath ,
+                                    'filetype' =>   $archivo->filetype ,
+                                    'status'   =>   1 ,
+                                ]);
+                                $archivo->update([
+                                    'status'=> 0,
+                                    'updated_at' => now(),
+                                ]);
+                            }
 
+                        }
                         break;
                     case 'diario':
                         $inidia = Carbon::parse($request->calendario_start_evento)->clone()->startOfDay();
