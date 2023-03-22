@@ -602,6 +602,7 @@
                                 var formIdAnulacion = new FormData();
                                 formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
                                 formIdAnulacion.append("estado", estado);
+                                formIdAnulacion.append("sustento", result.value.sustento);
                                 $.ajax({
                                     processData: false,
                                     contentType: false,

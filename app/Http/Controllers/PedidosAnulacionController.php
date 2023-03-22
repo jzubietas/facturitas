@@ -224,12 +224,15 @@ class PedidosAnulacionController extends Controller
                 if (Auth::user()->rol == User::ROL_ASESOR) {
                     if ($pedido->estado_aprueba_asesor==0){
                         $btn[] = '<button class="btn btn-primary btn-lg btnApruebaAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-check"></i></button>';
+
                     }
                 }
                 if (Auth::user()->rol == User::ROL_ENCARGADO) {
                     if ($pedido->estado_aprueba_encargado==0){ //<i class="fas fa-ban"></i>
                         $btn[] = '<button class="btn btn-warning btn-lg btnApruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Aprobar Anulacion"><i class="fa fa-check-double"></i></button>';
                         $btn[] = '<button class="btn btn-danger btn-lg btnDesapruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Desaprobar Anulacion"><i class="fas fa-ban"></i></button>';
+                    }else if($pedido->estado_aprueba_encargado==2){
+                        $btn[] = '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Rechazado</span>';
                     }
                 }
                 if (Auth::user()->rol == User::ROL_ADMIN) {
@@ -424,11 +427,13 @@ class PedidosAnulacionController extends Controller
         $pedidosanulacion=PedidosAnulacion::where('id',$request->pedidoAnulacionId)->first();
         if ($request->estado==1){
             $pedidosanulacion->update([
+
                 'estado_aprueba_encargado' => $request->estado,
                 'estado_aprueba_administrador' => 0,
             ]);
         }elseif ($request->estado==2){
             $pedidosanulacion->update([
+                'motivo_sol_encargado' => $request->sustento,
                 'estado_aprueba_asesor' => 0,
                 'estado_aprueba_encargado' => $request->estado,
             ]);
