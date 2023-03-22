@@ -555,7 +555,7 @@ class FullCalenderController extends Controller
                         'unsigned'=>'0',
                         'start'=>$request->start,
                         'end'=>$request->end,
-                        'colorEvento'=>'white',
+                        'colorEvento'=>'black',
                     ]
                 );
                 return response()->json($event);
