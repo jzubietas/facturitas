@@ -353,7 +353,8 @@
                     $('#calendario_nombre_evento_editar').val(info.event.title);
                     $('#calendario_descripcion_evento_editar').val(info.event._def.extendedProps.description);
                     $('#picturee').attr('src',info.event._def.extendedProps.adjunto);
-
+                    $("#calendario_tipo_evento").prop('disabled',true);
+                    $("#calendario_frecuencia_evento").prop('disabled',true);
                     editar_evento_calendario.show();
                 },
                 eventResize: function(info) {
@@ -594,6 +595,8 @@
                 $(".contenedor_adjunto").removeClass('d-none');
 
                 $('.btn-edit-check').removeClass('d-none');
+                $("#calendario_tipo_evento").prop('disabled',false);
+                $("#calendario_frecuencia_evento").prop('disabled',false);
             });
 
             $(document).on("click", "#frm_editar_evento_calendario .btn-edit-check", function (event) {
