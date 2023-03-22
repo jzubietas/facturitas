@@ -333,7 +333,7 @@
                     return false;
                 }
                 if (txtMotivoPedComplet.length < 1) {
-                    Swal.fire('Error','Ingrese el motivo para solicitar la anulacion del pedido','warning'
+                    Swal.fire('Error','Completa el sustento para la anulación ','warning'
                     ).then(function () {
                         $("#txtMotivoPedComplet").focus()
                     });
@@ -483,7 +483,7 @@
                     return false;
                 }
                 if (txtMotivoFactura.length < 1) {
-                    Swal.fire('Error','Ingrese el motivo para solicitar la anulacion del pedido','warning'
+                    Swal.fire('Error','Completa el sustento para la anulación ','warning'
                     ).then(function () {
                         $("#txtMotivoFactura").focus()
                     });
