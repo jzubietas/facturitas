@@ -119,8 +119,8 @@ class FullCalenderController extends Controller
                         $event = Event::create([
                             'title' => $request->calendario_nombre_evento_editar,
                             'description' => $request->calendario_descripcion_evento_editar,
-                            'start' => $request->calendario_start_evento,
-                            'end' => $request->calendario_end_evento,
+                            'start' => $request->edit_start,
+                            'end' => $request->edit_start,
                             'color' => $color,
                             'colorEvento' => $colorEvento,
                             'fondoEvento' => $fondoEvento,

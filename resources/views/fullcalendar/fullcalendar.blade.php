@@ -357,8 +357,12 @@
                     $('#picturee').attr('src',info.event._def.extendedProps.adjunto);
                     $("#calendario_tipo_evento_editar").prop('disabled',true);
                     $("#calendario_frecuencia_evento_editar").prop('disabled',true);
+                    $("#calendario_nombre_evento_editar").prop('disabled',true);
+                    $("#calendario_descripcion_evento_editar").prop('disabled',true);
+
                     console.log(moment(info.event.start).format('Y-MM-DD'));
                     $("#edit_start").val(moment(info.event.start).format('Y-MM-DD'));
+
                     editar_evento_calendario.show();
                 },
                 eventResize: function(info) {
