@@ -345,7 +345,7 @@
                     agregar_evento_calendario.show();
                 },
                 eventClick: function(info) {
-                    console.log(info)
+                    console.log(info.event.start);
                     console.log("eventclick editar en evento")
                     $('#editar_evento_calendario .btn-edit i').removeClass('text-dark').addClass('text-warning');
                     $("#editar_evento").val(info.event.id);
@@ -357,6 +357,8 @@
                     $('#picturee').attr('src',info.event._def.extendedProps.adjunto);
                     $("#calendario_tipo_evento_editar").prop('disabled',true);
                     $("#calendario_frecuencia_evento_editar").prop('disabled',true);
+                    console.log(moment(info.event.start).format('Y-MM-DD'));
+                    $("#edit_start").val(moment(info.event.start).format('Y-m-d h:i:s'));
                     editar_evento_calendario.show();
                 },
                 eventResize: function(info) {

@@ -115,7 +115,7 @@ class FullCalenderController extends Controller
                 switch($request->calendario_frecuencia_evento_editar)
                 {
                     case 'una_vez':
-                        $frecuencia_recorrido = $request->calendario_start_evento;
+                        $frecuencia_recorrido = $request->edit_start;
                         $event = Event::create([
                             'title' => $request->calendario_nombre_evento_editar,
                             'description' => $request->calendario_descripcion_evento_editar,
@@ -167,7 +167,7 @@ class FullCalenderController extends Controller
                     case 'repetir':
 
 
-                        $inidia = Carbon::parse($request->calendario_start_evento)->clone()->startOfDay();
+                        $inidia = Carbon::parse($request->edit_start)->clone()->startOfDay();
                         $grupo=0;
                         for ($i = $inidia->day; $i <= $inidia->daysInMonth; $i++)
                         {
@@ -206,7 +206,7 @@ class FullCalenderController extends Controller
                         }
                         break;
                     case 'ini_mes':
-                        $startDate = Carbon::parse($request->calendario_start_evento);
+                        $startDate = Carbon::parse($request->edit_start);
                         if (!$startDate->day == 1) {
                             $startDate->addMonth();
                         }
@@ -252,7 +252,7 @@ class FullCalenderController extends Controller
                         }
                         break;
                     case 'fin_mes':
-                        $startDate = Carbon::parse($request->calendario_start_evento);
+                        $startDate = Carbon::parse($request->edit_start);
                         if (!$startDate->isLastOfMonth()) {
                             //$date->addMonth();
                             //$startDate=$startDate->clone()->lastOfMonth();
