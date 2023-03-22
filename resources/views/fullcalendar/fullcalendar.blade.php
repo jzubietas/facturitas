@@ -422,6 +422,16 @@
                 }
             })
 
+            $(document).on('change','#calendario_tipo_evento_editar',function(){
+                //
+                let val=$(this).val();
+                if(val=='OTROS')
+                {
+                    $('.demo-color-texto').addClass('d-none');
+                    $('.demo-color-fondo').removeClass('d-none');
+                }
+            })
+
             $(document).on('focus',"input[type=text]",function(){
                 this.select()
             })
