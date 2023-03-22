@@ -48,21 +48,14 @@
                 <div class="row">
                     <div class="col-sm-10 offset-sm-1 text-center">
                         <div class="info-form">
-                            <form class="mt-60">
+                            <form id="formulario" class="mt-60">
                                 <div class="form-group">
-                                    {{--<label>Usuario</label>
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control " readonly name="txtUser" id="txtUser">
-                                        <div class="input-group-append">
-                                            <button class="btn" type="button"><i class="fa fa-user" aria-hidden="true"></i></button>
-                                        </div>
-                                    </div>--}}
 
                                     <label class="float-left">Contraseña de accesso</label>
                                     <div class="input-group mb-3">
-                                        <input class="form-control" type="password">
+                                        <input class="form-control" type="password" id="clave">
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">Acceder</button>
+                                            <button class="btn btn-primary" type="submit" id="acceder">Acceder</button>
                                         </div>
                                     </div>
                                 </div>
@@ -103,11 +96,19 @@
                 }
             });
 
-            $(document).on('click','form button.btn-primary',function(){
+            $(document).on('keypress','#clave',function(e) {
+                if(e.which == 13)
+                {
+                    $("#formulario").trigger('submit');
+                }
+            });
+
+            $(document).on("submit", "#formulario", function (event) {
                 //validar clave
+                event.preventDefault();
 
                 let formData = new FormData();
-                let clave=$('form input[type="password"]').val();
+                let clave=$('#clave').val();
                 if(clave=='')
                 {
                     Swal.fire('Error', 'Debe ingresar una contraseña.', 'error');
