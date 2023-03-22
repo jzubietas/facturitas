@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventsUnsigned;
+use App\Models\ImageAgenda;
+use App\Models\ImagenAgenda;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -113,10 +115,20 @@ class FullCalenderController extends Controller
 
                     foreach($files as $file){
                         $fileattach=$file->store('agenda', 'pstorage');
+                        $imageevent= ImageAgenda::create([
+                            'unsigned' =>   1,
+                            'event_id' =>   $event->id ,
+                            'filename' =>   $file->getClientOriginalName() ,
+                            'filepath' =>    $fileattach ,
+                            'filetype' =>   $file->getClientOriginalExtension() ,
+                            'status'   =>   1 ,
+                        ]);
+
+                        /*$fileattach=$file->store('agenda', 'pstorage');
                         $fileEvent =Event::where('id',$request->editar_evento)->first();
                         $fileEvent->update([
                             'attach'=> $fileattach,
-                        ]);
+                        ]);*/
                     }
                 }
 
@@ -163,10 +175,18 @@ class FullCalenderController extends Controller
                         if (isset($files) ){
                             foreach($files as $file){
                                 $fileattach=$file->store('agenda', 'pstorage');
-                                $fileEvent =Event::where('id',$event->id)->first();
+                                $imageevent= ImageAgenda::create([
+                                    'unsigned' =>   1 ,
+                                    'event_id' =>   $event->id ,
+                                    'filename' =>   $file->getClientOriginalName() ,
+                                    'filepath' =>    $fileattach ,
+                                    'filetype' =>   $file->getClientOriginalExtension() ,
+                                    'status'   =>   1 ,
+                                ]);
+                                /*$fileEvent =Event::where('id',$event->id)->first();
                                 $fileEvent->update([
                                     'attach'=> $fileattach,
-                                ]);
+                                ]);*/
                             }
                         }
 
@@ -321,6 +341,20 @@ class FullCalenderController extends Controller
                     //'end' => $request->calendario_start_evento,
                     'color' => $request->calendario_color_evento,
                 ]);
+                $files = $request->file('inputFilesEventU');
+                if (isset($files)){
+                    foreach($files as $file){
+                        $fileattach=$file->store('agenda', 'pstorage');
+                        $imageevent= ImageAgenda::create([
+                            'unsigned' =>   0,
+                            'event_id' =>   $event->id ,
+                            'filename' =>   $file->getClientOriginalName() ,
+                            'filepath' =>    $fileattach ,
+                            'filetype' =>   $file->getClientOriginalExtension() ,
+                            'status'   =>   1 ,
+                        ]);
+                    }
+                }
                 return response()->json($event);
             case 'update':
                 $event = EventsUnsigned::find($request->id)->update([

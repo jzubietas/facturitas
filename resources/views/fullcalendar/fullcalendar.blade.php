@@ -99,6 +99,8 @@
                                     <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
                                     <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
                                 </ul>
+                                {{--<input type="text" class="form-control colorpicker-input" value="#007bff">--}}
+                                <input type="color" class="form-control form-control-color"  id="color-selector" value="#ffffff">
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -112,6 +114,11 @@
                                         <textarea class="form-control" id="text-new-event" name="text-new-event"></textarea>
                                     </div>
                                 </div>
+                                <div class=" col-md-12">
+                                    {!! Form::label('inputFilesEventU', 'Adjuntar Archivos') !!}
+                                    {!! Form::file('inputFilesEventU[]', ['class' => 'form-control-file','multiple','id'=>'inputFilesEventU','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
+                                </div>
+
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <button id="add-new-event" type="button" class="btn btn-primary float-right">Agregar</button>
@@ -184,7 +191,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js"></script>
 
     <script src=" {{asset('js/toaster.min.js')}}"></script>
-    <script src=" {{asset('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js')}}"></script>
+    <script src=" {{asset('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js')}}"></script>
 
     <script src='https://unpkg.com/popper.js/dist/umd/popper.min.js'></script>
     <script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script>
@@ -438,6 +445,15 @@
                     'background-color': currColor,
                     'border-color': currColor
                 })
+                $('#new-event').css('background-color', currColor);
+                $('#text-new-event').css('background-color', currColor);
+            })
+
+            $('#color-selector').change(function() {
+                var color = $(this).val();
+                currColor =color;
+                $('#new-event').css('background-color', currColor);
+                $('#text-new-event').css('background-color', currColor);
             })
 
             $(document).on('click','.delete-unsigned-event',function(){
@@ -468,10 +484,16 @@
                 e.preventDefault()
                 let val = $('#new-event').val()
                 let valtext = $('#text-new-event').val()
+                var files = document.getElementById('inputFilesEventU').files;
+                var valColor = $('#color-selector').val();
+
+                /*return false;*/
                 if (val.length === 0) {
                     return
                 }
-
+                if (valColor!="#ffffff"){
+                    currColor=valColor;
+                }
                 // Create events
                 let event = $('<div />')
                 event.css({
@@ -487,21 +509,26 @@
                     '</button>'
                 )
 
-                switch(currColor)
-                {
-                    case 'rgb(0, 86, 179)':currColor='bg-primary';break;
-                    case 'rgb(186, 139, 0)':currColor='bg-warning';break;
-                    case 'rgb(25, 105, 44)':currColor='bg-success';break;
-                    case 'rgb(167, 29, 42)':currColor='bg-danger';break;
-                    //case 'rgb(0, 123, 255)':currColor='bg-grey';break;
-                    default:currColor='bg-info';break;
+                if (valColor=="#ffffff"){
+                    switch(currColor)
+                    {
+                        case 'rgb(0, 86, 179)':currColor='bg-primary';break;
+                        case 'rgb(186, 139, 0)':currColor='bg-warning';break;
+                        case 'rgb(25, 105, 44)':currColor='bg-success';break;
+                        case 'rgb(167, 29, 42)':currColor='bg-danger';break;
+                        //case 'rgb(0, 123, 255)':currColor='bg-grey';break;
+                        default:currColor='bg-info';break;
+                    }
                 }
-
+                /*console.log('valColor= ',valColor,' currColor=',currColor); return false;*/
                 let formUnsigned = new FormData();
                 formUnsigned.append('calendario_nombre_evento', val);
                 formUnsigned.append('calendario_descripcion_evento', valtext);
                 formUnsigned.append('calendario_color_evento', currColor);
                 formUnsigned.append('type', 'add');
+                for (var i = 0; i < files.length; i++) {
+                    formUnsigned.append('inputFilesEventU[]', files[i]);
+                }
                 $.ajax({
                     url: "{{route('fullcalendarAjaxUnsigned')}}",
                     data: formUnsigned,

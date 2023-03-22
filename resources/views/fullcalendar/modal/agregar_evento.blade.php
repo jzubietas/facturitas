@@ -86,7 +86,7 @@
                             </div>
                             <div class="form-group col lg-6">
                                 {!! Form::label('attachments', 'Adjuntar Archivos') !!}
-                                {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','id'=>'inputFilesEventA','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
+                                {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','multiple','id'=>'inputFilesEventA','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
                             </div>
                             <div class="form-group col-lg-6">
                                 <div class="image-wrapper">
