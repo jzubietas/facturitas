@@ -105,6 +105,16 @@ class FullCalenderController extends Controller
                 return response()->json($events);
                 break;
             case 'modificar':
+                $color='';$colorFondo='';
+                if($request->calendario_tipo_evento=='OTROS')
+                {
+                    $colorFondo=$request->calendario_fondo_evento;$color="black";
+
+                }else if($request->calendario_tipo_evento=='PAGO')
+                {
+                    $colorFondo='#BA55D3';$color='black';
+                }
+
                 $event=Event::where('id',$request->editar_evento)->first();
                 $color=$event->color;
                 $colorEvento=$event->colorEvento;
@@ -122,8 +132,8 @@ class FullCalenderController extends Controller
                             'start' => $request->edit_start,
                             'end' => $request->edit_start,
                             'color' => $color,
-                            'colorEvento' => $colorEvento,
-                            'fondoEvento' => $fondoEvento,
+                            'colorEvento' => $color,
+                            'fondoEvento' => $colorFondo,
                             'tipo' => $request->calendario_tipo_evento_editar,
                             'frecuencia' => $request->calendario_frecuencia_evento_editar,
                             'unsigned'=>'0',
@@ -363,14 +373,17 @@ class FullCalenderController extends Controller
                 ]);
                 return response()->json($event);
             case 'add':
+
                 $color='';$colorFondo='';
-                if($request->colorBackground!='')
+                if($request->calendario_tipo_evento=='OTROS')
                 {
-                    $colorFondo=$request->calendario_fondo_evento;
-                }else{
-                    if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='black';}
-                    else if($request->calendario_tipo_evento=='OTROS'){$colorFondo='#5F9F9F';$color="black";}
+                    $colorFondo=$request->calendario_fondo_evento;$color="black";
+
+                }else if($request->calendario_tipo_evento=='PAGO')
+                {
+                    $colorFondo='#BA55D3';$color='black';
                 }
+
                 //analisis frecuencia
             $frecuencia_recorrido=null;
                 switch($request->calendario_frecuencia_evento) {
