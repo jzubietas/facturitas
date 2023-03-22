@@ -168,7 +168,10 @@ class FullCalenderController extends Controller
                             'fondoEvento' => $colorFondo,
                             'tipo' => $request->calendario_tipo_evento,
                             'frecuencia' => $request->calendario_frecuencia_evento,
+                            'unsigned'=>'0',
+                            'status'=>'1'
                         ]);
+                        $event->update(['grupo'=>$event->id]);
                         $files = $request->file('inputFilesEvent');
                         if (isset($files) ){
                             foreach($files as $file){
@@ -210,6 +213,7 @@ class FullCalenderController extends Controller
                         /*$difference = ($inidia->diff($findia)->days < 1)
                             ? 'today'
                             : $inidia->diffForHumans($findia);*/
+                        $grupo=0;
                         for ($i = $inidia->day; $i <= $inidia->daysInMonth; $i++) {
                             //llevar al dia
                             $fecha = $inidia->clone()->setUnitNoOverflow('day', $i, 'month');
@@ -225,7 +229,16 @@ class FullCalenderController extends Controller
                                 'fondoEvento' => $colorFondo,
                                 'tipo' => $request->calendario_tipo_evento,
                                 'frecuencia' => $request->calendario_frecuencia_evento,
+                                'unsigned'=>'0',
+                                'status'=>'1'
                             ]);
+                            if($i==$inidia->day)
+                            {
+                                $grupo=$event->id;
+                                $event->update(['grupo'=>$grupo]);
+                            }else{
+                                $event->update(['grupo'=>$grupo]);
+                            }
 
                         }
                         $files = $request->file('inputFilesEvent');
@@ -248,7 +261,7 @@ class FullCalenderController extends Controller
                         $endDate = $startDate->clone()->addYear()->startOfYear()->subDay();
                         //$monthsRemaining = 12 - $startDate->month + 1;
                         $firstDayOfNextMonth = $startDate->clone()->firstOfMonth();
-
+                        $grupo=0;
                         for ($date = $firstDayOfNextMonth; $date->lte($endDate); $date->addMonthsNoOverflow())
                         {
                             $fullmes=$date->clone()->firstOfMonth();
@@ -262,7 +275,18 @@ class FullCalenderController extends Controller
                                 'fondoEvento' => $colorFondo,
                                 'tipo' => $request->get('calendario_tipo_evento'),
                                 'frecuencia' => $request->get('calendario_frecuencia_evento'),
+                                'unsigned'=>'0',
+                                'status'=>'1'
                             ]);
+
+                            if($date==$firstDayOfNextMonth)
+                            {
+                                $grupo=$event->id;
+                                $event->update(['grupo'=>$grupo]);
+                            }else{
+                                $event->update(['grupo'=>$grupo]);
+                            }
+
                         }
                         $files = $request->file('inputFilesEvent');
                         if (isset($files) ){
@@ -283,7 +307,7 @@ class FullCalenderController extends Controller
                         }
                         $endDate = $startDate->clone()->addYear()->startOfYear()->subDay();
                         $lastDayOfNextMonth = $startDate->clone()->lastOfMonth();
-
+                        $grupo=0;
                         for ($date = $lastDayOfNextMonth; $date->lte($endDate); $date->addMonthsNoOverflow())
                         {
                             $fullmes=$date->clone()->lastOfMonth();
@@ -297,7 +321,17 @@ class FullCalenderController extends Controller
                                 'fondoEvento' => $colorFondo,
                                 'tipo' => $request->get('calendario_tipo_evento'),
                                 'frecuencia' => $request->get('calendario_frecuencia_evento'),
+                                'unsigned'=>'0',
+                                'status'=>'1'
                             ]);
+
+                            if($date==$lastDayOfNextMonth)
+                            {
+                                $grupo=$event->id;
+                                $event->update(['grupo'=>$grupo]);
+                            }else{
+                                $event->update(['grupo'=>$grupo]);
+                            }
                         }
                         $files = $request->file('inputFilesEvent');
 
