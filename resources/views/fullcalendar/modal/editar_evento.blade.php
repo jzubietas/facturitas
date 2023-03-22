@@ -53,7 +53,7 @@
                                         <label for="calendario_frecuencia_evento_editar">Frecuencia</label>
                                         <select id="calendario_frecuencia_evento_editar" name="calendario_frecuencia_evento_editar" class="form-control">
                                             <option value="una_vez">Una vez</option>
-                                            <option value="repetir">Repetir</option>
+                                            <option value="repetir">Repetir en el mes</option>
                                             <option value="ini_mes">Inicio de Mes</option>
                                             <option value="fin_mes">Fin de Mes</option>
                                         </select>
