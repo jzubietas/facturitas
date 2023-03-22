@@ -579,7 +579,7 @@
                 }
                 Swal.fire({
                     title:'Cancelar',
-                    html:'<textarea id="txt_sustento" placeholder="Sustento"></textarea>',
+                    html:'<textarea id="txt_sustento" placeholder="Sustento" class="form-control"></textarea>',
                     preConfirm: () => {
                         const sustento = Swal.getPopup().querySelector('#txt_sustento').value
                         if(!sustento){
