@@ -112,7 +112,6 @@ class FullCalenderController extends Controller
                 ]);
                 $files = $request->file('inputFilesEvent');
                 if (isset($files)){
-
                     foreach($files as $file){
                         $fileattach=$file->store('agenda', 'pstorage');
                         $imageevent= ImageAgenda::create([
@@ -131,7 +130,6 @@ class FullCalenderController extends Controller
                         ]);*/
                     }
                 }
-
                 return response()->json($event);
                 break;
             case 'adddrop':

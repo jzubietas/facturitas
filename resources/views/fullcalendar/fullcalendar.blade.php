@@ -335,6 +335,7 @@
                     $("#calendario_start_evento").val(info.dateStr);
                     $("#calendario_end_evento").val(info.dateStr);
                     $('.btn-edit-check').addClass('d-none');
+
                     agregar_evento_calendario.show();
                 },
                 eventClick: function(info) {
@@ -541,6 +542,7 @@
 
                 $('#new-event').val('')
                 $('#text-new-event').val('')
+                $("#inputFilesEventU").val('')
                 $('#new-event').css('background-color', '#ece63c');
                 $('#text-new-event').css('background-color', '#ece63c');
                 $('#color-selector').val('#ece63c')
@@ -658,6 +660,7 @@
                 $('#calendario_nombre_evento').val('');
                 $('#calendario_start_evento').val('');
                 $('#calendario_end_evento').val('');
+                $("#inputFilesEventA").val();
                 $('#calendario_fondo_evento').val('#3788D8');
                 $('#calendario_color_evento').val('#ffffff');
             }
