@@ -337,6 +337,7 @@
                     ).then(function () {
                         $("#txtMotivoPedComplet").focus()
                     });
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
                     return false;
                 }
                 var data = new FormData(document.getElementById("form-agregaranulacion-pc"));
@@ -487,6 +488,7 @@
                     ).then(function () {
                         $("#txtMotivoFactura").focus()
                     });
+                    $(".btnEnviarFactura").attr('disabled', false);
                     return false;
                 }
                 var datas = new FormData(document.getElementById("form-agregaranulacion-f"));
