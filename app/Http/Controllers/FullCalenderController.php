@@ -316,13 +316,11 @@ class FullCalenderController extends Controller
                 $color='';$colorFondo='';
                 if($request->colorBackground!='')
                 {
-                    $colorFondo=$request->colorBackground;$color='black';
+                    $colorFondo=$request->calendario_fondo_evento;
                 }else{
                     if($request->calendario_tipo_evento=='PAGO'){$colorFondo='#BA55D3';$color='black';}
                     else if($request->calendario_tipo_evento=='OTROS'){$colorFondo='#5F9F9F';$color="black";}
                 }
-
-
                 //analisis frecuencia
             $frecuencia_recorrido=null;
                 switch($request->calendario_frecuencia_evento) {

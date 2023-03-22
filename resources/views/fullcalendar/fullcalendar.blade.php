@@ -335,6 +335,10 @@
                     $("#calendario_start_evento").val(info.dateStr);
                     $("#calendario_end_evento").val(info.dateStr);
                     $('.btn-edit-check').addClass('d-none');
+                    $('#inputFilesEventA').val('');
+                    $('#picturea').attr('src','');
+                    $('.demo-color-texto').addClass('d-none');
+                    $('.demo-color-fondo').addClass('d-none');
 
                     agregar_evento_calendario.show();
                 },
@@ -401,6 +405,16 @@
                     });
                 }
             });
+
+            $(document).on('change','#calendario_tipo_evento',function(){
+                //
+                let val=$(this).val();
+                if(val=='OTROS')
+                {
+                    $('.demo-color-texto').addClass('d-none');
+                    $('.demo-color-fondo').removeClass('d-none');
+                }
+            })
 
             $(document).on('focus',"input[type=text]",function(){
                 this.select()
