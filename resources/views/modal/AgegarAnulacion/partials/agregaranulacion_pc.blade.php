@@ -14,7 +14,7 @@
         </div>
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
             <input name="asesorCodigoPc" id="asesorCodigoPc"
-                   placeholder="Asesor" readonly>
+                   placeholder="Asesor" readonly style="background: #62CDFF;">
             <div class="input-icon">
                 <i class="fa fa-user-circle" aria-hidden="true"></i>
             </div>
@@ -23,14 +23,14 @@
     <div class="row">
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
             <input name="importeCodigoPc" id="importeCodigoPc"
-                   placeholder="Colocar el importe del pedido" readonly>
+                   placeholder="Colocar el importe del pedido" readonly style="background: #62CDFF;">
             <div class="input-icon">
                 <i class="fa fa-plus-square" aria-hidden="true"></i>
             </div>
         </div>
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
             <input name="anulacionCodigoPc" id="anulacionCodigoPc"
-                   placeholder="Colocar el importe a anular" readonly>
+                   placeholder="Colocar el importe a anular" readonly style="background: #62CDFF;">
             <div class="input-icon">
                 <i class="fa fa-minus-square" aria-hidden="true"></i>
             </div>
@@ -39,14 +39,14 @@
     <div class="row">
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
             <input name="rucCodigoPc" id="rucCodigoPc"
-                   placeholder="Colocar el RUC del cliente" readonly>
+                   placeholder="Colocar el RUC del cliente" readonly style="background: #62CDFF;">
             <div class="input-icon">
                 <i class="fa fa-list-ol" aria-hidden="true"></i>
             </div>
         </div>
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
             <input name="razonCodigoPc" id="razonCodigoPc"
-                   placeholder="Colocar la razón social" readonly>
+                   placeholder="Colocar la razón social" readonly style="background: #62CDFF;">
             <div class="input-icon">
                 <i class="fa fa-map-pin" aria-hidden="true"></i>
             </div>
