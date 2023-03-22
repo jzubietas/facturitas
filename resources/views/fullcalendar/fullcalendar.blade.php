@@ -358,7 +358,7 @@
                     $("#calendario_tipo_evento_editar").prop('disabled',true);
                     $("#calendario_frecuencia_evento_editar").prop('disabled',true);
                     console.log(moment(info.event.start).format('Y-MM-DD'));
-                    $("#edit_start").val(moment(info.event.start).format('Y-m-d h:i:s'));
+                    $("#edit_start").val(moment(info.event.start).format('Y-MM-DD'));
                     editar_evento_calendario.show();
                 },
                 eventResize: function(info) {
