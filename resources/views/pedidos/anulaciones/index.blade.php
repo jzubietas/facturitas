@@ -159,7 +159,7 @@
                         },
                     },
                     {data: 'empresas', name: 'empresas',},
-                    {data: 'total', name: 'total', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
+                    {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
                     {
                         data: 'fechacreaanula',
                         name: 'fechacreaanula',
