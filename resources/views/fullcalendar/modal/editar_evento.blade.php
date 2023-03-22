@@ -40,8 +40,8 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="calendario_tipo_evento">Tipo</label>
-                                        <select id="calendario_tipo_evento" name="calendario_tipo_evento" class="form-control">
+                                        <label for="calendario_tipo_evento_editar">Tipo</label>
+                                        <select id="calendario_tipo_evento_editar" name="calendario_tipo_evento_editar" class="form-control">
                                             <option value="PAGO">PAGO</option>
                                             <option value="OTROS">OTROS</option>
                                         </select>
@@ -50,8 +50,8 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="calendario_frecuencia_evento">Frecuencia</label>
-                                        <select id="calendario_frecuencia_evento" name="calendario_frecuencia_evento" class="form-control">
+                                        <label for="calendario_frecuencia_evento_editar">Frecuencia</label>
+                                        <select id="calendario_frecuencia_evento_editar" name="calendario_frecuencia_evento_editar" class="form-control">
                                             <option value="una_vez">Una vez</option>
                                             <option value="diario">Diario</option>
                                             <option value="ini_mes">Inicio de Mes</option>

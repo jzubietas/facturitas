@@ -112,7 +112,7 @@ class FullCalenderController extends Controller
 
                 Event::where('grupo','=',$event->id)->update(['status'=>'0']);
 
-                switch($request->calendario_frecuencia_evento)
+                switch($request->calendario_frecuencia_evento_editar)
                 {
                     case 'una_vez':
                         $frecuencia_recorrido = $request->calendario_start_evento;
@@ -124,8 +124,8 @@ class FullCalenderController extends Controller
                             'color' => $color,
                             'colorEvento' => $colorEvento,
                             'fondoEvento' => $fondoEvento,
-                            'tipo' => $request->calendario_tipo_evento,
-                            'frecuencia' => $request->calendario_frecuencia_evento,
+                            'tipo' => $request->calendario_tipo_evento_editar,
+                            'frecuencia' => $request->calendario_frecuencia_evento_editar,
                             'unsigned'=>'0',
                             'status'=>'1'
                         ]);
@@ -178,8 +178,8 @@ class FullCalenderController extends Controller
                                 'color' => $color,
                                 'colorEvento' => $colorEvento,
                                 'fondoEvento' => $fondoEvento,
-                                'tipo' => $request->calendario_tipo_evento,
-                                'frecuencia' => $request->calendario_frecuencia_evento,
+                                'tipo' => $request->calendario_tipo_evento_editar,
+                                'frecuencia' => $request->calendario_frecuencia_evento_editar,
                                 'unsigned'=>'0',
                                 'status'=>'1'
                             ]);
@@ -223,8 +223,8 @@ class FullCalenderController extends Controller
                                 'color' => $color,
                                 'colorEvento' => $colorEvento,
                                 'fondoEvento' => $fondoEvento,
-                                'tipo' => $request->get('calendario_tipo_evento'),
-                                'frecuencia' => $request->get('calendario_frecuencia_evento'),
+                                'tipo' => $request->calendario_tipo_evento_editar,
+                                'frecuencia' => $request->calendario_frecuencia_evento_editar,
                                 'unsigned'=>'0',
                                 'status'=>'1'
                             ]);
@@ -269,8 +269,8 @@ class FullCalenderController extends Controller
                                 'color' => $color,
                                 'colorEvento' => $colorEvento,
                                 'fondoEvento' => $fondoEvento,
-                                'tipo' => $request->get('calendario_tipo_evento'),
-                                'frecuencia' => $request->get('calendario_frecuencia_evento'),
+                                'tipo' => $request->calendario_tipo_evento_editar,
+                                'frecuencia' => $request->calendario_frecuencia_evento_editar,
                                 'unsigned'=>'0',
                                 'status'=>'1'
                             ]);
