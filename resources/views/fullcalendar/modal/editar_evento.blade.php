@@ -59,7 +59,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <input type="text" id="edit_start" name="edit_start">
+                                <input type="hidden" id="edit_start" name="edit_start">
                                 <div class="col-md-12">
 
                                     <div class="form-row">
