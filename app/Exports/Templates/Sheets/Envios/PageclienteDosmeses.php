@@ -32,16 +32,16 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                 DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
-        //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
+        //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get(); Carbon::parse(now())->clone()
 
-        $dosmeses_ini=now()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
-        $dosmeses_fin=now()->endOfMonth()->subMonths(1)->format('Y-m');
+        $dosmeses_ini=Carbon::parse(now())->clone()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
+        $dosmeses_fin=Carbon::parse(now())->clone()->endOfMonth()->subMonths(1)->format('Y-m');
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
             {
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
-                if($fecha_analizar==$dosmeses_ini || $fecha_analizar==$dosmeses_fin)
+                if($fecha_analizar==$dosmeses_ini)
                 {
                     //if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
                     {
