@@ -117,9 +117,9 @@
                 ajax: "{{ route('pedidosanulacionestabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data.itipoanulacion=='C') {
-                        $('td', row).css('background', '#F51646').css('font-weight', 'bold').css('color', '#ffffff');
+                        $('td', row).css('background', '#FFAFB0').css('font-weight', 'bold');
                     }else if (data.itipoanulacion=='F'){
-                        $('td', row).css('background', '#F5B8BF').css('font-weight', 'bold');
+                        $('td', row).css('background', '#58D68D').css('font-weight', 'bold');
                     }
                 },
                 rowCallback: function (row, data, index) {

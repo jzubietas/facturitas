@@ -633,6 +633,7 @@ $banca"
                     DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
                     pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' limit 1) as vtipoAnulacion"),
                     DB::raw("(select  pea.total_anular from pedidos_anulacions as pea where pea.pedido_id= pedidos.id  limit 1) as dMontoAnular"),
+                    'pedidos.estado as idPedidoAnulacion',
                 ])
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -658,7 +659,7 @@ $banca"
                     'pedidos.pendiente_anulacion',
                     'pedidos.condicion',
                     'pedidos.condicion_code',
-                    DB::raw('(DATE_FORMAT(pedidos.fecha_anulacion, "%Y-%m-%d %h:%i:%s")) as fecha'),
+                    DB::raw('(DATE_FORMAT(pea.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
@@ -671,10 +672,11 @@ $banca"
                     /*'ia.adjunto',
                     'dp.tipo_banca as id_imagen_atenciones',*/
                     DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes "),
-                    DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
-                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' limit 1) as vtipoAnulacion"),
-                    DB::raw("(select  pea.total_anular from pedidos_anulacions as pea where pea.pedido_id= pedidos.id  limit 1) as dMontoAnular"),
+                    'pea.tipo  as vtipoAnulacion',
+                    'pea.total_anular as dMontoAnular',
+                    'pea.id as idPedidoAnulacion',
                 ])
+                ->where('pea.tipo', 'F')
                 ->where('pea.state_solicitud', '1')
                 ->where('pea.estado_aprueba_asesor', '1')
                 ->where('pea.estado_aprueba_encargado', '1')
@@ -718,7 +720,7 @@ $banca"
                 ->addIndexColumn()
                 ->addColumn('adjunto', function ($pedido) {
                     $buton = '';
-                    $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
+                    $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" data-total_anular_adjunto="' . $pedido->dMontoAnular . '" data-tipo_anulacion="' . $pedido->vtipoAnulacion . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
                     return $buton;
                 })
                 ->addColumn('condicion_code', function ($pedido) {
@@ -735,15 +737,26 @@ $banca"
                         return $badge_estado;
                     }
                 })
+                ->addColumn('tipoanulacion', function ($pedido) {
+                    $badge_estado = '';
+                    if ($pedido->pendiente_anulacion == '1') {
+                        $badge_estado .= '<span class="badge badge-info bg-info"> PEDIDO COMPLETO</span>';
+                        return $badge_estado;
+                    }else{
+                        $badge_estado .= '<span class="badge badge-warning"> FACTURA</span>';
+                        return $badge_estado;
+                    }
+                })
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
                     if ($pedido->pendiente_anulacion == 1) {
-                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-tatal_pedido="' . $pedido->total . '" data-tatal_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize" >EMITIR N/C</button>';
+                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-total_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize mr-2" data-vtipoanul="C" >EMITIR N/C</button>';
                     }
                     if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL) {
-                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-tatal_pedido="' . $pedido->total . '" data-tatal_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize" >EMITIR N/C</button>';
+                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-total_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize  mr-2" data-vtipoanul="F" >EMITIR N/C</button>';
+                        $btn .= '<a data-target="#modal-veradjunto" data-id_anulacion_adjuntos="' .$pedido->idPedidoAnulacion . '" data-total_anular="' . $pedido->dMontoAnular . '" data-toggle="modal" ><button class="btn btn-primary btn-sm mr-2"><i class="fas fa-file-download "></i> Doc por anular</button></a>';
                     }
-                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn btn-light btn-sm" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn btn-light btn-sm" target="_blank"><i class="fa fa-file-pdf text-primary  mr-2"></i> Ver PDF</a>';
                     $btn .= ' <button class="btn btn-warning btn-sm"
                     data-toggle="jqconfirm"
                     data-target="' . route('pedidos.confirmar.anular', ['pedido_id' => $pedido->id, 'action' => 'confirm_anulled_cancel']) . '"
@@ -752,7 +765,7 @@ $banca"
                     </button>';
                     return $btn;
                 })
-                ->rawColumns(['adjunto','condicion_code','action'])
+                ->rawColumns(['adjunto','condicion_code','action','tipoanulacion'])
                 ->toJson();
         }
 

@@ -3271,18 +3271,47 @@ class PedidoController extends Controller
     {
         if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);
-            if ($pedido->pendiente_anulacion != '1') {
+            /*if ($pedido->pendiente_anulacion != '1') {
                 return response()->json([
                     "success" => 0,
                 ]);
+            }*/
+
+            $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id)->where('state_solicitud',1);
+            $contpedanulacions=$pedidosanulacion->count();
+            if ($contpedanulacions==1){
+                $pedidosanulacion=$pedidosanulacion->first();
+                $pedidosanulacion->update([
+                    'state_solicitud'=>0,
+                ]);
+                if ($pedidosanulacion->tipo=='C'){
+                    $pedido->update([
+                        'motivo' => "",
+                        'responsable' => "",
+                        'pendiente_anulacion' => 0,
+                        'path_adjunto_anular' => "",
+                        'path_adjunto_anular_disk' => "",
+                        'modificador' => "",
+                        'fecha_anulacion' => null,
+                        'condicion'=>"",
+                    ]);
+                }else if ($pedidosanulacion->tipo=='F'){
+                    $pedido->update([
+                        'motivo' => "",
+                        'condicion'=>"",
+                    ]);
+                }
+            }else{
+                $pedido->update([
+                    'pendiente_anulacion' => '0',
+                    'user_anulacion_id' => \auth()->id(),
+                    'fecha_anulacion_denegada' => now(),
+                ]);
             }
-            $pedido->update([
-                'pendiente_anulacion' => '0',
-                'user_anulacion_id' => \auth()->id(),
-                'fecha_anulacion_denegada' => now(),
-            ]);
+
+
             return response()->json([
-                "success" => 1
+                "success" => 1,'pedido'=>$pedido,'pedidosanulacion'=>$pedidosanulacion
             ]);
         }
         $this->validate($request, [

@@ -2,7 +2,7 @@
 <div class="modal fade" id="modal_confirmar_anular" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 500px!important;">
         <div class="modal-content">
-            <div class="modal-header bg-danger">
+            <div class="modal-header " id="divHeaderAnulacion">
                 <h5 class="modal-title" id="exampleModalLabel">Confirmar anulacion</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -13,13 +13,13 @@
                 <p class="p-2 border border-dark">
                     <b>Motivo de anulacion: </b> <span id="motivo_anulacion_text"></span>
                         {{--<br>
-                        <b>Total: </b> <span id="montot_anulacion_text"></span>
+                        <b>Total: </b> <span id="montot_anulacion_text"></span>--}}
                         <br>
-                        <b class="lblMontoAnular">Anular: </b> <span id="montoa_anulacion_text" class="txtMontoAnular"></span>--}}
+                        <b class="lblMontoAnular h5 text-danger font-weight-bold">Monto Anular: </b> <span id="montoa_anulacion_text" class="txtMontoAnular h5 text-danger font-weight-bold"></span>
                 </p>
                 <div class="mt-4">
                     <input type="hidden" id="anular_pedido_id">
-                    <div class="alert alert-warning"> Permite seleccionar multiples notas de credito</div>
+                    <div class="alert alert-warning" id="divNotaAnula"> Permite seleccionar multiples notas de credito</div>
                     <div class="input-group mb-3">
                         <input class="form-control-file" type="file" name="attachments[]" multiple accept="*"
                                id="anularAttachments" >

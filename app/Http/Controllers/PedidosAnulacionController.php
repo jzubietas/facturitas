@@ -530,9 +530,9 @@ class PedidosAnulacionController extends Controller
                     'fecha_anulacion' => now(),
                 ]);
 
-                $pedidosanulacion->update([
+                /*$pedidosanulacion->update([
                     'pendiente_anulacion' => 1,
-                ]);
+                ]);*/
             }
         }else if ($pedidosanulacion->tipo=='F'){
             $pedidos=$pedidos->clone()->first();
@@ -551,5 +551,22 @@ class PedidosAnulacionController extends Controller
             'state_solicitud' => 0,
         ]);
         return  response()->json(['data' => $request->all(),'pedidosanulacion' => $pedidosanulacion,'success'=>"Anulado" ]);
+    }
+
+    public function verAdjuntosAddAsesorAnulacion(Request $request)
+    {
+        $pedidosanulaadjuntos = PedidosAnulacion::where('id', $request->idAnulacionAdjuntos)->first();
+        $adjuntosid = explode("-", $pedidosanulaadjuntos->files_asesor_ids);
+        $adjuntosid2=array();
+        for ($i = 0; $i < count($adjuntosid); $i++) {
+            if ($adjuntosid[$i]!=""){
+                array_push($adjuntosid2, $adjuntosid[$i]);
+            }
+        }
+        if (count($adjuntosid2)>0){
+            $imagenes = FileUploadAnulacion::whereIn('id', $adjuntosid2)->get();
+        }
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntosAnula', compact('imagenes'));
+        /*return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulaadjuntos))?$pedidosanulaadjuntos:0) ,'adjuntosid: ' => $adjuntosid,'adjuntosid2: ' => $adjuntosid2,'imagenes: ' => ((isset($imagenes))?$imagenes:0)]);*/
     }
 }

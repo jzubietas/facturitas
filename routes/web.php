@@ -833,6 +833,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::middleware('authorize.pedido.anulled')
         ->post('confirmaSolicitudAnulacion', [PedidosAnulacionController::class, 'confirmaSolicitudAnulacion'])
         ->name('confirmaSolicitudAnulacion');
+    Route::post('verAdjuntosAddAsesorAnulacion', [PedidosAnulacionController::class, 'verAdjuntosAddAsesorAnulacion'])->name('verAdjuntosAddAsesorAnulacion');
 
     /*Route::middleware('authorize.agenda')
         ->post('confirmaSolicitudAnulacion', [FullCalenderController::class, 'confirmaSolicitudAnulacion'])
