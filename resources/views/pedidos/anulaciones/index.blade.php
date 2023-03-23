@@ -25,6 +25,7 @@
     @include('modal.AgegarAnulacion.modalAgregarAnulacion')
     @include('pedidos.anulaciones.modal.confirmaAnulacion')
     @include('pedidos.anulaciones.modal.verMotivoAnulacion')
+    @include('pedidos.anulaciones.modal.verSustentoRechazoEnc')
     <div class="card p-0" style="overflow: hidden !important;">
 
         <div class="tab-content" id="myTabContent" style="overflow-x: scroll !important;">
@@ -577,51 +578,83 @@
                     v_url="{{ route('anulacionAprobacionJefeOp') }}";
                     v_text=v_estado+"- Jefe de Operaciones";
                 }
-                Swal.fire({
-                    title:'Cancelar',
-                    html:'<textarea id="txt_sustento" placeholder="Sustento" class="form-control"></textarea>',
-                    preConfirm: () => {
-                        const sustento = Swal.getPopup().querySelector('#txt_sustento').value
-                        if(!sustento){
-                            Swal.showValidationMessage(`Por favor ingrese sustento`);
-                        }
-                        return { sustento:sustento }
-                    },
-                    icon: 'warning',
-                    title: '¿Estás seguro?',
-                    text: v_text,
-                    showDenyButton: true,
-                    confirmButtonText: v_button,
-                    denyButtonText: 'No, cancelar',
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                if (estado==1){
+                    Swal.fire({
+                        title:'Cancelar',
+                        icon: 'warning',
+                        title: '¿Estás seguro?',
+                        text: v_text,
+                        showDenyButton: true,
+                        confirmButtonText: v_button,
+                        denyButtonText: 'No, cancelar',
+                    }).then((result) => {
                         if (result.isConfirmed) {
-                            console.log(result.value.sustento);
-                            if(result.value.sustento!='')
-                            {
-                                var formIdAnulacion = new FormData();
-                                formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
-                                formIdAnulacion.append("estado", estado);
-                                formIdAnulacion.append("sustento", result.value.sustento);
-                                $.ajax({
-                                    processData: false,
-                                    contentType: false,
-                                    type: 'POST',
-                                    url: v_url,
-                                    data: formIdAnulacion,
-                                    success: function (data) {
-                                        console.log(data);
-                                        Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
-                                        $('#tblListadoAnulaciones').DataTable().ajax.reload();
-                                    }
-                                });
-                            }else{
-                                Swal.fire('Notificacion', 'Sustento no puede estar vacio.', 'danger');
-                            }
-
+                            var formIdAnulacion = new FormData();
+                            formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
+                            formIdAnulacion.append("estado", estado);
+                            formIdAnulacion.append("sustento", "");
+                            $.ajax({
+                                processData: false,
+                                contentType: false,
+                                type: 'POST',
+                                url: v_url,
+                                data: formIdAnulacion,
+                                success: function (data) {
+                                    console.log(data);
+                                    Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
+                                    $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                }
+                            });
                         }
-                    }
-                })
+                    })
+                }else  if (estado==2){
+                    Swal.fire({
+                        title:'Cancelar',
+                        html:'<textarea id="txt_sustento" placeholder="Complete el sustento para la anulacion." class="form-control"></textarea>',
+                        preConfirm: () => {
+                            const sustento = Swal.getPopup().querySelector('#txt_sustento').value
+                            if(!sustento){
+                                Swal.showValidationMessage(`Por favor ingrese sustento`);
+                            }
+                            return { sustento:sustento }
+                        },
+                        icon: 'warning',
+                        title: '¿Estás seguro?',
+                        text: v_text,
+                        showDenyButton: true,
+                        confirmButtonText: v_button,
+                        denyButtonText: 'No, cancelar',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (result.isConfirmed) {
+                                console.log(result.value.sustento);
+                                if(result.value.sustento!='')
+                                {
+                                    var formIdAnulacion = new FormData();
+                                    formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
+                                    formIdAnulacion.append("estado", estado);
+                                    formIdAnulacion.append("sustento", result.value.sustento);
+                                    $.ajax({
+                                        processData: false,
+                                        contentType: false,
+                                        type: 'POST',
+                                        url: v_url,
+                                        data: formIdAnulacion,
+                                        success: function (data) {
+                                            console.log(data);
+                                            Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
+                                            $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                        }
+                                    });
+                                }else{
+                                    Swal.fire('Notificacion', 'Sustento no puede estar vacio.', 'danger');
+                                }
+
+                            }
+                        }
+                    })
+                }
+
             }
 
             $('#modal-confirma-anulacion').on('show.bs.modal', function (event) {
@@ -650,21 +683,27 @@
                         'Ingrese el motivo para confirmar la solicitud la anulacion del pedido',
                         'warning'
                     )
+                    $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
+                    return false;
                 } else if (responsable == '') {
                     Swal.fire(
                         'Error',
                         'Ingrese el responsable de la anulación',
                         'warning'
                     )
+                    $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
+                    return false;
                 } else if (!anulacion_password) {
                     Swal.fire(
                         'Error',
                         'Ingrese la contraseña para autorizar la anulación',
                         'warning'
-                    )
+                    );
+                    $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
+                    return false;
                 }else if (inputFilesAdmin == '') {
                     Swal.fire('Error', 'No se puede confirmar la anulacion sin archivos', 'warning');
-                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
                     return false;
                 } else {
                     ejecutarForSolicituAnulacion();
@@ -734,6 +773,43 @@
                 var pedido_motivo= button.data('pedido-motivo')
                 $("#txtMotivoAnulacion").html(pedido_motivo);
             });
+
+            $('#modal-ver_rechazo_encargado').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var motivo_rechazo= button.data('motivo-rechazo')
+                $("#txtMotivoRechazo").html(motivo_rechazo);
+            });
+
+            $('#tblListadoAnulaciones tbody').on('click', 'button.btnAnularSolicitudByAsesor', function () {
+                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+                /*console.log(data.idanulacion); return false;*/
+                Swal.fire({
+                    title:'Cancelar',
+                    icon: 'warning',
+                    title: '¿Estás seguro?',
+                    text: 'Esta anulando la solicitud. Recuerde que ya no podra visualizar el registro.',
+                    showDenyButton: true,
+                    confirmButtonText: 'Si, anular',
+                    denyButtonText: 'No, cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var formAnularSol = new FormData();
+                        formAnularSol.append("pedidoAnulacionId", data.idanulacion);
+                        $.ajax({
+                            processData: false,
+                            contentType: false,
+                            type: 'POST',
+                            url: '{{ route('anulacionSolicitud') }}',
+                            data: formAnularSol,
+                            success: function (data) {
+                                console.log(data);
+                                Swal.fire('Notificacion', 'Se anuló la solicitud correctamente.', 'success');
+                                $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                            }
+                        });
+                    }
+                })
+            })
             /*FIN DEL SCRIPT*/
         });
     </script>

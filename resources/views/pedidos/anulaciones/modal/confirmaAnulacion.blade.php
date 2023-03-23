@@ -20,7 +20,7 @@
                     </div>
                     <div class="form-group col lg-12">
                         {!! Form::label('motivo', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
-                        {!! Form::textarea('motivo', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Motivo', 'required' => 'required']) !!}
+                        {!! Form::textarea('motivo', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Motivo']) !!}
                     </div>
                     <div class="form-group col lg-12">
                         {!! Form::label('attachments', 'Adjuntar Archivos') !!}
@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group col lg-12">
                         {!! Form::label('anulacion_password', 'Contraseña de anulación') !!}
-                        {!! Form::password('anulacion_password', ['class' => 'form-control', 'placeholder' => 'Contraseña de anulación', 'required' => 'required',]) !!}
+                        {!! Form::password('anulacion_password', ['class' => 'form-control', 'placeholder' => 'Contraseña de anulación',]) !!}
                     </div>
                     {{-- </div> --}}
                 </div>

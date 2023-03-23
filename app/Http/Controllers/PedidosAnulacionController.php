@@ -125,12 +125,16 @@ class PedidosAnulacionController extends Controller
                     'pea.estado_aprueba_administrador',
                     'pea.estado_aprueba_jefeop',
                     'pea.motivo_solicitud',
+                    'pea.motivo_sol_encargado',
+                    'pea.motivo_sol_admin',
+                    'pea.motivo_jefeop_admin',
                 ]
-            );
+            )
+        ->where('pea.state_solicitud',1);
 
 
         if (Auth::user()->rol == User::ROL_ASESOR) {
-            $pedidos=$pedidos->whereIn('pea.estado_aprueba_asesor',[0,1])->whereIn('pea.estado_aprueba_encargado',[0,1,2]);
+            $pedidos=$pedidos->whereIn('pea.estado_aprueba_asesor',[0,1])->whereIn('pea.estado_aprueba_encargado',[0,2])->whereIn('pea.estado_aprueba_administrador',[0,2]);
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
@@ -142,7 +146,7 @@ class PedidosAnulacionController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
         } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
-            $pedidos=$pedidos->where('estado_aprueba_encargado',0);
+            $pedidos=$pedidos->whereIn('estado_aprueba_encargado',[0,2]);
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.supervisor', Auth::user()->id)
@@ -154,7 +158,7 @@ class PedidosAnulacionController extends Controller
         } else if (Auth::user()->rol == User::ROL_LLAMADAS) {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
-                ->where('users.llamada', Auth::user()->id)
+                ->where('users.llamada', Au::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
@@ -175,9 +179,9 @@ class PedidosAnulacionController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
         }else{
-            $pedidos=$pedidos->whereIn('estado_aprueba_asesor',[0,1])
+            $pedidos=$pedidos->whereIn('estado_aprueba_asesor',[0,1,2])
                 ->whereIn('estado_aprueba_encargado',[0,1,2])
-                ->whereIn('estado_aprueba_administrador',[0,1,2]);
+                ->whereIn('estado_aprueba_administrador',[0]);
         }
 
         $miidentificador = Auth::user()->name;
@@ -224,15 +228,23 @@ class PedidosAnulacionController extends Controller
                 if (Auth::user()->rol == User::ROL_ASESOR) {
                     if ($pedido->estado_aprueba_asesor==0){
                         $btn[] = '<button class="btn btn-primary btn-lg btnApruebaAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-check"></i></button>';
+                        $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_encargado  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
+                        $btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';
 
+                    }else if($pedido->estado_aprueba_encargado!=1){
+                        $btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';
                     }
                 }
                 if (Auth::user()->rol == User::ROL_ENCARGADO) {
-                    if ($pedido->estado_aprueba_encargado==0){ //<i class="fas fa-ban"></i>
+                    if ($pedido->estado_aprueba_encargado==0){
                         $btn[] = '<button class="btn btn-warning btn-lg btnApruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Aprobar Anulacion"><i class="fa fa-check-double"></i></button>';
                         $btn[] = '<button class="btn btn-danger btn-lg btnDesapruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Desaprobar Anulacion"><i class="fas fa-ban"></i></button>';
+                        if ($pedido->estado_aprueba_administrador==2){
+                            $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_admin  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
+                        }
                     }else if($pedido->estado_aprueba_encargado==2){
-                        $btn[] = '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin: 0px !important;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Rechazado</span>';
+                        $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_encargado  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
+                        $btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';
                     }
                 }
                 if (Auth::user()->rol == User::ROL_ADMIN) {
@@ -240,11 +252,16 @@ class PedidosAnulacionController extends Controller
 
                     if ($pedido->estado_aprueba_asesor==0 || $pedido->estado_aprueba_encargado==2){
                         $btn[] = '<button class="btn btn-primary btn-lg btnApruebaAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-check"></i></button>';
+                        $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_encargado  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
+                        $btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';
                     }
 
-                    if ($pedido->estado_aprueba_encargado==0 && $pedido->estado_aprueba_asesor=1){
+                    if ($pedido->estado_aprueba_encargado==0 && $pedido->estado_aprueba_asesor==1){
                         $btn[] = '<button class="btn btn-warning btn-lg btnApruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Aprobar Anulacion"><i class="fa fa-check-double"></i></button>';
                         $btn[] = '<button class="btn btn-danger btn-lg btnDesapruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Desaprobar Anulacion"><i class="fas fa-ban"></i></button>';
+                        if ($pedido->estado_aprueba_administrador==2){
+                            $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_admin  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
+                        }
                         $deshabilitar="disabled";
                     }
                     if ($pedido->estado_aprueba_administrador==0 && $pedido->estado_aprueba_encargado==1){
@@ -335,7 +352,7 @@ class PedidosAnulacionController extends Controller
         }else if($request->tipoAnulacion=="F"){
             $motivoanulacion="Solicitud de anulacion - Factura";
         }*/
-        $pedidosAnulValida=PedidosAnulacion::where('pedido_id',$pedido_id);
+        $pedidosAnulValida=PedidosAnulacion::where('pedido_id',$pedido_id)->where('state_solicitud',1);
         $countpedidosanul=$pedidosAnulValida->count();
         if ($countpedidosanul==0){
             $pedidosinpago=Pedido::where('id',$pedido_id)->where('pago',0)->where('pagado',0)->count();
@@ -379,7 +396,7 @@ class PedidosAnulacionController extends Controller
         }else if($request->tipoAnulacion2=="F"){
             $motivoanulacion="Solicitud de anulacion - Factura";
         }*/
-        $pedidosAnulValida=PedidosAnulacion::where('pedido_id',$pedido_id);
+        $pedidosAnulValida=PedidosAnulacion::where('pedido_id',$pedido_id)->where('state_solicitud',1);
         $countpedidosanul=$pedidosAnulValida->count();
         if ($countpedidosanul==0){
             $pedidosinpago=Pedido::where('id',$pedido_id)->where('pago',0)->where('pagado',0)->count();
@@ -427,12 +444,13 @@ class PedidosAnulacionController extends Controller
         $pedidosanulacion=PedidosAnulacion::where('id',$request->pedidoAnulacionId)->first();
         if ($request->estado==1){
             $pedidosanulacion->update([
-
+                'user_id_encargado'=>  Auth::user()->id,
                 'estado_aprueba_encargado' => $request->estado,
                 'estado_aprueba_administrador' => 0,
             ]);
         }elseif ($request->estado==2){
             $pedidosanulacion->update([
+                'user_id_encargado'=>  Auth::user()->id,
                 'motivo_sol_encargado' => $request->sustento,
                 'estado_aprueba_asesor' => 0,
                 'estado_aprueba_encargado' => $request->estado,
@@ -446,10 +464,15 @@ class PedidosAnulacionController extends Controller
         $pedidosanulacion=PedidosAnulacion::where('id',$request->pedidoAnulacionId)->first();
         if ($request->estado==1){
             $pedidosanulacion->update([
+                'user_id_administrador'=>  Auth::user()->id,
                 'estado_aprueba_administrador' => $request->estado,
+                'estado_aprueba_jefeop' => 0,
             ]);
         }elseif ($request->estado==2){
             $pedidosanulacion->update([
+                'user_id_administrador'=>  Auth::user()->id,
+                'motivo_sol_admin' => $request->sustento,
+                'estado_aprueba_asesor' => 2,
                 'estado_aprueba_encargado' => 0,
                 'estado_aprueba_administrador' => $request->estado,
             ]);
@@ -519,5 +542,14 @@ class PedidosAnulacionController extends Controller
             ]);
         }
         return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulacion))?$pedidosanulacion:0) ,'IDsFiles: ' => $idsfiles,'pedidos: '  => $pedidos,'contpedanulacions'=>$contpedanulacions,'$contpedidos'=>$contpedidos]);
+    }
+
+    public function anulacionSolicitud(Request $request)
+    {
+        $pedidosanulacion=PedidosAnulacion::where('id',$request->pedidoAnulacionId)->first();
+        $pedidosanulacion->update([
+            'state_solicitud' => 0,
+        ]);
+        return  response()->json(['data' => $request->all(),'pedidosanulacion' => $pedidosanulacion,'success'=>"Anulado" ]);
     }
 }

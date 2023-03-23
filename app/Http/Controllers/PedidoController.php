@@ -3318,7 +3318,7 @@ class PedidoController extends Controller
             ]);
         }
         setting()->save();
-        $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id);
+        $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id)->where('state_solicitud',1);
         $contpedanulacions=$pedidosanulacion->count();
         if ($contpedanulacions==1){
             $pedidosanulacion=$pedidosanulacion->first();
@@ -3334,17 +3334,22 @@ class PedidoController extends Controller
                 $pedido->detallePedidos()->update([
                     'estado' => '0'
                 ]);
+                $pedidosanulacion->update([
+                    'user_id_jefeop'=>Auth::user()->id,
+                    'motivo_jefeop_admin'=>Pedido::ANULADO,
+                    'estado_aprueba_jefeop'=>1,
+                ]);
             }else if ($pedidosanulacion->tipo=='F'){
                 $pedido->update([
                     'condicion' => Pedido::ANULADO_PARCIAL,
                 ]);
+                $pedidosanulacion->update([
+                    'user_id_jefeop'=>Auth::user()->id,
+                    'motivo_jefeop_admin'=>Pedido::ANULADO_PARCIAL,
+                    'estado_aprueba_jefeop'=>1,
+                ]);
             }
-            $pedidosanulacion=$pedidosanulacion->clone()->first();
-            $pedidosanulacion->update([
-                'user_id_jefeop'=>Auth::user()->id,
-                'motivo_jefeop_admin'=>Pedido::ANULADO_PARCIAL,
-                'estado_aprueba_jefeop'=>1,
-            ]);
+
         }else{
             $pedido->update([
                 'condicion' => 'ANULADO',

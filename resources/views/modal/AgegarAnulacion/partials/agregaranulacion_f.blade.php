@@ -27,8 +27,12 @@
             </div>
         </div>
         <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
-            <input name="anularCodigoF" id="anularCodigoF" type="number"
-                   placeholder="Colocar el importe a anular" class="bg-warning type_number" style="background: #A4907C;">
+            <input type="text" name="anularCodigoF" id="anularCodigoF" step="0.01" min="0"
+                   class="form-control number ob" data-type="text" data-msj="Ingrese una cantidad"
+                   placeholder="Cantidad..." style="background: #A4907C;">
+
+            {{--<input name="anularCodigoF" id="anularCodigoF"  step="0.01" min="0" class="form-control bg-warning number ob" data-type="text"
+                   placeholder="Colocar el importe a anular"  style="background: #A4907C;">--}}
             <div class="input-icon">
                 <i class="fa fa-minus-square" aria-hidden="true"></i>
             </div>

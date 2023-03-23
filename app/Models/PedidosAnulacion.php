@@ -32,6 +32,7 @@ class PedidosAnulacion extends Model
         'created_at',
         'updated_at',
         'total_anular',
-        'tipo'
+        'tipo',
+        'state_solicitud',
     ];
 }

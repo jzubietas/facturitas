@@ -73,7 +73,7 @@
                 },
                 rowCallback: function (row, data, index) {
                     if (  data.vtipoAnulacion!='F') {
-                        $('td', row).css('background', '#F51646').css('font-weight', 'bold').css('color', '#ffffff');
+                        $('td', row).css('background', '#FFAFB0').css('font-weight', 'bold');
                     }else{
                         $('td', row).css('background', '#F5B8BF').css('font-weight', 'bold');
                     }
