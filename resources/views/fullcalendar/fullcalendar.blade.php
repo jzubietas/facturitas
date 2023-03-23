@@ -659,40 +659,98 @@
 
             $(document).on('click','.btn-delete',function(){
                 event.preventDefault();
-                let eleme="frm_editar_evento_calendario";
-                var form = $('#'+eleme)[0];
-                var formData = new FormData(form);
-                formData.append('type', 'borrar')
-                $.ajax({
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('fullcalendarAjax') }}",
-                    success: function (data) {
-                        editar_evento_calendario.hide();
-                        calendario1.refetchEvents();
+
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Seguro de eliminar la nota en la agenda!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    cancelButtonText: 'No. Cancelar esto!' ,
+                    confirmButtonText: 'Si. Estoy seguro!',
+                    reverseButtons: true
+                }).then((result)=> {
+                    console.log(result.isConfirmed)
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Segunda advertencia!',
+                            text: 'Esta totalmente seguro de eliminar la nota en la agenda!',
+                            showCancelButton: true,
+                            cancelButtonText: 'No. Cancelar esto!' ,
+                            confirmButtonText: 'Si. Totalmente seguro!',
+                            reverseButtons: true,
+                            icon: 'success'
+                        }).then((result2)=> {
+                            console.log(result2.isConfirmed)
+                            if (result2.isConfirmed)
+                            {
+                                let eleme="frm_editar_evento_calendario";
+                                var form = $('#'+eleme)[0];
+                                var formData = new FormData(form);
+                                formData.append('type', 'borrar')
+                                $.ajax({
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    type: 'POST',
+                                    url: "{{ route('fullcalendarAjax') }}",
+                                    success: function (data) {
+                                        editar_evento_calendario.hide();
+                                        calendario1.refetchEvents();
+                                    }
+                                });
+                            }else{
+
+                            }
+
+                        });
+                    } else if(result.isDenied) {
+                        Swal.fire("Cancelando", "No se realizo ningun cambio", "error");
                     }
-                });
+                })
+
+
+
             })
 
             $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();
-                var form = $(this)[0];
-                var formData = new FormData(form);
-                formData.append('type', 'borrar')
-                $.ajax({
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('fullcalendarAjax') }}",
-                    success: function (data) {
-                        eliminar_evento_calendario.hide();
-                        let eventDelete = calendario.getEventById(formData.get("eliminar_evento"))
-                        eventDelete.remove();
+
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Seguro de eliminar la nota en la agenda!",
+                    icon: "warning",
+                    buttons: [
+                        'No. Cancelar esto!',
+                        'Si. Estoy seguro!'
+                    ],
+                    dangerMode: true,
+                }).then(function(isConfirm) {
+                    if (isConfirm) {
+                        Swal.fire({
+                            title: 'Segunda advertencia!',
+                            text: 'Esta totalmente seguro de eliminar la nota en la agenda!',
+                            icon: 'success'
+                        }).then(function() {
+                            var form = $(this)[0];
+                            var formData = new FormData(form);
+                            formData.append('type', 'borrar')
+                            $.ajax({
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                type: 'POST',
+                                url: "{{ route('fullcalendarAjax') }}",
+                                success: function (data) {
+                                    eliminar_evento_calendario.hide();
+                                    let eventDelete = calendario.getEventById(formData.get("eliminar_evento"))
+                                    eventDelete.remove();
+                                }
+                            });
+                        });
+                    } else {
+                        Swal.fire("Cancelando", "No se realizo ningun cambio", "error");
                     }
-                });
+                })
             });
 
             window.agregarEventoPredefinido=function(registro){
