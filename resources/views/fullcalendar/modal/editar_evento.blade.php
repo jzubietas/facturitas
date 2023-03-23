@@ -31,17 +31,38 @@
                         <form id="frm_editar_evento_calendario" name="frm_editar_evento_calendario" enctype="multipart/form-data">
                             <input type="hidden" id="editar_evento" name="editar_evento">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-row">
-                                        <div class="form-group mr-2">
-                                            <a class="text-dark" href="#"><i class="fas fa-square"></i></a>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control border border-0" id="calendario_nombre_evento_editar"
-                                                   placeholder="Nombre de evento" value="" name="calendario_nombre_evento_editar" readonly>
-                                        </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="calendario_nombre_evento_editar">Nombre</label>
+                                        <input type="text" class="form-control border border-0" id="calendario_nombre_evento_editar"
+                                               placeholder="Nombre de evento" value="" name="calendario_nombre_evento_editar" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="calendario_tipo_evento_editar">Tipo</label>
+                                        <select id="calendario_tipo_evento_editar" name="calendario_tipo_evento_editar" class="form-control">
+                                            <option value="PAGO">PAGO</option>
+                                            <option value="OTROS">OTROS</option>
+                                        </select>
 
                                     </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="calendario_frecuencia_evento_editar">Frecuencia</label>
+                                        <select id="calendario_frecuencia_evento_editar" name="calendario_frecuencia_evento_editar" class="form-control">
+                                            <option value="una_vez">Una vez</option>
+                                            <option value="repetir">Repetir en el mes</option>
+                                            <option value="repetir_mes">Repetir cada mes</option>
+                                            <option value="ini_mes">Inicio de Mes</option>
+                                            <option value="fin_mes">Fin de Mes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="edit_start" name="edit_start">
+                                <div class="col-md-12">
+
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label for="calendario_descripcion_evento_editar">Descripcion</label>
@@ -49,11 +70,23 @@
                                                      name="calendario_descripcion_evento_editar" rows="3" readonly></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group col-lg-6">
+                                    <div class="col-md-6 d-none demo-color-texto">
+                                        <div class="form-group">
+                                            <label>Color de Texto:</label>
+                                            <input id="calendario_color_evento" type="color" class="form-control" name="calendario_color_evento">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-none demo-color-fondo">
+                                        <div class="form-group">
+                                            <label>Color de Fondo:</label>
+                                            <input id="calendario_fondo_evento" type="color" class="form-control" name="calendario_fondo_evento">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6 contenedor_adjunto d-none">
                                         {!! Form::label('attachments', 'Adjuntar Archivos') !!}
                                         {!! Form::file('inputFilesEvent[]', ['class' => 'form-control-file','multiple','id'=>'inputFilesEventE','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
                                     </div>
-                                    <div class="form-group col-lg-6">
+                                    <div class="form-group col-lg-6 contenedor_adjunto d-none">
                                         <div class="image-wrapper">
                                             <img id="picturee" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del adjunto" width="250px">
                                         </div>

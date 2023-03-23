@@ -858,7 +858,7 @@ ${files.map(function (file) {
                         } else {
                             if (anno_filter != '') {
                                 console.log({{$anno_selected}});
-                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1)) {
+                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1) || anno_filter == ({{$anno_selected}} - 2)) {
                                 } else {
                                     Swal.fire(
                                         'Error',
@@ -910,7 +910,7 @@ ${files.map(function (file) {
                             console.log("anno is nan")
                         } else {
                             if (anno_filter != '') {
-                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1)) {
+                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1) || anno_filter == ({{$anno_selected}} - 2)) {
                                 } else {
                                     Swal.fire(
                                         'Error',

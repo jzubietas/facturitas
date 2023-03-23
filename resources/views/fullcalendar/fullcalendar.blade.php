@@ -20,7 +20,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
-
+        .fc-title{
+            font-size: .9em;
+        }
     </style>
     <style>
 
@@ -335,18 +337,41 @@
                     $("#calendario_start_evento").val(info.dateStr);
                     $("#calendario_end_evento").val(info.dateStr);
                     $('.btn-edit-check').addClass('d-none');
+                    $('#inputFilesEventA').val('');
+                    $("#calendario_nombre_evento").val("");
+                    $("·calendario_descripcion_evento_nuevo").val("");
+                    $('#picturea').attr('src','');
+                    $('.demo-color-texto').addClass('d-none');
+                    $('.demo-color-fondo').addClass('d-none');
+                    $("#calendario_tipo_evento").val('PAGO');
+
+                    //if(val=='PAGO')
+                    //{
+                        //$('.demo-color-texto').addClass('d-none');
+                        //$('.demo-color-fondo').removeClass('d-none');
+                    //}
+
                     agregar_evento_calendario.show();
                 },
                 eventClick: function(info) {
-                    console.log(info)
+                    console.log(info.event.start);
                     console.log("eventclick editar en evento")
                     $('#editar_evento_calendario .btn-edit i').removeClass('text-dark').addClass('text-warning');
                     $("#editar_evento").val(info.event.id);
+                    $(".contenedor_adjunto").addClass('d-none');
                     $(".fecha_lectura_start").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $(".fecha_lectura_end").html(moment(info.event.start).format('YYYY-MM-DD hh:mm:ss'));
                     $('#calendario_nombre_evento_editar').val(info.event.title);
                     $('#calendario_descripcion_evento_editar').val(info.event._def.extendedProps.description);
                     $('#picturee').attr('src',info.event._def.extendedProps.adjunto);
+                    $("#calendario_tipo_evento_editar").prop('disabled',true);
+                    $("#calendario_frecuencia_evento_editar").prop('disabled',true);
+                    $("#calendario_nombre_evento_editar").prop('disabled',true);
+                    $("#calendario_descripcion_evento_editar").prop('disabled',true);
+
+                    console.log(moment(info.event.start).format('Y-MM-DD'));
+                    $("#edit_start").val(moment(info.event.start).format('Y-MM-DD'));
+
                     editar_evento_calendario.show();
                 },
                 eventResize: function(info) {
@@ -382,7 +407,9 @@
 
                     let formData = new FormData();
                     formData.append('eliminar_evento', eventEliminar)
-                    formData.append('type', 'delete')
+                    formData.append('start', start_)
+                    formData.append('end', end_)
+                    formData.append('type', 'traslado')
                     $.ajax({
                         data: formData,
                         processData: false,
@@ -390,40 +417,33 @@
                         type: 'POST',
                         url: "{{ route('fullcalendarAjaxUnsigned') }}",
                         success: function (data) {
-                            let eventDeleteUnsigned = $("#unsigned_"+eventEliminar);
-                            eventDeleteUnsigned.fadeOut("normal", function() {
-                                $(this).remove();
-                            });
-
-                            //aqui registro el evento temporal a evento oficial
-                            var formData = new FormData();
-                            formData.append('calendario_nombre_evento', titulo);
-                            formData.append('calendario_descripcion_evento_nuevo', descripcion);
-                            formData.append('calendario_start_evento', start_);
-                            formData.append('calendario_color_evento', color);
-                            formData.append('colorTexto', color);
-                            formData.append('colorBackground', color);
-                            formData.append('calendario_end_evento', end_);
-                            formData.append('calendario_frecuencia_evento', 'una_vez');
-                            formData.append('calendario_tipo_evento', 'OTROS');
-                            formData.append('id_unsigned_event', eventEliminar)
-                            formData.append('type', 'add');
-                            $.ajax({
-                                url: "{{route('fullcalendarAjax')}}",
-                                data: formData,
-                                type: "POST",
-                                processData: false,
-                                contentType: false,
-                                success: function (data) {
-                                    agregar_evento_calendario.hide();
-                                    displayMessage("Nota creada.");
-                                    calendario1.refetchEvents();
-                                }
-                            });
+                            agregar_evento_calendario.hide();
+                            displayMessage("Nota creada.");
+                            calendario1.refetchEvents();
                         }
                     });
                 }
             });
+
+            $(document).on('change','#calendario_tipo_evento',function(){
+                //
+                let val=$(this).val();
+                if(val=='OTROS')
+                {
+                    $('.demo-color-texto').addClass('d-none');
+                    $('.demo-color-fondo').removeClass('d-none');
+                }
+            })
+
+            $(document).on('change','#calendario_tipo_evento_editar',function(){
+                //
+                let val=$(this).val();
+                if(val=='OTROS')
+                {
+                    $('.demo-color-texto').addClass('d-none');
+                    $('.demo-color-fondo').removeClass('d-none');
+                }
+            })
 
             $(document).on('focus',"input[type=text]",function(){
                 this.select()
@@ -511,7 +531,7 @@
                 event.css({
                     'background-color': currColor,
                     'border-color': currColor,
-                    'color': '#fff'
+                    'color': '#000'
                 }).addClass('external-event btn btn-md rounded d-flex justify-content-between ')
 
                 event.html('<span class="">'+val+'</span>'+
@@ -566,6 +586,7 @@
 
                 $('#new-event').val('')
                 $('#text-new-event').val('')
+                $("#inputFilesEventU").val('')
                 $('#new-event').css('background-color', '#ece63c');
                 $('#text-new-event').css('background-color', '#ece63c');
                 $('#color-selector').val('#ece63c')
@@ -598,8 +619,19 @@
                 $('#calendario_descripcion_evento_editar').removeClass('border').removeClass('border-0');
                 $("#calendario_descripcion_evento_editar").prop('readonly',false);
                 $("#calendario_nombre_evento_editar").prop('readonly',false).focus();
+                $(".contenedor_adjunto").removeClass('d-none');
 
                 $('.btn-edit-check').removeClass('d-none');
+                $("#calendario_tipo_evento_editar").prop('disabled',false);
+                $("#calendario_frecuencia_evento_editar").prop('disabled',false);
+                let val=$("#calendario_tipo_evento_editar").val();
+                if(val=='OTROS')
+                {
+                    $('.demo-color-texto').addClass('d-none');
+                    $('.demo-color-fondo').removeClass('d-none');
+                }
+                $("#calendario_nombre_evento_editar").prop('disabled',false);
+                $("#calendario_descripcion_evento_editar").prop('disabled',false);
             });
 
             $(document).on("click", "#frm_editar_evento_calendario .btn-edit-check", function (event) {
@@ -627,40 +659,98 @@
 
             $(document).on('click','.btn-delete',function(){
                 event.preventDefault();
-                let eleme="frm_editar_evento_calendario";
-                var form = $('#'+eleme)[0];
-                var formData = new FormData(form);
-                formData.append('type', 'borrar')
-                $.ajax({
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('fullcalendarAjax') }}",
-                    success: function (data) {
-                        editar_evento_calendario.hide();
-                        calendario1.refetchEvents();
+
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Seguro de eliminar la nota en la agenda!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    cancelButtonText: 'No. Cancelar esto!' ,
+                    confirmButtonText: 'Si. Estoy seguro!',
+                    reverseButtons: true
+                }).then((result)=> {
+                    console.log(result.isConfirmed)
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Segunda advertencia!',
+                            text: 'Esta totalmente seguro de eliminar la nota en la agenda!',
+                            showCancelButton: true,
+                            cancelButtonText: 'No. Cancelar esto!' ,
+                            confirmButtonText: 'Si. Totalmente seguro!',
+                            reverseButtons: true,
+                            icon: 'success'
+                        }).then((result2)=> {
+                            console.log(result2.isConfirmed)
+                            if (result2.isConfirmed)
+                            {
+                                let eleme="frm_editar_evento_calendario";
+                                var form = $('#'+eleme)[0];
+                                var formData = new FormData(form);
+                                formData.append('type', 'borrar')
+                                $.ajax({
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    type: 'POST',
+                                    url: "{{ route('fullcalendarAjax') }}",
+                                    success: function (data) {
+                                        editar_evento_calendario.hide();
+                                        calendario1.refetchEvents();
+                                    }
+                                });
+                            }else{
+
+                            }
+
+                        });
+                    } else if(result.isDenied) {
+                        Swal.fire("Cancelando", "No se realizo ningun cambio", "error");
                     }
-                });
+                })
+
+
+
             })
 
             $(document).on("submit", "#frm_eliminar_evento_calendario", function (event) {
                 event.preventDefault();
-                var form = $(this)[0];
-                var formData = new FormData(form);
-                formData.append('type', 'delete')
-                $.ajax({
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('fullcalendarAjax') }}",
-                    success: function (data) {
-                        eliminar_evento_calendario.hide();
-                        let eventDelete = calendario.getEventById(formData.get("eliminar_evento"))
-                        eventDelete.remove();
+
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Seguro de eliminar la nota en la agenda!",
+                    icon: "warning",
+                    buttons: [
+                        'No. Cancelar esto!',
+                        'Si. Estoy seguro!'
+                    ],
+                    dangerMode: true,
+                }).then(function(isConfirm) {
+                    if (isConfirm) {
+                        Swal.fire({
+                            title: 'Segunda advertencia!',
+                            text: 'Esta totalmente seguro de eliminar la nota en la agenda!',
+                            icon: 'success'
+                        }).then(function() {
+                            var form = $(this)[0];
+                            var formData = new FormData(form);
+                            formData.append('type', 'borrar')
+                            $.ajax({
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                type: 'POST',
+                                url: "{{ route('fullcalendarAjax') }}",
+                                success: function (data) {
+                                    eliminar_evento_calendario.hide();
+                                    let eventDelete = calendario.getEventById(formData.get("eliminar_evento"))
+                                    eventDelete.remove();
+                                }
+                            });
+                        });
+                    } else {
+                        Swal.fire("Cancelando", "No se realizo ningun cambio", "error");
                     }
-                });
+                })
             });
 
             window.agregarEventoPredefinido=function(registro){
@@ -682,6 +772,7 @@
                 $('#calendario_nombre_evento').val('');
                 $('#calendario_start_evento').val('');
                 $('#calendario_end_evento').val('');
+                $("#inputFilesEventA").val();
                 $('#calendario_fondo_evento').val('#3788D8');
                 $('#calendario_color_evento').val('#ffffff');
             }
