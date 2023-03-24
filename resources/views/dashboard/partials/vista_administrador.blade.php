@@ -100,7 +100,7 @@
 
 <div class="d-flex justify-content-center">
     <div id="spinner" class="spinner-border" role="status">
-        <image src="{{asset('images/progress.gif')}}"></image>
+        <image src="{{asset('images/progress.gif')}}" class="img-md"></image>
         <span class="d-none sr-only">Loading...</span>
     </div>
 </div>
