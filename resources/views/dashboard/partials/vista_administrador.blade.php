@@ -1,5 +1,10 @@
 @yield('css-datatables')
 
+<div id="spinner" class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+</div>
+
+
 {{-- BIENVENIDA --}}
 <div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
     <h2>
@@ -405,6 +410,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     contentType: false,
                     method: 'POST',
                     url: "{{ route('dashboard.viewMetaTable') }}",
+                    beforeSend: function() {
+                        $('#spinner').show();
+                    },
+                    complete: function() {
+                        $('#spinner').hide();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Handle the error
+                    },
                     success: function (resultado) {
                         if (entero == 1) {
                             $('#metas_dp').html(resultado);
