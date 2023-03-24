@@ -98,11 +98,11 @@
 <hr>
 {{-- FULLSCREEN --}}
 
+<div id="spinner" class="position-relative">
+    <img src="your-image-url" alt="Your Image" class="img-fluid d-none">
 
-<div class="d-flex justify-content-center">
-    <div id="spinner" class="spinner-border" role="status">
-        <image src="{{asset('images/progress.gif')}}" class="d-none img-md"></image>
-        <span class="sr-only">Loading...</span>
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <img src="{{asset('images/progress.gif')}}" alt="Your Spinner" class="img-fluid spinner">
     </div>
 </div>
 
