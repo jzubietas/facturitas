@@ -32,6 +32,10 @@
                 overflow-x: scroll !important;
             }
         }
+        #spinner {
+            display: none;
+        }
+
     </style>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endpush
@@ -46,6 +50,8 @@
 @stop
 
 @section('content')
+
+
     <div class="container-fluid">
         @if(Auth::user()->rol == 'Administrador')
             @include('dashboard.partials.vista_administrador')

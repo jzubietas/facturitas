@@ -97,9 +97,21 @@
 
 <hr>
 {{-- FULLSCREEN --}}
+
+<div id="spinner" class="position-relative d-flex justify-content-center">
+
+
+    <div class="position-relative top-50 start-50 translate-middle">
+        <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
+    </div>
+</div>
+
+
 <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2 bg-white">
         <div class="d-flex justify-content-center row bg-white">
+
+
 
 
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
@@ -130,7 +142,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
             <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
-                   value="">
+                   value="" readonly>
             <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
 
 
@@ -426,6 +438,19 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     contentType: false,
                     method: 'POST',
                     url: "{{ route('dashboard.viewMetaTable') }}",
+                    beforeSend: function() {
+                        $('#contenedor-fullscreen').hide()
+                        $('.spinner').show()
+                        $('#spinner').show()
+                    },
+                    complete: function() {
+                        $('#contenedor-fullscreen').show()
+                        $('.spinner').hide()
+                        $('#spinner').hide()
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Handle the error
+                    },
                     success: function (resultado) {
                         if (entero == 1) {
                             $('#metas_dp').html(resultado);

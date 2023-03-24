@@ -17,6 +17,8 @@
             ABANDONO
           @elseif($key === '8')
             NULOS
+            @elseif($key === '9')
+                ACTIVOS
 
           @endif
 
@@ -42,6 +44,8 @@
         {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'CASI_ABANDONO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '8')
         {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'ABANDONO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '9')
+            {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'ACTIVO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
 
       @endif
             <div class="card-body">

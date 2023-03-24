@@ -670,6 +670,13 @@ return [
                     'active' => ['recurrentes'],
                 ],
                 [
+                    'text' => 'Clientes Activo',
+                    'route' => 'clientes.activos',
+                    'can' => 'clientes.activos',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['activos'],
+                ],
+                [
                     'text' => 'Abandono Recientes',
                     'route' => 'clientes.abandonos.recientes',
                     'can' => 'clientes.abandonos.reciente',//
