@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Correction;
 use App\Models\DetalleContactos;
+use App\Models\DetallePedido;
 use App\Models\FileUploadAnulacion;
 use App\Models\Pedido;
 use App\Models\PedidosAnulacion;
@@ -275,26 +276,37 @@ class PedidosAnulacionController extends Controller
             })
             ->addColumn('tipoanulacion', function ($pedido) use ($miidentificador) {
                 $htmltipoanul = "";
+
+                if ($pedido->tipoanulacion=='C'){
+                    $htmltipoanul = $htmltipoanul . '<span class="badge badge-info bg-info">PEDIDO COMPLETO</span>';
+                }else  if ($pedido->tipoanulacion=='F'){
+                    $htmltipoanul = $htmltipoanul . '<span class="badge badge-warning">FACTURA</span>';
+                }
+                return $htmltipoanul;
+                return join('', $htmltipoanul);
+            })
+            ->addColumn('motivo', function ($pedido) use ($miidentificador) {
+                $htmltipoanul = "";
                 $deshabilitar="";
                 if (in_array(Auth::user()->rol,[User::ROL_ADMIN,User::ROL_ASESOR,User::ROL_ENCARGADO])) {
                     if ($pedido->tipoanulacion=='C'){
-                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-info bg-info">PEDIDO COMPLETO</span></a>  ';
+                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo" ><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }else  if ($pedido->tipoanulacion=='F'){
-                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-warning">FACTURA</span></a>  ';
+                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }
                     return $htmltipoanul;
                 }else{
                     $deshabilitar="btn disabled";
                     if ($pedido->tipoanulacion=='C'){
-                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" class="'.$deshabilitar.'"  data-toggle="modal" title="Ver motivo"><span class="badge badge-info bg-info">PEDIDO COMPLETO</span></a>  ';
+                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" class="'.$deshabilitar.'"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }else  if ($pedido->tipoanulacion=='F'){
-                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" class="'.$deshabilitar.'"  data-toggle="modal" title="Ver motivo"><span class="badge badge-warning">FACTURA</span></a>  ';
+                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" class="'.$deshabilitar.'"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }
                     return $htmltipoanul;
                 }
                 return join('', $htmltipoanul);
             })
-            ->rawColumns(['action','action','tipoanulacion'])
+            ->rawColumns(['action','action','tipoanulacion','motivo'])
             ->make(true);
     }
 
@@ -304,7 +316,7 @@ class PedidosAnulacionController extends Controller
             ->join('detalle_pedidos as dp', 'dp.codigo', 'pedidos.codigo')
             ->join('users as u', 'u.id', 'pedidos.user_id')
             ->where('u.rol', 'Asesor')
-            ->where('pedidos.codigo',  $request->codigo)
+            ->where('pedidos.codigo',  trim($request->codigo))
             ->select([
                 'pedidos.id',
                 'pedidos.codigo',
@@ -335,11 +347,14 @@ class PedidosAnulacionController extends Controller
                 ->pluck('users.identificador');
             $listado_codigo_pedido = $listado_codigo_pedido->WhereIn('u.identificador', $usersasesores);
         }
+        $contadorcodigo=0;
+        if ($request->tipo=="F"){
+            $listado_codigo_pedidoverifica=$listado_codigo_pedido->clone()->where('pedidos.condicion_envio_code', Pedido::POR_ATENDER_INT);
+            $contadorcodigo=$listado_codigo_pedidoverifica->count();
+        }
         $totallistado=$listado_codigo_pedido->count();
         $listado_codigo_pedido=$listado_codigo_pedido->first();
-
-            /*->first();*/
-        return response()->json(['data'=>$listado_codigo_pedido,'contador'=>$totallistado]);
+        return response()->json(['data'=>$listado_codigo_pedido,'contador'=>$totallistado,'contadorcodigo'=>$contadorcodigo]);
     }
     public function solicitaAnulacionPedido(Request $request)
     {
@@ -520,19 +535,36 @@ class PedidosAnulacionController extends Controller
         if ($pedidosanulacion->tipo=='C'){
             if ($contpedidos==1){
                 $pedidos=$pedidos->clone()->first();
-                $pedidos->update([
-                    'motivo' => $request->motivo,
-                    'responsable' => $request->responsable,
-                    'pendiente_anulacion' => 1,
-                    'path_adjunto_anular' => null,
-                    'path_adjunto_anular_disk' => 'pstorage',
-                    'modificador' => 'USER' . Auth::user()->id,
-                    'fecha_anulacion' => now(),
-                ]);
+                if ($pedidos->condicion_code == Pedido::POR_ATENDER_INT) {
+                    $pedidos->update([
+                        'motivo' => $request->motivo,
+                        'responsable' => $request->responsable,
+                        'condicion' => 'ANULADO',
+                        'condicion_code' => Pedido::ANULADO_INT,
+                        'modificador' => 'USER' . Auth::user()->id,
+                        'user_anulacion_id' => Auth::user()->id,
+                        'fecha_anulacion' => now(),
+                        'fecha_anulacion_confirm' => now(),
+                        'estado' => '0',
+                        'path_adjunto_anular' => null,
+                        'path_adjunto_anular_disk' => 'pstorage',
+                    ]);
+                    $detalle_pedidos=DetallePedido::where('pedido_id',$pedidos->id)->first();
+                    $detalle_pedidos->update([
+                        'estado' => '0'
+                    ]);
+                }else{
+                    $pedidos->update([
+                        'motivo' => $request->motivo,
+                        'responsable' => $request->responsable,
+                        'pendiente_anulacion' => 1,
+                        'path_adjunto_anular' => null,
+                        'path_adjunto_anular_disk' => 'pstorage',
+                        'modificador' => 'USER' . Auth::user()->id,
+                        'fecha_anulacion' => now(),
+                    ]);
+                }
 
-                /*$pedidosanulacion->update([
-                    'pendiente_anulacion' => 1,
-                ]);*/
             }
         }else if ($pedidosanulacion->tipo=='F'){
             $pedidos=$pedidos->clone()->first();

@@ -721,6 +721,9 @@ $banca"
                 ->addColumn('adjunto', function ($pedido) {
                     $buton = '';
                     $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" data-total_anular_adjunto="' . $pedido->dMontoAnular . '" data-tipo_anulacion="' . $pedido->vtipoAnulacion . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
+                    if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL) {
+                        $buton .= '<a data-target="#modal-veradjunto" data-id_anulacion_adjuntos="' .$pedido->idPedidoAnulacion . '" data-total_anular="' . $pedido->dMontoAnular . '" data-toggle="modal" ><button class="btn btn-primary btn-sm mr-2"><i class="fas fa-file-download "></i> Doc por anular</button></a>';
+                    }
                     return $buton;
                 })
                 ->addColumn('condicion_code', function ($pedido) {
@@ -754,7 +757,6 @@ $banca"
                     }
                     if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL) {
                         $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-total_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize  mr-2" data-vtipoanul="F" >EMITIR N/C</button>';
-                        $btn .= '<a data-target="#modal-veradjunto" data-id_anulacion_adjuntos="' .$pedido->idPedidoAnulacion . '" data-total_anular="' . $pedido->dMontoAnular . '" data-toggle="modal" ><button class="btn btn-primary btn-sm mr-2"><i class="fas fa-file-download "></i> Doc por anular</button></a>';
                     }
                     $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn btn-light btn-sm" target="_blank"><i class="fa fa-file-pdf text-primary  mr-2"></i> Ver PDF</a>';
                     $btn .= ' <button class="btn btn-warning btn-sm"

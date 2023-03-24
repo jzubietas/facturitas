@@ -1575,6 +1575,8 @@ class PedidoController extends Controller
         $pedido = Pedido::with('cliente')->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->leftJoin('pedidos_anulacions as pea','pedidos.id','pea.pedido_id')
+            ->leftJoin('users as peau', 'pea.user_id_administrador', 'peau.id')
             ->select(
                 'pedidos.*',
                 'pedidos.condicion as condiciones',
@@ -1603,6 +1605,11 @@ class PedidoController extends Controller
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
                 'dp.saldo as diferencia',
+
+                'peau.name as usersanulpar',
+                'pea.created_at as fecsolicitudaaaa',
+                'pea.updated_at as fecconfirmaaaaa',
+                'pea.motivo_sol_admin',
             )
             //->activo()
             ->where('pedidos.id', $pedido)

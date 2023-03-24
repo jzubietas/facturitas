@@ -290,6 +290,91 @@
         </div>
     @endif
 
+    @if($pedido->condicion==\App\Models\Pedido::ANULADO_PARCIAL)
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-bold">Detalle de Anulación Parcial</h4>
+            </div>
+            <div class="border rounded card-body border-secondary">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        Responsable <B>{{$pedido->usersanulpar}}</B>
+                    </li>
+                    <li class="list-group-item">
+                        Fecha de anulacion
+                        <b>{{$pedido->fecsolicitudaaaa}}</b>
+                    </li>
+                    <li class="list-group-item">
+                        Fecha de anulacion
+                        confirmada
+                        <b>{{($pedido->fecconfirmaaaaa)}}</b>
+                    </li>
+                    <li class="list-group-item">
+                        Motivo de anulacion:
+                        <b>{{$pedido->motivo_sol_admin}}</b>
+                    </li>
+                    @if(count($pedido->adjuntosFiles())>0)
+                        <li class="list-group-item bg-danger">
+                            Adjuntos
+                        </li>
+                    @endif
+                    <li class="list-group-item">
+                        <div class="row">
+                            @foreach($pedido->adjuntosFiles() as $file)
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <a target="_blank"
+                                               href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                @if(!Str::contains(Str::lower($file),'.pdf'))
+                                                    <img class="w-100"
+                                                         src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                @else
+                                                    <i class="fa fa-file-pdf"></i>
+                                                @endif
+                                                {{basename($file)}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </li>
+
+                    @if(count($pedido->notasCreditoFiles())>0)
+                        <li class="list-group-item bg-danger">
+                            Notas de Credito
+                        </li>
+                    @endif
+
+                    <li class="list-group-item">
+                        <div class="row">
+                            @foreach($pedido->notasCreditoFiles() as $file)
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <a target="_blank"
+                                               href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                @if(!Str::contains(Str::lower($file),'.pdf'))
+                                                    <img class="w-100"
+                                                         src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                @else
+                                                    <i class="fa fa-file-pdf"></i>
+                                                @endif
+                                                {{basename($file)}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    @endif
+
         <div class="card">
             <div class="card-body">
                 <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50"

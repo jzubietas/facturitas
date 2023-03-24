@@ -39,6 +39,7 @@
                         <th scope="col" class="align-middle">Código</th>
                         <th scope="col" class="align-middle">Cliente</th>
                         <th scope="col" class="align-middle">Razón social</th>
+                        <th scope="col" class="align-middle">Motivo</th>
                         <th scope="col" class="align-middle">Total</th>
                         <th scope="col" class="align-middle">F. Registro</th>
                         <th scope="col" class="align-middle">Eliminar (S/)</th>
@@ -160,6 +161,7 @@
                         },
                     },
                     {data: 'empresas', name: 'empresas',},
+                    {data: 'motivo', name: 'motivo',},
                     {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
                     {
                         data: 'fechacreaanula',
@@ -277,7 +279,7 @@
                         type: "POST",
                         url: "{{ route('pedidosanulaciones.modal.agregaranulacion_pc') }}",
                         data: {
-                            codigo: $(this).val(),
+                            codigo: $(this).val(),tipo: 'F',
                         },
                         dataType: 'json',
                         cache: false,
@@ -335,6 +337,15 @@
                 }
                 if (txtMotivoPedComplet.length < 1) {
                     Swal.fire('Error','Completa el sustento para la anulación ','warning'
+                    ).then(function () {
+                        $("#txtMotivoPedComplet").focus()
+                    });
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    return false;
+                }
+
+                if (txtMotivoPedComplet.length > 250) {
+                    Swal.fire('Error','El campo motivo no debe superar los 250 caracteres.','warning'
                     ).then(function () {
                         $("#txtMotivoPedComplet").focus()
                     });
@@ -401,24 +412,31 @@
                         type: "POST",
                         url: "{{ route('pedidosanulaciones.modal.agregaranulacion_f') }}",
                         data: {
-                            codigo: $(this).val(),
+                            codigo: $(this).val(),tipo: 'F',
 
                         },
                         dataType: 'json',
                         cache: false,
                         success: function (response) {
+                            console.log('Respuesta',response);
                             if (response.contador>=1){
-                                if (response.data.estado!=0){
-                                    $('#tipoAnulacion2').val("F");
-                                    $('#txtIdPedidoFactura').val(response.data.id);
-                                    $('#asesorCodigoF').val(response.data.name);
-                                    $('#importeCodigoF').val(response.data.total);
-                                    $('#anulacionCodigoF').val(response.data.total);
-                                    $('#rucCodigoF').val(response.data.ruc);
-                                    $('#razonCodigoF').val(response.data.nombre_empresa);
+                                if (response.contadorcodigo==0){
+                                    if (response.data.estado!=0){
+                                        $('#tipoAnulacion2').val("F");
+                                        $('#txtIdPedidoFactura').val(response.data.id);
+                                        $('#asesorCodigoF').val(response.data.name);
+                                        $('#importeCodigoF').val(response.data.total);
+                                        $('#anulacionCodigoF').val(response.data.total);
+                                        $('#rucCodigoF').val(response.data.ruc);
+                                        $('#razonCodigoF').val(response.data.nombre_empresa);
+                                    }else{
+                                        Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
+                                    }
+
                                 }else{
-                                    Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
+                                    Swal.fire('Error', 'El pedido ingresado se encuentra en estado POR ATENDER - OPE, verifique.', 'warning');return false;
                                 }
+
                             }else{
                                 Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
                             }
@@ -486,6 +504,14 @@
                 }
                 if (txtMotivoFactura.length < 1) {
                     Swal.fire('Error','Completa el sustento para la anulación ','warning'
+                    ).then(function () {
+                        $("#txtMotivoFactura").focus()
+                    });
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
+                if (txtMotivoFactura.length >250) {
+                    Swal.fire('Error','El campo sustento no debe superar los 250 caracteres.','warning'
                     ).then(function () {
                         $("#txtMotivoFactura").focus()
                     });
@@ -665,6 +691,8 @@
                 var nameresponsable= button.data('responsable-anula');
                 console.log('idanulacion => ',idanulacion,'codigoanulacion => ',codigopedido);
                 $("#motivo").val('');
+                $("#anulacion_password").val('');
+                $("#inputFilesAdmin").val('');
                 $("#responsable").val(nameresponsable);
                 $("#txtPedidoId").val(pedido_id );
                 $("#txtPedidoAnulacionId").val(idanulacion );
@@ -705,7 +733,15 @@
                     Swal.fire('Error', 'No se puede confirmar la anulacion sin archivos', 'warning');
                     $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
                     return false;
-                } else {
+                }
+                else if (motivo.length >250) {
+                    Swal.fire('Error','El campo sustento no debe superar los 250 caracteres.','warning'
+                    ).then(function () {
+                        $("#txtMotivoFactura").focus()
+                    });
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }else {
                     ejecutarForSolicituAnulacion();
                 }
             })

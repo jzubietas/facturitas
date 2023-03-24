@@ -29,6 +29,36 @@
                     @include('modal.AgegarAnulacion.partials.agregaranulacion_f')
                 </div>
 
+                {{--<div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item"><a class="nav-link active" href="#settings2" id="btn_agregaranulacion_pc"  data-toggle="tab">Settings2</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#settings3"  id="btn_agregaranulacion_f"  data-toggle="tab">Settings3</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+
+                                <div class="active tab-pane" id="settings2">
+                                    <form class="form-horizontal">
+                                        <div id="modal-agregaranulacion-pc-container" class="modal-agregaranulacion-pc-container">
+                                            @include('modal.AgegarAnulacion.partials.agregaranulacion_pc')
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane" id="settings3">
+                                    <form class="form-horizontal">
+                                        <div id="modal-agregaranulacion-f-container" class="modal-agregaranulacion-f-container">
+                                            @include('modal.AgegarAnulacion.partials.agregaranulacion_f')
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>--}}
             </div>
 
         </div>
