@@ -308,7 +308,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
-    
+
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{asset('js/bootstrap-datepicker.es.js')}}" charset="UTF-8"></script>
     <script>
@@ -325,8 +325,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $("#fechametames-button").click(function() {
                 $("#fechametames").datepicker("show");
 
-                $('#fechametames').datepicker('setDate', new Date());
+                //$('#fechametames').datepicker('setDate', new Date());
+                $('#fechametames').datepicker('setDate', "{{\Carbon\Carbon::parse($fechametames)->format('Y-m-d')}}");
             });
+
+
 
             $.get("{{ route('chart-data') }}", function(data) {
                 var ctx = document.getElementById('my-chart-dejarondepedir').getContext('2d');
@@ -354,11 +357,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 });
             });
 
-
             $('#exampleModalCenter').modal('show');
-
-
-            $('#fechametames').val("{{\Carbon\Carbon::parse($fechametames)->format('Y-m-d')}}");
 
             $(document).on('change', '#fechametames', function () {
                 //const value = e.target.value;
