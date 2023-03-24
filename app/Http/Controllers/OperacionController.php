@@ -618,7 +618,7 @@ class OperacionController extends Controller
                         </a>';
                 }
 
-                if(in_array(auth()->user()->rol, [User::ROL_ADMIN,User::ROL_OPERARIO,User::ROL_JEFE_OPERARIO])) {
+                if(in_array(auth()->user()->rol, [User::ROL_ADMIN])) {
 
                     $btn[] = '<a class="btn-md dropdown-item text-danger btn-fontsize" href="#"' .
                         'data-backdrop="static" data-keyboard="false"' .
