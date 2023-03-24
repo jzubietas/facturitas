@@ -78,6 +78,10 @@
     </div>
 
     <div class="container-fluid">
+        <canvas id="chartPedidosAsesores" style="height: 350px;"></canvas>
+    </div>
+
+    <div class="container-fluid">
         <canvas id="my-chart"></canvas>
     </div>
 @stop
@@ -87,7 +91,7 @@
         .content-header {
             background-color: white !important;
         }
- 
+
         .content {
             background-color: white !important;
         }
@@ -149,6 +153,30 @@
                                 }
                             }]
                         }
+                    }
+                });
+            });
+
+            $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
+                var ctx = document.getElementById('chartPedidosAsesores').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels  :data.labels,
+                        datasets: data.datasets,
+                    },
+                    options: {
+                        responsive              : true,
+                        maintainAspectRatio     : false,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                stacked: true
+                            }]
+                        },
+                        height: 350
                     }
                 });
             });
