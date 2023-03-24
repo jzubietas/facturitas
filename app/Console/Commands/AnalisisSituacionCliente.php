@@ -174,7 +174,7 @@ class AnalisisSituacionCliente extends Command
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'ACTIVO',
+                                          "situacion" => 'RECURRENTE',
                                           "flag_fp" => '1'
                                       ]);
                                   }
