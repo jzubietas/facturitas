@@ -286,8 +286,35 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 </div>
 
+{{-- PEDIDOS POR ASESOR --}}
+<div class="conatiner-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title text-uppercase">PEDIDOS POR ASESOR</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="d-flex flex-column">
+                        <span class="text-bold text-lg">{{$gasto_total_olva}}</span>
+                        <span>Total de pedidos en mes actual</span>
+                    </p>
+                </div>
 
+                <div class="position-relative mb-4">
+                    <canvas id="chartPedidosAsesores" style="height: 350px;"></canvas>
+                </div>
+                <div class="d-flex flex-row justify-content-end">
+                    <span class="mr-2 text-uppercase">
 
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section('js-datatables')
     <script>
@@ -538,6 +565,53 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }
                 }
             })
+
+            let arrayAsesores = [{{$labelasesores}}]
+            console.log('arrayAsesores: ',arrayAsesores);
+            var ctx = document.getElementById('chartPedidosAsesores').getContext('2d');
+            var chartPedidosAsesores = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels  : ['January S', 'February E' , 'March SAD', 'April', 'May', 'June', 'July'],
+                    datasets: [
+                        {
+                            label               : 'Digital Goods',
+                            backgroundColor     : 'rgba(60,141,188,0.9)',
+                            borderColor         : 'rgba(60,141,188,0.8)',
+                            pointRadius          : false,
+                            pointColor          : '#3b8bba',
+                            pointStrokeColor    : 'rgba(60,141,188,1)',
+                            pointHighlightFill  : '#fff',
+                            pointHighlightStroke: 'rgba(60,141,188,1)',
+                            data                : [28, 48, 40, 19, 86, 27, 90]
+                        },
+                        {
+                            label               : 'Electronics',
+                            backgroundColor     : 'rgba(210, 214, 222, 1)',
+                            borderColor         : 'rgba(210, 214, 222, 1)',
+                            pointRadius         : false,
+                            pointColor          : 'rgba(210, 214, 222, 1)',
+                            pointStrokeColor    : '#c1c7d1',
+                            pointHighlightFill  : '#fff',
+                            pointHighlightStroke: 'rgba(220,220,220,1)',
+                            data                : [65, 59, 80, 81, 56, 55, 40]
+                        },
+                    ]
+                },
+                options: {
+                    responsive              : true,
+                    maintainAspectRatio     : false,
+                    scales: {
+                        xAxes: [{
+                            stacked: true,
+                        }],
+                        yAxes: [{
+                            stacked: true
+                        }]
+                    },
+                    height: 350
+                }
+            });
         })
     </script>
 @endsection

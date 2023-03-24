@@ -160,10 +160,17 @@ class DashboardController extends Controller
 
         $fechametames = Carbon::now()->format('Y-m-d');
 
+        $arregloasesores = [];
+        $asesores_list=User::where('rol',User::ROL_ASESOR)->where('estado',1)->orderBy('supervisor','asc')->orderBy('name','asc')->limit(7)->get();
+        foreach ($asesores_list as $item => $asslst){
+            $arregloasesores[$item] =(string)($asslst->identificador);
+        }
 
+        $labelasesores=implode(',', $arregloasesores);
+        /*dd($asesores_list,$arregloasesores);*/
         return view('dashboard.dashboard', compact(
             'fechametames', 'lst_users_vida', 'mirol', 'idEncargado'
-            , 'contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual', 'asesor_pedido_dia', 'fechametames', 'gasto_total_olva', 'contadores_mes_actual_olva'
+            , 'contadores_arr', 'contadores_mes_anterior', 'contadores_mes_actual', 'asesor_pedido_dia', 'fechametames', 'gasto_total_olva', 'contadores_mes_actual_olva','labelasesores'
         ));
 
     }
