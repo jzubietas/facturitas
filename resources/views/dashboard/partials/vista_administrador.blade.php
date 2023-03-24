@@ -393,11 +393,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
                 let valorr=$('#fechametames').val();
                 let ddd=valorr.substring(1, 2);
-                console.log(ddd)
+                console.log("ddd "+ddd)
                 let mmm=valorr.substring(3, 2);
-                console.log(mmm)
+                console.log("mmm "+mmm)
                 let yyy=valorr.substring(6, 4);
-                console.log(yyy);
+                console.log("yyy "+yyy);
                 console.log(valorr)
 
                 fd.append('fechametames', valorr);
