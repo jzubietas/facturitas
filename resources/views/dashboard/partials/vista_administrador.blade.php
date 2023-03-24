@@ -130,7 +130,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
             <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
-                   value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
+                   value="">
             <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
 
 
