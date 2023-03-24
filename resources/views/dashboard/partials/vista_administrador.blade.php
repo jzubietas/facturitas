@@ -129,8 +129,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
         <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
-            <input type="date" id="fechametames" class="border-0 ml-3"
+            <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
                    value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
+            <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
+
+
         </div>
     </div>
 
@@ -305,13 +308,20 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
-
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
+
+            $("#fechametames").datepicker();
+            $("#fechametames-button").click(function() {
+                $("#fechametames").datepicker("show");
+
+                $('#fechametames').datepicker('setDate', new Date());
             });
 
             $.get("{{ route('chart-data') }}", function(data) {
