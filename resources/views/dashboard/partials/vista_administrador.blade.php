@@ -420,10 +420,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     beforeSend: function() {
                         $('#contenedor-fullscreen').hide()
                         $('.spinner').show()
+                        $('#spinner').show()
                     },
                     complete: function() {
                         $('#contenedor-fullscreen').show()
                         $('.spinner').hide()
+                        $('#spinner').hide()
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         // Handle the error
