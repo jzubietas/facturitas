@@ -325,7 +325,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             var currentYear = date.getFullYear();
 
             $('#fechametames').datepicker({
-                dateFormat: 'yy-mm-dd'
+                dateFormat: 'dd-mm-yy'
             });
 
             $("#fechametames-button").click(function() {
@@ -392,6 +392,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
                 let valorr=$('#fechametames').val();
+                var parts = valorr.split("-");
+                valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
                 console.log(valorr)
 
                 fd.append('fechametames', valorr);
