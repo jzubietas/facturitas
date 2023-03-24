@@ -322,10 +322,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $("#fechametames").datepicker({
                 language: 'es'
             });
-<<<<<<< HEAD
- 
-=======
->>>>>>> parent of 6faa9979 (carga)
+
             $("#fechametames-button").click(function() {
                 //$("#fechametames").datepicker("show");
 
