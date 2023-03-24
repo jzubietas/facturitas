@@ -323,8 +323,19 @@
                         });
                         break;
                     case 'form-agregarcontacto-n':
+                        $(".btnEnviarAgregaContacto").attr('disabled', false);
                         var cliente_id = $('#cbxClienteAgregaNuevo').val();
                         var contacto_nombre = $('#txtNombreContactoNuevo').val();
+                        if (cliente_id=="" ||cliente_id=="-1"){
+                            Swal.fire('Error', 'Seleccione el cliente.', 'warning');
+                            $(".btnEnviarAgregaContacto").attr('disabled', false);
+                            return false;
+                        }
+                        if (contacto_nombre==""  ){
+                            Swal.fire('Error', 'Ingrese el Numero de contacto.', 'warning');
+                            $(".btnEnviarAgregaContacto").attr('disabled', false);
+                            return false;
+                        }
                         $.ajax({
                             url: "{{ route('agregarcontactonuevo') }}",
                             method: 'POST',
@@ -334,13 +345,14 @@
                                 $('#cbxClienteAgregaNuevo').val('-1');
                                 $('#txtNombreContactoNuevo').val('');
                                 $('#cbxClienteAgregaNuevo').html(data.html).selectpicker("refresh");
+                                $(".btnEnviarAgregaContacto").attr('disabled', false);
                             }
                         });
                         break;
                     case 'form-agregarcontacto-cno':
                         var cno_cliente_id = $('#cbxCambiaNombre').val();
                         var cno_cambio_nombre = $('#txtCambiaNombre').val();
-                        if (cno_cliente_id == -1) {
+                        if (cno_cliente_id == "" || cno_cliente_id == "-1") {
                             Swal.fire('Error', 'Seleccione un cliente', 'warning').then(function () {
                                 $("select[name='cbxCambiaNombre']").focus()
                             });

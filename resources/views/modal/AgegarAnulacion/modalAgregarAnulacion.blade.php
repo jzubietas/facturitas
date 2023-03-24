@@ -10,55 +10,174 @@
 
                 <input type="hidden" class="d-none" id="modalagregaranulacion" name="modalagregaranulacion">
 
-                <div class="form-row">
-                    <div class="form-group col-lg-6">
-
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button id="btn_agregaranulacion_pc" type="button" class="btn rounded btn-info ml-2"> Pedido Completo</button>
-                            <button id="btn_agregaranulacion_f" type="button" class="btn rounded btn-secondary  ml-2"> Factura</button>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div id="modal-agregaranulacion-pc-container" class="modal-agregaranulacion-pc-container">
-                    @include('modal.AgegarAnulacion.partials.agregaranulacion_pc')
-                </div>
-
-                <div id="modal-agregaranulacion-f-container" class="modal-agregaranulacion-f-container">
-                    @include('modal.AgegarAnulacion.partials.agregaranulacion_f')
-                </div>
-
-                {{--<div class="col-md-12">
+                {{--Inicio Tabs Solicitud Anulacion--}}
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item"><a class="nav-link active" href="#settings2" id="btn_agregaranulacion_pc"  data-toggle="tab">Settings2</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#settings3"  id="btn_agregaranulacion_f"  data-toggle="tab">Settings3</a></li>
+                                <li class="nav-item"><a class="nav-link active" href="#tabPedidoCompleto"   data-toggle="tab" > Pedido Completo</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#tabFactura"  data-toggle="tab" > Factura</a></li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
 
-                                <div class="active tab-pane" id="settings2">
-                                    <form class="form-horizontal">
-                                        <div id="modal-agregaranulacion-pc-container" class="modal-agregaranulacion-pc-container">
-                                            @include('modal.AgegarAnulacion.partials.agregaranulacion_pc')
+                                <div class="active tab-pane" id="tabPedidoCompleto">
+                                    <form id="form-agregaranulacion-pc" name="form-agregaranulacion-pc" enctype="multipart/form-data">
+                                        <input type="hidden" id="agregaranulacion_pc" name="agregaranulacion_pc">
+                                        <input type="hidden" name="opcion" value="1">
+                                        <input type="hidden" id="txtIdPedidoCompleto" name="txtIdPedidoCompleto">
+                                        <input type="hidden" id="tipoAnulacion" name="tipoAnulacion" value="C">
+
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="codigoCodigoPc" id="codigoCodigoPc"
+                                                       placeholder="Colocar codigo del pedido" class="bg-warning">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="asesorCodigoPc" id="asesorCodigoPc"
+                                                       placeholder="Asesor" readonly style="background: #62CDFF;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="importeCodigoPc" id="importeCodigoPc"
+                                                       placeholder="Colocar el importe del pedido" readonly style="background: #62CDFF;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="anulacionCodigoPc" id="anulacionCodigoPc"
+                                                       placeholder="Colocar el importe a anular" readonly style="background: #62CDFF;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-minus-square" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="rucCodigoPc" id="rucCodigoPc"
+                                                       placeholder="Colocar el RUC del cliente" readonly style="background: #62CDFF;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-list-ol" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="razonCodigoPc" id="razonCodigoPc"
+                                                       placeholder="Colocar la razón social" readonly style="background: #62CDFF;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-map-pin" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
+                                                {!! Form::file('inputArchivoSubir[]', ['class' => 'form-control-file', 'id'=>'inputArchivoSubir','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col lg-12">
+                                                {!! Form::label('txtMotivoPedComplet', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
+                                                {!! Form::textarea('txtMotivoPedComplet', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Completa el sustento para la anulación ',  'id'=>'txtMotivoPedComplet']) !!}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
+                                                <button type="submit" class="float-right btn btn-success btnEnviarPagoCompleto">Enviar</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
 
-                                <div class="tab-pane" id="settings3">
-                                    <form class="form-horizontal">
-                                        <div id="modal-agregaranulacion-f-container" class="modal-agregaranulacion-f-container">
-                                            @include('modal.AgegarAnulacion.partials.agregaranulacion_f')
+                                <div class="tab-pane" id="tabFactura">
+                                    <form id="form-agregaranulacion-f" name="form-agregaranulacion-f" class="agregaranulacion" enctype="multipart/form-data">
+                                        <input type="hidden" id="agregaranulacion_f" name="agregaranulacion_f">
+                                        <input type="hidden" id="txtIdPedidoFactura" name="txtIdPedidoFactura">
+                                        <input type="hidden" id="tipoAnulacion2" name="tipoAnulacion2" value="F">
+                                        <input type="hidden" name="opcion" value="2">
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="codigoCodigoF" id="codigoCodigoF"
+                                                       placeholder="Colocar codigo del pedido" class="bg-warning">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="asesorCodigoF" id="asesorCodigoF" placeholder="Asesor" readonly style="background: #A4907C;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="importeCodigoF" id="importeCodigoF"
+                                                       placeholder="Colocar el importe del pedido" readonly style="background: #A4907C;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                {{--<input type="text" name="anularCodigoF" id="anularCodigoF" step="0.01" min="0"
+                                                       class="form-control number ob" data-type="text" data-msj="Ingrese una cantidad"
+                                                       placeholder="Cantidad..." style="background: #A4907C;">--}}
+
+                                                <input name="anularCodigoF" id="anularCodigoF"  step="0.01" min="0" class="form-control bg-warning number ob" data-type="text"
+                                                       placeholder="Colocar el importe a anular"  style="background: #A4907C;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-minus-square" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="rucCodigoF" id="rucCodigoF"
+                                                       placeholder="Colocar el RUC del cliente" readonly style="background: #A4907C;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-list-ol" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="razonCodigoF" id="razonCodigoF"
+                                                       placeholder="Colocar la razón social" readonly style="background: #A4907C;">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-map-pin" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
+                                                {!! Form::file('inputArchivoSubirf[]', ['class' => 'form-control-file', 'id'=>'inputArchivoSubirf','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col lg-12">
+                                                {!! Form::label('txtMotivoFactura', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
+                                                {!! Form::textarea('txtMotivoFactura', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Completa el sustento para la anulación ', 'id'=>'txtMotivoFactura']) !!}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
+                                                <button type="submit" class="float-right btn btn-success btnEnviarFactura">Enviar</button>
+                                            </div>
+                                        </div>
+
+
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>--}}
+                </div>
+                {{--Fin Tabs Solicitud Anulacion--}}
             </div>
 
         </div>

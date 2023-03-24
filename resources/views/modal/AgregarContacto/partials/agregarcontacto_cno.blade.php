@@ -24,7 +24,7 @@
     </ul>
     <hr class="mt-2 mb-3"/>
     <div class="form-group col-lg-12">
-        <button type="submit" class="float-right btn btn-success">Enviar</button>
+        <button type="submit" class="float-right btn btn-success btnCambiarNombreCliente">Enviar</button>
     </div>
 
 </form>
