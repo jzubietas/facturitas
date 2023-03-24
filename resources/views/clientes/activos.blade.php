@@ -23,7 +23,7 @@
                         <img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
                 </div>
             </div>
-            @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes ACTIVOS', 'key' => '2'])
+            @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes ACTIVOS', 'key' => '9'])
 
         @endcan
     </h1>
