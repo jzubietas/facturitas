@@ -99,9 +99,9 @@
 {{-- FULLSCREEN --}}
 
 <div id="spinner" class="position-relative d-flex justify-content-center">
-    <img src="your-image-url" alt="Your Image" class="img-fluid d-none">
+   
 
-    <div class="position-absolute top-50 start-50 translate-middle">
+    <div class=" top-50 start-50 translate-middle">
         <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
     </div>
 </div>
