@@ -19,3 +19,6 @@ cronlog.txt
 *.cmd
 *.iso
 *.bat
+vendor
+/vendor
+vendor/
