@@ -98,7 +98,7 @@
 <hr>
 {{-- FULLSCREEN --}}
 
-<div id="spinner" class="position-relative">
+<div id="spinner" class="position-relative d-flex justify-content-center">
     <img src="your-image-url" alt="Your Image" class="img-fluid d-none">
 
     <div class="position-absolute top-50 start-50 translate-middle">
