@@ -314,10 +314,52 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 </div>
 
-<div class="container-fluid">
-    <h1> Cuadro comparativo de Pedidos Anulados</h1>
-    <canvas id="my-chart-pedidosporasesor"  style="min-height: 650px; height: 650px; max-height: 650px; max-width: 100%;"></canvas>
+
+
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="far fa-chart-bar"></i>
+            Cuadro comparativo de Pedidos Anulados
+        </h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool disabled" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+<div class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+    </div>
+</div>
+
+{{--<div class="container-fluid">
+    <h1> Cuadro comparativo de Pedidos Anulados</h1>
+
+</div>--}}
 
 <div class="container-fluid">
     <canvas id="my-chart-dejaronpedir"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
@@ -367,8 +409,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
             $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
-                var ctxpedidosporasesor = document.getElementById('my-chart-pedidosporasesor').getContext('2d');
-                var chartpedidosporasesor = new Chart(ctxpedidosporasesor, {
+                var ctxpedidosporasesor1 = document.getElementById('my-chart-pedidosporasesorpar1').getContext('2d');
+                var chartpedidosporasesor1 = new Chart(ctxpedidosporasesor1, {
                     type: 'horizontalBar',
                     data: {
                         labels: data.labels,
@@ -382,7 +424,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                 stacked: true,
                                 max: 100,
                                 ticks: {
-                                    beginAtZero: true,
+                                    beginAtZero: false,
                                     callback: function (value) {
                                         return value + '%';
                                     },
@@ -390,7 +432,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             }],
                             yAxes: [{
                                 stacked: true,
-
                             }]
                         },
                         plugins: {
@@ -401,6 +442,47 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                 },
                                 formatter: function(value, context) {
                                     return Math.round(value) + '%';
+                                }
+                            },
+                        },
+                    }
+                });
+            });
+
+            $.get("{{ route('chart-pedidos-asesores-faltantes') }}", function(data) {
+                var ctxpedidosporasesor2 = document.getElementById('my-chart-pedidosporasesorpar2').getContext('2d');
+                var chartpedidosporasesor2 = new Chart(ctxpedidosporasesor2, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: data.labels,
+                        datasets: data.datasets,
+                    },
+                    options: {
+                        responsive              : true,
+                        aintainAspectRatio     : false,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                                max: 100,
+                                ticks: {
+                                    beginAtZero: false,
+                                    callback: function (value) {
+                                        return value + '%';
+                                    },
+                                },
+                            }],
+                            yAxes: [{
+                                stacked: true,
+                            }]
+                        },
+                        plugins: {
+                            datalabels: {
+                                color: 'red',
+                                anchor: 'end',
+                                align: 'end',
+                                formatter: function(value, context) {
+                                    console.log('aaaaaaaaaaa:',value,context)
+                                    return value + '%';
                                 }
                             },
                         },
