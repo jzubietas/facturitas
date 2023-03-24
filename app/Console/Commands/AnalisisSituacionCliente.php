@@ -165,6 +165,20 @@ class AnalisisSituacionCliente extends Command
                                       ]);
                                   }
                                   break;
+                              case 'ACTIVO':
+                                  if($situacion_antes->activos==0)
+                                  {
+                                      $situacion_create->update([
+                                          "situacion" => 'RECURRENTE',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }else{
+                                      $situacion_create->update([
+                                          "situacion" => 'ACTIVO',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }
+                                  break;
                               default:break;
                           }
                       }
@@ -231,12 +245,12 @@ class AnalisisSituacionCliente extends Command
                                   if($situacion_periodo->activos>0)
                                   {
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'ACTIVO',
                                           "flag_fp" => '1'
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'ACTIVO',
                                           "flag_fp" => '1'
                                       ]);
                                   }
@@ -250,7 +264,7 @@ class AnalisisSituacionCliente extends Command
                                   if($situacion_periodo->activos>0)
                                   {
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'ACTIVO',
                                           "flag_fp" => '1'
                                       ]);
                                   }else{
@@ -263,7 +277,7 @@ class AnalisisSituacionCliente extends Command
                                   break;
                               case 'NUEVO':
                                   $situacion_create->update([
-                                      "situacion" => 'RECURRENTE',
+                                      "situacion" => 'ACTIVO',
                                       "flag_fp" => '1'
                                   ]);
 
@@ -316,7 +330,43 @@ class AnalisisSituacionCliente extends Command
                                       if ($situacion_antes->activos > 0 )
                                       {
                                           $situacion_create->update([
+                                              "situacion" => 'ACTIVO',
+                                              "flag_fp" => '1'
+                                          ]);
+                                      }else{
+                                          $situacion_create->update([
+                                              "situacion" => 'RECUPERADO RECIENTE',
+                                              "flag_fp" => '1'
+                                          ]);
+                                      }
+
+                                  }else{
+                                      if ($situacion_antes->activos > 0 )
+                                      {
+                                          $situacion_create->update([
                                               "situacion" => 'RECURRENTE',
+                                              "flag_fp" => '1'
+                                          ]);
+                                      }else{
+                                          $situacion_create->update([
+                                              "situacion" => 'ABANDONO RECIENTE',
+                                              "flag_fp" => '1'
+                                          ]);
+                                      }
+
+                                  }
+                                  break;
+                              case 'ACTIVO':
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+                                  if($situacion_periodo->activos>0)
+                                  {
+                                      if ($situacion_antes->activos > 0 )
+                                      {
+                                          $situacion_create->update([
+                                              "situacion" => 'ACTIVO',
                                               "flag_fp" => '1'
                                           ]);
                                       }else{
