@@ -337,6 +337,7 @@ class DashboardController extends Controller
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
 
+            var_dump($asesor->id);
             var_dump($meta_calculo_row->meta_quincena);
             //continue;
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
