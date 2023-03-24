@@ -297,7 +297,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
-
+ 
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -306,6 +308,54 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 }
             });
 
+            var date = new Date();
+            var currentMonth = date.getMonth();
+            var currentDate = date.getDate();
+            var currentYear = date.getFullYear();
+
+            $('#fechametames').datepicker({
+                //minDate: new Date(currentYear, currentMonth, currentDate),
+                dateFormat: 'dd-mm-yy'
+            });
+
+            $("#fechametames-button").click(function() {
+                //$("#fechametames").datepicker("show");
+
+                //$('#fechametames').datepicker('setDate', new Date());
+                $('#fechametames').datepicker('setDate', new Date());
+                $('#fechametames').trigger('change');
+            });
+
+            $('#fechametames').datepicker('setDate', new Date());
+            //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
+
+
+
+            $.get("{{ route('chart-data') }}", function(data) {
+                var ctx = document.getElementById('my-chart-dejarondepedir').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'My chart',
+                            data: data.values,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
 
             $('#exampleModalCenter').modal('show');
 
