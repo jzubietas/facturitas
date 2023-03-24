@@ -357,19 +357,19 @@ class ChartController extends Controller
             $pedidosAnuladosPorAsesores=$totalfila-$pedidosPendAnulPorAsesores-$pedidosActivosPorAsesores;
 
             if ($pedidosActivosPorAsesores != 0.0 || $totalfila!=0.0) {
-                $gDataporc1[$item]=round((($pedidosActivosPorAsesores /$totalfila)*100),1);
+                $gDataporc1[$item]=35;//round((($pedidosActivosPorAsesores /$totalfila)*100),1);
             } else {
                 $gDataporc1[$item]=0;
             }
 
             if ($pedidosPendAnulPorAsesores != 0.0 || $totalfila!=0.0) {
-                $oDataporc2[$item]=round((($pedidosPendAnulPorAsesores /$totalfila)*100),1);
+                $oDataporc2[$item]=35;//ound((($pedidosPendAnulPorAsesores /$totalfila)*100),1);
             } else {
                 $oDataporc2[$item]=0;
             }
 
             if ($pedidosAnuladosPorAsesores != 0.0 || $totalfila!=0.0) {
-                $rDataporc3[$item]=round((($pedidosAnuladosPorAsesores /$totalfila)*100),1);
+                $rDataporc3[$item]=35;//round((($pedidosAnuladosPorAsesores /$totalfila)*100),1);
             } else {
                 $rDataporc3[$item]=0;
             }

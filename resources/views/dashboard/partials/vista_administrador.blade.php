@@ -354,7 +354,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <canvas id="my-chart-pedidosporencargado"  style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    <div class="chart">
+                        <canvas id="mychartpedidosporencargado"   style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;" ></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -498,7 +500,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             });
 
             $.get("{{ route('chart-pedidos-encargados') }}", function(data) {
-                var ctxpedidosxncargado = document.getElementById('my-chart-pedidosporencargado').getContext('2d');
+                var ctxpedidosxncargado = document.getElementById('mychartpedidosporencargado').getContext('2d');
                 var chartpedidosxncargado = new Chart(ctxpedidosxncargado, {
                     type: 'horizontalBar',
                     data: {
