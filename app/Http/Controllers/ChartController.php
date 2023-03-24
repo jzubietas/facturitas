@@ -54,7 +54,7 @@ class ChartController extends Controller
             $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
             $arreglocontador[$item] =$asslst->total;
 
-            $pedidosInactivosPorAsesores = Pedido::selectRaw('pedidos.user_id, count(pedidos.user_id) as totalanul')
+            /*$pedidosInactivosPorAsesores = Pedido::selectRaw('pedidos.user_id, count(pedidos.user_id) as totalanul')
                 ->where('pedidos.user_id',$asslst->user_id)
                 ->where('pedidos.estado',1)
                 ->where('pedidos.pendiente_anulacion',0)
@@ -69,7 +69,8 @@ class ChartController extends Controller
                 }
             }else{
                 $arreglocontadoranul[$contador] =0;
-            }
+            }*/
+            $arreglocontadoranul[$contador] =$item*10;
             $contador++;
                 /*((isset($pedidosInactivosPorAsesores->totalanul))?$pedidosInactivosPorAsesores->totalanul:0);*/
 

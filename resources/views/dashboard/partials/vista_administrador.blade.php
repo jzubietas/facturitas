@@ -302,7 +302,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 </div>
 
 <div class="container-fluid">
-    <canvas id="my-chart-pedidosporasesor"  style="min-height: 250px; height: 350px; max-height: 350px; max-width: 100%;"></canvas>
+    <canvas id="my-chart-pedidosporasesor"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
 </div>
 
 <div class="container-fluid">
