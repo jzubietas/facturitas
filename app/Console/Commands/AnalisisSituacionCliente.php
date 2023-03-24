@@ -231,12 +231,12 @@ class AnalisisSituacionCliente extends Command
                                   if($situacion_periodo->activos>0)
                                   {
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'ACTIVO',
                                           "flag_fp" => '1'
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'ACTIVO',
                                           "flag_fp" => '1'
                                       ]);
                                   }
@@ -250,7 +250,7 @@ class AnalisisSituacionCliente extends Command
                                   if($situacion_periodo->activos>0)
                                   {
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'ACTIVO',
                                           "flag_fp" => '1'
                                       ]);
                                   }else{
@@ -263,7 +263,7 @@ class AnalisisSituacionCliente extends Command
                                   break;
                               case 'NUEVO':
                                   $situacion_create->update([
-                                      "situacion" => 'RECURRENTE',
+                                      "situacion" => 'ACTIVO',
                                       "flag_fp" => '1'
                                   ]);
 
@@ -316,7 +316,7 @@ class AnalisisSituacionCliente extends Command
                                       if ($situacion_antes->activos > 0 )
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'RECURRENTE',
+                                              "situacion" => 'ACTIVO',
                                               "flag_fp" => '1'
                                           ]);
                                       }else{

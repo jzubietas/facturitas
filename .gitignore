@@ -2,7 +2,6 @@
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
 .env
 .env.backup
 .phpunit.result.cache
@@ -13,8 +12,6 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-resources/views/base_fria/action.blade
-resources/views/base_fria/action.blade.php
 metadata/*
 *.sql
 cronlog.txt
@@ -22,3 +19,6 @@ cronlog.txt
 *.cmd
 *.iso
 *.bat
+vendor
+/vendor
+vendor/

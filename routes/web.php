@@ -841,5 +841,5 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
         ->name('autorizarAgenda');*/
 
     Route::get('chart-data', [ChartController::class,'getData'])->name('chart-data');
-
+    Route::get('chart-pedidos-asesores', [ChartController::class,'getPedidosAsesores'])->name('chart-pedidos-asesores');
 });
