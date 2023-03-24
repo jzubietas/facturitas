@@ -312,7 +312,7 @@ class DashboardController extends Controller
             }
 
             /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
-            $date_pagos = Carbon::parse(now())->subMonth();
+            $date_pagos = Carbon::parse(now())->subMonth()->startOfMonth();
             $fechametames = Carbon::now()->clone();
 
             if (!request()->has("fechametames")) {
@@ -323,8 +323,8 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
             }
 
-            $fechametames = Carbon::now()->clone();
-            $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+            //$fechametames = Carbon::now()->clone();
+            //$date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
 
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
                 ->where('pedidos.codigo', 'not like', "%-C%")->activo()
