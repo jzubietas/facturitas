@@ -1,4 +1,4 @@
-<?php //e1b9ac37a063cc618de4a9ada1882f46
+<?php //4caf03955689cb5e0e2ba86c56c65b05
 /** @noinspection all */
 
 namespace LaravelIdea\Helper\App\Models {
@@ -2191,7 +2191,6 @@ namespace LaravelIdea\Helper\App\Models {
      * @method Paginator|Media[]|_IH_Media_C simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
      * @method Media sole(array|string $columns = ['*'])
      * @method Media updateOrCreate(array $attributes, array $values = [])
-     * @method _IH_Media_QB ordered()
      */
     class _IH_Media_QB extends _BaseBuilder {}
     
