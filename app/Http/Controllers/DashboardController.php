@@ -342,6 +342,14 @@ class DashboardController extends Controller
 
             $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
 
+            if (!request()->has("fechametames")) {
+                $fechametames = Carbon::now()->clone();
+                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+            } else {
+                $fechametames = Carbon::parse($request->fechametames)->clone();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
+            }
+
             $total_pedido = Pedido::query()->where('user_id', $asesor->id)
                 ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
