@@ -129,11 +129,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
         <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
-            <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
+            <input type="date" id="fechametames" class="border-0 ml-3"
                    value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
-            <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
-
-
         </div>
     </div>
 
@@ -235,12 +232,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             class="chartjs-render-monitor" width="764" height="200"></canvas>
                 </div>
                 <div class="d-flex flex-row justify-content-end">
-                    <span class="mr-2 text-uppercase">
-                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
-                    </span>
                     <span class="text-uppercase">
                         <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
-
+                    </span>
+                    <span class="mr-2 text-uppercase">
+                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
                     </span>
                 </div>
             </div>
@@ -289,13 +285,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 </div>
 
-<div class="container-fluid">
-    <canvas id="my-chart-dejarondepedir"></canvas>
-</div>
-
-
-
-
 @section('js-datatables')
     <script>
         $(".animated-progress span").each(function () {
@@ -309,8 +298,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         });
     </script>
 
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="{{asset('js/bootstrap-datepicker.es.js')}}" charset="UTF-8"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -319,48 +306,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 }
             });
 
-            $("#fechametames").datepicker({
-                language: 'es'
-            });
-
-            $("#fechametames-button").click(function() {
-                $("#fechametames").datepicker("show");
-
-                //$('#fechametames').datepicker('setDate', new Date());
-                $('#fechametames').datepicker('setDate', new Date());
-            });
-
-            $('#fechametames').datepicker('setDate', new Date());
-
-
-
-            $.get("{{ route('chart-data') }}", function(data) {
-                var ctx = document.getElementById('my-chart-dejarondepedir').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'My chart',
-                            data: data.values,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            });
 
             $('#exampleModalCenter').modal('show');
+
+
+            $('#fechametames').val("{{\Carbon\Carbon::parse($fechametames)->format('Y-m-d')}}");
 
             $(document).on('change', '#fechametames', function () {
                 //const value = e.target.value;
@@ -584,6 +534,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }
                 }
             })
+
         })
     </script>
 @endsection

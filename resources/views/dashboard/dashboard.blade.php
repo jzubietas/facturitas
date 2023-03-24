@@ -33,7 +33,6 @@
           }
         }
     </style>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endpush
 @section('content_header')
     <div><h1>Dashboard</h1>
@@ -78,7 +77,13 @@
         @endif
     </div>
 
+    <div class="container-fluid">
+        <canvas id="chartPedidosAsesores" style="height: 350px;"></canvas>
+    </div>
 
+    <div class="container-fluid">
+        <canvas id="my-chart"></canvas>
+    </div>
 @stop
 
 @section('css')
@@ -126,6 +131,55 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
 
+            $.get("{{ route('chart-data') }}", function(data) {
+                var ctx = document.getElementById('my-chart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'My chart',
+                            data: data.values,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+
+            $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
+                var ctx = document.getElementById('chartPedidosAsesores').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels  :data.labels,
+                        datasets: data.datasets,
+                    },
+                    options: {
+                        responsive              : true,
+                        maintainAspectRatio     : false,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                stacked: true
+                            }]
+                        },
+                        height: 350
+                    }
+                });
+            });
         })
     </script>
     @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
