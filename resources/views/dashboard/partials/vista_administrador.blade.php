@@ -821,4 +821,5 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             })
         })
     </script>
+    
 @endsection
