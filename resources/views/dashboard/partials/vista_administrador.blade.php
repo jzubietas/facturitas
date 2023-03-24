@@ -354,7 +354,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             window.cargaNueva = function (entero) {
                 console.log(' ' + entero)
                 var fd = new FormData();
-                fd.append('fechametames', $('#fechametames').val());
+                fd.append('fechametames', '2023-03-24');
                 fd.append('ii', entero);
                 $.ajax({
                     data: fd,
