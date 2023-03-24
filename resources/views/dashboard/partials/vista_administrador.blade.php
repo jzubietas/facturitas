@@ -99,7 +99,7 @@
 {{-- FULLSCREEN --}}
 
 <div id="spinner" class="position-relative d-flex justify-content-center">
-   
+
 
     <div class=" top-50 start-50 translate-middle">
         <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
@@ -418,12 +418,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     method: 'POST',
                     url: "{{ route('dashboard.viewMetaTable') }}",
                     beforeSend: function() {
-                        $("#contenedor-fullscreen").hide();
-                        $('#spinner').show();
+                        $('#contenedor-fullscreen').addClass('d-none');
+                        $('#spinner').removeClass('d-none');
                     },
                     complete: function() {
-                        $("#contenedor-fullscreen").show();
-                        $('#spinner').hide();
+                        $('#contenedor-fullscreen').removeClass('d-none');
+                        $('#spinner').addClass('d-none');
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         // Handle the error
