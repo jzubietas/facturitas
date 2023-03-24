@@ -102,7 +102,7 @@
     <img src="your-image-url" alt="Your Image" class="img-fluid d-none">
 
     <div class="position-absolute top-50 start-50 translate-middle">
-        <img src="{{asset('images/progress.gif')}}" alt="Your Spinner" class="img-fluid spinner">
+        <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class="img-fluid spinner">
     </div>
 </div>
 
