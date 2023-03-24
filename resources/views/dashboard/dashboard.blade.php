@@ -33,6 +33,7 @@
             }
         }
         #spinner {
+            height: 600px;
             display: block;
         }
 
