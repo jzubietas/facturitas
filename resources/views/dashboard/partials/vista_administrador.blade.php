@@ -97,7 +97,7 @@
 
 <hr>
 {{-- FULLSCREEN --}}
-<div id="spinner" class="spinner-border text-primary col-lg-12" role="status">
+<div id="spinner" class="spinner-border text-primary col-lg-12 text-center" role="status">
     <span class="sr-only">Loading...</span>
 
 </div>
