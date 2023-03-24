@@ -256,8 +256,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="visitors-chart" style="display: block; width: 764px; height: 200px;"
-                            class="chartjs-render-monitor" width="764" height="200"></canvas>
+                    <canvas id="visitors-chart" style="display: block; height: 200px; max-width: 100%;"
+                            class="chartjs-render-monitor" height="200"></canvas>
                 </div>
                 <div class="d-flex flex-row justify-content-end">
                     <span class="mr-2 text-uppercase">
@@ -301,8 +301,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="visitors-chart-olva" style="display: block; width: 764px; height: 200px;"
-                            class="chartjs-render-monitor" width="764" height="200"></canvas>
+                    <canvas id="visitors-chart-olva" style="display: block; height: 200px;  max-width: 100%;"
+                            class="chartjs-render-monitor"  height="200"></canvas>
                 </div>
                 <div class="d-flex flex-row justify-content-end">
                     <span class="mr-2 text-uppercase">
