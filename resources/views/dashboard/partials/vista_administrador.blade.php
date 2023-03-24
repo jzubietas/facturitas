@@ -326,7 +326,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 $("#fechametames").datepicker("show");
 
                 //$('#fechametames').datepicker('setDate', new Date());
-                $('#fechametames').datepicker('setDate', "{{\Carbon\Carbon::parse($fechametames)->format('Y-m-d')}}");
+                $('#fechametames').datepicker('setDate', new Date());
             });
 
 
