@@ -98,6 +98,7 @@
 <hr>
 {{-- FULLSCREEN --}}
 <div id="spinner" class="spinner-border text-primary col-lg-12 text-center" role="status">
+    <image src="{{asset('images/progress.gif')}}"></image>
     <span class="sr-only">Loading...</span>
 
 </div>
