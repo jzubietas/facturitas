@@ -631,8 +631,8 @@ $banca"
                     DB::raw(" ( select ia2.id from imagen_atencions ia2 inner join pedidos pedidoi2 on pedidoi2.id=ia2.pedido_id and pedidoi2.id=pedidos.id where ia2.estado=1 limit 1) as id_imagen_atenciones "),
                     DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes "),
                     DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
-                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' limit 1) as vtipoAnulacion"),
-                    DB::raw("(select  pea.total_anular from pedidos_anulacions as pea where pea.pedido_id= pedidos.id  limit 1) as dMontoAnular"),
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' and pea.state_solicitud=1 limit 1) as vtipoAnulacion"),
+                    DB::raw("(select  pea.total_anular from pedidos_anulacions as pea where pea.pedido_id= pedidos.id  and pea.state_solicitud=1 limit 1) as dMontoAnular"),
                     'pedidos.estado as idPedidoAnulacion',
                 ])
                 ->where('pedidos.estado', '1')

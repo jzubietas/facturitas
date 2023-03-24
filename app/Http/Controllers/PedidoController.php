@@ -176,7 +176,8 @@ class PedidoController extends Controller
                     'dp.saldo as diferencia',
                     'direccion_grupos.motorizado_status',
                     DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
-                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' limit 1) as vtipoAnulacion"),
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' and pea.state_solicitud=1 limit 1) as vtipoAnulacion"),
+                    DB::raw("(select  pea.state_solicitud from pedidos_anulacions as pea where pea.pedido_id= pedidos.id order by pea.created_at desc limit 1) as vStateSolicitud"),
                 ]
             );
 
@@ -279,6 +280,9 @@ class PedidoController extends Controller
                 }
                 if ($pedido->condiciones==Pedido::PENDIENTE_ANULACION_PARCIAL ) {
                     $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::PENDIENTE_ANULACION_PARCIAL.'</span>';
+                }
+                if ($pedido->vStateSolicitud==0) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">ANULACION RECHAZADA</span>';
                 }
                 if ( $pedido->condiciones==Pedido::ANULADO_PARCIAL) {
                     $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULADO_PARCIAL.'</span>';
@@ -3278,11 +3282,11 @@ class PedidoController extends Controller
     {
         if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);
-            /*if ($pedido->pendiente_anulacion != '1') {
+            if ($pedido->pendiente_anulacion != '1') {
                 return response()->json([
                     "success" => 0,
                 ]);
-            }*/
+            }
 
             $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id)->where('state_solicitud',1);
             $contpedanulacions=$pedidosanulacion->count();
