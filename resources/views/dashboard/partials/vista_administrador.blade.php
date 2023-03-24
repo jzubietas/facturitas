@@ -329,6 +329,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 $('#fechametames').datepicker('setDate', new Date());
             });
 
+            $('#fechametames').datepicker('setDate', new Date());
+
 
 
             $.get("{{ route('chart-data') }}", function(data) {
