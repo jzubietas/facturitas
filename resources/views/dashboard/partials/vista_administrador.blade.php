@@ -297,7 +297,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
- 
+
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
     <script>
@@ -331,31 +331,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 
 
-            $.get("{{ route('chart-data') }}", function(data) {
-                var ctx = document.getElementById('my-chart-dejarondepedir').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'My chart',
-                            data: data.values,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            });
+            
 
             $('#exampleModalCenter').modal('show');
 
@@ -375,7 +351,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargReporteMetasCobranzasGeneral();
 
 
-            });  
+            });
 
             window.cargaNueva = function (entero) {
                 console.log(' ' + entero)
