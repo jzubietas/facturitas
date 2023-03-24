@@ -97,14 +97,15 @@
 
 <hr>
 {{-- FULLSCREEN --}}
+<div id="spinner" class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+
+</div>
 <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2 bg-white">
         <div class="d-flex justify-content-center row bg-white">
 
-            <div id="spinner" class="spinner-border text-primary" role="status">
-                <span class="sr-only">Loading...</span>
-                
-            </div>
+
 
 
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
@@ -411,9 +412,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     method: 'POST',
                     url: "{{ route('dashboard.viewMetaTable') }}",
                     beforeSend: function() {
+                        $("#contenedor-fullscreen").hide();
                         $('#spinner').show();
                     },
                     complete: function() {
+                        $("#contenedor-fullscreen").show();
                         $('#spinner').hide();
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
