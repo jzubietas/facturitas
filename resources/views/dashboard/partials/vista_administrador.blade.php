@@ -98,10 +98,11 @@
 <hr>
 {{-- FULLSCREEN --}}
 
+
 <div class="d-flex justify-content-center">
     <div id="spinner" class="spinner-border" role="status">
-        <image src="{{asset('images/progress.gif')}}" class="img-md"></image>
-        <span class="d-none sr-only">Loading...</span>
+        <image src="{{asset('images/progress.gif')}}" class="d-none img-md"></image>
+        <span class="sr-only">Loading...</span>
     </div>
 </div>
 
