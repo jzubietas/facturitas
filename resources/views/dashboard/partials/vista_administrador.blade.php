@@ -256,7 +256,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="visitors-chart" style="display: block; height: 200px; max-width: 100%;"
+                    <canvas id="visitors-chart" style="display: block; height: 200px; max-width: 100%; "
                             class="chartjs-render-monitor" height="200"></canvas>
                 </div>
                 <div class="d-flex flex-row justify-content-end">
