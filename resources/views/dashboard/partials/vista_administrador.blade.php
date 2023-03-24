@@ -290,6 +290,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 </div>
 
 <div class="container-fluid">
+    <canvas id="my-chart-pedidosporasesor"  style="min-height: 250px; height: 350px; max-height: 350px; max-width: 100%;"></canvas>
+</div>
+
+<div class="container-fluid">
     <canvas id="my-chart-dejarondepedir"></canvas>
 </div>
 
@@ -366,6 +370,23 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }
                 });
             });
+
+            $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
+                var ctxpedidosporasesor = document.getElementById('my-chart-pedidosporasesor').getContext('2d');
+                var chartpedidosporasesor = new Chart(ctxpedidosporasesor, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels  : data.labels,
+                        datasets: data.datasets
+                    },
+                    options: {
+                        responsive              : true,
+                        maintainAspectRatio     : false,
+                        datasetFill             : false
+                    }
+                });
+            });
+
 
             $('#exampleModalCenter').modal('show');
 

@@ -6,6 +6,7 @@ use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Http\Request;
 use ConsoleTVs\Charts\Facades\Charts;
+use function PHPUnit\Framework\isNull;
 
 class ChartController extends Controller
 {
@@ -26,16 +27,12 @@ class ChartController extends Controller
     {
         $arregloasesores = [];
         $arreglocontador = [];
+        $arreglocontadoranul = [];
 
         $ids_asesores=User::where('rol',User::ROL_ASESOR)->where('estado',1)
-            ->select([
-                'id',
-                'identificador',
-                'name',
-                'letra',
-            ])
+            ->select(['id','identificador','name','letra',])
             ->orderBy('supervisor','asc')
-            ->orderBy('name','asc')->limit(7)
+            ->orderBy('name','asc')
             ->pluck('id');
 
 
@@ -49,31 +46,35 @@ class ChartController extends Controller
             ->whereYear('pedidos.created_at',2023)
             ->get();
         /*
-        hacer un select por cada asesor y retornar el total  
+        hacer un select por cada asesor y retornar el total
         */
-        /*$pedidosActivosPorAsesores2 = Pedido::leftJoin('pedidos as s2', function ($join) {
-                $join->on('pedidos.user_id', '=', 's2.user_id');
-            })
-            ->leftJoin('users as u','pedidos.user_id','u.id')
-            ->groupBy('pedidos.user_id','u.identificador','u.letra')
-            ->whereIn('pedidos.user_id',$ids_asesores)
-            ->where('pedidos.estado',1)
-            ->where('pedidos.pendiente_anulacion',1)
-            ->whereMonth('pedidos.created_at', 3)
-            ->whereYear('pedidos.created_at',2023)
-            ->selectRaw('u.identificador,u.letra,pedidos.user_id, count(pedidos.user_id) as total')
-            ->get();
 
-        dd($pedidosActivosPorAsesores2);*/
+        $contador=0;
         foreach ($pedidosActivosPorAsesores as $item => $asslst){
             $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
-        }
+            $arreglocontador[$item] =$asslst->total;
 
-        foreach ($pedidosActivosPorAsesores as $item2 => $pedido){
-            $arreglocontador[$item2] =$pedido->total;
-        }
+            $pedidosInactivosPorAsesores = Pedido::selectRaw('pedidos.user_id, count(pedidos.user_id) as totalanul')
+                ->where('pedidos.user_id',$asslst->user_id)
+                ->where('pedidos.estado',1)
+                ->where('pedidos.pendiente_anulacion',0)
+                ->whereMonth('pedidos.created_at', 3)
+                ->whereYear('pedidos.created_at',2023)
+                ->groupBy('pedidos.user_id')
+                ->get();
+            dd($pedidosInactivosPorAsesores);
+            if (!isset($pedidosInactivosPorAsesores)){
+                foreach ($pedidosInactivosPorAsesores as $item2 => $asslst2){
+                    $arreglocontadoranul[$contador] =$asslst2->totalanul;
+                }
+            }else{
+                $arreglocontadoranul[$contador] =0;
+            }
+            $contador++;
+                /*((isset($pedidosInactivosPorAsesores->totalanul))?$pedidosInactivosPorAsesores->totalanul:0);*/
 
-        /*dd($arreglocontador);*/
+        }
+        /*dd($pedidosInactivosPorAsesores,$arreglocontadoranul);*/
 
         return response()->json([
             'labels' => $arregloasesores,
@@ -87,7 +88,7 @@ class ChartController extends Controller
                     'pointStrokeColor'    => 'rgba(60,141,188,1)',
                     'pointHighlightFill'  => '#fff',
                     'pointHighlightStroke'=> 'rgba(60,141,188,1)',
-                    'data'                => [12,20,30,15,20,45,10]
+                    'data'                => $arreglocontadoranul
                 ],
                 [
                     'label'                => 'Pedidos Activos ',
