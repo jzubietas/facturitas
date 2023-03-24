@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlertaController;
 use App\Http\Controllers\AnulacionController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CourierRegistrosController;
 use App\Http\Controllers\DashboardController;
@@ -836,5 +837,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Route::middleware('authorize.agenda')
         ->post('confirmaSolicitudAnulacion', [FullCalenderController::class, 'confirmaSolicitudAnulacion'])
         ->name('autorizarAgenda');*/
+
+    Route::get('chart-data', [ChartController::class,'getData'])->name('chart-data');
 
 });
