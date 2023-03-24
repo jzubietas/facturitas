@@ -309,6 +309,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         });
     </script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{asset('js/bootstrap-datepicker.es.js')}}" charset="UTF-8"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
