@@ -418,12 +418,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     method: 'POST',
                     url: "{{ route('dashboard.viewMetaTable') }}",
                     beforeSend: function() {
-                        $('#contenedor-fullscreen').addClass('d-none');
-                        $('#spinner').removeClass('d-none');
+                        $('#contenedor-fullscreen').hide()
+                        $('.spinner').show()
                     },
                     complete: function() {
-                        $('#contenedor-fullscreen').removeClass('d-none');
-                        $('#spinner').addClass('d-none');
+                        $('#contenedor-fullscreen').show()
+                        $('.spinner').hide()
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         // Handle the error
