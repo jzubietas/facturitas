@@ -1,4 +1,4 @@
-<?php //7ea0164ee9645ad4dcca7c4ffdc44a5b
+<?php //0744b171c99ce5307f38e2da1500fdb2
 /** @noinspection all */
 
 namespace App\Models {
@@ -11,7 +11,6 @@ namespace App\Models {
     use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     use Illuminate\Database\Eloquent\Relations\HasMany;
     use Illuminate\Database\Eloquent\Relations\HasOne;
-    use Illuminate\Database\Eloquent\Relations\MorphTo;
     use Illuminate\Database\Eloquent\Relations\MorphToMany;
     use Illuminate\Notifications\DatabaseNotification;
     use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -1060,12 +1059,7 @@ namespace App\Models {
      * @property Carbon|null $created_at
      * @property Carbon|null $updated_at
      * @property-read $created_at_format attribute
-     * @property-read string $extension attribute
-     * @property-read string $human_readable_size attribute
      * @property-read $media_link attribute
-     * @property-read string $type attribute
-     * @property Model $model
-     * @method MorphTo model()
      * @method static _IH_Media_QB onWriteConnection()
      * @method _IH_Media_QB newQuery()
      * @method static _IH_Media_QB on(null|string $connection = null)

@@ -323,7 +323,7 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
             }
 
-            $fechametames = Carbon::now()->clone();
+            //$fechametames = Carbon::now()->clone();
             $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
 
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
@@ -336,7 +336,7 @@ class DashboardController extends Controller
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
 
-            $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
+            $metatotal_quincena = 1;//(float)$meta_calculo_row->meta_quincena;
             $metatotal_intermedia = (float)$meta_calculo_row->meta_intermedia;
             $metatotal_1 = (float)$meta_calculo_row->meta_pedido;
             $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
