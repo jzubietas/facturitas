@@ -172,6 +172,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     <div id="metas_total"></div>
                 </div>
 
+                <div class="contain-table-dual row" style="width: 100% !important;">
+                    <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
+                    <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
+                </div>
+
             </div>
 
         </div>
@@ -305,9 +310,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <canvas id="my-chart-pedidosporasesor"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
 </div>
 
-<div class="container-fluid">
-    <canvas id="my-chart-dejarondepedir"></canvas>
-</div>
 
 
 
@@ -355,34 +357,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $('#fechametames').datepicker('setDate', new Date());
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
-
-
-            $.get("{{ route('chart-data') }}", function(data) {
-                var ctx = document.getElementById('my-chart-dejarondepedir').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'My chart',
-                            data: data.values,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            });
-
             $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
                 var ctxpedidosporasesor = document.getElementById('my-chart-pedidosporasesor').getContext('2d');
                 var chartpedidosporasesor = new Chart(ctxpedidosporasesor, {
@@ -412,6 +386,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(6);//totales porcentajes arriba de metas cobranzas
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
 
+                cargaNueva(8);
+                cargaNueva(9);
+
                 cargReporteMetasCobranzasGeneral();
 
 
@@ -420,14 +397,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             window.cargaNueva = function (entero) {
                 console.log(' ' + entero)
                 var fd = new FormData();
-
-
-
                 //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
                 let valorr=$('#fechametames').val();
                 var parts = valorr.split("-");
                 valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
-                console.log(valorr)
 
                 fd.append('fechametames', valorr);
                 console.log()
@@ -467,9 +440,17 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         }else if (entero == 7) {
                             $('#porcentaje_pedidos_metas').html(resultado);
                         }
+                        else if (entero == 8) {/*izquierda*/
+                            $('#grafico_dejaronpedir_left').html(resultado);
+                        }
+                        else if (entero == 9) {/*derecha*/
+                            $('#grafico_dejaronpedir_right').html(resultado);
+                        }
+
                     }
                 })
             }
+
 
 
             window.cargReporteAnalisis = function () {
@@ -521,6 +502,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva(7);//totales porcentajes arriba de metas pedidos
             cargaNueva(4);//fernando
             cargaNueva(5);//paola
+
+            cargaNueva(8);
+            cargaNueva(9);
+
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
@@ -535,6 +520,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
                 cargaNueva(4);
                 cargaNueva(5);
+
+                cargaNueva(8);
+                cargaNueva(9);
+
                 cargReporteMetasCobranzasGeneral();
             }
 
