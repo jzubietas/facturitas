@@ -3,6 +3,7 @@
 /public/storage
 /public/vendor
 /storage/*.key
+/vendor
 .env
 .env.backup
 .phpunit.result.cache
@@ -20,6 +21,3 @@ cronlog.txt
 *.cmd
 *.iso
 *.bat
-vendor
-/vendor
-vendor/
