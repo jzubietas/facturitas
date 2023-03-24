@@ -319,9 +319,16 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 }
             });
 
-            $("#fechametames").datepicker({
-                language: 'es'
+            var date = new Date();
+            var currentMonth = date.getMonth();
+            var currentDate = date.getDate();
+            var currentYear = date.getFullYear();
+
+            $('#fechametames').datepicker({
+                //minDate: new Date(currentYear, currentMonth, currentDate),
+                dateFormat: 'dd-mm-yy'
             });
+
             $("#fechametames-button").click(function() {
                 //$("#fechametames").datepicker("show");
 
@@ -331,6 +338,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             });
 
             $('#fechametames').datepicker('setDate', new Date());
+            //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
 
 
@@ -380,7 +388,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             window.cargaNueva = function (entero) {
                 console.log(' ' + entero)
                 var fd = new FormData();
-                fd.append('fechametames', $('#fechametames').val());
+
+
+
+                //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
+                let valorr=$('#fechametames').val();
+                console.log(valorr)
+
+                fd.append('fechametames', valorr);
+                console.log()
                 fd.append('ii', entero);
                 $.ajax({
                     data: fd,
