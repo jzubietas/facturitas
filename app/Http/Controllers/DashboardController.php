@@ -331,8 +331,6 @@ class DashboardController extends Controller
                 ->whereDate('pedidos.created_at', $fechametames)
                 ->where('pendiente_anulacion', '<>', '1')->count();
 
-            //dd($asesor->id);
-            /*$fechametames = Carbon::parse($request->fechametames);*/
             $meta_calculo_row = Meta::where('rol', User::ROL_ASESOR)
                 ->where('user_id', $asesor->id)
                 ->where('anio', $fechametames->format('Y'))
