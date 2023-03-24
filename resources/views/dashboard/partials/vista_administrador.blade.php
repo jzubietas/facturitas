@@ -101,6 +101,11 @@
     <div class="d-flex justify-content-center flex-column mb-2 bg-white">
         <div class="d-flex justify-content-center row bg-white">
 
+            <div id="spinner" class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+                Cargando
+            </div>
+
 
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
