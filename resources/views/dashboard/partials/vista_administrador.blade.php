@@ -308,7 +308,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
-
+ 
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
     <script>
@@ -328,7 +328,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //minDate: new Date(currentYear, currentMonth, currentDate),
                 dateFormat: 'dd-mm-yy'
             });
- 
+
             $("#fechametames-button").click(function() {
                 //$("#fechametames").datepicker("show");
 
