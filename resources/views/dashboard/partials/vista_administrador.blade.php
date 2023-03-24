@@ -97,11 +97,15 @@
 
 <hr>
 {{-- FULLSCREEN --}}
-<div id="spinner" class="spinner-border text-primary col-lg-12 text-center" role="status">
-    <image src="{{asset('images/progress.gif')}}"></image>
-    <span class="sr-only">Loading...</span>
 
+<div class="d-flex justify-content-center">
+    <div id="spinner" class="spinner-border" role="status">
+        <image src="{{asset('images/progress.gif')}}"></image>
+        <span class="d-none sr-only">Loading...</span>
+    </div>
 </div>
+
+
 <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2 bg-white">
         <div class="d-flex justify-content-center row bg-white">
