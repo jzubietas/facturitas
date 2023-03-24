@@ -325,7 +325,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             var currentYear = date.getFullYear();
 
             $('#fechametames').datepicker({
-                dateFormat: 'yy-mm-dd'
+                dateFormat: 'dd-mm-yy'
             });
 
             $("#fechametames-button").click(function() {
