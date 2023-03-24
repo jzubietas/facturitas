@@ -1,3 +1,6 @@
+
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
+
 # Easily optimize images using PHP
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/image-optimizer.svg?style=flat-square)](https://packagist.org/packages/spatie/image-optimizer)
@@ -21,6 +24,8 @@ Here are some [example conversions](#example-conversions) that have been done by
 Loving Laravel? Then head over to [the Laravel specific integration](https://github.com/spatie/laravel-image-optimizer).
 
 Using WordPress? Then try out [the WP CLI command](https://github.com/TypistTech/image-optimize-command).
+
+SilverStripe enthusiast? Don't waste time, go to [the SilverStripe module](https://github.com/axllent/silverstripe-image-optimiser).
 
 ## Support us
 
@@ -55,7 +60,7 @@ Here's how to install all the optimizers on Ubuntu:
 sudo apt-get install jpegoptim
 sudo apt-get install optipng
 sudo apt-get install pngquant
-sudo npm install -g svgo@1.3.2
+sudo npm install -g svgo
 sudo apt-get install gifsicle
 sudo apt-get install webp
 ```
@@ -66,7 +71,7 @@ And here's how to install the binaries on MacOS (using [Homebrew](https://brew.s
 brew install jpegoptim
 brew install optipng
 brew install pngquant
-npm install -g svgo@1.3.2
+npm install -g svgo
 brew install gifsicle
 brew install webp
 ```
@@ -77,7 +82,7 @@ sudo dnf install epel-release
 sudo dnf install jpegoptim
 sudo dnf install optipng
 sudo dnf install pngquant
-sudo npm install -g svgo@1.3.2
+sudo npm install -g svgo
 sudo dnf install gifsicle
 sudo dnf install libwebp-tools
 ```
@@ -101,11 +106,9 @@ PNGs will be made smaller by running them through two tools. The first one is [P
 
 ### SVGs
 
-SVGs will be minified by [SVGO 1](https://github.com/svg/svgo). SVGO's default configuration will be used, with the omission of the `cleanupIDs` plugin because that one is known to cause troubles when displaying multiple optimized SVGs on one page.
+SVGs will be minified by [SVGO](https://github.com/svg/svgo). SVGO's default configuration will be used, with the omission of the `cleanupIDs` and `removeViewBox` plugins because these are known to cause troubles when displaying multiple optimized SVGs on one page.
 
 Please be aware that SVGO can break your svg. You'll find more info on that in this [excellent blogpost](https://www.sarasoueidan.com/blog/svgo-tools/) by [Sara Soueidan](https://twitter.com/SaraSoueidan).
-
-For now, the default configuration used for SVGO is only compatible with SVGO 1.x. To use options compatible with SVGO 2.x, you need to [create your own optimization chain](#creating-your-own-optimization-chains).
 
 ### GIFs
 
@@ -337,11 +340,11 @@ composer test
 
 ## Contributing
 
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
 
 ## Security
 
-If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
 
 ## Postcardware
 
