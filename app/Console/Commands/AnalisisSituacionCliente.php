@@ -165,7 +165,6 @@ class AnalisisSituacionCliente extends Command
                                       ]);
                                   }
                                   break;
-                              default:break;
                               case 'ACTIVO':
                                   if($situacion_antes->activos==0)
                                   {
