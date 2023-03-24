@@ -323,34 +323,24 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
             }
 
-            //$fechametames = Carbon::now()->clone();
-            //$date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
 
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
                 ->where('pedidos.codigo', 'not like', "%-C%")->activo()
                 ->whereDate('pedidos.created_at', $fechametames)
                 ->where('pendiente_anulacion', '<>', '1')->count();
 
-            //dd($fechametames, User::ROL_ASESOR,$asesor->id,$fechametames->format('Y'),$fechametames->format('m'));
             $meta_calculo_row = Meta::where('rol', User::ROL_ASESOR)
                 ->where('user_id', $asesor->id)
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
 
-            //var_dump($asesor->id);
-            //var_dump($meta_calculo_row->meta_quincena);
-            //continue;
+
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
             $metatotal_intermedia = (float)$meta_calculo_row->meta_intermedia;
             $metatotal_1 = (float)$meta_calculo_row->meta_pedido;
             $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
 
             $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
-
-            /*$total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-                ->where('codigo', 'not like', "%-C%")->activo()
-                ->where('pendiente_anulacion', '<>', '1'),
-                $fechametames, 'created_at')->count();*/
 
             $total_pedido = Pedido::query()->where('user_id', $asesor->id)
                 ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
