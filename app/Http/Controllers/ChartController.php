@@ -25,7 +25,6 @@ class ChartController extends Controller
             ->orderBy('name','asc')
             ->pluck('id');
 
-
         $pedidosActivosPorAsesores = Pedido::selectRaw('u.identificador,u.letra,pedidos.user_id, count(pedidos.user_id) as total')
             ->leftJoin('users as u','pedidos.user_id','u.id')
             ->groupBy('pedidos.user_id','u.identificador','u.letra')
@@ -36,13 +35,9 @@ class ChartController extends Controller
             ->whereYear('pedidos.created_at',2023)
             ->get();
 
-        $contador=0;
         foreach ($pedidosActivosPorAsesores as $item => $asslst){
             $arregloasesores[$item] =($asslst->identificador)."::".($asslst->identificador)."-".($asslst->letra);
             $arreglocontador[$item] =$asslst->total;
-
-            $arreglocontadoranul[$contador] =$item*10;
-            $contador++;
 
         }
 
@@ -50,19 +45,8 @@ class ChartController extends Controller
             'labels' => $arregloasesores,
             'datasets' => [
                 [
-                    'label'               => 'Pedidos Inactivos',
-                    'backgroundColor'     => 'rgba(60,141,188,0.9)',
-                    'borderColor'         => 'rgba(60,141,188,0.8)',
-                    'pointRadius'         => false,
-                    'pointColor'          => '#3b8bba',
-                    'pointStrokeColor'    => 'rgba(60,141,188,1)',
-                    'pointHighlightFill'  => '#fff',
-                    'pointHighlightStroke'=> 'rgba(60,141,188,1)',
-                    'data'                => $arreglocontadoranul
-                ],
-                [
-                    'label'                => 'Pedidos Activos ',
-                    'backgroundColor'      => 'rgba(210, 214, 222, 1)',
+                    'label'                => 'Situacion',
+                    'backgroundColor'      => 'rgba(105, 214, 222, 1)',
                     'borderColor'          => 'rgba(210, 214, 222, 1)',
                     'pointRadius'          => false,
                     'pointColor'           => 'rgba(210, 214, 222, 1)',

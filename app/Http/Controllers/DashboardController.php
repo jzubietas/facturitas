@@ -1801,7 +1801,13 @@ class DashboardController extends Controller
                 //$html.='<br> '.$data["progress_pagos"].' : '.$data["total_pagado"].' - '.$data["total_pedido_mespasado"].' <br>';
                 //continue;
 
-                $division=$data["all_situacion_activo"] / $data["all_situacion"];
+                if($data["all_situacion"]==0)
+                {
+                    $division=0;
+                }else{
+                    $division=$data["all_situacion_activo"] / $data["all_situacion"];
+                }
+
 
                 {
                     $html .= '<div class="w-100 bg-white rounded">
