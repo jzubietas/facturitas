@@ -1,10 +1,5 @@
 @yield('css-datatables')
 
-<div id="spinner" class="spinner-border text-primary" role="status">
-    <span class="sr-only">Loading...</span>
-</div>
-
-
 {{-- BIENVENIDA --}}
 <div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
     <h2>
