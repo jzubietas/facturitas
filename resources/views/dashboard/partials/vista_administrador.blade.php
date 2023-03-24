@@ -336,8 +336,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $('#exampleModalCenter').modal('show');
 
 
-            $('#fechametames').val("{{\Carbon\Carbon::parse($fechametames)->format('Y-m-d')}}");
-
             $(document).on('change', '#fechametames', function () {
                 //const value = e.target.value;
                 cargaNueva(1);
