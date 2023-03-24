@@ -77,9 +77,7 @@
         @endif
     </div>
 
-    <div class="container-fluid">
-        <canvas id="my-chart"></canvas>
-    </div>
+
 @stop
 
 @section('css')
@@ -87,7 +85,7 @@
         .content-header {
             background-color: white !important;
         }
- 
+
         .content {
             background-color: white !important;
         }
@@ -127,31 +125,6 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
 
-            $.get("{{ route('chart-data') }}", function(data) {
-                var ctx = document.getElementById('my-chart').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'My chart',
-                            data: data.values,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            });
         })
     </script>
     @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
