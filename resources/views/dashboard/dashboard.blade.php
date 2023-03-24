@@ -8,31 +8,32 @@
             background: rgb(241 241 241 / 80%);
         }
         .h-40{
-          height: 40px !important;
+            height: 40px !important;
         }
 
         .h-60{
-          height: 60px !important;
+            height: 60px !important;
         }
 
         @media screen and (max-width: 992px){
-          .responsive-table{
-            display: flex !important;
-            flex-wrap: wrap !important;
-          }
-          .h-50-res{
-            height: 50px !important;
-          }
+            .responsive-table{
+                display: flex !important;
+                flex-wrap: wrap !important;
+            }
+            .h-50-res{
+                height: 50px !important;
+            }
         }
         @media screen and (max-width: 767px){
-          .table-total{
-            overflow: hidden !important;
-          }
-          .scrollbar-x{
-            overflow-x: scroll !important;
-          }
+            .table-total{
+                overflow: hidden !important;
+            }
+            .scrollbar-x{
+                overflow-x: scroll !important;
+            }
         }
     </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endpush
 @section('content_header')
     <div><h1>Dashboard</h1>
@@ -77,13 +78,7 @@
         @endif
     </div>
 
-    <div class="container-fluid">
-        <canvas id="chartPedidosAsesores" style="height: 350px;"></canvas>
-    </div>
 
-    <div class="container-fluid">
-        <canvas id="my-chart"></canvas>
-    </div>
 @stop
 
 @section('css')
@@ -131,55 +126,6 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
 
-            $.get("{{ route('chart-data') }}", function(data) {
-                var ctx = document.getElementById('my-chart').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'My chart',
-                            data: data.values,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            });
-
-            $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
-                var ctx = document.getElementById('chartPedidosAsesores').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels  :data.labels,
-                        datasets: data.datasets,
-                    },
-                    options: {
-                        responsive              : true,
-                        maintainAspectRatio     : false,
-                        scales: {
-                            xAxes: [{
-                                stacked: true,
-                            }],
-                            yAxes: [{
-                                stacked: true
-                            }]
-                        },
-                        height: 350
-                    }
-                });
-            });
         })
     </script>
     @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
@@ -202,57 +148,57 @@
         </script>
     @endif
     <script>
-      $(document).ready(function () {
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
-
-        $("#buttom_search_cliente_clear").click(function () {
-          $("#search_content_result").html('');
-          $("#input_search_cliente").val('');
-        });
-        $("#input_search_type").on("change", function () {
-          $("#search_content_result").html('');
-          $("#input_search_cliente").val('');
-        })
-
-        $("#buttom_search_cliente").click(function () {
-          var tipo = $("#input_search_type").val()
-
-          if (!document.getElementById("input_search_cliente").value) {
-            Swal.fire(
-              'El campo de texto del buscador esta vacio, ingrese valores para poder buscar',
-              '',
-              'warning'
-            )
-            return;
-          }
-          if (tipo == "CLIENTE") {
-            $.ajax({
-              url: "{{route('dashboard.search-cliente')}}",
-              data: {q: document.getElementById("input_search_cliente").value},
-              context: document.body
-            }).done(function (a) {
-              console.log(a)
-              $("#search_content_result").html(a);
+        $(document).ready(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
-          } else if (tipo == "RUC") {
-            $.ajax({
-              url: "{{route('dashboard.search-ruc')}}",
-              data: {
-                q: document.getElementById("input_search_cliente").value
-              },
-              context: document.body
-            }).done(function (a) {
-              console.log(a)
-              $("#search_content_result").html(a);
-            });
-          }
-        })
 
-      });
+            $("#buttom_search_cliente_clear").click(function () {
+                $("#search_content_result").html('');
+                $("#input_search_cliente").val('');
+            });
+            $("#input_search_type").on("change", function () {
+                $("#search_content_result").html('');
+                $("#input_search_cliente").val('');
+            })
+
+            $("#buttom_search_cliente").click(function () {
+                var tipo = $("#input_search_type").val()
+
+                if (!document.getElementById("input_search_cliente").value) {
+                    Swal.fire(
+                        'El campo de texto del buscador esta vacio, ingrese valores para poder buscar',
+                        '',
+                        'warning'
+                    )
+                    return;
+                }
+                if (tipo == "CLIENTE") {
+                    $.ajax({
+                        url: "{{route('dashboard.search-cliente')}}",
+                        data: {q: document.getElementById("input_search_cliente").value},
+                        context: document.body
+                    }).done(function (a) {
+                        console.log(a)
+                        $("#search_content_result").html(a);
+                    });
+                } else if (tipo == "RUC") {
+                    $.ajax({
+                        url: "{{route('dashboard.search-ruc')}}",
+                        data: {
+                            q: document.getElementById("input_search_cliente").value
+                        },
+                        context: document.body
+                    }).done(function (a) {
+                        console.log(a)
+                        $("#search_content_result").html(a);
+                    });
+                }
+            })
+
+        });
     </script>
 @endpush
 
