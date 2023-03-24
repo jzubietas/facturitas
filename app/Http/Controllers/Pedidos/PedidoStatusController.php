@@ -604,7 +604,6 @@ $banca"
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                /*->join('imagen_atencions as ia', 'pedidos.id', 'ia.pedido_id')*/
                 ->select([
                     'pedidos.id',
                     DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
@@ -630,14 +629,60 @@ $banca"
                     'pedidos.motivo',
                     DB::raw(" ( select ia.adjunto from imagen_atencions ia inner join pedidos pedidoi on pedidoi.id=ia.pedido_id and pedidoi.id=pedidos.id where ia.estado=1 limit 1) as adjunto "),
                     DB::raw(" ( select ia2.id from imagen_atencions ia2 inner join pedidos pedidoi2 on pedidoi2.id=ia2.pedido_id and pedidoi2.id=pedidos.id where ia2.estado=1 limit 1) as id_imagen_atenciones "),
-                    /*'ia.adjunto',
-                    'dp.tipo_banca as id_imagen_atenciones',*/
-                    DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
+                    DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes "),
+                    DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' limit 1) as vtipoAnulacion"),
+                    DB::raw("(select  pea.total_anular from pedidos_anulacions as pea where pea.pedido_id= pedidos.id  limit 1) as dMontoAnular"),
+                    'pedidos.estado as idPedidoAnulacion',
                 ])
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.pendiente_anulacion', '1');
+                ->where('pedidos.pendiente_anulacion', '1')
+                ;
 
+            $pedidosanulcion = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->leftJoin('pedidos_anulacions as pea','pedidos.id','pea.pedido_id')
+                ->select([
+                    'pedidos.id',
+                    DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
+                                WHEN pedidos.id<100 THEN concat('PED00',pedidos.id)
+                                WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id)
+                                ELSE concat('PED',pedidos.id) END) AS id2"),
+                    'c.nombre as nombres',
+                    'c.celular as celulares',
+                    'u.identificador as users',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'pedidos.pendiente_anulacion',
+                    'pedidos.condicion',
+                    'pedidos.condicion_code',
+                    DB::raw('(DATE_FORMAT(pea.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.fecha_envio_doc_fis',
+                    'dp.fecha_recepcion',
+                    'dp.tipo_banca',
+                    'pedidos.motivo',
+                    DB::raw(" ( select ia.adjunto from imagen_atencions ia inner join pedidos pedidoi on pedidoi.id=ia.pedido_id and pedidoi.id=pedidos.id where ia.estado=1 limit 1) as adjunto "),
+                    DB::raw(" ( select ia2.id from imagen_atencions ia2 inner join pedidos pedidoi2 on pedidoi2.id=ia2.pedido_id and pedidoi2.id=pedidos.id where ia2.estado=1 limit 1) as id_imagen_atenciones "),
+                    /*'ia.adjunto',
+                    'dp.tipo_banca as id_imagen_atenciones',*/
+                    DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes "),
+                    'pea.tipo  as vtipoAnulacion',
+                    'pea.total_anular as dMontoAnular',
+                    'pea.id as idPedidoAnulacion',
+                ])
+                ->where('pea.tipo', 'F')
+                ->where('pea.state_solicitud', '1')
+                ->where('pea.estado_aprueba_asesor', '1')
+                ->where('pea.estado_aprueba_encargado', '1')
+                ->where('pea.estado_aprueba_administrador', '1')
+                ->where('pea.estado_aprueba_jefeop', '0')
+                ;
 
             if (Auth::user()->rol == User::ROL_OPERARIO) {
 
@@ -670,30 +715,59 @@ $banca"
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
             }
-
+            $pedidos=$pedidos->union($pedidosanulcion);
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
                 ->addColumn('adjunto', function ($pedido) {
                     $buton = '';
-                    $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
+                    $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" data-total_anular_adjunto="' . $pedido->dMontoAnular . '" data-tipo_anulacion="' . $pedido->vtipoAnulacion . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
+                    if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL) {
+                        $buton .= '<a data-target="#modal-veradjunto" data-id_anulacion_adjuntos="' .$pedido->idPedidoAnulacion . '" data-total_anular="' . $pedido->dMontoAnular . '" data-toggle="modal" ><button class="btn btn-primary btn-sm mr-2"><i class="fas fa-file-download "></i> Doc por anular</button></a>';
+                    }
                     return $buton;
+                })
+                ->addColumn('condicion_code', function ($pedido) {
+                    $badge_estado = '';
+                    if ($pedido->pendiente_anulacion == '1') {
+                        $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION. '</span>';
+                        return $badge_estado;
+                    }else{
+                        if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL){
+                            $badge_estado .= '<span class="badge bg-danger">' . $pedido->condicion. '</span>';
+                        }elseif ($pedido->condicion==Pedido::ANULADO_PARCIAL){
+                            $badge_estado .= '<span class="badge bg-danger">' . $pedido->condicion. '</span>';
+                        }
+                        return $badge_estado;
+                    }
+                })
+                ->addColumn('tipoanulacion', function ($pedido) {
+                    $badge_estado = '';
+                    if ($pedido->pendiente_anulacion == '1') {
+                        $badge_estado .= '<span class="badge badge-info bg-info"> PEDIDO COMPLETO</span>';
+                        return $badge_estado;
+                    }else{
+                        $badge_estado .= '<span class="badge badge-warning"> FACTURA</span>';
+                        return $badge_estado;
+                    }
                 })
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
                     if ($pedido->pendiente_anulacion == 1) {
-                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize" >EMITIR N/C</button>';
+                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-total_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize mr-2" data-vtipoanul="C" >EMITIR N/C</button>';
                     }
-                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item py-2 btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                    if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL) {
+                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-total_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize  mr-2" data-vtipoanul="F" >EMITIR N/C</button>';
+                    }
+                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn btn-light btn-sm" target="_blank"><i class="fa fa-file-pdf text-primary  mr-2"></i> Ver PDF</a>';
                     $btn .= ' <button class="btn btn-warning btn-sm"
                     data-toggle="jqconfirm"
                     data-target="' . route('pedidos.confirmar.anular', ['pedido_id' => $pedido->id, 'action' => 'confirm_anulled_cancel']) . '"
                     data-method="POST">
                         Rechazar
                     </button>';
-
                     return $btn;
                 })
-                ->rawColumns(['adjunto','action'])
+                ->rawColumns(['adjunto','condicion_code','action','tipoanulacion'])
                 ->toJson();
         }
 

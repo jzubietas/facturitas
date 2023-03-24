@@ -32,10 +32,10 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                 DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
-        //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
+        //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get(); Carbon::parse(now())->clone()
 
-        $dosmeses_ini=now()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
-        $dosmeses_fin=now()->endOfMonth()->subMonths(1)->format('Y-m');
+        $dosmeses_ini=Carbon::parse(now())->clone()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
+        $dosmeses_fin=Carbon::parse(now())->clone()->startOfMonth()->subMonths(1)->format('Y-m');
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
@@ -68,8 +68,8 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                                         where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as deuda"),
                 DB::raw("(select dp2.saldo from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
-                DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
-                                        where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
+                DB::raw("(select DATE_FORMAT(a.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
+                                        where dp3.estado=1 and a.cliente_id=clientes.id order by a.created_at desc limit 1) as mesultimopedido"),
             ]);
 
         if (Auth::user()->rol == User::ROL_LLAMADAS) {
@@ -115,7 +115,6 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
         $pedidos = $data->WhereIn('u.identificador', $asesores);
 
         }
-
         return $data->get();
     }
     public function fields(): array

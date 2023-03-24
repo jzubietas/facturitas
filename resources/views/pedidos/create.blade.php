@@ -852,12 +852,13 @@ ${files.map(function (file) {
 
                 if (ptipo_banca == '') {
                 } else {
-                    if (ptipo_banca == 'FISICO') {
+                    if (ptipo_banca == 'FISICO ') {
                         if (isNaN(anno_filter)) {
                             console.log("anno is nan")
                         } else {
                             if (anno_filter != '') {
-                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1)) {
+                                console.log({{$anno_selected}});
+                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1) || anno_filter == ({{$anno_selected}} - 2)) {
                                 } else {
                                     Swal.fire(
                                         'Error',
@@ -909,7 +910,7 @@ ${files.map(function (file) {
                             console.log("anno is nan")
                         } else {
                             if (anno_filter != '') {
-                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1)) {
+                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1) || anno_filter == ({{$anno_selected}} - 2)) {
                                 } else {
                                     Swal.fire(
                                         'Error',

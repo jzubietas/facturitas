@@ -618,14 +618,20 @@ class OperacionController extends Controller
                         </a>';
                 }
 
-                $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'pedido_id')) . '" class="btn-md dropdown-item py-2 btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
-                /*$btn[] = '<a class="btn-sm dropdown-item text-danger" href="#"'.
-                        'data-toggle="modal"'.
-                        'data-correccion="'.$pedido->id.'"'.
+                if(in_array(auth()->user()->rol, [User::ROL_ADMIN])) {
+
+                    $btn[] = '<a class="btn-md dropdown-item text-danger btn-fontsize" href="#"' .
+                        'data-backdrop="static" data-keyboard="false"' .
+                        'data-toggle="modal"' .
+                        'data-correccion="' . $pedido->id . '"' .
                         'data-target="#modalcorreccion-rechazo">
                             <i class="fa fa-ban"></i>
                         RECHAZAR
-                        </a>';*/
+                        </a>';
+                }
+
+                $btn []= '<a href="' . route('correccionPDF', data_get($pedido, 'pedido_id')) . '" class="btn-md dropdown-item py-2 btn-fontsize" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+
 
                 $btn[] = '</ul></div>';
 
@@ -2104,6 +2110,15 @@ class OperacionController extends Controller
         if (!$request->rechazo) {
             $html = '';
         } else {
+            $correction=Correction::where('id','=',$request->rechazo)->first();
+            $correction->update(['estado'=>'0']);
+            $pedido=Pedido::where('codigo','=',$correction->code)->first();
+            $pedido->update([
+                'resultado_correccion'=>'0',
+                'estado_correccion' => '0',
+                'condicion_envio' => $pedido->condicion_envio_anterior,
+                'condicion_envio_code' => $pedido->condicion_envio_code_anterior,
+            ]);
             $html = 'a';
         }
         return response()->json(['html' => $html]);

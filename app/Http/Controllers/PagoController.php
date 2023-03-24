@@ -1041,7 +1041,7 @@ class PagoController extends Controller
 
         }
 
-        return redirect()->route('pagos.index')->with('info', 'registrado');
+        return redirect()->route('pagos.create')->with('info', 'registrado');
 
     }
 
@@ -1933,24 +1933,24 @@ class PagoController extends Controller
             return datatables()
                 ->query(DB::table($pagos))
                 //->editColumn('code', function ($pago) {
-                    //$cv=$pago->cantidad_voucher;
-                    //$cp=$pago->cantidad_pedido;
-                    //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
-                    /*$fecha_created=Carbon::parse($pago->created_at);
-                    $dd=$fecha_created->format('d');
-                    $mm=$fecha_created->format('m');
+                //$cv=$pago->cantidad_voucher;
+                //$cp=$pago->cantidad_pedido;
+                //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
+                /*$fecha_created=Carbon::parse($pago->created_at);
+                $dd=$fecha_created->format('d');
+                $mm=$fecha_created->format('m');
 
-                    $unido=$dd.$mm;
-                    if($pago->id<10){
-                        return 'PAG000'.$pago->identifica.'-'.$unido.'-'.$pago->id;
-                    }else if($pago->id<100){
-                        return 'PAG00'.$pago->identifica.'-'.$unido.'-'.$pago->id;
-                    }else if($pago->id<1000){
-                        return 'PAG0'.$pago->identifica.'-'.$unido.'-'.$pago->id;
-                    }else{
-                        return 'PAG'.$pago->identifica.'-'.$unido.'-'.$pago->id;
-                    }
-                })*/
+                $unido=$dd.$mm;
+                if($pago->id<10){
+                    return 'PAG000'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<100){
+                    return 'PAG00'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<1000){
+                    return 'PAG0'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                }else{
+                    return 'PAG'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                }
+            })*/
                 ->addIndexColumn()
                 ->addColumn('action', function ($pago) {
                     $btn = '';
@@ -2272,8 +2272,8 @@ class PagoController extends Controller
 
     public function DescargarImgDevolucion(Request $request)
     {
-      $destinationPath = base_path("storage/app/public/" . $request->imagen);
-      return response()->download($destinationPath);
+        $destinationPath = base_path("storage/app/public/" . $request->imagen);
+        return response()->download($destinationPath);
     }
 
     public function perdonardeuda(Request $request)
@@ -2333,7 +2333,9 @@ class PagoController extends Controller
                     ]);
 
                 }
-
+                if ($request->hasFile('perdonar_currier_captura')) {
+                    $capturapercur = $request->file('perdonar_currier_captura')->store('pagos', 'pstorage');
+                }
                 DetallePago::create([
                     'pago_id' => $pago->id,
                     'cuenta' => '',
@@ -2344,10 +2346,18 @@ class PagoController extends Controller
                     'obanco' => '',
                     'fecha' => Carbon::now(),
                     'fecha_deposito' => Carbon::now(),
-                    'imagen' => '',
+                    'imagen' => $capturapercur,
                     'estado' => '1'
                 ]);
-
+                $identi_asesor = User::where("id", $cliente_perdondarcourier->user_id)->where("unificado", "NO")->first();
+                $fecha_created=Carbon::parse($pago->created_at);
+                $dd=$fecha_created->format('d');
+                $mm=$fecha_created->format('m');
+                $unido=$dd.$mm;
+                $valorcorrelativo='PAG'.$identi_asesor->identificador.'-'.$unido.'-'.$pago->id;
+                $pago->update([
+                    "correlativo" => 'PAG'.$identi_asesor->identificador.'-'.$unido.'-'.$pago->id
+                ]);
 
                 DB::commit();
             } catch (\Throwable $th) {
@@ -2356,7 +2366,7 @@ class PagoController extends Controller
                 dd($th);*/
             }
 
-            return response()->json(['html' => $pago->id]);
+            return response()->json(['html' => $pago->id,'pagos' => $pago,'valorcorrelativo'=>$valorcorrelativo]);
 
 
         }
@@ -2500,8 +2510,8 @@ class PagoController extends Controller
         //return $titular_c;
         //return $request->fecha;
         $pagos_repetidos = DetallePago::
-            //->with(['pago', 'pago.user'])
-            where('banco', $request->banco)
+        //->with(['pago', 'pago.user'])
+        where('banco', $request->banco)
             ->where('titular', $request->titular)
             ->where('detalle_pagos.monto', $monto_c)
             ->where('detalle_pagos.fecha', $fecha_c)//2023-01-18
@@ -2520,4 +2530,15 @@ class PagoController extends Controller
         ]);
     }
 
+    public  function getDataPagoReciente(Request $request){
+        /*return $request->all();*/
+        $detalle_pagos=DetallePago::join('pedidos as pe','detalle_pagos.pago_id','pe.id')
+            ->join('clientes as cl','pe.cliente_id','cl.id')
+            ->select(['detalle_pagos.*'])
+            ->where('cl.id',$request->cliente_id)
+            ->orderby('detalle_pagos.created_at','DESC')
+            ->limit(1)
+            ->get();
+        return response()->json(['det_pagos' => $detalle_pagos]);
+    }
 }

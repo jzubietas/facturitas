@@ -86,6 +86,37 @@
         {{--      DATATABLE--}}
         <div class="col-lg-12 " id="contenedor-fullscreen">
 
+            <div class="d-flex justify-content-center flex-column mb-2 bg-white">
+                <div class="d-flex justify-content-center row bg-white">
+                    <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
+                        <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                            <h5 class="card-title text-uppercase">Total de cobranzas:</h5>
+                            <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
+                        <h1 class="text-uppercase justify-center text-center " style="color: #FFFFFF;
+background: #FFFFFF;
+text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">Metas del mes
+                            de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+                        <button style="background: none; border: none" onclick="openFullscreen();">
+                            <i class="fas fa-expand-arrows-alt ml-3"
+                               style="font-size: 20px"></i>
+                        </button>
+                    </div>
+
+                    <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
+                        <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                            <h5 class="card-title text-uppercase">Total de pedidos:</h5>
+                            <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
             <div class="d-flex justify-content-center">
                 <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
                 <button style="background: none; border: none" onclick="openFullscreen();">
@@ -98,7 +129,6 @@
                            value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
                 </div>
             </div>
-
 
             {{-- TABLA DUAL --}}
             <div class="" style=" overflow: hidden !important;">
@@ -344,6 +374,10 @@
                             $('#supervisor_total').html(resultado);
                         } else if (entero == 5) {
                             $('#supervisor_A').html(resultado);
+                        }else if (entero == 6) {
+                            $('#porcentaje_cobranzas_metas').html(resultado);
+                        }else if (entero == 7) {
+                            $('#porcentaje_pedidos_metas').html(resultado);
                         }
                     }
                 })
@@ -365,17 +399,25 @@
             cargaNueva(5);
             @endif
 
+            cargaNueva(6);//totales porcentajes arriba de metas cobranzas
+            cargaNueva(7);//totales porcentajes arriba de metas pedidos
+
+
             setInterval(myTimer, 10000);
             function myTimer() {
                 cargaNueva(1);
                 cargaNueva(2);
 
-            @if($mirol == 'Encargado' && $idEncargado == 46)
-            cargaNueva(4);
-            @endif
-            @if($mirol == 'Encargado' && $idEncargado == 24)
-            cargaNueva(5);
+                @if($mirol == 'Encargado' && $idEncargado == 46)
+                    cargaNueva(4);
                 @endif
+
+                @if($mirol == 'Encargado' && $idEncargado == 24)
+                    cargaNueva(5);
+                @endif
+
+                cargaNueva(6);//totales porcentajes arriba de metas cobranzas
+                cargaNueva(7);//totales porcentajes arriba de metas pedidos
             }
 
             $('a[href$="#myModal"]').on("click", function () {

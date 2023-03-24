@@ -307,9 +307,10 @@
 
                         //$("#formulario").trigger('submit');
                     }else{
+                        var mensaje='El numero <strong>'+celular+'</strong> ya se encuentra registrado en el Asesor: <strong>'+data.datoscelular.nombreAsesor+'</strong> como <strong>'+data.datoscelular.condiciones_tipo+'</strong> ';
                         Swal.fire(
                             'Error',
-                            'Se encontro un error',
+                            mensaje,
                             'warning'
                         )
                         return false;

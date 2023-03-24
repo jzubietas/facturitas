@@ -164,9 +164,9 @@ class BasefriaController extends Controller
     public function create()
     {
         $usersB = User::where('users.estado', '1')
-            ->whereIn('rol', [User::ROL_ASESOR_ADMINISTRATIVO])
+            ->whereIn('rol', [User::ROL_ASESOR_ADMINISTRATIVO])//51
             ->first();
-
+        //dd($usersB);
         $users = collect();
         $users->put($usersB->id, $usersB->identificador);
         $usersall = User::select(

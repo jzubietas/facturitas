@@ -1118,12 +1118,14 @@
                 serverSide: true,
                 searching: true,
                 //stateSave: true,
-                order: [[8, "desc"]],
+                order: [[6, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
-                        if (data.pendiente_anulacion == 1) {
+                        if (data.pendiente_anulacion == 1 && data.vtipoAnulacion!='F') {
                             $('td', row).css('background', 'red').css('font-weight', 'bold');
+                        }else if (data.pendiente_anulacion == 1 && data.vtipoAnulacion=='F'){
+                            $('td', row).css('background', 'RosyBrown').css('font-weight', 'bold');
                         }
                     } else {
                         $(row).addClass('textred');
@@ -1321,7 +1323,12 @@ ${data.foto3 ? `
                     {
                         data: 'condicion_pa', name: 'condicion_pa', render: function (data, type, row, meta) {
                             if (row.condiciones == 'ANULADO' || row.condicion_code == 4 || row.estado == 0) {
-                                return 'ANULADO';
+                                /*return 'ANULADO';*/
+                                if (row.estado == '0' && row.condicion_code != '5'){
+                                    return 'ANULADO';
+                                }else if(row.condicion_code == '5'){
+                                    return 'ANULADO PARCIAL';
+                                }
                             } else {
                                 if (row.condicion_pa == null) {
                                     return 'SIN PAGO REGISTRADO';

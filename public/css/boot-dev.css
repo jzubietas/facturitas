@@ -3988,6 +3988,7 @@ body {
 @media screen and (max-width: 1230px) {
     .contain-table-dual {
         flex-direction: column !important;
+        flex-wrap: initial !important;
     }
 
     #meta,

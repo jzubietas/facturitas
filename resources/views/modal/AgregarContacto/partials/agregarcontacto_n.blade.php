@@ -19,13 +19,13 @@
                 <b>Numero de contacto <span class="text-danger">(Obligatorio):</span></b>
             </h6>
             <input name="txtNombreContactoNuevo" id="txtNombreContactoNuevo" class="form-control w-100"
-                     style=" color: red; font-weight: bold; background: white; "  placeholder="Colocar los nombres completos">
+                     style=" color: red; font-weight: bold; background: white; "  placeholder="Ingrese el Numero de contacto">
         </li>
 
     </ul>
     <hr class="mt-2 mb-3"/>
     <div class="form-group col-lg-12">
-        <button type="submit" class="float-right btn btn-success ">Enviar</button>
+        <button type="submit" class="float-right btn btn-success btnEnviarAgregaContacto">Enviar</button>
     </div>
 
 </form>

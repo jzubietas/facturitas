@@ -97,17 +97,21 @@
 
 <hr>
 {{-- FULLSCREEN --}}
-<div class="col-lg-12 " id="contenedor-fullscreen">
-    <div class="d-flex justify-content-center flex-column mb-2">
-        <div class="d-flex justify-content-center row">
-            <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1">
+<div class="col-lg-12 bg-white" id="contenedor-fullscreen">
+    <div class="d-flex justify-content-center flex-column mb-2 bg-white">
+        <div class="d-flex justify-content-center row bg-white">
+
+
+            <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
                     <h5 class="card-title text-uppercase">Total de cobranzas:</h5>
-                    <p class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                    <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2">
-                <h1 class="text-uppercase justify-center text-center">Metas del mes
+            <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
+                <h1 class="text-uppercase justify-center text-center " style="color: #FFFFFF;
+background: #FFFFFF;
+text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">Metas del mes
                     de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
                 <button style="background: none; border: none" onclick="openFullscreen();">
                     <i class="fas fa-expand-arrows-alt ml-3"
@@ -117,11 +121,13 @@
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
                     <h5 class="card-title text-uppercase">Total de pedidos:</h5>
-                    <p class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                    <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-center align-items-center ml-5">
+
+
+        <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
             <input type="date" id="fechametames" class="border-0 ml-3"
                    value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
@@ -317,6 +323,8 @@
                 cargaNueva(3);
                 cargaNueva(4);
                 cargaNueva(5);
+                cargaNueva(6);//totales porcentajes arriba de metas cobranzas
+                cargaNueva(7);//totales porcentajes arriba de metas pedidos
 
                 cargReporteMetasCobranzasGeneral();
 
@@ -345,6 +353,10 @@
                             $('#supervisor_total').html(resultado);
                         } else if (entero == 5) {
                             $('#supervisor_A').html(resultado);
+                        }else if (entero == 6) {
+                            $('#porcentaje_cobranzas_metas').html(resultado);
+                        }else if (entero == 7) {
+                            $('#porcentaje_pedidos_metas').html(resultado);
                         }
                     }
                 })
@@ -395,19 +407,23 @@
 
             cargaNueva(1);
             cargaNueva(2);
-            cargaNueva(3);
-            cargaNueva(4);
-            cargaNueva(5);
+            cargaNueva(3);//totales porcentajes debajo de metas
+            cargaNueva(6);//totales porcentajes arriba de metas cobranzas
+            cargaNueva(7);//totales porcentajes arriba de metas pedidos
+            cargaNueva(4);//fernando
+            cargaNueva(5);//paola
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
 
-            setInterval(myTimer, 500000);
+            setInterval(myTimer, 30000);
 
             function myTimer() {
                 cargaNueva(1);
                 cargaNueva(2);
                 cargaNueva(3);
+                cargaNueva(6);//totales porcentajes arriba de metas cobranzas
+                cargaNueva(7);//totales porcentajes arriba de metas pedidos
                 cargaNueva(4);
                 cargaNueva(5);
                 cargReporteMetasCobranzasGeneral();

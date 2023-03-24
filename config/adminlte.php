@@ -763,7 +763,7 @@ return [
         ],
 
         [
-            'text' => 'Usuarios',
+            'text' => 'Accesos y Permisos',
             'icon' => 'fas fa-user',
             'can' => 'configuracion.modulo',
             'submenu' => [
@@ -839,6 +839,20 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'Planificacion',
+            'icon' => 'fas fa-user',
+            'can' => 'planificacion.modulo',
+            'submenu' => [
+                [
+                    'text' => 'Calendario',
+                    'route' => 'fullcalendarindex',
+                    'can' => 'planificacion.calendario',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['roles*'],
+                ],
+            ]
+        ]
     ],
 
     /*
@@ -1033,6 +1047,21 @@ return [
                     'type' => 'css',
                     'asset' => true,
                     'location' => 'vendor/pnotify/PNotifyConfirm.css',
+                ],
+            ],
+        ],
+        'BootstrapColorpicker' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css',
                 ],
             ],
         ],

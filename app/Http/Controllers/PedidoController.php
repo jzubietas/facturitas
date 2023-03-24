@@ -26,6 +26,7 @@ use App\Models\ImagenPedido;
 use App\Models\Pago;
 use App\Models\PagoPedido;
 use App\Models\PedidoHistory;
+use App\Models\PedidosAnulacion;
 use App\Models\User;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -173,7 +174,9 @@ class PedidoController extends Controller
                     DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha2_up'),
                     DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
                     'dp.saldo as diferencia',
-                    'direccion_grupos.motorizado_status'
+                    'direccion_grupos.motorizado_status',
+                    DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' limit 1) as vtipoAnulacion"),
                 ]
             );
 
@@ -258,7 +261,7 @@ class PedidoController extends Controller
 
                 }
                 if ($pedido->pendiente_anulacion == '1') {
-                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
+                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION. '</span>';
                     return $badge_estado;
                 }
                 if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
@@ -273,6 +276,12 @@ class PedidoController extends Controller
                 }
                 if ($pedido->estado_sobre == '1') {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
+                }
+                if ($pedido->condiciones==Pedido::PENDIENTE_ANULACION_PARCIAL ) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::PENDIENTE_ANULACION_PARCIAL.'</span>';
+                }
+                if ( $pedido->condiciones==Pedido::ANULADO_PARCIAL) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULADO_PARCIAL.'</span>';
                 }
                 if ($pedido->estado_ruta == '1') {
                     $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
@@ -1566,6 +1575,8 @@ class PedidoController extends Controller
         $pedido = Pedido::with('cliente')->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->leftJoin('pedidos_anulacions as pea','pedidos.id','pea.pedido_id')
+            ->leftJoin('users as peau', 'pea.user_id_administrador', 'peau.id')
             ->select(
                 'pedidos.*',
                 'pedidos.condicion as condiciones',
@@ -1594,6 +1605,11 @@ class PedidoController extends Controller
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
                 'dp.saldo as diferencia',
+
+                'peau.name as usersanulpar',
+                'pea.created_at as fecsolicitudaaaa',
+                'pea.updated_at as fecconfirmaaaaa',
+                'pea.motivo_sol_admin',
             )
             //->activo()
             ->where('pedidos.id', $pedido)
@@ -1609,7 +1625,49 @@ class PedidoController extends Controller
             ->orderByDesc('estado')
             ->get();
 
-        return view('pedidos.show', compact('pedido', 'imagenes', 'imagenesatencion', 'adelanto', 'deudaTotal'));
+        $motivo_anulado_parcial=[];
+        if($pedido->condicion_code==Pedido::ANULADO_PARCIAL_INT)
+        {
+            $pedidos_a=PedidosAnulacion::where('pedido_id','=',$pedido->id)->get();
+            foreach ($pedidos_a as $anulacion_p)
+            {
+                $estado_a_asesor=$anulacion_p->estado_aprueba_asesor;
+                $estado_a_encargado=$anulacion_p->estado_aprueba_encargado;
+                $estado_a_administrador=$anulacion_p->estado_aprueba_administrador;
+                $estado_a_jefeop=$anulacion_p->estado_aprueba_jefeop;
+                if($estado_a_asesor=='1')
+                {
+                    $motivo_anulado_parcial[] = [
+                        'usu_motivo'=>'Asesor',
+                        'motivo'=>$anulacion_p->motivo_solicitud,
+                    ];
+                }
+                if($estado_a_encargado=='1')
+                {
+                    $motivo_anulado_parcial[] = [
+                        'usu_motivo'=>'Encargado',
+                        'motivo'=>$anulacion_p->motivo_sol_encargado,
+                    ];
+                }
+                if($estado_a_administrador=='1')
+                {
+                    $motivo_anulado_parcial[] = [
+                        'usu_motivo'=>'Administrador',
+                        'motivo'=>$anulacion_p->motivo_sol_admin,
+                    ];
+                }
+                if($estado_a_jefeop=='1')
+                {
+                    $motivo_anulado_parcial[] = [
+                        'usu_motivo'=>'Jefe Operaciones',
+                        'motivo'=>$anulacion_p->motivo_jefeop_admin,
+                    ];
+                }
+            }
+        }
+        //dd($motivo_anulado_parcial);
+
+        return view('pedidos.show', compact('pedido', 'imagenes', 'imagenesatencion', 'adelanto', 'deudaTotal','motivo_anulado_parcial'));
     }
 
     /**
@@ -1878,6 +1936,14 @@ class PedidoController extends Controller
                         $filePaths[] = $file->store("pedidos_adjuntos", "pstorage");
                     }
                 }
+            }
+
+            $pedidosanulacion=PedidosAnulacion::where('pedido_id',$pedido->id);
+            $contpedanulacions=$pedidosanulacion->count();
+            if ($contpedanulacions==1){
+                $pedidosanulacion->update([
+                    'estado_aprueba_jefeop' => 1,
+                ]);
             }
 
             setting()->load();
@@ -3212,18 +3278,47 @@ class PedidoController extends Controller
     {
         if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);
-            if ($pedido->pendiente_anulacion != '1') {
+            /*if ($pedido->pendiente_anulacion != '1') {
                 return response()->json([
                     "success" => 0,
                 ]);
+            }*/
+
+            $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id)->where('state_solicitud',1);
+            $contpedanulacions=$pedidosanulacion->count();
+            if ($contpedanulacions==1){
+                $pedidosanulacion=$pedidosanulacion->first();
+                $pedidosanulacion->update([
+                    'state_solicitud'=>0,
+                ]);
+                if ($pedidosanulacion->tipo=='C'){
+                    $pedido->update([
+                        'motivo' => "",
+                        'responsable' => "",
+                        'pendiente_anulacion' => 0,
+                        'path_adjunto_anular' => "",
+                        'path_adjunto_anular_disk' => "",
+                        'modificador' => "",
+                        'fecha_anulacion' => null,
+                        'condicion'=>"",
+                    ]);
+                }else if ($pedidosanulacion->tipo=='F'){
+                    $pedido->update([
+                        'motivo' => "",
+                        'condicion'=>"",
+                    ]);
+                }
+            }else{
+                $pedido->update([
+                    'pendiente_anulacion' => '0',
+                    'user_anulacion_id' => \auth()->id(),
+                    'fecha_anulacion_denegada' => now(),
+                ]);
             }
-            $pedido->update([
-                'pendiente_anulacion' => '0',
-                'user_anulacion_id' => \auth()->id(),
-                'fecha_anulacion_denegada' => now(),
-            ]);
+
+
             return response()->json([
-                "success" => 1
+                "success" => 1,'pedido'=>$pedido,'pedidosanulacion'=>$pedidosanulacion
             ]);
         }
         $this->validate($request, [
@@ -3232,10 +3327,12 @@ class PedidoController extends Controller
             'attachments.*' => 'required|file',
         ]);
         $pedido = Pedido::findOrFail($request->pedido_id);
-        if ($pedido->pendiente_anulacion != '1') {
-            return response()->json([
-                "success" => 0,
-            ]);
+        if ($pedido->condicion!=Pedido::PENDIENTE_ANULACION_PARCIAL){
+            if ($pedido->pendiente_anulacion != '1') {
+                return response()->json([
+                    "success" => 0,
+                ]);
+            }
         }
 
         $filePaths = [];
@@ -3257,19 +3354,52 @@ class PedidoController extends Controller
             ]);
         }
         setting()->save();
+        $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id)->where('state_solicitud',1);
+        $contpedanulacions=$pedidosanulacion->count();
+        if ($contpedanulacions==1){
+            $pedidosanulacion=$pedidosanulacion->first();
+            if ($pedidosanulacion->tipo=='C'){
+                $pedido->update([
+                    'condicion' => 'ANULADO',
+                    'condicion_code' => Pedido::ANULADO_INT,
+                    'user_anulacion_id' => Auth::user()->id,
+                    'fecha_anulacion_confirm' => now(),
+                    'estado' => '0',
+                    'pendiente_anulacion' => '0',
+                ]);
+                $pedido->detallePedidos()->update([
+                    'estado' => '0'
+                ]);
+                $pedidosanulacion->update([
+                    'user_id_jefeop'=>Auth::user()->id,
+                    'motivo_jefeop_admin'=>Pedido::ANULADO,
+                    'estado_aprueba_jefeop'=>1,
+                ]);
+            }else if ($pedidosanulacion->tipo=='F'){
+                $pedido->update([
+                    'condicion' => Pedido::ANULADO_PARCIAL,
+                ]);
+                $pedidosanulacion->update([
+                    'user_id_jefeop'=>Auth::user()->id,
+                    'motivo_jefeop_admin'=>Pedido::ANULADO_PARCIAL,
+                    'estado_aprueba_jefeop'=>1,
+                ]);
+            }
 
-        $pedido->update([
-            'condicion' => 'ANULADO',
-            'condicion_code' => Pedido::ANULADO_INT,
-            'user_anulacion_id' => Auth::user()->id,
-            'fecha_anulacion_confirm' => now(),
-            'estado' => '0',
-            'pendiente_anulacion' => '0',
-        ]);
+        }else{
+            $pedido->update([
+                'condicion' => 'ANULADO',
+                'condicion_code' => Pedido::ANULADO_INT,
+                'user_anulacion_id' => Auth::user()->id,
+                'fecha_anulacion_confirm' => now(),
+                'estado' => '0',
+                'pendiente_anulacion' => '0',
+            ]);
+            $pedido->detallePedidos()->update([
+                'estado' => '0'
+            ]);
+        }
 
-        $pedido->detallePedidos()->update([
-            'estado' => '0'
-        ]);
 
         $correct = Correction::where('code', 'like', '' . $pedido->codigo . '-C%')->get();
         foreach ($correct as $correction) {
@@ -3281,7 +3411,7 @@ class PedidoController extends Controller
         event(new PedidoAnulledEvent($pedido));
 
         return response()->json([
-            "success" => 1
+            "success" => 1,'contpedanulacions'=>$contpedanulacions,'pedido'=>$pedido,'pedido'=>$pedidosanulacion
         ]);
     }
 

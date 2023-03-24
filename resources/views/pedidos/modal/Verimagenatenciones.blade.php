@@ -18,9 +18,15 @@
                                         <div class="row">
 
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
+                                                <div class="row border rounded border-danger mb-2 divMontoTotalAtencion" >
+                                                    <div class="col-6">
+                                                        <h3 class="text-danger"><b>Monto a Anular:</b></h3>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span class="h3 txtMontoAnularAtencion text-danger" ><b> 0.01</b></span>
+                                                    </div>
+                                                </div>
                                                 <div class="row">
-
                                                     <div class="col-12">
                                                         <h6><b>Archivos adjuntos:</b></h6>
                                                     </div>

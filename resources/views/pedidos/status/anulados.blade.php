@@ -13,12 +13,12 @@
             <table id="tablaOperacionesPendienteAnulacion" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col" class="align-middle">Item</th>
+                    <th scope="col" class="align-middle">Tipo</th>
                     <th scope="col" class="align-middle">Código</th>
                     <th scope="col" class="align-middle">Asesor</th>
                     <th scope="col" class="align-middle">Fecha de Anulacion</th>
                     <th scope="col" class="align-middle">Tipo de Banca</th>
-                    <th scope="col" class="align-middle">Adjuntos</th>
+                    {{--<th scope="col" class="align-middle">Adjuntos</th>--}}
                     <th scope="col" class="align-middle">Atencion</th>
                     <th scope="col" class="align-middle">Estado</th>
                     <th scope="col" class="align-middle">Acciones</th>
@@ -31,6 +31,7 @@
     </div>
     @include('operaciones.modal.confirmarAnular')
     @include('pedidos.modal.Verimagenatenciones')
+    @include('operaciones.modal.veradjuntoid')
 @endsection
 
 @section('css')
@@ -66,13 +67,17 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
-                "order": [[0, "desc"]],
+                "order": [[3, "desc"]],
                 ajax: "{{ route('pedidos.estados.anulados',['ajax-datatable'=>1]) }}",
                 createdRow: function (row, data, dataIndex) {
 
                 },
                 rowCallback: function (row, data, index) {
-                    $('td', row).css('background', 'red').css('font-weight', 'bold');
+                    if (  data.vtipoAnulacion!='F') {
+                        $('td', row).css('background', '#FFAFB0').css('font-weight', 'bold');
+                    }else{
+                        $('td', row).css('background', '#58D68D').css('font-weight', 'bold');
+                    }
                     $("[data-toggle=jqconfirm]", row).click(function () {
                         const action = $(this).data('target')
                         const method = $(this).data('method')
@@ -92,6 +97,7 @@
                                             url: action,
                                             data: data,
                                         }).done(function (data) {
+                                            console.log(data)
                                             self.close()
                                             if (data.success) {
                                                 Swal.fire(
@@ -118,7 +124,7 @@
                     })
                 },
                 columns: [
-                    {
+                    /*{
                         data: 'id',
                         name: 'id',
                         render: function (data, type, row, meta) {
@@ -132,7 +138,8 @@
                                 return 'PED' + row.id;
                             }
                         }
-                    },
+                    },*/
+                    {data: 'tipoanulacion', name: 'tipoanulacion',},
                     {data: 'codigos', name: 'codigos',},
                     //{data: 'empresas', name: 'empresas', },
                     {data: 'users', name: 'users',},
@@ -143,7 +150,7 @@
                         //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' ).format('HH:mm:ss'),
                     },
                     {data: 'tipo_banca', name: 'tipo_banca',},
-                    {
+                    /*{
                         data: 'imagenes',
                         name: 'imagenes',
                         orderable: false,
@@ -162,17 +169,12 @@
                             }
 
                         }
-                    },
+                    },*/
                     {data: 'adjunto', name: 'adjunto',},
                     {
                         data: 'condicion_code',
                         name: 'condicion_code',
-                        render: function (data, type, row, meta) {
-                            if (row.pendiente_anulacion == 1) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
-                            }
-                            return ''
-                        }
+                        sWidth: '10%',
                     },
                     {
                         data: 'action',
@@ -212,6 +214,34 @@
                 $("#anular_pedido_id").html(button.data('pedido_id_code'))
                 $("#motivo_anulacion_text").html(button.data('pedido_motivo'))
                 $("#anular_pedido_id").val(button.data('pedido_id'))
+                $("#montoa_anulacion_text").html("S/. "+ separateComma(button.data('total_anular')).toLocaleString("en-US"))
+
+                if (button.data('vtipoanul')=="C"){
+                    $("#divHeaderAnulacion").removeClass("bg-success");
+                    $("#divHeaderAnulacion").addClass("bg-danger");
+
+                    $("#attachmentsButtom").removeClass("bg-success");
+                    $("#attachmentsButtom").addClass("bg-danger");
+
+                    $("#divNotaAnula").removeClass("alert-warning");
+                    $("#divNotaAnula").addClass("alert-danger");
+                    $(".lblMontoAnular, .txtMontoAnular").hide();
+                }else if (button.data('vtipoanul')=="F"){
+                    $("#divHeaderAnulacion").removeClass("bg-danger");
+                    $("#divHeaderAnulacion").addClass("bg-success");
+
+                    $("#attachmentsButtom").removeClass("bg-danger");
+                    $("#attachmentsButtom").addClass("bg-success");
+
+                    $("#divNotaAnula").removeClass("alert-warning");
+                    $("#divNotaAnula").removeClass("alert-danger");
+                    $("#divNotaAnula").addClass("alert-success");
+                    $(".lblMontoAnular, .txtMontoAnular").show();
+                }else{
+                    $("#divHeaderAnulacion").removeClass("bg-danger");
+                    $("#divHeaderAnulacion").removeClass("bg-success");
+                    $("#divHeaderAnulacion").addClass("bg-info");
+                }
             })
 
             $('#modal_imagen_atenciones').on('show.bs.modal', function (event) {
@@ -219,6 +249,18 @@
                 console.log(event.relatedTarget)
                 console.log(button.data('id_imagen_atencion'))
                 var idunico = button.data('pedido_id')
+                var montoAnular=button.data('total_anular_adjunto')
+
+                console.log('rtotal anular adjunto', button.data('total_anular_adjunto'))
+                $(".txtMontoAnularAtencion").html("S/. " + separateComma(montoAnular).toLocaleString("en-US"))
+                $(".txtMontoAnularAtencion").addClass("font-weight-bold");
+                console.log('aaaaaaaaaaaaaa: ',button.data('tipo_anulacion'))
+                if (button.data('tipo_anulacion')=="" ){
+                    $(".divMontoTotalAtencion").hide();
+                }else if (button.data('tipo_anulacion')=="F" ){
+                    $(".divMontoTotalAtencion").show();
+                }
+
                 //recupera imagenes adjuntas
                 $.ajax({
                     url: "{{ route('operaciones.veratencionanulacion',':id') }}".replace(':id', idunico),
@@ -259,6 +301,7 @@
                     processData: false,
                     contentType: false,
                 }).done(function (data) {
+                    console.log('CONFIRMA N-C = ',data)
                     if (data.success) {
                         Swal.fire(
                             'Mensaje',
@@ -279,6 +322,66 @@
                     $('#tablaOperacionesPendienteAnulacion').DataTable().ajax.reload();
                 });
             })
+
+
+            $('#modal-veradjunto').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                console.log(event.relatedTarget)
+
+                var idAnulacionAdjuntos = button.data('id_anulacion_adjuntos')
+                var dataveradjunto = new FormData();
+                dataveradjunto.append("idAnulacionAdjuntos", idAnulacionAdjuntos)
+
+                var montoAnular=button.data('total_anular')
+
+                console.log('rtotal anular adjunto', button.data('total_anular'))
+                $(".txtMontoAnularAdjuntos").html("S/. " + separateComma(montoAnular).toLocaleString("en-US"))
+                $(".txtMontoAnularAdjuntos").addClass("font-weight-bold");
+
+                //recupera imagenes adjuntas
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    url: "{{ route('verAdjuntosAddAsesorAnulacion') }}",
+                    data: dataveradjunto,
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idAnulacionAdjuntos)
+                        $('#imagenes_adjunto').html("");
+                        $('#imagenes_adjunto').html(data);
+                        /*console.log(data);*/
+                    }
+                });
+            })
+            function separateComma(val) {
+                // remove sign if negative
+                var sign = 1;
+                if (val < 0) {
+                    sign = -1;
+                    val = -val;
+                }
+                // trim the number decimal point if it exists
+                let num = val.toString().includes('.') ? val.toString().split('.')[0] : val.toString();
+                let len = num.toString().length;
+                let result = '';
+                let count = 1;
+
+                for (let i = len - 1; i >= 0; i--) {
+                    result = num.toString()[i] + result;
+                    if (count % 3 === 0 && count !== 0 && i !== 0) {
+                        result = ',' + result;
+                    }
+                    count++;
+                }
+
+                // add number after decimal point
+                if (val.toString().includes('.')) {
+                    result = result + '.' + val.toString().split('.')[1];
+                }
+                // return result with - sign if negative
+                return sign < 0 ? '-' + result : result;
+            }
 
         });
     </script>
