@@ -34,7 +34,7 @@
         }
         #spinner {
             height: 600px;
-            display: block;
+            display: none;
         }
 
     </style>
