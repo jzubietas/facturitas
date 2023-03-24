@@ -334,34 +334,34 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         </div>
     </div>
     <div class="card-body">
-<div class="content">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                </div>
-            </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
 
-        </div>
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="chart">
-                        <canvas id="mychartpedidosporencargado"   style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;" ></canvas>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="chart">
+                                <canvas id="mychartpedidosporencargado"   style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;" ></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
     </div>
 </div>
 
