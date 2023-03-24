@@ -101,7 +101,7 @@
 <div id="spinner" class="position-relative d-flex justify-content-center">
 
 
-    <div class=" top-50 start-50 translate-middle">
+    <div class="position-absolute top-50 start-50 translate-middle">
         <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
     </div>
 </div>
