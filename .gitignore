@@ -1,7 +1,11 @@
 /node_modules
 /public/hot
 /public/storage
+/public/vendor
 /storage/*.key
+/vendor/*
+/vendor
+/vendor/
 .env
 .env.backup
 .phpunit.result.cache
@@ -19,6 +23,3 @@ cronlog.txt
 *.cmd
 *.iso
 *.bat
-vendor
-/vendor
-vendor/
