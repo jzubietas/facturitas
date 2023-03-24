@@ -331,7 +331,7 @@ class DashboardController extends Controller
                 ->whereDate('pedidos.created_at', $fechametames)
                 ->where('pendiente_anulacion', '<>', '1')->count();
 
-            dd($fechametames, User::ROL_ASESOR,$asesor->id, ' ',$fechametames->format('Y'),$fechametames->format('m'));
+            dd($fechametames, User::ROL_ASESOR,$asesor->id,$fechametames->format('Y'),$fechametames->format('m'));
             $meta_calculo_row = Meta::where('rol', User::ROL_ASESOR)
                 ->where('user_id', $asesor->id)
                 ->where('anio', $fechametames->format('Y'))
