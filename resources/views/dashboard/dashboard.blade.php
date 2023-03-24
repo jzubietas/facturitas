@@ -33,7 +33,7 @@
             }
         }
         #spinner {
-            display: none;
+            display: block;
         }
 
     </style>
