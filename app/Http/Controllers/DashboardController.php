@@ -407,16 +407,22 @@ class DashboardController extends Controller
                 ->activo()
                 ->count();
 
+            $clientes_situacion_recurrente = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('user_id', $asesor->id)
+                ->where('clientes.situacion','=','ACTIVO')
+                ->activo()
+                ->count();
+
             //recurrente mes pasado
-            $clientes_situacion_recurrente = Clientes::query()
-                ->join('users as u','u.id','clientes.user_id')
-                ->where('u.id', $asesor->id)
+            //$clientes_situacion_recurrente = Clientes::query()
+             //   ->join('users as u','u.id','clientes.user_id')
+               // ->where('u.id', $asesor->id)
                 //->whereIn('situacion_clientes.situacion',['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','ACTIVO'])
                 //->where('situacion_clientes.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
-                ->where('clientes.tipo','=','1')->where('clientes.estado','=','1')
-                ->where( DB::raw(" (select count(p.id) from pedidos p where p.cliente_id=clientes.id and cast(p.created_at as date) between ".Carbon::now()->firstOfMonth()->subMonth()->format('Y-m-d')." and ".Carbon::now()->endOfMonth()->subMonth()->format('Y-m-d')." and p.estado='1'
-                    and p.codigo not like '%-C%' and p.pendiente_anulacion <>'1')'"),'>','0')
-                ->count();
+                //->where('clientes.tipo','=','1')->where('clientes.estado','=','1')
+                //->where( DB::raw(" (select count(p.id) from pedidos p where p.cliente_id=clientes.id and cast(p.created_at as date) between ".Carbon::now()->firstOfMonth()->subMonth()->format('Y-m-d')." and ".Carbon::now()->endOfMonth()->subMonth()->format('Y-m-d')." and p.estado='1'
+                 //   and p.codigo not like '%-C%' and p.pendiente_anulacion <>'1')'"),'>','0')
+                //->count();
 
             $encargado_asesor = $asesor->supervisor;
 
