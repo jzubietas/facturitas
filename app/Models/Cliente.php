@@ -482,7 +482,7 @@ class Cliente extends Model
               }
 
           }
-          
+
       }
 
     return null;
