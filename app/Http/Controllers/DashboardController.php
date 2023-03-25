@@ -291,7 +291,7 @@ class DashboardController extends Controller
                     'total_pedido' => 0,
                     'pedidos_dia' => 0,
                     'clientes_situacion_activo' => 0,
-                    'clientes_situacion' => 0,
+                    'clientes_situacion_recurrente' => 0,
                 ];
         }
 
