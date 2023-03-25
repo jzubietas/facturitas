@@ -302,7 +302,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 </div>
 
 <div class="container-fluid">
-    <canvas id="my-chart-pedidosporasesor"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
+    <h1> Cuadro comparativo de Pedidos Anulados</h1>
+    <canvas id="my-chart-pedidosporasesor"  style="min-height: 650px; height: 650px; max-height: 650px; max-width: 100%;"></canvas>
 </div>
 
 <div class="container-fluid">
@@ -388,13 +389,39 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 var chartpedidosporasesor = new Chart(ctxpedidosporasesor, {
                     type: 'horizontalBar',
                     data: {
-                        labels  : data.labels,
-                        datasets: data.datasets
+                        labels: data.labels,
+                        datasets: data.datasets,
                     },
                     options: {
                         responsive              : true,
-                        maintainAspectRatio     : false,
-                        datasetFill             : false
+                        aintainAspectRatio     : false,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                                max: 100,
+                                ticks: {
+                                    beginAtZero: true,
+                                    callback: function (value) {
+                                        return value + '%';
+                                    },
+                                },
+                            }],
+                            yAxes: [{
+                                stacked: true,
+
+                            }]
+                        },
+                        plugins: {
+                            datalabels: {
+                                color: 'white',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: function(value, context) {
+                                    return Math.round(value) + '%';
+                                }
+                            },
+                        },
                     }
                 });
             });
