@@ -408,8 +408,10 @@ class DashboardController extends Controller
                 ->count();
 
             $clientes_situacion_recurrente = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->join('situacion_clientes cv','cv.cliente_id','clientes.id')
+                ->where('cv.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
                 ->where('user_id', $asesor->id)
-                ->where('clientes.situacion','=','ACTIVO')
+                ->where('clientes.situacion','=','RECURRENTE')
                 ->activo()
                 ->count();
 
