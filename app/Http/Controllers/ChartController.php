@@ -43,7 +43,6 @@ class ChartController extends Controller
 
             $arreglocontadoranul[$contador] =$item*10;
             $contador++;
-
         }
 
         return response()->json([

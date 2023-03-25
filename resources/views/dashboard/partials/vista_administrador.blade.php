@@ -315,9 +315,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <canvas id="my-chart-pedidosporasesor"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
 </div>
 
-
-
-
+<div class="container-fluid">
+    <canvas id="my-chart-dejaronpedir"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
+</div>
 
 @section('js-datatables')
     <script>
@@ -378,6 +378,22 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 });
             });
 
+            $.get("{{ route('chart-data') }}", function(data) {
+                var ctxpedidosdejaronpedir = document.getElementById('my-chart-dejaronpedir').getContext('2d');
+                var chartpedidosdejaronpedir = new Chart(ctxpedidosdejaronpedir, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels  : data.labels,
+                        datasets: data.datasets
+                    },
+                    options: {
+                        responsive              : true,
+                        maintainAspectRatio     : false,
+                        datasetFill             : false
+                    }
+                });
+            });
+
 
             $('#exampleModalCenter').modal('show');
 
@@ -395,7 +411,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(9);
 
                 cargReporteMetasCobranzasGeneral();
-
 
             });
 
