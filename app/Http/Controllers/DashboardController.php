@@ -651,7 +651,27 @@ class DashboardController extends Controller
             }
             $progressData->splice($skip, $take)->all();
         }
+        else if ($request->ii == 8) {
+            if ($total_asesor % 2 == 0) {
+                $skip = 0;
+                $take = intval($total_asesor / 2);
+            } else {
+                $skip = 0;
+                $take = intval($total_asesor / 2) + 1;
+            }
+            $progressData->splice($skip, $take)->all();
+        }
         else if ($request->ii == 2) {
+            if ($total_asesor % 2 == 0) {
+                $skip = intval($total_asesor / 2);
+                $take = intval($total_asesor / 2);
+            } else {
+                $skip = intval($total_asesor / 2) + 1;
+                $take = intval($total_asesor / 2);
+            }
+            $progressData->splice($skip, $take)->all();
+        }
+        else if ($request->ii == 9) {
             if ($total_asesor % 2 == 0) {
                 $skip = intval($total_asesor / 2);
                 $take = intval($total_asesor / 2);
