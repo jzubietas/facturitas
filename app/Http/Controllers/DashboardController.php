@@ -417,14 +417,14 @@ class DashboardController extends Controller
 
             //recurrente mes pasado
             //$clientes_situacion_recurrente = Clientes::query()
-             //   ->join('users as u','u.id','clientes.user_id')
-               // ->where('u.id', $asesor->id)
-                //->whereIn('situacion_clientes.situacion',['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','ACTIVO'])
-                //->where('situacion_clientes.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
-                //->where('clientes.tipo','=','1')->where('clientes.estado','=','1')
-                //->where( DB::raw(" (select count(p.id) from pedidos p where p.cliente_id=clientes.id and cast(p.created_at as date) between ".Carbon::now()->firstOfMonth()->subMonth()->format('Y-m-d')." and ".Carbon::now()->endOfMonth()->subMonth()->format('Y-m-d')." and p.estado='1'
-                 //   and p.codigo not like '%-C%' and p.pendiente_anulacion <>'1')'"),'>','0')
-                //->count();
+            //   ->join('users as u','u.id','clientes.user_id')
+            // ->where('u.id', $asesor->id)
+            //->whereIn('situacion_clientes.situacion',['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','ACTIVO'])
+            //->where('situacion_clientes.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
+            //->where('clientes.tipo','=','1')->where('clientes.estado','=','1')
+            //->where( DB::raw(" (select count(p.id) from pedidos p where p.cliente_id=clientes.id and cast(p.created_at as date) between ".Carbon::now()->firstOfMonth()->subMonth()->format('Y-m-d')." and ".Carbon::now()->endOfMonth()->subMonth()->format('Y-m-d')." and p.estado='1'
+            //   and p.codigo not like '%-C%' and p.pendiente_anulacion <>'1')'"),'>','0')
+            //->count();
 
             $encargado_asesor = $asesor->supervisor;
 
@@ -1857,12 +1857,12 @@ class DashboardController extends Controller
                 }*/
 
                 //$data["all_situacion_activo"];
-            if($data["all_situacion_recurrente"]==0)
-            {
-                $porcentaje=0.00;
-            }else{
-                $porcentaje=round(($data["all_situacion_activo"] / $data["all_situacion_recurrente"])*100,2);
-            }
+                if($data["all_situacion_recurrente"]==0)
+                {
+                    $porcentaje=0.00;
+                }else{
+                    $porcentaje=round(($data["all_situacion_activo"] / $data["all_situacion_recurrente"])*100,2);
+                }
 
 
                 {
