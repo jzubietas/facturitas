@@ -411,8 +411,7 @@ class DashboardController extends Controller
             $clientes_situacion_recurrente = SituacionClientes::query()->join('users as u', 'u.id', 'situacion_clientes.user_id')
                 ->where('u.id', $asesor->id)
                 ->whereIn('situacion_clientes.situacion',['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','ACTIVO'])
-                ->where('situacion_clientes.mes',Carbon::now()->clone()->subMonth()->format('m'))
-                ->where('situacion_clientes.anio',Carbon::now()->clone()->subMonth()->format('Y'))
+                ->where('situacion_clientes.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
                 ->count();
 
             $encargado_asesor = $asesor->supervisor;
