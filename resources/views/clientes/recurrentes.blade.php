@@ -310,7 +310,8 @@
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
                     "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
+                    "processing": "<img src='{{asset('imagenes/avatar-admin.png')}}'> Carregando...",
+                    //"processing": "Procesando...",
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
                     "paginate": {

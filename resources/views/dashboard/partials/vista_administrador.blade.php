@@ -111,9 +111,6 @@
     <div class="d-flex justify-content-center flex-column mb-2 bg-white">
         <div class="d-flex justify-content-center row bg-white">
 
-
-
-
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
                     <h5 class="card-title text-uppercase">Total de cobranzas:</h5>
@@ -172,21 +169,27 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     <div id="metas_total"></div>
                 </div>
 
-                <br><br><br><br><br>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <h1 class="text-center">Dejaron de pedir</h1>
-                </div>
-
-                <div class="contain-table-dual row" style="width: 100% !important;">
-                    <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
-                    <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
-                </div>
-
             </div>
 
         </div>
     </div>
     {{-- FIN-TABLA-DUAL --}}
+
+</div>
+
+<div class ="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <br><br>
+            <h1 class="text-center">Dejaron de pedir</h1>
+        </div>
+        <div class="contain-table-dual row" style="width: 100% !important;">
+            <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
+            <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
+        </div>
+    </div>
+
+
 
 </div>
 
@@ -253,8 +256,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="visitors-chart" style="display: block; width: 764px; height: 200px;"
-                            class="chartjs-render-monitor" width="764" height="200"></canvas>
+                    <canvas id="visitors-chart" style="display: block; height: 200px; max-width: 100%; "
+                            class="chartjs-render-monitor" height="200"></canvas>
                 </div>
                 <div class="d-flex flex-row justify-content-end">
                     <span class="mr-2 text-uppercase">
@@ -298,8 +301,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="visitors-chart-olva" style="display: block; width: 764px; height: 200px;"
-                            class="chartjs-render-monitor" width="764" height="200"></canvas>
+                    <canvas id="visitors-chart-olva" style="display: block; height: 200px;  max-width: 100%;"
+                            class="chartjs-render-monitor"  height="200"></canvas>
                 </div>
                 <div class="d-flex flex-row justify-content-end">
                     <span class="mr-2 text-uppercase">
@@ -311,10 +314,52 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 </div>
 
-<div class="container-fluid">
-    <h1> Cuadro comparativo de Pedidos Anulados</h1>
-    <canvas id="my-chart-pedidosporasesor"  style="min-height: 650px; height: 650px; max-height: 650px; max-width: 100%;"></canvas>
+
+
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="far fa-chart-bar"></i>
+            Cuadro comparativo de Pedidos Anulados
+        </h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool disabled" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+<div class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+    </div>
+</div>
+
+{{--<div class="container-fluid">
+    <h1> Cuadro comparativo de Pedidos Anulados</h1>
+
+</div>--}}
 
 <div class="container-fluid">
     <canvas id="my-chart-dejaronpedir"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
@@ -364,8 +409,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
             $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
-                var ctxpedidosporasesor = document.getElementById('my-chart-pedidosporasesor').getContext('2d');
-                var chartpedidosporasesor = new Chart(ctxpedidosporasesor, {
+                var ctxpedidosporasesor1 = document.getElementById('my-chart-pedidosporasesorpar1').getContext('2d');
+                var chartpedidosporasesor1 = new Chart(ctxpedidosporasesor1, {
                     type: 'horizontalBar',
                     data: {
                         labels: data.labels,
@@ -379,7 +424,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                 stacked: true,
                                 max: 100,
                                 ticks: {
-                                    beginAtZero: true,
+                                    beginAtZero: false,
                                     callback: function (value) {
                                         return value + '%';
                                     },
@@ -387,7 +432,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             }],
                             yAxes: [{
                                 stacked: true,
-
                             }]
                         },
                         plugins: {
@@ -398,6 +442,47 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                 },
                                 formatter: function(value, context) {
                                     return Math.round(value) + '%';
+                                }
+                            },
+                        },
+                    }
+                });
+            });
+
+            $.get("{{ route('chart-pedidos-asesores-faltantes') }}", function(data) {
+                var ctxpedidosporasesor2 = document.getElementById('my-chart-pedidosporasesorpar2').getContext('2d');
+                var chartpedidosporasesor2 = new Chart(ctxpedidosporasesor2, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: data.labels,
+                        datasets: data.datasets,
+                    },
+                    options: {
+                        responsive              : true,
+                        aintainAspectRatio     : false,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                                max: 100,
+                                ticks: {
+                                    beginAtZero: false,
+                                    callback: function (value) {
+                                        return value + '%';
+                                    },
+                                },
+                            }],
+                            yAxes: [{
+                                stacked: true,
+                            }]
+                        },
+                        plugins: {
+                            datalabels: {
+                                color: 'red',
+                                anchor: 'end',
+                                align: 'end',
+                                formatter: function(value, context) {
+                                    console.log('aaaaaaaaaaa:',value,context)
+                                    return value + '%';
                                 }
                             },
                         },

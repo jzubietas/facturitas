@@ -258,7 +258,8 @@ class BasefriaController extends Controller
         $mirol = Auth::user()->rol;
         $users = User::where('users.estado', '1')
             ->whereIn('users.rol', ['Asesor', 'ASESOR ADMINISTRATIVO'])
-            ->pluck('name', 'id');
+            ->select(DB::raw('CONCAT(COALESCE(identificador, "") , " ", CASE WHEN COALESCE(exidentificador, "") <>"" THEN CONCAT("(", exidentificador,")") ELSE "" END ) AS full_identificador'),'id')
+            ->pluck('full_identificador', 'id');
         $porcentajes = Porcentaje::where('cliente_id', $basefrium->id)->get();
 
         return view('base_fria.edit', compact('basefrium', 'users', 'porcentajes', 'mirol'));
@@ -274,8 +275,12 @@ class BasefriaController extends Controller
     public function update(Request $request, Cliente $basefrium)
     {
         $user = User::where('id', $request->user_id)->first();//el asesor
+        if ($request->nombre==null){
+            $request->nombre="";
+        }
         $letra=$user->letra;
         //return $basefrium;
+
         $request->validate([
             //'nombre' => 'required',
             //'dni' => 'required',
@@ -287,13 +292,19 @@ class BasefriaController extends Controller
             //'porcentaje' => 'required',
         ]);
 
-        $basefrium->update([
+        $datosafgectados=$basefrium->update([
             'nombre' => $request->nombre,
             'dni' => $request->dni,
             'celular' => $request->celular,
             'icelular' => $letra,
+            'user_id'=>$request->user_id,
             'tipo' => '0'
         ]);
+        /*if ($datosafgectados > 0) {
+            dd("VEr",$request,$basefrium);
+        } else {
+            dd($request,$basefrium,$user,$letra);
+        }*/
 
         if ($request->tipo === '1') {
             return redirect()->route('clientes.index')->with('info', 'actualizado');
