@@ -295,6 +295,20 @@ class DashboardController extends Controller
                 ];
         }
 
+        $clientes_situacion_activo_mayor=0;
+        foreach ($asesores as $asesori)
+        {
+            $clientes_situacion_activo_mayor_ = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('user_id', $asesori->id)
+                ->where('clientes.situacion', '=', 'ACTIVO')
+                ->activo()
+                ->count();
+            if($clientes_situacion_activo_mayor_>=$clientes_situacion_activo_mayor_)
+            {
+                $clientes_situacion_activo_mayor=$clientes_situacion_activo_mayor_;
+            }
+        }
+
 
         foreach ($asesores as $asesor) {
             /*if (!$asesor->identificador == '01') continue;*/
@@ -1829,16 +1843,22 @@ class DashboardController extends Controller
                 }*/
 
                 //$data["all_situacion_activo"];
+            if($clientes_situacion_activo_mayor==0)
+            {
+                $porcentaje=0.00;
+            }else{
+                $porcentaje=$data["all_situacion_activo"] / $clientes_situacion_activo_mayor;
+            }
 
 
                 {
                     $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
                                   <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: 100%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: '.$porcentaje.'%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                      <span style="font-weight: lighter"> <b class="bold-size">   ' . $data["all_situacion_activo"] . ' </b> - ' . $data["all_situacion_activo"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> </p></span>
+                                      <span style="font-weight: lighter"> <b class="bold-size">   ' . $data["all_situacion_activo"] . ' </b> - ' . $data["all_situacion_activo"]  .'/'.$clientes_situacion_activo_mayor. ' <p class="text-red d-inline format-size" style="color: #d9686!important"> </p></span>
                                   </div>
                               </div>
                               <sub class="d-none">% -  Pagados/ Asignados</sub>
