@@ -1659,8 +1659,8 @@ class ClienteController extends Controller
                 'clientes.deuda',
                 //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
                 'clientes.situacion'
-                , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
-                , DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
+                , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.codigo not like '%-C%' and  dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
+                , DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.codigo not like '%-C%' and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
             ]);
 
         if (Auth::user()->rol == "Llamadas") {
