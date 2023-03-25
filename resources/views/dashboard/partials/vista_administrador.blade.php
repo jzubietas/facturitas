@@ -351,15 +351,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     </div>
 
                 </div>
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="chart">
-                                <canvas id="mychartpedidosporencargado"   style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;" ></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -375,10 +366,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 </div>
 
 @section('js-datatables')
-
-
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
     <script>
         $(".animated-progress span").each(function () {
             $(this).animate(
@@ -390,6 +377,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
+
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -499,48 +489,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }
                 });
             });
-
-            $.get("{{ route('chart-pedidos-encargados') }}", function(data) {
-                var ctxpedidosxncargado = document.getElementById('mychartpedidosporencargado').getContext('2d');
-                var chartpedidosxncargado = new Chart(ctxpedidosxncargado, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: data.labels,
-                        datasets: data.datasets,
-                    },
-                    options: {
-                        responsive              : true,
-                        aintainAspectRatio     : false,
-                        scales: {
-                            xAxes: [{
-                                stacked: true,
-                                max: 100,
-                                ticks: {
-                                    beginAtZero: false,
-                                    callback: function (value) {
-                                        return value + '%';
-                                    },
-                                },
-                            }],
-                            yAxes: [{
-                                stacked: true,
-                            }]
-                        },
-                        plugins: {
-                            datalabels: {
-                                color: 'red',
-                                anchor: 'end',
-                                align: 'end',
-                                formatter: function(value, context) {
-                                    console.log('aaaaaaaaaaa:',value,context)
-                                    return value + '%';
-                                }
-                            },
-                        },
-                    }
-                });
-            });
-
 
             $.get("{{ route('chart-data') }}", function(data) {
                 var ctxpedidosdejaronpedir = document.getElementById('my-chart-dejaronpedir').getContext('2d');
@@ -822,5 +770,4 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             })
         })
     </script>
-    
 @endsection
