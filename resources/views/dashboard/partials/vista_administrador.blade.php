@@ -351,6 +351,13 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             </div>
 
         </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="my-chart-pedidosporencargado"  style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
     </div>
@@ -490,6 +497,48 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }
                 });
             });
+
+            $.get("{{ route('chart-pedidos-encargados') }}", function(data) {
+                var ctxpedidosxncargado = document.getElementById('my-chart-pedidosporencargado').getContext('2d');
+                var chartpedidosxncargado = new Chart(ctxpedidosxncargado, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: data.labels,
+                        datasets: data.datasets,
+                    },
+                    options: {
+                        responsive              : true,
+                        aintainAspectRatio     : false,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                                max: 100,
+                                ticks: {
+                                    beginAtZero: false,
+                                    callback: function (value) {
+                                        return value + '%';
+                                    },
+                                },
+                            }],
+                            yAxes: [{
+                                stacked: true,
+                            }]
+                        },
+                        plugins: {
+                            datalabels: {
+                                color: 'red',
+                                anchor: 'end',
+                                align: 'end',
+                                formatter: function(value, context) {
+                                    console.log('aaaaaaaaaaa:',value,context)
+                                    return value + '%';
+                                }
+                            },
+                        },
+                    }
+                });
+            });
+
 
             $.get("{{ route('chart-data') }}", function(data) {
                 var ctxpedidosdejaronpedir = document.getElementById('my-chart-dejaronpedir').getContext('2d');
