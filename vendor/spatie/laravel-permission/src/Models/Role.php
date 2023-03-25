@@ -13,6 +13,13 @@ use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $guard_name
+ * @property ?\Illuminate\Support\Carbon $created_at
+ * @property ?\Illuminate\Support\Carbon $updated_at
+ */
 class Role extends Model implements RoleContract
 {
     use HasPermissions;
@@ -83,7 +90,6 @@ class Role extends Model implements RoleContract
     /**
      * Find a role by its name and guard name.
      *
-     * @param  string  $name
      * @param  string|null  $guardName
      * @return \Spatie\Permission\Contracts\Role|\Spatie\Permission\Models\Role
      *
@@ -105,7 +111,6 @@ class Role extends Model implements RoleContract
     /**
      * Find a role by its id (and optionally guardName).
      *
-     * @param  int  $id
      * @param  string|null  $guardName
      * @return \Spatie\Permission\Contracts\Role|\Spatie\Permission\Models\Role
      */
@@ -125,7 +130,6 @@ class Role extends Model implements RoleContract
     /**
      * Find or create role by its name (and optionally guardName).
      *
-     * @param  string  $name
      * @param  string|null  $guardName
      * @return \Spatie\Permission\Contracts\Role|\Spatie\Permission\Models\Role
      */
@@ -165,7 +169,6 @@ class Role extends Model implements RoleContract
      * Determine if the user may perform the given permission.
      *
      * @param  string|Permission  $permission
-     * @return bool
      *
      * @throws \Spatie\Permission\Exceptions\GuardDoesNotMatch
      */
