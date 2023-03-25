@@ -348,6 +348,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         <div class="card-body">
                             <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
                         </div>
+
                     </div>
 
                 </div>
@@ -770,4 +771,5 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             })
         })
     </script>
+    
 @endsection
