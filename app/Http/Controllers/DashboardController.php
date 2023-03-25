@@ -651,7 +651,27 @@ class DashboardController extends Controller
             }
             $progressData->splice($skip, $take)->all();
         }
+        else if ($request->ii == 8) {
+            if ($total_asesor % 2 == 0) {
+                $skip = 0;
+                $take = intval($total_asesor / 2);
+            } else {
+                $skip = 0;
+                $take = intval($total_asesor / 2) + 1;
+            }
+            $progressData->splice($skip, $take)->all();
+        }
         else if ($request->ii == 2) {
+            if ($total_asesor % 2 == 0) {
+                $skip = intval($total_asesor / 2);
+                $take = intval($total_asesor / 2);
+            } else {
+                $skip = intval($total_asesor / 2) + 1;
+                $take = intval($total_asesor / 2);
+            }
+            $progressData->splice($skip, $take)->all();
+        }
+        else if ($request->ii == 9) {
             if ($total_asesor % 2 == 0) {
                 $skip = intval($total_asesor / 2);
                 $take = intval($total_asesor / 2);
@@ -1801,22 +1821,24 @@ class DashboardController extends Controller
                 //$html.='<br> '.$data["progress_pagos"].' : '.$data["total_pagado"].' - '.$data["total_pedido_mespasado"].' <br>';
                 //continue;
 
-                if($data["all_situacion"]==0)
+                /*if($data["all_situacion"]==0)
                 {
                     $division=0;
                 }else{
                     $division=$data["all_situacion_activo"] / $data["all_situacion"];
-                }
+                }*/
+
+                //$data["all_situacion_activo"];
 
 
                 {
                     $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
                                   <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $division . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: 100%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                      <span style="font-weight: lighter"> <b class="bold-size">   ' . $division . '% </b> - ' . $data["all_situacion_activo"] . ' / ' . $data["all_situacion"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                      <span style="font-weight: lighter"> <b class="bold-size">   ' . $data["all_situacion_activo"] . ' </b> - ' . $data["all_situacion_activo"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> </p></span>
                                   </div>
                               </div>
                               <sub class="d-none">% -  Pagados/ Asignados</sub>
