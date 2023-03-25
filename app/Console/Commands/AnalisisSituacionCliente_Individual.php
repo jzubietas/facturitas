@@ -87,8 +87,8 @@ class AnalisisSituacionCliente_Individual extends Command
                     $where_mes=$periodo_ejecucion->format('m');
 
                     //contadores
-                    $cont_mes=Pedido::where('cliente_id',$cliente->id)->where('codigo', 'not like', "%-C%")->whereYear('created_at',$where_anio)
-                        ->whereMonth('created_at',$where_mes)->count();
+                    $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
+                        ->whereMonth('created_at',$where_mes)->where('codigo', 'not like', "%-C%")->count();
                     $cont_mes_activo=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                         ->whereMonth('created_at',$where_mes)->activo()->where('codigo', 'not like', "%-C%")->count();
                     $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
@@ -349,7 +349,7 @@ class AnalisisSituacionCliente_Individual extends Command
                                         if ($situacion_antes->activos > 0 )
                                         {
                                             $situacion_create->update([
-                                                "situacion" => 'RECURRENTE',
+                                                "situacion" => 'ACTIVO',
                                                 "flag_fp" => '1'
                                             ]);
                                         }else{

@@ -344,7 +344,7 @@ class AnalisisSituacionCliente extends Command
                                       if ($situacion_antes->activos > 0 )
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'RECURRENTE',
+                                              "situacion" => 'ACTIVO',
                                               "flag_fp" => '1'
                                           ]);
                                       }else{
