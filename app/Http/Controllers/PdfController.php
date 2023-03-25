@@ -130,6 +130,13 @@ class PdfController extends Controller
             ['c.estado', '=', '1'],
             ['c.tipo', '=', '1']
           ])
+        ->orWhere([
+            ['situacion_clientes.situacion', '=', 'ACTIVO'],
+            ['situacion_clientes.periodo', '=', $periodo_actual],
+            ['u.identificador', '<>', '15'],
+            ['c.estado', '=', '1'],
+            ['c.tipo', '=', '1']
+        ])
         ->groupBy([
         'situacion_clientes.situacion'
       ])
@@ -140,21 +147,35 @@ class PdfController extends Controller
                                                     WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
                                                     THEN (select sum(m.meta_quincena_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_quincena "),
+                                                    THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='ACTIVO'
+                                                    THEN (select sum(m.meta_quincena_activo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_quincena "),
 
         DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                   THEN (select sum(m.cliente_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
                                                     THEN (select sum(m.cliente_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.cliente_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
+                                                    THEN (select sum(m.cliente_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='ACTIVO'
+                                                    THEN (select sum(m.cliente_activo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
 
         DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
                                                     THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='NUEVO'
-                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
+                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='ACTIVO'
+                                                    THEN (select sum(m.cliente_activo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
+            DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
+                                                    THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                                    THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                                    THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                                    WHEN situacion_clientes.situacion='ACTIVO'
+                                                    THEN (select sum(m.cliente_activo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
 
         DB::raw('count(situacion_clientes.situacion) as total')
       ])
