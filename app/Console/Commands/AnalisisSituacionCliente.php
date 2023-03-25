@@ -151,68 +151,93 @@ class AnalisisSituacionCliente extends Command
                                           ]);
                                           break;
 
-                                      case 'NUEVO':
+                              case 'NUEVO':
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+                                  if($situacion_periodo->activos>0)
+                                  {
+                                      if($situacion_antes->activos>0)
+                                      {
                                           $situacion_create->update([
-                                              "situacion" => 'RECURRENTE',
-                                              "flag_fp" => '1'
+                                              "situacion" => 'ACTIVO',"flag_fp" => '1'
                                           ]);
-                                          break;
-                                      case 'ABANDONO RECIENTE':
-                                      case 'ABANDONO':
+                                      }else{
                                           $situacion_create->update([
-                                              "situacion" => 'ABANDONO',
-                                              "flag_fp" => '1'
+                                              "situacion" => 'NUEVO',"flag_fp" => '1'//
                                           ]);
-                                          break;
-                                      case 'RECURRENTE':
-                                          if($situacion_antes->activos==0)
-                                          {
-                                              $situacion_create->update([
-                                                  "situacion" => 'ABANDONO RECIENTE',
-                                                  "flag_fp" => '1'
-                                              ]);
-                                          }else{
-                                              $situacion_create->update([
-                                                  "situacion" => 'RECURRENTE',
-                                                  "flag_fp" => '1'
-                                              ]);
-                                          }
-                                          break;
-                                      case 'ACTIVO':
-                                          if($situacion_antes->activos==0)
-                                          {
-                                              $situacion_create->update([
-                                                  "situacion" => 'RECURRENTE',
-                                                  "flag_fp" => '1'
-                                              ]);
-                                          }else{
-                                              $situacion_create->update([
-                                                  "situacion" => 'RECURRENTE',
-                                                  "flag_fp" => '1'
-                                              ]);
-                                          }
-                                          break;
-                                      default:break;
+                                      }
+                                  }else{
+                                      if($situacion_antes->activos>0)
+                                      {
+                                          $situacion_create->update([
+                                              "situacion" => 'RECURRENTE',"flag_fp" => '1'
+                                          ]);
+                                      }else{
+                                          $situacion_create->update([
+                                              "situacion" => 'NULO',"flag_fp" => '1'
+                                          ]);
+                                      }
+
                                   }
-                              }
+                                  break;
+                              case 'ABANDONO RECIENTE':
+                              case 'ABANDONO':
+                                  $situacion_create->update([
+                                      "situacion" => 'ABANDONO',
+                                      "flag_fp" => '1'
+                                  ]);
+                                  break;
+                              case 'RECURRENTE':
+                                  if($situacion_antes->activos==0)
+                                  {
+                                      $situacion_create->update([
+                                          "situacion" => 'ABANDONO RECIENTE',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }else{
+                                      $situacion_create->update([
+                                          "situacion" => 'RECURRENTE',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }
+                                  break;
+                              case 'ACTIVO':
+                                  if($situacion_antes->activos==0)
+                                  {
+                                      $situacion_create->update([
+                                          "situacion" => 'RECURRENTE',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }else{
+                                      $situacion_create->update([
+                                          "situacion" => 'RECURRENTE',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }
+                                  break;
+                              default:break;
                           }
-                          else{
-                              if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
-                              {
+                      }
+                  }
+                  else{
+                      if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
+                      {
+                          $situacion_create->update([
+                              "situacion" => 'NUEVO',
+                              "flag_fp" => '0'
+                          ]);
+                      }
+                      else{
+                          $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                          switch($situacion_antes->situacion)
+                          {
+                              case 'BASE FRIA':
                                   $situacion_create->update([
                                       "situacion" => 'NUEVO',
-                                      "flag_fp" => '0'
+                                      "flag_fp" => '1'
                                   ]);
-                              }
-                              else{
-                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-                                  switch($situacion_antes->situacion)
-                                  {
-                                      case 'BASE FRIA':
-                                          $situacion_create->update([
-                                              "situacion" => 'NUEVO',
-                                              "flag_fp" => '1'
-                                          ]);
 
                                           $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
                                           $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
@@ -287,29 +312,30 @@ class AnalisisSituacionCliente extends Command
                                               ]);
                                           }
 
-                                          break;
-                                      case 'NUEVO':
-                                          $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                                          $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                                          $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                                  break;
+                              case 'NUEVO':
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
-                                          if($situacion_periodo->activos>0)
-                                          {
-                                              $situacion_create->update([
-                                                  "situacion" => 'ACTIVO',
-                                                  "flag_fp" => '1'
-                                              ]);
-                                          }else{
-                                              $situacion_create->update([
-                                                  "situacion" => 'RECURRENTE',
-                                                  "flag_fp" => '1'
-                                              ]);
-                                          }
-                                          break;
-                                      case 'ABANDONO':
-                                          $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                                          $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                                          $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+                                  if($situacion_periodo->activos>0)
+                                  {
+                                      $situacion_create->update([
+                                          "situacion" => 'ACTIVO',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }else{
+                                      $situacion_create->update([
+                                          "situacion" => 'RECURRENTE',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }
+                                  break;
+                              case 'ABANDONO':
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
                                           if($situacion_periodo->activos>0)
                                           {
