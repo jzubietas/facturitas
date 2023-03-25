@@ -366,6 +366,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 </div>
 
 @section('js-datatables')
+
+
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
     <script>
         $(".animated-progress span").each(function () {
             $(this).animate(
@@ -377,9 +381,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
-
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
