@@ -1855,10 +1855,10 @@ class DashboardController extends Controller
                     $html .= '<div class="w-100 bg-white rounded">
                               <div class="position-relative rounded">
                                   <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: '.$porcentaje.'%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                      <div class="rounded" role="progressbar" style="background: #ff7d7d !important; width: '.$porcentaje.'%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
-                                  <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                      <span style="font-weight: lighter"> <b class="bold-size">   ' . $data["all_situacion_activo"] . ' </b>  <p class="text-red d-inline format-size" style="color: #d9686!important"> </p></span>
+                                  <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 16px;">
+                                      <span style="font-weight: lighter"> <b class="bold-size" style="color:#001253;">   ' . $data["all_situacion_activo"] . ' </b>  <p class="text-red d-inline format-size" style="color: #d9686!important"> </p></span>
                                   </div>
                               </div>
                               <sub class="d-none">% -  Pagados/ Asignados</sub>
