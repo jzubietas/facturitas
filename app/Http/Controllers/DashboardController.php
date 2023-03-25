@@ -1859,7 +1859,7 @@ class DashboardController extends Controller
                                       <div class="rounded" role="progressbar" style="background: #ff7d7d !important; width: '.$porcentaje.'%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 16px;">
-                                      <span style="font-weight: lighter"> <b class="bold-size" style="color:#001253;">   ' . $porcentaje . '% - <span style="font-size:11px;color:grey;">'.$data["all_situacion_activo"].'/'.$data["all_situacion_recurrente"].'</span> </b>  <p class="text-red d-inline format-size" style="color: #d9686!important"> </p></span>
+                                      <span style="font-weight: bold;"> <b class="bold-size" style="color:#001253;">   ' . $porcentaje . '% - <span style="font-size:11px;color:grey;">'.$data["all_situacion_activo"].'/'.$data["all_situacion_recurrente"].'</span> </b>  <p class="text-red d-inline format-size" style="color: #d9686!important"> </p></span>
                                   </div>
                               </div>
                               <sub class="d-none">% -  Pagados/ Asignados</sub>
