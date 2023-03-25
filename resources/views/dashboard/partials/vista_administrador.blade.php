@@ -111,9 +111,6 @@
     <div class="d-flex justify-content-center flex-column mb-2 bg-white">
         <div class="d-flex justify-content-center row bg-white">
 
-
-
-
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
                     <h5 class="card-title text-uppercase">Total de cobranzas:</h5>
@@ -172,21 +169,27 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     <div id="metas_total"></div>
                 </div>
 
-                <br><br><br><br><br>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <h1 class="text-center">Dejaron de pedir</h1>
-                </div>
-
-                <div class="contain-table-dual row" style="width: 100% !important;">
-                    <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
-                    <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
-                </div>
-
             </div>
 
         </div>
     </div>
     {{-- FIN-TABLA-DUAL --}}
+
+</div>
+
+<div class ="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <br><br>
+            <h1 class="text-center">Dejaron de pedir</h1>
+        </div>
+        <div class="contain-table-dual row" style="width: 100% !important;">
+            <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
+            <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
+        </div>
+    </div>
+
+
 
 </div>
 
