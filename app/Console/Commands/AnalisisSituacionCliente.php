@@ -276,11 +276,22 @@ class AnalisisSituacionCliente extends Command
 
                                   break;
                               case 'NUEVO':
-                                  $situacion_create->update([
-                                      "situacion" => 'ACTIVO',
-                                      "flag_fp" => '1'
-                                  ]);
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
+                                  if($situacion_periodo->activos>0)
+                                  {
+                                      $situacion_create->update([
+                                          "situacion" => 'ACTIVO',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }else{
+                                      $situacion_create->update([
+                                          "situacion" => 'RECURRENTE',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }
                                   break;
                               case 'ABANDONO':
                                   $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
