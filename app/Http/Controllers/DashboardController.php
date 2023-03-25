@@ -408,12 +408,14 @@ class DashboardController extends Controller
                 ->count();
 
             //recurrente mes pasado
-            $clientes_situacion_recurrente = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
-                ->join('clientes as c','c.id','situacion_clientes.cliente_id')
-                ->join('users as u','u.id','c.user_id')
+            $clientes_situacion_recurrente = Clientes::query()
+                ->join('users as u','u.id','clientes.user_id')
                 ->where('u.id', $asesor->id)
-                ->whereIn('situacion_clientes.situacion',['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','ACTIVO'])
-                ->where('situacion_clientes.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
+                //->whereIn('situacion_clientes.situacion',['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','ACTIVO'])
+                //->where('situacion_clientes.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
+                ->where('c.tipo','=','1')->where('c.estado','=','1')
+                ->where( DB::raw(" (select count(p.id) from pedidos p where p.cliente_id=clientes.id and cast(p.created_at as date) between ".Carbon::now()->firstOfMonth()->subMonth()->format('Y-m-d')." and ".Carbon::now()->endOfMonth()->subMonth()->format('Y-m-d')." and p.estado='1'
+                    and p.codigo not like '%-C%' and p.pendiente_anulacion <>'1')'"),'>','0')
                 ->count();
 
             $encargado_asesor = $asesor->supervisor;
