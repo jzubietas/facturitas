@@ -290,6 +290,8 @@ class DashboardController extends Controller
                     'progress_pedidos' => 0,
                     'total_pedido' => 0,
                     'pedidos_dia' => 0,
+                    'clientes_situacion_activo' => 0,
+                    'clientes_situacion' => 0,
                 ];
         }
 
@@ -312,7 +314,7 @@ class DashboardController extends Controller
             }
 
             /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
-            $date_pagos = Carbon::parse(now())->subMonth();
+            $date_pagos = Carbon::parse(now())->subMonth()->startOfMonth();
             $fechametames = Carbon::now()->clone();
 
             if (!request()->has("fechametames")) {
@@ -323,8 +325,6 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
             }
 
-            //$fechametames = Carbon::now()->clone();
-            $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
 
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
                 ->where('pedidos.codigo', 'not like', "%-C%")->activo()
@@ -336,17 +336,21 @@ class DashboardController extends Controller
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
 
-            $metatotal_quincena = 1;//(float)$meta_calculo_row->meta_quincena;
+
+            $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
             $metatotal_intermedia = (float)$meta_calculo_row->meta_intermedia;
             $metatotal_1 = (float)$meta_calculo_row->meta_pedido;
             $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
 
             $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
 
-            /*$total_pedido = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)
-                ->where('codigo', 'not like', "%-C%")->activo()
-                ->where('pendiente_anulacion', '<>', '1'),
-                $fechametames, 'created_at')->count();*/
+            if (!request()->has("fechametames")) {
+                $fechametames = Carbon::now()->clone();
+                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+            } else {
+                $fechametames = Carbon::parse($request->fechametames)->clone();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
+            }
 
             $total_pedido = Pedido::query()->where('user_id', $asesor->id)
                 ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
@@ -382,6 +386,18 @@ class DashboardController extends Controller
                 ->where('pendiente_anulacion', '<>', '1')
                 ->whereDate('pedidos.created_at', $fechametames)->count();
 
+            $clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('user_id', $asesor->id)
+                ->where('clientes.situacion','=','ACTIVO')
+                ->activo()
+                ->count();
+
+            $clientes_situacion = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('user_id', $asesor->id)
+                //->where('cliente.situacion','=','ACTIVO')
+                ->activo()
+                ->count();
+
             $encargado_asesor = $asesor->supervisor;
 
             $item = [
@@ -397,12 +413,16 @@ class DashboardController extends Controller
                 "meta" => $metatotal_1,
                 "meta_2" => $metatotal_2,
                 "pedidos_totales" => $pedidos_totales,
+                "clientes_situacio" => $clientes_situacion,
+                "clientes_situacion_activo" => $clientes_situacion_activo,
                 "supervisor" => $supervisor,
             ];
 
             if (array_key_exists($encargado_asesor, $count_asesor)) {
                 if ($encargado_asesor == 46) {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
+                    $count_asesor[$encargado_asesor]['clientes_situacion'] = $clientes_situacion + $count_asesor[$encargado_asesor]['clientes_situacion'];
+                    $count_asesor[$encargado_asesor]['clientes_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['clientes_situacion_activo'];
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -413,6 +433,8 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
                 } else if ($encargado_asesor == 24) {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
+                    $count_asesor[$encargado_asesor]['clientes_situacion'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['clientes_situacion'];
+                    $count_asesor[$encargado_asesor]['clientes_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['clientes_situacion_activo'];
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -423,6 +445,8 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
                 } else {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = 0;
+                    $count_asesor[$encargado_asesor]['clientes_situacion'] = 0;
+                    $count_asesor[$encargado_asesor]['clientes_situacion_activo'] = 0;
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -531,6 +555,8 @@ class DashboardController extends Controller
                     $newData[$identificador]['supervisor'] += data_get($item, 'supervisor');
                     $newData[$identificador]['meta_new'] += data_get($item, 'meta_new');//0 quincena //0.5 intermedia //1 meta1//2 meta2
                     $newData[$identificador]['pedidos_totales'] += data_get($item, 'pedidos_totales');//todo el mes
+                    $newData[$identificador]['clientes_situacion'] += data_get($item, 'clientes_situacion');//todo el mes
+                    $newData[$identificador]['clientes_situacion_activo'] += data_get($item, 'clientes_situacion_activo');//todo el mes
                     $newData[$identificador]['meta_quincena'] += data_get($item, 'meta_quincena');
                     $newData[$identificador]['meta_intermedia'] += data_get($item, 'meta_intermedia');
                     $newData[$identificador]['meta'] += data_get($item, 'meta');
@@ -551,6 +577,8 @@ class DashboardController extends Controller
             $allmeta_2 = data_get($item, 'meta_2');//meta 2
             $pedidos_dia = data_get($item, 'pedidos_dia');//pedidos diario
             $pedidos_totales = data_get($item, 'pedidos_totales');//pedidos de todo el mes
+            $clientes_situacion = data_get($item, 'clientes_situacion');//pedidos de todo el mes
+            $clientes_situacion_activo = data_get($item, 'clientes_situacion_activo');//pedidos de todo el mes
             $supervisor = data_get($item, 'supervisor');
             $meta_new = data_get($item, 'meta_new');
 
@@ -605,6 +633,8 @@ class DashboardController extends Controller
             $item['total_pedido_pasado'] = $all_mespasado;
             $item['pedidos_dia'] = $pedidos_dia;
             $item['pedidos_totales'] = $pedidos_totales;
+            $item['all_situacion'] = $clientes_situacion;
+            $item['all_situacion_activo'] = $clientes_situacion_activo;
             $item['meta_new'] = $meta_new;
             $item['porcentaje_general']=($all/$allmeta_2);
             return $item;
@@ -637,6 +667,8 @@ class DashboardController extends Controller
 
         //aqui la division de  1  o 2
         $all = collect($progressData)->pluck('total_pedido')->sum();
+        $all_situacion = collect($progressData)->pluck('all_situacion')->sum();
+        $all_situacion_activo = collect($progressData)->pluck('all_situacion_activo')->sum();
         $all_mespasado = collect($progressData)->pluck('total_pedido_mespasado')->sum();
         $pay = collect($progressData)->pluck('total_pagado')->sum();
         $meta_quincena = collect($progressData)->pluck('meta_quincena')->sum();
@@ -666,6 +698,8 @@ class DashboardController extends Controller
             "progress_pedidos" => $p_pedidos,
             "progress_pagos" => $p_pagos,
             "total_pedido" => $all,
+            "all_situacion" => $all_situacion,
+            "all_situacion_activo" => $all_situacion_activo,
             "total_pedido_mespasado" => $all_mespasado,
             "total_pagado" => $pay,
             "meta" => $meta,
@@ -677,6 +711,7 @@ class DashboardController extends Controller
         $html = '';
 
         /*TOTAL*/
+
         if ($request->ii == 3) {
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
             $html .= '<tbody>
@@ -832,7 +867,7 @@ class DashboardController extends Controller
 
             $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>    </div>';
+             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>    </div>';
             $html .= '</th>
               </tr>
               </tbody>';
@@ -1146,13 +1181,13 @@ class DashboardController extends Controller
             if ($count_asesor[24]['total_pedido_mespasado'] == 0) {
                 $html .= '</div>
                       <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px;height: 30px !important;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  %</b> - ' . $count_asesor[24]['total_pagado'] . '/' . $count_asesor[24]['total_pedido_mespasado'] . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  %</b> - ' . $count_asesor[24]['total_pagado'] . '/' . $count_asesor[24]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
             } else {
                 $html .= '</div>
                       <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px;height: 30px !important;">
-                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::now()->subMonths(1)->monthName . ' :  ' . round(($count_asesor[24]['total_pagado'] / $count_asesor[24]['total_pedido_mespasado']) * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pagado'] . '/' . $count_asesor[24]['total_pedido_mespasado'] . '</span>
+                            <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  ' . round(($count_asesor[24]['total_pagado'] / $count_asesor[24]['total_pedido_mespasado']) * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pagado'] . '/' . $count_asesor[24]['total_pedido_mespasado'] . '</span>
                       </div>
                     </div>';
             }
@@ -1250,7 +1285,7 @@ class DashboardController extends Controller
             } else {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px; height: 30px !important;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::now()->monthName . ' : ' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta']) * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta'] . '</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta']) * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta'] . '</span>
     </div>';
             }
 
@@ -1726,6 +1761,70 @@ class DashboardController extends Controller
                 }
 
                 $html .= '  </td>
+      </tr> ';
+            }
+
+            $html .= '</tbody>';
+
+            $html .= '</table>';
+        }
+
+        else if ($request->ii == 8 || $request->ii == 9) {
+
+            $html .= '<table class="table tabla-metas_pagos_pedidos table-dark" style="background: #e4dbc6; color: #232121; margin-bottom: 3px !important;">';
+            $html .= '<thead>
+                <tr>
+                    <th width="8%">Asesor</th>
+                    <th width="11%">Id</th>
+
+                    <th width="33%">Dejaro de pedir  ' . Carbon::parse($date_pagos)->monthName . ' </th>
+                </tr>
+                </thead>
+                <tbody>';
+            foreach ($progressData as $data) {
+                $html .= '<tr>
+             <td class="name-size">' . $data["name"] . '</td>
+             <td>' . $data["identificador"] . ' ';
+
+                if ($data["supervisor"] == 46) {
+                    $html .= '- A';
+                } else {
+                    $html .= '- B';
+                }
+                $html .= '
+             </td>
+             ';
+                $html .= '<td>';
+
+                /*inicio pagos*/
+
+                //$html.='<br> '.$data["progress_pagos"].' : '.$data["total_pagado"].' - '.$data["total_pedido_mespasado"].' <br>';
+                //continue;
+
+                if($data["all_situacion"]==0)
+                {
+                    $division=0;
+                }else{
+                    $division=$data["all_situacion_activo"] / $data["all_situacion"];
+                }
+
+
+                {
+                    $html .= '<div class="w-100 bg-white rounded">
+                              <div class="position-relative rounded">
+                                  <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
+                                      <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $division . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                      </div>
+                                  <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                      <span style="font-weight: lighter"> <b class="bold-size">   ' . $division . '% </b> - ' . $data["all_situacion_activo"] . ' / ' . $data["all_situacion"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                  </div>
+                              </div>
+                              <sub class="d-none">% -  Pagados/ Asignados</sub>
+                            </div>';
+                }
+                /*fin pagos*/
+
+                $html .= '</td>
       </tr> ';
             }
 

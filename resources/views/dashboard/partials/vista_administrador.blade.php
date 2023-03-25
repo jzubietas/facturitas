@@ -97,9 +97,21 @@
 
 <hr>
 {{-- FULLSCREEN --}}
+
+<div id="spinner" class="position-relative d-flex justify-content-center">
+
+
+    <div class="position-relative top-50 start-50 translate-middle">
+        <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
+    </div>
+</div>
+
+
 <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2 bg-white">
         <div class="d-flex justify-content-center row bg-white">
+
+
 
 
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
@@ -130,7 +142,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
             <label class="p-0 m-0" for="ingresar">Fecha: </label>
             <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
-                   value="">
+                   value="" readonly>
             <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
 
 
@@ -158,6 +170,16 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div id="metas_total"></div>
+                </div>
+
+                <br><br><br><br><br>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h1 class="text-center">Dejaron de pedir</h1>
+                </div>
+
+                <div class="contain-table-dual row" style="width: 100% !important;">
+                    <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
+                    <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
                 </div>
 
             </div>
@@ -290,11 +312,13 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 </div>
 
 <div class="container-fluid">
-    <canvas id="my-chart-dejarondepedir"></canvas>
+    <h1> Cuadro comparativo de Pedidos Anulados</h1>
+    <canvas id="my-chart-pedidosporasesor"  style="min-height: 650px; height: 650px; max-height: 650px; max-width: 100%;"></canvas>
 </div>
 
-
-
+<div class="container-fluid">
+    <canvas id="my-chart-dejaronpedir"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
+</div>
 
 @section('js-datatables')
     <script>
@@ -325,7 +349,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             var currentYear = date.getFullYear();
 
             $('#fechametames').datepicker({
-                dateFormat: 'yy-mm-dd'
+                dateFormat: 'dd-mm-yy'
             });
 
             $("#fechametames-button").click(function() {
@@ -339,33 +363,64 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $('#fechametames').datepicker('setDate', new Date());
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
-
-
-            $.get("{{ route('chart-data') }}", function(data) {
-                var ctx = document.getElementById('my-chart-dejarondepedir').getContext('2d');
-                var chart = new Chart(ctx, {
+            $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
+                var ctxpedidosporasesor = document.getElementById('my-chart-pedidosporasesor').getContext('2d');
+                var chartpedidosporasesor = new Chart(ctxpedidosporasesor, {
                     type: 'horizontalBar',
                     data: {
                         labels: data.labels,
-                        datasets: [{
-                            label: 'My chart',
-                            data: data.values,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
+                        datasets: data.datasets,
                     },
                     options: {
+                        responsive              : true,
+                        aintainAspectRatio     : false,
                         scales: {
-                            yAxes: [{
+                            xAxes: [{
+                                stacked: true,
+                                max: 100,
                                 ticks: {
-                                    beginAtZero: true
-                                }
+                                    beginAtZero: true,
+                                    callback: function (value) {
+                                        return value + '%';
+                                    },
+                                },
+                            }],
+                            yAxes: [{
+                                stacked: true,
+
                             }]
-                        }
+                        },
+                        plugins: {
+                            datalabels: {
+                                color: 'white',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: function(value, context) {
+                                    return Math.round(value) + '%';
+                                }
+                            },
+                        },
                     }
                 });
             });
+
+            $.get("{{ route('chart-data') }}", function(data) {
+                var ctxpedidosdejaronpedir = document.getElementById('my-chart-dejaronpedir').getContext('2d');
+                var chartpedidosdejaronpedir = new Chart(ctxpedidosdejaronpedir, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels  : data.labels,
+                        datasets: data.datasets
+                    },
+                    options: {
+                        responsive              : true,
+                        maintainAspectRatio     : false,
+                        datasetFill             : false
+                    }
+                });
+            });
+
 
             $('#exampleModalCenter').modal('show');
 
@@ -379,20 +434,20 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(6);//totales porcentajes arriba de metas cobranzas
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
 
-                cargReporteMetasCobranzasGeneral();
+                cargaNueva(8);
+                cargaNueva(9);
 
+                cargReporteMetasCobranzasGeneral();
 
             });
 
             window.cargaNueva = function (entero) {
                 console.log(' ' + entero)
                 var fd = new FormData();
-
-
-
                 //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
                 let valorr=$('#fechametames').val();
-                console.log(valorr)
+                var parts = valorr.split("-");
+                valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
 
                 fd.append('fechametames', valorr);
                 console.log()
@@ -403,6 +458,19 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     contentType: false,
                     method: 'POST',
                     url: "{{ route('dashboard.viewMetaTable') }}",
+                    beforeSend: function() {
+                        $('#contenedor-fullscreen').hide()
+                        $('.spinner').show()
+                        $('#spinner').show()
+                    },
+                    complete: function() {
+                        $('#contenedor-fullscreen').show()
+                        $('.spinner').hide()
+                        $('#spinner').hide()
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Handle the error
+                    },
                     success: function (resultado) {
                         if (entero == 1) {
                             $('#metas_dp').html(resultado);
@@ -419,9 +487,17 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         }else if (entero == 7) {
                             $('#porcentaje_pedidos_metas').html(resultado);
                         }
+                        else if (entero == 8) {/*izquierda*/
+                            $('#grafico_dejaronpedir_left').html(resultado);
+                        }
+                        else if (entero == 9) {/*derecha*/
+                            $('#grafico_dejaronpedir_right').html(resultado);
+                        }
+
                     }
                 })
             }
+
 
 
             window.cargReporteAnalisis = function () {
@@ -473,6 +549,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva(7);//totales porcentajes arriba de metas pedidos
             cargaNueva(4);//fernando
             cargaNueva(5);//paola
+
+            cargaNueva(8);
+            cargaNueva(9);
+
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
@@ -487,6 +567,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
                 cargaNueva(4);
                 cargaNueva(5);
+
+                cargaNueva(8);
+                cargaNueva(9);
+
                 cargReporteMetasCobranzasGeneral();
             }
 

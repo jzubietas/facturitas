@@ -97,6 +97,9 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 case 'ABANDONO RECIENTE':
                     $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO RECIENTE']);
                     break;
+            case 'ACTIVO':
+                $clientes=$clientes->whereIn('clientes.situacion',['ACTIVO']);
+                break;
                 default:break;
             }
 

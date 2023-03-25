@@ -83,11 +83,11 @@ class AnalisisSituacionCliente extends Command
 
                   //contadores
                   $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
-                      ->whereMonth('created_at',$where_mes)->count();
+                      ->whereMonth('created_at',$where_mes)->where('codigo', 'not like', "%-C%")->count();
                   $cont_mes_activo=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
-                      ->whereMonth('created_at',$where_mes)->activo()->count();
+                      ->whereMonth('created_at',$where_mes)->activo()->where('codigo', 'not like', "%-C%")->count();
                   $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
-                      ->whereMonth('created_at',$where_mes)->activo('0')->count();
+                      ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
 
                   $situacion_create=SituacionClientes::create([
                       'cliente_id'=>$cliente->id,
@@ -174,7 +174,7 @@ class AnalisisSituacionCliente extends Command
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'ACTIVO',
+                                          "situacion" => 'RECURRENTE',
                                           "flag_fp" => '1'
                                       ]);
                                   }
@@ -276,11 +276,22 @@ class AnalisisSituacionCliente extends Command
 
                                   break;
                               case 'NUEVO':
-                                  $situacion_create->update([
-                                      "situacion" => 'ACTIVO',
-                                      "flag_fp" => '1'
-                                  ]);
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
+                                  if($situacion_periodo->activos>0)
+                                  {
+                                      $situacion_create->update([
+                                          "situacion" => 'ACTIVO',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }else{
+                                      $situacion_create->update([
+                                          "situacion" => 'RECURRENTE',
+                                          "flag_fp" => '1'
+                                      ]);
+                                  }
                                   break;
                               case 'ABANDONO':
                                   $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
@@ -344,7 +355,7 @@ class AnalisisSituacionCliente extends Command
                                       if ($situacion_antes->activos > 0 )
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'RECURRENTE',
+                                              "situacion" => 'ACTIVO',
                                               "flag_fp" => '1'
                                           ]);
                                       }else{

@@ -339,7 +339,7 @@
                                 limpiarFormSolAnulCompl();
                                 $('#tblListadoAnulaciones').DataTable().ajax.reload();
                             }else {
-                                Swal.fire('Error', 'El pago tiene pagos o adelantos, verifique.', 'warning');
+                                Swal.fire('Error', 'El pedido tiene pagos o adelantos, verifique.', 'warning');
                             }
                         }else {
                             Swal.fire('Error', 'Ya existe un registro con los mismos datos, verifique.', 'warning');
@@ -505,7 +505,7 @@
                                 limpiarFormSolAnulFact();
                                 $('#tblListadoAnulaciones').DataTable().ajax.reload();
                             }else {
-                                Swal.fire('Error', 'El pago tiene pagos o adelantos, verifique.', 'warning');
+                                Swal.fire('Error', 'El pedido tiene pagos o adelantos, verifique.', 'warning');
                             }
                         }else {
                             Swal.fire('Error', 'Ya existe un registro con los mismos datos, verifique.', 'warning');

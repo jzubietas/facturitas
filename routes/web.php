@@ -164,6 +164,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientes.recurrentes', [ClienteController::class, 'indexrecurrente'])->name('clientes.recurrentes');
     Route::get('clientesrecurrentetabla', [ClienteController::class, 'indexrecurrentetabla'])->name('clientesrecurrentetabla');
 
+    Route::get('clientes.activos', [ClienteController::class, 'indexactivo'])->name('clientes.activos');
+    Route::get('clientesactivotabla', [ClienteController::class, 'indexactivotabla'])->name('clientesactivotabla');
+
     Route::get('clientes.nuevos', [ClienteController::class, 'indexnuevo'])->name('clientes.nuevos');
     Route::get('clientesnuevotabla', [ClienteController::class, 'indexnuevotabla'])->name('clientesnuevotabla');
 
