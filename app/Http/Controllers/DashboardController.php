@@ -408,12 +408,46 @@ class DashboardController extends Controller
                 ->count();
 
             //recurrente mes pasado
-            $clientes_situacion_recurrente = SituacionClientes::query()
-                ->join('clientes as c', 'c.id', 'situacion_clientes.cliente_id')
-                ->join('users as u', 'u.id', 'c.user_id')
+            $clientes_situacion_recurrente = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
+                ->join('clientes as c','c.id','situacion_clientes.cliente_id')
+                ->join('users as u','u.id','c.user_id')
                 ->where('u.id', $asesor->id)
-                ->whereIn('situacion_clientes.situacion',['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','ACTIVO'])
-                ->where('situacion_clientes.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
+                ->where([
+                    ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                    ['a.situacion', '=', 'RECUPERADO ABANDONO'],
+                    ['situacion_clientes.periodo', '=', Carbon::now()->clone()->format('Y-m')],
+                    ['a.periodo', '=', Carbon::now()->clone()->subMonth()->format('Y-m')],
+                    ['u.identificador', '<>', '15'],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                    ['a.situacion', '=', 'RECUPERADO RECIENTE'],
+                    ['situacion_clientes.periodo', '=', Carbon::now()->clone()->format('Y-m')],
+                    ['a.periodo', '=', Carbon::now()->clone()->subMonth()->format('Y-m')],
+                    ['u.identificador', '<>', '15'],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                    ['a.situacion', '=', 'NUEVO'],
+                    ['situacion_clientes.periodo', '=', Carbon::now()->clone()->format('Y-m')],
+                    ['a.periodo', '=', Carbon::now()->clone()->subMonth()->format('Y-m')],
+                    ['u.identificador', '<>', '15'],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                    ['a.situacion', '=', 'ACTIVO'],
+                    ['situacion_clientes.periodo', '=', Carbon::now()->clone()->format('Y-m')],
+                    ['a.periodo', '=', Carbon::now()->clone()->subMonth()->format('Y-m')],
+                    ['u.identificador', '<>', '15'],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
                 ->count();
 
             $encargado_asesor = $asesor->supervisor;
