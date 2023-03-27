@@ -288,7 +288,7 @@ class AnalisisSituacionCliente_Individual extends Command
                                     $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(3);
 
                                     $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                                    $this->$situacion_periodo;
+                                    $this->warn($situacion_periodo);
                                     $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
                                     if($situacion_periodo->activos==0)
