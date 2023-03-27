@@ -113,7 +113,7 @@
 
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
-                    <h5 class="card-title text-uppercase">Total de cobranzas:</h5>
+                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
                     <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
                 </div>
             </div>
@@ -181,7 +181,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <br><br>
-            <h1 class="text-center">Dejaron de pedir</h1>
+            <h1 class="text-center">Dejaron de pedir SssS</h1>
         </div>
         <div class="contain-table-dual row" style="width: 100% !important;">
             <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
@@ -771,5 +771,5 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             })
         })
     </script>
-    
+
 @endsection
