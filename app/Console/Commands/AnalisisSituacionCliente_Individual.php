@@ -576,6 +576,9 @@ class AnalisisSituacionCliente_Individual extends Command
                 }
 
             }
+
+            $final_cliente=Cliente::where('id',$cliente->id)->first();
+            $this->info("situacion final es ".$final_cliente->situacion);
             $progress->advance();
         }
 
