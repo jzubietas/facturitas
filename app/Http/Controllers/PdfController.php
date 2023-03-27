@@ -348,13 +348,13 @@ class PdfController extends Controller
 
         foreach ($situaciones_clientes as $situacion_cliente_2)
         {
-            if($situacion_cliente->situacion=='ACTIVO')
+            if($situacion_cliente_2->situacion=='ACTIVO')
             {
                 $html[] = '<tr>';
                 $html[] = '<td style="width:20%;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-                    $situacion_cliente->situacion .
+                    $situacion_cliente_2->situacion .
                     '</span>';
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
