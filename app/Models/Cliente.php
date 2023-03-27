@@ -509,7 +509,7 @@ class Cliente extends Model
                               'situacion'=>'NULO'
                           ]);
                       }
-
+ 
                       $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 
                       Cliente::where('id',$cliente->id)->update([

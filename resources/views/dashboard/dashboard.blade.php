@@ -91,7 +91,7 @@
     <style>
         .content-header {
             background-color: white !important;
-        }
+        } 
 
         .content {
             background-color: white !important;
