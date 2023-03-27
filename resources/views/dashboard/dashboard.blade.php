@@ -91,7 +91,7 @@
     <style>
         .content-header {
             background-color: white !important;
-        } 
+        }
 
         .content {
             background-color: white !important;
@@ -108,14 +108,14 @@
     <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-@endsection
-@push('js')
+
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
 
         })
     </script>
+
     @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
         <script type="text/javascript"
@@ -135,6 +135,7 @@
             });
         </script>
     @endif
+
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -188,6 +189,8 @@
 
         });
     </script>
-@endpush
+
+@endsection
+
 
 
