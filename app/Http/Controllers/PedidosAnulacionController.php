@@ -315,7 +315,6 @@ class PedidosAnulacionController extends Controller
         $listado_codigo_pedido = Pedido::query()
             ->join('detalle_pedidos as dp', 'dp.codigo', 'pedidos.codigo')
             ->join('users as u', 'u.id', 'pedidos.user_id')
-            ->where('u.rol', 'Asesor')
             ->where('pedidos.codigo',  trim($request->codigo))
             ->select([
                 'pedidos.id',
@@ -336,7 +335,7 @@ class PedidosAnulacionController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $listado_codigo_pedido = $listado_codigo_pedido->WhereIn('u.identificador', $usersasesores);
+            $listado_codigo_pedido = $listado_codigo_pedido->where('u.rol', 'Asesor')->WhereIn('u.identificador', $usersasesores);
         }elseif (Auth::user()->rol == User::ROL_ENCARGADO){
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -345,7 +344,7 @@ class PedidosAnulacionController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            $listado_codigo_pedido = $listado_codigo_pedido->WhereIn('u.identificador', $usersasesores);
+            $listado_codigo_pedido = $listado_codigo_pedido->where('u.rol', 'Asesor')->WhereIn('u.identificador', $usersasesores);
         }
         $contadorcodigo=0;
         if ($request->tipo=="F"){
