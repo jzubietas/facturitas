@@ -98,7 +98,7 @@
 <hr>
 {{-- FULLSCREEN --}}
 
-<div id="spinner" class="position-relative d-flex justify-content-center">
+<div id="spinner" class="d-none"><!--position-relative d-flex justify-content-center -->
 
 
     <div class="position-relative top-50 start-50 translate-middle">
@@ -569,7 +569,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     contentType: false,
                     method: 'POST',
                     url: "{{ route('dashboard.viewMetaTable') }}",
-                    beforeSend: function() {
+                    /*beforeSend: function() {
                         $('#contenedor-fullscreen').hide()
                         $('.spinner').show()
                         $('#spinner').show()
@@ -578,7 +578,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         $('#contenedor-fullscreen').show()
                         $('.spinner').hide()
                         $('#spinner').hide()
-                    },
+                    },*/
                     error: function(jqXHR, textStatus, errorThrown) {
                         // Handle the error
                     },
