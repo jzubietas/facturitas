@@ -108,24 +108,6 @@
     <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        (function () {
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-
-
-        })()
-    </script>
-
-    <script>
-
-    </script>
 @endsection
 @push('js')
     <script>
@@ -170,7 +152,7 @@
                 $("#input_search_cliente").val('');
             })
 
-            $("#buttom_search_cliente").click(function () {
+            $("#buttom_search_cliente").click(function () { console.log('U- buttom_search_cliente');
                 var tipo = $("#input_search_type").val()
 
                 if (!document.getElementById("input_search_cliente").value) {
