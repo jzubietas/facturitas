@@ -153,7 +153,8 @@
                 $("#input_search_cliente").val('');
             })
 
-            $("#buttom_search_cliente").click(function () { console.log('U- buttom_search_cliente');
+            $("#buttom_search_cliente").click(function () {
+                console.log('U- buttom_search_cliente');
                 var tipo = $("#input_search_type").val()
 
                 if (!document.getElementById("input_search_cliente").value) {
