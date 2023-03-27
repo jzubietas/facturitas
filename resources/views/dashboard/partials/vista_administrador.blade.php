@@ -114,6 +114,7 @@
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
                     <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
+                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
                     <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
                 </div>
             </div>
@@ -181,7 +182,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <br><br>
-            <h1 class="text-center">Dejaron de pedir SssS</h1>
+            <h1 class="text-center">Dejaron de pedir <i class="fas fa-exclamation-circle"></i> </h1>
         </div>
         <div class="contain-table-dual row" style="width: 100% !important;">
             <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
@@ -350,7 +351,28 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         </div>
 
                     </div>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                        </div>
 
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
@@ -378,6 +400,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(this).text($(this).attr("data-progress") + "%");
         });
     </script>
+
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
 
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
@@ -771,5 +796,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             })
         })
     </script>
+
 
 @endsection
