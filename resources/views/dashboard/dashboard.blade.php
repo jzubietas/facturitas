@@ -38,6 +38,7 @@
 
     </style>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
 @endpush
 @section('content_header')
     <div><h1>Dashboard</h1>
@@ -108,21 +109,20 @@
     <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 @endsection
 @push('js')
     <script>
-        $(function () {
+        $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip()
 
         })
     </script>
     @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-        <script type="text/javascript"
-                src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
         <script>
-            $(function () {
+            $(document).ready(function () {
 
                 $('#datepickerDashborad').change(function (e) {
                     const value = e.target.value;
