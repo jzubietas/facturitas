@@ -188,15 +188,15 @@ class AnalisisSituacionCliente_Individual extends Command
                                     $situacion_antes_3=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes_3->format('Y-m'))->first();
 
                                     //marzo estoy sin pedidos totales
-                                    if($situacion_periodo==0)
+                                    if($situacion_periodo->activos==0)
                                     {
-                                        if($situacion_antes==0)
+                                        if($situacion_antes->activos==0)
                                         {
                                             //es febrero
-                                            if($situacion_antes_2==0)
+                                            if($situacion_antes_2->activos==0)
                                             {
                                                 //es enero
-                                                if($situacion_antes_3==0)
+                                                if($situacion_antes_3->activos==0)
                                                 {
                                                     // es diciembre
                                                     //a abandono
@@ -204,20 +204,20 @@ class AnalisisSituacionCliente_Individual extends Command
                                                         "situacion" => 'ABANDONO',"flag_fp" => '1'
                                                     ]);
 
-                                                }else if($situacion_antes_3>0)
+                                                }else if($situacion_antes_3->activos>0)
                                                 {
                                                     //a abandono reciente
                                                     $situacion_create->update([
                                                         "situacion" => 'ABANDONO RECIENTE',"flag_fp" => '1'
                                                     ]);
                                                 }
-                                            }else if($situacion_antes_2>0)
+                                            }else if($situacion_antes_2->activos>0)
                                             {
                                                 $situacion_create->update([
                                                     "situacion" => 'ABANDONO RECIENTE',"flag_fp" => '1'
                                                 ]);
                                             }
-                                        }else if($situacion_antes>0)
+                                        }else if($situacion_antes->activos>0)
                                         {
                                             $situacion_create->update([
                                                 "situacion" => 'RECURRENTE',"flag_fp" => '1'
