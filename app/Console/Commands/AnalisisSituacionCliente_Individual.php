@@ -479,7 +479,7 @@ class AnalisisSituacionCliente_Individual extends Command
                         $cont_ped_activo=Pedido::where('cliente_id',$cliente->id)->activo()->count();
                         $cont_ped_nulo=Pedido::where('cliente_id',$cliente->id)->activo(0)->count();
 
-                        if( ($situacion_final!='BASE FRIA') && ($cont_ped_activo==0) && ($cont_ped_nulo>0) )
+                        /*if( ($situacion_final!='BASE FRIA') && ($cont_ped_activo==0) && ($cont_ped_nulo>0) )
                         {
                             $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
                                 ->where('periodo',$mes_actual->format('Y-m'))
@@ -487,7 +487,7 @@ class AnalisisSituacionCliente_Individual extends Command
                             $situacion_cambia->update([
                                 'situacion'=>'NULO'
                             ]);
-                        }
+                        }*/
 
                         $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 
