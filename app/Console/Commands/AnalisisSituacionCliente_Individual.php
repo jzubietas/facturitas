@@ -281,15 +281,14 @@ class AnalisisSituacionCliente_Individual extends Command
                             switch($situacion_antes->situacion)
                             {
                                 case 'BASE FRIA':
-                                    /*$situacion_create->update([
-                                        "situacion" => 'NUEVO',
-                                        "flag_fp" => '1'
-                                    ]);*/
-
                                     $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+                                    $mes_antes_2 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(2);
+                                    $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(3);
+
                                     $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                     $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
-
+                                    
                                     if($situacion_periodo->activos==0)
                                     {
                                         $situacion_create->update([
