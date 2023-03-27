@@ -373,7 +373,7 @@ class PdfController extends Controller
                                                                 ' . $porcentaje . '% </b>
                                                                - ' . $activos_cuenta . ' /  ' . ($activos_cuenta+$recurrentes_cuenta) . '
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
-                                                                   ' . $diferenciameta . '
+                                                                   
                                                                   </p>
                                                     </span>
                                              </div>
