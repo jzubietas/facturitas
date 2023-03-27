@@ -87,11 +87,11 @@
 
 @stop
 
-@section('css')
+@push('css')
     <style>
         .content-header {
             background-color: white !important;
-        }
+        } 
 
         .content {
             background-color: white !important;
@@ -101,7 +101,7 @@
             margin: 40px auto;
         }
     </style>
-@stop
+@endpush
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -205,7 +205,7 @@
             })
 
         });
-    </script> 
+    </script>
 @endpush
 
 
