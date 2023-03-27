@@ -112,7 +112,7 @@ class Cliente extends Model
 
           //if($cliente->id==1739)
           {
-
+              //$this->warn($cliente->id);
               $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
 
               $periodo_inicial=Carbon::parse($fp->created_at);
@@ -131,6 +131,8 @@ class Cliente extends Model
                       ->whereMonth('created_at',$where_mes)->activo()->where('codigo', 'not like', "%-C%")->count();
                   $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                       ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
+
+                  //$this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
 
                   $situacion_create=SituacionClientes::create([
                       'cliente_id'=>$cliente->id,
@@ -209,6 +211,23 @@ class Cliente extends Model
                                               "situacion" => 'NULO',"flag_fp" => '1'
                                           ]);
                                       }
+
+                                  }
+                                  break;
+                              case 'NULO':
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+                                  if($situacion_periodo->activos>0)
+                                  {
+                                      $situacion_create->update([
+                                          "situacion" => 'NUEVO',"flag_fp" => '1'//
+                                      ]);
+                                  }else{
+                                      $situacion_create->update([
+                                          "situacion" => 'NULO',"flag_fp" => '1'
+                                      ]);
 
                                   }
                                   break;
@@ -375,6 +394,23 @@ class Cliente extends Model
 
                                   }
                                   break;
+                              case 'NULO':
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                  $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+
+                                  if($situacion_periodo->activos>0)
+                                  {
+                                      $situacion_create->update([
+                                          "situacion" => 'NUEVO',"flag_fp" => '1'//
+                                      ]);
+                                  }else{
+                                      $situacion_create->update([
+                                          "situacion" => 'NULO',"flag_fp" => '1'
+                                      ]);
+                                  }
+                                  break;
                               case 'ABANDONO':
                                   $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
@@ -500,7 +536,7 @@ class Cliente extends Model
                       $cont_ped_activo=Pedido::where('cliente_id',$cliente->id)->activo()->count();
                       $cont_ped_nulo=Pedido::where('cliente_id',$cliente->id)->activo(0)->count();
 
-                      if( ($situacion_final!='BASE FRIA') && ($cont_ped_activo==0) && ($cont_ped_nulo>0) )
+                      /*if( ($situacion_final!='BASE FRIA') && ($cont_ped_activo==0) && ($cont_ped_nulo>0) )
                       {
                           $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
                               ->where('periodo',$mes_actual->format('Y-m'))
@@ -508,8 +544,8 @@ class Cliente extends Model
                           $situacion_cambia->update([
                               'situacion'=>'NULO'
                           ]);
-                      }
- 
+                      }*/
+
                       $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 
                       Cliente::where('id',$cliente->id)->update([
@@ -521,7 +557,7 @@ class Cliente extends Model
               }
 
           }
-
+          //$progress->advance();
       }
 
     return null;

@@ -94,6 +94,8 @@ class AnalisisSituacionCliente_Individual extends Command
                     $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                         ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
 
+                    $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
+
                     $situacion_create=SituacionClientes::create([
                         'cliente_id'=>$cliente->id,
                         'situacion'=>'',
@@ -171,6 +173,23 @@ class AnalisisSituacionCliente_Individual extends Command
                                                 "situacion" => 'NULO',"flag_fp" => '1'
                                             ]);
                                         }
+
+                                    }
+                                    break;
+                                case 'NULO':
+                                    $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                    $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                    $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+                                    if($situacion_periodo->activos>0)
+                                    {
+                                        $situacion_create->update([
+                                                "situacion" => 'NUEVO',"flag_fp" => '1'//
+                                            ]);
+                                    }else{
+                                        $situacion_create->update([
+                                            "situacion" => 'NULO',"flag_fp" => '1'
+                                        ]);
 
                                     }
                                     break;
@@ -337,6 +356,23 @@ class AnalisisSituacionCliente_Individual extends Command
 
                                     }
                                     break;
+                                case 'NULO':
+                                    $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                    $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
+                                    $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+
+
+                                    if($situacion_periodo->activos>0)
+                                    {
+                                        $situacion_create->update([
+                                            "situacion" => 'NUEVO',"flag_fp" => '1'//
+                                        ]);
+                                    }else{
+                                        $situacion_create->update([
+                                            "situacion" => 'NULO',"flag_fp" => '1'
+                                        ]);
+                                    }
+                                    break;
                                 case 'ABANDONO':
                                     $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
                                     $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
@@ -462,7 +498,7 @@ class AnalisisSituacionCliente_Individual extends Command
                         $cont_ped_activo=Pedido::where('cliente_id',$cliente->id)->activo()->count();
                         $cont_ped_nulo=Pedido::where('cliente_id',$cliente->id)->activo(0)->count();
 
-                        if( ($situacion_final!='BASE FRIA') && ($cont_ped_activo==0) && ($cont_ped_nulo>0) )
+                        /*if( ($situacion_final!='BASE FRIA') && ($cont_ped_activo==0) && ($cont_ped_nulo>0) )
                         {
                             $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
                                 ->where('periodo',$mes_actual->format('Y-m'))
@@ -470,7 +506,7 @@ class AnalisisSituacionCliente_Individual extends Command
                             $situacion_cambia->update([
                                 'situacion'=>'NULO'
                             ]);
-                        }
+                        }*/
 
                         $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 
