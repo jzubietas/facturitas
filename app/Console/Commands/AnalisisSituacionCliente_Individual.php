@@ -94,7 +94,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                         ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
 
-                    $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
+                    //$this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
 
                     $situacion_create=SituacionClientes::create([
                         'cliente_id'=>$cliente->id,
@@ -282,13 +282,13 @@ class AnalisisSituacionCliente_Individual extends Command
                             {
                                 case 'BASE FRIA':
                                     $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                                    $this->warn($mes_actual);
+                                    //$this->warn($mes_actual);
                                     $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
                                     $mes_antes_2 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(2);
                                     $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(3);
 
                                     $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                                    $this->warn($situacion_periodo);
+                                    //$this->warn($situacion_periodo);
                                     $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
                                     if($situacion_periodo->activos==0)
