@@ -290,37 +290,20 @@ class AnalisisSituacionCliente_Individual extends Command
                                     $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                     $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
-                                    if($situacion_antes->flag_fp==0)
+                                    if($situacion_periodo->anulados==0)
                                     {
-                                        if($situacion_periodo->activos>0)
-                                        {
-                                            $situacion_create->update([
-                                                "situacion" => 'NUEVO',
-                                                "flag_fp" => '1'
-                                            ]);
-                                        }else{
-                                            $situacion_create->update([
-                                                "situacion" => 'NUEVO',
-                                                "flag_fp" => '0'
-                                            ]);
-                                        }
-
-                                    }
-                                    else if($situacion_antes->flag_fp==1)
+                                        $situacion_create->update([
+                                            "situacion" => 'NUEVO',
+                                            "flag_fp" => '1'
+                                        ]);
+                                    }else if($situacion_periodo->anulados>0)
                                     {
-                                        if($situacion_periodo->activos>0)
-                                        {
-                                            $situacion_create->update([
-                                                "situacion" => 'NUEVO',
-                                                "flag_fp" => '1'
-                                            ]);
-                                        }else{
-                                            $situacion_create->update([
-                                                "situacion" => 'NUEVO',
-                                                "flag_fp" => '0'
-                                            ]);
-                                        }
+                                        $situacion_create->update([
+                                            "situacion" => 'NULO',
+                                            "flag_fp" => '1'
+                                        ]);
                                     }
+                                    
                                     break;
                                 case 'RECUPERADO RECIENTE':
                                     $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
