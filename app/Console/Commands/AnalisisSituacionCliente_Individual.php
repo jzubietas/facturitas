@@ -426,7 +426,7 @@ class AnalisisSituacionCliente_Individual extends Command
                                         }
                                     }else{
                                         $situacion_create->update([
-                                            "situacion" => 'ACTIVO',"flag_fp" => '1'
+                                            "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
                                         ]);
                                     }
                                     break;
