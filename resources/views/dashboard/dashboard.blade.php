@@ -87,7 +87,7 @@
 
 @stop
 
-@section('css')
+@push('css')
     <style>
         .content-header {
             background-color: white !important;
@@ -101,7 +101,7 @@
             margin: 40px auto;
         }
     </style>
-@stop
+@endpush
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -172,7 +172,7 @@
 
             $("#buttom_search_cliente").click(function () {
                 var tipo = $("#input_search_type").val()
- 
+
                 if (!document.getElementById("input_search_cliente").value) {
                     Swal.fire(
                         'El campo de texto del buscador esta vacio, ingrese valores para poder buscar',
