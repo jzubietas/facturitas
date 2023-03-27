@@ -98,7 +98,7 @@
 <hr>
 {{-- FULLSCREEN --}}
 
-<div id="spinner" class="position-relative d-flex justify-content-center d-none">
+<div id="spinner" class="d-none"><!--position-relative d-flex justify-content-center -->
 
 
     <div class="position-relative top-50 start-50 translate-middle">
