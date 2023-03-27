@@ -108,14 +108,14 @@
     <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+@endsection
+@push('js')
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
 
         })
     </script>
-
     @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
         <script type="text/javascript"
@@ -135,7 +135,6 @@
             });
         </script>
     @endif
-
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -153,8 +152,7 @@
                 $("#input_search_cliente").val('');
             })
 
-            $("#buttom_search_cliente").click(function () {
-                console.log('U- buttom_search_cliente');
+            $("#buttom_search_cliente").click(function () { console.log('U- buttom_search_cliente');
                 var tipo = $("#input_search_type").val()
 
                 if (!document.getElementById("input_search_cliente").value) {
@@ -190,8 +188,6 @@
 
         });
     </script>
-
-@endsection
-
+@endpush
 
 
