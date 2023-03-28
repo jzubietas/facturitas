@@ -291,8 +291,8 @@ class DashboardController extends Controller
                     'progress_pedidos' => 0,
                     'total_pedido' => 0,
                     'pedidos_dia' => 0,
-                    'clientes_situacion_activo' => 0,
-                    'clientes_situacion_recurrente' => 0,
+                    'all_situacion_activo' => 0,
+                    'all_situacion_recurrente' => 0,
                 ];
         }
 
@@ -449,8 +449,8 @@ class DashboardController extends Controller
             if (array_key_exists($encargado_asesor, $count_asesor)) {
                 if ($encargado_asesor == 46) {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
-                    $count_asesor[$encargado_asesor]['clientes_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['clientes_situacion_activo'];
-                    $count_asesor[$encargado_asesor]['clientes_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['clientes_situacion_recurrente'];
+                    $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
+                    $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -461,8 +461,8 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
                 } else if ($encargado_asesor == 24) {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
-                    $count_asesor[$encargado_asesor]['clientes_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['clientes_situacion_recurrente'];
-                    $count_asesor[$encargado_asesor]['clientes_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['clientes_situacion_activo'];
+                    $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
+                    $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -473,8 +473,8 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
                 } else {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = 0;
-                    $count_asesor[$encargado_asesor]['clientes_situacion_recurrente'] = 0;
-                    $count_asesor[$encargado_asesor]['clientes_situacion_activo'] = 0;
+                    $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = 0;
+                    $count_asesor[$encargado_asesor]['all_situacion_activo'] = 0;
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -1888,6 +1888,337 @@ class DashboardController extends Controller
 
             $html .= '</table>';
         }
+
+        else if ($request->ii == 13)
+        {
+            $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
+            $html .= '<tbody>
+                    <tr class="responsive-table">
+                        <th class="col-lg-4 col-md-12 col-sm-12">';
+            $html .= '<div class="position-relative rounded">
+                <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
+
+            if ($object_totales['all_situacion_recurrente'] == 0) {
+                $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                 style="width: ' . round(($object_totales['all_situacion_activo'] / $object_totales['all_situacion_recurrente']) * 100, 2) . '%"
+                 aria-valuenow="' . (round(0, 2)) . '"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+            } else {
+
+                if($object_totales['all_situacion_activo']>0)
+                {
+                    $round=round( ( ($object_totales['all_situacion_activo'])/$object_totales['all_situacion_recurrente'] )*100 ,2);
+                }else{
+                    $round=0.00;
+                    //cuando pedidos es 0
+                }
+
+                if(0<$round && $round<=40)
+                {
+                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                         style="width: ' . $round . '%"
+                         aria-valuenow="' . $round . '"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>';
+                }
+                else if(40<$round && $round<=50)
+                {
+                    $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
+                           style="height: 30px !important;width: ' . $round . '%"
+                           aria-valuenow="70"
+                           aria-valuemin
+                           aria-valuemax="100"></div>
+                          <div class="progress-bar h-60-res" role="progressbar"
+                               style="width: ' . ($round - 40) . '%;
+                           background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
+                               aria-valuenow="' . ($round - 40) . '"
+                               aria-valuemin="0"
+                               aria-valuemax="100"></div>';
+                }
+                else if(50<$round && $round<=70)
+                {
+                    $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
+                 style="height: 30px !important;width: ' . ($round) . '%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+                }
+                else if(70<$round && $round<=80)
+                {
+                    $html .= '<div class="progress-bar bg-warning rounded height-bar-progress" role="progressbar"
+                             style="height: 30px !important;width: ' . ($round) . '%"
+                             aria-valuenow="70"
+                             aria-valuemin="0"
+                             aria-valuemax="100"></div>
+                        <div class="progress-bar rounded height-bar-progress" role="progressbar"
+                             style="height: 30px !important;width: ' . ($round) . '%;
+                         background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
+                             aria-valuenow="' . ($round) . '"
+                             aria-valuemin="0"
+                             aria-valuemax="100"></div>';
+                }
+                else if(80<$round && $round<=100)
+                {
+                    $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
+                         style="height: 30px !important;width: ' . $round . '%;background: #03af03;"
+                         aria-valuenow="' . $round . '"
+                         aria-valuemin="0" aria-valuemax="100"></div>';
+                }
+                else
+                {
+                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                         style="width: ' . ($round) . '%"
+                         aria-valuenow="' . ($round) . '"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>';
+                }
+
+            }
+
+            if ($object_totales['all_situacion_recurrente'] == 0) {
+                $html .= '</div>
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
+                style="top: 3px !important;height: 30px !important;font-size: 12px;">
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
+             TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
+                    $object_totales['all_situacion_activo'] . '/' . $object_totales['all_situacion_recurrente'] . '</span>
+    </div>';
+            } else {
+                $html .= '</div>
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
+                style="top: 3px !important;height: 30px !important;font-size: 12px;">
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
+             TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($object_totales['all_situacion_activo'] / $object_totales['all_situacion_recurrente']) * 100, 2) . '%</b> - '
+                    . $object_totales['all_situacion_activo'] . '/' . $object_totales['all_situacion_recurrente'] . '</span>
+    </div>';
+            }
+
+            $html .= '</th>
+              </tr>
+              </tbody>';
+            $html .= '</table>';
+        }
+        else if ($request->ii == 14)
+        {
+            $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
+            $html .= '<tbody>
+                    <tr class="responsive-table">
+                        <th class="col-lg-4 col-md-12 col-sm-12">';
+            $html .= '<div class="position-relative rounded">
+                <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
+
+            if ($count_asesor[46]['all_situacion_recurrente'] == 0) {
+                $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                 style="width: ' . round(($count_asesor[46]['all_situacion_activo'] / $count_asesor[46]['all_situacion_recurrente']) * 100, 2) . '%"
+                 aria-valuenow="' . (round(0, 2)) . '"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+            } else {
+
+                if($count_asesor[46]['all_situacion_activo']>0)
+                {
+                    $round=round( ( ($count_asesor[46]['all_situacion_activo'])/$count_asesor[46]['all_situacion_recurrente'] )*100 ,2);
+                }else{
+                    $round=0.00;
+                    //cuando pedidos es 0
+                }
+
+                if(0<$round && $round<=40)
+                {
+                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                         style="width: ' . $round . '%"
+                         aria-valuenow="' . $round . '"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>';
+                }
+                else if(40<$round && $round<=50)
+                {
+                    $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
+                           style="height: 30px !important;width: ' . $round . '%"
+                           aria-valuenow="70"
+                           aria-valuemin
+                           aria-valuemax="100"></div>
+                          <div class="progress-bar h-60-res" role="progressbar"
+                               style="width: ' . ($round - 40) . '%;
+                           background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
+                               aria-valuenow="' . ($round - 40) . '"
+                               aria-valuemin="0"
+                               aria-valuemax="100"></div>';
+                }
+                else if(50<$round && $round<=70)
+                {
+                    $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
+                 style="height: 30px !important;width: ' . ($round) . '%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+                }
+                else if(70<$round && $round<=80)
+                {
+                    $html .= '<div class="progress-bar bg-warning rounded height-bar-progress" role="progressbar"
+                             style="height: 30px !important;width: ' . ($round) . '%"
+                             aria-valuenow="70"
+                             aria-valuemin="0"
+                             aria-valuemax="100"></div>
+                        <div class="progress-bar rounded height-bar-progress" role="progressbar"
+                             style="height: 30px !important;width: ' . ($round) . '%;
+                         background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
+                             aria-valuenow="' . ($round) . '"
+                             aria-valuemin="0"
+                             aria-valuemax="100"></div>';
+                }
+                else if(80<$round && $round<=100)
+                {
+                    $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
+                         style="height: 30px !important;width: ' . $round . '%;background: #03af03;"
+                         aria-valuenow="' . $round . '"
+                         aria-valuemin="0" aria-valuemax="100"></div>';
+                }
+                else
+                {
+                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                         style="width: ' . ($round) . '%"
+                         aria-valuenow="' . ($round) . '"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>';
+                }
+
+            }
+
+            if ($count_asesor[46]['all_situacion_recurrente'] == 0) {
+                $html .= '</div>
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
+                style="top: 3px !important;height: 30px !important;font-size: 12px;">
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
+             LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
+                    $count_asesor[46]['all_situacion_activo'] . '/' . $count_asesor[46]['all_situacion_recurrente'] . '</span>
+    </div>';
+            } else {
+                $html .= '</div>
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
+                style="top: 3px !important;height: 30px !important;font-size: 12px;">
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
+             LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[46]['all_situacion_activo'] / $count_asesor[46]['all_situacion_recurrente']) * 100, 2) . '%</b> - '
+                    . $count_asesor[46]['all_situacion_activo'] . '/' . $count_asesor[46]['all_situacion_recurrente'] . '</span>
+    </div>';
+            }
+
+            $html .= '</th>
+              </tr>
+              </tbody>';
+            $html .= '</table>';
+        } /*PAOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----- 24*/
+        else if ($request->ii == 15)
+        {
+            $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
+            $html .= '<tbody>
+                    <tr class="responsive-table">
+                        <th class="col-lg-4 col-md-12 col-sm-12">';
+            $html .= '<div class="position-relative rounded">
+                <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
+
+            if ($count_asesor[24]['all_situacion_recurrente'] == 0) {
+                $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                 style="width: ' . round(($count_asesor[24]['all_situacion_activo'] / $count_asesor[24]['all_situacion_recurrente']) * 100, 2) . '%"
+                 aria-valuenow="' . (round(0, 2)) . '"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+            } else {
+
+                if($count_asesor[24]['all_situacion_activo']>0)
+                {
+                    $round=round( ( ($count_asesor[24]['all_situacion_activo'])/$count_asesor[24]['all_situacion_recurrente'] )*100 ,2);
+                }else{
+                    $round=0.00;
+                    //cuando pedidos es 0
+                }
+
+                if(0<$round && $round<=40)
+                {
+                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                         style="width: ' . $round . '%"
+                         aria-valuenow="' . $round . '"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>';
+                }
+                else if(40<$round && $round<=50)
+                {
+                    $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
+                           style="height: 30px !important;width: ' . $round . '%"
+                           aria-valuenow="70"
+                           aria-valuemin
+                           aria-valuemax="100"></div>
+                          <div class="progress-bar h-60-res" role="progressbar"
+                               style="width: ' . ($round - 40) . '%;
+                           background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
+                               aria-valuenow="' . ($round - 40) . '"
+                               aria-valuemin="0"
+                               aria-valuemax="100"></div>';
+                }
+                else if(50<$round && $round<=70)
+                {
+                    $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
+                 style="height: 30px !important;width: ' . ($round) . '%"
+                 aria-valuenow="70"
+                 aria-valuemin="0"
+                 aria-valuemax="100"></div>';
+                }
+                else if(70<$round && $round<=80)
+                {
+                    $html .= '<div class="progress-bar bg-warning rounded height-bar-progress" role="progressbar"
+                             style="height: 30px !important;width: ' . ($round) . '%"
+                             aria-valuenow="70"
+                             aria-valuemin="0"
+                             aria-valuemax="100"></div>
+                        <div class="progress-bar rounded height-bar-progress" role="progressbar"
+                             style="height: 30px !important;width: ' . ($round) . '%;
+                         background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
+                             aria-valuenow="' . ($round) . '"
+                             aria-valuemin="0"
+                             aria-valuemax="100"></div>';
+                }
+                else if(80<$round && $round<=100)
+                {
+                    $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
+                         style="height: 30px !important;width: ' . $round . '%;background: #03af03;"
+                         aria-valuenow="' . $round . '"
+                         aria-valuemin="0" aria-valuemax="100"></div>';
+                }
+                else
+                {
+                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                         style="width: ' . ($round) . '%"
+                         aria-valuenow="' . ($round) . '"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>';
+                }
+
+            }
+
+            if ($count_asesor[24]['all_situacion_recurrente'] == 0) {
+                $html .= '</div>
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
+                style="top: 3px !important;height: 30px !important;font-size: 12px;">
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
+             PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
+                    $count_asesor[24]['all_situacion_activo'] . '/' . $count_asesor[24]['all_situacion_recurrente'] . '</span>
+    </div>';
+            } else {
+                $html .= '</div>
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
+                style="top: 3px !important;height: 30px !important;font-size: 12px;">
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
+             PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[24]['all_situacion_activo'] / $count_asesor[24]['all_situacion_recurrente']) * 100, 2) . '%</b> - '
+                    . $count_asesor[24]['all_situacion_activo'] . '/' . $count_asesor[24]['all_situacion_recurrente'] . '</span>
+    </div>';
+            }
+
+            $html .= '</th>
+              </tr>
+              </tbody>';
+            $html .= '</table>';
+        } /*PAOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----- 24*/
 
         return $html;
     }
