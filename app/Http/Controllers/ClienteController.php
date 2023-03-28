@@ -1500,7 +1500,6 @@ class ClienteController extends Controller
         return view('clientes.recuperadosRecientes', compact('superasesor', 'users', 'dateM', 'dateY', 'mirol', 'anios'));
     }
 
-
     public function indexnuevotabla(Request $request)
     {
 
