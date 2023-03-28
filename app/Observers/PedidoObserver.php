@@ -19,9 +19,8 @@ class PedidoObserver
      */
     public function created(Pedido $pedido)
     {
-        //\Log::info("PostCreatePedido -> ".$pedido->cliente_id);
-        /*PostCreatePedido::dispatchSync($pedido->cliente_id);*/
-        //PostUpdateSituacion::dispatchSync($pedido->cliente_id);
+        \Log::info("PostCreatePedido -> ".$pedido->cliente_id);
+        PostUpdateSituacion::dispatchSync($pedido->cliente_id);
     }
 
     /**
@@ -32,10 +31,8 @@ class PedidoObserver
      */
     public function updated(Pedido $pedido)
     {
-      //PostUpdateSituacion::dispatchSync($pedido->cliente_id);
-        //
-      //\Log::info("PostCreatePedido -> ".$pedido->codigo);
-      //PostUpdatePedido::dispatchSync($pedido->codigo);
+      \Log::info("PostCreatePedido -> ".$pedido->codigo);
+        PostUpdateSituacion::dispatchSync($pedido->cliente_id);
     }
 
     /**
@@ -46,7 +43,7 @@ class PedidoObserver
      */
     public function deleted(Pedido $pedido)
     {
-      //PostUpdateSituacion::dispatchSync($pedido->cliente_id);
+        PostUpdateSituacion::dispatchSync($pedido->cliente_id);
         //
     }
 
@@ -58,8 +55,7 @@ class PedidoObserver
      */
     public function restored(Pedido $pedido)
     {
-      //PostUpdateSituacion::dispatchSync($pedido->cliente_id);
-        //
+        PostUpdateSituacion::dispatchSync($pedido->cliente_id);
     }
 
     /**
@@ -70,7 +66,6 @@ class PedidoObserver
      */
     public function forceDeleted(Pedido $pedido)
     {
-      //PostUpdateSituacion::dispatchSync($pedido->cliente_id);
-        //
+        PostUpdateSituacion::dispatchSync($pedido->cliente_id);
     }
 }
