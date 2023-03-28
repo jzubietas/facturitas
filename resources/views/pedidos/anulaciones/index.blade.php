@@ -481,14 +481,14 @@
                     $(".btnEnviarFactura").attr('disabled', false);
                     return false;
                 }
-                if (txtMotivoFactura.length >250) {
+                /*if (txtMotivoFactura.length >250) {
                     Swal.fire('Error','El campo sustento no debe superar los 250 caracteres.','warning'
                     ).then(function () {
                         $("#txtMotivoFactura").focus()
                     });
                     $(".btnEnviarFactura").attr('disabled', false);
                     return false;
-                }
+                }*/
                 var datas = new FormData(document.getElementById("form-agregaranulacion-f"));
                 /*console.log('FActuras',datas); return false;*/
                 $.ajax({
