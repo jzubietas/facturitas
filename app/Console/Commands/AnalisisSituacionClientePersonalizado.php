@@ -59,7 +59,7 @@ class AnalisisSituacionClientePersonalizado extends Command
 
 
     $clientes=Cliente::whereIn('tipo',['0','1'])
-      ->whereNull('situacion')
+      ->where('situacion','=','NULO')
       ->orderBy('id','asc')->get();
 
     $progress = $this->output->createProgressBar($clientes->count());
