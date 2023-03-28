@@ -3962,7 +3962,7 @@ class DashboardController extends Controller
                     $porcentaje=0.00;
                     $diferencia=0;
                 }else{
-                    $porcentaje=round(($data["all_situacion_activo"] / ($data["all_situacion_recurrente"]+$data["all_situacion_recurrente"]) )*100,2);
+                    $porcentaje=round(($data["all_situacion_activo"] / ($data["all_situacion_recurrente"]+$data["all_situacion_activo"]) )*100,2);
                     $diferencia= ($data["all_situacion_activo"]+$data["all_situacion_recurrente"])-$data["all_situacion_activo"];
                 }
 
