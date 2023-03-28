@@ -266,6 +266,9 @@ class PdfController extends Controller
 
         foreach ($situaciones_clientes as $situacion_cliente)
         {
+            if($situacion_cliente_2->situacion=='ACTIVO' || $situacion_cliente_2->situacion=='RECURRENTE')
+                continue;
+
             $html[] = '<tr>';
             $html[] = '<td style="width:20%;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
