@@ -760,7 +760,8 @@ class DashboardController extends Controller
 
         /*TOTAL*/
 
-        if ($request->ii == 3) {
+        if ($request->ii == 3)
+        {
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
             $html .= '<tbody>
               <tr class="responsive-table">
@@ -1894,6 +1895,13 @@ class DashboardController extends Controller
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
             $html .= '<tbody>
                     <tr class="responsive-table">
+                    <th class="col-lg-4 col-md-12 col-sm-12">';
+
+            $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['all_situacion_activo'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
+                    style="height: 30px !important;display:flex; align-items: center; color: black !important;">
+                    TOTAL DE ACTIVOS: ' . $object_totales['all_situacion_activo'] . ' </span>';
+
+            $html.='</th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
@@ -2004,6 +2012,13 @@ class DashboardController extends Controller
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
             $html .= '<tbody>
                     <tr class="responsive-table">
+                    <th class="col-lg-4 col-md-12 col-sm-12">';
+
+            $html .= '<span class="px-4 pt-1 pb-1 ' . (($count_asesor[46]['all_situacion_activo'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
+                    style="height: 30px !important;display:flex; align-items: center; color: black !important;">
+                    TOTAL DE ACTIVOS: ' . $count_asesor[46]['all_situacion_activo'] . ' </span>';
+
+            $html.='</th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
@@ -2114,6 +2129,13 @@ class DashboardController extends Controller
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #e4dbc6; color: #0a0302">';
             $html .= '<tbody>
                     <tr class="responsive-table">
+                    <th class="col-lg-4 col-md-12 col-sm-12">';
+
+            $html .= '<span class="px-4 pt-1 pb-1 ' . (($count_asesor[24]['all_situacion_activo'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
+                    style="height: 30px !important;display:flex; align-items: center; color: black !important;">
+                    TOTAL DE ACTIVOS: ' . $count_asesor[24]['all_situacion_activo'] . ' </span>';
+
+            $html.='</th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
