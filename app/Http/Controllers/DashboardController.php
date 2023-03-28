@@ -2670,7 +2670,7 @@ class DashboardController extends Controller
             $item['meta_new'] = $meta_new;
             $item['porcentaje_general']=($all/$allmeta_2);
             return $item;
-        })->sortBy('identificador', SORT_NUMERIC, true);
+        })->sortBy('identificador', SORT_NUMERIC, false);
             //->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
 
         if ($request->ii == 1) {
