@@ -294,13 +294,13 @@ class AnalisisSituacionCliente_Individual extends Command
                                     if($situacion_periodo->activos==0)
                                     {
                                         $situacion_create->update([
-                                            "situacion" => 'NUEVO',
+                                            "situacion" => 'BASE FRIA',
                                             "flag_fp" => '1'
                                         ]);
                                     }else if($situacion_periodo->activos>0)
                                     {
                                         $situacion_create->update([
-                                            "situacion" => 'NULO',
+                                            "situacion" => 'NUEVO',
                                             "flag_fp" => '1'
                                         ]);
                                     }
