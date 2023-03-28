@@ -137,6 +137,13 @@ class PdfController extends Controller
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['u.identificador', '<>', '15'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
             ->groupBy([
                 'situacion_clientes.situacion'
             ])
