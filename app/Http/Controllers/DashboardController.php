@@ -1329,12 +1329,12 @@ class DashboardController extends Controller
             if ($count_asesor[24]['meta'] == 0) {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px; height: 30px !important;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta'] . '</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  aa' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta'] . '</span>
     </div>';
             } else {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;font-size: 12px; height: 30px !important;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta_2']) * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta_2'] . '</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  bb' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[24]['total_pedido'] / $count_asesor[24]['meta_2']) * 100, 2) . '%</b> - ' . $count_asesor[24]['total_pedido'] . '/' . $count_asesor[24]['meta_2'] . '</span>
     </div>';
             }
 
