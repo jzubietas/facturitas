@@ -1918,9 +1918,11 @@ class DashboardController extends Controller
 
                 if($object_totales['all_situacion_activo']>0)
                 {
+                    $diferencia= ($object_totales['all_situacion_activo']+$object_totales['all_situacion_recurrente']) - $object_totales['all_situacion_activo'];
                     $round=round( ( ($object_totales['all_situacion_activo'])/$object_totales['all_situacion_recurrente'] )*100 ,2);
                 }else{
                     $round=0.00;
+                    $diferencia=0;
                     //cuando pedidos es 0
                 }
 
@@ -1992,7 +1994,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                    $object_totales['all_situacion_activo'] . '/' . $object_totales['all_situacion_recurrente'] . '</span>
+                    $object_totales['all_situacion_activo'] . '/ ( Recurrentes. ' . $object_totales['all_situacion_recurrente'] . ' + Activos.'.$object_totales['all_situacion_activo'].'</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -2000,7 +2002,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($object_totales['all_situacion_activo'] / $object_totales['all_situacion_recurrente']) * 100, 2) . '%</b> - '
-                    . $object_totales['all_situacion_activo'] . '/' . $object_totales['all_situacion_recurrente'] . '</span>
+                    . $object_totales['all_situacion_activo'] . '/ (Recurrentes ' . $object_totales['all_situacion_recurrente'] . ' + Activos.'.$object_totales['all_situacion_activo'].'</span>
     </div>';
             }
 
