@@ -2119,7 +2119,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[46]['all_situacion_activo'] / $count_asesor[46]['all_situacion_recurrente']) * 100, 2) . '%</b> - '
-                    . $count_asesor[46]['all_situacion_activo'] . '/' . $count_asesor[46]['all_situacion_recurrente'] . '</span>
+                    . $count_asesor[46]['all_situacion_activo'] . '/ Recurrente. ' . $count_asesor[46]['all_situacion_recurrente'].' + Activo. '.$count_asesor[46]['all_situacion_activo'] . '</span>
     </div>';
             }
 
