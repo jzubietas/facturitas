@@ -628,6 +628,72 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 })
             }
 
+            window.cargaNuevaRecurrenteActivo = function (entero) {
+                console.log(' ' + entero)
+                var fd = new FormData();
+                //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
+                let valorr=$('#fechametames').val();
+                var parts = valorr.split("-");
+                valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+                fd.append('fechametames', valorr);
+                console.log()
+                fd.append('ii', entero);
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    method: 'POST',
+                    url: "{{ route('dashboard.viewMetaTable.Recurrente.Activo') }}",
+                    /*beforeSend: function() {
+                        $('#contenedor-fullscreen').hide()
+                        $('.spinner').show()
+                        $('#spinner').show()
+                    },
+                    complete: function() {
+                        $('#contenedor-fullscreen').show()
+                        $('.spinner').hide()
+                        $('#spinner').hide()
+                    },*/
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Handle the error
+                    },
+                    success: function (resultado) {
+                        if (entero == 1) {
+                            $('#metas_dp').html(resultado);
+                        } else if (entero == 2) {
+                            $('#meta').html(resultado);
+                        } else if (entero == 3) {
+                            $('#metas_total').html(resultado);
+                        } else if (entero == 4) {
+                            $('#supervisor_total').html(resultado);
+                        } else if (entero == 5) {
+                            $('#supervisor_A').html(resultado);
+                        }else if (entero == 6) {
+                            $('#porcentaje_cobranzas_metas').html(resultado);
+                        }else if (entero == 7) {
+                            $('#porcentaje_pedidos_metas').html(resultado);
+                        }
+                        else if (entero == 8) {/*izquierda*/
+                            $('#grafico_dejaronpedir_right').html(resultado);
+                        }
+                        else if (entero == 9) {/*derecha*/
+
+                            $('#grafico_dejaronpedir_left').html(resultado);
+                        }
+                        else if (entero == 13) {
+                            $('#dejaronpedir_supervisor_total').html(resultado);
+                        }
+                        else if (entero == 14) {
+                            $('#dejaronpedir_supervisor_A').html(resultado);
+                        } else if (entero == 15) {
+                            $('#dejaronpedir_supervisor_B').html(resultado);
+                        }
+
+                    }
+                })
+            }
+
 
 
             window.cargReporteAnalisis = function () {
@@ -680,8 +746,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva(4);//fernando
             cargaNueva(5);//paola
 
-            cargaNueva(8);
-            cargaNueva(9);
+            cargaNuevaRecurrenteActivo(8);
+            cargaNuevaRecurrenteActivo(9);
 
             cargaNueva(14);//fernando
             cargaNueva(15);//paola
@@ -702,8 +768,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(4);
                 cargaNueva(5);
 
-                cargaNueva(8);
-                cargaNueva(9);
+                cargaNuevaRecurrenteActivo(8);
+                cargaNuevaRecurrenteActivo(9);
 
                 cargaNueva(14);//fernando
                 cargaNueva(15);//paola
