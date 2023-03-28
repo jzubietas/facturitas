@@ -99,7 +99,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ABANDONO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -108,7 +108,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -117,7 +117,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECURRENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -126,7 +126,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'BASE FRIA'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -135,7 +135,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ACTIVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -144,7 +144,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -153,7 +153,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -162,7 +162,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -171,7 +171,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ACTIVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -180,7 +180,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -189,7 +189,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -198,7 +198,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
