@@ -609,10 +609,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             $('#porcentaje_pedidos_metas').html(resultado);
                         }
                         else if (entero == 8) {/*izquierda*/
-                            $('#grafico_dejaronpedir_left').html(resultado);
+                            $('#grafico_dejaronpedir_right').html(resultado);
                         }
                         else if (entero == 9) {/*derecha*/
-                            $('#grafico_dejaronpedir_right').html(resultado);
+
+                            $('#grafico_dejaronpedir_left').html(resultado);
                         }
                         else if (entero == 13) {
                             $('#dejaronpedir_supervisor_total').html(resultado);
