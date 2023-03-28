@@ -469,7 +469,7 @@ class PdfController extends Controller
                 $html[] = '<td style="width:80%">';
                 $porcentaje = 0;
                 $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
-                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta) - $activos_cuenta;
+                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*0.6 - $activos_cuenta;
                 $color_progress = '#FFD4D4';  /*ROSADO*/
                 $html[] = '<div class="w-100 bg-white rounded">
                                         <div class="position-relative rounded">
@@ -483,7 +483,7 @@ class PdfController extends Controller
                                                                 . $activos_cuenta .
                                                                 ' /  (activos. ' . ($activos_cuenta).'   + recurrente. '.($recurrentes_cuenta) . ')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
-
+                                                                   '.$diferenciameta.'
                                                                   </p>
                                                     </span>
                                              </div>
