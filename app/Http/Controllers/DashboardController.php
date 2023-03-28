@@ -2016,7 +2016,7 @@ class DashboardController extends Controller
 
             $html .= '<span class="px-4 pt-1 pb-1 ' . (($count_asesor[46]['all_situacion_activo'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
                     style="height: 30px !important;display:flex; align-items: center; color: black !important;">
-                    TOTAL DE ACTIVOS: ' . $count_asesor[46]['all_situacion_activo'] . ' </span>';
+                    LUIS - TOTAL DE ACTIVOS: ' . $count_asesor[46]['all_situacion_activo'] . ' </span>';
 
             $html.='</th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
@@ -2133,7 +2133,7 @@ class DashboardController extends Controller
 
             $html .= '<span class="px-4 pt-1 pb-1 ' . (($count_asesor[24]['all_situacion_activo'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
                     style="height: 30px !important;display:flex; align-items: center; color: black !important;">
-                    TOTAL DE ACTIVOS: ' . $count_asesor[24]['all_situacion_activo'] . ' </span>';
+                    PAOLA - TOTAL DE ACTIVOS: ' . $count_asesor[24]['all_situacion_activo'] . ' </span>';
 
             $html.='</th>
                         <th class="col-lg-4 col-md-12 col-sm-12">';
