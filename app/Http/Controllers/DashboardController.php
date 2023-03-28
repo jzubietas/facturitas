@@ -2405,11 +2405,16 @@ class DashboardController extends Controller
                 ->where('pendiente_anulacion', '<>', '1')
                 ->whereDate('pedidos.created_at', $fechametames)->count();
 
-            $clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+            $periodo_antes = Carbon::now()->clone()->subMonth()->startOfMonth()->format('Y-m');
+            $periodo_actual = Carbon::now()->clone()->startOfMonth()->format('Y-m');
+
+
+
+            /*$clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_id', $asesor->id)
                 ->where('clientes.situacion','=','ACTIVO')
                 ->activo()
-                ->count();
+                ->count();*/
 
             /*$clientes_situacion_recurrente = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_id', $asesor->id)
@@ -2417,13 +2422,105 @@ class DashboardController extends Controller
                 ->activo()
                 ->count();*/
 
-            $clientes_situacion_recurrente = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+            $clientes_situacion_activo = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
+                ->join('clientes as c','c.id','situacion_clientes.cliente_id')
+                ->join('users as u','u.id','c.user_id')
+                ->Where([
+                    ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                    ['a.situacion', '=', 'ACTIVO'],
+                    ['situacion_clientes.periodo', '=', $periodo_actual],
+                    ['a.periodo', '=', $periodo_antes],
+                    ['u.identificador', '<>', 'B'],
+                    ['u.identificador', '<>', '15'],
+                    ['u.identificador', '<>', '16'],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                    ['a.situacion', '=', 'RECUPERADO ABANDONO'],
+                    ['situacion_clientes.periodo', '=', $periodo_actual],
+                    ['a.periodo', '=', $periodo_antes],
+                    ['u.identificador', '<>', 'B'],
+                    ['u.identificador', '<>', '15'],
+                    ['u.identificador', '<>', '16'],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                    ['a.situacion', '=', 'RECUPERADO RECIENTE'],
+                    ['situacion_clientes.periodo', '=', $periodo_actual],
+                    ['a.periodo', '=', $periodo_antes],
+                    ['u.identificador', '<>', 'B'],
+                    ['u.identificador', '<>', '15'],
+                    ['u.identificador', '<>', '16'],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                    ['a.situacion', '=', 'NUEVO'],
+                    ['situacion_clientes.periodo', '=', $periodo_actual],
+                    ['a.periodo', '=', $periodo_antes],
+                    ['u.identificador', '<>', 'B'],
+                    ['u.identificador', '<>', '15'],
+                    ['u.identificador', '<>', '16'],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->count();
+
+
+
+            $clientes_situacion_recurrente = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
+                ->join('clientes as c','c.id','situacion_clientes.cliente_id')
+                ->join('users as u','u.id','c.user_id')
+                ->Where([
+                    ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                    ['a.situacion', '=', 'ACTIVO'],
+                    ['situacion_clientes.periodo', '=', $periodo_actual],
+                    ['a.periodo', '=', $periodo_antes],
+                    ['c.user_id', $asesor->id],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                    ['a.situacion', '=', 'RECUPERADO ABANDONO'],
+                    ['situacion_clientes.periodo', '=', $periodo_actual],
+                    ['a.periodo', '=', $periodo_antes],
+                    ['c.user_id', $asesor->id],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                    ['a.situacion', '=', 'RECUPERADO RECIENTE'],
+                    ['situacion_clientes.periodo', '=', $periodo_actual],
+                    ['a.periodo', '=', $periodo_antes],
+                    ['c.user_id', $asesor->id],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->orWhere([
+                    ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                    ['a.situacion', '=', 'NUEVO'],
+                    ['situacion_clientes.periodo', '=', $periodo_actual],
+                    ['a.periodo', '=', $periodo_antes],
+                    ['c.user_id', $asesor->id],
+                    ['c.estado', '=', '1'],
+                    ['c.tipo', '=', '1']
+                ])
+                ->count();
+
+                /*Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->join('situacion_clientes as cv','cv.cliente_id','clientes.id')
                 ->where('cv.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
                 ->where('clientes.user_id', $asesor->id)
                 ->where('clientes.situacion','=','RECURRENTE')
                 ->activo()
-                ->count();
+                ->count();*/
 
             //recurrente mes pasado
             //$clientes_situacion_recurrente = Clientes::query()
