@@ -95,112 +95,81 @@ class PdfController extends Controller
             ->join('clientes as c','c.id','situacion_clientes.cliente_id')
             ->join('users as u','u.id','c.user_id')
             ->where([
+                ['u.identificador', '<>', 'B'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->where([
                 ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['a.situacion', '=', 'ABANDONO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['a.situacion', '=', 'ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['a.situacion', '=', 'RECURRENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'NUEVO'],
                 ['a.situacion', '=', 'BASE FRIA'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'ACTIVO'],
                 ['a.situacion', '=', 'ACTIVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'ACTIVO'],
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'ACTIVO'],
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'ACTIVO'],
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'RECURRENTE'],
                 ['a.situacion', '=', 'ACTIVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'RECURRENTE'],
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'RECURRENTE'],
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'RECURRENTE'],
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
             ])
             ->groupBy([
                 'situacion_clientes.situacion'
