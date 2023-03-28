@@ -80,7 +80,7 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <h6 class="alert alert-warning text-center font-weight-bold" style="background: #62CDFF !important;">
-                                                    <b>Doc <span class="text-danger">por anular</span></b>
+                                                    <b>Doc <span class="text-danger">por anular</span> <i class="fa fa-arrow-right text-danger" aria-hidden="true"></i></b>
                                                 </h6>
                                             </div>
                                             <div class="col-lg-6">
@@ -99,7 +99,7 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <h6 class="alert alert-warning text-center font-weight-bold" style="background: #62CDFF !important;">
-                                                    <b>Captura de pantalla <span class="text-danger">(*)</span></b>
+                                                    <b>Captura de pantalla <span class="text-danger">(*)</span> <i class="fa fa-arrow-right text-danger" aria-hidden="true"></i></b>
                                                 </h6>
                                             </div>
                                             <div class="col-lg-6">
@@ -178,7 +178,8 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <h6 class="alert alert-warning text-center font-weight-bold">
-                                                    <b>Doc <span class="text-danger">por anular</span></b>
+                                                    <b>Doc <span class="text-danger">por anular</span> <i class="fa fa-arrow-right text-danger" aria-hidden="true"></i>
+                                                    </b>
                                                 </h6>
                                             </div>
                                             <div class="col-lg-6">
@@ -187,7 +188,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="row">
                                             <div class="form-group col lg-12">
                                                 {!! Form::label('txtMotivoFactura', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
@@ -197,7 +198,7 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <h6 class="alert alert-warning text-center font-weight-bold">
-                                                    <b>Captura de pantalla <span class="text-danger">(*)</span></b>
+                                                    <b>Captura de pantalla <span class="text-danger">(*)</span> <i class="fa fa-arrow-right text-danger" aria-hidden="true"></i></b>
                                                 </h6>
                                             </div>
                                             <div class="col-lg-6">
