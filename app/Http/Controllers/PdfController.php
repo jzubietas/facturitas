@@ -132,14 +132,72 @@ class PdfController extends Controller
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['a.situacion', '=', 'ACTIVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', '15'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['a.situacion', '=', 'RECUPERADO ABANDONO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', '15'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['a.situacion', '=', 'RECUPERADO RECIENTE'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', '15'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['a.situacion', '=', 'NUEVO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
                 ['u.identificador', '<>', '15'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'ACTIVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', '15'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'RECUPERADO ABANDONO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', '15'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'RECUPERADO RECIENTE'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', '15'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'NUEVO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
                 ['u.identificador', '<>', '15'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
@@ -204,6 +262,7 @@ class PdfController extends Controller
                 $recurrentes_cuenta=$situacion_cliente_3->total;
             }
         }
+
 
         foreach ($situaciones_clientes as $situacion_cliente)
         {
