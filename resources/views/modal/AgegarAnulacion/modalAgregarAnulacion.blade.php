@@ -79,22 +79,35 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <h6 class="alert alert-warning text-center font-weight-bold">
+                                                <h6 class="alert alert-warning text-center font-weight-bold" style="background: #62CDFF !important;">
                                                     <b>Doc <span class="text-danger">por anular</span></b>
                                                 </h6>
                                             </div>
                                         </div>
+
+
+
                                         <div class="row">
                                             <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
                                                 {!! Form::file('inputArchivoSubir[]', ['class' => 'form-control-file', 'id'=>'inputArchivoSubir','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
                                             </div>
                                         </div>
+
                                         <div class="row">
                                             <div class="form-group col lg-12">
                                                 {!! Form::label('txtMotivoPedComplet', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
                                                 {!! Form::textarea('txtMotivoPedComplet', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Completa el sustento para la anulación ',  'id'=>'txtMotivoPedComplet']) !!}
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <h6 class="alert alert-warning text-center font-weight-bold" style="background: #62CDFF !important;">
+                                                    <b>Captura de pantalla <span class="text-danger">(*)</span></b>
+                                                </h6>
+                                            </div>
+                                        </div>
+
+
                                         <div class="row">
                                             <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
                                                 <button type="submit" class="float-right btn btn-success btnEnviarPagoCompleto">Enviar</button>
@@ -178,6 +191,15 @@
                                                 {!! Form::textarea('txtMotivoFactura', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Completa el sustento para la anulación ', 'id'=>'txtMotivoFactura']) !!}
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <h6 class="alert alert-warning text-center font-weight-bold">
+                                                    <b>Captura de pantalla <span class="text-danger">(*)</span></b>
+                                                </h6>
+                                            </div>
+                                        </div>
+
+
                                         <div class="row">
                                             <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
                                                 <button type="submit" class="float-right btn btn-success btnEnviarFactura">Enviar</button>
