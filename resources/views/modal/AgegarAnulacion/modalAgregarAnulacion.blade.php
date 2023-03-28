@@ -100,10 +100,15 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-6">
                                                 <h6 class="alert alert-warning text-center font-weight-bold" style="background: #62CDFF !important;">
                                                     <b>Captura de pantalla <span class="text-danger">(*)</span></b>
                                                 </h6>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
+                                                    {!! Form::file('inputArchivoCapturaSubir[]', ['class' => 'form-control-file', 'id'=>'inputArchivoCapturaSubir','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
+                                                </div>
                                             </div>
                                         </div>
 
@@ -192,10 +197,15 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-6">
                                                 <h6 class="alert alert-warning text-center font-weight-bold">
                                                     <b>Captura de pantalla <span class="text-danger">(*)</span></b>
                                                 </h6>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
+                                                    {!! Form::file('inputArchivoCapturaSubirf[]', ['class' => 'form-control-file', 'id'=>'inputArchivoCapturaSubirf','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
+                                                </div>
                                             </div>
                                         </div>
 
