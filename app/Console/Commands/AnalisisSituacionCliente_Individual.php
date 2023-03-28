@@ -288,22 +288,45 @@ class AnalisisSituacionCliente_Individual extends Command
                                     $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(3);
 
                                     $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                                    //$this->warn($situacion_periodo);
+
                                     $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
-                                    if($situacion_periodo->activos==0)
+
+                                    if($situacion_periodo->anulados==0)
                                     {
-                                        $situacion_create->update([
-                                            "situacion" => 'BASE FRIA',
-                                            "flag_fp" => '1'
-                                        ]);
-                                    }else if($situacion_periodo->activos>0)
-                                    {
-                                        $situacion_create->update([
-                                            "situacion" => 'NUEVO',
-                                            "flag_fp" => '1'
-                                        ]);
+
+                                        if($situacion_periodo->activos==0)
+                                        {
+                                            $situacion_create->update([
+                                                "situacion" => 'BASE FRIA',
+                                                "flag_fp" => '1'
+                                            ]);
+                                        }else if($situacion_periodo->activos>0)
+                                        {
+                                            $situacion_create->update([
+                                                "situacion" => 'NUEVO',
+                                                "flag_fp" => '1'
+                                            ]);
+                                        }
                                     }
+                                    else if($situacion_periodo->anulados==0)
+                                    {
+
+                                        if($situacion_periodo->activos==0)
+                                        {
+                                            $situacion_create->update([
+                                                "situacion" => 'NULO',
+                                                "flag_fp" => '1'
+                                            ]);
+                                        }else if($situacion_periodo->activos>0)
+                                        {
+                                            $situacion_create->update([
+                                                "situacion" => 'NUEVO',
+                                                "flag_fp" => '1'
+                                            ]);
+                                        }
+                                    }
+
 
                                     break;
                                 case 'RECUPERADO RECIENTE':
