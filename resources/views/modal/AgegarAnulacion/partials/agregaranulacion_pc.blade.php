@@ -1,4 +1,4 @@
-<form id="form-agregaranulacion-pc" name="form-agregaranulacion-pc" enctype="multipart/form-data">
+<form id="form-agregaranulacion-pc-2" name="form-agregaranulacion-pc-2" enctype="multipart/form-data">
     <input type="hidden" id="agregaranulacion_pc" name="agregaranulacion_pc">
     <input type="hidden" name="opcion" value="1">
     <input type="hidden" id="txtIdPedidoCompleto" name="txtIdPedidoCompleto">

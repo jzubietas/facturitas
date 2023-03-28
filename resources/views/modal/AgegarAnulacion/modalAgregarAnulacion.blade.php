@@ -78,6 +78,13 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-lg-12">
+                                                <h6 class="alert alert-warning text-center font-weight-bold">
+                                                    <b>Doc <span class="text-danger">por anular:</span></b>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
                                                 {!! Form::file('inputArchivoSubir[]', ['class' => 'form-control-file', 'id'=>'inputArchivoSubir','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
                                             </div>
@@ -151,6 +158,13 @@
                                                 <div class="input-icon">
                                                     <i class="fa fa-map-pin" aria-hidden="true"></i>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <h6 class="alert alert-warning text-center font-weight-bold">
+                                                    <b>Doc <span class="text-danger">por anular:</span></b>
+                                                </h6>
                                             </div>
                                         </div>
                                         <div class="row">
