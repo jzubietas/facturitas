@@ -432,7 +432,7 @@ class AnalisisSituacionCliente_Individual extends Command
                                                         // es diciembre
                                                         //a abandono
                                                         $situacion_create->update([
-                                                            "situacion" => 'NULO',"flag_fp" => '1'
+                                                            "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
                                                         ]);
 
                                                     }else if($situacion_antes_3->activos>0)
