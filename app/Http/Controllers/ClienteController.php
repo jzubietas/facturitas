@@ -1016,11 +1016,12 @@ class ClienteController extends Controller
     public function indexabandonotabla(Request $request)
     {
 
-        $data = Cliente:://CLIENTES SIN PEDIDOS
+        $data = Cliente::
         join('users as u', 'clientes.user_id', 'u.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
+            ->where('clientes.user_id','<>', 'B')
             ->when($request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE]);
             })
@@ -1158,6 +1159,7 @@ class ClienteController extends Controller
             ->join('listado_resultados as lr', 'clientes.id', 'lr.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
+            ->where('clientes.user_id','<>', 'B')
             ->where('clientes.tipo', '1')
             ->where('clientes.situacion', 'CASI ABANDONO')
             //->where('lr.s_2022_11','ABANDONO RECIENTE')
@@ -1506,6 +1508,7 @@ class ClienteController extends Controller
         join('users as u', 'clientes.user_id', 'u.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
+            ->where('clientes.user_id','<>', 'B')
             ->where('clientes.tipo', '1')
             ->whereNotIn('u.identificador',['15'])
             ->whereIn('clientes.situacion', [Cliente::NUEVO])
@@ -1619,6 +1622,7 @@ class ClienteController extends Controller
         join('users as u', 'clientes.user_id', 'u.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
+            ->where('clientes.user_id','<>', 'B')
             ->where('clientes.tipo', '1')
             ->whereIn('clientes.situacion', [Cliente::RECURRENTE])
             ->groupBy(
@@ -1730,6 +1734,7 @@ class ClienteController extends Controller
         join('users as u', 'clientes.user_id', 'u.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
+            ->where('clientes.user_id','<>', 'B')
             ->where('clientes.tipo', '1')
             ->whereIn('clientes.situacion', [Cliente::ACTIVO])
             ->groupBy(
@@ -1841,6 +1846,7 @@ class ClienteController extends Controller
         join('users as u', 'clientes.user_id', 'u.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
+            ->where('clientes.user_id','<>', 'B')
             ->where('clientes.tipo', '1')
             ->whereNotIn('u.identificador',['15'])
             ->when($request->has("situacion"), function ($query) use ($request) {
@@ -1953,6 +1959,7 @@ class ClienteController extends Controller
     join('users as u', 'clientes.user_id', 'u.id')
       ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
       ->where('clientes.estado', '1')
+        ->where('clientes.user_id','<>', 'B')
       ->where('clientes.tipo', '1')
       /*->when($request->has("situacion"), function ($query) use ($request) {
         $query->whereIn('clientes.situacion', [$request->situacion]);
