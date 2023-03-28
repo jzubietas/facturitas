@@ -182,7 +182,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <br><br>
-            <h1 class="text-center">Dejaron de pedir <i class="fas fa-exclamation-circle"></i> <i class="fa fa-money text-success" aria-hidden="true"></i> </h1>
+            <h1 class="text-center">Dejaron de pedir <i class="fas fa-exclamation-circle"></i> <i class="fas fa-dollar-sign"></i> Money </h1>
         </div>
         <div class="contain-table-dual row" style="width: 100% !important;">
             <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
