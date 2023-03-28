@@ -41,7 +41,7 @@
                         <th scope="col" class="align-middle">Razón social</th>
                         <th scope="col" class="align-middle">Motivo</th>
                         <th scope="col" class="align-middle">Total</th>
-                        <th scope="col" class="align-middle">F. Registro</th>
+                        <th scope="col" class="align-middle">F. Anulacion</th>
                         <th scope="col" class="align-middle">Eliminar (S/)</th>
                         <th scope="col" class="align-middle">Accion</th>
                     </tr>
