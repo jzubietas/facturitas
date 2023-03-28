@@ -2430,9 +2430,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'ACTIVO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['u.identificador', '<>', 'B'],
-                    ['u.identificador', '<>', '15'],
-                    ['u.identificador', '<>', '16'],
+                    ['c.user_id', $asesor->id],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -2441,9 +2439,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['u.identificador', '<>', 'B'],
-                    ['u.identificador', '<>', '15'],
-                    ['u.identificador', '<>', '16'],
+                    ['c.user_id', $asesor->id],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -2452,9 +2448,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['u.identificador', '<>', 'B'],
-                    ['u.identificador', '<>', '15'],
-                    ['u.identificador', '<>', '16'],
+                    ['c.user_id', $asesor->id],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -2463,9 +2457,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'NUEVO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['u.identificador', '<>', 'B'],
-                    ['u.identificador', '<>', '15'],
-                    ['u.identificador', '<>', '16'],
+                    ['c.user_id', $asesor->id],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
