@@ -4126,21 +4126,22 @@ class DashboardController extends Controller
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
 
+            if($count_asesor[46]['all_situacion_activo']>0)
+            {
+                $round=round( ( ($count_asesor[46]['all_situacion_activo'])/($count_asesor[46]['all_situacion_recurrente']+$count_asesor[46]['all_situacion_activo']) )*100 ,2);
+            }else{
+                $round=0.00;
+                //cuando pedidos es 0
+            }
+
             if ($count_asesor[46]['all_situacion_recurrente'] == 0) {
                 $html .= '<div class="progress-bar bg-danger" role="progressbar"
-                 style="width: ' . round(($count_asesor[46]['all_situacion_activo'] / $count_asesor[46]['all_situacion_recurrente']) * 100, 2) . '%"
+                 style="width: ' . $round . '%"
                  aria-valuenow="' . (round(0, 2)) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
             } else {
 
-                if($count_asesor[46]['all_situacion_activo']>0)
-                {
-                    $round=round( ( ($count_asesor[46]['all_situacion_activo'])/($count_asesor[46]['all_situacion_recurrente']+$count_asesor[46]['all_situacion_activo']) )*100 ,2);
-                }else{
-                    $round=0.00;
-                    //cuando pedidos es 0
-                }
 
                 if(0<$round && $round<=40)
                 {
