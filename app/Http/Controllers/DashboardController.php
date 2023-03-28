@@ -911,7 +911,7 @@ class DashboardController extends Controller
             }
             else
             {
-                $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                $html .= '<div class="progress-bar bg-info" role="progressbar"
                          style="width: ' . ($round) . '%"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
@@ -1138,7 +1138,7 @@ class DashboardController extends Controller
                 }
                 else
                 {
-                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
+                    $html .= '<div class="progress-bar bg-info" role="progressbar"
                          style="width: ' . ($round) . '%"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
