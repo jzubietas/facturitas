@@ -59,7 +59,7 @@ class AnalisisSituacionClientePersonalizado extends Command
 
 
     $clientes=Cliente::whereIn('tipo',['0','1'])
-      ->where('situacion','=','RECURRENTE')
+      ->where('situacion','=','RECUPERADO ABANDONO')
         //->whereNull('situacion')
       ->orderBy('id','asc')->get();
 
