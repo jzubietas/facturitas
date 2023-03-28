@@ -402,7 +402,7 @@ class DashboardController extends Controller
                 ->whereDate('pedidos.created_at', $fechametames)->count();
 
             $clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
-                ->where('user_id', $asesor->id)
+                ->where('clientes.user_id', $asesor->id)
                 ->where('clientes.situacion','=','ACTIVO')
                 ->activo()
                 ->count();
@@ -410,7 +410,7 @@ class DashboardController extends Controller
             $clientes_situacion_recurrente = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->join('situacion_clientes as cv','cv.cliente_id','clientes.id')
                 ->where('cv.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
-                ->where('user_id', $asesor->id)
+                ->where('clientes.user_id', $asesor->id)
                 ->where('clientes.situacion','=','RECURRENTE')
                 ->activo()
                 ->count();
