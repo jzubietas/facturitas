@@ -1994,7 +1994,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                    $object_totales['all_situacion_activo'] . '/ ( Recurrentes. ' . $object_totales['all_situacion_recurrente'] . ' + Activos.'.$object_totales['all_situacion_activo'].'</span>
+                    $object_totales['all_situacion_activo'] . '/ ( Activos. ' . $object_totales['all_situacion_activo'] . ' + Recurrentes.'.$object_totales['all_situacion_recurrente'].'</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -2002,7 +2002,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($object_totales['all_situacion_activo'] / $object_totales['all_situacion_recurrente']) * 100, 2) . '%</b> - '
-                    . $object_totales['all_situacion_activo'] . '/ (Recurrentes ' . $object_totales['all_situacion_recurrente'] . ' + Activos.'.$object_totales['all_situacion_activo'].'</span>
+                    . $object_totales['all_situacion_activo'] . '/ (Activos ' . $object_totales['all_situacion_activo'] . ' + Recurrentes.'.$object_totales['all_situacion_recurrente'].'</span>
     </div>';
             }
 
@@ -2110,8 +2110,8 @@ class DashboardController extends Controller
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
-             LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                    $count_asesor[46]['all_situacion_activo'] . '/' . $count_asesor[46]['all_situacion_recurrente'] . '</span>
+             LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - '
+                    . $count_asesor[46]['all_situacion_activo'] . '/ Activo. ' . $count_asesor[46]['all_situacion_activo'].' + Recurrente. '.$count_asesor[46]['all_situacion_recurrente'] . '</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -2119,7 +2119,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[46]['all_situacion_activo'] / $count_asesor[46]['all_situacion_recurrente']) * 100, 2) . '%</b> - '
-                    . $count_asesor[46]['all_situacion_activo'] . '/ Recurrente. ' . $count_asesor[46]['all_situacion_recurrente'].' + Activo. '.$count_asesor[46]['all_situacion_activo'] . '</span>
+                    . $count_asesor[46]['all_situacion_activo'] . '/ Activo. ' . $count_asesor[46]['all_situacion_activo'].' + Recurrente. '.$count_asesor[46]['all_situacion_recurrente'] . '</span>
     </div>';
             }
 
@@ -2228,7 +2228,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                    $count_asesor[24]['all_situacion_activo'] . '/' . ($count_asesor[24]['all_situacion_recurrente']+$count_asesor[24]['all_situacion_activo']) . '</span>
+                    . $count_asesor[24]['all_situacion_activo'] . '/ Activos. ' . ($count_asesor[24]['all_situacion_activo']).' + Recurrentes. '.($count_asesor[24]['all_situacion_recurrente']) . '</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -2236,7 +2236,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[24]['all_situacion_activo'] / ($count_asesor[24]['all_situacion_recurrente']+$count_asesor[24]['all_situacion_activo']) ) * 100, 2) . '%</b> - '
-                    . $count_asesor[24]['all_situacion_activo'] . '/ Recurrentes. ' . ($count_asesor[24]['all_situacion_recurrente']).' + Activos. '.($count_asesor[24]['all_situacion_activo']) . '</span>
+                    . $count_asesor[24]['all_situacion_activo'] . '/ Activos. ' . ($count_asesor[24]['all_situacion_activo']).' + Recurrentes. '.($count_asesor[24]['all_situacion_recurrente']) . '</span>
     </div>';
             }
 
@@ -4092,8 +4092,8 @@ class DashboardController extends Controller
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
-             TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                    $object_totales['all_situacion_activo'] . '/ ( Recurrentes. ' . $object_totales['all_situacion_recurrente'] . ' + Activos.'.$object_totales['all_situacion_activo'].'</span>
+             TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - '
+                    . $object_totales['all_situacion_activo'] . '/ (Activos ' . $object_totales['all_situacion_activo'] . ' + Recurrente.'.$object_totales['all_situacion_recurrente'].'</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -4101,7 +4101,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($object_totales['all_situacion_activo'] / $object_totales['all_situacion_recurrente']) * 100, 2) . '%</b> - '
-                    . $object_totales['all_situacion_activo'] . '/ (Recurrentes ' . $object_totales['all_situacion_recurrente'] . ' + Activos.'.$object_totales['all_situacion_activo'].'</span>
+                    . $object_totales['all_situacion_activo'] . '/ (Activos ' . $object_totales['all_situacion_activo'] . ' + Recurrente.'.$object_totales['all_situacion_recurrente'].'</span>
     </div>';
             }
 
@@ -4209,8 +4209,8 @@ class DashboardController extends Controller
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
-             LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                    $count_asesor[46]['all_situacion_activo'] . '/' . $count_asesor[46]['all_situacion_recurrente'] . '</span>
+             LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - '
+                    . $count_asesor[46]['all_situacion_activo'] . '/ Activo. ' . $count_asesor[46]['all_situacion_activo'].' + Recurrente. '.$count_asesor[46]['all_situacion_recurrente'] . '</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -4218,7 +4218,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              LUIS: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[46]['all_situacion_activo'] / $count_asesor[46]['all_situacion_recurrente']) * 100, 2) . '%</b> - '
-                    . $count_asesor[46]['all_situacion_activo'] . '/ Recurrente. ' . $count_asesor[46]['all_situacion_recurrente'].' + Activo. '.$count_asesor[46]['all_situacion_activo'] . '</span>
+                    . $count_asesor[46]['all_situacion_activo'] . '/ Activo. ' . $count_asesor[46]['all_situacion_activo'].' + Recurrente. '.$count_asesor[46]['all_situacion_recurrente'] . '</span>
     </div>';
             }
 
@@ -4326,8 +4326,8 @@ class DashboardController extends Controller
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
-             PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                    $count_asesor[24]['all_situacion_activo'] . '/' . ($count_asesor[24]['all_situacion_recurrente']+$count_asesor[24]['all_situacion_activo']) . '</span>
+             PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - '
+                    . $count_asesor[24]['all_situacion_activo'] . '/ Activos. ' . ($count_asesor[24]['all_situacion_activo']).' + Recurrente. '.($count_asesor[24]['all_situacion_recurrente']) . '</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -4335,7 +4335,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[24]['all_situacion_activo'] / ($count_asesor[24]['all_situacion_recurrente']+$count_asesor[24]['all_situacion_activo']) ) * 100, 2) . '%</b> - '
-                    . $count_asesor[24]['all_situacion_activo'] . '/ Recurrentes. ' . ($count_asesor[24]['all_situacion_recurrente']).' + Activos. '.($count_asesor[24]['all_situacion_activo']) . '</span>
+                    . $count_asesor[24]['all_situacion_activo'] . '/ Activos. ' . ($count_asesor[24]['all_situacion_activo']).' + Recurrente. '.($count_asesor[24]['all_situacion_recurrente']) . '</span>
     </div>';
             }
 
