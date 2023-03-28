@@ -370,8 +370,9 @@ class PdfController extends Controller
                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
-                                                                ' . $porcentaje . '% </b>
-                                                               - ' . $activos_cuenta . ' /  (activos. ' . ($activos_cuenta).'   + recurrente. '($recurrentes_cuenta) . ')
+                                                                ' . $porcentaje . '% </b>- '
+                                                                . $activos_cuenta . 
+                                                                ' /  (activos. ' . ($activos_cuenta).'   + recurrente. '.($recurrentes_cuenta) . ')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
 
                                                                   </p>
