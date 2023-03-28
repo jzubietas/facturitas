@@ -9,7 +9,7 @@
             <h3>Bandeja de Anulaciones</h3>
         </div>
         <div class="form-group col-md-6">
-            @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ENCARGADO || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_JEFE_OPERARIO  )
+            @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ENCARGADO || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_JEFE_OPERARIO || Auth::user()->rol == \App\Models\User::ROL_ASESOR_ADMINISTRATIVO  )
                 <a class="btn btn-danger btn-sm m-0" href="#" data-target="#modal-agregar-anulacion" data-toggle="modal">
                     <b class="text-white font-weight-bold d-flex align-items-center justify-content-center">
                         <i class="fa fa-ban mr-1" aria-hidden="true"></i><p class="m-0 text-card-navbar">  Solicitar Anulacion</p>
