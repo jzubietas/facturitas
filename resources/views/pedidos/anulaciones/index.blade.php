@@ -315,14 +315,14 @@
                     return false;
                 }
 
-                if (txtMotivoPedComplet.length > 250) {
+                /*if (txtMotivoPedComplet.length > 250) {
                     Swal.fire('Error','El campo motivo no debe superar los 250 caracteres.','warning'
                     ).then(function () {
                         $("#txtMotivoPedComplet").focus()
                     });
                     $(".btnEnviarPagoCompleto").attr('disabled', false);
                     return false;
-                }
+                }*/
                 var data = new FormData(document.getElementById("form-agregaranulacion-pc"));
 
                 $.ajax({
