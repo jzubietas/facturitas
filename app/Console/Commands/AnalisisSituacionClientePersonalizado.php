@@ -423,7 +423,7 @@ class AnalisisSituacionClientePersonalizado extends Command
                                       }
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
+                                          "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
                                       ]);
                                   }
                                   break;
