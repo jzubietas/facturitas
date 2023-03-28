@@ -298,27 +298,21 @@ class ChartController extends Controller
         $oDataporc2 = [];
         $rDataporc3 = [];
 
-        $totalasesores=User::where('rol',User::ROL_ASESOR)->where('estado',1)
+        $totalasesores=User::where('rol',User::ROL_ENCARGADO)->where('estado',1)
             ->select(['id','identificador','name','letra',])
-            ->orderBy('supervisor','asc')
             ->orderBy('id','desc')->count();
-        $totalasesores=ceil($totalasesores/2);
-        $idsasesores=User::where('rol',User::ROL_ASESOR)->where('estado',1)
+
+
+        $arrayasesores=User::where('rol',User::ROL_ENCARGADO)->where('estado',1)
             ->select(['id','identificador','name','letra',])
             ->orderBy('supervisor','asc')
-            ->orderBy('id','desc')->limit($totalasesores)
             ->pluck('id');
 
-        $ids_asesores=User::where('rol',User::ROL_ASESOR)->where('estado',1)
-            ->whereNotIn('id',$idsasesores)
-            ->select(['id','identificador','name','letra',])
-            ->orderBy('supervisor','asc')
-            ->orderBy('id','desc')
-            ->get();
+
         /*dd($ids_asesores);*/
         $mes= Carbon::now()->month;
         $anio=Carbon::now()->year;
-        foreach ($ids_asesores as $item => $asslst){
+        foreach ($arrayasesores as $item => $asslst){
             $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
 
             $pedidosActivosPorAsesores = Pedido::where('pedidos.user_id',$asslst->id)
@@ -407,4 +401,6 @@ class ChartController extends Controller
             ],
         ]);
     }
+
+    //Fin de las funciones
 }

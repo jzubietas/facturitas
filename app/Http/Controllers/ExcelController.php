@@ -33,6 +33,7 @@ use App\Exports\PedidosPorEnviarExport;
 use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\PedidosSinPagosExport;
 use App\Exports\SobresRutaEnvioExport;
+use App\Exports\Templates\PlantillaExportaListadoOlva;
 use App\Exports\Templates\PlantillaExportBasefriaMultiple;
 use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
@@ -466,5 +467,10 @@ class ExcelController extends Controller
             ->download('Estado de Sobres.xlsx');
     }
 
+    public function listadoEnviosTiendaOlva(Request $request)
+    {
 
+        return (new PlantillaExportaListadoOlva)
+            ->download('Lista de Envio tieda Olva.xlsx');
+    }
 }

@@ -89,7 +89,7 @@
                 },
                 rowCallback: function (row, data, index) {
                     renderEventButtonAction(row, data, index)
-                    if (data.courier_failed_sync_at != null) {
+                    if (data.courier_failed_sync_at != null || data.courier_estado==null) {
                         $('td', row).css('background', 'var(--red,red)')
                     }
                 },

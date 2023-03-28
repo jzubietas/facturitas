@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\CommonModel;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -59,7 +60,6 @@ class DireccionGrupo extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'courier_estado' => 'boolean',
         'courier_data' => 'object',
     ];
 
@@ -596,7 +596,7 @@ class DireccionGrupo extends Model implements HasMedia
         $data = [
             'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$condicion_envio],
             'condicion_envio_code' => $condicion_envio,
-            'condicion_envio_at' => now(),
+            'condicion_envio_at' => Carbon::now(),
             'cambio_direccion_at' => null,
         ];
         $grupo->update(array_merge($data, $extras));

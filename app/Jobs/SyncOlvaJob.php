@@ -62,9 +62,11 @@ class SyncOlvaJob implements ShouldQueue
 
                 $success = data_get($result, 'success');
                 $code = data_get($result, 'code');
+
                 if ($success) {
                     $result = $this->procesarInformacion($result);
                     $estado = data_get($result, 'general.nombre_estado_tracking');
+
                     $direccionGrupo->update([
                         'direccion' => $tracking[0] . '-' . $tracking[1],
                         'courier_sync_at' => now(),

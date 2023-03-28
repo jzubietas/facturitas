@@ -273,7 +273,6 @@ class Pedido extends Model
     } */
 
     protected $casts = [
-        'courier_estado' => 'boolean',
         'courier_data' => 'json',
     ];
 
