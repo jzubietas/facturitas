@@ -266,7 +266,7 @@ class PdfController extends Controller
 
         foreach ($situaciones_clientes as $situacion_cliente)
         {
-            if($situacion_cliente_2->situacion=='ACTIVO' || $situacion_cliente_2->situacion=='RECURRENTE')
+            if($situacion_cliente->situacion=='ACTIVO' || $situacion_cliente->situacion=='RECURRENTE')
                 continue;
 
             $html[] = '<tr>';
