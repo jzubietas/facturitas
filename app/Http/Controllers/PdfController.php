@@ -94,7 +94,7 @@ class PdfController extends Controller
         $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
             ->join('clientes as c','c.id','situacion_clientes.cliente_id')
             ->join('users as u','u.id','c.user_id')
-            ->whereNotIn('u.identificador',['B','15'])
+            ->whereNotIn('u.identificador',['B','15','16A'])
             ->where('c.estado','1')
             ->where('c.tipo','1')
             ->where([
