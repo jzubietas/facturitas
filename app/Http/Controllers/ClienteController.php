@@ -1845,7 +1845,7 @@ class ClienteController extends Controller
         join('users as u', 'clientes.user_id', 'u.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
-            ->whereNotIn('u.identificador', ['B'])
+            ->where('u.identificador','<>', 'B')
             ->where('clientes.tipo', '1')
             ->whereNotIn('u.identificador',['15'])
             ->when($request->has("situacion"), function ($query) use ($request) {
