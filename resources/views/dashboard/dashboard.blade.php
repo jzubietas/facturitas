@@ -162,7 +162,7 @@
                         'warning'
                     )
                     return;
-                }
+                } 
                 if (tipo == "CLIENTE") {
                     $.ajax({
                         url: "{{route('dashboard.search-cliente')}}",
