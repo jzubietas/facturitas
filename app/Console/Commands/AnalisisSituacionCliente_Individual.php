@@ -309,7 +309,7 @@ class AnalisisSituacionCliente_Individual extends Command
                                             ]);
                                         }
                                     }
-                                    else if($situacion_periodo->anulados==0)
+                                    else if($situacion_periodo->anulados>0)
                                     {
 
                                         if($situacion_periodo->activos==0)
