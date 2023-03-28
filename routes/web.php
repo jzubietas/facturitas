@@ -76,6 +76,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     //Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
     Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
+    Route::any('dashboard.viewMetaTable.Recurrente.Activo', [DashboardController::class, 'viewMetaTableRecurrenteActivo'])->name('dashboard.viewMetaTable.Recurrente.Activo');
 
     Route::any('dashboard.viewAnalisis', [PdfController::class, 'Analisisgrafico'])->name('dashboard.viewAnalisis');
     Route::any('dashboard.graficoSituacionClientes', [PdfController::class, 'SituacionClientes'])->name('dashboard.graficoSituacionClientes');

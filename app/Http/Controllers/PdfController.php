@@ -99,7 +99,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ABANDONO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -108,7 +108,16 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+                ['a.situacion', '=', 'NULO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -117,7 +126,16 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECURRENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', 'B'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
+                ['a.situacion', '=', 'NULO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -126,14 +144,97 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'BASE FRIA'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
                 ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['a.situacion', '=', 'ACTIVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
                 ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['a.situacion', '=', 'RECUPERADO ABANDONO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
+                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['a.situacion', '=', 'RECUPERADO RECIENTE'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
+                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['a.situacion', '=', 'NUEVO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
+                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'ACTIVO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
+                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'RECUPERADO ABANDONO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
+                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'RECUPERADO RECIENTE'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
+                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'NUEVO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['u.identificador', '<>', 'B'],
+                ['u.identificador', '<>', '15'],
+                ['u.identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -185,16 +286,24 @@ class PdfController extends Controller
         $recurrentes_cuenta=0;
         $html = [];
         $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
+
+        foreach ($situaciones_clientes as $situacion_cliente_3)
+        {
+            if($situacion_cliente_3->situacion=='ACTIVO')
+            {
+                $activos_cuenta=$situacion_cliente_3->total;
+            }
+            else if($situacion_cliente_3->situacion=='RECURRENTE')
+            {
+                $recurrentes_cuenta=$situacion_cliente_3->total;
+            }
+        }
+
+
         foreach ($situaciones_clientes as $situacion_cliente)
         {
-            if($situacion_cliente->situacion=='ACTIVO')
-            {
-                $activos_cuenta=$situacion_cliente->total;
+            if($situacion_cliente->situacion=='ACTIVO' || $situacion_cliente->situacion=='RECURRENTE')
                 continue;
-            }else if($situacion_cliente->situacion=='RECURRENTE')
-            {
-                $recurrentes_cuenta=$situacion_cliente->total;
-            }
 
             $html[] = '<tr>';
             $html[] = '<td style="width:20%;" class="text-center">';
@@ -359,8 +468,9 @@ class PdfController extends Controller
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
                 $porcentaje = 0;
-                $porcentaje = round(($activos_cuenta / $activos_cuenta+$recurrentes_cuenta) * 100, 2);
-                $diferenciameta = $activos_cuenta+$recurrentes_cuenta - $activos_cuenta;
+                $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
+                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*0.6 - $activos_cuenta;
+                $diferenciameta=round($diferenciameta);
                 $color_progress = '#FFD4D4';  /*ROSADO*/
                 $html[] = '<div class="w-100 bg-white rounded">
                                         <div class="position-relative rounded">
@@ -370,10 +480,11 @@ class PdfController extends Controller
                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
-                                                                ' . $porcentaje . '% </b>
-                                                               - ' . $activos_cuenta . ' /  ' . ($activos_cuenta+$recurrentes_cuenta) . '
+                                                                ' . $porcentaje . '% </b>- '
+                                                                . $activos_cuenta .
+                                                                ' /  (activos. ' . ($activos_cuenta).'   + recurrente. '.($recurrentes_cuenta) . ')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
-                                                                   
+                                                                   '.$diferenciameta.'
                                                                   </p>
                                                     </span>
                                              </div>

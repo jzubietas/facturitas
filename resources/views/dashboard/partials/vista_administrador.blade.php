@@ -182,17 +182,27 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <br><br>
-            <h1 class="text-center">Dejaron de pedir <i class="fas fa-exclamation-circle"></i> <i class="fas fa-dollar-sign"></i> Money </h1>
+            <h1 class="text-center">CLIENTES ACTIVOS/RECURRENTES (%)</h1>
         </div>
         <div class="contain-table-dual row" style="width: 100% !important;">
             <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
             <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
         </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="dejaronpedir_supervisor_total"></div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="dejaronpedir_supervisor_A"></div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="dejaronpedir_supervisor_B"></div>
+        </div>
+
     </div>
-
-
-
 </div>
+
+
 
 <br>
 
@@ -599,10 +609,85 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             $('#porcentaje_pedidos_metas').html(resultado);
                         }
                         else if (entero == 8) {/*izquierda*/
-                            $('#grafico_dejaronpedir_left').html(resultado);
+                            $('#grafico_dejaronpedir_right').html(resultado);
                         }
                         else if (entero == 9) {/*derecha*/
+
+                            $('#grafico_dejaronpedir_left').html(resultado);
+                        }
+                        else if (entero == 13) {
+                            $('#dejaronpedir_supervisor_total').html(resultado);
+                        }
+                        else if (entero == 14) {
+                            $('#dejaronpedir_supervisor_A').html(resultado);
+                        } else if (entero == 15) {
+                            $('#dejaronpedir_supervisor_B').html(resultado);
+                        }
+
+                    }
+                })
+            }
+
+            window.cargaNuevaRecurrenteActivo = function (entero) {
+                console.log(' ' + entero)
+                var fd = new FormData();
+                //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
+                let valorr=$('#fechametames').val();
+                var parts = valorr.split("-");
+                valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+                fd.append('fechametames', valorr);
+                console.log()
+                fd.append('ii', entero);
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    method: 'POST',
+                    url: "{{ route('dashboard.viewMetaTable.Recurrente.Activo') }}",
+                    /*beforeSend: function() {
+                        $('#contenedor-fullscreen').hide()
+                        $('.spinner').show()
+                        $('#spinner').show()
+                    },
+                    complete: function() {
+                        $('#contenedor-fullscreen').show()
+                        $('.spinner').hide()
+                        $('#spinner').hide()
+                    },*/
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Handle the error
+                    },
+                    success: function (resultado) {
+                        if (entero == 1) {
+                            $('#metas_dp').html(resultado);
+                        } else if (entero == 2) {
+                            $('#meta').html(resultado);
+                        } else if (entero == 3) {
+                            $('#metas_total').html(resultado);
+                        } else if (entero == 4) {
+                            $('#supervisor_total').html(resultado);
+                        } else if (entero == 5) {
+                            $('#supervisor_A').html(resultado);
+                        }else if (entero == 6) {
+                            $('#porcentaje_cobranzas_metas').html(resultado);
+                        }else if (entero == 7) {
+                            $('#porcentaje_pedidos_metas').html(resultado);
+                        }
+                        else if (entero == 8) {/*izquierda*/
                             $('#grafico_dejaronpedir_right').html(resultado);
+                        }
+                        else if (entero == 9) {/*derecha*/
+
+                            $('#grafico_dejaronpedir_left').html(resultado);
+                        }
+                        else if (entero == 13) {
+                            $('#dejaronpedir_supervisor_total').html(resultado);
+                        }
+                        else if (entero == 14) {
+                            $('#dejaronpedir_supervisor_A').html(resultado);
+                        } else if (entero == 15) {
+                            $('#dejaronpedir_supervisor_B').html(resultado);
                         }
 
                     }
@@ -661,8 +746,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva(4);//fernando
             cargaNueva(5);//paola
 
-            cargaNueva(8);
-            cargaNueva(9);
+            cargaNuevaRecurrenteActivo(8);
+            cargaNuevaRecurrenteActivo(9);
+
+            cargaNueva(14);//fernando
+            cargaNueva(15);//paola
+            cargaNueva(13);//totales porcentajes debajo de metas
 
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
@@ -679,8 +768,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(4);
                 cargaNueva(5);
 
-                cargaNueva(8);
-                cargaNueva(9);
+                cargaNuevaRecurrenteActivo(8);
+                cargaNuevaRecurrenteActivo(9);
+
+                cargaNueva(14);//fernando
+                cargaNueva(15);//paola
+                cargaNueva(13);//totales porcentajes debajo de metas
 
                 cargReporteMetasCobranzasGeneral();
             }

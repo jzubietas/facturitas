@@ -25,11 +25,11 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             ->select([
                 'clientes.id',
                 'clientes.tipo',
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido"),
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%m') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_mes"),
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_anio"),
-                DB::raw("(select dp1.pago from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pago"),
-                DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
+                DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido"),
+                DB::raw("(select DATE_FORMAT(dp1.created_at,'%m') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido_mes"),
+                DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido_anio"),
+                DB::raw("(select dp1.pago from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido_pago"),
+                DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
         //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get(); Carbon::parse(now())->clone()
@@ -65,11 +65,11 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                 DB::raw("(select case when dp1.pagado=0 then 'DEUDA'
                                         when dp1.pagado=1 then 'DEUDA'
                                         else 'NO DEUDA' end from pedidos dp1
-                                        where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as deuda"),
+                                        where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as deuda"),
                 DB::raw("(select dp2.saldo from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
-                                        where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
+                                        where dp2.estado=1 and a.cliente_id=clientes.id and a.codigo not like '%-C%' order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(a.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
-                                        where dp3.estado=1 and a.cliente_id=clientes.id order by a.created_at desc limit 1) as mesultimopedido"),
+                                        where dp3.estado=1 and a.cliente_id=clientes.id and a.codigo not like '%-C%' order by a.created_at desc limit 1) as mesultimopedido"),
             ]);
 
         if (Auth::user()->rol == User::ROL_LLAMADAS) {

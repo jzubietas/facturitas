@@ -638,6 +638,19 @@ class Pedido extends Model
         return $query;
     }
 
+    public static function getTipoLetraByCliente($cliente)
+    {
+        $letra="";
+        $weight="";
+        $info_cliente=Cliente::where('id','=',$cliente)->first()->situacion;
+        if($info_cliente==Cliente::RECUPERADO_ABANDONO)
+        {
+            $letra="Comic";
+            $weight="bold";
+        }
+        return $letra."|".$weight;
+    }
+
     public static function getColorByCondicionEnvio($condicion_envio)
     {
         $condicion_envio = \Str::lower($condicion_envio ?? '');

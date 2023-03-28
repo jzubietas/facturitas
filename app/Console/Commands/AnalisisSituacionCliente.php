@@ -283,22 +283,45 @@ class AnalisisSituacionCliente extends Command
                                   $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(3);
 
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
-                                  //$this->warn($situacion_periodo);
+
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
-                                  if($situacion_periodo->activos==0)
+
+                                  if($situacion_periodo->anulados==0)
                                   {
-                                      $situacion_create->update([
-                                          "situacion" => 'NUEVO',
-                                          "flag_fp" => '1'
-                                      ]);
-                                  }else if($situacion_periodo->activos>0)
-                                  {
-                                      $situacion_create->update([
-                                          "situacion" => 'NULO',
-                                          "flag_fp" => '1'
-                                      ]);
+
+                                      if($situacion_periodo->activos==0)
+                                      {
+                                          $situacion_create->update([
+                                              "situacion" => 'BASE FRIA',
+                                              "flag_fp" => '1'
+                                          ]);
+                                      }else if($situacion_periodo->activos>0)
+                                      {
+                                          $situacion_create->update([
+                                              "situacion" => 'NUEVO',
+                                              "flag_fp" => '1'
+                                          ]);
+                                      }
                                   }
+                                  else if($situacion_periodo->anulados>0)
+                                  {
+
+                                      if($situacion_periodo->activos==0)
+                                      {
+                                          $situacion_create->update([
+                                              "situacion" => 'NULO',
+                                              "flag_fp" => '1'
+                                          ]);
+                                      }else if($situacion_periodo->activos>0)
+                                      {
+                                          $situacion_create->update([
+                                              "situacion" => 'NUEVO',
+                                              "flag_fp" => '1'
+                                          ]);
+                                      }
+                                  }
+
 
                                   break;
                               case 'RECUPERADO RECIENTE':
@@ -384,45 +407,94 @@ class AnalisisSituacionCliente extends Command
 
 
                                   //marzo estoy sin pedidos totales
-                                  if($situacion_periodo->activos==0)
+                                  if($situacion_periodo->anulados==0)
                                   {
-                                      if($situacion_antes->activos==0)
+                                      if($situacion_periodo->activos==0)
                                       {
-                                          //es febrero
-                                          if($situacion_antes_2->activos==0)
+                                          $situacion_create->update([
+                                              "situacion" => 'NULO',"flag_fp" => '1'
+                                          ]);
+                                      }else if($situacion_periodo->activos>0)
+                                      {
+                                          if($situacion_antes->activos==0)
                                           {
-                                              //es enero
-                                              if($situacion_antes_3->activos==0)
+                                              //es febrero
+                                              if($situacion_antes_2->activos==0)
                                               {
-                                                  // es diciembre
-                                                  //a abandono
-                                                  $situacion_create->update([
-                                                      "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
-                                                  ]);
+                                                  //es enero
+                                                  if($situacion_antes_3->activos==0)
+                                                  {
+                                                      // es diciembre
+                                                      //a abandono
+                                                      $situacion_create->update([
+                                                          "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
+                                                      ]);
 
-                                              }else if($situacion_antes_3->activos>0)
+                                                  }else if($situacion_antes_3->activos>0)
+                                                  {
+                                                      //a abandono reciente
+                                                      $situacion_create->update([
+                                                          "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                      ]);
+                                                  }
+                                              }else if($situacion_antes_2->activos>0)
                                               {
-                                                  //a abandono reciente
                                                   $situacion_create->update([
-                                                      "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                      "situacion" => 'NUEVO',"flag_fp" => '1'
                                                   ]);
                                               }
-                                          }else if($situacion_antes_2->activos>0)
+                                          }else if($situacion_antes->activos>0)
                                           {
                                               $situacion_create->update([
                                                   "situacion" => 'NUEVO',"flag_fp" => '1'
                                               ]);
                                           }
-                                      }else if($situacion_antes->activos>0)
+                                      }
+                                  }
+                                  else if($situacion_periodo->anulados>0)
+                                  {
+                                      if($situacion_periodo->activos==0)
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'NUEVO',"flag_fp" => '1'
+                                              "situacion" => 'NULO',"flag_fp" => '1'
                                           ]);
+
+                                      }else if($situacion_periodo->activos>0)
+                                      {
+                                          if($situacion_antes->activos==0)
+                                          {
+                                              //es febrero
+                                              if($situacion_antes_2->activos==0)
+                                              {
+                                                  //es enero
+                                                  if($situacion_antes_3->activos==0)
+                                                  {
+                                                      // es diciembre
+                                                      //a abandono
+                                                      $situacion_create->update([
+                                                          "situacion" => 'NULO',"flag_fp" => '1'
+                                                      ]);
+
+                                                  }else if($situacion_antes_3->activos>0)
+                                                  {
+                                                      //a abandono reciente
+                                                      $situacion_create->update([
+                                                          "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                      ]);
+                                                  }
+                                              }else if($situacion_antes_2->activos>0)
+                                              {
+                                                  $situacion_create->update([
+                                                      "situacion" => 'NUEVO',"flag_fp" => '1'
+                                                  ]);
+                                              }
+                                          }else if($situacion_antes->activos>0)
+                                          {
+                                              $situacion_create->update([
+                                                  "situacion" => 'NUEVO',"flag_fp" => '1'
+                                              ]);
+                                          }
                                       }
-                                  }else{
-                                      $situacion_create->update([
-                                          "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
-                                      ]);
                                   }
                                   break;
                               case 'ABANDONO':
