@@ -80,7 +80,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <h6 class="alert alert-warning text-center font-weight-bold">
-                                                    <b>Doc <span class="text-danger">por anular:</span></b>
+                                                    <b>Doc <span class="text-danger">por anular</span></b>
                                                 </h6>
                                             </div>
                                         </div>
@@ -163,7 +163,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <h6 class="alert alert-warning text-center font-weight-bold">
-                                                    <b>Doc <span class="text-danger">por anular:</span></b>
+                                                    <b>Doc <span class="text-danger">por anular</span></b>
                                                 </h6>
                                             </div>
                                         </div>
