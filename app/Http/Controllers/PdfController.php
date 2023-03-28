@@ -185,17 +185,21 @@ class PdfController extends Controller
         $recurrentes_cuenta=0;
         $html = [];
         $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
+
+        foreach ($situaciones_clientes as $situacion_cliente_3)
+        {
+            if($situacion_cliente_3->situacion=='ACTIVO')
+            {
+                $activos_cuenta=$situacion_cliente_3->total;
+            }
+            else if($situacion_cliente_3->situacion=='RECURRENTE')
+            {
+                $recurrentes_cuenta=$situacion_cliente_3->total;
+            }
+        }
+
         foreach ($situaciones_clientes as $situacion_cliente)
         {
-            if($situacion_cliente->situacion=='ACTIVO')
-            {
-                $activos_cuenta=$situacion_cliente->total;
-                continue;
-            }else if($situacion_cliente->situacion=='RECURRENTE')
-            {
-                $recurrentes_cuenta=$situacion_cliente->total;
-            }
-
             $html[] = '<tr>';
             $html[] = '<td style="width:20%;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
@@ -371,7 +375,7 @@ class PdfController extends Controller
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>- '
-                                                                . $activos_cuenta . 
+                                                                . $activos_cuenta .
                                                                 ' /  (activos. ' . ($activos_cuenta).'   + recurrente. '.($recurrentes_cuenta) . ')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
 
