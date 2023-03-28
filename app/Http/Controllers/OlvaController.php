@@ -83,29 +83,33 @@ class OlvaController extends Controller
             ->join('users', 'users.id', 'direccion_grupos.user_id')
             ->activo()
             ->whereIn('direccion_grupos.condicion_envio_code', [
+                Pedido::RECEPCIONADO_OLVA_INT,
+                Pedido::EN_CAMINO_OLVA_INT,
                 Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+                Pedido::NO_ENTREGADO_OLVA_INT,
             ])
-            ->whereNull('direccion_grupos.courier_failed_sync_at')
+            /*->whereNull('direccion_grupos.courier_failed_sync_at')
             ->where('direccion_grupos.distribucion', 'OLVA')
-            ->where('direccion_grupos.motorizado_status', '0')
+            ->where('direccion_grupos.motorizado_status', '0')*/
+            ->whereNotIn('direccion_grupos.courier_estado', ["ENTREGADO"])
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
                 "clientes.nombre as cliente_nombre",
             ]);
-        if (user_rol(User::ROL_ASESOR) || user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
+        /*if (user_rol(User::ROL_ASESOR) || user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
             $pedidos_provincia->where(function ($query) {
                 $query->whereNull('direccion_grupos.add_screenshot_at');
                 $query->orWhereDate('direccion_grupos.add_screenshot_at', '<', now());
             });
-        }
+        }*/
 
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
 
         $query = DB::table($pedidos_provincia);
-        if (!user_rol(User::ROL_ASESOR) && !user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
+        /*if (!user_rol(User::ROL_ASESOR) && !user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
             $query->orderBy('add_screenshot_at');
-        }
+        }*/
         $query->orderByDesc('id');
 
         return datatables()->query($query)
@@ -140,7 +144,7 @@ class OlvaController extends Controller
             })
             ->addColumn('condicion_envio_format', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $html = '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                $html = '<span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span>';
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
@@ -327,10 +331,12 @@ class OlvaController extends Controller
             ->inOlva()
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->where('direccion_grupos.motorizado_status', '0')
+
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
                 "clientes.nombre as cliente_nombre",
+                DB::raw("(select env_tracking from pedidos pe where pe.direccion_grupo=direccion_grupos.id limit 1) as pe_env_tracking"),
             ]);
 
         return Datatables::of(
@@ -349,7 +355,15 @@ class OlvaController extends Controller
             ->editColumn('direccion_format', function ($pedido) {
                 return collect(explode(',', $pedido->direccion))->trim()
                     ->map(function ($f) use ($pedido) {
-                        if ($pedido->courier_failed_sync_at != null) {
+                        $verBoton=0;
+                        $trackings= collect(explode(',', $pedido->pe_env_tracking))->trim()->filter()->values();
+                        foreach ($trackings as $item =>  $tracking) {
+                            $tracking = explode('-', $tracking);
+                        }
+                        if (count($tracking) != 2) {
+                            $verBoton=1;
+                        }
+                        if ($pedido->courier_failed_sync_at != null || $verBoton==1) {
                             return '<b class="d-flex">' . $f . '<i data-jqconfirm="edit_tracking" data-action="' . route('envios.seguimientoprovincia.update', [
                                     'direccion_grupo_id' => $pedido->id,
                                     'action' => 'update_tracking',
@@ -369,12 +383,12 @@ class OlvaController extends Controller
             })
             ->addColumn('condicion_envio_format', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $html = '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                $html = '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->courier_estado . '</span>';
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
                 $btnAdd = [];
-                switch ($pedido->condicion_envio_code) {
+                /*switch ($pedido->condicion_envio_code) {
                     case Pedido::RECEPCIONADO_OLVA_INT:
                         $btnType = [
                             'icon' => 'fas fa-car',
@@ -399,14 +413,14 @@ class OlvaController extends Controller
                         break;
                     default:
                         $btnType = [];
-                }
+                }*/
                 $btn = '';
-                if (!empty($btnType)) {
+                /*if (!empty($btnType)) {
                     $btn = '<button style="font-size:9px" data-target="" data-toggle="jqconfirm" class="btn ' . $btnType['btnClass'] . ' btn-sm"><i class="' . $btnType['icon'] . '"></i> <b>ACTUALIZAR ESTADO</b></button>';
                 }
                 if (!in_array(\auth()->user()->rol, [User::ROL_JEFE_COURIER, User::ROL_ADMIN])) {
                     $btn = '';
-                }
+                }*/
                 return '<div class="d-flex" style="flex-direction: column; gap:0.5rem">' . $btn . join('', $btnAdd) . '</div>';
             })
             ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])

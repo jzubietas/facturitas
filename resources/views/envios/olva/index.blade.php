@@ -34,6 +34,13 @@
           </tr>
         </tbody>
       </table><br> --}}
+    <div class="card">
+        <div class="card-body row">
+            <div class="col-md-6">
+                <a class="btn btn-success btn-sm" href="{{ route('excel.envios-olva')  }}" target="_blank" ><i class="fa fa-file-excel"></i> Exportar Excel</a>
+            </div>
+        </div>
+    </div>
       <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
         <tr>

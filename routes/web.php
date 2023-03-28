@@ -848,4 +848,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('chart-pedidos-asesores', [ChartController::class,'getPedidosAsesores'])->name('chart-pedidos-asesores');
     Route::get('chart-pedidos-asesores-faltantes', [ChartController::class,'getPedidosAsesoresfaltantes'])->name('chart-pedidos-asesores-faltantes');
     Route::get('chart-pedidos-encargados', [ChartController::class,'getPedidosEncargadosfaltantes'])->name('chart-pedidos-encargados');
+
+
+    Route::get('excel/envios/olva', [ExcelController::class, 'listadoEnviosTiendaOlva'])->name('excel.envios-olva');
+
 });

@@ -100,6 +100,13 @@
                 </tbody>
             </table>
             <br>-->
+            <div class="card">
+                <div class="card-body row">
+                    <div class="col-md-6">
+                        <a type="button" class="btn btn-outline-warning btn-sm" href="{{ route('envios.olva.index')  }}"><i class="fas fa-dolly-flatbed"></i> Olva / Tienda Agente</a>
+                    </div>
+                </div>
+            </div>
             <table id="tablabandejapedidos" class="table table-striped">{{-- display nowrap  --}}
                 <thead>
                 <tr>
