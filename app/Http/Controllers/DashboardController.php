@@ -2142,7 +2142,7 @@ class DashboardController extends Controller
 
             if ($count_asesor[24]['all_situacion_recurrente'] == 0) {
                 $html .= '<div class="progress-bar bg-danger" role="progressbar"
-                 style="width: ' . round(($count_asesor[24]['all_situacion_activo'] / $count_asesor[24]['all_situacion_recurrente']) * 100, 2) . '%"
+                 style="width: ' . round(($count_asesor[24]['all_situacion_activo'] / ($count_asesor[24]['all_situacion_recurrente']+$count_asesor[24]['all_situacion_activo']) ) * 100, 2) . '%"
                  aria-valuenow="' . (round(0, 2)) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
@@ -2150,7 +2150,7 @@ class DashboardController extends Controller
 
                 if($count_asesor[24]['all_situacion_activo']>0)
                 {
-                    $round=round( ( ($count_asesor[24]['all_situacion_activo'])/$count_asesor[24]['all_situacion_recurrente'] )*100 ,2);
+                    $round=round( ( ($count_asesor[24]['all_situacion_activo'])/($count_asesor[24]['all_situacion_recurrente'] +$count_asesor[24]['all_situacion_activo'] ) )*100 ,2);
                 }else{
                     $round=0.00;
                     //cuando pedidos es 0
@@ -2224,15 +2224,15 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                    $count_asesor[24]['all_situacion_activo'] . '/' . $count_asesor[24]['all_situacion_recurrente'] . '</span>
+                    $count_asesor[24]['all_situacion_activo'] . '/' . ($count_asesor[24]['all_situacion_recurrente']+$count_asesor[24]['all_situacion_activo']) . '</span>
     </div>';
             } else {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total"
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
-             PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[24]['all_situacion_activo'] / $count_asesor[24]['all_situacion_recurrente']) * 100, 2) . '%</b> - '
-                    . $count_asesor[24]['all_situacion_activo'] . '/' . $count_asesor[24]['all_situacion_recurrente'] . '</span>
+             PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($count_asesor[24]['all_situacion_activo'] / ($count_asesor[24]['all_situacion_recurrente']+$count_asesor[24]['all_situacion_activo']) ) * 100, 2) . '%</b> - '
+                    . $count_asesor[24]['all_situacion_activo'] . '/' . ($count_asesor[24]['all_situacion_recurrente'] +$count_asesor[24]['all_situacion_activo']) . '</span>
     </div>';
             }
 
