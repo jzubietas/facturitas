@@ -1919,7 +1919,7 @@ class DashboardController extends Controller
                 if($object_totales['all_situacion_activo']>0)
                 {
                     $diferencia= ($object_totales['all_situacion_activo']+$object_totales['all_situacion_recurrente']) - $object_totales['all_situacion_activo'];
-                    $round=round( ( ($object_totales['all_situacion_activo'])/$object_totales['all_situacion_recurrente'] )*100 ,2);
+                    $round=round( ( ($object_totales['all_situacion_activo'])/ ($object_totales['all_situacion_recurrente']+$object_totales['all_situacion_activo'] ) )*100 ,2);
                 }else{
                     $round=0.00;
                     $diferencia=0;
@@ -2037,7 +2037,7 @@ class DashboardController extends Controller
 
                 if($count_asesor[46]['all_situacion_activo']>0)
                 {
-                    $round=round( ( ($count_asesor[46]['all_situacion_activo'])/$count_asesor[46]['all_situacion_recurrente'] )*100 ,2);
+                    $round=round( ( ($count_asesor[46]['all_situacion_activo'])/ ($count_asesor[46]['all_situacion_recurrente']+$count_asesor[46]['all_situacion_activo']) )*100 ,2);
                 }else{
                     $round=0.00;
                     //cuando pedidos es 0
