@@ -255,6 +255,9 @@ class PedidoController extends Controller
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
+            ->addColumn('tipo_letra', function ($pedido) {
+                return Pedido::getTipoLetraByCliente($pedido->cliente_id);
+            })
             ->editColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';
                 if ($pedido->codigo_regularizado == '1') {

@@ -188,11 +188,21 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
             <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
         </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="dejaronpedir_supervisor_total"></div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="dejaronpedir_supervisor_A"></div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="dejaronpedir_supervisor_B"></div>
+        </div>
+
     </div>
-
-
-
 </div>
+
+
 
 <br>
 
@@ -604,6 +614,14 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         else if (entero == 9) {/*derecha*/
                             $('#grafico_dejaronpedir_right').html(resultado);
                         }
+                        else if (entero == 13) {
+                            $('#dejaronpedir_supervisor_total').html(resultado);
+                        }
+                        else if (entero == 14) {
+                            $('#dejaronpedir_supervisor_A').html(resultado);
+                        } else if (entero == 15) {
+                            $('#dejaronpedir_supervisor_B').html(resultado);
+                        }
 
                     }
                 })
@@ -664,6 +682,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva(8);
             cargaNueva(9);
 
+            cargaNueva(14);//fernando
+            cargaNueva(15);//paola
+            cargaNueva(13);//totales porcentajes debajo de metas
+
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
@@ -681,6 +703,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 cargaNueva(8);
                 cargaNueva(9);
+
+                cargaNueva(14);//fernando
+                cargaNueva(15);//paola
+                cargaNueva(13);//totales porcentajes debajo de metas
 
                 cargReporteMetasCobranzasGeneral();
             }
