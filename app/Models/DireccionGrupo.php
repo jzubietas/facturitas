@@ -50,9 +50,9 @@ class DireccionGrupo extends Model implements HasMedia
     const  OLVA_SINIESTRADO=10;
     const  OLVA_NOEXISTE=11;
 
-    public static function getEstadosOlvaFinal(self $grupo){
+   /* public static function getEstadosOlvaFinal(self $grupo){
         return DireccionGrupo::$getEstadosOlva($grupo->courier_estado);
-    }
+    }*/
 
     public static $getEstadosOlva = [
         'OTROS' => DireccionGrupo::OLVA_OTROS,

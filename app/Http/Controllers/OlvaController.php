@@ -155,9 +155,9 @@ class OlvaController extends Controller
                 return join('', $brnOlva);
             })
             ->addColumn('courier_estado_nueva', function ($pedido) {
-                return DireccionGrupo::getEstadosOlvaFinal($pedido->courier_estado);
+                return DireccionGrupo::$getEstadosOlva[$pedido->courier_estado];
             })
-            ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format','courier_estado_nueva'])
+            ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
             ->make(true);
     }
 

@@ -49,6 +49,7 @@
       <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
         <tr>
+            <th class="align-middle" scope="col">Ordnar</th>
           <th class="align-middle" scope="col">Item</th>
           <th class="align-middle" scope="col">Código</th>
           <th class="align-middle" scope="col">Id</th>
@@ -161,7 +162,7 @@
         stateSave: false,
         serverSide: true,
         searching: true,
-        /*"order": [[8, "asc"]],*/
+        "order": [[0, "desc"]],
         ajax: "{{ route('envios.olva.table') }}",
         createdRow: function (row, data, dataIndex) {
           //console.log(row);
@@ -323,6 +324,11 @@
           })
         },
         columns: [
+            {
+              data:'courier_estado_nueva',
+              name:'courier_estado_nueva',
+              'visible':false,
+            },
           {
             data: 'id',
             name: 'id',
