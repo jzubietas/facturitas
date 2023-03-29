@@ -724,25 +724,25 @@ class PagoController extends Controller
 
                 $cliente = Cliente::find($request->cliente_id);
 
-                $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
-                $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
+                $cliente_pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
+                $cliente_pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
 
 
                 $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)
                     ->where('pagado', '0')
                     ->count();
 
-                if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes == 0) {
+                if ($cliente_pedidos_mes_deuda > 0 && $cliente_pedidos_mes_deuda_antes == 0) {
                     $cliente->update([
                         'deuda' => '0'
                     ]);
 
-                } else if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes > 0) {
+                } else if ($cliente_pedidos_mes_deuda > 0 && $cliente_pedidos_mes_deuda_antes > 0) {
                     $cliente->update([
                         'deuda' => '1'
                     ]);
 
-                } else if ($cliente->pedidos_mes_deuda == 0 && $cliente->pedidos_mes_deuda_antes > 0) {
+                } else if ($cliente_pedidos_mes_deuda == 0 && $cliente_pedidos_mes_deuda_antes > 0) {
                     $cliente->update([
                         'deuda' => '1'
                     ]);
