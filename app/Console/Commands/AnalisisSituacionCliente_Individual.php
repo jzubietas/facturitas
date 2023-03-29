@@ -120,7 +120,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     $compara=Carbon::parse($periodo_original);
                     $this->warn("compara con ".$compara);
 
-                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->clone()->startOfMonth()->subMonth();
 
                     if($cont_mes==0)
                     {
