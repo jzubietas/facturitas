@@ -652,7 +652,7 @@ class AnalisisSituacionCliente_Individual extends Command
                         ]);
 
                     }
-                    $dias_sumar=Carbon::parse($periodo_ejecucion)->daysInMonth();
+                    $dias_sumar=Carbon::parse($periodo_ejecucion)->daysInMonth;
                     $this->info("sumar ".$dias_sumar);
                     $periodo_ejecucion->addDays($dias_sumar);
                 }
