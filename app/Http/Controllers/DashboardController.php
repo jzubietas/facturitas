@@ -1316,7 +1316,7 @@ class DashboardController extends Controller
                 else
                 {
                     $html .= '<div class="progress-bar bg-danger" role="progressbar"
-                         style="width: ' . ($round) . '%"
+                         style="width: ' . ($round) . ';%background: rgba(0,143,251,1) !important;"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
@@ -1797,7 +1797,7 @@ class DashboardController extends Controller
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                          <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
+                                          <div class="rounded" role="progressbar" style="background: rgba(0,143,251,1); width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                             <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_2"] . '<p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
