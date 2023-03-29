@@ -372,6 +372,7 @@ class PedidosAnulacionController extends Controller
             $pedidosinpago=Pedido::where('id',$pedido_id)->where('pago',0)->where('pagado',0)->count();
             if ($pedidosinpago==1){
                 $files = $request->file('inputArchivoSubir');
+                $filesC = $request->file('inputArchivoCapturaSubir');
                 $pedidosanulacion = new PedidosAnulacion;
                 $pedidosanulacion->pedido_id=$pedido_id;;
                 $pedidosanulacion->user_id_asesor=auth()->user()->id;
@@ -387,6 +388,15 @@ class PedidosAnulacionController extends Controller
                     $fileUpload->filename = $file->getClientOriginalName();
                     $fileUpload->filepath = $file->store('pedidos/anulaciones', 'pstorage');
                     $fileUpload->type= $file->getClientOriginalExtension();
+                    $fileUpload->save();
+                    $idsfiles=$idsfiles.$fileUpload->id."-";
+                }
+                foreach($filesC as $fileC){
+                    $fileUpload = new FileUploadAnulacion;
+                    $fileUpload->pedido_anulacion_id=$pedidosanulacion->id;
+                    $fileUpload->filename = $fileC->getClientOriginalName();
+                    $fileUpload->filepath = $fileC->store('pedidos/anulaciones', 'pstorage');
+                    $fileUpload->type= $fileC->getClientOriginalExtension();
                     $fileUpload->save();
                     $idsfiles=$idsfiles.$fileUpload->id."-";
                 }

@@ -306,6 +306,11 @@
                     $(".btnEnviarPagoCompleto").attr('disabled', false);
                     return false;
                 }
+                if ($('#inputArchivoCapturaSubir').val() == '') {
+                    Swal.fire('Error', 'No se puede ingresar sin archivos en captura', 'warning');
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    return false;
+                }
                 if (txtMotivoPedComplet.length < 1) {
                     Swal.fire('Error','Completa el sustento para la anulación ','warning'
                     ).then(function () {
@@ -315,14 +320,14 @@
                     return false;
                 }
 
-                if (txtMotivoPedComplet.length > 250) {
+                /*if (txtMotivoPedComplet.length > 250) {
                     Swal.fire('Error','El campo motivo no debe superar los 250 caracteres.','warning'
                     ).then(function () {
                         $("#txtMotivoPedComplet").focus()
                     });
                     $(".btnEnviarPagoCompleto").attr('disabled', false);
                     return false;
-                }
+                }*/
                 var data = new FormData(document.getElementById("form-agregaranulacion-pc"));
 
                 $.ajax({
@@ -473,6 +478,11 @@
                     $(".btnEnviarFactura").attr('disabled', false);
                     return false;
                 }
+                if ($('#inputArchivoCapturaSubirf').val() == '') {
+                    Swal.fire('Error', 'No se puede ingresar sin archivos en capturas', 'warning');
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
                 if (txtMotivoFactura.length < 1) {
                     Swal.fire('Error','Completa el sustento para la anulación ','warning'
                     ).then(function () {
@@ -481,14 +491,14 @@
                     $(".btnEnviarFactura").attr('disabled', false);
                     return false;
                 }
-                if (txtMotivoFactura.length >250) {
+                /*if (txtMotivoFactura.length >250) {
                     Swal.fire('Error','El campo sustento no debe superar los 250 caracteres.','warning'
                     ).then(function () {
                         $("#txtMotivoFactura").focus()
                     });
                     $(".btnEnviarFactura").attr('disabled', false);
                     return false;
-                }
+                }*/
                 var datas = new FormData(document.getElementById("form-agregaranulacion-f"));
                 /*console.log('FActuras',datas); return false;*/
                 $.ajax({

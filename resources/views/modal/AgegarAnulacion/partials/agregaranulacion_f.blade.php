@@ -1,4 +1,4 @@
-<form id="form-agregaranulacion-f" name="form-agregaranulacion-f" class="agregaranulacion" enctype="multipart/form-data">
+<form id="form-agregaranulacion-f-2" name="form-agregaranulacion-f-2" class="agregaranulacion" enctype="multipart/form-data">
     <input type="hidden" id="agregaranulacion_f" name="agregaranulacion_f">
     <input type="hidden" id="txtIdPedidoFactura" name="txtIdPedidoFactura">
     <input type="hidden" id="tipoAnulacion2" name="tipoAnulacion2" value="F">
