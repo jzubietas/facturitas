@@ -78,8 +78,6 @@ class AnalisisSituacionCliente_Individual extends Command
             $this->warn($clientes);
             $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
 
-
-
             $this->warn($periodo_inicial);
 
             $periodo_ejecucion=$periodo_inicial;
@@ -95,9 +93,6 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     $this->warn($periodo_ejecucion);
                     $periodo_ejecucion=$periodo_ejecucion->addMonth();
-                    continue;
-
-                    //$periodo_ejecucion=$periodo_ejecucion->addMonth();
 
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
@@ -110,7 +105,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                         ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
 
-                    //$this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
+                    $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
 
                     $situacion_create=SituacionClientes::create([
                         'cliente_id'=>$cliente->id,
@@ -121,6 +116,10 @@ class AnalisisSituacionCliente_Individual extends Command
                         'periodo'=>Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m'),
                         'flag_fp'=>'0'
                     ]);
+
+                    continue;
+
+
 
                     $compara=Carbon::parse($fp->created_at);
 
