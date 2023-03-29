@@ -53,7 +53,6 @@ class PedidosExport implements FromView, ShouldAutoSize
                     'dp.anio as aniopedido'
                 ]
             )
-            //->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
               /*->where('pedidos.codigo','not like','%-C%')*/
             ->where('pedidos.estado_correcion','=','0')
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
