@@ -67,7 +67,7 @@ class AnalisisSituacionCliente_Individual extends Command
       //$this->info($diff);
       //return 0;
 
-        $periodo_inicial=Carbon::parse($fp->created_at);
+        $periodo_inicial=Carbon::parse($fp->created_at)->clone()->startOfMonth();
         $periodo_ejecucion=null;
 
         foreach($clientes as $cliente)
