@@ -1368,13 +1368,12 @@ class DashboardController extends Controller
                 }
                 else
                 {
-                    $html .= '<div class="progress-bar bg-primary" role="progressbar"
-                         style="width: ' . ($round) . '%"
+                    $html .= '<div class="progress-bar " role="progressbar"
+                         style="width: ' . ($round) . '%;background:rgba(0,143,251,1)"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
                 }
-
 
             }
 
