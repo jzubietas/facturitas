@@ -809,8 +809,9 @@
                 var button = $(event.relatedTarget)
                 console.log(button);
                 var pedido_motivo= button.data('pedido-motivo')
+                var pedido_codigo= button.data('codigos')
                 $("#txtMotivoAnulacion").html(pedido_motivo);
-
+                $(".lblTitleMotivoAnulacion").html("Motivo Anulacion : "+pedido_codigo);
                 //datos form
                 /*var formVerImagenAnularSol = new FormData();
                 formVerImagenAnularSol.append("pedidoAnulacionId", data.idanulacion);*/

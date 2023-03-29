@@ -290,9 +290,9 @@ class PedidosAnulacionController extends Controller
                 $deshabilitar="";
                 if (in_array(Auth::user()->rol,[User::ROL_ADMIN,User::ROL_ASESOR,User::ROL_ENCARGADO])) {
                     if ($pedido->tipoanulacion=='C'){
-                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo" ><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
+                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo" ><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }else  if ($pedido->tipoanulacion=='F'){
-                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
+                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }
                     return $htmltipoanul;
                 }else{
