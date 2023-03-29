@@ -54,7 +54,7 @@ class PedidosExport implements FromView, ShouldAutoSize
                 ]
             )
               /*->where('pedidos.codigo','not like','%-C%')*/
-            ->where('pedidos.estado_correcion','=','0')
+            ->where('pedidos.estado_correccion','=','0')
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
