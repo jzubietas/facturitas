@@ -911,8 +911,8 @@ class DashboardController extends Controller
             }
             else
             {
-                $html .= '<div class="progress-bar bg-info" role="progressbar"
-                         style="width: ' . ($round) . '%"
+                $html .= '<div class="progress-bar " role="progressbar"
+                         style="width: ' . ($round) . ';background: #008ffb !important%;"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
@@ -1138,8 +1138,8 @@ class DashboardController extends Controller
                 }
                 else
                 {
-                    $html .= '<div class="progress-bar bg-info" role="progressbar"
-                         style="width: ' . ($round) . '%"
+                    $html .= '<div class="progress-bar" role="progressbar"
+                         style="width: ' . ($round) . ';background: #008ffb !important%;"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
@@ -1368,8 +1368,8 @@ class DashboardController extends Controller
                 }
                 else
                 {
-                    $html .= '<div class="progress-bar bg-info" role="progressbar"
-                         style="width: ' . ($round) . '%"
+                    $html .= '<div class="progress-bar " role="progressbar"
+                         style="width: ' . ($round) . ';background: #008ffb !important%;"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
