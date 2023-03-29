@@ -87,15 +87,17 @@ class AnalisisSituacionCliente_Individual extends Command
 
             for($i=0;$i<$diff;$i++)
                 {
+
                     $this->warn('vuelta '.$i);
-
-
-
-                    $this->warn($periodo_ejecucion);
-
-
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
+                    $mes_ejecucion = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+                    
+                    $this->warn($periodo_ejecucion);
+
+                    continue;
+
 
                     //contadores
                     $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
