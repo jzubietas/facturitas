@@ -91,12 +91,20 @@ class AnalisisSituacionCliente_Individual extends Command
                     $this->warn('vuelta '.$i);
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
-                    $mes_ejecucion = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m');
+                    $mes_ejecucion = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+
+                    $uso_ejecucion=$mes_ejecucion->clone()->format('Y-m');
+                    $uso_antes=$mes_ejecucion->clone()->subMonth()->format('Y-m');
+
+                    $this->warn($uso_ejecucion . ' y ' .$uso_antes);
+
+                    continue;
+
                     $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth()->format('Y-m');
 
                     $this->warn($mes_ejecucion);
 
-                    continue;
+
 
 
                     //contadores
