@@ -762,6 +762,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             setInterval(myTimer, 30000);
 
             function myTimer() {
+                console.log("recargando")
                 cargaNueva(1);
                 cargaNueva(2);
                 cargaNueva(3);
