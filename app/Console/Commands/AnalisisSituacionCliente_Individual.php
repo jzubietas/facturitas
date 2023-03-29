@@ -75,31 +75,21 @@ class AnalisisSituacionCliente_Individual extends Command
 
             $idcliente=$cliente->id;
 
-            $this->warn($clientes);
-            $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
+            //if($cliente->id==1739)
+            {
+                $this->warn($cliente->id);
+                $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
 
-            $this->warn($periodo_inicial);
+                $periodo_inicial=Carbon::parse($fp->created_at);
+                $periodo_ejecucion=null;
 
-            $periodo_ejecucion=$periodo_inicial;
-
-            $this->warn($diff);
-            //continue;
-
-            for($i=0;$i<$diff;$i++)
+                for($i=0;$i<$diff;$i++)
                 {
-
-                    $this->warn('vuelta '.$i);
+                    $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
-                    $mes_ejecucion = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-
-                    $uso_ejecucion=$mes_ejecucion->clone()->format('Y-m');
-                    $uso_antes=$mes_ejecucion->clone()->subMonth()->format('Y-m');
-
-                    $this->warn($uso_ejecucion . ' y ' .$uso_antes);
 
                     //contadores
-
                     $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                         ->whereMonth('created_at',$where_mes)->where('codigo', 'not like', "%-C%")->count();
                     $cont_mes_activo=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
@@ -107,8 +97,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                         ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
 
-                    $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
-
+                    //$this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
 
                     $situacion_create=SituacionClientes::create([
                         'cliente_id'=>$cliente->id,
@@ -120,44 +109,9 @@ class AnalisisSituacionCliente_Individual extends Command
                         'flag_fp'=>'0'
                     ]);
 
-                    $compara=Carbon::parse($periodo_original);
-                    $this->info("compara con ".$compara);
+                    $compara=Carbon::parse($fp->created_at);
 
-                    if($cont_mes==0)
-                    {
-                        if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
-                        {
-                            $this->info("es mes origen");
-                            $situacion_create->update([
-                                "situacion" => 'BASE FRIA',
-                                "flag_fp" => '0'
-                            ]);
-                        }else{
-                            $this->warn("mes antes   -> ".$uso_antes);
-                            $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)
-                                ->where('periodo',$uso_antes)->first();
-
-                            $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
-
-                            $periodo_ejecucion=$uso_ejecucion;
-
-                            $this->warn("mes ejecucion  ->".$periodo_ejecucion );
-                            $this->warn($situacion_antes);
-                        }
-
-                    }else if($cont_mes>0)
-                    {
-
-                    }
-
-
-                    /////////////////////////////////////
-                    $periodo_ejecucion=Carbon::parse($periodo_ejecucion)->addMonth();
-                    $where_anio=$periodo_ejecucion->clone()->format('Y');
-                    $where_mes=$periodo_ejecucion->clone()->format('m');
-
-
-                    continue;
+                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
 
                     if($cont_mes==0)
                     {
@@ -169,16 +123,7 @@ class AnalisisSituacionCliente_Individual extends Command
                             ]);
                         }
                         else{
-                            $this->warn("mes antes   -> ".$mes_antes);
-                            $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)
-                                ->where('periodo',$mes_antes->format('Y-m'))->first();
-
-                            $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
-
-                            $periodo_ejecucion=Carbon::createFromDate($where_anio,$where_mes,1)->startOfMonth();
-
-                            $this->warn("mes ejecucion  ->".$periodo_ejecucion );
-                            $this->warn($situacion_antes);
+                            $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
                             switch($situacion_antes->situacion)
                             {
@@ -535,7 +480,7 @@ class AnalisisSituacionCliente_Individual extends Command
                                                         // es diciembre
                                                         //a abandono
                                                         $situacion_create->update([
-                                                            "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
+                                                            "situacion" => 'NULO',"flag_fp" => '1'
                                                         ]);
 
                                                     }else if($situacion_antes_3->activos>0)
@@ -676,7 +621,6 @@ class AnalisisSituacionCliente_Individual extends Command
 
                         }
                     }
-                    /**/
 
                     if($i==($diff-1))
                     {
@@ -704,13 +648,9 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     }
 
-                    /**/
-                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
-
-                    continue;
-
                 }
 
+            }
 
             $final_cliente=Cliente::where('id',$cliente->id)->first();
             $this->info("situacion final es ".$final_cliente->situacion);
