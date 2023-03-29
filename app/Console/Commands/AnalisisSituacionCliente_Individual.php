@@ -120,18 +120,6 @@ class AnalisisSituacionCliente_Individual extends Command
                     $compara=Carbon::parse($periodo_original);
                     $this->warn("compara con ".$compara);
 
-                    /**/
-
-
-                    /**/
-                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
-
-                    continue;
-
-
-
-
-
                     $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
 
                     if($cont_mes==0)
@@ -643,6 +631,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
                         }
                     }
+                    /**/
 
                     if($i==($diff-1))
                     {
@@ -670,7 +659,10 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     }
 
+                    /**/
+                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
 
+                    continue;
 
                 }
 
