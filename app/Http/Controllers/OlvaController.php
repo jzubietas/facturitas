@@ -99,7 +99,7 @@ class OlvaController extends Controller
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
 
         $query = DB::table($pedidos_provincia);
-        $query->orderByDesc('direccion_grupos.courier_estado');
+        /*$query->orderByDesc('direccion_grupos.courier_estado');*/
 
         return datatables()->query($query)
             ->addIndexColumn()
@@ -137,6 +137,7 @@ class OlvaController extends Controller
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
+                $brnOlva=[];
                 if (user_rol(User::ROL_ADMIN) || user_rol(User::ROL_ENCARGADO)) {
                     $pintar = 'info';
                     if ($pedido->add_screenshot_at == null) {
@@ -146,11 +147,17 @@ class OlvaController extends Controller
                     } elseif (Carbon::parse($pedido->add_screenshot_at)->isToday()) {
                         $pintar = 'success';
                     }
-                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . $pintar . ' btn-sm "><i class="fa fa-history"></i> <b class="' . ($pedido->add_screenshot_at == null ? 'text-dark' : '') . '">Ver Historial</b></button>';
+                    $brnOlva[]= '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . $pintar . ' btn-sm "><i class="fa fa-history"></i> <b class="' . ($pedido->add_screenshot_at == null ? 'text-dark' : '') . '">Ver Historial</b></button>';
                 }
-                return '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
+                if ($pedido->courier_estado =="CONFIRMACION EN TIENDA" || $pedido->courier_estado=="EN ALMACEN"){
+                    $brnOlva[]= '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
+                }
+                return join('', $brnOlva);
             })
-            ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
+            ->addColumn('courier_estado_nueva', function ($pedido) {
+                return DireccionGrupo::getEstadosOlvaFinal($pedido->courier_estado);
+            })
+            ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format','courier_estado_nueva'])
             ->make(true);
     }
 
