@@ -40,6 +40,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('motorizado:send-observado')
             ->dailyAt('23:59');
 
+        $schedule->command('actualizaestado:masivo')
+            ->dailyAt('06:00');
+
+        $schedule->command('actualizaestado:masivo')
+            ->dailyAt('12:00');
+
         /*$schedule->command('olva:sync')
             ->dailyAt('20:00');*/
 

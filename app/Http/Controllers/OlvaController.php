@@ -91,7 +91,7 @@ class OlvaController extends Controller
             /*->whereNull('direccion_grupos.courier_failed_sync_at')
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->where('direccion_grupos.motorizado_status', '0')*/
-            ->whereNotIn('direccion_grupos.courier_estado', ["ENTREGADO"])
+            ->whereIn('direccion_grupos.courier_estado', ['CONFIRMACION EN TIENDA','EN ALMACEN','DESPACHADO','REGISTRADO',])
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
@@ -436,5 +436,183 @@ class OlvaController extends Controller
         ]);
     }
 
+    public function volvanoentregado()
+    {
+        return view('envios.olva.olvanoentregado');
+    }
+    public function volvaextraviado()
+    {
+        return view('envios.olva.olvaextraviado');
+    }
+
+    public function tblolvanoentregado()
+    {
+        $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
+            ->join('users', 'users.id', 'direccion_grupos.user_id')
+            ->activo()
+            ->whereIn('direccion_grupos.condicion_envio_code', [
+                Pedido::RECEPCIONADO_OLVA_INT,
+                Pedido::EN_CAMINO_OLVA_INT,
+                Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+                Pedido::NO_ENTREGADO_OLVA_INT,
+            ])
+            /*->whereNull('direccion_grupos.courier_failed_sync_at')
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->where('direccion_grupos.motorizado_status', '0')*/
+            ->whereIn('direccion_grupos.courier_estado', ['ASIGNADO','MOTIVADO','NO ENTREGADO',])
+            ->select([
+                'direccion_grupos.*',
+                "clientes.celular as cliente_celular",
+                "clientes.nombre as cliente_nombre",
+            ]);
+        /*if (user_rol(User::ROL_ASESOR) || user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
+            $pedidos_provincia->where(function ($query) {
+                $query->whereNull('direccion_grupos.add_screenshot_at');
+                $query->orWhereDate('direccion_grupos.add_screenshot_at', '<', now());
+            });
+        }*/
+
+        add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
+
+        $query = DB::table($pedidos_provincia);
+        /*if (!user_rol(User::ROL_ASESOR) && !user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
+            $query->orderBy('add_screenshot_at');
+        }*/
+        $query->orderByDesc('id');
+
+        return datatables()->query($query)
+            ->addIndexColumn()
+            ->editColumn('created_at_format', function ($pedido) {
+                if ($pedido->created_at != null) {
+                    return Carbon::parse($pedido->created_at)->format('d-m-Y h:i A');
+                } else {
+                    return '';
+                }
+            })
+            ->editColumn('direccion_format', function ($pedido) {
+                return collect(explode(',', $pedido->direccion))->trim()
+                    ->map(function ($f) use ($pedido) {
+                        if ($pedido->courier_failed_sync_at != null) {
+                            return '<b class="d-flex">' . $f . '<i data-jqconfirm="edit_tracking" data-action="' . route('envios.seguimientoprovincia.update', [
+                                    'direccion_grupo_id' => $pedido->id,
+                                    'action' => 'update_tracking',
+                                ]) . '" data-code="' . $f . '" role="button" class="fa fa-pencil-alt rounded p-1 bg-info"></i></b>';
+                        }
+                        return '<b>' . $f . '</b>';
+                    })->join('<br>');
+            })
+            ->editColumn('referencia_format', function ($pedido) {
+                $html = collect(explode(',', $pedido->referencia))->trim()->map(fn($f) => '<b>' . $f . '</b>')->join('<br>') . '<br>';
+
+
+                $html .= collect(explode(',', $pedido->observacion))->trim()->map(fn($f) => '<a target="_blank" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rutulo</a>')->join('<br>');
+
+                $html .= '<p>';
+                return $html;
+            })
+            ->addColumn('condicion_envio_format', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $html = '<span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span>';
+                return $html;
+            })
+            ->addColumn('action', function ($pedido) {
+                if (user_rol(User::ROL_ADMIN) || user_rol(User::ROL_ENCARGADO)) {
+                    $pintar = 'info';
+                    if ($pedido->add_screenshot_at == null) {
+                        $pintar = 'danger';
+                    } elseif (Carbon::parse($pedido->add_screenshot_at) < now()->startOfDay()) {
+                        $pintar = 'danger';
+                    } elseif (Carbon::parse($pedido->add_screenshot_at)->isToday()) {
+                        $pintar = 'success';
+                    }
+                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . $pintar . ' btn-sm "><i class="fa fa-history"></i> <b class="' . ($pedido->add_screenshot_at == null ? 'text-dark' : '') . '">Ver Historial</b></button>';
+                }
+                return '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
+            })
+            ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
+            ->make(true);
+    }
+
+    public function tblolvaextraviado()
+    {
+        $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
+            ->join('users', 'users.id', 'direccion_grupos.user_id')
+            ->activo()
+            ->whereIn('direccion_grupos.condicion_envio_code', [
+                Pedido::RECEPCIONADO_OLVA_INT,
+                Pedido::EN_CAMINO_OLVA_INT,
+                Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+                Pedido::NO_ENTREGADO_OLVA_INT,
+            ])
+            /*->whereNull('direccion_grupos.courier_failed_sync_at')
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->where('direccion_grupos.motorizado_status', '0')*/
+            ->whereIn('direccion_grupos.courier_estado', ['SINIESTRADO',])
+            ->select([
+                'direccion_grupos.*',
+                "clientes.celular as cliente_celular",
+                "clientes.nombre as cliente_nombre",
+            ]);
+
+        add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
+
+        $query = DB::table($pedidos_provincia);
+        /*if (!user_rol(User::ROL_ASESOR) && !user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
+            $query->orderBy('add_screenshot_at');
+        }*/
+        $query->orderByDesc('id');
+
+        return datatables()->query($query)
+            ->addIndexColumn()
+            ->editColumn('created_at_format', function ($pedido) {
+                if ($pedido->created_at != null) {
+                    return Carbon::parse($pedido->created_at)->format('d-m-Y h:i A');
+                } else {
+                    return '';
+                }
+            })
+            ->editColumn('direccion_format', function ($pedido) {
+                return collect(explode(',', $pedido->direccion))->trim()
+                    ->map(function ($f) use ($pedido) {
+                        if ($pedido->courier_failed_sync_at != null) {
+                            return '<b class="d-flex">' . $f . '<i data-jqconfirm="edit_tracking" data-action="' . route('envios.seguimientoprovincia.update', [
+                                    'direccion_grupo_id' => $pedido->id,
+                                    'action' => 'update_tracking',
+                                ]) . '" data-code="' . $f . '" role="button" class="fa fa-pencil-alt rounded p-1 bg-info"></i></b>';
+                        }
+                        return '<b>' . $f . '</b>';
+                    })->join('<br>');
+            })
+            ->editColumn('referencia_format', function ($pedido) {
+                $html = collect(explode(',', $pedido->referencia))->trim()->map(fn($f) => '<b>' . $f . '</b>')->join('<br>') . '<br>';
+
+
+                $html .= collect(explode(',', $pedido->observacion))->trim()->map(fn($f) => '<a target="_blank" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rutulo</a>')->join('<br>');
+
+                $html .= '<p>';
+                return $html;
+            })
+            ->addColumn('condicion_envio_format', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $html = '<span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span>';
+                return $html;
+            })
+            ->addColumn('action', function ($pedido) {
+                if (user_rol(User::ROL_ADMIN) || user_rol(User::ROL_ENCARGADO)) {
+                    $pintar = 'info';
+                    if ($pedido->add_screenshot_at == null) {
+                        $pintar = 'danger';
+                    } elseif (Carbon::parse($pedido->add_screenshot_at) < now()->startOfDay()) {
+                        $pintar = 'danger';
+                    } elseif (Carbon::parse($pedido->add_screenshot_at)->isToday()) {
+                        $pintar = 'success';
+                    }
+                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . $pintar . ' btn-sm "><i class="fa fa-history"></i> <b class="' . ($pedido->add_screenshot_at == null ? 'text-dark' : '') . '">Ver Historial</b></button>';
+                }
+                return '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
+            })
+            ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
+            ->make(true);
+    }
 
 }

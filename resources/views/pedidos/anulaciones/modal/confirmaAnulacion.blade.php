@@ -19,7 +19,7 @@
                                 class="textcodepedido">PED000</strong></p>
                     </div>
                     <div class="form-group col lg-12">
-                        {!! Form::label('motivo', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
+                        {!! Form::label('motivo', 'Ingrese el motivo de la anulación del pedido') !!}
                         {!! Form::textarea('motivo', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Motivo']) !!}
                     </div>
                     <div class="form-group col lg-12">

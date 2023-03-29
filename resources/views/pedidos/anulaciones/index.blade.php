@@ -733,16 +733,18 @@
                     $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
                     return false;
                 }
-                else if (motivo.length >250) {
+                else {
+                    ejecutarForSolicituAnulacion();
+                }
+
+            /*else if (motivo.length >250) {
                     Swal.fire('Error','El campo sustento no debe superar los 250 caracteres.','warning'
                     ).then(function () {
                         $("#txtMotivoFactura").focus()
                     });
                     $(".btnEnviarFactura").attr('disabled', false);
                     return false;
-                }else {
-                    ejecutarForSolicituAnulacion();
-                }
+                }*/
             })
 
             function ejecutarForSolicituAnulacion() {

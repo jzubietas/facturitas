@@ -101,9 +101,23 @@
             </table>
             <br>-->
             <div class="card">
-                <div class="card-body row">
+                <div class="card-body row p-1">
                     <div class="col-md-6">
-                        <a type="button" class="btn btn-outline-warning btn-sm" href="{{ route('envios.olva.index')  }}"><i class="fas fa-dolly-flatbed"></i> Olva / Tienda Agente</a>
+                        <a type="button" class="btn btn-outline-warning btn-sm" href="{{ route('envios.olva.index')  }}">
+                            <span class="badge bg-success countOlvaIndex">300</span>
+                            <i class="fas fa-dolly-flatbed"></i>
+                            Olva / Tienda Agente</a>
+
+                        <a type="button" class="btn btn-outline-danger btn-sm" href="{{ route('envios.olva.olvanoentregado')  }}">
+                            <span class="badge bg-info countNoEntregado">891</span>
+                            <i class="far fa-angry"></i>
+                            Olva / No entregado</a>
+
+                        <a type="button" class="btn btn-outline-secondary btn-sm" href="{{ route('envios.olva.olvaextraviado')  }}">
+                            <span class="badge bg-teal countExtraviado">67</span>
+                            <i class="fas fa-car-crash"></i>
+                            Olva / Extraviado</a>
+
                     </div>
                 </div>
             </div>
@@ -1605,6 +1619,22 @@ ${data.foto3 ? `
                 evento.preventDefault();
                 clickformrestaurar();
             });
+
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('getContadoresOlva') }}",
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function (data) {
+                /*$("#modal-delete").modal("hide");
+                resetearcamposdelete();
+                $('#tablabandejapedidos').DataTable().ajax.reload();*/
+            }).fail(function (err, error, errMsg) {
+                console.log('Error al intentar',arguments, err, errMsg)
+            });
+
 
         });
     </script>

@@ -265,10 +265,10 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'Yajra\\DataTables\\' => 
         array (
             0 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
-            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-fractal/src',
-            2 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
-            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
-            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
+            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
+            2 => __DIR__ . '/..' . '/yajra/laravel-datatables-fractal/src',
+            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
+            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
         ),
         'Whoops\\' => 
         array (
@@ -839,6 +839,8 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Actions\\Fortify\\UpdateUserPassword' => __DIR__ . '/../..' . '/app/Actions/Fortify/UpdateUserPassword.php',
         'App\\Actions\\Fortify\\UpdateUserProfileInformation' => __DIR__ . '/../..' . '/app/Actions/Fortify/UpdateUserProfileInformation.php',
         'App\\Actions\\Jetstream\\DeleteUser' => __DIR__ . '/../..' . '/app/Actions/Jetstream/DeleteUser.php',
+        'App\\Console\\Commands\\AnalisisEstadoOlva' => __DIR__ . '/../..' . '/app/Console/Commands/AnalisisEstadoOlva.php',
+        'App\\Console\\Commands\\AnalisisEstadoOlvaByTracking' => __DIR__ . '/../..' . '/app/Console/Commands/AnalisisEstadoOlvaByTracking.php',
         'App\\Console\\Commands\\AnalisisSituacionCliente' => __DIR__ . '/../..' . '/app/Console/Commands/AnalisisSituacionCliente.php',
         'App\\Console\\Commands\\AnalisisSituacionClientePersonalizado' => __DIR__ . '/../..' . '/app/Console/Commands/AnalisisSituacionClientePersonalizado.php',
         'App\\Console\\Commands\\AnalisisSituacionCliente_Individual' => __DIR__ . '/../..' . '/app/Console/Commands/AnalisisSituacionCliente_Individual.php',
@@ -938,6 +940,7 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Exports\\Templates\\PlantillaExportPedidoMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportPedidoMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportPedidosPerdonarCourierReporteMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportPedidosPerdonarCourierReporteMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportRutaenvioMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportRutaenvioMultiple.php',
+        'App\\Exports\\Templates\\PlantillaExportaListadoOlva' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportaListadoOlva.php',
         'App\\Exports\\Templates\\PlantillaMotorizadoConfirmarMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaMotorizadoConfirmarMultiple.php',
         'App\\Exports\\Templates\\PlantillaRecepcionMotorizadoMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaRecepcionMotorizadoMultiple.php',
         'App\\Exports\\Templates\\Sheets\\Clientes\\PageclienteReporteMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Clientes/PageclienteReporteMultiple.php',
