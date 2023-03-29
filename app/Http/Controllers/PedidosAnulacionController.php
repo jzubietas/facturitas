@@ -536,9 +536,15 @@ class PedidosAnulacionController extends Controller
 
     public function confirmaSolicitudAnulacion(Request $request)
     {
+        /*return $request->all();*/
         $idsfiles="";
+        $culpable="";
         $files = $request->file('inputFilesAdmin');
-
+        if ($request->cbxCulpables=="-1"){
+            $culpable=$request->txtOtrosCulpables;
+        }else{
+            $culpable=$request->cbxCulpables;
+        }
         foreach($files as $file){
             $fileUpload = new FileUploadAnulacion;
             $fileUpload->pedido_anulacion_id=$request->txtPedidoAnulacionId;
@@ -560,6 +566,7 @@ class PedidosAnulacionController extends Controller
                 'motivo_sol_admin' => $request->motivo,
                 'filesadmin_ids' => $idsfiles,
                 'estado_aprueba_administrador' => 1,
+                'resposable_aprob_admin' => $culpable,
             ]);
         }
         if ($pedidosanulacion->tipo=='C'){
@@ -647,5 +654,21 @@ class PedidosAnulacionController extends Controller
         }
         return view('pedidos.anulaciones.modal.ContenidoModal.ListadoAdjuntosSolicitud', compact('imagenes'));
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+    }
+
+    public function getcbxculpables(Request $request)
+    {
+        $html = '<option value="-1">' . trans('---- OTRO CULPABLE ----') . '</option>';
+        $registros = PedidosAnulacion::where('id',$request->idpedidoanulacion)->pluck('resposable_create_asesor', 'resposable_aprob_encargado');
+
+        foreach ($registros as $resposable_create_asesor => $resposable_aprob_encargado) {
+            if (isset($resposable_create_asesor)){
+                $html .= '<option value="' . $resposable_create_asesor. '">' . $resposable_create_asesor. '</option>';
+            }
+            if (isset($resposable_aprob_encargado)){
+                $html .= '<option value="' . $resposable_aprob_encargado. '">' . $resposable_aprob_encargado. '</option>';
+            }
+        }
+        return response()->json(['datoscombo' => $html]);
     }
 }

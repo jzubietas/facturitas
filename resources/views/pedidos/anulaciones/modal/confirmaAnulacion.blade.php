@@ -3,7 +3,7 @@
     <div class="modal-dialog" style="max-width: 800px!important;">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h5 class="modal-title" id="exampleModalLabel">Confirmar Anulacion Pedido</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar Anulacion Pedido SA</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -18,23 +18,43 @@
                         <p style="text-align: justify;">Confirme si desea <strong>ANULAR</strong> el pedido: <strong
                                 class="textcodepedido">PED000</strong></p>
                     </div>
-                    <div class="form-group col lg-12">
+                    <div class="form-group col-lg-12">
                         {!! Form::label('motivo', 'Ingrese el motivo de la anulación del pedido') !!}
                         {!! Form::textarea('motivo', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Motivo']) !!}
                     </div>
-                    <div class="form-group col lg-12">
+                    <div class="form-group col-lg-12">
                         {!! Form::label('attachments', 'Adjuntar Archivos') !!}
                         {!! Form::file('inputFilesAdmin[]', ['class' => 'form-control-file','multiple','id'=>'inputFilesAdmin','accept'=>".png, .jpg,.jpeg,.pdf, .xlsx , .xls"]) !!}
                     </div>
-                    <div class="form-group col lg-12">
-                        {!! Form::label('responsable', 'Responsable de la anulación') !!}
-                        {!! Form::text('responsable', '', ['class' => 'form-control', 'placeholder' => 'Responsable', 'required' => 'required','readonly']) !!}
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group col-lg-12">
+                                {!! Form::label('responsable', 'Responsable de la anulación') !!}
+                                {!! Form::text('responsable', '', ['class' => 'form-control', 'placeholder' => 'Responsable', 'required' => 'required','readonly']) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group col-lg-12">
+                                {!! Form::label('anulacion_password', 'Contraseña de anulación') !!}
+                                {!! Form::password('anulacion_password', ['class' => 'form-control', 'placeholder' => 'Contraseña de anulación',]) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group col-lg-12">
+                                {!! Form::label('cbxCulpables', 'Culpable') !!}
+                                <select class="form-control selectpicker" data-live-search="true" id="cbxCulpables" name="cbxCulpables">
+                                    <option value="-1">---OTRO CULPABLE---</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group col-lg-12">
+                                {!! Form::label('txtOtrosCulpables', 'Otro Culpable') !!}
+                                {!! Form::text('txtOtrosCulpables', '', ['class' => 'form-control', 'placeholder' => 'Otros Culpables']) !!}
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group col lg-12">
-                        {!! Form::label('anulacion_password', 'Contraseña de anulación') !!}
-                        {!! Form::password('anulacion_password', ['class' => 'form-control', 'placeholder' => 'Contraseña de anulación',]) !!}
-                    </div>
-                    {{-- </div> --}}
                 </div>
 
                 <div class="modal-footer">

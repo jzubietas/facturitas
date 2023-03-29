@@ -93,6 +93,7 @@ class OlvaController extends Controller
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
                 "clientes.nombre as cliente_nombre",
+                "direccion_grupos.id as idDireccionGrupo",
                 DB::raw("(CASE
                         WHEN courier_estado='OTROS' THEN '01'
                         WHEN courier_estado='OTROS2' THEN '02'
@@ -145,7 +146,7 @@ class OlvaController extends Controller
             })
             ->addColumn('condicion_envio_format', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $html = '<span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span>';
+                $html = '<a href="" data-target="#modal-ver_timeline-estado" data-iddirecciongrupo="' . $pedido->idDireccionGrupo . '"  data-toggle="modal" title="Ver Detalles"><span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span></a>  ';
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
