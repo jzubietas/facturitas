@@ -99,7 +99,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                         ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
 
-                    //$this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
+
 
                     $situacion_create=SituacionClientes::create([
                         'cliente_id'=>$cliente->id,
@@ -112,7 +112,8 @@ class AnalisisSituacionCliente_Individual extends Command
                     ]);
 
                     $compara=Carbon::parse($fp->created_at);
-
+                    $this->warn("");
+                    $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
                     $this->warn("error ".Carbon::createFromDate($where_anio, $where_mes)->startOfMonth());
 
                     $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
