@@ -39,7 +39,7 @@ class AnalisisSituacionCliente_Individual extends Command
      *
      * @return int
      */
-    public function handle(): int
+    public function handle()
     {
       //$cliente_id=$this->argument('celular');
       $cliente_id=Cliente::where('celular',$this->argument('celular'))->first()->id;
