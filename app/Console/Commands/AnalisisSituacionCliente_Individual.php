@@ -117,7 +117,7 @@ class AnalisisSituacionCliente_Individual extends Command
                         'flag_fp'=>'0'
                     ]);
 
-                    $compara=Carbon::parse($fp->created_at);
+                    $compara=Carbon::parse($periodo_inicial);
                     $this->warn("compara con ".$compara);
 
                     /**/
