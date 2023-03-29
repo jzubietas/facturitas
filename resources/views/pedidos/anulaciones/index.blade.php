@@ -745,6 +745,29 @@
                 $("#txtPedidoId").val(pedido_id );
                 $("#txtPedidoAnulacionId").val(idanulacion );
                 $(".textcodepedido").html(codigopedido);
+
+                var formConfirAdmin = new FormData();
+                formConfirAdmin.append("idpedidoanulacion", idanulacion);
+
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('getcbxculpables') }}",
+                    data: formConfirAdmin,
+                    success: function (data) {
+                        console.log('BLoqueando', data);
+                        $('#cbxCulpables').html(data.datoscombo).selectpicker("refresh");
+                    }
+                });
+            });
+
+            $(document).on("change", "#cbxCulpables", function () {
+                if ($(this).val()=="-1"){
+                    $("#txtOtrosCulpables").attr('disabled', false);
+                }else {
+                    $("#txtOtrosCulpables").attr('disabled', true);
+                }
             });
 
             $(document).on("submit", "#frmConfirmaAnulacion", function (evento) {
@@ -753,6 +776,14 @@
                 var responsable = $("#responsable").val();
                 var anulacion_password = $("#anulacion_password").val();
                 var inputFilesAdmin = $('#inputFilesAdmin').val();
+                var culpable="";
+                var cbxCulpables = $('#cbxCulpables').val();
+                var txtOtrosCulpables = $('#txtOtrosCulpables').val();
+                if (cbxCulpables=="-1"){
+                    culpable=txtOtrosCulpables;
+                }else{
+                    culpable=cbxCulpables;
+                }
                 if (motivo.length < 1) {
                     Swal.fire(
                         'Error',
@@ -779,6 +810,10 @@
                     return false;
                 }else if (inputFilesAdmin == '') {
                     Swal.fire('Error', 'No se puede confirmar la anulacion sin archivos', 'warning');
+                    $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
+                    return false;
+                }else if (culpable == '') {
+                    Swal.fire('Error', 'Seleccione un culpable', 'warning');
                     $(".btnConfirmaSolicitudAdmin").attr('disabled', false);
                     return false;
                 }

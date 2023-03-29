@@ -843,7 +843,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
         ->post('confirmaSolicitudAnulacion', [PedidosAnulacionController::class, 'confirmaSolicitudAnulacion'])
         ->name('confirmaSolicitudAnulacion');
     Route::post('verAdjuntosAddAsesorAnulacion', [PedidosAnulacionController::class, 'verAdjuntosAddAsesorAnulacion'])->name('verAdjuntosAddAsesorAnulacion');
-
+    Route::post('getcbxculpables', [PedidosAnulacionController::class, 'getcbxculpables'])->name('getcbxculpables');
     /*Route::middleware('authorize.agenda')
         ->post('confirmaSolicitudAnulacion', [FullCalenderController::class, 'confirmaSolicitudAnulacion'])
         ->name('autorizarAgenda');*/

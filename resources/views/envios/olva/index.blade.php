@@ -66,6 +66,9 @@
         <tbody>
         </tbody>
       </table>
+
+        @include('envios.olva.modal.timelineestado')
+
     </div>
   </div>
 
@@ -446,6 +449,14 @@
           }
         },
       });
+
+
+        $('#modal-ver_timeline-estado').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var idDireccionGrupo = button.data('iddirecciongrupo')
+            console.log('iddirecciongrupo=',idDireccionGrupo)
+        });
+
 
     });
   </script>
