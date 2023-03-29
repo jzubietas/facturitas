@@ -1274,7 +1274,7 @@ class PedidoController extends Controller
                 ->join('users as u', 'c.user_id', 'u.id')
                 ->where("c.estado", "1")
                 ->where("c.tipo", "1")
-                ->where("pedidos.estado_correccion", "0")
+                //->where("pedidos.estado_correccion", "0")
                 ->whereDate('pedidos.created_at', $dia)
                 ->where('u.identificador', $request->user_id)
                 ->count();
@@ -1288,7 +1288,7 @@ class PedidoController extends Controller
                 ->join('users as u', 'c.user_id', 'u.id')
                 ->where("c.estado", "1")
                 ->where("c.tipo", "1")
-                ->where("pedidos.estado_correccion", "0")
+                //->where("pedidos.estado_correccion", "0")
                 ->whereDate('pedidos.created_at', $dia)
                 ->where('u.identificador', $request->user_id)
                 ->count();
@@ -1301,7 +1301,7 @@ class PedidoController extends Controller
                 ->join('users as u', 'c.user_id', 'u.id')
                 ->where("c.estado", "1")
                 ->where("c.tipo", "1")
-                ->where("pedidos.estado_correccion", "0")
+                //->where("pedidos.estado_correccion", "0")
                 ->whereDate('pedidos.created_at', $dia)
                 ->where('u.identificador', $request->user_id)
                 ->count();
