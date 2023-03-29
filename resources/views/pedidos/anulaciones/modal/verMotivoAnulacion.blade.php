@@ -8,9 +8,11 @@
                 </button>
             </div>
             {{--{{ Form::Open(['route' => ['users.destroy', $user], 'method' => 'delete']) }}--}}
-            <form id="frmDesactivarUsuario">
+            <form id="frmVerMotivoAnulacionUsuario">
                 <div class="modal-body">
                     <p style="text-align: justify; font-size:20px;"><strong>Motivo:</strong> <br> <span id="txtMotivoAnulacion"></span> </p>
+
+                    <div id="imagenAnulacionUsuario"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

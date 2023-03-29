@@ -108,6 +108,12 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="form-group col lg-12">
+                                                {!! Form::label('txtResponsablePedComplet', 'Ingrese el responsable para la anulacion de pedido') !!}
+                                                {!! Form::text('txtResponsablePedComplet', '', ['class' => 'form-control', 'placeholder' => 'Completa el responsable para la anulación ',  'id'=>'txtResponsablePedComplet']) !!}
+                                            </div>
+                                        </div>
 
 
                                         <div class="row">
@@ -205,6 +211,12 @@
                                                 <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
                                                     {!! Form::file('inputArchivoCapturaSubirf[]', ['class' => 'form-control-file', 'id'=>'inputArchivoCapturaSubirf','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col lg-12">
+                                                {!! Form::label('txtResponsableFactura', 'Ingrese responsable para anulacion de factura') !!}
+                                                {!! Form::text('txtResponsableFactura', '', ['class' => 'form-control', 'placeholder' => 'Completa el responsable para la anulación ', 'id'=>'txtResponsableFactura']) !!}
                                             </div>
                                         </div>
 

@@ -289,6 +289,7 @@
                 var txtIdPedidoCompleto     =$('#txtIdPedidoCompleto').val();
                 var asesorCodigoPc          =$('#asesorCodigoPc').val();
                 var txtMotivoPedComplet     =$('#txtMotivoPedComplet').val();
+                var txtResponsablePedComplet     =$('#txtResponsablePedComplet').val();
 
                 if (txtIdPedidoCompleto == '') {
                     Swal.fire('Error', 'No se puede ingresar una solicitud sin un pedido', 'warning');
@@ -315,6 +316,14 @@
                     Swal.fire('Error','Completa el sustento para la anulación ','warning'
                     ).then(function () {
                         $("#txtMotivoPedComplet").focus()
+                    });
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    return false;
+                }
+                if (txtResponsablePedComplet.length < 1) {
+                    Swal.fire('Error','Completa el responsable de la anulación ','warning'
+                    ).then(function () {
+                        $("#txtResponsablePedComplet").focus()
                     });
                     $(".btnEnviarPagoCompleto").attr('disabled', false);
                     return false;
@@ -446,6 +455,7 @@
                 var btotal                 =$('#importeCodigoF').val();
                 var bimporte               =$('#anularCodigoF').val();
                 var txtMotivoFactura    =$('#txtMotivoFactura').val();
+                var txtResponsableFactura    =$('#txtResponsableFactura').val();
 
                 if (txtIdPedidoFactura == '') {
                     Swal.fire('Error', 'No se puede ingresar una solicitud sin un pedido', 'warning');
@@ -485,6 +495,14 @@
                 }
                 if (txtMotivoFactura.length < 1) {
                     Swal.fire('Error','Completa el sustento para la anulación ','warning'
+                    ).then(function () {
+                        $("#txtMotivoFactura").focus()
+                    });
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
+                if (txtResponsableFactura.length < 1) {
+                    Swal.fire('Error','Completa el responsable para la anulación ','warning'
                     ).then(function () {
                         $("#txtMotivoFactura").focus()
                     });
@@ -789,8 +807,28 @@
 
             $('#modal-ver_motivoanulacion').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
+                console.log(button);
                 var pedido_motivo= button.data('pedido-motivo')
                 $("#txtMotivoAnulacion").html(pedido_motivo);
+
+                //datos form
+                var formVerImagenAnularSol = new FormData();
+                formVerImagenAnularSol.append("pedidoAnulacionId", data.idanulacion);
+
+                /*cargar imagenes*/
+                /*$.ajax({
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: '{{ route('anulacionSolicitud') }}',
+                    data: formAnularSol,
+                    success: function (data) {
+                        console.log(data);
+                        Swal.fire('Notificacion', 'Se anuló la solicitud correctamente.', 'success');
+                        $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                    }
+                });*/
+
             });
 
             $('#modal-ver_rechazo_encargado').on('show.bs.modal', function (event) {
