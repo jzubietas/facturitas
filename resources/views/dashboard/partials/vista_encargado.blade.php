@@ -198,11 +198,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <x-grafico-pedidos-por-dia rol="Encargado" title="CANTIDAD DE PEDIDOS DE LOS ASESORES POR DIA"
+                    {{--<x-grafico-pedidos-por-dia rol="Encargado" title="CANTIDAD DE PEDIDOS DE LOS ASESORES POR DIA"
                                                label-x="Asesores" label-y="Cant. Pedidos"
                                                only-day></x-grafico-pedidos-por-dia>
                     <x-grafico-pedidos-por-dia rol="Encargado" title="CANTIDAD DE PEDIDOS DE LOS ASESORES POR MES"
-                                               label-x="Asesores" label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
+                                               label-x="Asesores" label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>--}}
                 </div>
             </div>
         </div>
