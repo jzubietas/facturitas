@@ -92,7 +92,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
 
                     $this->warn($periodo_ejecucion);
-                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
+
 
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
@@ -116,6 +116,9 @@ class AnalisisSituacionCliente_Individual extends Command
                         'periodo'=>Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m'),
                         'flag_fp'=>'0'
                     ]);
+
+
+                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
 
                     continue;
 
