@@ -83,7 +83,7 @@ class AnalisisSituacionCliente_Individual extends Command
                 $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
 
                 $periodo_inicial=Carbon::parse($fp->created_at);
-                $periodo_ejecucion=Carbon::parse($fp->created_at);
+                $periodo_ejecucion=Carbon::parse($fp->created_at)->startOfMonth()->startOfDay();
 
                 for($i=0;$i<($diff);$i++)
                 {
