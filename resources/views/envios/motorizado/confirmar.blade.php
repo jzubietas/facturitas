@@ -120,6 +120,7 @@
                     $("[data-toggle=jqConfirm]", row).click(function () {
                         const targetLink = $(this).data('target')
                         const imagen1 = $(this).data('imagen1')
+                        console.log(imagen1);
                         const imagen2 = $(this).data('imagen2')
                         const imagen3 = $(this).data('imagen3')
                         $.confirm({
