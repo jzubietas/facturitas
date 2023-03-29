@@ -6,7 +6,9 @@
 
 
 @section('content_header')
-  <h1>Lista de Envios en TIENDA/AGENTE para el encargado</h1>
+  <h1  class="d-inline-block">Lista de Envios en TIENDA/AGENTE para el encargado</h1>
+  <a class="btn btn-info btn-sm d-inline-block" href="{{ route('pedidos.index')  }}" ><i class="fas fa-arrow-left"></i></a>
+
   @if($superasesor > 0)
     <br>
     <div class="bg-4">
@@ -159,7 +161,7 @@
         stateSave: false,
         serverSide: true,
         searching: true,
-        /*  "order": [[0, "desc"]],*/
+        /*"order": [[8, "asc"]],*/
         ajax: "{{ route('envios.olva.table') }}",
         createdRow: function (row, data, dataIndex) {
           //console.log(row);
