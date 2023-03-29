@@ -414,6 +414,7 @@ class PedidosAnulacionController extends Controller
 
         $idsfiles="";
         $motivoanulacion= $request->txtMotivoFactura;
+        $responsableanulacion= $request->txtResponsableFactura;
         $pedido_id= $request->txtIdPedidoFactura;
         /*if($request->tipoAnulacion2=="C"){
             $motivoanulacion="Solicitud de anulacion - Pedido Completo";
