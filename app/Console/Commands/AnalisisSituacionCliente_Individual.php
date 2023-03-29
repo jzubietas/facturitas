@@ -46,6 +46,8 @@ class AnalisisSituacionCliente_Individual extends Command
       //$this->warn("Cargando primer pedido mes anio");
       $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
 
+        $fp->created_at=Carbon::parse($fp->created_at)->startOfMonth();
+
       $periodo_original=Carbon::parse($fp->created_at)->clone()->startOfMonth();
       $periodo_actual=Carbon::parse(now())->clone()->endOfMonth();
 
