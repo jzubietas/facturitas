@@ -69,20 +69,17 @@ class AnalisisSituacionCliente_Individual extends Command
 
         foreach($clientes as $cliente)
         {
-            $this->warn($clientes);
-            continue;
 
             $idcliente=$cliente->id;
 
-            //if($cliente->id==1739)
-            {
-                $this->warn($cliente->id);
-                $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
+            $this->warn($clientes);
+            $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
+            continue;
 
-                $periodo_inicial=Carbon::parse($fp->created_at);
-                $periodo_ejecucion=null;
+            $periodo_inicial=Carbon::parse($fp->created_at);
+            $periodo_ejecucion=null;
 
-                for($i=0;$i<$diff;$i++)
+            for($i=0;$i<$diff;$i++)
                 {
                     $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
                     $where_anio=$periodo_ejecucion->format('Y');
@@ -650,7 +647,6 @@ class AnalisisSituacionCliente_Individual extends Command
 
                 }
 
-            }
 
             $final_cliente=Cliente::where('id',$cliente->id)->first();
             $this->info("situacion final es ".$final_cliente->situacion);
