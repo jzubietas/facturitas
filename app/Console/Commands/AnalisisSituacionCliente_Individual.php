@@ -125,7 +125,10 @@ class AnalisisSituacionCliente_Individual extends Command
                             ]);
                         }
                         else{
-                            $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                            $this->info("anio ".$where_anio."   mes ".$where_mes);
+                            $this->warn("mes antes ".$mes_antes);
+                            $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)
+                                ->where('periodo',$mes_antes->format('Y-m'))->first();
 
                             switch($situacion_antes->situacion)
                             {
