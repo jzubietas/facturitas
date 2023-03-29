@@ -1108,7 +1108,7 @@ class DashboardController extends Controller
                 else
                 {
                     $html .= '<div class="progress-bar bg-danger" role="progressbar"
-                         style="width: ' . ($round) . '%"
+                         style="width: ' . ($round) . ';%background: rgba(0,143,251,1) !important;"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
