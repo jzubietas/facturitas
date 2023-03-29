@@ -98,8 +98,8 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     $this->warn($uso_ejecucion . ' y ' .$uso_antes);
 
-                    $where_anio=$uso_ejecucion->format('Y');
-                    $where_mes=$uso_ejecucion->format('m');
+                    $where_anio=$mes_ejecucion->clone()->format('Y');
+                    $where_mes=$mes_ejecucion->clone()->format('m');
 
 
 
