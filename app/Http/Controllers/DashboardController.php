@@ -341,7 +341,7 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
-            dd($fechametames,$date_pagos);
+            //dd($fechametames,$date_pagos);
 
 
             $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
