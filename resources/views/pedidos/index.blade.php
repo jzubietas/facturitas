@@ -111,7 +111,7 @@
                         <a type="button" class="btn btn-outline-danger btn-sm" href="{{ route('envios.olva.olvanoentregado')  }}">
                             <span class="badge bg-info countNoEntregado">891</span>
                             <i class="far fa-angry"></i>
-                            Olva / No entregado</a>
+                            Olva / Devueltos</a>
 
                         <a type="button" class="btn btn-outline-secondary btn-sm" href="{{ route('envios.olva.olvaextraviado')  }}">
                             <span class="badge bg-teal countExtraviado">67</span>

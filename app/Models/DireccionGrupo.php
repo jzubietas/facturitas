@@ -38,17 +38,17 @@ class DireccionGrupo extends Model implements HasMedia
     const SCE_ENTREGADO = 'ENTREGADO - OLVA';
     const SCE_NO_ENTREGADO = 'NO ENTREGADO - OLVA';
 
-    const  OLVA_OTROS=1;
-    const  OLVA_OTROS2=22;
-    const  OLVA_CONFIRMACION=3;
-    const  OLVA_EN_ALMACEN=4;
-    const  OLVA_DESPACHADO=5;
-    const  OLVA_REGISTRADO=6;
-    const  OLVA_ASIGNADO=7;
-    const  OLVA_MOTIVADO=8;
-    const  OLVA_NO_ENTREGADO=9;
-    const  OLVA_SINIESTRADO=10;
-    const  OLVA_NOEXISTE=11;
+    const  OLVA_OTROS="01";
+    const  OLVA_OTROS2="02";
+    const  OLVA_CONFIRMACION="03";
+    const  OLVA_EN_ALMACEN="04";
+    const  OLVA_DESPACHADO="05";
+    const  OLVA_REGISTRADO="06";
+    const  OLVA_ASIGNADO="07";
+    const  OLVA_MOTIVADO="08";
+    const  OLVA_NO_ENTREGADO="09";
+    const  OLVA_SINIESTRADO="10";
+    const  OLVA_NOEXISTE="11";
 
    /* public static function getEstadosOlvaFinal(self $grupo){
         return DireccionGrupo::$getEstadosOlva($grupo->courier_estado);
@@ -65,7 +65,7 @@ class DireccionGrupo extends Model implements HasMedia
         'MOTIVADO' => DireccionGrupo::OLVA_MOTIVADO,
         'NO ENTREGADO' => DireccionGrupo::OLVA_NO_ENTREGADO,
         'SINIESTRADO' => DireccionGrupo::OLVA_SINIESTRADO,
-        //'' => DireccionGrupo::OLVA_NOEXISTE,
+        '' => DireccionGrupo::OLVA_NOEXISTE,
     ];
 
     protected $guarded = ['id'];

@@ -93,14 +93,26 @@ class OlvaController extends Controller
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
                 "clientes.nombre as cliente_nombre",
+                DB::raw("(CASE
+                        WHEN courier_estado='OTROS' THEN '01'
+                        WHEN courier_estado='OTROS2' THEN '02'
+                        WHEN courier_estado='CONFIRMACION EN TIENDA' THEN '03'
+                        WHEN courier_estado='EN ALMACEN' THEN '04'
+                        WHEN courier_estado='DESPACHADO' THEN '05'
+                        WHEN courier_estado='REGISTRADO' THEN '06'
+                        WHEN courier_estado='ASIGNADO' THEN '07'
+                        WHEN courier_estado='MOTIVADO' THEN '08'
+                        WHEN courier_estado='NO ENTREGADO' THEN '09'
+                        WHEN courier_estado='SINIESTRADO' THEN '10'
+                        WHEN courier_estado='' THEN '11'
+                            ELSE 'OTROS'
+                        END ) as courier_estado_nueva"),
             ]);
 
 
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
 
         $query = DB::table($pedidos_provincia);
-        /*$query->orderByDesc('direccion_grupos.courier_estado');*/
-
         return datatables()->query($query)
             ->addIndexColumn()
             ->editColumn('created_at_format', function ($pedido) {
@@ -153,9 +165,6 @@ class OlvaController extends Controller
                     $brnOlva[]= '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
                 }
                 return join('', $brnOlva);
-            })
-            ->addColumn('courier_estado_nueva', function ($pedido) {
-                return DireccionGrupo::$getEstadosOlva[$pedido->courier_estado];
             })
             ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
             ->make(true);

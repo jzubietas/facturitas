@@ -49,7 +49,7 @@
       <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
         <tr>
-            <th class="align-middle" scope="col">Ordnar</th>
+          <th class="align-middle" scope="col">Ordenar</th>
           <th class="align-middle" scope="col">Item</th>
           <th class="align-middle" scope="col">Código</th>
           <th class="align-middle" scope="col">Id</th>
@@ -162,7 +162,7 @@
         stateSave: false,
         serverSide: true,
         searching: true,
-        "order": [[0, "desc"]],
+        order: [[0, "asc"]],
         ajax: "{{ route('envios.olva.table') }}",
         createdRow: function (row, data, dataIndex) {
           //console.log(row);
