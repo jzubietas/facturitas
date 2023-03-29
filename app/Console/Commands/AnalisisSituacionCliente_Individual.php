@@ -117,14 +117,20 @@ class AnalisisSituacionCliente_Individual extends Command
                         'flag_fp'=>'0'
                     ]);
 
+                    $compara=Carbon::parse($fp->created_at);
+                    $this->warn("compara con ".$compara);
 
+                    /**/
+
+
+                    /**/
                     $periodo_ejecucion=$periodo_ejecucion->addMonth();
 
                     continue;
 
 
 
-                    $compara=Carbon::parse($fp->created_at);
+
 
                     $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
 
