@@ -100,9 +100,9 @@ class AnalisisSituacionCliente_Individual extends Command
 
 
 
-                    $mes_ejecucion->addMonth();
-                    $where_anio=$mes_ejecucion->clone()->format('Y');
-                    $where_mes=$mes_ejecucion->clone()->format('m');
+                    $periodo_ejecucion->addMonth();
+                    $where_anio=$periodo_ejecucion->clone()->format('Y');
+                    $where_mes=$periodo_ejecucion->clone()->format('m');
 
 
 
