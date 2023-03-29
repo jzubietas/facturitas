@@ -603,7 +603,56 @@
                     v_url="{{ route('anulacionAprobacionJefeOp') }}";
                     v_text=v_estado+"- Jefe de Operaciones";
                 }
-                if (estado==1){
+
+                if ($.trim(accion) =="2" && $.trim(estado) =="1"){
+                    Swal.fire({
+                        title:'Cancelar',
+                        html:'<textarea id="txt_responsableanulacion_enc" placeholder="Ingrese el responsable para la anulacion de pedido." class="form-control"></textarea>',
+                        preConfirm: () => {
+                            const txt_responsableanulacion_enc = Swal.getPopup().querySelector('#txt_responsableanulacion_enc').value
+                            if(!txt_responsableanulacion_enc){
+                                Swal.showValidationMessage(`Completa el responsable de la anulacion`);
+                            }
+                            return { responsableanulacion_enc:txt_responsableanulacion_enc }
+                        },
+                        icon: 'warning',
+                        title: '¿Estás seguro?',
+                        text: v_text,
+                        showDenyButton: true,
+                        confirmButtonText: v_button,
+                        denyButtonText: 'No, cancelar',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (result.isConfirmed) {
+                                /*console.log("BAGAN BAGAN:",result.value.responsableanulacion_enc);*/
+                                if(result.value.responsableanulacion_enc!='')
+                                {
+                                    console.log("Aca no ingresa, anda paya bobo")
+                                    var formIdAnulacion = new FormData();
+                                    formIdAnulacion.append("pedidoAnulacionId", idAnulacion);
+                                    formIdAnulacion.append("estado", estado);
+                                    formIdAnulacion.append("sustento", result.value.sustento);
+                                    formIdAnulacion.append("responsableanulacion_enc", result.value.responsableanulacion_enc);
+                                    $.ajax({
+                                        processData: false,
+                                        contentType: false,
+                                        type: 'POST',
+                                        url: v_url,
+                                        data: formIdAnulacion,
+                                        success: function (data) {
+                                            console.log(data);
+                                            Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
+                                            $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                        }
+                                    });
+                                }else{
+                                    Swal.fire('Notificacion', 'El responsable para la anulacion de pedido no puede estar vacio.', 'danger');
+                                }
+
+                            }
+                        }
+                    })
+                }else if ($.trim(accion)!="2" && $.trim(estado)=="1"){
                     Swal.fire({
                         title:'Cancelar',
                         icon: 'warning',
@@ -632,7 +681,7 @@
                             });
                         }
                     })
-                }else  if (estado==2){
+                }else  if ($.trim(estado)=="2"){
                     Swal.fire({
                         title:'Cancelar',
                         html:'<textarea id="txt_sustento" placeholder="Complete el sustento para la anulacion." class="form-control"></textarea>',
@@ -808,28 +857,47 @@
             $('#modal-ver_motivoanulacion').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 console.log(button);
+                var idPedidoAnulacion= button.data('idanulacion')
                 var pedido_motivo= button.data('pedido-motivo')
                 var pedido_codigo= button.data('codigos')
+                var resposable_create_asesor= button.data('responsable_create_asesor')
+                var responsable_aprob_encarg= button.data('responsable_aprob_encarg')
+
                 $("#txtMotivoAnulacion").html(pedido_motivo);
                 $(".lblTitleMotivoAnulacion").html("Motivo Anulacion : "+pedido_codigo);
+                console.log("respo_ase=",resposable_create_asesor.length," respo_ennc=",responsable_aprob_encarg.length)
+                if (resposable_create_asesor.length>=1){
+                    $(".divResponsableAsesor").show();
+                    $("#txtResponsableAsesor").html(resposable_create_asesor);
+                }else{
+                    $(".divResponsableAsesor").hide();
+                    $("#txtResponsableAsesor").html("")
+                }
+
+                if (responsable_aprob_encarg.length>0){
+                    $(".divResponsableEncarg").show();
+                    $("#txtResponsableEncarg").html(responsable_aprob_encarg);
+                }else{
+                    $(".divResponsableEncarg").hide();
+                    $("#txtResponsableEncarg").html("")
+                }
+
                 //datos form
                 /*var formVerImagenAnularSol = new FormData();
                 formVerImagenAnularSol.append("pedidoAnulacionId", data.idanulacion);*/
 
                 /*cargar imagenes*/
-                /*$.ajax({
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: '{{ route('anulacionSolicitud') }}',
-                    data: formAnularSol,
+                $.ajax({
+                    url: "{{ route('operaciones.veratencionanulacion',':id') }}".replace(':id', idPedidoAnulacion),
+                    data: idPedidoAnulacion,
+                    method: 'POST',
                     success: function (data) {
-                        console.log(data);
-                        Swal.fire('Notificacion', 'Se anuló la solicitud correctamente.', 'success');
-                        $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idPedidoAnulacion)
+                        $('#imagenAnulacionUsuario').html("");
+                        $('#imagenAnulacionUsuario').html(data);
                     }
-                });*/
-
+                });
             });
 
             $('#modal-ver_rechazo_encargado').on('show.bs.modal', function (event) {

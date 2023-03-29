@@ -34,5 +34,8 @@ class PedidosAnulacion extends Model
         'total_anular',
         'tipo',
         'state_solicitud',
+        'resposable_create_asesor',
+        'resposable_aprob_encargado',
+        'files_responsable_asesor',
     ];
 }

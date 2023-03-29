@@ -129,6 +129,8 @@ class PedidosAnulacionController extends Controller
                     'pea.motivo_sol_encargado',
                     'pea.motivo_sol_admin',
                     'pea.motivo_jefeop_admin',
+                    'pea.resposable_create_asesor',
+                    'pea.resposable_aprob_encargado',
                 ]
             )
         ->where('pea.state_solicitud',1);
@@ -290,9 +292,9 @@ class PedidosAnulacionController extends Controller
                 $deshabilitar="";
                 if (in_array(Auth::user()->rol,[User::ROL_ADMIN,User::ROL_ASESOR,User::ROL_ENCARGADO])) {
                     if ($pedido->tipoanulacion=='C'){
-                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo" ><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
+                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-responsable_create_asesor="' . $pedido->resposable_create_asesor . '" data-responsable_aprob_encarg="' . $pedido->resposable_aprob_encargado . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo" ><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }else  if ($pedido->tipoanulacion=='F'){
-                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
+                        $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-responsable_create_asesor="' . $pedido->resposable_create_asesor . '" data-responsable_aprob_encarg="' . $pedido->resposable_aprob_encargado . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }
                     return $htmltipoanul;
                 }else{
@@ -359,6 +361,7 @@ class PedidosAnulacionController extends Controller
     {
 
         $idsfiles="";
+        $idsfilesc="";
         $motivoanulacion=$request->txtMotivoPedComplet;
         $pedido_id= $request->txtIdPedidoCompleto;
         /*if($request->tipoAnulacion=="C"){
@@ -380,6 +383,7 @@ class PedidosAnulacionController extends Controller
                 $pedidosanulacion->estado_aprueba_asesor=1;
                 $pedidosanulacion->tipo=$request->tipoAnulacion;
                 $pedidosanulacion->total_anular=$request->anulacionCodigoPc;
+                $pedidosanulacion->resposable_create_asesor=$request->txtResponsablePedComplet;
                 $pedidosanulacion->save();
 
                 foreach($files as $file){
@@ -398,9 +402,10 @@ class PedidosAnulacionController extends Controller
                     $fileUpload->filepath = $fileC->store('pedidos/anulaciones', 'pstorage');
                     $fileUpload->type= $fileC->getClientOriginalExtension();
                     $fileUpload->save();
-                    $idsfiles=$idsfiles.$fileUpload->id."-";
+                    $idsfilesc=$idsfilesc.$fileUpload->id."-";
                 }
                 $pedidosanulacion->files_asesor_ids=$idsfiles;
+                $pedidosanulacion->files_responsable_asesor=$idsfilesc;
                 $pedidosanulacion->update();
             }
         }
@@ -413,6 +418,7 @@ class PedidosAnulacionController extends Controller
     {
 
         $idsfiles="";
+        $idsfilesc="";
         $motivoanulacion= $request->txtMotivoFactura;
         $responsableanulacion= $request->txtResponsableFactura;
         $pedido_id= $request->txtIdPedidoFactura;
@@ -427,6 +433,7 @@ class PedidosAnulacionController extends Controller
             $pedidosinpago=Pedido::where('id',$pedido_id)->where('pago',0)->where('pagado',0)->count();
             if ($pedidosinpago==1){
                 $files = $request->file('inputArchivoSubirf');
+                $filesC = $request->file('inputArchivoCapturaSubirf');
                 $pedidosanulacion = new PedidosAnulacion;
                 $pedidosanulacion->pedido_id=$pedido_id;;
                 $pedidosanulacion->user_id_asesor=auth()->user()->id;
@@ -434,6 +441,7 @@ class PedidosAnulacionController extends Controller
                 $pedidosanulacion->estado_aprueba_asesor=1;
                 $pedidosanulacion->tipo=$request->tipoAnulacion2;
                 $pedidosanulacion->total_anular=$request->anularCodigoF;
+                $pedidosanulacion->resposable_create_asesor=$request->txtResponsableFactura;
                 $pedidosanulacion->save();
 
                 foreach($files as $file){
@@ -445,7 +453,18 @@ class PedidosAnulacionController extends Controller
                     $fileUpload->save();
                     $idsfiles=$idsfiles.$fileUpload->id."-";
                 }
+                foreach($filesC as $fileC){
+                    $fileUpload = new FileUploadAnulacion;
+                    $fileUpload->pedido_anulacion_id=$pedidosanulacion->id;
+                    $fileUpload->filename = $fileC->getClientOriginalName();
+                    $fileUpload->filepath = $fileC->store('pedidos/anulaciones', 'pstorage');
+                    $fileUpload->type= $fileC->getClientOriginalExtension();
+                    $fileUpload->save();
+                    $idsfilesc=$idsfilesc.$fileUpload->id."-";
+                }
+
                 $pedidosanulacion->files_asesor_ids=$idsfiles;
+                $pedidosanulacion->files_responsable_asesor=$idsfilesc;
                 $pedidosanulacion->update();
             }
 
@@ -472,6 +491,7 @@ class PedidosAnulacionController extends Controller
                 'user_id_encargado'=>  Auth::user()->id,
                 'estado_aprueba_encargado' => $request->estado,
                 'estado_aprueba_administrador' => 0,
+                'resposable_aprob_encargado' => $request->responsableanulacion_enc,
             ]);
         }elseif ($request->estado==2){
             $pedidosanulacion->update([
@@ -610,5 +630,22 @@ class PedidosAnulacionController extends Controller
         }
         return view('operaciones.modal.ContenidoModal.ListadoAdjuntosAnula', compact('imagenes'));
         /*return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulaadjuntos))?$pedidosanulaadjuntos:0) ,'adjuntosid: ' => $adjuntosid,'adjuntosid2: ' => $adjuntosid2,'imagenes: ' => ((isset($imagenes))?$imagenes:0)]);*/
+    }
+
+    public function verFilesSolicitudAsesorAnulacion(PedidosAnulacion $pedidosanulacion)
+    {
+        $pedidosanulaadjuntos = PedidosAnulacion::where('id', $pedidosanulacion->id)->first();
+        $adjuntosid = explode("-", $pedidosanulaadjuntos->files_responsable_asesor);
+        $adjuntosid2=array();
+        for ($i = 0; $i < count($adjuntosid); $i++) {
+            if ($adjuntosid[$i]!=""){
+                array_push($adjuntosid2, $adjuntosid[$i]);
+            }
+        }
+        if (count($adjuntosid2)>0){
+            $imagenes = FileUploadAnulacion::whereIn('id', $adjuntosid2)->get();
+        }
+        return view('pedidos.anulaciones.modal.ContenidoModal.ListadoAdjuntosSolicitud', compact('imagenes'));
+        //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 }

@@ -10,9 +10,20 @@
             {{--{{ Form::Open(['route' => ['users.destroy', $user], 'method' => 'delete']) }}--}}
             <form id="frmVerMotivoAnulacionUsuario">
                 <div class="modal-body">
+                    <div class="divResponsableAsesor">
+                        <p style="text-align: justify; font-size:20px;"><strong>Responsable Asesor:</strong> <br> <span id="txtResponsableAsesor"></span> </p>
+                    </div>
+                    <div class="divResponsableEncarg">
+                        <p style="text-align: justify; font-size:20px;"><strong>Responsable Encargado:</strong> <br> <span id="txtResponsableEncarg"></span> </p>
+                    </div>
                     <p style="text-align: justify; font-size:20px;"><strong>Motivo:</strong> <br> <span id="txtMotivoAnulacion"></span> </p>
 
-                    <div id="imagenAnulacionUsuario"></div>
+                    <div class="card">
+                        <p style="text-align: justify; font-size:20px;"><strong>Adjuntos:</strong> </p>
+                        <div class="card-body row ">
+                            <div id="imagenAnulacionUsuario"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
