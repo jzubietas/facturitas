@@ -67,11 +67,10 @@ class AnalisisSituacionCliente_Individual extends Command
       //$this->info($diff);
       //return 0;
 
-        $this->warn($clientes);
-        return 0;
-
         foreach($clientes as $cliente)
         {
+            $this->warn($clientes);
+            continue;
 
             $idcliente=$cliente->id;
 
