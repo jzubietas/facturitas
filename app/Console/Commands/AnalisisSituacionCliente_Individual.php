@@ -152,7 +152,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
 
                     /////////////////////////////////////
-                    $periodo_ejecucion->addMonth();
+                    $periodo_ejecucion=Carbon::parse($periodo_ejecucion)->addMonth();
                     $where_anio=$periodo_ejecucion->clone()->format('Y');
                     $where_mes=$periodo_ejecucion->clone()->format('m');
 
