@@ -91,7 +91,10 @@ class AnalisisSituacionCliente_Individual extends Command
                 {
                     $this->warn('vuelta '.$i);
 
+                    $periodo_ejecucion=$periodo_ejecucion->addMonthsWithNoOverflow($i);
+
                     $this->warn($periodo_ejecucion);
+                    continue;
 
                     //$periodo_ejecucion=$periodo_ejecucion->addMonth();
 
@@ -658,7 +661,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     }
 
-                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
+
 
                 }
 
