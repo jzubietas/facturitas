@@ -855,5 +855,5 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
 
     Route::get('excel/envios/olva', [ExcelController::class, 'listadoEnviosTiendaOlva'])->name('excel.envios-olva');
-
+    Route::post('pedidosanul.verfilessolicasesores/{pedidosanulacion}', [PedidosAnulacionController::class, 'verFilesSolicitudAsesorAnulacion'])->name('anulaciones.verfilessolicasesores');
 });
