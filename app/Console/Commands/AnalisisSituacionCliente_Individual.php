@@ -85,11 +85,15 @@ class AnalisisSituacionCliente_Individual extends Command
             $periodo_ejecucion=null;
 
             $this->warn($diff);
-            continue;
+            //continue;
 
             for($i=0;$i<$diff;$i++)
                 {
+                    $this->warn('vuelta '.$i);
                     $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
+                    $this->warn($periodo_ejecucion);
+
+                    continue;
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
 
