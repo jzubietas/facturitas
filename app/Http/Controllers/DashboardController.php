@@ -2281,7 +2281,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              PAOLA: TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' .
-                     $count_asesor[24]['all_situacion_activo'] . '/ Activos. ' . ($count_asesor[24]['all_situacion_activo']).' + Recurrentes. '.($count_asesor[24]['all_situacion_recurrente']) . '</span>
+                    $count_asesor[24]['all_situacion_activo'] . '/ Activos. ' . ($count_asesor[24]['all_situacion_activo']).' + Recurrentes. '.($count_asesor[24]['all_situacion_recurrente']) . '</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -2559,13 +2559,13 @@ class DashboardController extends Controller
                 ])
                 ->count();
 
-                /*Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
-                ->join('situacion_clientes as cv','cv.cliente_id','clientes.id')
-                ->where('cv.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
-                ->where('clientes.user_id', $asesor->id)
-                ->where('clientes.situacion','=','RECURRENTE')
-                ->activo()
-                ->count();*/
+            /*Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+            ->join('situacion_clientes as cv','cv.cliente_id','clientes.id')
+            ->where('cv.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
+            ->where('clientes.user_id', $asesor->id)
+            ->where('clientes.situacion','=','RECURRENTE')
+            ->activo()
+            ->count();*/
 
             //recurrente mes pasado
             //$clientes_situacion_recurrente = Clientes::query()
@@ -2819,7 +2819,7 @@ class DashboardController extends Controller
             $item['porcentaje_general']=($all/$allmeta_2);
             return $item;
         })->sortBy('identificador', SORT_NUMERIC, false);
-            //->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
+        //->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
 
         if ($request->ii == 1) {
             if ($total_asesor % 2 == 0) {
