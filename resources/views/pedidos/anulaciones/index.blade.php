@@ -306,6 +306,11 @@
                     $(".btnEnviarPagoCompleto").attr('disabled', false);
                     return false;
                 }
+                if ($('#inputArchivoCapturaSubir').val() == '') {
+                    Swal.fire('Error', 'No se puede ingresar sin archivos en captura', 'warning');
+                    $(".btnEnviarPagoCompleto").attr('disabled', false);
+                    return false;
+                }
                 if (txtMotivoPedComplet.length < 1) {
                     Swal.fire('Error','Completa el sustento para la anulación ','warning'
                     ).then(function () {
@@ -470,6 +475,11 @@
 
                 if ($('#inputArchivoSubirf').val() == '') {
                     Swal.fire('Error', 'No se puede ingresar sin archivos', 'warning');
+                    $(".btnEnviarFactura").attr('disabled', false);
+                    return false;
+                }
+                if ($('#inputArchivoCapturaSubirf').val() == '') {
+                    Swal.fire('Error', 'No se puede ingresar sin archivos en capturas', 'warning');
                     $(".btnEnviarFactura").attr('disabled', false);
                     return false;
                 }
