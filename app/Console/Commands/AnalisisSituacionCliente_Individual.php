@@ -120,6 +120,7 @@ class AnalisisSituacionCliente_Individual extends Command
                             ]);
                         }
                         else{
+                            $this->warn($mes_antes);
                             $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
                             switch($situacion_antes->situacion)
