@@ -1369,7 +1369,7 @@ class DashboardController extends Controller
                 else
                 {
                     $html .= '<div class="progress-bar " role="progressbar"
-                         style="width: ' . ($round) . '%;background:rgba(0,143,251,1)"
+                         style="width: ' . ($round) . '%;background:rgba(0,143,251,1);"
                          aria-valuenow="' . ($round) . '"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>';
@@ -1451,7 +1451,7 @@ class DashboardController extends Controller
                     $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
                                       <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                          <div class="rounded" role="progressbar" style="background: #8ec117 !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
+                                          <div class="rounded" role="progressbar" style="background: rgba(3,175,3,1) !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
                                             <span style="font-weight: lighter"> <b  class="bold-size">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
