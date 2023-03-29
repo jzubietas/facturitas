@@ -128,6 +128,21 @@ class AnalisisSituacionCliente_Individual extends Command
                         if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
                         {
                             $this->info("es mes origen");
+                            $situacion_create->update([
+                                "situacion" => 'BASE FRIA',
+                                "flag_fp" => '0'
+                            ]);
+                        }else{
+                            $this->warn("mes antes   -> ".$uso_antes);
+                            $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)
+                                ->where('periodo',$uso_antes->format('Y-m'))->first();
+
+                            $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
+
+                            $periodo_ejecucion=$uso_ejecucion;
+
+                            $this->warn("mes ejecucion  ->".$periodo_ejecucion );
+                            $this->warn($situacion_antes);
                         }
 
                     }else if($cont_mes>0)
