@@ -135,7 +135,7 @@ class AnalisisSituacionCliente_Individual extends Command
                         }else{
                             $this->warn("mes antes   -> ".$uso_antes);
                             $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)
-                                ->where('periodo',$uso_antes->format('Y-m'))->first();
+                                ->where('periodo',$uso_antes)->first();
 
                             $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
 
