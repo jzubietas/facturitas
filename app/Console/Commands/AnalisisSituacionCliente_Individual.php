@@ -85,9 +85,9 @@ class AnalisisSituacionCliente_Individual extends Command
                 $periodo_inicial=Carbon::parse($fp->created_at);
                 $periodo_ejecucion=Carbon::parse($fp->created_at);
 
-                for($i=-1;$i<($diff-1);$i++)
+                for($i=0;$i<($diff);$i++)
                 {
-                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
+
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
 
@@ -652,7 +652,8 @@ class AnalisisSituacionCliente_Individual extends Command
                         ]);
 
                     }
-
+                    $dias_sumar=Carbon::parse($periodo_ejecucion)->day;
+                    $periodo_ejecucion=$periodo_ejecucion->addDays($dias_sumar);
                 }
 
             }
