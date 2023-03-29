@@ -1624,13 +1624,14 @@ ${data.foto3 ? `
             $.ajax({
                 type: 'POST',
                 url: "{{ route('getContadoresOlva') }}",
-                data: formData,
-                processData: false,
-                contentType: false,
             }).done(function (data) {
-                /*$("#modal-delete").modal("hide");
-                resetearcamposdelete();
-                $('#tablabandejapedidos').DataTable().ajax.reload();*/
+                $('.countOlvaIndex').html("");
+                $('.countNoEntregado').html("");
+                $('.countExtraviado').html("");
+
+                $('.countOlvaIndex').html(data.contadorOlvaIndex);
+                $('.countNoEntregado').html(data.contadorOlvaNoentregado);
+                $('.countExtraviado').html(data.contadorOlvaExtraviado);
             }).fail(function (err, error, errMsg) {
                 console.log('Error al intentar',arguments, err, errMsg)
             });

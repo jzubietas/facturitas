@@ -88,29 +88,18 @@ class OlvaController extends Controller
                 Pedido::EN_TIENDA_AGENTE_OLVA_INT,
                 Pedido::NO_ENTREGADO_OLVA_INT,
             ])
-            /*->whereNull('direccion_grupos.courier_failed_sync_at')
-            ->where('direccion_grupos.distribucion', 'OLVA')
-            ->where('direccion_grupos.motorizado_status', '0')*/
             ->whereIn('direccion_grupos.courier_estado', ['CONFIRMACION EN TIENDA','EN ALMACEN','DESPACHADO','REGISTRADO',])
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
                 "clientes.nombre as cliente_nombre",
             ]);
-        /*if (user_rol(User::ROL_ASESOR) || user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
-            $pedidos_provincia->where(function ($query) {
-                $query->whereNull('direccion_grupos.add_screenshot_at');
-                $query->orWhereDate('direccion_grupos.add_screenshot_at', '<', now());
-            });
-        }*/
+
 
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
 
         $query = DB::table($pedidos_provincia);
-        /*if (!user_rol(User::ROL_ASESOR) && !user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
-            $query->orderBy('add_screenshot_at');
-        }*/
-        $query->orderByDesc('id');
+        $query->orderByDesc('direccion_grupos.courier_estado');
 
         return datatables()->query($query)
             ->addIndexColumn()
