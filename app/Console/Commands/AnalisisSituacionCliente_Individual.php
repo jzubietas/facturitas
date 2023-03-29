@@ -98,6 +98,8 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     $this->warn($uso_ejecucion . ' y ' .$uso_antes);
 
+                    //contadores
+
                     $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
                         ->whereMonth('created_at',$where_mes)->where('codigo', 'not like', "%-C%")->count();
                     $cont_mes_activo=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
@@ -106,22 +108,6 @@ class AnalisisSituacionCliente_Individual extends Command
                         ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
 
                     $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
-
-
-                    $periodo_ejecucion->addMonth();
-                    $where_anio=$periodo_ejecucion->clone()->format('Y');
-                    $where_mes=$periodo_ejecucion->clone()->format('m');
-
-
-
-                    continue;
-
-                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth()->format('Y-m');
-
-                    $this->warn($mes_ejecucion);
-
-                    //contadores
-
 
 
                     $situacion_create=SituacionClientes::create([
@@ -136,6 +122,19 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     $compara=Carbon::parse($periodo_original);
                     $this->warn("compara con ".$compara);
+
+
+
+                    $periodo_ejecucion->addMonth();
+                    $where_anio=$periodo_ejecucion->clone()->format('Y');
+                    $where_mes=$periodo_ejecucion->clone()->format('m');
+
+
+                    continue;
+
+
+
+
 
                     $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
 
