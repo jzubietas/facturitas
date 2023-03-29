@@ -22,7 +22,7 @@
 
 @section('auth_body')
     <form action="{{ $login_url }}" method="post">
-        @csrf
+        {{ csrf_field() }}
 
         {{-- Email field --}}
         <div class="input-group mb-3">
