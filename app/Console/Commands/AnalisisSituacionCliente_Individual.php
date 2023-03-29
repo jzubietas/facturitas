@@ -98,6 +98,11 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     $this->warn($uso_ejecucion . ' y ' .$uso_antes);
 
+                    $where_anio=$uso_ejecucion->format('Y');
+                    $where_mes=$uso_ejecucion->format('m');
+
+
+
                     continue;
 
                     $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth()->format('Y-m');
