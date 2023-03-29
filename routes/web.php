@@ -311,7 +311,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::middleware('authorize.pedido.anulled')
         ->post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])
         ->name('pedidodeleteRequest.post');
-
+    Route::post('getContadoresOlva', [PedidoController::class, 'getContadoresOlva'])->name('getContadoresOlva');
 
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 

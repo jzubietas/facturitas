@@ -3586,4 +3586,8 @@ class PedidoController extends Controller
         return $result_direccion . '|' . $totalpedidos;
 
     }
+
+    public  function  getContadoresOlva(Request $request){
+        return 0;
+    }
 }

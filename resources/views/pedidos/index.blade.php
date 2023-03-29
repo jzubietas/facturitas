@@ -1628,9 +1628,9 @@ ${data.foto3 ? `
                 processData: false,
                 contentType: false,
             }).done(function (data) {
-                $("#modal-delete").modal("hide");
+                /*$("#modal-delete").modal("hide");
                 resetearcamposdelete();
-                $('#tablabandejapedidos').DataTable().ajax.reload();
+                $('#tablabandejapedidos').DataTable().ajax.reload();*/
             }).fail(function (err, error, errMsg) {
                 console.log('Error al intentar',arguments, err, errMsg)
             });
