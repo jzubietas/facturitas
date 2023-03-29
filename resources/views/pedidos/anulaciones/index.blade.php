@@ -812,8 +812,8 @@
                 $("#txtMotivoAnulacion").html(pedido_motivo);
 
                 //datos form
-                var formVerImagenAnularSol = new FormData();
-                formVerImagenAnularSol.append("pedidoAnulacionId", data.idanulacion);
+                /*var formVerImagenAnularSol = new FormData();
+                formVerImagenAnularSol.append("pedidoAnulacionId", data.idanulacion);*/
 
                 /*cargar imagenes*/
                 /*$.ajax({
