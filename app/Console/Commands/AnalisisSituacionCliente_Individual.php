@@ -90,7 +90,7 @@ class AnalisisSituacionCliente_Individual extends Command
             for($i=0;$i<$diff;$i++)
                 {
                     $this->warn('vuelta '.$i);
-                    $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
+                    $periodo_ejecucion=$periodo_inicial->addMonths($i);
                     $this->warn($periodo_ejecucion);
 
                     continue;
