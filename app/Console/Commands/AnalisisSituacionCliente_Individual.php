@@ -74,9 +74,11 @@ class AnalisisSituacionCliente_Individual extends Command
 
             $this->warn($clientes);
             $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
-            continue;
+
 
             $periodo_inicial=Carbon::parse($fp->created_at);
+            $this->warn($periodo_inicial);
+            continue;
             $periodo_ejecucion=null;
 
             for($i=0;$i<$diff;$i++)
