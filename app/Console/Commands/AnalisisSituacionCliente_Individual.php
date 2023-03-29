@@ -120,7 +120,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     $compara=Carbon::parse($periodo_original);
                     $this->warn("compara con ".$compara);
 
-                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->clone()->startOfMonth()->subMonth();
+                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
 
                     if($cont_mes==0)
                     {
@@ -136,7 +136,9 @@ class AnalisisSituacionCliente_Individual extends Command
                             $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)
                                 ->where('periodo',$mes_antes->format('Y-m'))->first();
 
-                            $periodo_ejecucion=Carbon::createFromDate($where_anio,$where_mes,1);
+                            $this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
+
+                            $periodo_ejecucion=Carbon::createFromDate($where_anio,$where_mes,1)->startOfMonth();
 
                             $this->warn("mes ejecucion  ->".$periodo_ejecucion );
                             $this->warn($situacion_antes);
