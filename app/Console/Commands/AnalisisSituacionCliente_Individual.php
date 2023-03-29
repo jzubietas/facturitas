@@ -93,9 +93,8 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     $this->warn($periodo_ejecucion);
 
-                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
+                    //$periodo_ejecucion=$periodo_ejecucion->addMonth();
 
-                    continue;
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
 
