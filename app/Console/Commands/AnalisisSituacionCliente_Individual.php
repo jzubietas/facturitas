@@ -46,6 +46,8 @@ class AnalisisSituacionCliente_Individual extends Command
       //$this->warn("Cargando primer pedido mes anio");
       $fp=Pedido::orderBy('created_at','asc')->limit(1)->first();
 
+        $fp->created_at=Carbon::parse($fp->created_at)->startOfMonth();
+
       $periodo_original=Carbon::parse($fp->created_at)->clone()->startOfMonth();
       $periodo_actual=Carbon::parse(now())->clone()->endOfMonth();
 
@@ -67,6 +69,9 @@ class AnalisisSituacionCliente_Individual extends Command
       //$this->info($diff);
       //return 0;
 
+        $periodo_inicial=Carbon::parse($fp->created_at)->clone()->startOfMonth();
+        $periodo_ejecucion=null;
+
         foreach($clientes as $cliente)
         {
 
@@ -78,11 +83,11 @@ class AnalisisSituacionCliente_Individual extends Command
                 $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
 
                 $periodo_inicial=Carbon::parse($fp->created_at);
-                $periodo_ejecucion=null;
+                $periodo_ejecucion=Carbon::parse($fp->created_at)->startOfMonth()->startOfDay();
 
-                for($i=0;$i<$diff;$i++)
+                for($i=0;$i<($diff);$i++)
                 {
-                    $periodo_ejecucion=Carbon::parse($fp->created_at)->addMonths($i);
+
                     $where_anio=$periodo_ejecucion->format('Y');
                     $where_mes=$periodo_ejecucion->format('m');
 
@@ -120,7 +125,10 @@ class AnalisisSituacionCliente_Individual extends Command
                             ]);
                         }
                         else{
-                            $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
+                            $this->info("anio ".$where_anio."   mes ".$where_mes);
+                            $this->warn("mes antes ".$mes_antes);
+                            $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)
+                                ->where('periodo',$mes_antes->format('Y-m'))->first();
 
                             switch($situacion_antes->situacion)
                             {
@@ -477,7 +485,7 @@ class AnalisisSituacionCliente_Individual extends Command
                                                         // es diciembre
                                                         //a abandono
                                                         $situacion_create->update([
-                                                            "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
+                                                            "situacion" => 'NULO',"flag_fp" => '1'
                                                         ]);
 
                                                     }else if($situacion_antes_3->activos>0)
@@ -644,7 +652,9 @@ class AnalisisSituacionCliente_Individual extends Command
                         ]);
 
                     }
-
+                    $dias_sumar=Carbon::parse($periodo_ejecucion)->daysInMonth;
+                    $this->info("sumar ".$dias_sumar);
+                    $periodo_ejecucion->addDays($dias_sumar);
                 }
 
             }
