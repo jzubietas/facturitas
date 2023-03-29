@@ -329,13 +329,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['pedidos pagados'],
                 ],
-                [
+                /*[
                     'text' => 'Olva Tienda/Agente',
                     'route' => 'envios.olva.index',
                     'can' => 'envios.encargado.tienda_agente',
                     'icon' => 'fas fa-check-circle dot_encargado_tienda_agente_count',
                     'active' => ['enviados'],
-                ],
+                ],*/
                 [
                   'text' => 'Bandejas de recojo',
                   'route' => 'pedidos.recojo',
