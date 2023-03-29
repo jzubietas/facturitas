@@ -113,6 +113,8 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     $compara=Carbon::parse($fp->created_at);
 
+                    $this->warn("error ".Carbon::createFromDate($where_anio, $where_mes)->startOfMonth());
+
                     $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
 
                     if($cont_mes==0)
