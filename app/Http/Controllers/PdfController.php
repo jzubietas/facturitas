@@ -85,7 +85,7 @@ class PdfController extends Controller
 
         $inicio_s = Carbon::now()->clone()->startOfMonth()->format('Y-m-d');
         $inicio_f = Carbon::now()->clone()->endOfMonth()->format('Y-m-d');
-        $periodo_antes = Carbon::now()->clone()->subMonth()->startOfMonth()->format('Y-m');
+        $periodo_antes = Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m');
         $periodo_actual = Carbon::now()->clone()->startOfMonth()->format('Y-m');
 
         $mes_w = Carbon::now()->clone()->startOfMonth()->format('m');
