@@ -730,7 +730,8 @@ class DashboardController extends Controller
         $meta_2 = collect($progressData)->pluck('meta_2')->sum();
         $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
         $supervisor = collect($progressData)->pluck('supervisor')->sum();
-
+        $meta_new=0;
+        $progress_pedidos=0;
 
         foreach ($supervisores_array as $supervisor_2)
         {
@@ -758,11 +759,27 @@ class DashboardController extends Controller
         }
 
         //verificar totales
-        if ($meta > 0) {
-            $p_pedidos = round(($all / $meta) * 100, 2);
-        } else {
-            $p_pedidos = 0;
+
+        if ($all >= 0 && $all < $meta)
+        {
+            if($all>0)
+            {
+                $progress_pedidos=round(($all/$meta)*100,2 );
+            }else{
+                $progress_pedidos=0;
+            }
+            $meta_new=1;
+        }else if($all >= $meta)
+        {
+            if($meta_2 > 0)
+            {
+                $progress_pedidos=round( ($all/$meta_2)*100,2 );
+            }else{
+                $progress_pedidos=0;
+            }
+            $meta_new=2;
         }
+
         if ($all_mespasado == 0) {
             $p_pagos = 0;
         } else {
@@ -774,7 +791,7 @@ class DashboardController extends Controller
         }
 
         $object_totales = [
-            "progress_pedidos" => $p_pedidos,
+            //"progress_pedidos" => $p_pedidos,
             "progress_pagos" => $p_pagos,
             "total_pedido" => $all,
             "all_situacion_recurrente" => $all_situacion_recurrente,
@@ -785,6 +802,8 @@ class DashboardController extends Controller
             "meta_2" => $meta_2,
             "pedidos_dia" => $pedidos_dia,
             "supervisor" => $supervisor,
+            "meta_new"=>$meta_new,
+            "progress_pedidos"=>$progress_pedidos
         ];
 
         $html = '';
@@ -943,11 +962,27 @@ class DashboardController extends Controller
                          aria-valuemax="100"></div>';
             }
 
-
-
-            $html .= '</div>
+            if ($object_totales['meta'] == 0) {
+                $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>    </div>';
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>
+    </div>';
+            } else {
+
+                if ($object_totales['meta_new'] == 1)
+                {
+                    $html .= '</div>
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
+             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>    </div>';
+                }else if ($object_totales['meta_new'] == 2)
+                {
+                    $html .= '</div>
+    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
+             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_2'] . '</span>    </div>';
+                }
+
+            }
+
             $html .= '</th>
               </tr>
               </tbody>';
@@ -1103,7 +1138,8 @@ class DashboardController extends Controller
                  aria-valuenow="' . (round(0, 2)) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
-            } else {
+            }
+            else {
 
                 if($count_asesor[$idencargado]['total_pedido']>0)
                 {
