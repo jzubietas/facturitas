@@ -658,7 +658,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
                     }
 
-                    $periodo_ejecucion=$periodo_ejecucion->addMonth($i);
+                    $periodo_ejecucion=$periodo_ejecucion->addMonth();
 
                 }
 
