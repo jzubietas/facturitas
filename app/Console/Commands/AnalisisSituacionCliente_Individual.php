@@ -80,7 +80,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
             $this->warn($periodo_inicial);
 
-            $periodo_ejecucion=$periodo_original;
+            $periodo_ejecucion=$periodo_inicial;
 
             $this->warn($diff);
             //continue;
