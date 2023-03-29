@@ -121,7 +121,7 @@ class AnalisisSituacionCliente_Individual extends Command
                     ]);
 
                     $compara=Carbon::parse($periodo_original);
-                    $this->warn("compara con ".$compara);
+                    $this->info("compara con ".$compara);
 
 
 
