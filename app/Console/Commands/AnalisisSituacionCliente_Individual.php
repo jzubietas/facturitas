@@ -67,6 +67,9 @@ class AnalisisSituacionCliente_Individual extends Command
       //$this->info($diff);
       //return 0;
 
+        $periodo_inicial=Carbon::parse($fp->created_at);
+        $periodo_ejecucion=null;
+
         foreach($clientes as $cliente)
         {
 
@@ -76,10 +79,13 @@ class AnalisisSituacionCliente_Individual extends Command
             $delete=SituacionClientes::where('cliente_id',$cliente->id)->delete();
 
 
-            $periodo_inicial=Carbon::parse($fp->created_at);
+
             $this->warn($periodo_inicial);
-            continue;
+
             $periodo_ejecucion=null;
+
+            $this->warn($diff);
+            continue;
 
             for($i=0;$i<$diff;$i++)
                 {
