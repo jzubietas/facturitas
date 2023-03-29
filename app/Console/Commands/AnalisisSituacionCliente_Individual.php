@@ -123,20 +123,26 @@ class AnalisisSituacionCliente_Individual extends Command
                     $compara=Carbon::parse($periodo_original);
                     $this->info("compara con ".$compara);
 
+                    if($cont_mes==0)
+                    {
+                        if( $where_anio==$compara->format('Y') && $where_mes==$compara->format('m') )
+                        {
+                            $this->info("es mes origen");
+                        }
+
+                    }else if($cont_mes>0)
+                    {
+
+                    }
 
 
+                    /////////////////////////////////////
                     $periodo_ejecucion->addMonth();
                     $where_anio=$periodo_ejecucion->clone()->format('Y');
                     $where_mes=$periodo_ejecucion->clone()->format('m');
 
 
                     continue;
-
-
-
-
-
-                    $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
 
                     if($cont_mes==0)
                     {
