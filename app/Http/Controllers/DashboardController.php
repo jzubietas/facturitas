@@ -1018,9 +1018,6 @@ class DashboardController extends Controller
             if($request->ii==4){$idencargado=46;}
             else if($request->ii==5){$idencargado=24;}
 
-
-
-
             /*if ($count_asesor[$idencargado]['total_pedido']>=0 && $count_asesor[$idencargado]['total_pedido'] < $count_asesor[$idencargado]['meta']) {
                 if ($count_asesor[$idencargado]['meta'] > 0) {
                     $p_pedidos = round(($count_asesor[$idencargado]['total_pedido'] / $count_asesor[$idencargado]['meta']) * 100, 2);
