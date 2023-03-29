@@ -39,7 +39,7 @@ class AnalisisSituacionCliente_Individual extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
       //$cliente_id=$this->argument('celular');
       $cliente_id=Cliente::where('celular',$this->argument('celular'))->first()->id;
@@ -66,6 +66,9 @@ class AnalisisSituacionCliente_Individual extends Command
 
       //$this->info($diff);
       //return 0;
+
+        $this->warn($clientes);
+        return 0;
 
         foreach($clientes as $cliente)
         {
