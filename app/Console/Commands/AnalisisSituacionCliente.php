@@ -97,13 +97,13 @@ class AnalisisSituacionCliente extends Command
                       'cantidad_pedidos'=>$cont_mes,
                       'anulados'=>$cont_mes_anulado,
                       'activos'=>$cont_mes_activo,
-                      'periodo'=>Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->format('Y-m'),
+                      'periodo'=>Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->format('Y-m'),
                       'flag_fp'=>'0'
                   ]);
 
                   $compara=Carbon::parse($fp->created_at);
 
-                  $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
+                  $mes_antes = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth();
 
                   if($cont_mes==0)
                   {
@@ -141,7 +141,7 @@ class AnalisisSituacionCliente extends Command
                                   break;
 
                               case 'NUEVO':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
@@ -172,10 +172,10 @@ class AnalisisSituacionCliente extends Command
                                   }
                                   break;
                               case 'NULO':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                                  $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
-                                  $mes_antes_2 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(2);
-                                  $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(3);
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
+                                  $mes_antes = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth();
+                                  $mes_antes_2 = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth(2);
+                                  $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth(3);
 
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
@@ -276,11 +276,11 @@ class AnalisisSituacionCliente extends Command
                           switch($situacion_antes->situacion)
                           {
                               case 'BASE FRIA':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   //$this->warn($mes_actual);
-                                  $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
-                                  $mes_antes_2 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(2);
-                                  $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(3);
+                                  $mes_antes = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth();
+                                  $mes_antes_2 = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth(2);
+                                  $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth(3);
 
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 
@@ -325,7 +325,7 @@ class AnalisisSituacionCliente extends Command
 
                                   break;
                               case 'RECUPERADO RECIENTE':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
@@ -343,7 +343,7 @@ class AnalisisSituacionCliente extends Command
                                   }
                                   break;
                               case 'RECUPERADO ABANDONO':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
@@ -363,7 +363,7 @@ class AnalisisSituacionCliente extends Command
 
                                   break;
                               case 'NUEVO':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
@@ -395,10 +395,10 @@ class AnalisisSituacionCliente extends Command
                                   }
                                   break;
                               case 'NULO':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
-                                  $mes_antes = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth();
-                                  $mes_antes_2 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(2);
-                                  $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth()->subMonth(3);
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
+                                  $mes_antes = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth();
+                                  $mes_antes_2 = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth(2);
+                                  $mes_antes_3 = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth(3);
 
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
@@ -498,7 +498,7 @@ class AnalisisSituacionCliente extends Command
                                   }
                                   break;
                               case 'ABANDONO':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
@@ -517,7 +517,7 @@ class AnalisisSituacionCliente extends Command
 
                                   break;
                               case 'ABANDONO RECIENTE':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
@@ -536,7 +536,7 @@ class AnalisisSituacionCliente extends Command
 
                                   break;
                               case 'RECURRENTE':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
@@ -572,7 +572,7 @@ class AnalisisSituacionCliente extends Command
                                   }
                                   break;
                               case 'ACTIVO':
-                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                                  $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
 
@@ -616,7 +616,7 @@ class AnalisisSituacionCliente extends Command
 
                   if($i==($diff-1))
                   {
-                      $mes_actual = Carbon::createFromDate($where_anio, $where_mes)->startOfMonth();
+                      $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                       $situacion_final=SituacionClientes::where('cliente_id',$cliente->id)
                           ->where('periodo',$mes_actual->format('Y-m'))->first();
                       $cont_ped_activo=Pedido::where('cliente_id',$cliente->id)->activo()->count();
