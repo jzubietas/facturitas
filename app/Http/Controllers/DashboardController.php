@@ -335,10 +335,10 @@ class DashboardController extends Controller
 
             if (!request()->has("fechametames")) {
                 $fechametames = Carbon::now()->clone();
-                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse(now())->clone()->startOfMonth()->subMonth();
             } else {
                 $fechametames = Carbon::parse($request->fechametames)->clone();
-                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
             dd($fechametames,$date_pagos);
