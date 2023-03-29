@@ -82,7 +82,7 @@ class AnalisisSituacionCliente_Individual extends Command
 
             $this->warn($periodo_inicial);
 
-            $periodo_ejecucion=null;
+            $periodo_ejecucion=$periodo_inicial;
 
             $this->warn($diff);
             //continue;
@@ -90,7 +90,7 @@ class AnalisisSituacionCliente_Individual extends Command
             for($i=0;$i<$diff;$i++)
                 {
                     $this->warn('vuelta '.$i);
-                    $periodo_ejecucion=$periodo_inicial->addMonths($i);
+
                     $this->warn($periodo_ejecucion);
 
                     continue;
@@ -656,6 +656,8 @@ class AnalisisSituacionCliente_Individual extends Command
                         ]);
 
                     }
+
+                    $periodo_ejecucion=$periodo_ejecucion->addMonth($i);
 
                 }
 
