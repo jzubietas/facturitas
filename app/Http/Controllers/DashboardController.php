@@ -364,10 +364,10 @@ class DashboardController extends Controller
 
             if (!request()->has("fechametames")) {
                 $fechametames = Carbon::now()->clone();
-                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse(now())->clone()->startOfMonth()->subMonth();
             } else {
                 $fechametames = Carbon::parse($request->fechametames)->clone();
-                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
             $total_pedido = Pedido::query()->where('user_id', $asesor->id)
@@ -412,7 +412,7 @@ class DashboardController extends Controller
 
             $clientes_situacion_recurrente = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->join('situacion_clientes as cv','cv.cliente_id','clientes.id')
-                ->where('cv.periodo',Carbon::now()->clone()->subMonth()->format('Y-m'))
+                ->where('cv.periodo',Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m'))
                 ->where('clientes.user_id', $asesor->id)
                 ->where('clientes.situacion','=','RECURRENTE')
                 ->activo()
@@ -2386,15 +2386,15 @@ class DashboardController extends Controller
             }
 
             /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
-            $date_pagos = Carbon::parse(now())->subMonth()->startOfMonth();
+            $date_pagos = Carbon::parse(now())->startOfMonth()->subMonth();
             $fechametames = Carbon::now()->clone();
 
             if (!request()->has("fechametames")) {
                 $fechametames = Carbon::now()->clone();
-                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse(now())->clone()->startOfMonth()->subMonth();
             } else {
                 $fechametames = Carbon::parse($request->fechametames)->clone();
-                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
 
@@ -2418,10 +2418,10 @@ class DashboardController extends Controller
 
             if (!request()->has("fechametames")) {
                 $fechametames = Carbon::now()->clone();
-                $date_pagos = Carbon::parse(now())->clone()->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse(now())->clone()->startOfMonth()->subMonth();
             } else {
                 $fechametames = Carbon::parse($request->fechametames)->clone();
-                $date_pagos = Carbon::parse($request->fechametames)->clone()->subMonth()->startOfMonth();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
             $total_pedido = Pedido::query()->where('user_id', $asesor->id)
@@ -2458,7 +2458,7 @@ class DashboardController extends Controller
                 ->where('pendiente_anulacion', '<>', '1')
                 ->whereDate('pedidos.created_at', $fechametames)->count();
 
-            $periodo_antes = Carbon::now()->clone()->subMonth()->startOfMonth()->format('Y-m');
+            $periodo_antes = Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m');
             $periodo_actual = Carbon::now()->clone()->startOfMonth()->format('Y-m');
 
 
