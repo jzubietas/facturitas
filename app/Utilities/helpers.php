@@ -201,7 +201,7 @@ if (!function_exists("get_olva_tracking")) {
                 'apikey' => 'a82e5d192fae9bbfee43a964024498e87dfecb884b67c7e95865a3bb07b607dd',
                 'details' => 1
             ]);
-        return $response->json()->data->details;
+        return $response->json();
     }
 }
 
