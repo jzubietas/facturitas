@@ -123,7 +123,7 @@ class PdfController extends Controller
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
-                ['a.situacion', '=', 'RECURRENTE'],
+                ['a.situacion', '=', 'CAIDO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['u.identificador', '<>', 'B'],
@@ -151,8 +151,8 @@ class PdfController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'ACTIVO'],
-                ['a.situacion', '=', 'ACTIVO'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
+                ['a.situacion', '=', 'LEVANTADO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['u.identificador', '<>', 'B'],
@@ -162,7 +162,7 @@ class PdfController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -173,7 +173,7 @@ class PdfController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -184,7 +184,7 @@ class PdfController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'ACTIVO'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -195,8 +195,8 @@ class PdfController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
-                ['a.situacion', '=', 'ACTIVO'],
+                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['a.situacion', '=', 'LEVANTADO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['u.identificador', '<>', 'B'],
@@ -206,7 +206,7 @@ class PdfController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['situacion_clientes.situacion', '=', 'CAIDO'],
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -217,7 +217,7 @@ class PdfController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['situacion_clientes.situacion', '=', 'CAIDO'],
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -228,7 +228,7 @@ class PdfController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'RECURRENTE'],
+                ['situacion_clientes.situacion', '=', 'CAIDO'],
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -249,7 +249,7 @@ class PdfController extends Controller
                                                     THEN (select sum(m.meta_quincena_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='NUEVO'
                                                     THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='ACTIVO'
+                                                    WHEN situacion_clientes.situacion='LEVANTADO'
                                                     THEN (select sum(m.meta_quincena_activo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_quincena "),
 
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
@@ -258,7 +258,7 @@ class PdfController extends Controller
                                                     THEN (select sum(m.cliente_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='NUEVO'
                                                     THEN (select sum(m.cliente_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='ACTIVO'
+                                                    WHEN situacion_clientes.situacion='LEVANTADO'
                                                     THEN (select sum(m.cliente_activo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
 
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
@@ -267,7 +267,7 @@ class PdfController extends Controller
                                                     THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='NUEVO'
                                                     THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='ACTIVO'
+                                                    WHEN situacion_clientes.situacion='LEVANTADO'
                                                     THEN (select sum(m.cliente_activo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
@@ -275,7 +275,7 @@ class PdfController extends Controller
                                                     THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='NUEVO'
                                                     THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='ACTIVO'
+                                                    WHEN situacion_clientes.situacion='LEVANTADO'
                                                     THEN (select sum(m.cliente_activo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
 
                 DB::raw('count(situacion_clientes.situacion) as total')
@@ -289,11 +289,11 @@ class PdfController extends Controller
 
         foreach ($situaciones_clientes as $situacion_cliente_3)
         {
-            if($situacion_cliente_3->situacion=='ACTIVO')
+            if($situacion_cliente_3->situacion=='LEVANTADO')
             {
                 $activos_cuenta=$situacion_cliente_3->total;
             }
-            else if($situacion_cliente_3->situacion=='RECURRENTE')
+            else if($situacion_cliente_3->situacion=='CAIDO')
             {
                 $recurrentes_cuenta=$situacion_cliente_3->total;
             }
@@ -302,7 +302,7 @@ class PdfController extends Controller
 
         foreach ($situaciones_clientes as $situacion_cliente)
         {
-            if($situacion_cliente->situacion=='ACTIVO' || $situacion_cliente->situacion=='RECURRENTE')
+            if($situacion_cliente->situacion=='LEVANTADO' || $situacion_cliente->situacion=='CAIDO')
                 continue;
 
             $html[] = '<tr>';
@@ -457,7 +457,7 @@ class PdfController extends Controller
 
         foreach ($situaciones_clientes as $situacion_cliente_2)
         {
-            if($situacion_cliente_2->situacion=='ACTIVO')
+            if($situacion_cliente_2->situacion=='LEVANTADO')
             {
                 $html[] = '<tr>';
                 $html[] = '<td style="width:20%;" class="text-center">';
@@ -482,7 +482,7 @@ class PdfController extends Controller
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>- '
                                                                 . $activos_cuenta .
-                                                                ' /  (activos. ' . ($activos_cuenta).'   + recurrente. '.($recurrentes_cuenta) . ')
+                                                                ' /  (levantados. ' . ($activos_cuenta).'   + caidos. '.($recurrentes_cuenta) . ')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    '.$diferenciameta.'
                                                                   </p>
