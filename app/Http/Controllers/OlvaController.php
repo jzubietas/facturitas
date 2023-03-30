@@ -624,11 +624,24 @@ class OlvaController extends Controller
         $grupo_courier_data = DireccionGrupo::where('id',$request->id_direcciongrupo)->first()->courier_data;
 
         $grupo_courier_data=$grupo_courier_data->data->details;
-        /*foreach($grupo_courier_data->data->details as $item)
+        $json_data=[];
+        foreach($grupo_courier_data as $item)
         {
-            dd($item->estado_tracking);
-        }*/
+            $ejecution = \Str::lower($item->estado_tracking ?? '');
+            $ejecution_2 = \Str::lower($item->obs ?? '');
+            if(!(\Str::contains($ejecution, "valija")) && !(\Str::contains($ejecution_2, "valija")) )
+            {
+                $json_data[]=$item;
+            }
+            //if( $item->estado_tracking)
+            //dd($item->estado_tracking);
+        }
+        //dd($json_data);
         //dd($grupo_courier_data);
+        $grupo_courier_data=collect($json_data)->toArray();
+        //dd($grupo_courier_data);
+
+
         return view('envios.olva.modal.onlytimeline',compact('grupo_courier_data'));
     }
 }
