@@ -149,7 +149,7 @@ class PedidosAnulacionController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
         } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
-            $pedidos=$pedidos->whereIn('estado_aprueba_encargado',[0,2]);
+            $pedidos=$pedidos->whereIn('estado_aprueba_encargado',[0]);
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.supervisor', Auth::user()->id)
@@ -247,7 +247,7 @@ class PedidosAnulacionController extends Controller
                         }
                     }else if($pedido->estado_aprueba_encargado==2){
                         $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_encargado  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
-                        $btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';
+                        /*$btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';*/
                     }
                 }
                 if (Auth::user()->rol == User::ROL_ADMIN) {
