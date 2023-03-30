@@ -1932,7 +1932,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $round . '%</b> - '
-                    . $object_totales['all_situacion_activo'] . '/ (Activos ' . $object_totales['all_situacion_activo'] . ' + Recurrentes.'.$object_totales['all_situacion_recurrente'].'</span>
+                    . $object_totales['all_situacion_activo'] . '/ (Levantados ' . $object_totales['all_situacion_activo'] . ' + Caidos.'.$object_totales['all_situacion_recurrente'].'</span>
     </div>';
             }
 
@@ -4023,7 +4023,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - '
-                    . $object_totales['all_situacion_activo'] . '/ (Activos ' . $object_totales['all_situacion_activo'] . ' + Recurrente.'.$object_totales['all_situacion_recurrente'].'</span>
+                    . $object_totales['all_situacion_activo'] . '/ (Levantados ' . $object_totales['all_situacion_activo'] . ' + Caidos.'.$object_totales['all_situacion_recurrente'].'</span>
     </div>';
             } else {
                 $html .= '</div>
@@ -4031,7 +4031,7 @@ class DashboardController extends Controller
                 style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">
              TOTAL DEJARON DE PEDIR -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(($object_totales['all_situacion_activo'] / $object_totales['all_situacion_recurrente']) * 100, 2) . '%</b> - '
-                    . $object_totales['all_situacion_activo'] . '/ (Activos ' . $object_totales['all_situacion_activo'] . ' + Recurrente.'.$object_totales['all_situacion_recurrente'].'</span>
+                    . $object_totales['all_situacion_activo'] . '/ (Levantados ' . $object_totales['all_situacion_activo'] . ' + Caidos.'.$object_totales['all_situacion_recurrente'].'</span>
     </div>';
             }
 
