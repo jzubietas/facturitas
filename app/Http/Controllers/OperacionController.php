@@ -1409,18 +1409,14 @@ class OperacionController extends Controller
     {
         $pedidosanulacions=PedidosAnulacion::where('id', $pedido->id)->select([
             'files_asesor_ids',
-            'files_encargado_ids',
-            'filesadmin_ids',
-            'files_jefeop_ids',
+            'files_responsable_asesor',
         ])->get();
 
 
         $arrayfiles_asesor_ids=array();
-        $arrayfiles_encarg_ids=array();
-        $arrayfiles_admin_ids=array();
+        $arrayfiles_resp_ases_ids=array();
         $imagenesasesores=null;
-        $imagenesencargad=null;
-        $imagenesadminist=null;
+        $imagenesrespases=null;
         foreach ($pedidosanulacions as $pedidosanulacion){
             if ($pedidosanulacion->files_asesor_ids){
                 $valfiles_asesor_ids = explode("-", $pedidosanulacion->files_asesor_ids);
@@ -1432,33 +1428,18 @@ class OperacionController extends Controller
                     }
                 }
             }
-            if ($pedidosanulacion->files_encargado_ids){
-                $valfiles_encargado_ids = explode("-", $pedidosanulacion->files_encargado_ids);
+            if ($pedidosanulacion->files_responsable_asesor){
+                $valfiles_resp_ases_ids = explode("-", $pedidosanulacion->files_responsable_asesor);
 
-                for ($i = 0; $i < count($valfiles_encargado_ids); $i++) {
-                    if ($valfiles_encargado_ids[$i]!=""){
-                        array_push($arrayfiles_encarg_ids, $valfiles_encargado_ids[$i]);
-                        $imagenesencargad = FileUploadAnulacion::whereIn('id', $valfiles_encargado_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+                for ($i = 0; $i < count($valfiles_resp_ases_ids); $i++) {
+                    if ($valfiles_resp_ases_ids[$i]!=""){
+                        array_push($arrayfiles_resp_ases_ids, $valfiles_resp_ases_ids[$i]);
+                        $imagenesrespases = FileUploadAnulacion::whereIn('id', $arrayfiles_resp_ases_ids)->where('pedido_anulacion_id',$pedido->id)->get();
                     }
                 }
             }
-            if ($pedidosanulacion->filesadmin_ids){
-                $valfiles_admin_ids = explode("-", $pedidosanulacion->filesadmin_ids);
-
-                for ($i = 0; $i < count($valfiles_admin_ids); $i++) {
-                    if ($valfiles_admin_ids[$i]!=""){
-                        array_push($imagenesadminist, $valfiles_admin_ids[$i]);
-                        $imagenesadminist = FileUploadAnulacion::whereIn('id', $valfiles_admin_ids)->where('pedido_anulacion_id',$pedido->id)->get();
-                    }
-                }
-            }
-
         }
-        /*dd($imagenesasesores,$imagenesencargad,$imagenesadminist);*/
-
-
-        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenesasesores','imagenesencargad','imagenesadminist'));
-        //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenesasesores','imagenesrespases'));
     }
 
     public function editatencionsinconfirmar(Pedido $pedido)
