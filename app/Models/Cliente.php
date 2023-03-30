@@ -171,14 +171,14 @@ class Cliente extends Model
 
                               case 'RECUPERADO RECIENTE':
                                   $situacion_create->update([
-                                      "situacion" => 'RECURRENTE',
+                                      "situacion" => 'CAIDO',
                                       "flag_fp" => '1'
                                   ]);
                                   break;
 
                               case 'RECUPERADO ABANDONO':
                                   $situacion_create->update([
-                                      "situacion" => 'RECURRENTE',
+                                      "situacion" => 'CAIDO',
                                       "flag_fp" => '1'
                                   ]);
                                   break;
@@ -193,7 +193,7 @@ class Cliente extends Model
                                       if($situacion_antes->activos>0)
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'ACTIVO',"flag_fp" => '1'
+                                              "situacion" => 'LEVANTADO',"flag_fp" => '1'
                                           ]);
                                       }else{
                                           $situacion_create->update([
@@ -204,7 +204,7 @@ class Cliente extends Model
                                       if($situacion_antes->activos>0)
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'RECURRENTE',"flag_fp" => '1'
+                                              "situacion" => 'CAIDO',"flag_fp" => '1'
                                           ]);
                                       }else{
                                           $situacion_create->update([
@@ -258,12 +258,12 @@ class Cliente extends Model
                                       }else if($situacion_antes->activos>0)
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'RECURRENTE',"flag_fp" => '1'
+                                              "situacion" => 'CAIDO',"flag_fp" => '1'
                                           ]);
                                       }
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'ACTIVO',"flag_fp" => '1'
+                                          "situacion" => 'LEVANTADO',"flag_fp" => '1'
                                       ]);
                                   }
                                   break;
@@ -274,7 +274,7 @@ class Cliente extends Model
                                       "flag_fp" => '1'
                                   ]);
                                   break;
-                              case 'RECURRENTE':
+                              case 'CAIDO':
                                   if($situacion_antes->activos==0)
                                   {
                                       $situacion_create->update([
@@ -283,21 +283,21 @@ class Cliente extends Model
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'CAIDO',
                                           "flag_fp" => '1'
                                       ]);
                                   }
                                   break;
-                              case 'ACTIVO':
+                              case 'LEVANTADO':
                                   if($situacion_antes->activos==0)
                                   {
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'CAIDO',
                                           "flag_fp" => '1'
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'CAIDO',
                                           "flag_fp" => '1'
                                       ]);
                                   }
@@ -375,12 +375,12 @@ class Cliente extends Model
                                   if($situacion_periodo->activos>0)
                                   {
                                       $situacion_create->update([
-                                          "situacion" => 'ACTIVO',
+                                          "situacion" => 'LEVANTADO',
                                           "flag_fp" => '1'
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'ACTIVO',
+                                          "situacion" => 'LEVANTADO',
                                           "flag_fp" => '1'
                                       ]);
                                   }
@@ -394,12 +394,12 @@ class Cliente extends Model
                                   if($situacion_periodo->activos>0)
                                   {
                                       $situacion_create->update([
-                                          "situacion" => 'ACTIVO',
+                                          "situacion" => 'LEVANTADO',
                                           "flag_fp" => '1'
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'RECURRENTE',
+                                          "situacion" => 'CAIDO',
                                           "flag_fp" => '1'
                                       ]);
                                   }
@@ -416,7 +416,7 @@ class Cliente extends Model
                                       if($situacion_antes->activos>0)
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'ACTIVO',"flag_fp" => '1'
+                                              "situacion" => 'LEVANTADO',"flag_fp" => '1'
                                           ]);
                                       }else{
                                           $situacion_create->update([
@@ -427,7 +427,7 @@ class Cliente extends Model
                                       if($situacion_antes->activos>0)
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'RECURRENTE',"flag_fp" => '1'
+                                              "situacion" => 'CAIDO',"flag_fp" => '1'
                                           ]);
                                       }else{
                                           $situacion_create->update([
@@ -578,7 +578,7 @@ class Cliente extends Model
                                   }
 
                                   break;
-                              case 'RECURRENTE':
+                              case 'CAIDO':
                                   $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
@@ -588,7 +588,7 @@ class Cliente extends Model
                                       if ($situacion_antes->activos > 0 )
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'ACTIVO',
+                                              "situacion" => 'LEVANTADO',
                                               "flag_fp" => '1'
                                           ]);
                                       }else{
@@ -602,7 +602,7 @@ class Cliente extends Model
                                       if ($situacion_antes->activos > 0 )
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'ACTIVO',
+                                              "situacion" => 'LEVANTADO',
                                               "flag_fp" => '1'
                                           ]);
                                       }else{
@@ -614,7 +614,7 @@ class Cliente extends Model
 
                                   }
                                   break;
-                              case 'ACTIVO':
+                              case 'LEVANTADO':
                                   $mes_actual = Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth();
                                   $situacion_periodo=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
                                   $situacion_antes=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_antes->format('Y-m'))->first();
@@ -624,7 +624,7 @@ class Cliente extends Model
                                       if ($situacion_antes->activos > 0 )
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'ACTIVO',
+                                              "situacion" => 'LEVANTADO',
                                               "flag_fp" => '1'
                                           ]);
                                       }else{
@@ -638,7 +638,7 @@ class Cliente extends Model
                                       if ($situacion_antes->activos > 0 )
                                       {
                                           $situacion_create->update([
-                                              "situacion" => 'RECURRENTE',
+                                              "situacion" => 'CAIDO',
                                               "flag_fp" => '1'
                                           ]);
                                       }else{
