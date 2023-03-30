@@ -295,7 +295,7 @@ class PedidosAnulacionController extends Controller
                 if (in_array(Auth::user()->rol,[User::ROL_ADMIN,User::ROL_ASESOR,User::ROL_ENCARGADO])) {
                     if ($pedido->tipoanulacion=='C'){
                         $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-responsable_create_asesor="' . $pedido->resposable_create_asesor . '" data-responsable_aprob_encarg="' . $pedido->resposable_aprob_encargado . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo" ><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
-                    }else  if ($pedido->tipoanulacion=='F'){
+                    }else  if ($pedido->tipoanulacion=='F' || $pedido->tipoanulacion=='Q'){
                         $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-responsable_create_asesor="' . $pedido->resposable_create_asesor . '" data-responsable_aprob_encarg="' . $pedido->resposable_aprob_encargado . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }
                     return $htmltipoanul;
@@ -303,7 +303,7 @@ class PedidosAnulacionController extends Controller
                     $deshabilitar="btn disabled";
                     if ($pedido->tipoanulacion=='C'){
                         $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" class="'.$deshabilitar.'"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
-                    }else  if ($pedido->tipoanulacion=='F'){
+                    }else  if ($pedido->tipoanulacion=='F' || $pedido->tipoanulacion=='Q'){
                         $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" class="'.$deshabilitar.'"  data-toggle="modal" title="Ver motivo"><span class="badge badge-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }
                     return $htmltipoanul;

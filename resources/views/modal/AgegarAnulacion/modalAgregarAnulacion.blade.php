@@ -15,9 +15,13 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item"><a class="nav-link active" href="#tabPedidoCompleto"   data-toggle="tab" > Pedido Completo</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#tabFactura"  data-toggle="tab" > Factura</a></li>
-                                @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN  || Auth::user()->rol == \App\Models\User::ROL_COBRANZAS   )
+                                @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ENCARGADO || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_COBRANZAS || Auth::user()->rol == \App\Models\User::ROL_ASESOR_ADMINISTRATIVO  )
+                                    <li class="nav-item"><a class="nav-link active" href="#tabPedidoCompleto"   data-toggle="tab" > Pedido Completo</a></li>
+                                @endif
+                                @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ENCARGADO || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_ASESOR_ADMINISTRATIVO  )
+                                    <li class="nav-item"><a class="nav-link" href="#tabFactura"  data-toggle="tab" > Factura</a></li>
+                                @endif
+                                @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN  || Auth::user()->rol == \App\Models\User::ROL_COBRANZAS || Auth::user()->rol == \App\Models\User::ROL_JEFE_LLAMADAS)
                                     <li class="nav-item"><a class="nav-link" href="#tabCobranza"  data-toggle="tab" > Anulacion Cobranza</a></li>
                                 @endif
                             </ul>
