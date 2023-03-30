@@ -280,12 +280,12 @@ class DashboardController extends Controller
                 return $query->where('supervisor', '=', $encargado);
             })->count();
 
-            $asesores = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
+            /*$asesores = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })->get();
             $total_asesor = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
-            })->count();
+            })->count();*/
         }
 
         $supervisores_array = User::query()->activo()->rolSupervisor()->get();
