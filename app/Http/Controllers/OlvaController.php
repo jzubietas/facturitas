@@ -620,5 +620,8 @@ class OlvaController extends Controller
             ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
             ->make(true);
     }
-
+    public  function gettimelineestadosolva(Request  $request){
+        $grupo_courier_data = DireccionGrupo::where('id',$request->id_direcciongrupo)->first()->courier_data;
+        return view('envios.olva.modal.onlytimeline',compact('grupo_courier_data'))->with('json', json_encode($grupo_courier_data));
+    }
 }

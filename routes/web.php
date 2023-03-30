@@ -402,7 +402,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios/olva/olvaextraviado', [OlvaController::class, 'volvaextraviado'])->name('envios.olva.olvaextraviado');
     Route::get('envios/olva/noentregado', [OlvaController::class, 'tblolvanoentregado'])->name('envios.olva.noentregado');
     Route::get('envios/olva/extraviado', [OlvaController::class, 'tblolvaextraviado'])->name('envios.olva.extraviado');
-
+    Route::post('gettimeline_estados_olva', [OlvaController::class, 'gettimelineestadosolva'])->name('gettimeline_estados_olva');
 
     Route::get('envios.seguimientoprovincia', [OlvaController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
     Route::get('envios.seguimientoprovinciatabla', [OlvaController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
