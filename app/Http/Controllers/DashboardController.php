@@ -250,27 +250,40 @@ class DashboardController extends Controller
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('identificador', auth()->user()->identificador)->where('excluir_meta', '<>', '1')->get();
             $total_asesor = User::query()->activo()->rolAsesor()->where('identificador', auth()->user()->identificador)->where('excluir_meta', '<>', '1')->count();
-        } else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
+        }
+        else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
             $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
-        } else if (auth()->user()->rol == User::ROL_LLAMADAS) {
+        }
+        else if (auth()->user()->rol == User::ROL_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
             $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
-        } else if (auth()->user()->rol == User::ROL_FORMACION) {
+        }
+        else if (auth()->user()->rol == User::ROL_FORMACION) {
             $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
             $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
-        } else if (auth()->user()->rol == User::ROL_PRESENTACION) {
+        }
+        else if (auth()->user()->rol == User::ROL_PRESENTACION) {
             $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
             $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
-        } else {
+        }
+        else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
                 $encargado = auth()->user()->id;
             }
+
             $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })->get();
             $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->when($encargado != null, function ($query) use ($encargado) {
+                return $query->where('supervisor', '=', $encargado);
+            })->count();
+
+            $asesores = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
+                return $query->where('supervisor', '=', $encargado);
+            })->get();
+            $total_asesor = User::query()->activo()->rolAsesor()->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })->count();
         }
