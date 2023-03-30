@@ -14,10 +14,12 @@ use App\Models\DireccionEnvio;
 use App\Models\DireccionGrupo;
 use App\Models\DireccionPedido;
 use App\Models\Distrito;
+use App\Models\FileUploadAnulacion;
 use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
+use App\Models\PedidosAnulacion;
 use App\Models\User;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -1405,9 +1407,57 @@ class OperacionController extends Controller
 
     public function verAtencionAnulacion(Pedido $pedido)
     {
-        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '1')->get();
+        $pedidosanulacions=PedidosAnulacion::where('id', $pedido->id)->select([
+            'files_asesor_ids',
+            'files_encargado_ids',
+            'filesadmin_ids',
+            'files_jefeop_ids',
+        ])->get();
 
-        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes'));
+
+        $arrayfiles_asesor_ids=array();
+        $arrayfiles_encarg_ids=array();
+        $arrayfiles_admin_ids=array();
+        $imagenesasesores=null;
+        $imagenesencargad=null;
+        $imagenesadminist=null;
+        foreach ($pedidosanulacions as $pedidosanulacion){
+            if ($pedidosanulacion->files_asesor_ids){
+                $valfiles_asesor_ids = explode("-", $pedidosanulacion->files_asesor_ids);
+
+                for ($i = 0; $i < count($valfiles_asesor_ids); $i++) {
+                    if ($valfiles_asesor_ids[$i]!=""){
+                        array_push($arrayfiles_asesor_ids, $valfiles_asesor_ids[$i]);
+                        $imagenesasesores = FileUploadAnulacion::whereIn('id', $arrayfiles_asesor_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+                    }
+                }
+            }
+            if ($pedidosanulacion->files_encargado_ids){
+                $valfiles_encargado_ids = explode("-", $pedidosanulacion->files_encargado_ids);
+
+                for ($i = 0; $i < count($valfiles_encargado_ids); $i++) {
+                    if ($valfiles_encargado_ids[$i]!=""){
+                        array_push($arrayfiles_encarg_ids, $valfiles_encargado_ids[$i]);
+                        $imagenesencargad = FileUploadAnulacion::whereIn('id', $valfiles_encargado_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+                    }
+                }
+            }
+            if ($pedidosanulacion->filesadmin_ids){
+                $valfiles_admin_ids = explode("-", $pedidosanulacion->filesadmin_ids);
+
+                for ($i = 0; $i < count($valfiles_admin_ids); $i++) {
+                    if ($valfiles_admin_ids[$i]!=""){
+                        array_push($imagenesadminist, $valfiles_admin_ids[$i]);
+                        $imagenesadminist = FileUploadAnulacion::whereIn('id', $valfiles_admin_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+                    }
+                }
+            }
+
+        }
+        /*dd($imagenesasesores,$imagenesencargad,$imagenesadminist);*/
+
+
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenesasesores','imagenesencargad','imagenesadminist'));
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 

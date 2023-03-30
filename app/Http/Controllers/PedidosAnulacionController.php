@@ -111,7 +111,7 @@ class PedidosAnulacionController extends Controller
                     'c.celular as celulares',
                     'u.identificador as users',
                     'dp.nombre_empresa as empresas',
-                    //'dp.total as total',
+                    'dp.total as total',
                     'dp.cantidad as cantidad',
                     'dp.ruc as ruc',
                     'dp.saldo as diferencia',
@@ -283,6 +283,8 @@ class PedidosAnulacionController extends Controller
                     $htmltipoanul = $htmltipoanul . '<span class="badge badge-info bg-info">PEDIDO COMPLETO</span>';
                 }else  if ($pedido->tipoanulacion=='F'){
                     $htmltipoanul = $htmltipoanul . '<span class="badge badge-warning">FACTURA</span>';
+                }else  if ($pedido->tipoanulacion=='Q'){
+                    $htmltipoanul = $htmltipoanul . '<span class="badge badge-success">COBRANZA</span>';
                 }
                 return $htmltipoanul;
                 return join('', $htmltipoanul);
@@ -327,6 +329,8 @@ class PedidosAnulacionController extends Controller
                 'dp.nombre_empresa',
                 'dp.adjunto',
                 'pedidos.estado',
+                'dp.saldo',
+                'dp.total as totaldp',
             ]);
         if (Auth::user()->rol == User::ROL_ASESOR){
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -349,7 +353,7 @@ class PedidosAnulacionController extends Controller
             $listado_codigo_pedido = $listado_codigo_pedido->where('u.rol', 'Asesor')->WhereIn('u.identificador', $usersasesores);
         }
         $contadorcodigo=0;
-        if ($request->tipo=="F"){
+        if ($request->tipo=="F" || $request->tipo=="Q"){
             $listado_codigo_pedidoverifica=$listado_codigo_pedido->clone()->where('pedidos.condicion_envio_code', Pedido::POR_ATENDER_INT);
             $contadorcodigo=$listado_codigo_pedidoverifica->count();
         }
@@ -471,6 +475,60 @@ class PedidosAnulacionController extends Controller
         }
 
         return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulacion))?$pedidosanulacion:0) ,'IDs Files: '  => $idsfiles,'countpedidosanul'=>((isset($countpedidosanul))?$countpedidosanul:0) ,'pedidosinpago'=> ((isset($pedidosinpago))?$pedidosinpago:0)]);
+    }
+
+    public function solicitaAnulacionPedidoq(Request $request)
+    {
+
+        $idsfiles="";
+        $idsfilesc="";
+        $motivoanulacion= $request->txtMotivoCobranza;
+        $responsableanulacion= $request->txtResponsableCobranza;
+        $pedido_id= $request->txtIdPedidoCobranza;
+
+        $pedidosAnulValida=PedidosAnulacion::where('pedido_id',$pedido_id)->where('state_solicitud',1);
+        $countpedidosanul=$pedidosAnulValida->count();
+        if ($countpedidosanul==0){
+            /*$pedidosinpago=Pedido::where('id',$pedido_id)->where('pago',0)->where('pagado',0)->count();
+            if ($pedidosinpago==1){*/
+                $files = $request->file('filesAddCobranza');
+                $filesC = $request->file('filesAddCapturaCobranza');
+                $pedidosanulacion = new PedidosAnulacion;
+                $pedidosanulacion->pedido_id=$pedido_id;;
+                $pedidosanulacion->user_id_asesor=auth()->user()->id;
+                $pedidosanulacion->motivo_solicitud=$motivoanulacion;
+                $pedidosanulacion->estado_aprueba_asesor=1;
+                $pedidosanulacion->tipo=$request->tipoCobranza2;
+                $pedidosanulacion->total_anular=$request->txtImporteAnularCob;
+                $pedidosanulacion->resposable_create_asesor=$request->txtResponsableCobranza;
+                $pedidosanulacion->save();
+
+                foreach($files as $file){
+                    $fileUpload = new FileUploadAnulacion;
+                    $fileUpload->pedido_anulacion_id=$pedidosanulacion->id;
+                    $fileUpload->filename = $file->getClientOriginalName();
+                    $fileUpload->filepath = $file->store('pedidos/anulaciones', 'pstorage');
+                    $fileUpload->type= $file->getClientOriginalExtension();
+                    $fileUpload->save();
+                    $idsfiles=$idsfiles.$fileUpload->id."-";
+                }
+                foreach($filesC as $fileC){
+                    $fileUpload = new FileUploadAnulacion;
+                    $fileUpload->pedido_anulacion_id=$pedidosanulacion->id;
+                    $fileUpload->filename = $fileC->getClientOriginalName();
+                    $fileUpload->filepath = $fileC->store('pedidos/anulaciones', 'pstorage');
+                    $fileUpload->type= $fileC->getClientOriginalExtension();
+                    $fileUpload->save();
+                    $idsfilesc=$idsfilesc.$fileUpload->id."-";
+                }
+
+                $pedidosanulacion->files_asesor_ids=$idsfiles;
+                $pedidosanulacion->files_responsable_asesor=$idsfilesc;
+                $pedidosanulacion->update();
+            /*}*/
+        }
+
+        return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulacion))?$pedidosanulacion:0) ,'IDs Files: '  => $idsfiles,'countpedidosanul'=>((isset($countpedidosanul))?$countpedidosanul:0) ,'pedidosinpago'=> 0]);
     }
 
     public function anulacionAprobacionAsesor(Request $request)
@@ -608,6 +666,18 @@ class PedidosAnulacionController extends Controller
             $pedidos->update([
                 'motivo' => $request->motivo,
                 'condicion' => Pedido::PENDIENTE_ANULACION_PARCIAL,
+            ]);
+        }else if ($pedidosanulacion->tipo=='Q'){
+            $pedidos=$pedidos->clone()->first();
+            $pedidodetail= DetallePedido::where('pedido_id',$pedidos->id);
+
+            $pedidos->update([
+                'motivo' => $request->motivo,
+                'pagado' => 2,
+                'condicion' => Pedido::ANULACION_COBRANZA,
+            ]);
+            $pedidodetail->update([
+                'saldo' => 0.00,
             ]);
         }
         return  response()->json(['data' => $request->all(),'pedidosanulacion' => ((isset($pedidosanulacion))?$pedidosanulacion:0) ,'IDsFiles: ' => $idsfiles,'pedidos: '  => $pedidos,'contpedanulacions'=>$contpedanulacions,'$contpedidos'=>$contpedidos]);

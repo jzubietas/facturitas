@@ -17,6 +17,7 @@
                             <ul class="nav nav-pills">
                                 <li class="nav-item"><a class="nav-link active" href="#tabPedidoCompleto"   data-toggle="tab" > Pedido Completo</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#tabFactura"  data-toggle="tab" > Factura</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#tabCobranza"  data-toggle="tab" > Anulacion Cobranza</a></li>
                             </ul>
                         </div>
                         <div class="card-body">
@@ -110,15 +111,15 @@
                                         </div>
                                         <div class="row">
                                             <div class="form-group col lg-12">
-                                                {!! Form::label('txtResponsablePedComplet', 'Ingrese el responsable para la anulacion de pedido') !!}
-                                                {!! Form::text('txtResponsablePedComplet', '', ['class' => 'form-control', 'placeholder' => 'Completa el responsable para la anulación ',  'id'=>'txtResponsablePedComplet']) !!}
+                                                {!! Form::label('txtResponsablePedComplet', 'Responsable de la anulación ') !!}
+                                                {!! Form::text('txtResponsablePedComplet', '', ['class' => 'form-control', 'placeholder' => 'Completa el responsable de la anulación ',  'id'=>'txtResponsablePedComplet']) !!}
                                             </div>
                                         </div>
 
 
                                         <div class="row">
                                             <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
-                                                <button type="submit" class="float-right btn btn-success btnEnviarPagoCompleto">Enviar</button>
+                                                <button type="submit" class="float-right btn btn-primary btnEnviarPagoCompleto">Enviar</button>
                                             </div>
                                         </div>
                                     </form>
@@ -215,15 +216,118 @@
                                         </div>
                                         <div class="row">
                                             <div class="form-group col lg-12">
-                                                {!! Form::label('txtResponsableFactura', 'Ingrese responsable para anulacion de factura') !!}
-                                                {!! Form::text('txtResponsableFactura', '', ['class' => 'form-control', 'placeholder' => 'Completa el responsable para la anulación ', 'id'=>'txtResponsableFactura']) !!}
+                                                {!! Form::label('txtResponsableFactura', 'Responsable de la anulación ') !!}
+                                                {!! Form::text('txtResponsableFactura', '', ['class' => 'form-control', 'placeholder' => 'Completa el responsable de la anulación  ', 'id'=>'txtResponsableFactura']) !!}
                                             </div>
                                         </div>
 
 
                                         <div class="row">
                                             <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
-                                                <button type="submit" class="float-right btn btn-success btnEnviarFactura">Enviar</button>
+                                                <button type="submit" class="float-right btn btn-warning btnEnviarFactura">Enviar</button>
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane" id="tabCobranza">
+                                    <form id="frmAgregaAnulacionCobranza" name="frmAgregaAnulacionCobranza" class="agregaranulacion" enctype="multipart/form-data">
+                                        <input type="hidden" id="agregaanulacion_cobranza" name="agregaanulacion_cobranza">
+                                        <input type="hidden" id="txtIdPedidoCobranza" name="txtIdPedidoCobranza">
+                                        <input type="hidden" id="tipoCobranza2" name="tipoCobranza2" value="Q">
+                                        <input type="hidden" name="opcion" value="3">
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="txtCodPedidoCobranza" id="txtCodPedidoCobranza"
+                                                       placeholder="Colocar codigo del pedido" class="bg-warning">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="txtCodAsesorCobranza" id="txtCodAsesorCobranza" placeholder="Asesor" readonly class="bg-gradient-success">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="txtImporteCobranza" id="txtImporteCobranza"
+                                                       placeholder="Colocar el importe del pedido" readonly class="bg-gradient-success">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="txtImporteAnularCob" id="txtImporteAnularCob"  class="bg-gradient-success" readonly
+                                                       placeholder="Colocar el importe a anular"  >
+                                                <div class="input-icon">
+                                                    <i class="fa fa-minus-square" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="txtRucCobranza" id="txtRucCobranza"
+                                                       placeholder="Colocar el RUC del cliente" readonly class="bg-gradient-success">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-list-ol" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                            <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
+                                                <input name="txtRazSocialCobranza" id="txtRazSocialCobranza"
+                                                       placeholder="Colocar la razón social" readonly class="bg-gradient-success">
+                                                <div class="input-icon">
+                                                    <i class="fa fa-map-pin" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h6 class="alert alert-success text-center font-weight-bold">
+                                                    <b>Doc <span >por anular</span> <i class="fa fa-arrow-right text-danger" aria-hidden="true"></i>
+                                                    </b>
+                                                </h6>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
+                                                    {!! Form::file('filesAddCobranza[]', ['class' => 'form-control-file', 'id'=>'filesAddCobranza','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-group col lg-12">
+                                                {!! Form::label('txtMotivoCobranza', 'Ingrese el motivo de la anulación del pedido(Max. 250 caracteres)') !!}
+                                                {!! Form::textarea('txtMotivoCobranza', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Completa el sustento para la anulación ', 'id'=>'txtMotivoCobranza']) !!}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h6 class="alert alert-success text-center font-weight-bold">
+                                                    <b>Captura de pantalla <span >(*)</span> <i class="fa fa-arrow-right text-danger" aria-hidden="true"></i></b>
+                                                </h6>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-icon col-lg-12 col-md-12 col-sm-12">
+                                                    {!! Form::file('filesAddCapturaCobranza[]', ['class' => 'form-control-file', 'id'=>'filesAddCapturaCobranza','accept'=>'.png, .jpg,.jpeg,.pdf, .xlsx , .xls', 'multiple']) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col lg-12">
+                                                {!! Form::label('txtResponsableCobranza', 'Responsable de la anulación ') !!}
+                                                {!! Form::text('txtResponsableCobranza', '', ['class' => 'form-control', 'placeholder' => 'Completa el Responsable de la anulación', 'id'=>'txtResponsableCobranza']) !!}
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="input-group input-group-icon d-flex justify-content-center align-items-center">
+                                                <button type="submit" class="float-right btn btn-success btnEnviarCobranza">Enviar</button>
                                             </div>
                                         </div>
 

@@ -289,6 +289,9 @@ class PedidoController extends Controller
                     $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULADO_PARCIAL.'</span>';
                 }
 
+                if ( $pedido->condiciones==Pedido::ANULACION_COBRANZA) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULACION_COBRANZA.'</span>';
+                }
                 if ($pedido->vStateSolicitud=='0' && $pedido->vStateSolicitud!='') {
                     $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">ANULACION RECHAZADA</span>';
                 }

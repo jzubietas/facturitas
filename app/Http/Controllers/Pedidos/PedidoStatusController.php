@@ -676,7 +676,7 @@ $banca"
                     'pea.total_anular as dMontoAnular',
                     'pea.id as idPedidoAnulacion',
                 ])
-                ->where('pea.tipo', 'F')
+                ->whereIn('pea.tipo', ['F','Q'])
                 ->where('pea.state_solicitud', '1')
                 ->where('pea.estado_aprueba_asesor', '1')
                 ->where('pea.estado_aprueba_encargado', '1')
@@ -742,12 +742,15 @@ $banca"
                 })
                 ->addColumn('tipoanulacion', function ($pedido) {
                     $badge_estado = '';
-                    if ($pedido->pendiente_anulacion == '1') {
-                        $badge_estado .= '<span class="badge badge-info bg-info"> PEDIDO COMPLETO</span>';
+                    if ($pedido->vtipoAnulacion == '') {
+                        $badge_estado .= '<span class="badge badge-info bg-info"> PEDIDO COMPLETO '.$pedido->vtipoAnulacion.'</span>';
                         return $badge_estado;
-                    }else{
-                        $badge_estado .= '<span class="badge badge-warning"> FACTURA</span>';
+                    }else if($pedido->vtipoAnulacion == 'F'){
+                        $badge_estado .= '<span class="badge badge-warning"> FACTURA '.$pedido->vtipoAnulacion.'</span>';
                         return $badge_estado;
+                    }else if($pedido->vtipoAnulacion == 'Q'){
+                    $badge_estado .= '<span class="badge badge-success"> COBRANZA '.$pedido->vtipoAnulacion.'</span>';
+                    return $badge_estado;
                     }
                 })
                 ->addColumn('action', function ($pedido) {

@@ -46,6 +46,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('actualizaestado:masivo')
             ->dailyAt('12:00');
 
+        $schedule->command('show:analisis:situacion')
+            ->monthlyOn(1,'01:00');
         /*$schedule->command('olva:sync')
             ->dailyAt('20:00');*/
 

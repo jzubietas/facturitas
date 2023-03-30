@@ -830,10 +830,12 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::any('pedidosanulaciones.modal.agregaranulacion_pc', [PedidosAnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_pc');
     Route::any('pedidosanulaciones.modal.agregaranulacion_f', [PedidosAnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_f');
+    Route::any('pedidosanulaciones_cobranza', [PedidosAnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones_cobranza');
 
     Route::get('pedidosanulacionestabla', [PedidosAnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulacionestabla');
     Route::post('solicita_anulacion_pedido', [PedidosAnulacionController::class, 'solicitaAnulacionPedido'])->name('solicita_anulacion_pedido');
     Route::post('solicita_anulacion_pedidof', [PedidosAnulacionController::class, 'solicitaAnulacionPedidof'])->name('solicita_anulacion_pedidof');
+    Route::post('solicita_anulacion_pedidoq', [PedidosAnulacionController::class, 'solicitaAnulacionPedidoq'])->name('solicita_anulacion_pedidoq');
     Route::post('anulacionAprobacionAsesor', [PedidosAnulacionController::class, 'anulacionAprobacionAsesor'])->name('anulacionAprobacionAsesor');
     Route::post('anulacionAprobacionEncargado', [PedidosAnulacionController::class, 'anulacionAprobacionEncargado'])->name('anulacionAprobacionEncargado');
     Route::post('anulacionAprobacionAdmin', [PedidosAnulacionController::class, 'anulacionAprobacionAdmin'])->name('anulacionAprobacionAdmin');
@@ -844,9 +846,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
         ->name('confirmaSolicitudAnulacion');
     Route::post('verAdjuntosAddAsesorAnulacion', [PedidosAnulacionController::class, 'verAdjuntosAddAsesorAnulacion'])->name('verAdjuntosAddAsesorAnulacion');
     Route::post('getcbxculpables', [PedidosAnulacionController::class, 'getcbxculpables'])->name('getcbxculpables');
-    /*Route::middleware('authorize.agenda')
-        ->post('confirmaSolicitudAnulacion', [FullCalenderController::class, 'confirmaSolicitudAnulacion'])
-        ->name('autorizarAgenda');*/
 
     Route::get('chart-data', [ChartController::class,'getData'])->name('chart-data');
     Route::get('chart-pedidos-asesores', [ChartController::class,'getPedidosAsesores'])->name('chart-pedidos-asesores');

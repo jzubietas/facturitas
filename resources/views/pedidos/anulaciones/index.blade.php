@@ -114,23 +114,18 @@
                 serverSide: true,
                 searching: true,
                 //stateSave: true,
-                order: [[6, "desc"]],
+                order: [[7, "desc"]],
                 ajax: "{{ route('pedidosanulacionestabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     if (data.itipoanulacion=='C') {
                         $('td', row).css('background', '#FFAFB0').css('font-weight', 'bold');
                     }else if (data.itipoanulacion=='F'){
-                        $('td', row).css('background', '#58D68D').css('font-weight', 'bold');
+                        $('td', row).css('background', '#E1E0A8').css('font-weight', 'bold');
+                    }else if (data.itipoanulacion=='Q'){
+                        $('td', row).css('background', '#81B094').css('font-weight', 'bold');
                     }
                 },
                 rowCallback: function (row, data, index) {
-                    var pedidodiferencia = data.diferencia;
-
-                    if (data.condicion_code == 4 || data.estado == 0) {
-                        $('td:eq(13)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
-                    } else {
-                        $('td:eq(13)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
-                    }
 
                 },
                 initComplete: function (settings, json) {
@@ -162,7 +157,18 @@
                     },
                     {data: 'empresas', name: 'empresas',},
                     {data: 'motivo', name: 'motivo',},
-                    {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
+                    {data: 'cantidad', name: 'cantidad',
+                        render: function (data, type, row, meta) {
+                        var montotal=row.total;
+                            if (row.itipoanulacion == "Q") {
+                                return montotal.toLocaleString() ;
+                            } else {
+                                montotal= row.cantidad;
+                                return montotal.toLocaleString() ;
+                            }
+
+                        },
+                    },
                     {
                         data: 'fechacreaanula',
                         name: 'fechacreaanula',
@@ -374,6 +380,8 @@
                 $('#razonCodigoPc').val('');
                 $('#inputArchivoSubir').val('');
                 $('#txtMotivoPedComplet').val('');
+                $('#inputArchivoCapturaSubir').val('');
+                $('#txtResponsablePedComplet').val('');
             }
 
             function limpiarFormSolAnulFact(){
@@ -386,6 +394,22 @@
                 $('#razonCodigoF').val('');
                 $('#inputArchivoSubirf').val('');
                 $('#txtMotivoFactura').val('');
+                $('#inputArchivoCapturaSubirf').val('');
+                $('#txtResponsableFactura').val('');
+            }
+
+            function limpiarFormSolAnulCobr(){
+                $('#txtIdPedidoCobranza').val('');
+                $('#txtCodPedidoCobranza').val('');
+                $('#txtCodAsesorCobranza').val('');
+                $('#txtImporteCobranza').val('');
+                $('#txtImporteAnularCob').val('');
+                $('#txtRucCobranza').val('');
+                $('#txtRazSocialCobranza').val('');
+                $('#filesAddCobranza').val('');
+                $('#txtMotivoCobranza').val('');
+                $('#filesAddCapturaCobranza').val('');
+                $('#txtResponsableCobranza').val('');
             }
 
             /*MODAL ANULACION - F*/
@@ -414,6 +438,47 @@
                                         $('#anulacionCodigoF').val(response.data.total);
                                         $('#rucCodigoF').val(response.data.ruc);
                                         $('#razonCodigoF').val(response.data.nombre_empresa);
+                                    }else{
+                                        Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
+                                    }
+
+                                }else{
+                                    Swal.fire('Error', 'El pedido ingresado se encuentra en estado POR ATENDER - OPE, verifique.', 'warning');return false;
+                                }
+
+                            }else{
+                                Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
+                            }
+
+                        }
+                    });
+                }
+            });
+
+            $(document).on("keyup", '#txtCodPedidoCobranza', function () {
+                let tamanio = $.trim($(this).val()).length;
+                if (tamanio > 8 && tamanio < 16) {
+                    $.ajax
+                    ({
+                        type: "POST",
+                        url: "{{ route('pedidosanulaciones_cobranza') }}",
+                        data: {
+                            codigo: $(this).val(),tipo: 'Q',
+                        },
+                        dataType: 'json',
+                        cache: false,
+                        success: function (response) {
+                            console.log('Respuesta Cobranza',response);
+                            if (response.contador>=1){
+                                if (response.contadorcodigo==0){
+                                    if (response.data.estado!=0){
+                                        $('#tipoCobranza2').val("Q");
+                                        $('#txtIdPedidoCobranza').val(response.data.id);
+                                        $('#txtCodAsesorCobranza').val(response.data.name);
+                                        $('#txtImporteCobranza').val(response.data.totaldp);
+                                        $('#txtImporteAnularCob').val(response.data.saldo);
+                                        $('#txtRucCobranza').val(response.data.ruc);
+                                        $('#txtRazSocialCobranza').val(response.data.nombre_empresa);
                                     }else{
                                         Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
                                     }
@@ -539,6 +604,96 @@
                             Swal.fire('Error', 'Ya existe un registro con los mismos datos, verifique.', 'warning');
                         }
                         $(".btnEnviarFactura").attr('disabled', false);
+
+                    }
+                });
+
+            });
+
+            $(document).on("submit", "#frmAgregaAnulacionCobranza", function (e) {
+                e.preventDefault();
+                $(".btnEnviarCobranza").attr('disabled', 'disabled')
+                var txtIdPedidoCobranza  =$('#txtIdPedidoCobranza').val();
+                var txtCodPedidoCobranza =$('#txtCodPedidoCobranza').val();
+                var txtImporteCobranza   =$('#txtImporteCobranza').val();
+                var txtImporteAnularCob  =$('#txtImporteAnularCob').val();
+                var txtMotivoCobranza    =$('#txtMotivoCobranza').val();
+                var txtResponsableCobranza    =$('#txtResponsableCobranza').val();
+
+                if (txtIdPedidoCobranza == '') {
+                    Swal.fire('Error', 'No se puede ingresar una solicitud sin un pedido', 'warning');
+                    $(".btnEnviarCobranza").attr('disabled', false);
+                    return false;
+                }
+                if (txtCodPedidoCobranza == '') {
+                    Swal.fire('Error', 'No se puede ingresar un codigo vacio', 'warning');
+                    $(".btnEnviarCobranza").attr('disabled', false);
+                    return false;
+                }
+
+                if (txtImporteAnularCob== '') {
+                    Swal.fire('Error', 'Debe ingresar el importe a la solicitud.', 'warning').then(function () {
+                        $("#txtImporteAnularCob").focus()
+                    });
+                    $(".btnEnviarCobranza").attr('disabled', false);
+                    return false;
+                }
+                /*if (parseFloat(txtImporteAnularCob) >=parseFloat(txtImporteCobranza)) {
+                    Swal.fire('Error', 'El valor del importe a eliminar debe ser menor al total.', 'warning').then(function () {
+                        $("#txtImporteAnularCob").focus()
+                    });
+                    $(".btnEnviarCobranza").attr('disabled', false);
+                    return false;
+                }*/
+
+                if ($('#filesAddCobranza').val() == '') {
+                    Swal.fire('Error', 'No se puede ingresar sin archivos', 'warning');
+                    $(".btnEnviarCobranza").attr('disabled', false);
+                    return false;
+                }
+                if ($('#filesAddCapturaCobranza').val() == '') {
+                    Swal.fire('Error', 'No se puede ingresar sin archivos en capturas', 'warning');
+                    $(".btnEnviarCobranza").attr('disabled', false);
+                    return false;
+                }
+                if (txtMotivoCobranza.length < 1) {
+                    Swal.fire('Error','Completa el sustento para la anulación ','warning'
+                    ).then(function () {
+                        $("#txtMotivoCobranza").focus()
+                    });
+                    $(".btnEnviarCobranza").attr('disabled', false);
+                    return false;
+                }
+                if (txtResponsableCobranza.length < 1) {
+                    Swal.fire('Error','Completa el responsable para la anulación ','warning'
+                    ).then(function () {
+                        $("#txtResponsableCobranza").focus()
+                    });
+                    $(".btnEnviarCobranza").attr('disabled', false);
+                    return false;
+                }
+
+                var datacobranza = new FormData(document.getElementById("frmAgregaAnulacionCobranza"));
+                $.ajax({
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    url: "{{ route('solicita_anulacion_pedidoq') }}",
+                    data: datacobranza,
+                    success: function (data) {
+                        /*console.log('Solicitando Anulacion', data);*/
+                        if (data.countpedidosanul==0){
+                            if (data.pedidosinpago==0){
+                                Swal.fire('Notificacion', 'Se registró la solicitud de anulacion, correctamente.', 'success');
+                                limpiarFormSolAnulCobr();
+                                $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                            }else {
+                                Swal.fire('Error', 'El pedido tiene pagos o adelantos, verifique.', 'warning');
+                            }
+                        }else {
+                            Swal.fire('Error', 'Ya existe un registro con los mismos datos, verifique.', 'warning');
+                        }
+                        $(".btnEnviarCobranza").attr('disabled', false);
 
                     }
                 });
@@ -820,15 +975,6 @@
                 else {
                     ejecutarForSolicituAnulacion();
                 }
-
-            /*else if (motivo.length >250) {
-                    Swal.fire('Error','El campo sustento no debe superar los 250 caracteres.','warning'
-                    ).then(function () {
-                        $("#txtMotivoFactura").focus()
-                    });
-                    $(".btnEnviarFactura").attr('disabled', false);
-                    return false;
-                }*/
             })
 
             function ejecutarForSolicituAnulacion() {
