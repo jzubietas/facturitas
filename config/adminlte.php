@@ -663,11 +663,18 @@ return [
                     'active' => ['clientes'],
                 ],
                 [
-                    'text' => 'Clientes Recurrentes',
+                    'text' => 'Clientes Caidos',
                     'route' => 'clientes.recurrentes',
                     'can' => 'clientes.recurrentes',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['recurrentes'],
+                ],
+                [
+                    'text' => 'Clientes Levantados',
+                    'route' => 'clientes.levantados',
+                    'can' => 'clientes.levantados',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['levantados'],
                 ],
                 [
                     'text' => 'Clientes Activo',

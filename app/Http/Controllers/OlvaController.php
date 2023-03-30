@@ -622,6 +622,13 @@ class OlvaController extends Controller
     }
     public  function gettimelineestadosolva(Request  $request){
         $grupo_courier_data = DireccionGrupo::where('id',$request->id_direcciongrupo)->first()->courier_data;
-        return view('envios.olva.modal.onlytimeline',compact('grupo_courier_data'))->with('json', json_encode($grupo_courier_data));
+
+        $grupo_courier_data=$grupo_courier_data->data->details;
+        /*foreach($grupo_courier_data->data->details as $item)
+        {
+            dd($item->estado_tracking);
+        }*/
+        //dd($grupo_courier_data);
+        return view('envios.olva.modal.onlytimeline',compact('grupo_courier_data'));
     }
 }

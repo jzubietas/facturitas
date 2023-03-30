@@ -1850,7 +1850,7 @@ class DashboardController extends Controller
 
             if ($object_totales['all_situacion_recurrente'] == 0) {
                 $html .= '<div class="progress-bar bg-danger" role="progressbar"
-                 style="width: ' . round(($object_totales['all_situacion_activo'] / $object_totales['all_situacion_recurrente']) * 100, 2) . '%"
+                 style="width: ' . 0 . '%"
                  aria-valuenow="' . (round(0, 2)) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
@@ -2076,7 +2076,7 @@ class DashboardController extends Controller
 
             if ($count_asesor[24]['all_situacion_recurrente'] == 0) {
                 $html .= '<div class="progress-bar bg-danger" role="progressbar"
-                 style="width: ' . round(($count_asesor[24]['all_situacion_activo'] / ($count_asesor[24]['all_situacion_recurrente']+$count_asesor[24]['all_situacion_activo']) ) * 100, 2) . '%"
+                 style="width: ' . 0 . '%"
                  aria-valuenow="' . (round(0, 2)) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';

@@ -464,6 +464,7 @@
                 contentType: false,
             })
             .done(function (data) {
+                console.warn(data);
                 /*console.log('dataassssssssss',data);*/
                 $('#divtimelinedetalle').html(data)
             })

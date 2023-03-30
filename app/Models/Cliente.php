@@ -19,8 +19,9 @@ class Cliente extends Model
     const ABANDONO_RECIENTE = "ABANDONO RECIENTE";
     const ABANDONO_PERMANENTE = "ABANDONO PERMANENTE";
     const ABANDONO = "ABANDONO";
-    const RECURRENTE = "RECURRENTE";
+    const RECURRENTE = "CAIDO";
     const ACTIVO = "ACTIVO";
+    const LEVANTADO = "LEVANTADO";
     const NUEVO = "NUEVO";
     const RECUPERADO = "RECUPERADO";
     const CASI_ABANDONO = "CASI ABANDONO";
