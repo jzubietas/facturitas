@@ -74,6 +74,8 @@ class AnalisisEstadoOlvaByTracking extends Command
                                 'add_screenshot_at' => null,
                             ]);
 
+
+
                             $pedido->update([
                                 'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
                                 'courier_sync_at' => now(),
