@@ -75,6 +75,18 @@ class AnalisisEstadoOlva extends Command
                                 'add_screenshot_at' => null,
                             ]);
 
+                            foreach($datosolva as $item)
+                            {
+                                OlvaMovimientos::create([
+                                    'obs'=>$item->obs,
+                                    'nombre_sede'=>$item->nombre_sede,
+                                    'fecha_creacion'=>$item->fecha_creacion,
+                                    'estado_tracking'=>$item->estado_tracking,
+                                    'id_rpt_envio_ruta'=>$item->id_rpt_envio_ruta,
+                                    'status'=>'1',
+                                ]);
+                            }
+
                             $pedido->update([
                                 'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
                                 'courier_sync_at' => now(),

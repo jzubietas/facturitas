@@ -55,12 +55,6 @@ class ScraperController extends Controller
 
                           foreach($datosolva as $item)
                           {
-                              $ejecution = \Str::lower($item->estado_tracking ?? '');
-                              $ejecution_2 = \Str::lower($item->obs ?? '');
-                              /*if(!(\Str::contains($ejecution, "valija")) && !(\Str::contains($ejecution_2, "valija")) )
-                              {
-                                  $json_data[]=$item;
-                              }*/
                               OlvaMovimientos::create([
                                   'obs'=>$item->obs,
                                   'nombre_sede'=>$item->nombre_sede,
@@ -69,7 +63,6 @@ class ScraperController extends Controller
                                   'id_rpt_envio_ruta'=>$item->id_rpt_envio_ruta,
                                   'status'=>'1',
                               ]);
-
                           }
 
                           $pedido->update([
