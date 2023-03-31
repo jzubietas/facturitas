@@ -38,5 +38,7 @@ class PedidosAnulacion extends Model
         'resposable_aprob_encargado',
         'files_responsable_asesor',
         'resposable_aprob_admin',
+        'cantidad',
+        'cantidad_resta',
     ];
 }

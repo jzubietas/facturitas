@@ -86,6 +86,8 @@
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
     <script>
+
+
         let tblListadoAnulaciones = null;
         let dataForm_agregaranulacion_f = {};
         let dataForm_agregaranulacion_pc = {};
@@ -249,6 +251,7 @@
             /*MODAL ANULACION PEDIDOS COMPLETOS*/
             $(document).on("keyup", '#codigoCodigoPc', function () {
                 let tamanio = $.trim($(this).val()).length;
+                var txtValorPc=$(this).val();
                 if (tamanio > 8 && tamanio < 16) {
                     $.ajax
                     ({
@@ -267,15 +270,18 @@
                                     $('#tipoAnulacion').val("C");
                                     $('#txtIdPedidoCompleto').val(response.data.id);
                                     $('#asesorCodigoPc').val(response.data.name);
-                                    $('#importeCodigoPc').val(response.data.total);
-                                    $('#anulacionCodigoPc').val(response.data.total);
+                                    var numberpt =parseFloat(response.data.total.replace(",", ".")) ;
+                                    var formattedNumberpt = numberpt.toLocaleString('es-PE', {minimumFractionDigits: 2});
+                                    $('#importeCodigoPc').val(formattedNumberpt);
+                                    $('#anulacionCodigoPc').val(formattedNumberpt);
                                     $('#rucCodigoPc').val(response.data.ruc);
                                     $('#razonCodigoPc').val(response.data.nombre_empresa);
                                 }else{
                                     Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
                                 }
                             }else{
-                                Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
+                                limpiarFormSolAnulCompl();
+                                Swal.fire('Error', 'El pedido ingresado no te corresponde. Codigo = '+txtValorPc, 'warning');return false;
                             }
 
                         }
@@ -415,6 +421,7 @@
             /*MODAL ANULACION - F*/
             $(document).on("keyup", '#codigoCodigoF', function () {
                 let tamanio = $.trim($(this).val()).length;
+                var txtValorFac=$(this).val();
                 if (tamanio > 8 && tamanio < 16) {
                     $.ajax
                     ({
@@ -434,20 +441,26 @@
                                         $('#tipoAnulacion2').val("F");
                                         $('#txtIdPedidoFactura').val(response.data.id);
                                         $('#asesorCodigoF').val(response.data.name);
-                                        $('#importeCodigoF').val(response.data.total);
-                                        $('#anulacionCodigoF').val(response.data.total);
+
+                                        var numberf =parseFloat(response.data.total.replace(",", ".")) ;
+                                        var formattedNumberf = numberf.toLocaleString('es-PE', {minimumFractionDigits: 2});
+                                        $('#importeCodigoF').val(formattedNumberf);
+                                        $('#importeCodigoF').addClass("font-weight-bold");
+
+                                        /*$('#anulacionCodigoF').val(response.data.total);*/
                                         $('#rucCodigoF').val(response.data.ruc);
                                         $('#razonCodigoF').val(response.data.nombre_empresa);
                                     }else{
-                                        Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
+                                        limpiarFormSolAnulFact();
+                                        Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo al ingresado '+txtValorFac, 'warning');return false;
                                     }
-
                                 }else{
-                                    Swal.fire('Error', 'El pedido ingresado se encuentra en estado POR ATENDER - OPE, verifique.', 'warning');return false;
+                                    limpiarFormSolAnulFact();
+                                    Swal.fire('Error', 'El pedido ingresado se encuentra en estado POR ATENDER - OPE, verifique. Codigo = '+txtValorFac, 'warning');return false;
                                 }
-
                             }else{
-                                Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
+                                limpiarFormSolAnulFact();
+                                Swal.fire('Error', 'El pedido ingresado no te corresponde. Codigo = '+txtValorFac, 'warning');return false;
                             }
 
                         }
@@ -457,6 +470,7 @@
 
             $(document).on("keyup", '#txtCodPedidoCobranza', function () {
                 let tamanio = $.trim($(this).val()).length;
+                var txtCodPedidoCobranza=$(this).val();
                 if (tamanio > 8 && tamanio < 16) {
                     $.ajax
                     ({
@@ -470,25 +484,30 @@
                         success: function (response) {
                             console.log('Respuesta Cobranza',response);
                             if (response.contador>=1){
-                                if (response.contadorcodigo==0){
                                     if (response.data.estado!=0){
                                         $('#tipoCobranza2').val("Q");
                                         $('#txtIdPedidoCobranza').val(response.data.id);
                                         $('#txtCodAsesorCobranza').val(response.data.name);
-                                        $('#txtImporteCobranza').val(response.data.totaldp);
-                                        $('#txtImporteAnularCob').val(response.data.saldo);
+
+                                        var numberdp =parseFloat(response.data.total.replace(",", ".")) ;
+                                        var formattedNumberdp = numberdp.toLocaleString('es-PE', {minimumFractionDigits: 2});
+                                        $('#txtImporteCobranza').val(formattedNumberdp);
+                                        $('#txtImporteCobranza').addClass("font-weight-bold");
+
+                                        var number =parseFloat(response.data.totaldp2.replace(",", ".")) ;
+                                        var formattedNumber = number.toLocaleString('es-PE', {minimumFractionDigits: 2});
+                                        $('#txtImporteAnularCob').val( formattedNumber );
+                                        $('#txtImporteAnularCob').addClass("font-weight-bold");
+
                                         $('#txtRucCobranza').val(response.data.ruc);
                                         $('#txtRazSocialCobranza').val(response.data.nombre_empresa);
                                     }else{
-                                        Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo', 'warning');return false;
+                                        limpiarFormSolAnulCobr();
+                                        Swal.fire('Error', 'El pedido ingresado se encuentra anulado. Ingrese otro codigo, '+txtCodPedidoCobranza, 'warning');return false;
                                     }
-
-                                }else{
-                                    Swal.fire('Error', 'El pedido ingresado se encuentra en estado POR ATENDER - OPE, verifique.', 'warning');return false;
-                                }
-
                             }else{
-                                Swal.fire('Error', 'El pedido ingresado no te corresponde.', 'warning');return false;
+                                limpiarFormSolAnulCobr();
+                                Swal.fire('Error', 'No se puede solicitar la anulacion del pedido ya que no tiene adelantos, verifique. Codigo = '+txtCodPedidoCobranza, 'warning');return false;
                             }
 
                         }
