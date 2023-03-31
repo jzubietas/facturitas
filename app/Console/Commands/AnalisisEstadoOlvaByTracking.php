@@ -68,7 +68,7 @@ class AnalisisEstadoOlvaByTracking extends Command
                             $datosolva=$this->getconsultaolva(($numerotrack),($aniotrack));
                             //$this->warn($datosolva);
 
-                            if(!isset($datosolva["status"]))
+                            if(!isset($datosolva["status_fail"]))
                             {
                                 $datosolva=$datosolva["data"]["details"];
                                 $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');

@@ -70,7 +70,7 @@ class AnalisisEstadoOlva extends Command
                         if ($tracking[0]!="" && $tracking[1]!=""){
                             $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
                             //$this->warn($datosolva);
-                            if(!isset($datosolva["status"]))
+                            if(!isset($datosolva["status_fail"]))
                             {
                                 //if($datosolva!='')
                                 {

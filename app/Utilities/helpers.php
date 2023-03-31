@@ -205,7 +205,7 @@ if (!function_exists("get_olva_tracking")) {
             return $response->json();
         }catch(RequestException $e)
         {
-            $arra=['status'=>0,"error"=>"mensaje"];
+            $arra=['status_fail'=>0,"error"=>"mensaje"];
             return $arra->json();
         }
 
