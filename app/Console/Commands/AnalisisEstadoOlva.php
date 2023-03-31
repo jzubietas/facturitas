@@ -74,6 +74,7 @@ class AnalisisEstadoOlva extends Command
                             {
                                 //if($datosolva!='')
                                 {
+                                    $this->warn($datosolva["data"]);
                                     $datosolva=$datosolva["data"]["details"];
                                     $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
                                     $grupo->update([
@@ -84,6 +85,8 @@ class AnalisisEstadoOlva extends Command
                                         'courier_failed_sync_at' => null,
                                         'add_screenshot_at' => null,
                                     ]);
+
+
 
                                     foreach($datosolva as $item)
                                     {
