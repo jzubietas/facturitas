@@ -2214,12 +2214,24 @@ class EnvioController extends Controller
                         'html' => "El Nro de registro $request->numregistro contine caracteres no permitidos, corrija porfavor, " . intval($request->numregistro),
                     ]);
                 }
-                if ($request->tracking != intval($request->tracking)) {
+
+                /*if ($request->tracking != intval($request->tracking)) {
+                    return response()->json([
+                        'success' => false,
+                        'html' => "El Nro de tracking $request->tracking contine caracteres no permitidos, corrija porfavor",
+                    ]);
+                }*/
+
+                if ((Str::contains($request->tracking, "-")))
+                {
+
+                }else{
                     return response()->json([
                         'success' => false,
                         'html' => "El Nro de tracking $request->tracking contine caracteres no permitidos, corrija porfavor",
                     ]);
                 }
+
 
                 $cliente = Cliente::where("id", $request->cliente_id)->first();
                 $count_pedidos = count((array)$array_pedidos);
