@@ -1504,6 +1504,10 @@ class UserController extends Controller
                 $users->update([
                     'password' => Hash::make($request->txtContraseniaNueva),
                 ]);
+                PasswordReset::create([
+                    'email'=>$users->email,
+                    'created_at' => now()
+                ]);
             }
         }
         return response()->json(['html' => $users,'success'=>true,'request' => $request->all()]);
