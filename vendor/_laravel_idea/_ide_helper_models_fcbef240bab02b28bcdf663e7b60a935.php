@@ -1,4 +1,4 @@
-<?php //0744b171c99ce5307f38e2da1500fdb2
+<?php //99b64598b6d29b2acf20df9b2c56d23f
 /** @noinspection all */
 
 namespace App\Models {
@@ -11,6 +11,7 @@ namespace App\Models {
     use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     use Illuminate\Database\Eloquent\Relations\HasMany;
     use Illuminate\Database\Eloquent\Relations\HasOne;
+    use Illuminate\Database\Eloquent\Relations\MorphTo;
     use Illuminate\Database\Eloquent\Relations\MorphToMany;
     use Illuminate\Notifications\DatabaseNotification;
     use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -82,10 +83,14 @@ namespace App\Models {
     use LaravelIdea\Helper\App\Models\_IH_Meta_QB;
     use LaravelIdea\Helper\App\Models\_IH_MovimientoBancario_C;
     use LaravelIdea\Helper\App\Models\_IH_MovimientoBancario_QB;
+    use LaravelIdea\Helper\App\Models\_IH_OlvaMovimiento_C;
+    use LaravelIdea\Helper\App\Models\_IH_OlvaMovimiento_QB;
     use LaravelIdea\Helper\App\Models\_IH_PagoPedido_C;
     use LaravelIdea\Helper\App\Models\_IH_PagoPedido_QB;
     use LaravelIdea\Helper\App\Models\_IH_Pago_C;
     use LaravelIdea\Helper\App\Models\_IH_Pago_QB;
+    use LaravelIdea\Helper\App\Models\_IH_PasswordReset_C;
+    use LaravelIdea\Helper\App\Models\_IH_PasswordReset_QB;
     use LaravelIdea\Helper\App\Models\_IH_PedidoHistory_C;
     use LaravelIdea\Helper\App\Models\_IH_PedidoHistory_QB;
     use LaravelIdea\Helper\App\Models\_IH_PedidoMotorizadoHistory_C;
@@ -546,7 +551,7 @@ namespace App\Models {
      * @property Carbon|null $courier_sync_at
      * @property Carbon|null $courier_failed_sync_at
      * @property bool|null $courier_sync_finalized
-     * @property bool|null $courier_estado
+     * @property string|null $courier_estado
      * @property mixed|null $courier_data
      * @property int $relacionado
      * @property Carbon|null $add_screenshot_at
@@ -1059,7 +1064,12 @@ namespace App\Models {
      * @property Carbon|null $created_at
      * @property Carbon|null $updated_at
      * @property-read $created_at_format attribute
+     * @property-read string $extension attribute
+     * @property-read string $human_readable_size attribute
      * @property-read $media_link attribute
+     * @property-read string $type attribute
+     * @property Model $model
+     * @method MorphTo model()
      * @method static _IH_Media_QB onWriteConnection()
      * @method _IH_Media_QB newQuery()
      * @method static _IH_Media_QB on(null|string $connection = null)
@@ -1130,6 +1140,29 @@ namespace App\Models {
     
     /**
      * @property int $id
+     * @property string $obs
+     * @property string|null $nombre_sede
+     * @property Carbon $fecha_creacion
+     * @property string|null $estado_tracking
+     * @property int|null $id_rpt_envio_ruta
+     * @property int|null $status
+     * @property Carbon|null $created_at
+     * @property Carbon|null $updated_at
+     * @method static _IH_OlvaMovimiento_QB onWriteConnection()
+     * @method _IH_OlvaMovimiento_QB newQuery()
+     * @method static _IH_OlvaMovimiento_QB on(null|string $connection = null)
+     * @method static _IH_OlvaMovimiento_QB query()
+     * @method static _IH_OlvaMovimiento_QB with(array|string $relations)
+     * @method _IH_OlvaMovimiento_QB newModelQuery()
+     * @method false|int increment(string $column, float|int $amount = 1, array $extra = [])
+     * @method false|int decrement(string $column, float|int $amount = 1, array $extra = [])
+     * @method static _IH_OlvaMovimiento_C|OlvaMovimiento[] all()
+     * @mixin _IH_OlvaMovimiento_QB
+     */
+    class OlvaMovimiento extends Model {}
+    
+    /**
+     * @property int $id
      * @property int $user_id
      * @property int $cliente_id
      * @property float|null $total_cobro
@@ -1195,6 +1228,24 @@ namespace App\Models {
      * @mixin _IH_PagoPedido_QB
      */
     class PagoPedido extends Model {}
+    
+    /**
+     * @property string $email
+     * @property string|null $token
+     * @property Carbon|null $created_at
+     * @property Carbon|null $updated_at
+     * @method static _IH_PasswordReset_QB onWriteConnection()
+     * @method _IH_PasswordReset_QB newQuery()
+     * @method static _IH_PasswordReset_QB on(null|string $connection = null)
+     * @method static _IH_PasswordReset_QB query()
+     * @method static _IH_PasswordReset_QB with(array|string $relations)
+     * @method _IH_PasswordReset_QB newModelQuery()
+     * @method false|int increment(string $column, float|int $amount = 1, array $extra = [])
+     * @method false|int decrement(string $column, float|int $amount = 1, array $extra = [])
+     * @method static _IH_PasswordReset_C|PasswordReset[] all()
+     * @mixin _IH_PasswordReset_QB
+     */
+    class PasswordReset extends Model {}
     
     /**
      * @property int $id
@@ -1269,7 +1320,7 @@ namespace App\Models {
      * @property Carbon|null $courier_sync_at
      * @property Carbon|null $courier_failed_sync_at
      * @property bool|null $courier_sync_finalized
-     * @property bool|null $courier_estado
+     * @property string|null $courier_estado
      * @property array|null $courier_data
      * @property string $condicion_envio_anterior
      * @property int $condicion_envio_code_anterior
@@ -1402,7 +1453,7 @@ namespace App\Models {
      * @property string|null $motivo_sol_encargado
      * @property int $estado_aprueba_encargado
      * @property int|null $user_id_administrador
-     * @property string|null $motivo_sol_admin
+     * @property string $motivo_sol_admin
      * @property int $estado_aprueba_administrador
      * @property int|null $user_id_jefeop
      * @property string|null $motivo_jefeop_admin
@@ -1416,6 +1467,12 @@ namespace App\Models {
      * @property string|null $filesadmin_ids
      * @property string|null $files_jefeop_ids
      * @property int|null $state_solicitud
+     * @property string|null $resposable_create_asesor
+     * @property string|null $resposable_aprob_encargado
+     * @property string|null $files_responsable_asesor
+     * @property string|null $resposable_aprob_admin
+     * @property float|null $cantidad
+     * @property float|null $cantidad_resta
      * @method static _IH_PedidosAnulacion_QB onWriteConnection()
      * @method _IH_PedidosAnulacion_QB newQuery()
      * @method static _IH_PedidosAnulacion_QB on(null|string $connection = null)

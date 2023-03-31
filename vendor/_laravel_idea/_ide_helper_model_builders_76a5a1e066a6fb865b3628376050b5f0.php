@@ -1,4 +1,4 @@
-<?php //4caf03955689cb5e0e2ba86c56c65b05
+<?php //4b343a95b8d7e0caa7bc12f2b8117691
 /** @noinspection all */
 
 namespace LaravelIdea\Helper\App\Models {
@@ -36,8 +36,10 @@ namespace LaravelIdea\Helper\App\Models {
     use App\Models\Membership;
     use App\Models\Meta;
     use App\Models\MovimientoBancario;
+    use App\Models\OlvaMovimiento;
     use App\Models\Pago;
     use App\Models\PagoPedido;
+    use App\Models\PasswordReset;
     use App\Models\Pedido;
     use App\Models\PedidoHistory;
     use App\Models\PedidoMotorizadoHistory;
@@ -2191,6 +2193,7 @@ namespace LaravelIdea\Helper\App\Models {
      * @method Paginator|Media[]|_IH_Media_C simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
      * @method Media sole(array|string $columns = ['*'])
      * @method Media updateOrCreate(array $attributes, array $values = [])
+     * @method _IH_Media_QB ordered()
      */
     class _IH_Media_QB extends _BaseBuilder {}
     
@@ -2378,6 +2381,72 @@ namespace LaravelIdea\Helper\App\Models {
     class _IH_MovimientoBancario_QB extends _BaseBuilder {}
     
     /**
+     * @method OlvaMovimiento|null getOrPut($key, $value)
+     * @method OlvaMovimiento|$this shift(int $count = 1)
+     * @method OlvaMovimiento|null firstOrFail($key = null, $operator = null, $value = null)
+     * @method OlvaMovimiento|$this pop(int $count = 1)
+     * @method OlvaMovimiento|null pull($key, $default = null)
+     * @method OlvaMovimiento|null last(callable $callback = null, $default = null)
+     * @method OlvaMovimiento|$this random(int|null $number = null)
+     * @method OlvaMovimiento|null sole($key = null, $operator = null, $value = null)
+     * @method OlvaMovimiento|null get($key, $default = null)
+     * @method OlvaMovimiento|null first(callable $callback = null, $default = null)
+     * @method OlvaMovimiento|null firstWhere(string $key, $operator = null, $value = null)
+     * @method OlvaMovimiento|null find($key, $default = null)
+     * @method OlvaMovimiento[] all()
+     */
+    class _IH_OlvaMovimiento_C extends _BaseCollection {
+        /**
+         * @param int $size
+         * @return OlvaMovimiento[][]
+         */
+        public function chunk($size)
+        {
+            return [];
+        }
+    }
+    
+    /**
+     * @method _IH_OlvaMovimiento_QB whereId($value)
+     * @method _IH_OlvaMovimiento_QB whereObs($value)
+     * @method _IH_OlvaMovimiento_QB whereNombreSede($value)
+     * @method _IH_OlvaMovimiento_QB whereFechaCreacion($value)
+     * @method _IH_OlvaMovimiento_QB whereEstadoTracking($value)
+     * @method _IH_OlvaMovimiento_QB whereIdRptEnvioRuta($value)
+     * @method _IH_OlvaMovimiento_QB whereStatus($value)
+     * @method _IH_OlvaMovimiento_QB whereCreatedAt($value)
+     * @method _IH_OlvaMovimiento_QB whereUpdatedAt($value)
+     * @method OlvaMovimiento baseSole(array|string $columns = ['*'])
+     * @method OlvaMovimiento create(array $attributes = [])
+     * @method _IH_OlvaMovimiento_C|OlvaMovimiento[] cursor()
+     * @method OlvaMovimiento|null|_IH_OlvaMovimiento_C|OlvaMovimiento[] find($id, array $columns = ['*'])
+     * @method _IH_OlvaMovimiento_C|OlvaMovimiento[] findMany(array|Arrayable $ids, array $columns = ['*'])
+     * @method OlvaMovimiento|_IH_OlvaMovimiento_C|OlvaMovimiento[] findOrFail($id, array $columns = ['*'])
+     * @method OlvaMovimiento|_IH_OlvaMovimiento_C|OlvaMovimiento[] findOrNew($id, array $columns = ['*'])
+     * @method OlvaMovimiento first(array|string $columns = ['*'])
+     * @method OlvaMovimiento firstOr(array|\Closure $columns = ['*'], \Closure $callback = null)
+     * @method OlvaMovimiento firstOrCreate(array $attributes = [], array $values = [])
+     * @method OlvaMovimiento firstOrFail(array $columns = ['*'])
+     * @method OlvaMovimiento firstOrNew(array $attributes = [], array $values = [])
+     * @method OlvaMovimiento firstWhere(array|\Closure|Expression|string $column, $operator = null, $value = null, string $boolean = 'and')
+     * @method OlvaMovimiento forceCreate(array $attributes)
+     * @method _IH_OlvaMovimiento_C|OlvaMovimiento[] fromQuery(string $query, array $bindings = [])
+     * @method _IH_OlvaMovimiento_C|OlvaMovimiento[] get(array|string $columns = ['*'])
+     * @method OlvaMovimiento getModel()
+     * @method OlvaMovimiento[] getModels(array|string $columns = ['*'])
+     * @method _IH_OlvaMovimiento_C|OlvaMovimiento[] hydrate(array $items)
+     * @method OlvaMovimiento make(array $attributes = [])
+     * @method OlvaMovimiento newModelInstance(array $attributes = [])
+     * @method LengthAwarePaginator|OlvaMovimiento[]|_IH_OlvaMovimiento_C paginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method Paginator|OlvaMovimiento[]|_IH_OlvaMovimiento_C simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method OlvaMovimiento sole(array|string $columns = ['*'])
+     * @method OlvaMovimiento updateOrCreate(array $attributes, array $values = [])
+     * @method _IH_OlvaMovimiento_QB activo($estado = 1, $boolean = 'and')
+     * @method _IH_OlvaMovimiento_QB activoJoin($table, $estado = 1, $boolean = 'and')
+     */
+    class _IH_OlvaMovimiento_QB extends _BaseBuilder {}
+    
+    /**
      * @method PagoPedido|null getOrPut($key, $value)
      * @method PagoPedido|$this shift(int $count = 1)
      * @method PagoPedido|null firstOrFail($key = null, $operator = null, $value = null)
@@ -2518,6 +2587,67 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_Pago_QB condicion($value)
      */
     class _IH_Pago_QB extends _BaseBuilder {}
+    
+    /**
+     * @method PasswordReset|null getOrPut($key, $value)
+     * @method PasswordReset|$this shift(int $count = 1)
+     * @method PasswordReset|null firstOrFail($key = null, $operator = null, $value = null)
+     * @method PasswordReset|$this pop(int $count = 1)
+     * @method PasswordReset|null pull($key, $default = null)
+     * @method PasswordReset|null last(callable $callback = null, $default = null)
+     * @method PasswordReset|$this random(int|null $number = null)
+     * @method PasswordReset|null sole($key = null, $operator = null, $value = null)
+     * @method PasswordReset|null get($key, $default = null)
+     * @method PasswordReset|null first(callable $callback = null, $default = null)
+     * @method PasswordReset|null firstWhere(string $key, $operator = null, $value = null)
+     * @method PasswordReset|null find($key, $default = null)
+     * @method PasswordReset[] all()
+     */
+    class _IH_PasswordReset_C extends _BaseCollection {
+        /**
+         * @param int $size
+         * @return PasswordReset[][]
+         */
+        public function chunk($size)
+        {
+            return [];
+        }
+    }
+    
+    /**
+     * @method _IH_PasswordReset_QB whereEmail($value)
+     * @method _IH_PasswordReset_QB whereToken($value)
+     * @method _IH_PasswordReset_QB whereCreatedAt($value)
+     * @method _IH_PasswordReset_QB whereUpdatedAt($value)
+     * @method PasswordReset baseSole(array|string $columns = ['*'])
+     * @method PasswordReset create(array $attributes = [])
+     * @method _IH_PasswordReset_C|PasswordReset[] cursor()
+     * @method PasswordReset|null|_IH_PasswordReset_C|PasswordReset[] find($id, array $columns = ['*'])
+     * @method _IH_PasswordReset_C|PasswordReset[] findMany(array|Arrayable $ids, array $columns = ['*'])
+     * @method PasswordReset|_IH_PasswordReset_C|PasswordReset[] findOrFail($id, array $columns = ['*'])
+     * @method PasswordReset|_IH_PasswordReset_C|PasswordReset[] findOrNew($id, array $columns = ['*'])
+     * @method PasswordReset first(array|string $columns = ['*'])
+     * @method PasswordReset firstOr(array|\Closure $columns = ['*'], \Closure $callback = null)
+     * @method PasswordReset firstOrCreate(array $attributes = [], array $values = [])
+     * @method PasswordReset firstOrFail(array $columns = ['*'])
+     * @method PasswordReset firstOrNew(array $attributes = [], array $values = [])
+     * @method PasswordReset firstWhere(array|\Closure|Expression|string $column, $operator = null, $value = null, string $boolean = 'and')
+     * @method PasswordReset forceCreate(array $attributes)
+     * @method _IH_PasswordReset_C|PasswordReset[] fromQuery(string $query, array $bindings = [])
+     * @method _IH_PasswordReset_C|PasswordReset[] get(array|string $columns = ['*'])
+     * @method PasswordReset getModel()
+     * @method PasswordReset[] getModels(array|string $columns = ['*'])
+     * @method _IH_PasswordReset_C|PasswordReset[] hydrate(array $items)
+     * @method PasswordReset make(array $attributes = [])
+     * @method PasswordReset newModelInstance(array $attributes = [])
+     * @method LengthAwarePaginator|PasswordReset[]|_IH_PasswordReset_C paginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method Paginator|PasswordReset[]|_IH_PasswordReset_C simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method PasswordReset sole(array|string $columns = ['*'])
+     * @method PasswordReset updateOrCreate(array $attributes, array $values = [])
+     * @method _IH_PasswordReset_QB activo($estado = 1, $boolean = 'and')
+     * @method _IH_PasswordReset_QB activoJoin($table, $estado = 1, $boolean = 'and')
+     */
+    class _IH_PasswordReset_QB extends _BaseBuilder {}
     
     /**
      * @method PedidoHistory|null getOrPut($key, $value)
@@ -2938,6 +3068,12 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_PedidosAnulacion_QB whereFilesadminIds($value)
      * @method _IH_PedidosAnulacion_QB whereFilesJefeopIds($value)
      * @method _IH_PedidosAnulacion_QB whereStateSolicitud($value)
+     * @method _IH_PedidosAnulacion_QB whereResposableCreateAsesor($value)
+     * @method _IH_PedidosAnulacion_QB whereResposableAprobEncargado($value)
+     * @method _IH_PedidosAnulacion_QB whereFilesResponsableAsesor($value)
+     * @method _IH_PedidosAnulacion_QB whereResposableAprobAdmin($value)
+     * @method _IH_PedidosAnulacion_QB whereCantidad($value)
+     * @method _IH_PedidosAnulacion_QB whereCantidadResta($value)
      * @method PedidosAnulacion baseSole(array|string $columns = ['*'])
      * @method PedidosAnulacion create(array $attributes = [])
      * @method _IH_PedidosAnulacion_C|PedidosAnulacion[] cursor()
