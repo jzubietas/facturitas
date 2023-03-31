@@ -1444,7 +1444,7 @@ class OperacionController extends Controller
 
     public function verAdjuntosOperaciones(Pedido $pedido)
     {
-        $pedidosanulacions=PedidosAnulacion::where('id', $pedido->id)->select([
+        $pedidosanulacions=PedidosAnulacion::where('pedido_id', $pedido->id)->where('state_solicitud',1)->select([
             'files_asesor_ids',
         ])->get();
 
@@ -1462,9 +1462,10 @@ class OperacionController extends Controller
                         array_push($arrayfiles_asesor_ids, $valfiles_asesor_ids[$i]);
                     }
                 }
-                $imagenesasesores = FileUploadAnulacion::whereIn('id', $arrayfiles_asesor_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+                $imagenesasesores = FileUploadAnulacion::whereIn('id', $arrayfiles_asesor_ids)->whereIn('id',$valfiles_asesor_ids)->get();
             }
         }
+        /*dd($imagenesasesores);*/
         return view('operaciones.modal.ContenidoModal.ListadoAdjuntosOperaciones', compact('imagenesasesores'));
     }
 
