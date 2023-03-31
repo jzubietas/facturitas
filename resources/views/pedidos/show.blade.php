@@ -3,15 +3,29 @@
 @section('title', 'Detalle de pedido')
 
 @section('content_header')
-    @if ($pedido->id < 10)
-        <h1>Pedido: PED000{{ $pedido->id }}</h1>
-    @elseif($pedido->id < 100)
-        <h1>Pedido: PED00{{ $pedido->id }}</h1>
-    @elseif($pedido->id < 1000)
-        <h1>>Pedido: PED0{{ $pedido->id }}</h1>
-    @else
-        <h1>Pedido: PED{{ $pedido->id }}</h1>
-    @endif
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                @if ($pedido->id < 10)
+                    <h1 class="text-left">Pedido: PED000{{ $pedido->id }}</h1>
+                @elseif($pedido->id < 100)
+                    <h1 class="text-left">Pedido: PED00{{ $pedido->id }}</h1>
+                @elseif($pedido->id < 1000)
+                    <h1 class="text-left">>Pedido: PED0{{ $pedido->id }}</h1>
+                @else
+                    <h1 class="text-left">Pedido: PED{{ $pedido->id }}</h1>
+                @endif
+            </div>
+            <div class="col-sm-6">
+                @if(count($pedido->notasCreditoFiles())>0)
+                    <button class="btn btn-danger" onclick="window.scrollTo(0, document.body.scrollHeight);"><i class="fas fa-angle-double-down"></i> Ver Nota de Crédito <i class="fas fa-angle-double-down"></i></button>
+                @endif
+            </div>
+        </div>
+    </div>
+
+
+
 @stop
 
 @section('content')
@@ -229,7 +243,7 @@
                         <b>{{$pedido->motivo}}</b>
                     </li>
                     @if(count($pedido->adjuntosFiles())>0)
-                        <li class="list-group-item bg-danger">
+                        <li class="list-group-item bg-success">
                             Adjuntos
                         </li>
                     @endif
@@ -258,7 +272,7 @@
 
                     @if(count($pedido->notasCreditoFiles())>0)
                         <li class="list-group-item bg-danger">
-                            Notas de Credito
+                            <h1 class="font-weight-bolder font-" style="letter-spacing: 5px;"> Notas de Credito</h1>
                         </li>
                     @endif
 
