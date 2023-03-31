@@ -274,12 +274,12 @@ class DashboardController extends Controller
             }
 
             $asesores = User::query()->activo()->rolAsesor()
-                //->where('excluir_meta', '<>', '1')
+                ->where('excluir_meta', '<>', '1')
                 ->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                //->where('excluir_meta', '<>', '1')
+                ->where('excluir_meta', '<>', '1')
                 ->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })->count();
