@@ -78,7 +78,7 @@ class AnalisisEstadoOlvaByTracking extends Command
                             foreach($datosolva as $item)
                             {
                                 OlvaMovimiento::create([
-                                    'obs'=>$item->obs,
+                                    'obs'=>$item["obs"],
                                     'nombre_sede'=>$item->nombre_sede,
                                     'fecha_creacion'=>$item->fecha_creacion,
                                     'estado_tracking'=>$item->estado_tracking,
