@@ -68,7 +68,8 @@ class AnalisisEstadoOlvaByTracking extends Command
                             $datosolva=$this->getconsultaolva(($numerotrack),($aniotrack));
                             $json_data=json_encode($datosolva);
                             $this->warn($json_data);
-                            $this->warn($json_datasuccess);
+                            $json_decode=json_decode($json_data);
+                            $this->warn($json_decode["success"]);
                             //$this->warn($datosolva);
 
                             if(!isset($datosolva["status_fail"]))
