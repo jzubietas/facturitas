@@ -62,8 +62,8 @@ class AnalisisEstadoOlva extends Command
                         $tracking = explode('-', $tracking);
                     }
                     $this->info("");
-                    $this->warn($pedido->codigo.' es el codigo en ejecucion');
-                    $this->warn($tracking[0]." - ".$tracking[1].' es el tracking en ejecucion');
+                    $this->info($pedido->codigo.' es el codigo en ejecucion');
+                    $this->info($tracking[0]." - ".$tracking[1].' es el tracking en ejecucion');
                     if (count($tracking) == 2) {
                         $numerotrack=$tracking[0];
                         $aniotrack=$tracking[1];
