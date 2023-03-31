@@ -444,7 +444,7 @@ class PedidosAnulacionController extends Controller
                 $pedidosanulacion->motivo_solicitud=$motivoanulacion;
                 $pedidosanulacion->estado_aprueba_asesor=1;
                 $pedidosanulacion->tipo=$request->tipoAnulacion;
-                $pedidosanulacion->total_anular=$request->anulacionCodigoPc;
+                $pedidosanulacion->total_anular= str_replace(",","",$request->anulacionCodigoPc);
                 $pedidosanulacion->resposable_create_asesor=$request->txtResponsablePedComplet;
                 $pedidosanulacion->save();
 
