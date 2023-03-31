@@ -106,7 +106,8 @@ class AnalisisEstadoOlva extends Command
                                     ]);
                                     $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
                                 }
-                            }else{
+                            }
+                            else{
                                 $this->warn("Fallo al retornar informacion de OLVA COURIER");
                             }
 
