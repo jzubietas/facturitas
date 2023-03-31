@@ -14,9 +14,16 @@
                 <input type="hidden" id="txtPedidoAnulacionId" name="txtPedidoAnulacionId" >
                 <div class="modal-body">
                     {{-- <div class="form-row"> --}}
-                    <div class="form-group col-lg-12">
-                        <p style="text-align: justify;">Confirme si desea <strong>ANULAR</strong> el pedido: <strong
-                                class="textcodepedido">PED000</strong></p>
+                    <div class="form-group col-lg-12 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-sm-4 border-right">
+                                <p >Confirme si desea <strong>ANULAR</strong> el pedido: <strong
+                                        class="textcodepedido">PED000</strong></p>
+                            </div>
+                            <div class="col-sm-8">
+                                <p> Anulacion registrada por : <span class="right badge badge-warning text-sm txtNombreRegistraAnulacion">-</span> </p>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group col-lg-12">
                         {!! Form::label('motivo', 'Ingrese el motivo de la anulación del pedido') !!}

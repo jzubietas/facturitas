@@ -911,6 +911,7 @@
                 var idanulacion = button.data('idanulacion');
                 var codigopedido= button.data('codigo-pedido');
                 var nameresponsable= button.data('responsable-anula');
+                var registraSolicitud= button.data('registra_solicitud');
                 console.log('idanulacion => ',idanulacion,'codigoanulacion => ',codigopedido);
                 $("#motivo").val('');
                 $("#anulacion_password").val('');
@@ -919,6 +920,7 @@
                 $("#txtPedidoId").val(pedido_id );
                 $("#txtPedidoAnulacionId").val(idanulacion );
                 $(".textcodepedido").html(codigopedido);
+                $(".txtNombreRegistraAnulacion").html(registraSolicitud);
 
                 var formConfirAdmin = new FormData();
                 formConfirAdmin.append("idpedidoanulacion", idanulacion);

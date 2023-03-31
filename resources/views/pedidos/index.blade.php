@@ -1148,6 +1148,9 @@
                         }else if (data.pendiente_anulacion == 1 && data.vtipoAnulacion=='F'){
                             $('td', row).css('background', 'RosyBrown').css('font-weight', 'bold');
                         }
+                        if (data.condiciones == 'ANULACION COBRANZA'){
+                            $('td', row).addClass('text-indigo').css('text-align', 'center').css('font-weight', 'bold');
+                        }
                     } else {
                         $(row).addClass('textred');
                     }
