@@ -205,7 +205,7 @@ if (!function_exists("get_olva_tracking")) {
             return $response->json();
         }catch(RequestException $e)
         {
-            return null;
+            return '';
         }
 
 

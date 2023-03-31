@@ -69,7 +69,7 @@ class AnalisisEstadoOlva extends Command
                         if ($tracking[0]!="" && $tracking[1]!=""){
                             $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
 
-                            if($datosolva!=null)
+                            if($datosolva!='')
                             {
                                 $datosolva=$datosolva["data"]["details"];
                                 $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
