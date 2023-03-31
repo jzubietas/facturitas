@@ -68,49 +68,56 @@ class AnalisisEstadoOlva extends Command
                         $numerotrack=trim($tracking[0]);
                         $aniotrack=trim($tracking[1]);
                         if ($numerotrack!="" && $aniotrack!=""){
+                            $this->warn($numerotrack."-".$aniotrack.' es el tracking en ejecucion');
                             $datosolva=$this->getconsultaolva(($numerotrack),($aniotrack));
-                            //$this->warn($datosolva);
-                            if(!isset($datosolva["status_fail"]))
+                            $json_data=json_encode($datosolva);
+                            //$this->warn($json_data);
+                            $json_decode=json_decode($json_data,true);
+                            if($json_decode["success"]===true)
                             {
-                                //if($datosolva!='')
+                                $this->warn('json devolvio verdad');
+                                $datosolva=$json_decode["data"]["details"];
+                                $json_data_olva=json_encode($datosolva);
+                                //$this->warn($json_data_olva);
+                                //todo correcto
+                                $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
+                                $grupo->update([
+                                    'direccion' => ($numerotrack) . '-' . ($aniotrack),
+                                    'courier_sync_at' => now(),
+                                    'courier_estado' => $estado,
+                                    'courier_data' => $datosolva,
+                                    'courier_failed_sync_at' => null,
+                                    'add_screenshot_at' => null,
+                                ]);
+                                OlvaMovimiento::where('numerotrack',$numerotrack)
+                                    ->where('aniotrack',$aniotrack)->delete();
+
+                                foreach($datosolva as $item)
                                 {
-                                    $this->warn($datosolva["data"]);
-                                    $datosolva=$datosolva["data"]["details"];
-                                    $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
-                                    $grupo->update([
-                                        'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
-                                        'courier_sync_at' => now(),
-                                        'courier_estado' => $estado,
-                                        'courier_data' => $datosolva,
-                                        'courier_failed_sync_at' => null,
-                                        'add_screenshot_at' => null,
+                                    OlvaMovimiento::create([
+                                        'obs'=>$item["obs"],
+                                        'nombre_sede'=>$item["nombre_sede"],
+                                        'fecha_creacion'=>$item["fecha_creacion"],
+                                        'estado_tracking'=>$item["estado_tracking"],
+                                        'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
+                                        'status'=>'1',
+                                        'numerotrack'=>$numerotrack,
+                                        'aniotrack'=>$aniotrack,
                                     ]);
-
-
-
-                                    foreach($datosolva as $item)
-                                    {
-                                        OlvaMovimiento::create([
-                                            'obs'=>$item["obs"],
-                                            'nombre_sede'=>$item["nombre_sede"],
-                                            'fecha_creacion'=>$item["fecha_creacion"],
-                                            'estado_tracking'=>$item["estado_tracking"],
-                                            'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
-                                            'status'=>'1',
-                                        ]);
-                                    }
-
-                                    $pedido->update([
-                                        'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
-                                        'courier_sync_at' => now(),
-                                        'courier_estado' => $estado,
-                                        'courier_data' => $datosolva,
-                                        'courier_failed_sync_at' => null,
-                                    ]);
-                                    $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
                                 }
+
+                                $pedido->update([
+                                    'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
+                                    'courier_sync_at' => now(),
+                                    'courier_estado' => $estado,
+                                    'courier_data' => $datosolva,
+                                    'courier_failed_sync_at' => null,
+                                ]);
+                                $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
+
                             }
                             else{
+                                $this->warn('json devolvio falso');
                                 $this->warn("Fallo al retornar informacion de OLVA COURIER");
                             }
 

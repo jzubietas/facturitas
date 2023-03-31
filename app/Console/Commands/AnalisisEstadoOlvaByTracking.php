@@ -85,6 +85,9 @@ class AnalisisEstadoOlvaByTracking extends Command
                                     'courier_failed_sync_at' => null,
                                     'add_screenshot_at' => null,
                                 ]);
+                                OlvaMovimiento::where('numerotrack',$numerotrack)
+                                    ->where('aniotrack',$aniotrack)->delete();
+
                                 foreach($datosolva as $item)
                                 {
                                     OlvaMovimiento::create([
@@ -94,6 +97,8 @@ class AnalisisEstadoOlvaByTracking extends Command
                                         'estado_tracking'=>$item["estado_tracking"],
                                         'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
                                         'status'=>'1',
+                                        'numerotrack'=>$numerotrack,
+                                        'aniotrack'=>$aniotrack,
                                     ]);
                                 }
                                 $pedido->update([
