@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alerta;
 use App\Models\Cliente;
+use App\Models\PasswordReset;
 use App\Models\Porcentaje;
 use App\Models\Ruc;
 use App\Models\User;
@@ -272,6 +273,10 @@ class UserController extends Controller
         $user=User::where('id',$request->hiddenIdUsuario)->first();
         $user->update([
             'password' => bcrypt('123456789')
+        ]);
+        PasswordReset::create([
+            'email'=>$user->email,
+            'created_at' => now()
         ]);
         return response()->json(['user' => $user,'info'=> 'reseteado']);
         /*return redirect()->route('users.index')->with('info', 'reseteado');*/
@@ -1498,6 +1503,10 @@ class UserController extends Controller
             if (isset($request->txtContraseniaNueva)) {
                 $users->update([
                     'password' => Hash::make($request->txtContraseniaNueva),
+                ]);
+                PasswordReset::create([
+                    'email'=>$users->email,
+                    'created_at' => now()
                 ]);
             }
         }

@@ -64,37 +64,44 @@ class AnalisisEstadoOlvaByTracking extends Command
                         $numerotrack=$tracking[0];
                         $aniotrack=$tracking[1];
                         if ($tracking[0]!="" && $tracking[1]!=""){
-                            $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack))["data"]["details"];
-                            $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
-                            $grupo->update([
-                                'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
-                                'courier_sync_at' => now(),
-                                'courier_estado' => $estado,
-                                'courier_data' => $datosolva,
-                                'courier_failed_sync_at' => null,
-                                'add_screenshot_at' => null,
-                            ]);
-
-                            foreach($datosolva as $item)
+                            $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
+                            $this->warn($datosolva);
+                            if($datosolva!='')
                             {
-                                OlvaMovimiento::create([
-                                    'obs'=>$item["obs"],
-                                    'nombre_sede'=>$item["nombre_sede"],
-                                    'fecha_creacion'=>$item["fecha_creacion"],
-                                    'estado_tracking'=>$item["estado_tracking"],
-                                    'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
-                                    'status'=>'1',
+                                $datosolva=$datosolva["data"]["details"];
+                                $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
+                                $grupo->update([
+                                    'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
+                                    'courier_sync_at' => now(),
+                                    'courier_estado' => $estado,
+                                    'courier_data' => $datosolva,
+                                    'courier_failed_sync_at' => null,
+                                    'add_screenshot_at' => null,
                                 ]);
+                                foreach($datosolva as $item)
+                                {
+                                    OlvaMovimiento::create([
+                                        'obs'=>$item["obs"],
+                                        'nombre_sede'=>$item["nombre_sede"],
+                                        'fecha_creacion'=>$item["fecha_creacion"],
+                                        'estado_tracking'=>$item["estado_tracking"],
+                                        'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
+                                        'status'=>'1',
+                                    ]);
+                                }
+                                $pedido->update([
+                                    'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
+                                    'courier_sync_at' => now(),
+                                    'courier_estado' => $estado,
+                                    'courier_data' => $datosolva,
+                                    'courier_failed_sync_at' => null,
+                                ]);
+                                $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
+
+                            }else{
+                                $this->warn("Fallo al retornar informacion de OLVA COURIER");
                             }
 
-                            $pedido->update([
-                                'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
-                                'courier_sync_at' => now(),
-                                'courier_estado' => $estado,
-                                'courier_data' => $datosolva,
-                                'courier_failed_sync_at' => null,
-                            ]);
-                            $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
                             $progress->advance();
                         }
                     }
