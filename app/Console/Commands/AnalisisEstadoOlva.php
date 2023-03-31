@@ -69,43 +69,47 @@ class AnalisisEstadoOlva extends Command
                         $aniotrack=$tracking[1];
                         if ($tracking[0]!="" && $tracking[1]!=""){
                             $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
-
-                            if($datosolva!='')
+                            $this->warn($datosolva);
+                            if(!isset($datosolva["status"]))
                             {
-                                $datosolva=$datosolva["data"]["details"];
-                                $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
-                                $grupo->update([
-                                    'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
-                                    'courier_sync_at' => now(),
-                                    'courier_estado' => $estado,
-                                    'courier_data' => $datosolva,
-                                    'courier_failed_sync_at' => null,
-                                    'add_screenshot_at' => null,
-                                ]);
-
-                                foreach($datosolva as $item)
+                                //if($datosolva!='')
                                 {
-                                    OlvaMovimiento::create([
-                                        'obs'=>$item["obs"],
-                                        'nombre_sede'=>$item["nombre_sede"],
-                                        'fecha_creacion'=>$item["fecha_creacion"],
-                                        'estado_tracking'=>$item["estado_tracking"],
-                                        'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
-                                        'status'=>'1',
+                                    $datosolva=$datosolva["data"]["details"];
+                                    $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
+                                    $grupo->update([
+                                        'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
+                                        'courier_sync_at' => now(),
+                                        'courier_estado' => $estado,
+                                        'courier_data' => $datosolva,
+                                        'courier_failed_sync_at' => null,
+                                        'add_screenshot_at' => null,
                                     ]);
-                                }
 
-                                $pedido->update([
-                                    'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
-                                    'courier_sync_at' => now(),
-                                    'courier_estado' => $estado,
-                                    'courier_data' => $datosolva,
-                                    'courier_failed_sync_at' => null,
-                                ]);
-                                $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
+                                    foreach($datosolva as $item)
+                                    {
+                                        OlvaMovimiento::create([
+                                            'obs'=>$item["obs"],
+                                            'nombre_sede'=>$item["nombre_sede"],
+                                            'fecha_creacion'=>$item["fecha_creacion"],
+                                            'estado_tracking'=>$item["estado_tracking"],
+                                            'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
+                                            'status'=>'1',
+                                        ]);
+                                    }
+
+                                    $pedido->update([
+                                        'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
+                                        'courier_sync_at' => now(),
+                                        'courier_estado' => $estado,
+                                        'courier_data' => $datosolva,
+                                        'courier_failed_sync_at' => null,
+                                    ]);
+                                    $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
+                                }
                             }else{
                                 $this->warn("Fallo al retornar informacion de OLVA COURIER");
                             }
+
 
                             $progress->advance();
                         }
@@ -124,6 +128,6 @@ class AnalisisEstadoOlva extends Command
     public function getconsultaolva(string $tracking, string  $year)
     {
         $result = get_olva_tracking(trim($tracking), trim($year));
-        return $result;
+        return json_decode($result);
     }
 }
