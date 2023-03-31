@@ -128,6 +128,6 @@ class AnalisisEstadoOlva extends Command
     public function getconsultaolva(string $tracking, string  $year)
     {
         $result = get_olva_tracking(trim($tracking), trim($year));
-        return json_decode($result);
+        return ($result);
     }
 }
