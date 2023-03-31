@@ -372,7 +372,7 @@ class PagoController extends Controller
                 ->where('pedidos.pendiente_anulacion', '0')
                 ->where('dp.estado', '1')
                 ->where('dp.total', '>', '0')
-                ->where('dp.saldo', '>', '0');
+                ->where('dp.saldo', '>=', '0');
             //->get();
             //return $request->perdonar_deuda;
             if (!$request->perdonar_deuda) {
