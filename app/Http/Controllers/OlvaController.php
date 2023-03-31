@@ -337,7 +337,7 @@ class OlvaController extends Controller
             ->inOlva()
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->where('direccion_grupos.motorizado_status', '0')
-
+            ->where('direccion_grupos.direccion', 'not like', '%-%')
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
