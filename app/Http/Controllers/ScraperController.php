@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\SyncOlvaJob;
 use App\Models\Cliente;
 use App\Models\DireccionGrupo;
+use App\Models\OlvaMovimiento;
 use App\Models\OlvaMovimientos;
 use App\Models\Pedido;
 use Carbon\Carbon;
@@ -55,7 +56,7 @@ class ScraperController extends Controller
 
                           foreach($datosolva as $item)
                           {
-                              OlvaMovimientos::create([
+                              OlvaMovimiento::create([
                                   'obs'=>$item->obs,
                                   'nombre_sede'=>$item->nombre_sede,
                                   'fecha_creacion'=>$item->fecha_creacion,

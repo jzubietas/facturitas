@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\DireccionGrupo;
+use App\Models\OlvaMovimiento;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
 
@@ -77,7 +78,7 @@ class AnalisisEstadoOlva extends Command
 
                             foreach($datosolva as $item)
                             {
-                                OlvaMovimientos::create([
+                                OlvaMovimiento::create([
                                     'obs'=>$item->obs,
                                     'nombre_sede'=>$item->nombre_sede,
                                     'fecha_creacion'=>$item->fecha_creacion,
