@@ -57,11 +57,11 @@ class ScraperController extends Controller
                           foreach($datosolva as $item)
                           {
                               OlvaMovimiento::create([
-                                  'obs'=>$item->obs,
-                                  'nombre_sede'=>$item->nombre_sede,
-                                  'fecha_creacion'=>$item->fecha_creacion,
-                                  'estado_tracking'=>$item->estado_tracking,
-                                  'id_rpt_envio_ruta'=>$item->id_rpt_envio_ruta,
+                                  'obs'=>$item["obs"],
+                                  'nombre_sede'=>$item["nombre_sede"],
+                                  'fecha_creacion'=>$item["fecha_creacion"],
+                                  'estado_tracking'=>$item["estado_tracking"],
+                                  'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
                                   'status'=>'1',
                               ]);
                           }
