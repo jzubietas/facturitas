@@ -359,7 +359,7 @@ class PdfController extends Controller
                 if ($diferenciameta < 0) $diferenciameta = 0;
                 $valor_meta = $situacion_cliente->meta_2;
                 if ($porcentaje < 99){
-                    $color_progress = '#8ec117';  /*VERDE*/
+                    $color_progress = '#008ffb';  /*VERDE*/
                 }else if ($porcentaje < 98){
                     $color_progress = 'linear-gradient(90deg, rgba(3,175,3,1) 0%, rgba(24,150,24,1) 60%, rgba(0,143,251,1) 100%)';  /*VERDE-AZUL*/
                 }else {
