@@ -66,7 +66,7 @@ class AnalisisEstadoOlvaByTracking extends Command
                         if ($numerotrack!="" && $aniotrack!=""){
                             $this->warn($numerotrack."-".$aniotrack.' es el tracking en ejecucion');
                             $datosolva=$this->getconsultaolva(($numerotrack),($aniotrack));//json decode
-                            $json_data=($datosolva;
+                            $json_data=($datosolva);
                             $this->warn($json_data);
                             $this->warn($json_data["success"]);
                             //$this->warn($datosolva);
