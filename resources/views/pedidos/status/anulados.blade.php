@@ -248,7 +248,7 @@
                 var button = $(event.relatedTarget)
                 console.log(event.relatedTarget)
                 console.log(button.data('id_imagen_atencion'))
-                var idunico = button.data('pedido_id_anulacion')
+                var idunico = button.data('pedido_id')
                 var montoAnular=button.data('total_anular_adjunto')
 
                 console.log('rtotal anular adjunto', button.data('total_anular_adjunto'))
@@ -269,7 +269,7 @@
                     success: function (data) {
                         console.log(data)
                         console.log("OPERACIONES " + idunico)
-                        $('#listado_adjuntos_ver').html("");
+                        $('#listado_adjuntos_antes_ver').html("");
                         $('#listado_adjuntos_antes_ver').html(data);
                     }
                 });
