@@ -248,7 +248,7 @@
                 var button = $(event.relatedTarget)
                 console.log(event.relatedTarget)
                 console.log(button.data('id_imagen_atencion'))
-                var idunico = button.data('pedido_id')
+                var idunico = button.data('pedido_id_anulacion')
                 var montoAnular=button.data('total_anular_adjunto')
 
                 console.log('rtotal anular adjunto', button.data('total_anular_adjunto'))
@@ -263,15 +263,14 @@
 
                 //recupera imagenes adjuntas
                 $.ajax({
-                    url: "{{ route('operaciones.veratencionanulacion',':id') }}".replace(':id', idunico),
+                    url: "{{ route('operaciones.veradjuntos_operaciones',':id') }}".replace(':id', idunico),
                     data: idunico,
                     method: 'POST',
                     success: function (data) {
                         console.log(data)
-                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        console.log("OPERACIONES " + idunico)
                         $('#listado_adjuntos_ver').html("");
                         $('#listado_adjuntos_antes_ver').html(data);
-                        console.log(data);
                     }
                 });
             })

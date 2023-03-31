@@ -471,6 +471,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.datossubidaadj/{pedido}', [OperacionController::class, 'DatosSubidaAdjunto'])->name('operaciones.datossubidaadj');
     Route::post('operaciones.eliminaradjunto', [OperacionController::class, 'eliminarAdjuntoOperaciones'])->name('operaciones.eliminaradjunto');
     Route::post('operaciones.veratencionanulacion/{pedido}', [OperacionController::class, 'verAtencionAnulacion'])->name('operaciones.veratencionanulacion');
+    Route::post('operaciones.veradjuntos_operaciones/{pedido}', [OperacionController::class, 'verAdjuntosOperaciones'])->name('operaciones.veradjuntos_operaciones');
 
     Route::post('operaciones.subircorreccionsinconfirmar', [OperacionController::class, 'subircorreccionsinconfirmar'])->name('operaciones.subircorreccionsinconfirmar');
 

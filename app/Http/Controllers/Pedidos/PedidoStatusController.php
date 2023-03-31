@@ -633,7 +633,7 @@ $banca"
                     DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
                     pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' and pea.state_solicitud=1 limit 1) as vtipoAnulacion"),
                     DB::raw("(select  pea.total_anular from pedidos_anulacions as pea where pea.pedido_id= pedidos.id  and pea.state_solicitud=1 limit 1) as dMontoAnular"),
-                    'pedidos.estado as idPedidoAnulacion',
+                    DB::raw("(select  pea.id from pedidos_anulacions as pea where pea.pedido_id= pedidos.id  and pea.state_solicitud=1 limit 1) as idPedidoAnulacion"),
                 ])
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -720,7 +720,7 @@ $banca"
                 ->addIndexColumn()
                 ->addColumn('adjunto', function ($pedido) {
                     $buton = '';
-                    $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" data-total_anular_adjunto="' . $pedido->dMontoAnular . '" data-tipo_anulacion="' . $pedido->vtipoAnulacion . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
+                    $buton .= '<button data-toggle="modal" data-target="#modal_imagen_atenciones" data-id_imagen_atencion="' . $pedido->id_imagen_atenciones . '" data-pedido_id="' . $pedido->id . '" data-pedido_id_anulacion="' . $pedido->idPedidoAnulacion . '" data-total_anular_adjunto="' . $pedido->dMontoAnular . '" data-tipo_anulacion="' . $pedido->vtipoAnulacion . '" type="button" class="btn btn-warning btn-sm btn-fontsize" ><i class="fa fa-file-pdf"></i> Atencion</button>';
                     if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL) {
                         $buton .= '<a data-target="#modal-veradjunto" data-id_anulacion_adjuntos="' .$pedido->idPedidoAnulacion . '" data-total_anular="' . $pedido->dMontoAnular . '" data-toggle="modal" ><button class="btn btn-primary btn-sm mr-2"><i class="fas fa-file-download "></i> Doc por anular</button></a>';
                     }
