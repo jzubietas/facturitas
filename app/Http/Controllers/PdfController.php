@@ -471,6 +471,7 @@ class PdfController extends Controller
                 $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
                 $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*0.65 - $activos_cuenta;
                 $diferenciameta=round($diferenciameta);
+                if($diferenciameta<0)$diferenciameta=0;
                 $color_progress = '#FFD4D4';  /*ROSADO*/
                 $html[] = '<div class="w-100 bg-white rounded">
                                         <div class="position-relative rounded">
