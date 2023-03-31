@@ -15,7 +15,7 @@ class AlterTablePasswordresetToken extends Migration
     {
         Schema::table('password_resets', function (Blueprint $table) {
             //
-            $table->string("token")->nullable()->default('');
+            $table->string("token")->nullable()->default('')->change();
         });
     }
 
