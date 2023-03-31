@@ -64,9 +64,10 @@ class AnalisisEstadoOlvaByTracking extends Command
                         $numerotrack=$tracking[0];
                         $aniotrack=$tracking[1];
                         if ($tracking[0]!="" && $tracking[1]!=""){
-                            $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack))["data"]["details"];
+                            $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
                             if($datosolva!=null)
                             {
+                                $datosolva=$datosolva["data"]["details"];
                                 $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
                                 $grupo->update([
                                     'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
