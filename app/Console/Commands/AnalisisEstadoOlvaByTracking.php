@@ -66,8 +66,9 @@ class AnalisisEstadoOlvaByTracking extends Command
                         if ($numerotrack!="" && $aniotrack!=""){
                             $this->warn($numerotrack."-".$aniotrack.' es el tracking en ejecucion');
                             $datosolva=$this->getconsultaolva(($numerotrack),($aniotrack));
-                            $this->warn($datosolva);
-                            if($datosolva!='')
+                            //$this->warn($datosolva);
+
+                            if(!isset($datosolva["status"]))
                             {
                                 $datosolva=$datosolva["data"]["details"];
                                 $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
@@ -99,7 +100,8 @@ class AnalisisEstadoOlvaByTracking extends Command
                                 ]);
                                 $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
 
-                            }else{
+                            }
+                            else{
                                 $this->warn("Fallo al retornar informacion de OLVA COURIER");
                             }
 
