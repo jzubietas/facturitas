@@ -194,14 +194,21 @@ if (!function_exists("pdf_to_image")) {
 if (!function_exists("get_olva_tracking")) {
     function get_olva_tracking($tracking, $year = 23)
     {
-        $response = Http::acceptJson()
-            ->get('https://reports.olvaexpress.pe/webservice/rest/getTrackingInformation', [
-                'tracking' => $tracking,
-                'emision' => $year,
-                'apikey' => 'a82e5d192fae9bbfee43a964024498e87dfecb884b67c7e95865a3bb07b607dd',
-                'details' => 1
-            ]);
-        return $response->json();
+        try{
+            $response = Http::acceptJson()
+                ->get('https://reports.olvaexpress.pe/webservice/rest/getTrackingInformation', [
+                    'tracking' => $tracking,
+                    'emision' => $year,
+                    'apikey' => 'a82e5d192fae9bbfee43a964024498e87dfecb884b67c7e95865a3bb07b607dd',
+                    'details' => 1
+                ]);
+            return $response->json();
+        }catch(RequestException $e)
+        {
+            return null;
+        }
+
+
     }
 }
 
