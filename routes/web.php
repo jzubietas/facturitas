@@ -833,7 +833,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::any('pedidosanulaciones.modal.agregaranulacion_pc', [PedidosAnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_pc');
     Route::any('pedidosanulaciones.modal.agregaranulacion_f', [PedidosAnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones.modal.agregaranulacion_f');
-    Route::any('pedidosanulaciones_cobranza', [PedidosAnulacionController::class, 'modalsAnulacion'])->name('pedidosanulaciones_cobranza');
+    Route::any('pedidosanulaciones_cobranza', [PedidosAnulacionController::class, 'modalsanulacioncobranza'])->name('pedidosanulaciones_cobranza');
 
     Route::get('pedidosanulacionestabla', [PedidosAnulacionController::class, 'indexanulacionestabla'])->name('pedidosanulacionestabla');
     Route::post('solicita_anulacion_pedido', [PedidosAnulacionController::class, 'solicitaAnulacionPedido'])->name('solicita_anulacion_pedido');

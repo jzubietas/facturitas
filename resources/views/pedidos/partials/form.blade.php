@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="form-group col-lg-3  mb-1 py-2">
-                        {!! Form::label('ptipo_banca', 'Tipo de comprobante y banca') !!}
+                        {!! Form::label('ptipo_banca', 'Tipo de comprobante y banca' ) !!}
                         <select name="ptipo_banca" id="ptipo_banca" class="border form-control border-secondary">
                             <option value="">---- SELECCIONE ----</option>
                         </select>

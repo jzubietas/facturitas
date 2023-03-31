@@ -239,13 +239,25 @@ class PedidosAnulacionController extends Controller
                     }
                 }
                 if (Auth::user()->rol == User::ROL_ENCARGADO) {
-                    if ($pedido->estado_aprueba_encargado==0){
+                    if ($pedido->estado_aprueba_encargado==0 && ($pedido->itipoanulacion=="C" || $pedido->itipoanulacion=="F")){
                         $btn[] = '<button class="btn btn-warning btn-lg btnApruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Aprobar Anulacion"><i class="fa fa-check-double"></i></button>';
                         $btn[] = '<button class="btn btn-danger btn-lg btnDesapruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Desaprobar Anulacion"><i class="fas fa-ban"></i></button>';
                         if ($pedido->estado_aprueba_administrador==2){
                             $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_admin  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
                         }
-                    }else if($pedido->estado_aprueba_encargado==2){
+                    }else if($pedido->estado_aprueba_encargado==2 && ($pedido->itipoanulacion=="C" || $pedido->itipoanulacion=="F")){
+                        $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_encargado  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
+                        /*$btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';*/
+                    }
+                }
+                if (Auth::user()->rol == User::ROL_JEFE_LLAMADAS) {
+                    if ($pedido->estado_aprueba_encargado==0 && $pedido->itipoanulacion=="Q"){
+                        $btn[] = '<button class="btn btn-warning btn-lg btnApruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Aprobar Anulacion"><i class="fa fa-check-double"></i></button>';
+                        $btn[] = '<button class="btn btn-danger btn-lg btnDesapruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Desaprobar Anulacion"><i class="fas fa-ban"></i></button>';
+                        if ($pedido->estado_aprueba_administrador==2){
+                            $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_admin  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
+                        }
+                    }else if($pedido->estado_aprueba_encargado==2 && $pedido->itipoanulacion=="Q"){
                         $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_encargado  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
                         /*$btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';*/
                     }
@@ -292,7 +304,7 @@ class PedidosAnulacionController extends Controller
             ->addColumn('motivo', function ($pedido) use ($miidentificador) {
                 $htmltipoanul = "";
                 $deshabilitar="";
-                if (in_array(Auth::user()->rol,[User::ROL_ADMIN,User::ROL_ASESOR,User::ROL_ENCARGADO])) {
+                if (in_array(Auth::user()->rol,[User::ROL_ADMIN,User::ROL_ASESOR,User::ROL_ENCARGADO,User::ROL_COBRANZAS,User::ROL_JEFE_LLAMADAS])) {
                     if ($pedido->tipoanulacion=='C'){
                         $htmltipoanul = $htmltipoanul . '<a href="" data-target="#modal-ver_motivoanulacion" data-idanulacion="' . $pedido->idanulacion . '" data-codigos="' . $pedido->codigos . '" data-responsable_create_asesor="' . $pedido->resposable_create_asesor . '" data-responsable_aprob_encarg="' . $pedido->resposable_aprob_encargado . '" data-pedido-motivo="' . $pedido->motivo_solicitud  . '"  data-toggle="modal" title="Ver motivo" ><span class="badge badge-primary bg-primary"><i class="fas fa-eye text-lg"></i></span></a>  ';
                     }else  if ($pedido->tipoanulacion=='F' || $pedido->tipoanulacion=='Q'){
@@ -353,7 +365,7 @@ class PedidosAnulacionController extends Controller
             $listado_codigo_pedido = $listado_codigo_pedido->where('u.rol', 'Asesor')->WhereIn('u.identificador', $usersasesores);
         }
         $contadorcodigo=0;
-        if ($request->tipo=="F" || $request->tipo=="Q"){
+        if ($request->tipo=="F"){
             $listado_codigo_pedidoverifica=$listado_codigo_pedido->clone()->where('pedidos.condicion_envio_code', Pedido::POR_ATENDER_INT);
             $contadorcodigo=$listado_codigo_pedidoverifica->count();
         }
@@ -361,6 +373,52 @@ class PedidosAnulacionController extends Controller
         $listado_codigo_pedido=$listado_codigo_pedido->first();
         return response()->json(['data'=>$listado_codigo_pedido,'contador'=>$totallistado,'contadorcodigo'=>$contadorcodigo]);
     }
+
+    public function modalsanulacioncobranza(Request $request)
+    {
+        $listado_codigo_pedido = Pedido::query()
+            ->join('detalle_pedidos as dp', 'dp.codigo', 'pedidos.codigo')
+            ->join('users as u', 'u.id', 'pedidos.user_id')
+            ->where('pedidos.codigo',  trim($request->codigo))
+            ->select([
+                'pedidos.id',
+                'pedidos.codigo',
+                'u.name',
+                'dp.cantidad as total',
+                'dp.ruc',
+                'dp.nombre_empresa',
+                'dp.adjunto',
+                'pedidos.estado',
+                'dp.saldo',
+                'dp.total as totaldp',
+                DB::raw("((saldo-courier)/(porcentaje/100)) as totaldp2")
+            ])->where('pedidos.pago', 1)->where('pedidos.pagado',1);
+        if (Auth::user()->rol == User::ROL_ASESOR){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $listado_codigo_pedido = $listado_codigo_pedido->where('u.rol', 'Asesor')->WhereIn('u.identificador', $usersasesores);
+        }elseif (Auth::user()->rol == User::ROL_ENCARGADO){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $listado_codigo_pedido = $listado_codigo_pedido->where('u.rol', 'Asesor')->WhereIn('u.identificador', $usersasesores);
+        }
+
+        $totallistado=$listado_codigo_pedido->count();
+        $listado_codigo_pedido=$listado_codigo_pedido->first();
+        return response()->json(['data'=>$listado_codigo_pedido,'contador'=>$totallistado]);
+    }
+
     public function solicitaAnulacionPedido(Request $request)
     {
 
@@ -444,7 +502,7 @@ class PedidosAnulacionController extends Controller
                 $pedidosanulacion->motivo_solicitud=$motivoanulacion;
                 $pedidosanulacion->estado_aprueba_asesor=1;
                 $pedidosanulacion->tipo=$request->tipoAnulacion2;
-                $pedidosanulacion->total_anular=$request->anularCodigoF;
+                $pedidosanulacion->total_anular= str_replace(",","",$request->anularCodigoF);
                 $pedidosanulacion->resposable_create_asesor=$request->txtResponsableFactura;
                 $pedidosanulacion->save();
 
@@ -485,6 +543,9 @@ class PedidosAnulacionController extends Controller
         $motivoanulacion= $request->txtMotivoCobranza;
         $responsableanulacion= $request->txtResponsableCobranza;
         $pedido_id= $request->txtIdPedidoCobranza;
+        $totalanular=str_replace(",","",$request->txtImporteAnularCob);
+        $taotalcantidad=str_replace(",","",$request->txtImporteCobranza);
+
 
         $pedidosAnulValida=PedidosAnulacion::where('pedido_id',$pedido_id)->where('state_solicitud',1);
         $countpedidosanul=$pedidosAnulValida->count();
@@ -499,8 +560,10 @@ class PedidosAnulacionController extends Controller
                 $pedidosanulacion->motivo_solicitud=$motivoanulacion;
                 $pedidosanulacion->estado_aprueba_asesor=1;
                 $pedidosanulacion->tipo=$request->tipoCobranza2;
-                $pedidosanulacion->total_anular=$request->txtImporteAnularCob;
+                $pedidosanulacion->total_anular=$totalanular;
                 $pedidosanulacion->resposable_create_asesor=$request->txtResponsableCobranza;
+                $pedidosanulacion->cantidad= $taotalcantidad;
+                $pedidosanulacion->cantidad_resta=floatval($taotalcantidad)-floatval($totalanular);
                 $pedidosanulacion->save();
 
                 foreach($files as $file){
@@ -672,6 +735,7 @@ class PedidosAnulacionController extends Controller
             $pedidodetail= DetallePedido::where('pedido_id',$pedidos->id);
 
             $pedidos->update([
+                'cantidad' => $pedidosanulacion->cantidad_resta,
                 'motivo' => $request->motivo,
                 'pagado' => 2,
                 'condicion' => Pedido::ANULACION_COBRANZA,

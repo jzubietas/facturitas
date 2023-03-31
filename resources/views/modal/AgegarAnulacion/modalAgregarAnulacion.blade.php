@@ -55,14 +55,14 @@
                                         <div class="row">
                                             <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
                                                 <input name="importeCodigoPc" id="importeCodigoPc"
-                                                       placeholder="Colocar el importe del pedido" readonly style="background: #62CDFF;">
+                                                       placeholder="Colocar el importe del pedido" readonly style="background: #62CDFF;" class="font-weight-bold">
                                                 <div class="input-icon">
                                                     <i class="fa fa-plus-square" aria-hidden="true"></i>
                                                 </div>
                                             </div>
                                             <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
                                                 <input name="anulacionCodigoPc" id="anulacionCodigoPc"
-                                                       placeholder="Colocar el importe a anular" readonly style="background: #62CDFF;">
+                                                       placeholder="Colocar el importe a anular" readonly style="background: #62CDFF;" class="font-weight-bold">
                                                 <div class="input-icon">
                                                     <i class="fa fa-minus-square" aria-hidden="true"></i>
                                                 </div>
@@ -165,7 +165,7 @@
                                                        class="form-control number ob" data-type="text" data-msj="Ingrese una cantidad"
                                                        placeholder="Cantidad..." style="background: #A4907C;">--}}
 
-                                                <input name="anularCodigoF" id="anularCodigoF"  step="0.01" min="0" class="form-control bg-warning number ob" data-type="text"
+                                                <input name="anularCodigoF" id="anularCodigoF"  step="0.01" min="0" class="form-control bg-warning number ob font-weight-bold" data-type="text"
                                                        placeholder="Colocar el importe a anular"  style="background: #A4907C;">
                                                 <div class="input-icon">
                                                     <i class="fa fa-minus-square" aria-hidden="true"></i>
@@ -262,7 +262,7 @@
                                             <div class="row">
                                                 <div class="input-group input-group-icon col-lg-6 col-md-6 col-sm-12">
                                                     <input name="txtImporteCobranza" id="txtImporteCobranza"
-                                                           placeholder="Colocar el importe del pedido" readonly class="bg-gradient-success">
+                                                           placeholder="Colocar el Cantidad del pedido" readonly class="bg-gradient-success">
                                                     <div class="input-icon">
                                                         <i class="fa fa-plus-square" aria-hidden="true"></i>
                                                     </div>
