@@ -778,6 +778,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(15);//paola
                 cargaNueva(13);//totales porcentajes debajo de metas
 
+                cargReporteMetasSituacionClientes();
+
                 cargReporteMetasCobranzasGeneral();
             }
 
