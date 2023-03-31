@@ -69,6 +69,12 @@ class AnalisisEstadoOlvaByTracking extends Command
                             $json_data=json_encode($datosolva);
                             $this->warn($json_data);
                             $json_decode=json_decode($json_data,true);
+                            if($json_decode["success"]===true)
+                            {
+                                $this->warn('json devolvio verdad');
+                            }else{
+                                $this->warn('json devolvio falso');
+                            }
                             $this->warn($json_decode["success"]);
                             //$this->warn($datosolva);
 
