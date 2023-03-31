@@ -65,10 +65,10 @@ class AnalisisEstadoOlva extends Command
                     $this->info($pedido->codigo.' es el codigo en ejecucion');
                     $this->info($tracking[0]." - ".$tracking[1].' es el tracking en ejecucion');
                     if (count($tracking) == 2) {
-                        $numerotrack=$tracking[0];
-                        $aniotrack=$tracking[1];
-                        if ($tracking[0]!="" && $tracking[1]!=""){
-                            $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
+                        $numerotrack=trim($tracking[0]);
+                        $aniotrack=trim($tracking[1]);
+                        if ($numerotrack!="" && $aniotrack!=""){
+                            $datosolva=$this->getconsultaolva(($numerotrack),($aniotrack));
                             //$this->warn($datosolva);
                             if(!isset($datosolva["status_fail"]))
                             {
