@@ -61,18 +61,18 @@ class AnalisisEstadoOlvaByTracking extends Command
                         $tracking = explode('-', $tracking);
                     }
                     if (count($tracking) == 2) {
-                        $numerotrack=$tracking[0];
-                        $aniotrack=$tracking[1];
-                        if ($tracking[0]!="" && $tracking[1]!=""){
-                            $this->warn($tracking[0]."-".$tracking[1].' es el tracking en ejecucion');
-                            $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
+                        $numerotrack=trim($tracking[0]);
+                        $aniotrack=trim($tracking[1]);
+                        if ($numerotrack!="" && $aniotrack!=""){
+                            $this->warn($numerotrack."-".$aniotrack.' es el tracking en ejecucion');
+                            $datosolva=$this->getconsultaolva(($numerotrack),($aniotrack));
                             $this->info($datosolva);
                             if($datosolva!='')
                             {
                                 $datosolva=$datosolva["data"]["details"];
                                 $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
                                 $grupo->update([
-                                    'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
+                                    'direccion' => ($numerotrack) . '-' . ($aniotrack),
                                     'courier_sync_at' => now(),
                                     'courier_estado' => $estado,
                                     'courier_data' => $datosolva,
