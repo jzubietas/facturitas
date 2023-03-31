@@ -41,7 +41,7 @@ class AnalisisEstadoOlvaByTracking extends Command
     public function handle()
     {
         //$cliente_id=Cliente::where('celular',$this->argument('celular'))->first()->id;
-        $pedido=Pedido::where('env_tracking',$this->argument('tracking'))->first();
+        $pedido=Pedido::where('env_tra cking',$this->argument('tracking'))->first();
         $direccionGrupos = DireccionGrupo::whereIn('condicion_envio_code', [
             Pedido::RECEPCIONADO_OLVA_INT,
             Pedido::EN_CAMINO_OLVA_INT,
