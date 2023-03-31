@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Jobs\SyncOlvaJob;
 use App\Models\Cliente;
 use App\Models\DireccionGrupo;
+use App\Models\OlvaMovimiento;
+use App\Models\OlvaMovimientos;
 use App\Models\Pedido;
 use Carbon\Carbon;
 use Goutte\Client;
@@ -41,7 +43,7 @@ class ScraperController extends Controller
                       $numerotrack=$tracking[0];
                       $aniotrack=$tracking[1];
                       if ($tracking[0]!="" && $tracking[1]!=""){
-                          $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
+                          $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack))["data"]["details"];
                           $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
                           $grupo->update([
                               'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
@@ -51,6 +53,18 @@ class ScraperController extends Controller
                               'courier_failed_sync_at' => null,
                               'add_screenshot_at' => null,
                           ]);
+
+                          foreach($datosolva as $item)
+                          {
+                              OlvaMovimiento::create([
+                                  'obs'=>$item["obs"],
+                                  'nombre_sede'=>$item["nombre_sede"],
+                                  'fecha_creacion'=>$item["fecha_creacion"],
+                                  'estado_tracking'=>$item["estado_tracking"],
+                                  'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
+                                  'status'=>'1',
+                              ]);
+                          }
 
                           $pedido->update([
                               'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),

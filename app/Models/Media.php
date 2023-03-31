@@ -5,6 +5,7 @@ namespace App\Models;
 class Media extends \Spatie\MediaLibrary\MediaCollections\Models\Media
 {
 
+
     protected $appends=[
         'media_link',
         'created_at_format',

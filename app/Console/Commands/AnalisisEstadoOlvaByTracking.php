@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\DireccionGrupo;
+use App\Models\OlvaMovimiento;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
 
@@ -63,7 +64,7 @@ class AnalisisEstadoOlvaByTracking extends Command
                         $numerotrack=$tracking[0];
                         $aniotrack=$tracking[1];
                         if ($tracking[0]!="" && $tracking[1]!=""){
-                            $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack));
+                            $datosolva=$this->getconsultaolva(trim($numerotrack),trim($aniotrack))["data"]["details"];
                             $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
                             $grupo->update([
                                 'direccion' => trim($numerotrack) . '-' . trim($aniotrack),
@@ -73,6 +74,18 @@ class AnalisisEstadoOlvaByTracking extends Command
                                 'courier_failed_sync_at' => null,
                                 'add_screenshot_at' => null,
                             ]);
+
+                            foreach($datosolva as $item)
+                            {
+                                OlvaMovimiento::create([
+                                    'obs'=>$item["obs"],
+                                    'nombre_sede'=>$item["nombre_sede"],
+                                    'fecha_creacion'=>$item["fecha_creacion"],
+                                    'estado_tracking'=>$item["estado_tracking"],
+                                    'id_rpt_envio_ruta'=>$item["id_rpt_envio_ruta"],
+                                    'status'=>'1',
+                                ]);
+                            }
 
                             $pedido->update([
                                 'env_tracking' => trim($numerotrack) . '-' . trim($aniotrack),
