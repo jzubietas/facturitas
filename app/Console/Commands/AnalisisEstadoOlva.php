@@ -61,6 +61,8 @@ class AnalisisEstadoOlva extends Command
                     foreach ($trackings as $item =>  $tracking) {
                         $tracking = explode('-', $tracking);
                     }
+                    $this->warn($pedido->codigo.' es el codigo en ejecucion');
+                    $this->warn($tracking[0]." - ".$tracking[1].' es el tracking en ejecucion');
                     if (count($tracking) == 2) {
                         $numerotrack=$tracking[0];
                         $aniotrack=$tracking[1];
