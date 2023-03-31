@@ -273,10 +273,14 @@ class DashboardController extends Controller
                 $encargado = auth()->user()->id;
             }
 
-            $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->when($encargado != null, function ($query) use ($encargado) {
+            $asesores = User::query()->activo()->rolAsesor()
+                //->where('excluir_meta', '<>', '1')
+                ->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })->get();
-            $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->when($encargado != null, function ($query) use ($encargado) {
+            $total_asesor = User::query()->activo()->rolAsesor()
+                //->where('excluir_meta', '<>', '1')
+                ->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })->count();
 
@@ -367,6 +371,9 @@ class DashboardController extends Controller
                 ->where('user_id', $asesor->id)
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
+
+            
+            \Log::info("Error en meta_dashboard para asesor id -> " . $asesor->id);
 
 
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
