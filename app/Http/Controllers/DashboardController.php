@@ -372,9 +372,11 @@ class DashboardController extends Controller
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
 
-            
-            \Log::info("Error en meta_dashboard para asesor id -> " . $asesor->id);
 
+            if($meta_calculo_row==null)
+            {
+                \Log::info("Error en meta_dashboard para asesor id -> " . $asesor->id." en periodo ".$fechametames);
+            }
 
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
             $metatotal_intermedia = (float)$meta_calculo_row->meta_intermedia;
