@@ -7,7 +7,7 @@
 
                         <div class="single-timeline-area col-lg-12">
                             <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                <p>{{$item->nombre_sede}}</p>
+                                <p>{{$item["fecha_creacion"]}}-{{$item["nombre_sede"]}}</p>
                             </div>
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
@@ -17,14 +17,14 @@
                                         </div>
                                         <div class="timeline-text w-100">
                                             {{--<a target="_blank" href="$#"><img src="" class="w-100"></a>--}}
-                                            @if($item->estado_tracking=='CONFIRMACION EN TIENDA')
-                                                <span class="text-warning">{{$item->estado_tracking}}</span>
+                                            @if($item["estado_tracking"]=='CONFIRMACION EN TIENDA')
+                                                <span class="text-warning">{{$item["estado_tracking"]}}</span>
                                                 @else
-                                                {{$item->estado_tracking}}
+                                                {{$item["estado_tracking"]}}
                                                 @endif
 
                                             <br>
-                                            {{$item->obs}}
+                                            {{$item["obs"]}}
                                         </div>
                                     </div>
                                 </div>
