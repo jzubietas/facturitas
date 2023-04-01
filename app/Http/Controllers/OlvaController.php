@@ -623,7 +623,7 @@ class OlvaController extends Controller
     public  function gettimelineestadosolva(Request  $request){
         $grupo_courier_data = DireccionGrupo::where('id',$request->id_direcciongrupo)->first()->courier_data;
 
-        $grupo_courier_data=$grupo_courier_data->data->details;
+        //$grupo_courier_data=$grupo_courier_data->data->details;
         $json_data=[];
         foreach($grupo_courier_data as $item)
         {
