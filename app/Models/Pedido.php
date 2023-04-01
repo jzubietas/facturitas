@@ -26,6 +26,7 @@ class Pedido extends Model
     const ANULADO_PARCIAL = 'ANULADO PARCIAL';//5
 
     const ANULACION_COBRANZA = 'ANULACION COBRANZA';//
+    const PENDIENTE_ANULACION_COBRANZA = 'PENDIENTE ANULACION COBRANZA';//
     /**************
      * CONSTANTES PEDIDO NUMERICO
      */

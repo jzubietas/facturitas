@@ -737,19 +737,25 @@ $banca"
                         }elseif ($pedido->condicion==Pedido::ANULADO_PARCIAL){
                             $badge_estado .= '<span class="badge bg-danger">' . $pedido->condicion. '</span>';
                         }
+
+                        if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_COBRANZA){
+                            $badge_estado .= '<span class="badge bg-danger">' . $pedido->condicion. '</span>';
+                        }elseif ($pedido->condicion==Pedido::ANULACION_COBRANZA){
+                            $badge_estado .= '<span class="badge bg-danger">' . $pedido->condicion. '</span>';
+                        }
                         return $badge_estado;
                     }
                 })
                 ->addColumn('tipoanulacion', function ($pedido) {
                     $badge_estado = '';
                     if ($pedido->vtipoAnulacion == '') {
-                        $badge_estado .= '<span class="badge badge-info bg-info"> PEDIDO COMPLETO '.$pedido->vtipoAnulacion.'</span>';
+                        $badge_estado .= '<span class="badge badge-info bg-info"> PEDIDO COMPLETO</span>';
                         return $badge_estado;
                     }else if($pedido->vtipoAnulacion == 'F'){
-                        $badge_estado .= '<span class="badge badge-warning"> FACTURA '.$pedido->vtipoAnulacion.'</span>';
+                        $badge_estado .= '<span class="badge badge-warning"> FACTURA</span>';
                         return $badge_estado;
                     }else if($pedido->vtipoAnulacion == 'Q'){
-                    $badge_estado .= '<span class="badge badge-success"> COBRANZA '.$pedido->vtipoAnulacion.'</span>';
+                    $badge_estado .= '<span class="badge badge-success"> COBRANZA</span>';
                     return $badge_estado;
                     }
                 })
@@ -758,7 +764,7 @@ $banca"
                     if ($pedido->pendiente_anulacion == 1) {
                         $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-total_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize mr-2" data-vtipoanul="C" >EMITIR N/C</button>';
                     }
-                    if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL) {
+                    if ($pedido->condicion==Pedido::PENDIENTE_ANULACION_PARCIAL || $pedido->condicion==Pedido::PENDIENTE_ANULACION_COBRANZA) {
                         $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-total_anular="' . $pedido->dMontoAnular . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-success btn-sm btn-fontsize  mr-2" data-vtipoanul="F" >EMITIR N/C</button>';
                     }
                     $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn btn-light btn-sm" target="_blank"><i class="fa fa-file-pdf text-primary  mr-2"></i> Ver PDF</a>';

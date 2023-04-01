@@ -289,6 +289,10 @@ class PedidoController extends Controller
                     $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULADO_PARCIAL.'</span>';
                 }
 
+                if ($pedido->condiciones==Pedido::PENDIENTE_ANULACION_COBRANZA ) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::PENDIENTE_ANULACION_COBRANZA.'</span>';
+                }
+
                 if ( $pedido->condiciones==Pedido::ANULACION_COBRANZA) {
                     $badge_estado .= '<span class="badge bg-indigo p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULACION_COBRANZA.'</span>';
                 }
@@ -3302,12 +3306,14 @@ class PedidoController extends Controller
 
             $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id)->where('state_solicitud',1);
             $contpedanulacions=$pedidosanulacion->count();
-            if ($contpedanulacions==1){
+            if ($contpedanulacions==1)
+            {
                 $pedidosanulacion=$pedidosanulacion->first();
                 $pedidosanulacion->update([
                     'state_solicitud'=>0,
                 ]);
-                if ($pedidosanulacion->tipo=='C'){
+                if ($pedidosanulacion->tipo=='C')
+                {
                     $pedido->update([
                         'motivo' => "",
                         'responsable' => "",
@@ -3318,10 +3324,26 @@ class PedidoController extends Controller
                         'fecha_anulacion' => null,
                         'condicion'=>"",
                     ]);
-                }else if ($pedidosanulacion->tipo=='F'){
+                }
+                else if ($pedidosanulacion->tipo=='F')
+                {
                     $pedido->update([
                         'motivo' => "",
                         'condicion'=>"",
+                    ]);
+                }
+                else if ($pedidosanulacion->tipo=='Q')
+                {
+                    $pedidodetail= DetallePedido::where('pedido_id',$request->pedido_id);
+                    $pedido->update([
+                        'motivo' => "",
+                        'pagado' => 1,
+                        'condicion'=>"",
+                    ]);
+
+                    $pedidodetail->update([
+                        'cantidad' => $pedidosanulacion->cantidad,
+                        'saldo' => $pedidosanulacion->difanterior,
                     ]);
                 }
             }else{
@@ -3343,7 +3365,7 @@ class PedidoController extends Controller
             'attachments.*' => 'required|file',
         ]);
         $pedido = Pedido::findOrFail($request->pedido_id);
-        if ($pedido->condicion!=Pedido::PENDIENTE_ANULACION_PARCIAL){
+        if ( !in_array($pedido->condicion,[Pedido::PENDIENTE_ANULACION_PARCIAL,Pedido::PENDIENTE_ANULACION_COBRANZA])){
             if ($pedido->pendiente_anulacion != '1') {
                 return response()->json([
                     "success" => 0,
@@ -3373,7 +3395,7 @@ class PedidoController extends Controller
         $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id)->where('state_solicitud',1);
         $contpedanulacions=$pedidosanulacion->count();
         if ($contpedanulacions==1){
-            $pedidosanulacion=$pedidosanulacion->first();
+            $pedidosanulacion=PedidosAnulacion::where('pedido_id',$request->pedido_id)->where('state_solicitud',1)->first();
             if ($pedidosanulacion->tipo=='C'){
                 $pedido->update([
                     'condicion' => 'ANULADO',
@@ -3398,6 +3420,15 @@ class PedidoController extends Controller
                 $pedidosanulacion->update([
                     'user_id_jefeop'=>Auth::user()->id,
                     'motivo_jefeop_admin'=>Pedido::ANULADO_PARCIAL,
+                    'estado_aprueba_jefeop'=>1,
+                ]);
+            }else if ($pedidosanulacion->tipo=='Q'){
+                $pedido->update([
+                    'condicion' => Pedido::ANULACION_COBRANZA,
+                ]);
+                $pedidosanulacion->update([
+                    'user_id_jefeop'=>Auth::user()->id,
+                    'motivo_jefeop_admin'=>Pedido::ANULACION_COBRANZA,
                     'estado_aprueba_jefeop'=>1,
                 ]);
             }

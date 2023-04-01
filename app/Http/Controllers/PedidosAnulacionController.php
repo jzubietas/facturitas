@@ -734,12 +734,14 @@ class PedidosAnulacionController extends Controller
             ]);
         }else if ($pedidosanulacion->tipo=='Q'){
             $pedidos=$pedidos->clone()->first();
-            $pedidodetail= DetallePedido::where('pedido_id',$pedidos->id);
-
+            $pedidodetail= DetallePedido::where('pedido_id',$pedidos->id)->first();
+            $pedidosanulacion->update([
+                'difanterior' => $pedidodetail->saldo,
+            ]);
             $pedidos->update([
                 'motivo' => $request->motivo,
                 'pagado' => 2,
-                'condicion' => Pedido::ANULACION_COBRANZA,
+                'condicion' => Pedido::PENDIENTE_ANULACION_COBRANZA,
             ]);
             $pedidodetail->update([
                 'cantidad' => $pedidosanulacion->cantidad_resta,

@@ -73,11 +73,16 @@
 
                 },
                 rowCallback: function (row, data, index) {
-                    if (  data.vtipoAnulacion!='F') {
+                    if (data.vtipoAnulacion=='C') {
                         $('td', row).css('background', '#FFAFB0').css('font-weight', 'bold');
+                    }else if (data.vtipoAnulacion=='F'){
+                        $('td', row).css('background', '#E1E0A8').css('font-weight', 'bold');
+                    }else if (data.vtipoAnulacion=='Q'){
+                        $('td', row).css('background', '#81B094').css('font-weight', 'bold');
                     }else{
-                        $('td', row).css('background', '#58D68D').css('font-weight', 'bold');
+                        $('td', row).css('background', '#FFAFB0').css('font-weight', 'bold');
                     }
+
                     $("[data-toggle=jqconfirm]", row).click(function () {
                         const action = $(this).data('target')
                         const method = $(this).data('method')
