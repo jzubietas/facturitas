@@ -153,6 +153,7 @@ class PedidoController extends Controller
                     'pedidos.condicion as condiciones',
                     'pedidos.pagado as condicion_pa',
                     'c.nombre as nombres',
+                    'c.situacion as s_cliente',
                     'c.icelular as icelulares',
                     'c.celular as celulares',
                     'u.identificador as users',
@@ -311,6 +312,13 @@ class PedidoController extends Controller
                 $badge_estado .= '<span class="rounded etiquetas_asignacion" style="margin: 0px !important; background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
+            ->editColumn('celulares',function($pedido){
+                if ($pedido->icelulares != null) {
+                    return $pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : '.$pedido->s_cliente;
+                } else {
+                    return $pedido->celulares . ' - ' . $pedido->nombres.' : '.$pedido->s_cliente;
+                }
+            })
             ->addColumn('action', function ($pedido) use ($miidentificador) {
                 $btn = [];
 
@@ -435,7 +443,7 @@ class PedidoController extends Controller
                 $btn[] = '</ul></div>';
                 return join('', $btn);
             })
-            ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color'])
+            ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color','celulares'])
             ->make(true);
     }
 

@@ -1325,18 +1325,7 @@ ${data.foto3 ? `
                     },*/
                     // CODIGO
                     {data: 'codigos', name: 'codigos',},
-                    {
-                        data: 'celulares',
-                        name: 'celulares',
-                        render: function (data, type, row, meta) {
-                            if (row.icelulares != null) {
-                                return row.celulares + '-' + row.icelulares + ' - ' + row.nombres;
-                            } else {
-                                return row.celulares + ' - ' + row.nombres;
-                            }
-
-                        },
-                    },
+                    {data: 'celulares',name: 'celulares',},
                     {data: 'empresas', name: 'empresas',},
                     {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
                     {data: 'users', name: 'users',},
