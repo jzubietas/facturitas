@@ -42,6 +42,7 @@ class AnalisisEstadoOlvaByTracking extends Command
     {
         //$cliente_id=Cliente::where('celular',$this->argument('celular'))->first()->id;
         $pedidos=Pedido::where('env_tracking',$this->argument('tracking'))->get();
+        $progress = $this->output->createProgressBar($pedidos->count());
         foreach ($pedidos as $pedido)
         {
             $direccionGrupos = DireccionGrupo::whereIn('condicion_envio_code', [
@@ -50,7 +51,7 @@ class AnalisisEstadoOlvaByTracking extends Command
                 Pedido::EN_TIENDA_AGENTE_OLVA_INT,
                 Pedido::NO_ENTREGADO_OLVA_INT,
             ])->where('id',$pedido->direccion_grupo)->get();
-            $progress = $this->output->createProgressBar($direccionGrupos->count());
+
             foreach ($direccionGrupos as $grupo)
             {
                 /*$pedido=Pedido::where('direccion_grupo',$grupo->id)->first();*/
@@ -126,7 +127,7 @@ class AnalisisEstadoOlvaByTracking extends Command
                             }
 
 
-                            $progress->advance();
+
                         }
                     }
 
@@ -134,6 +135,7 @@ class AnalisisEstadoOlvaByTracking extends Command
 
                 /*}*/
             }
+            $progress->advance();
         }
 
         $this->info("Finish Cargando ");
