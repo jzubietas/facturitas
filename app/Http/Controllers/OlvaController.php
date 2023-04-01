@@ -524,7 +524,7 @@ class OlvaController extends Controller
             })*/
             ->addColumn('condicion_envio_format', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $html = '<a href="" data-target="#modal-ver_timeline-estado" data-iddirecciongrupo="' . $pedido->idDireccionGrupo . '"  data-toggle="modal" title="Ver Detalles"><span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span></a>  ';
+                $html = '<a href="" data-target="#modal-ver_timeline-estado" data-iddirecciongrupo="' . $pedido->id . '"  data-toggle="modal" title="Ver Detalles"><span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span></a>  ';
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
