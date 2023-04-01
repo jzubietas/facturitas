@@ -7,6 +7,7 @@ use App\Models\DireccionEnvio;
 use App\Models\DireccionGrupo;
 use App\Models\Distrito;
 use App\Models\Media;
+use App\Models\OlvaMovimiento;
 use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
@@ -621,9 +622,16 @@ class OlvaController extends Controller
             ->make(true);
     }
     public  function gettimelineestadosolva(Request  $request){
-        $grupo_courier_data = DireccionGrupo::where('id',$request->id_direcciongrupo)->first()->courier_data;
+        $grupo_courier_data_s = DireccionGrupo::where('id',$request->id_direcciongrupo)->first()->direccion;
 
-        //$grupo_courier_data=$grupo_courier_data->data->details;
+        $grupo_courier_data_track=explode('-',$grupo_courier_data_s);
+        $num=$grupo_courier_data_track[0];
+        $anio=$grupo_courier_data_track[1];
+
+        $grupo_courier_data=OlvaMovimiento::where('numerotrack',$num)->where('aniotrack',$anio)
+            ->orderBy('id_rpt_envio_ruta','desc')
+            ->get();
+
         $json_data=[];
         foreach($grupo_courier_data as $item)
         {
