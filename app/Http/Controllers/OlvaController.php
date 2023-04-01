@@ -635,7 +635,7 @@ class OlvaController extends Controller
         $json_data=[];
         foreach($grupo_courier_data as $item)
         {
-            dd($item->fecha_creacion);
+            //dd($item->fecha_creacion);
             $ejecution = \Str::lower($item->estado_tracking ?? '');
             $ejecution_2 = \Str::lower($item->obs ?? '');
             if(!(\Str::contains($ejecution, "valija")) && !(\Str::contains($ejecution_2, "valija")) )

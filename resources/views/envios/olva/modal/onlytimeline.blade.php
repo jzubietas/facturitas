@@ -7,7 +7,7 @@
 
                         <div class="single-timeline-area col-lg-12">
                             <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                <p>{{$item->fecha_creacion}}-{{$item->nombre_sede}}</p>
+                                <p>{{$item->nombre_sede}}</p>
                             </div>
                             <div class="row">
                                 <div class="col-12 col-md-12 col-lg-12">
