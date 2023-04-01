@@ -164,6 +164,7 @@
                             nLink.update(data);
                             insertDotMenu("i.dot_correcciones_count", '.noti-correcciones.noti-side', data.contador_correcciones)
                             insertDotMenu("i.dot_pedidos_atender_count", '.noti-pedidos-atender.noti-side', data.contador_pedidos_atender)
+                            insertDotMenu("i.dot_pedidos_atencion_count", '.noti-pedidos-atencion.noti-side', data.contador_pedidos_atencion)
                             insertDotMenu("i.dot_pedidos_atendidos_count", '.noti-pedidos-atendidos.noti-side', data.contador_pedidos_atendidos)
                             insertDotMenu("i.dot_pedidos_atendidos_operacion_count", '.noti-pedidos-atendidos.noti-side', data.contador_pedidos_atendidos_operacion)
                             insertDotMenu("i.dot_pedidos_pen_anulacion_count", '.noti-pedidos-pen-anulacion.noti-side', data.contador_pedidos_pen_anulacion)

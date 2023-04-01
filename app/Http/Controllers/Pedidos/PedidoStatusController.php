@@ -201,6 +201,7 @@ class PedidoStatusController extends Controller
         $pedidos_por_atender = Pedido::query()->activo()
             ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
             ->porAtenderEstatus()
+            ->whereNotIn('pedidos.condicion', [Pedido::EN_PROCESO_ATENCION])
             ->noPendingAnulation()
             ->count();
         if ($request->has('ajax-datatable')) {
@@ -296,7 +297,8 @@ class PedidoStatusController extends Controller
                 $pedidos->where('pedidos.da_confirmar_descarga', '0');
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::ATENDIDO_INT]);
             }*/
-            $pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
+            $pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT])
+            ->whereNotIn('pedidos.condicion', [Pedido::EN_PROCESO_ATENCION]);
             //$pedidos->where('pedidos.dar_confirmar_descarga', 0);
 
             return datatables()->query(DB::table($pedidos))

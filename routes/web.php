@@ -496,8 +496,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     /*Operaciones*/
 
-    //Route::get('operaciones.enatencion', [PedidoController::class, 'EnAtencion'])->name('operaciones.enatencion');
-    //Route::get('operaciones.enatenciontabla', [PedidoController::class, 'EnAtenciontabla'])->name('operaciones.enatenciontabla');
+    Route::get('operaciones.enatencion', [PedidoController::class, 'EnAtencion'])->name('operaciones.enatencion');
+    Route::get('operaciones.enatenciontabla', [PedidoController::class, 'EnAtenciontabla'])->name('operaciones.enatenciontabla');
 
 
     //Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
@@ -859,4 +859,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('excel/envios/olva', [ExcelController::class, 'listadoEnviosTiendaOlva'])->name('excel.envios-olva');
     Route::post('pedidosanul.verfilessolicasesores/{pedidosanulacion}', [PedidosAnulacionController::class, 'verFilesSolicitudAsesorAnulacion'])->name('anulaciones.verfilessolicasesores');
+
+    Route::post('getRucComboPedidos', [ClienteController::class, 'getRucComboPedidos'])->name('getRucComboPedidos');
+    Route::post('uptRucPedidos', [ClienteController::class, 'uptRucPedidos'])->name('uptRucPedidos');
 });

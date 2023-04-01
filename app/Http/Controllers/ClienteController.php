@@ -16,6 +16,7 @@ use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\Ruc;
 use App\Models\SituacionClientes;
+use App\Models\UpdateMovimiento;
 use App\Models\User;
 use App\Models\ListadoResultado;
 use Carbon\Carbon;
@@ -2861,4 +2862,56 @@ class ClienteController extends Controller
 
     }
 
+    public  function  getRucComboPedidos(Request  $request){
+        $datoscbx = '<option value="-1">' . trans('---- SELECCIONE RUC ----') . '</option>';
+        $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
+        $idpedido=0;
+        if (isset($pedido)){
+            $detalle_pedidos=DetallePedido::where('pedido_id',$pedido->id)->first();
+            $rucs = Ruc::where('estado', '1')->where('cliente_id',$pedido->cliente_id)->where('num_ruc','<>',$detalle_pedidos->ruc)
+                ->get([
+                    'id',
+                    'num_ruc',
+                    'empresa',
+                    'porcentaje',
+                ]);
+            foreach ($rucs as $cliente) {
+                $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->empresa . '" data-ruc="' . $cliente->num_ruc . '" >' . $cliente->num_ruc . '  -  ' . $cliente->empresa . '</option>';
+            }
+            $idpedido=$pedido->id;
+        }
+
+        return response()->json(['datoscbx' => $datoscbx,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
+    }
+
+    public function uptRucPedidos(Request $request)
+    {
+        /*return $request->all();*/
+        $statusupdte=false;
+        $cliente_ruc=Ruc::where('id',$request->codigo_ruc)->first();
+        if (isset($cliente_ruc)){
+            $pedidos_id=Pedido::where('id',$request->codigo_pedido)->first()->id;
+            $detalle_pedidos=DetallePedido::where('pedido_id',$pedidos_id)->first();
+
+            UpdateMovimiento::create([
+                'obs'=>"Actualizacion de ruc en el detalle pedido",
+                'valores_ant'=>strval($pedidos_id) ."|".$detalle_pedidos->nombre_empresa ."|".$detalle_pedidos->ruc,
+                'valores_act'=>strval($pedidos_id) ."|".$cliente_ruc->empresa."|".$cliente_ruc->num_ruc,
+                'fecha_creacion'=>Carbon::now(),
+            ]);
+
+            $detalle_pedidos->update([
+                'nombre_empresa' => $cliente_ruc->empresa,
+                'ruc' => $cliente_ruc->num_ruc,
+            ]);
+            $statusupdte=true;
+        }
+
+
+
+        return response()->json([
+            "success" => $statusupdte,
+            'detalle_pedidos' => $detalle_pedidos,
+        ]);
+    }
 }

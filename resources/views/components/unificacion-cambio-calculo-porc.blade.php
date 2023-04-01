@@ -22,6 +22,7 @@
     </script>
 @endsection
 
+@if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
 <section id="tabs" class="project-tab">
     <div class="row">
         <div class="col-md-12">
@@ -37,8 +38,8 @@
                        role="tab" aria-controls="navChangeRucCliente" aria-selected="false">Cambio RUC</a>
                     <a class="nav-item nav-link" id="navCambioEmresatab" data-toggle="tab" href="#navCambioEmresa"
                        role="tab" aria-controls="navCambioEmresa" aria-selected="false">Cambio Nombre Empresa</a>
-                    <a class="nav-item nav-link disabled" id="navBloqueoRuctab" data-toggle="tab" href="#navBloqueoRuc"
-                       role="tab" aria-controls="navBloqueoRuc" aria-selected="false">Bloqueo RUC</a>
+                    <a class="nav-item nav-link" id="navPedidoRucUpdtab" data-toggle="tab" href="#navPedidoRucUpd"
+                       role="tab" aria-controls="navPedidoRucUpd" aria-selected="false">Actualiza RUC en Pedido</a>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -273,13 +274,60 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="navBloqueoRuc" role="tabpanel" aria-labelledby="navBloqueoRuctab">
-                    {{--navBloqueoRuctab--}}
+                <div class="tab-pane fade" id="navPedidoRucUpd" role="tabpanel" aria-labelledby="navPedidoRucUpdtab">
+                    <div class="tab-pane fade show active" id="navPedidoRucUpd" role="tabpanel"
+                         aria-labelledby="navPedidoRucUpd">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Actualizacion de RUC por Pedido</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-body border border-secondary rounded">
+                                    <div class="form-row">
+                                        <div class="form-group col-lg-4">
+                                            {!! Form::label('txtNumeroPedido', 'PEDIDO*') !!} &nbsp; &nbsp; &nbsp;
+                                           {!! Form::text('txtNumeroPedido', '',['id'=>'txtNumeroPedido','class' => 'form-control', 'placeholder' => 'Codigo Pedido', 'required' => 'required']) !!}
+                                            <input type="hidden" id="txtIdPedido" name="txtIdPedido" value="0">
+                                        </div>
+                                        <div class="form-group col-lg-2 d-flex align-items-center justify-content-center border-right">
+                                            <button type="button" id="btnGetRucPedido"
+                                                    class="btn btn-info btn-lg "><i class="fas fa-search"></i>
+                                                Buscar
+                                            </button>
+                                            <button type="button" id="btnLimpiarBusquedaRP"
+                                                    class="btn btn-danger btn-lg "><i class="fas fa-eraser"></i>
+                                            </button>
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            {!! Form::label('cbxRucPedidoRucUpd"', 'RUC*') !!} &nbsp; &nbsp; &nbsp;
+                                            <select name="cbxRucPedidoRucUpd"
+                                                    class="border form-control border-secondary"
+                                                    id="cbxRucPedidoRucUpd" data-live-search="true">
+                                                <option value="-1">---- SELECCIONE RUC ----</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-lg-6"></div>
+                                        <div class="col-lg-6">
+                                            <div class="d-flex justify-content-between">
+                                                <button type="button" id="btnCambiarPedidoRucUpd"
+                                                        class="btn btn-success btn-lg float-right">
+                                                    Actualizar RUC en pedido
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+@endif
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
@@ -359,6 +407,75 @@
 
             });
 
+            $(document).on("click", "#btnCambiarPedidoRucUpd", function () {
+                var txtIdPedido = $('#txtIdPedido').val();
+                var cbxRucPedidoRucUpd = $('#cbxRucPedidoRucUpd').val();
+                if (txtIdPedido == '' || txtIdPedido == '0') {
+                    Swal.fire('Error', 'Debe ingresar el codigo del pedido', 'error');
+                    return false;
+                }
+                if (cbxRucPedidoRucUpd == '' || txtIdPedido == '-1') {
+                    Swal.fire('Error', 'Debe seleccionar el RUC correspondiente', 'error');
+                    return false;
+                }
+                var frmPedidoRucUpd = new FormData();
+                frmPedidoRucUpd.append('codigo_pedido', txtIdPedido);
+                frmPedidoRucUpd.append('codigo_ruc', cbxRucPedidoRucUpd);
+
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    data: frmPedidoRucUpd,
+                    type: 'POST',
+                    url: "{{ route('uptRucPedidos') }}",
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire('Mensaje', 'Se actualizaron los porcentajes correctamente', 'success')
+                            limpiarformporcentaje();
+                        }
+
+                    }
+                });
+            })
+
+            $(document).on("click", "#btnGetRucPedido", function () {
+                var txtNumeroPedido = $('#txtNumeroPedido').val();
+                if (txtNumeroPedido == '') {
+                    Swal.fire('Error', 'Debe ingresar el codigo del pedido', 'error').then(function () {
+                        $('#txtNumeroPedido').focus()
+                    });
+                    return false;
+                }
+                var frmPedidoRucUpd = new FormData();
+                frmPedidoRucUpd.append('codigo_pedido', txtNumeroPedido);
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    data: frmPedidoRucUpd,
+                    type: 'POST',
+                    url: "{{ route('getRucComboPedidos') }}",
+                    success: function (data) {
+                        console.log(data);
+                        if (data.pedido_id=="0") {
+                            Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
+                            $('#txtIdPedido').val(0);
+                            $('#cbxRucPedidoRucUpd').html("");
+                            $("#cbxRucPedidoRucUpd").selectpicker("refresh");
+                        }else {
+                            $('#cbxRucPedidoRucUpd').html(data.datoscbx);
+                            $("#cbxRucPedidoRucUpd").selectpicker("refresh");
+                            $('#txtIdPedido').val(data.pedido_id);
+                        }
+
+                    }
+                });
+            })
+            $(document).on("click", "#btnLimpiarBusquedaRP", function () {
+                $('#txtNumeroPedido').val("");
+                $('#txtIdPedido').val(0);
+                $('#cbxRucPedidoRucUpd').html("");
+                $("#cbxRucPedidoRucUpd").selectpicker("refresh");
+            })
             $(document).on("click", "#btnChangeProc", function () {
                 var cbChangePor = $('#cbxChangePorc').val();
                 var porcentaje1 = $('#porcentaje1').val();

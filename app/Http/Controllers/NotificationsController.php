@@ -158,6 +158,7 @@ class NotificationsController extends Controller
         ->where('pedidos.estado', '1')
         ->where('dp.estado', '1')
         ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
+         ->whereNotIn('pedidos.condicion', [Pedido::EN_PROCESO_ATENCION])
         ->poratenderestatus();
 
       if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
@@ -235,6 +236,46 @@ class NotificationsController extends Controller
 
       $contador_pedidos_atender = $contador_pedidos_atender->count();
 
+
+        /*********
+         * PEDIDOS ATENCION
+         */
+        $pedidos_atencion = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->where('pedidos.estado', '1')
+            ->where('dp.estado', '1')
+            ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION);
+        if (Auth::user()->rol == User::ROL_OPERARIO) {
+            $asesores_atencion = User::where('users.rol', User::ROL_ASESOR )
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $pedidos_atencion=$pedidos_atencion->WhereIn('pedidos.user_id', $asesores_atencion);
+        } else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO) {
+            $operario_atencions = User::where('users.rol', User::ROL_OPERARIO)
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $asesores_atencion = User::where('users.rol', User::ROL_ASESOR)
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operario_atencions)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $pedidos_atencion=$pedidos_atencion->WhereIn('pedidos.user_id', $asesores_atencion);
+        }
+        $contador_pedidos_atencion=$pedidos_atencion->count();
       /*********
        * PEDIDOS ATENDIDOS
        */
@@ -578,6 +619,7 @@ class NotificationsController extends Controller
             'icon_color' => 'white',
             'dropdown' => $dropdownHtml,
             'contador_pedidos_atender' => $contador_pedidos_atender, //Pedidos /Pedidos por Atender -Operaciones/Pedidos por Atender
+            'contador_pedidos_atencion' => $contador_pedidos_atencion, //Pedidos Atencion
             'contador_pedidos_atendidos' => $contador_pedidos_atendidos,//Pedidos /Pedidos Atendidos
             'contador_pedidos_atendidos_operacion' => $contador_pedidos_atendidos_operacion, //Operaciones/Pedidos listo para envio
             'contador_pedidos_pen_anulacion' => $contador_pedidos_pen_anulacion, //Operaciones/Pendiente Anulacion

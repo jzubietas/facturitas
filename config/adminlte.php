@@ -386,13 +386,13 @@ return [
                     'icon' => 'fas fa-check-circle dot_pedidos_atender_count',//'noti-pedidos-atender noti-side',
                     'active' => ['pedidos por atender'],
                 ],
-                /*[
+                [
                     'text' => 'Pedidos en atención',
                     'route'  => 'operaciones.enatencion',
                     'can' => 'operacion.enatencion',
-                    'icon'   => 'fas fa-check-circle',
+                    'icon'   => 'fas fa-check-circle dot_pedidos_atencion_count',
                     'active' => ['pedidos en atención'],
-                ],*/
+                ],
                 [
                     'text' => 'Pedidos listo para envio',
                     'route' => 'operaciones.atendidos',
