@@ -7,6 +7,7 @@ use App\Models\DireccionEnvio;
 use App\Models\DireccionGrupo;
 use App\Models\Distrito;
 use App\Models\Media;
+use App\Models\OlvaMovimiento;
 use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
@@ -516,9 +517,14 @@ class OlvaController extends Controller
                 $html .= '<p>';
                 return $html;
             })
-            ->addColumn('condicion_envio_format', function ($pedido) {
+            /*->addColumn('condicion_envio_format', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 $html = '<span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span>';
+                return $html;
+            })*/
+            ->addColumn('condicion_envio_format', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $html = '<a href="" data-target="#modal-ver_timeline-estado" data-iddirecciongrupo="' . $pedido->id . '"  data-toggle="modal" title="Ver Detalles"><span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span></a>  ';
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
@@ -598,9 +604,14 @@ class OlvaController extends Controller
                 $html .= '<p>';
                 return $html;
             })
-            ->addColumn('condicion_envio_format', function ($pedido) {
+            /*->addColumn('condicion_envio_format', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 $html = '<span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span>';
+                return $html;
+            })*/
+            ->addColumn('condicion_envio_format', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $html = '<a href="" data-target="#modal-ver_timeline-estado" data-iddirecciongrupo="' . $pedido->id . '"  data-toggle="modal" title="Ver Detalles"><span class="badge badge-success" style="background-color: '.$color.' !important;">' . $pedido->courier_estado . '</span></a>  ';
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
@@ -621,12 +632,20 @@ class OlvaController extends Controller
             ->make(true);
     }
     public  function gettimelineestadosolva(Request  $request){
-        $grupo_courier_data = DireccionGrupo::where('id',$request->id_direcciongrupo)->first()->courier_data;
+        $grupo_courier_data_s = DireccionGrupo::where('id',$request->id_direcciongrupo)->first()->direccion;
 
-        $grupo_courier_data=$grupo_courier_data->data->details;
+        $grupo_courier_data_track=explode('-',$grupo_courier_data_s);
+        $num=$grupo_courier_data_track[0];
+        $anio=$grupo_courier_data_track[1];
+
+        $grupo_courier_data=OlvaMovimiento::where('numerotrack',$num)->where('aniotrack',$anio)
+            ->orderBy('id_rpt_envio_ruta','desc')
+            ->get();
+
         $json_data=[];
         foreach($grupo_courier_data as $item)
         {
+            //dd($item->fecha_creacion);
             $ejecution = \Str::lower($item->estado_tracking ?? '');
             $ejecution_2 = \Str::lower($item->obs ?? '');
             if(!(\Str::contains($ejecution, "valija")) && !(\Str::contains($ejecution_2, "valija")) )
@@ -635,6 +654,7 @@ class OlvaController extends Controller
             }
             //if( $item->estado_tracking)
             //dd($item->estado_tracking);
+            $item->fecha_creacion=Carbon::parse($item->fecha_creacion)->format('d-m-Y');
         }
         //dd($json_data);
         //dd($grupo_courier_data);

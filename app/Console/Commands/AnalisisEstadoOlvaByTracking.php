@@ -41,29 +41,38 @@ class AnalisisEstadoOlvaByTracking extends Command
     public function handle()
     {
         //$cliente_id=Cliente::where('celular',$this->argument('celular'))->first()->id;
-        $pedido=Pedido::where('env_tracking',$this->argument('tracking'))->first();
-        $direccionGrupos = DireccionGrupo::whereIn('condicion_envio_code', [
-            Pedido::RECEPCIONADO_OLVA_INT,
-            Pedido::EN_CAMINO_OLVA_INT,
-            Pedido::EN_TIENDA_AGENTE_OLVA_INT,
-            Pedido::NO_ENTREGADO_OLVA_INT,
-        ])->where('id',$pedido->direccion_grupo)->get();
-        $progress = $this->output->createProgressBar($direccionGrupos->count());
-        foreach ($direccionGrupos as $grupo) {
-            /*$pedido=Pedido::where('direccion_grupo',$grupo->id)->first();*/
+        $pedidos=Pedido::where('env_tracking',$this->argument('tracking'))->get();
+        $progress = $this->output->createProgressBar($pedidos->count());
+        foreach ($pedidos as $pedido)
+        {
+            $direccionGrupos = DireccionGrupo::whereIn('condicion_envio_code', [
+                Pedido::RECEPCIONADO_OLVA_INT,
+                Pedido::EN_CAMINO_OLVA_INT,
+                Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+                Pedido::NO_ENTREGADO_OLVA_INT,
+            ])->where('id',$pedido->direccion_grupo)->get();
 
-            /*if (isset($pedido->env_tracking)){*/
-                if (strpos($pedido->env_tracking, '-') !== false) {
+            foreach ($direccionGrupos as $grupo)
+            {
+                /*$pedido=Pedido::where('direccion_grupo',$grupo->id)->first();*/
+
+                /*if (isset($pedido->env_tracking)){*/
+
+
+                if (strpos($pedido->env_tracking, '-') !== false)
+                {
                     $trackings= collect(explode(',', $pedido->env_tracking))->trim()->filter()->values();
                     $numerotrack="";
                     $aniotrack="";
                     foreach ($trackings as $item =>  $tracking) {
                         $tracking = explode('-', $tracking);
                     }
-                    if (count($tracking) == 2) {
+                    if (count($tracking) == 2)
+                    {
                         $numerotrack=trim($tracking[0]);
                         $aniotrack=trim($tracking[1]);
-                        if ($numerotrack!="" && $aniotrack!=""){
+                        if ($numerotrack!="" && $aniotrack!="")
+                        {
                             $this->warn($numerotrack."-".$aniotrack.' es el tracking en ejecucion');
                             $datosolva=$this->getconsultaolva(($numerotrack),($aniotrack));
                             $json_data=json_encode($datosolva);
@@ -110,21 +119,25 @@ class AnalisisEstadoOlvaByTracking extends Command
                                 ]);
                                 $this->info("( ". trim($numerotrack)." & ".trim($aniotrack)." GRUPO=> ".$grupo->id." PEDIDO=> ".$pedido->id." Estado=>".$estado." )" );
 
-                            }else{
+                            }
+                            else
+                            {
                                 $this->warn('json devolvio falso');
                                 $this->warn("Fallo al retornar informacion de OLVA COURIER");
                             }
 
 
-                            $progress->advance();
+
                         }
                     }
 
-
-
                 }
-            /*}*/
+
+                /*}*/
+            }
+            $progress->advance();
         }
+
         $this->info("Finish Cargando ");
         $progress->finish();
         $this->info('FIN');
