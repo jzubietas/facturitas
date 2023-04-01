@@ -417,6 +417,32 @@
                 },
             });
 
+            $('#modal-ver_timeline-estado').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idDireccionGrupo = button.data('iddirecciongrupo')
+                var formParam = new FormData();
+                formParam.append("id_direcciongrupo", idDireccionGrupo);
+                $.ajax({
+                    url: '{{route('gettimeline_estados_olva')}}',
+                    data: formParam,
+                    method: 'POST',
+                    processData: false,
+                    contentType: false,
+                })
+                    .done(function (data) {
+                        console.warn(data);
+                        /*console.log('dataassssssssss',data);*/
+                        $('#divtimelinedetalle').html(data)
+                    })
+                    .always(function () {
+                        /*self.hideLoading(true)*/
+                        /*$(row).parents('table').DataTable().draw(false)*/
+                    })
+
+
+                console.log('iddirecciongrupo=',idDireccionGrupo)
+            });
+
         });
     </script>
 @stop
