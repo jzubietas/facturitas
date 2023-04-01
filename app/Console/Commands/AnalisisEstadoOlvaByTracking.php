@@ -76,7 +76,7 @@ class AnalisisEstadoOlvaByTracking extends Command
                                 $json_data_olva=json_encode($datosolva);
                                 //$this->warn($json_data_olva);
                                 //todo correcto
-                                $estado = data_get($datosolva, 'data.general.nombre_estado_tracking');
+                                $estado = data_get($json_decode, 'data.general.nombre_estado_tracking');
                                 $grupo->update([
                                     'direccion' => ($numerotrack) . '-' . ($aniotrack),
                                     'courier_sync_at' => now(),
