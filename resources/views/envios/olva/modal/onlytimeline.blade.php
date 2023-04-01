@@ -17,7 +17,12 @@
                                         </div>
                                         <div class="timeline-text w-100">
                                             {{--<a target="_blank" href="$#"><img src="" class="w-100"></a>--}}
-                                            {{$item->estado_tracking}}
+                                            @if($item->estado_tracking=='CONFIRMACION EN TIENDA')
+                                                <span class="text-warning">{{$item->estado_tracking}}</span>
+                                                @else
+                                                {{$item->estado_tracking}}
+                                                @endif
+
                                             <br>
                                             {{$item->obs}}
                                         </div>
