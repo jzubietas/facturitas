@@ -314,9 +314,9 @@ class PedidoController extends Controller
             })
             ->editColumn('celulares',function($pedido){
                 if ($pedido->icelulares != null) {
-                    return $pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : '.$pedido->s_cliente;
+                    return $pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
                 } else {
-                    return $pedido->celulares . ' - ' . $pedido->nombres.' : '.$pedido->s_cliente;
+                    return $pedido->celulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
                 }
             })
             ->addColumn('action', function ($pedido) use ($miidentificador) {
