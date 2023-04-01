@@ -644,6 +644,7 @@ class OlvaController extends Controller
             }
             //if( $item->estado_tracking)
             //dd($item->estado_tracking);
+            $item->fecha_creacion=Carbon::parse($item->fecha_creacion)->format('d-m-Y');
         }
         //dd($json_data);
         //dd($grupo_courier_data);
