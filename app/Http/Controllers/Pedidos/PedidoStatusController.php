@@ -686,7 +686,7 @@ $banca"
 
             if (Auth::user()->rol == User::ROL_OPERARIO) {
 
-                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador'])
+                $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN])
                     ->where('users.estado', '1')
                     ->Where('users.operario', Auth::user()->id)
                     ->select(
@@ -694,10 +694,10 @@ $banca"
                     )
                     ->pluck('users.identificador');
                 $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
-
+                $pedidosanulcion=$pedidosanulcion->WhereIn('u.identificador', $asesores);
             } else if (Auth::user()->rol ==User::ROL_JEFE_OPERARIO) {
 
-                $operarios = User::where('users.rol', 'Operario')
+                $operarios = User::where('users.rol', User::ROL_OPERARIO)
                     ->where('users.estado', '1')
                     ->where('users.jefe', Auth::user()->id)
                     ->select(
@@ -705,7 +705,7 @@ $banca"
                     )
                     ->pluck('users.id');
 
-                $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN,User::ROL_ASESOR_ADMINISTRATIVO])
+                $asesores = User::whereIN('users.rol', [User::ROL_ASESOR])
                     ->where('users.estado', '1')
                     ->WhereIn('users.operario', $operarios)
                     ->select(
@@ -714,6 +714,7 @@ $banca"
                     ->pluck('users.identificador');
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+                $pedidosanulcion=$pedidosanulcion->WhereIn('u.identificador', $asesores);
             }
             $pedidos=$pedidos->union($pedidosanulcion);
             return datatables()->query(DB::table($pedidos))
