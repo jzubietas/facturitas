@@ -409,6 +409,7 @@
 
             $(document).on("click", "#btnCambiarPedidoRucUpd", function () {
                 var txtIdPedido = $('#txtIdPedido').val();
+                var txtCodPedido = $('#txtNumeroPedido').val();
                 var cbxRucPedidoRucUpd = $('#cbxRucPedidoRucUpd').val();
                 if (txtIdPedido == '' || txtIdPedido == '0') {
                     Swal.fire('Error', 'Debe ingresar el codigo del pedido', 'error');
@@ -430,8 +431,8 @@
                     url: "{{ route('uptRucPedidos') }}",
                     success: function (data) {
                         if (data.success) {
-                            Swal.fire('Mensaje', 'Se actualizaron los porcentajes correctamente', 'success')
-                            limpiarformporcentaje();
+                            Swal.fire('Mensaje', 'Se actualizo el RUC para el pedido '+txtCodPedido+' correctamente', 'success')
+                            limpiarUpdRucPedido();
                         }
 
                     }
@@ -532,6 +533,15 @@
                 $('#porcentaje3').val(0);
                 $('#porcentaje4').val(0);
                 $("#cbxChangePorc").selectpicker("refresh");
+            }
+
+            function limpiarUpdRucPedido() {
+
+                $('#txtIdPedido').val(0);
+                $('#txtNumeroPedido').val("");
+                $('#cbxRucPedidoRucUpd').html("");
+                $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
+                $("#cbxRucPedidoRucUpd").selectpicker("refresh");
             }
 
             $("#cbxRucChangeName").on("change", function () {
