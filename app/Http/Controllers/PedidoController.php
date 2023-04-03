@@ -248,6 +248,17 @@ class PedidoController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+        }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+            $usersasesores = User::where('users.rol', User::ROL_ASESOR)
+                ->where('users.estado', '1')
+                ->whereIn('users.identificador', ['15','16'])
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+
         }
 
         $miidentificador = Auth::user()->name;
