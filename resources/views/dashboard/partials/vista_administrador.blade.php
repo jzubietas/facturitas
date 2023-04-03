@@ -114,7 +114,6 @@
             <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
                 <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
                     <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
-                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
                     <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
                 </div>
             </div>
