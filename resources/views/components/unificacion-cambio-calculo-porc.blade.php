@@ -414,7 +414,7 @@
                     Swal.fire('Error', 'Debe ingresar el codigo del pedido', 'error');
                     return false;
                 }
-                if (cbxRucPedidoRucUpd == '' || txtIdPedido == '-1') {
+                if (cbxRucPedidoRucUpd == '' || cbxRucPedidoRucUpd == '-1') {
                     Swal.fire('Error', 'Debe seleccionar el RUC correspondiente', 'error');
                     return false;
                 }
@@ -459,7 +459,7 @@
                         if (data.pedido_id=="0") {
                             Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
                             $('#txtIdPedido').val(0);
-                            $('#cbxRucPedidoRucUpd').html("");
+                            $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
                         }else {
                             $('#cbxRucPedidoRucUpd').html(data.datoscbx);
@@ -473,7 +473,7 @@
             $(document).on("click", "#btnLimpiarBusquedaRP", function () {
                 $('#txtNumeroPedido').val("");
                 $('#txtIdPedido').val(0);
-                $('#cbxRucPedidoRucUpd').html("");
+                $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                 $("#cbxRucPedidoRucUpd").selectpicker("refresh");
             })
             $(document).on("click", "#btnChangeProc", function () {
