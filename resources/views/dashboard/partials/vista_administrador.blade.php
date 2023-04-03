@@ -272,13 +272,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             class="chartjs-render-monitor" height="200"></canvas>
                 </div>
                 <div class="d-flex flex-row justify-content-end">
-                    <span class="mr-2 text-uppercase">
-                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
-                    </span>
+
                     <span class="text-uppercase">
                         <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
 
                     </span>
+                    <span class="mr-2 text-uppercase">
+                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
+                    </span>
+
                 </div>
             </div>
         </div>
