@@ -691,7 +691,13 @@ class DashboardController extends Controller
             $item['all_situacion_recurrente'] = $clientes_situacion_recurrente;
             $item['all_situacion_activo'] = $clientes_situacion_activo;
             $item['meta_new'] = $meta_new;
-            $item['porcentaje_general']=($all/$allmeta_2);
+            if($allmeta_2==0)
+                $item['porcentaje_general']=0;
+            else
+            {
+                $item['porcentaje_general']=($all/$allmeta_2);
+            }
+
             return $item;
         })->sortBy('meta_new', SORT_NUMERIC, true)
             ->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
