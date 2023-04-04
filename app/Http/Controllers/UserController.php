@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alerta;
 use App\Models\Cliente;
+use App\Models\HistorialVidas;
 use App\Models\PasswordReset;
 use App\Models\Porcentaje;
 use App\Models\Ruc;
@@ -692,6 +693,10 @@ class UserController extends Controller
                 $user->update([
                     'vidas_restantes' => 3,
                     'cant_vidas_cero' => $cant_vidas_cero
+                ]);
+                HistorialVidas::create([
+                    'user_id'=>$user->id,
+                    'created_at' => Carbon::now()
                 ]);
             }
             Alerta::create([
