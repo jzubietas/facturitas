@@ -214,6 +214,7 @@ class DashboardController extends Controller
             ->orwhere(DB::raw("concat(clientes.celular,'-',clientes.icelular)"), 'like', '%' . $q . '%')
             ->orWhere('nombre', 'like', '%' . join("%", explode(" ", trim($q))) . '%')
             ->orWhere('dni', 'like', '%' . $q . '%')
+            ->where('estado',1)
             ->limit(10)
             ->get()
             ->map(function (Cliente $cliente) {
