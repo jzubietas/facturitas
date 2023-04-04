@@ -230,6 +230,7 @@ class DashboardController extends Controller
         $rucs = Ruc::query()
             ->with(['cliente', 'user'])
             ->where('num_ruc', 'like', '%' . $q . '%')
+            ->where('estado',1)
             ->limit(10)
             ->get()
             ->map(function (Ruc $ruc) {

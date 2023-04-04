@@ -714,7 +714,7 @@ class UserController extends Controller
         {
             return response()->json(['status'=>'0','vidas_anteriores' => '1', 'user' => $user]);
         }
-        
+
         return response()->json(['status'=>'1', 'vidas_anteriores' => $ingresa, 'user' => $user]);
 
     }
