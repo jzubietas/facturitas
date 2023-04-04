@@ -176,6 +176,8 @@ class PedidoController extends Controller
                     DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
                     'dp.saldo as diferencia',
                     'direccion_grupos.motorizado_status',
+                    //'direccion_grupos.motorizado_status',
+                    'direccion_grupos.observacion as dg_observacion',
                     DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
                     pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' and pea.state_solicitud=1 limit 1) as vtipoAnulacion"),
                     DB::raw("(select NULLIF(pea.state_solicitud,-1) from pedidos_anulacions as pea where pea.pedido_id= pedidos.id order by pea.created_at desc limit 1) as vStateSolicitud"),
@@ -362,7 +364,7 @@ class PedidoController extends Controller
 
                     if($pedido->env_rotulo!='' && $pedido->env_zona=='OLVA')
                     {
-                        $btn[] = collect(explode(',', $pedido->env_tracking))->trim()->map(fn($f) => '<a target="_blank" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rotulo</a>')->join('<br>');
+                        $btn[] = collect(explode(',', $pedido->dg_observacion))->trim()->map(fn($f) => '<a target="_blank" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rotulo</a>')->join('<br>');
                     }
                 }
                 if (can('pedidos.edit')) {
