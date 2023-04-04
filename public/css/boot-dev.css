@@ -5111,4 +5111,11 @@ metas_dp .animated-progress {
 /*--- /users.mipersonal ---*/
 /*--- /users.llamadas ---*/
 
-
+.dataTables_wrapper .dataTables_processing {
+    position: absolute;
+    top: 15% !important;
+    background: #FFFFCC;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-weight: bold;
+}
