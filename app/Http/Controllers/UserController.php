@@ -362,9 +362,9 @@ class UserController extends Controller
         $users = User::where('estado', '1')->where("rol", "Asesor");
 
         if ($mirol == 'Llamadas') {
-            $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+            //$users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } else if ($mirol == 'Jefe de llamadas') {
-            $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+            //$users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
             $users = $users->where('identificador', '<>', 'B');
         } else if ($mirol == 'Asesor') {
@@ -465,9 +465,9 @@ class UserController extends Controller
         $users = User::where('estado', '1')->where("rol", "Asesor");
 
         if ($mirol == 'Llamadas') {
-            $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+            //$users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } else if ($mirol == 'Jefe de llamadas') {
-            $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+            //$users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
             $users = $users->where('identificador', '<>', 'B');
         } else if ($mirol == 'Asesor') {
@@ -517,9 +517,9 @@ class UserController extends Controller
         $users = User::where('estado', '1')->whereIn("rol", [User::ROL_ASESOR]);
 
         if ($mirol == 'Llamadas') {
-            $users = $users->where('llamada', Auth::user()->id)->where("rol", User::ROL_ASESOR);
+            //$users = $users->where('llamada', Auth::user()->id)->where("rol", User::ROL_ASESOR);
         } elseif ($mirol == 'Jefe de llamadas') {
-            $users = $users->WhereNotIn("identificador", ['B']);
+            //$users = $users->WhereNotIn("identificador", ['B']);
         } elseif ($mirol == 'Asesor') {
             $users = $users->where('id', Auth::user()->id)->where("rol", User::ROL_ASESOR);
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
