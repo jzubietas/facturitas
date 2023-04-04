@@ -1468,7 +1468,6 @@ ${data.foto3 ? `
                         "next": "Siguiente",
                         "previous": "Anterior"
                     }
-
                 },*/
                 /*        buttons: [
                           {
