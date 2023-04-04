@@ -13,7 +13,7 @@ class CreateTableUsermovimientos extends Migration
      */
     public function up()
     {
-        Schema::table('users_movimientos', function (Blueprint $table) {
+        Schema::table('user_movimientos', function (Blueprint $table) {
             //
             $table->id();
             $table->string('accion')->default('')->nullable();
@@ -33,7 +33,7 @@ class CreateTableUsermovimientos extends Migration
      */
     public function down()
     {
-        Schema::table('users_movimientos', function (Blueprint $table) {
+        Schema::table('user_movimientos', function (Blueprint $table) {
             //
         });
     }
