@@ -359,6 +359,11 @@ class PedidoController extends Controller
 
                 if (can('pedidos.show')) {
                     $btn[] = '<a href="' . route("pedidos.show", $pedido->id) . '" class="btn btn-light btn-sm text-left p-2 text-center btn-fontsize"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
+
+                    if($pedido->env_rotulo!='' && $pedido->env_zona=='OLVA')
+                    {
+                        $btn[] = collect(explode(',', $pedido->env_tracking))->trim()->map(fn($f) => '<a target="_blank" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rotulo</a>')->join('<br>');
+                    }
                 }
                 if (can('pedidos.edit')) {
                     if ($pedido->condicion_pa == 0) {
