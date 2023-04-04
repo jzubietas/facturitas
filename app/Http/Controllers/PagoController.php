@@ -2532,9 +2532,11 @@ class PagoController extends Controller
 
     public  function getDataPagoReciente(Request $request){
         /*return $request->all();*/
-        $detalle_pagos=DetallePago::join('pedidos as pe','detalle_pagos.pago_id','pe.id')
+        $detalle_pagos=DetallePago::join('pago_pedidos','pp.pago_id','detalle_pagos.pago_id')
+            ->join('pedidos as pe','pp.pedido_id','pe.id')
             ->join('clientes as cl','pe.cliente_id','cl.id')
             ->select(['detalle_pagos.*'])
+            ->where('pp.estado','1')
             ->where('cl.id',$request->cliente_id)
             ->orderby('detalle_pagos.created_at','DESC')
             ->limit(1)
