@@ -207,11 +207,45 @@ class DashboardController extends Controller
     public function searchCliente(Request $request)
     {
         $q = $request->get("q");//915722331
-        $nrocel = str_replace(' ', '', $q);
+        $q =trim($q);
+        if(is_numeric($q))
+        {
+            //celular
+            $clientes = Cliente::query()
+                ->with(['user', 'rucs', 'porcentajes'])
+                ->where('celular', 'like', '%' . $q . '%')
+                //->orwhere(DB::raw("concat(clientes.celular,'-',clientes.icelular)"), 'like', '%' . $q . '%')
+                //->orWhere('nombre', 'like', '%' . join("%", explode(" ", trim($q))) . '%')
+                //->orWhere('dni', 'like', '%' . $q . '%')
+                ->where('estado',1)
+                ->limit(10)
+                ->get()
+                ->map(function (Cliente $cliente) {
+                    $cliente->deuda_total = DetallePedido::query()->whereIn('pedido_id', $cliente->pedidos()->where('estado', '1')->pluck("id"))->sum("saldo");
+                    return $cliente;
+                });
+        }else{
+            $nrocel = str_replace(' ', '', $q);
+            $clientes = Cliente::query()
+                ->with(['user', 'rucs', 'porcentajes'])
+                //->where('celular', 'like', '%' . $nrocel . '%')
+                //->orwhere(DB::raw("concat(clientes.celular,'-',clientes.icelular)"), 'like', '%' . $q . '%')
+                ->Where('nombre', 'like', '%' . join("%", explode(" ", trim($q))) . '%')
+                //->orWhere('dni', 'like', '%' . $q . '%')
+                ->where('estado',1)
+                ->limit(10)
+                ->get()
+                ->map(function (Cliente $cliente) {
+                    $cliente->deuda_total = DetallePedido::query()->whereIn('pedido_id', $cliente->pedidos()->where('estado', '1')->pluck("id"))->sum("saldo");
+                    return $cliente;
+                });
+        }
+
+        /*$nrocel = str_replace(' ', '', $q);
         $clientes = Cliente::query()
             ->with(['user', 'rucs', 'porcentajes'])
             ->where('celular', 'like', '%' . $nrocel . '%')
-            ->orwhere(DB::raw("concat(clientes.celular,'-',clientes.icelular)"), 'like', '%' . $q . '%')
+            //->orwhere(DB::raw("concat(clientes.celular,'-',clientes.icelular)"), 'like', '%' . $q . '%')
             ->orWhere('nombre', 'like', '%' . join("%", explode(" ", trim($q))) . '%')
             ->orWhere('dni', 'like', '%' . $q . '%')
             ->where('estado',1)
@@ -220,7 +254,7 @@ class DashboardController extends Controller
             ->map(function (Cliente $cliente) {
                 $cliente->deuda_total = DetallePedido::query()->whereIn('pedido_id', $cliente->pedidos()->where('estado', '1')->pluck("id"))->sum("saldo");
                 return $cliente;
-            });
+            });*/
 
         return view('dashboard.searchs.search_cliente', compact('clientes'));
     }
