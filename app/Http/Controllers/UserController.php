@@ -666,7 +666,8 @@ class UserController extends Controller
     {
         $user = User::where('id', $request->user_id)->first();
         $ingresa = 0;
-        if (intval($user->vidas_restantes) > 0) {
+        if (intval($user->vidas_restantes) > 0)
+        {
             $ingresa = 1;
             $contadorquitavidas = intval($user->vidas_restantes) - 1;
             $user->update([
@@ -709,9 +710,12 @@ class UserController extends Controller
             ]);
 
         }
-
-
-        return response()->json(['vidas_anteriores' => $ingresa, 'user' => $user]);
+        else
+        {
+            return response()->json(['status'=>'0','vidas_anteriores' => '1', 'user' => $user]);
+        }
+        
+        return response()->json(['status'=>'1', 'vidas_anteriores' => $ingresa, 'user' => $user]);
 
     }
 
