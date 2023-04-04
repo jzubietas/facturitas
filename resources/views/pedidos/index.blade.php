@@ -1476,6 +1476,10 @@ ${data.foto3 ? `
                             }
                           }
                         ],*/
+                "drawCallback":function(settings)
+                {
+                    $(".dataTables_wrapper .dataTables_processing").addClass("processing_custom_datatable_personal");
+                }
             });
 
             function charge_corrections(pedido_id) {

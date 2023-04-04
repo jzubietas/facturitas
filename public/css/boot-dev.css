@@ -5119,3 +5119,12 @@ metas_dp .animated-progress {
     border-radius: 3px;
     font-weight: bold;
 }
+
+.processing_custom_datatable_personal {
+    position: absolute;
+    top: 15% !important;
+    background: #FFFFCC;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-weight: bold;
+}
