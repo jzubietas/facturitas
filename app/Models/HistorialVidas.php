@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class HistorialVidas extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'id','user_id','created_at','updated_at'
+    ];
 }
