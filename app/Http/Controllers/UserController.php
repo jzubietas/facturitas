@@ -696,6 +696,7 @@ class UserController extends Controller
                 ]);
                 HistorialVidas::create([
                     'user_id'=>$user->id,
+                    'accion'=>'Agregado llamado de atencion: '.strval($user->cant_vidas_cero).' a '.strval($user->cant_vidas_cero+1),
                     'created_at' => Carbon::now()
                 ]);
             }
