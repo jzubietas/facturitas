@@ -15,8 +15,8 @@ class AlterTableHistorialvidas extends Migration
     {
         Schema::table('historial_vidas', function (Blueprint $table) {
             //
-            $table->string('accion')->nullable(true);
-            $table->integer('responsable')->default(0)->nullable();
+            $table->string('accion')->after('user_id')->nullable(true);
+            $table->integer('responsable')->after('accion')->default(0)->nullable();
         });
     }
 
