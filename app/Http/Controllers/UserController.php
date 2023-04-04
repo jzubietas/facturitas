@@ -721,6 +721,11 @@ class UserController extends Controller
         $user->update([
             'cant_vidas_cero' => 0
         ]);
+        HistorialVidas::create([
+            'user_id'=>$user->id,
+            'accion'=>'Reseteado llamada de atencion: '.strval($user->cant_vidas_cero).' a 0',
+            'created_at' => Carbon::now()
+        ]);
         return response()->json(['user' => $user]);
 
     }

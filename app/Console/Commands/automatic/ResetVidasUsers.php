@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\automatic;
 
+use App\Models\HistorialVidas;
 use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
@@ -51,6 +52,11 @@ class ResetVidasUsers extends Command
         'vidas_restantes' => 3,
         'cant_vidas_cero' => 0,
       ]);
+        HistorialVidas::create([
+            'user_id'=>$user->id,
+            'accion'=>'Reseteado vidas users por Consola: '.strval($user->cant_vidas_cero).' a '.strval($user->cant_vidas_cero+1),
+            'created_at' => Carbon::now()
+        ]);
       $progress->advance();
     }
     $this->info("Finalizando...");

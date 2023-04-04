@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\HistorialVidas;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class CalculoReseteoVidas_Personalizado extends Command
@@ -48,6 +50,11 @@ class CalculoReseteoVidas_Personalizado extends Command
                 'vidas_total' => 3,
                 'vidas_restantes' => 3,
                 'cant_vidas_cero' => 0,
+            ]);
+            HistorialVidas::create([
+                'user_id'=>$user->id,
+                'accion'=>'Reseteado vidas personalizado por Consola: '.strval($user->cant_vidas_cero).' a '.strval($user->cant_vidas_cero+1),
+                'created_at' => Carbon::now()
             ]);
             $progress->advance();
         }
