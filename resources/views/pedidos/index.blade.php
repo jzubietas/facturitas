@@ -1448,7 +1448,7 @@ ${data.foto3 ? `
                     },
                 ],
                 "language": {
-                    "url": "vendor/datatables/Spanish.json"
+                    "url": {{asset('vendor/datatables/Spanish.json')}}
                 },
                 /*language: {
                     "decimal": "",
