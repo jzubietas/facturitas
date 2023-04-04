@@ -13,7 +13,8 @@ class CreateTableUsermovimientos extends Migration
      */
     public function up()
     {
-        Schema::table('user_movimientos', function (Blueprint $table) {
+        Schema::dropIfExists('user_movimientos');
+        Schema::create('user_movimientos', function (Blueprint $table) {
             //
             $table->id();
             $table->string('accion')->default('')->nullable();
