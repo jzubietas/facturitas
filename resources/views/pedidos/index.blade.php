@@ -1447,7 +1447,10 @@ ${data.foto3 ? `
                         sWidth: '20%',
                     },
                 ],
-                language: {
+                "language": {
+                    "url": "vendor/datatables/Spanish.json"
+                },
+                /*language: {
                     "decimal": "",
                     "emptyTable": "No hay informaciÃ³n",
                     "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
@@ -1466,7 +1469,7 @@ ${data.foto3 ? `
                         "previous": "Anterior"
                     }
 
-                },
+                },*/
                 /*        buttons: [
                           {
                             text: 'RECOGER',
