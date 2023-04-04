@@ -156,6 +156,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 div.dataTables_wrapper div.dataTables_processing {
   position: relative;
   top: 0;
+    background:#FFFFCC;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-weight: bold;
   left: 50%;
   width: 200px;
   margin-left: -100px;
