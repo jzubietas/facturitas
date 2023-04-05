@@ -1465,7 +1465,7 @@ class OperacionController extends Controller
                         array_push($arrayfiles_asesor_ids, $valfiles_asesor_ids[$i]);
                     }
                 }
-                $imagenesasesores = FileUploadAnulacion::whereIn('id', $arrayfiles_asesor_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+                $imagenesasesores = FileUploadAnulacion::whereIn('id', $arrayfiles_asesor_ids)->where('pedido_anulacion_id',$request->idPedidoAnulacion)->get();
             }
             if ($pedidosanulacion->files_responsable_asesor){
                 $valfiles_resp_ases_ids = explode("-", $pedidosanulacion->files_responsable_asesor);
@@ -1474,7 +1474,7 @@ class OperacionController extends Controller
                         array_push($arrayfiles_resp_ases_ids, $valfiles_resp_ases_ids[$i]);
                     }
                 }
-                $imagenesrespases = FileUploadAnulacion::whereIn('id', $arrayfiles_resp_ases_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+                $imagenesrespases = FileUploadAnulacion::whereIn('id', $arrayfiles_resp_ases_ids)->where('pedido_anulacion_id',$request->idPedidoAnulacion)->get();
             }
         //}
         return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenesasesores','imagenesrespases'));

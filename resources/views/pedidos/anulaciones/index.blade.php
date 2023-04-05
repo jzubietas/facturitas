@@ -1100,11 +1100,15 @@
                         $('#imagenAnulacionUsuario').html(data);
                     }
                 });*/
+
+
                 var fd=new FormData();
                 fd.append('idPedidoAnulacion',idPedidoAnulacion);
                 $.ajax({
-                    url: "{{ route('operaciones.veratencionanulacion.show') }}",
                     data: fd,
+                    processData: false,
+                    contentType: false,
+                    url: "{{ route('operaciones.veratencionanulacion.show') }}",
                     method: 'POST',
                     success: function (data) {
                         console.log(data)
