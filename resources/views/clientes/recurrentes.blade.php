@@ -13,6 +13,19 @@
         @endcan
         @can('clientes.exportar')
             <div class="float-right btn-group dropleft">
+
+                <a href="{{route('excel.clientes.caidos.deuda.excel')}}" target="_blank" class="btn btn-dark mr-4">
+                    <i class="fa fa-download"></i>
+                    <i class="fa fa-file-excel"></i>
+                    CAIDOS (CON DEUDA - En Desarrollo)
+                </a>
+
+                <a href="{{route('excel.clientes.caidos.sindeuda.excel')}}" target="_blank" class="btn btn-dark mr-4">
+                    <i class="fa fa-download"></i>
+                    <i class="fa fa-file-excel"></i>
+                    CAIDOS (SIN DEUDA - En Desarrollo)
+                </a>
+
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                     Exportar
