@@ -552,9 +552,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //const value = e.target.value;
                 cargaNueva(1);
                 cargaNueva(2);
-                //cargaNueva(3);
+                cargaNueva(3);
                 //cargaNueva(4);
-                cargaNueva(5);
+                //cargaNueva(5);
                 cargaNueva(6);//totales porcentajes arriba de metas cobranzas
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
 
@@ -743,11 +743,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             cargaNueva(1);
             cargaNueva(2);
-            //cargaNueva(3);//totales porcentajes debajo de metas
+            cargaNueva(3);//totales porcentajes debajo de metas
             cargaNueva(6);//totales porcentajes arriba de metas cobranzas
             cargaNueva(7);//totales porcentajes arriba de metas pedidos
             //cargaNueva(4);//fernando
-            cargaNueva(5);//paola
+            //cargaNueva(5);//paola
 
             cargaNuevaRecurrenteActivo(8);
             cargaNuevaRecurrenteActivo(9);
@@ -766,11 +766,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 console.log("recargando")
                 cargaNueva(1);
                 cargaNueva(2);
-                //cargaNueva(3);
+                cargaNueva(3);
                 cargaNueva(6);//totales porcentajes arriba de metas cobranzas
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
                 //cargaNueva(4);
-                cargaNueva(5);
+                //cargaNueva(5);
 
                 cargaNuevaRecurrenteActivo(8);
                 cargaNuevaRecurrenteActivo(9);

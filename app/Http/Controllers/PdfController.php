@@ -469,7 +469,7 @@ class PdfController extends Controller
                 $html[] = '<td style="width:80%">';
                 $porcentaje = 0;
                 $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
-                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*0.65 - $activos_cuenta;
+                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*0.7 - $activos_cuenta;
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
                 $color_progress = '#FFD4D4';  /*ROSADO*/
