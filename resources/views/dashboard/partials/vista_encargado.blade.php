@@ -7,91 +7,92 @@
 <br>
 <br>
 
+<div class="row mb-3">
+    @include('dashboard.widgets.buscar_cliente')
+    @include('dashboard.partials.vista_quitar_vidas')
+</div>
+
 <div class="container-fluid mt-4">
     <div class="row">
-        <div class="col-12">
-            {{--            @include('dashboard.widgets.pedidos_creados')--}}
-        </div>
-        @include('dashboard.widgets.buscar_cliente')
-        @include('dashboard.partials.vista_quitar_vidas')
+
         <div class="col-md-12">
             <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
         </div>
+    </div>
 
-        <div class="col-lg-12 " id="contenedor-fullscreen">
+    <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
+        <div class="d-flex justify-content-center flex-column mb-2 bg-white">
+            <div class="d-flex justify-content-center row bg-white">
 
-            <div class="d-flex justify-content-center flex-column mb-2 bg-white">
-                <div class="d-flex justify-content-center row bg-white">
-                    <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
-                        <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
-                            <h5 class="card-title text-uppercase">Total de cobranzas:</h5>
-                            <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
-                        </div>
+                <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
+                    <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                        <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
+                        <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
                     </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
-                        <h1 class="text-uppercase justify-center text-center " style="color: #FFFFFF;
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
+                    <h1 class="text-uppercase justify-center text-center " style="color: #FFFFFF;
 background: #FFFFFF;
 text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">Metas del mes
-                            de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
-                        <button style="background: none; border: none" onclick="openFullscreen();">
-                            <i class="fas fa-expand-arrows-alt ml-3"
-                               style="font-size: 20px"></i>
-                        </button>
-                    </div>
-
-                    <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
-                        <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
-                            <h5 class="card-title text-uppercase">Total de pedidos:</h5>
-                            <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
-                        </div>
-                    </div>
-
+                        de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+                    <button style="background: none; border: none" onclick="openFullscreen();">
+                        <i class="fas fa-expand-arrows-alt ml-3"
+                           style="font-size: 20px"></i>
+                    </button>
                 </div>
-
-            </div>
-
-            <div class="d-flex justify-content-center">
-                <h1 class="text-uppercase justify-center text-center">Metas del mes</h1>
-                <button style="background: none; border: none" onclick="openFullscreen();">
-                    <i class="fas fa-expand-arrows-alt ml-3"
-                       style="font-size: 20px"></i>
-                </button>
-                <div class="d-flex justify-content-center align-items-center ml-5">
-                    <label class="p-0 m-0" for="ingresar">Fecha: </label>
-                    <input type="date" id="fechametames" class="border-0 ml-3"
-                           value="{{\Carbon\Carbon::now()->startOfDay()->format('Y-m-d')}}">
+                <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
+                    <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                        <h5 class="card-title text-uppercase">Total de pedidos:</h5>
+                        <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                    </div>
                 </div>
             </div>
 
-            {{-- TABLA DUAL --}}
-            <div class="" style=" overflow: hidden !important;">
-                <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
-                    <div class="row">
-                        <div class="contain-table-dual">
-                            <div class="col-lg-6" id="meta"></div>
-                            <div class="col-lg-6" id="metas_dp"></div>
-                        </div>
 
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id="supervisor_total"></div>
-                        </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id="supervisor_A"></div>
-                        </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id="supervisor_B"></div>
-                        </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id="metas_total"></div>
-                        </div>
+            <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
+                <label class="p-0 m-0" for="ingresar">Fecha: </label>
+                <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
+                       value="" readonly>
+                <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
 
-                    </div>
 
-                </div>
             </div>
-            {{-- FIN-TABLA-DUAL --}}
         </div>
+
+
+        {{-- TABLA DUAL --}}
+        <div class="" style=" overflow: hidden !important;">
+            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
+                <div class="row">
+                    <div class="contain-table-dual row" style="width: 100% !important;">
+                        <div class="col-lg-6" id="meta"></div>
+                        <div class="col-lg-6" id="metas_dp"></div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_total"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_A"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_B"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="metas_total"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {{-- FIN-TABLA-DUAL --}}
+
+    </div>
+
+    <div clas="row">
+
+
 
         <div class="col-md-12">
             <div class="row" id="widget-container">
