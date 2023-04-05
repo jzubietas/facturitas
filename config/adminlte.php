@@ -910,12 +910,12 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => 'vendor/datatables/js/jquery.dataTables.min.js',
+                    'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => 'vendor/datatables/js/dataTables.bootstrap4.min.js',
+                    'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
@@ -930,12 +930,12 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => 'plugins/select2/js/select2.min.js',
+                    'location' => '//cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
                 ],
                 [
                     'type' => 'css',
                     'asset' => false,
-                    'location' => 'plugins/select2/css/select2.min.css',
+                    'location' => '//cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
                 ],
             ],
         ],
@@ -945,12 +945,7 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => 'vendor/chart.js/Chart.bundle.min.js',
-                ],
-                [
-                    'type' => 'css',
-                    'asset' => false,
-                    'location' => 'vendor/chart.js/Chart.min.css',
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
                 ],
             ],
         ],
@@ -960,12 +955,12 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => 'plugins/sweetalert2/sweetalert2.all.min.js',
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => 'plugins/sweetalert2/sweetalert2.min.css',
+                    'location' => 'css/boot-dev.css?t=v1',
                 ],
             ],
         ],
@@ -975,12 +970,12 @@ return [
                 [
                     'type' => 'css',
                     'asset' => false,
-                    'location' => 'plugins/pace-progress/themes/blue/pace-theme-center-radar.min.css',
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-center-radar.min.css',
                 ],
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => 'plugins/pace-progress/pace.min.js',
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
                 ],
             ],
         ],

@@ -17,73 +17,7 @@
         <div class="col-md-12">
             <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
         </div>
-        {{--<div class="col-md-12">
-            <div class="card">
-                <div class="d-flex justify-content-end align-items-center">
-                    <div class="card my-2 mx-2">
-                        @php
-                            try {
-                                 $currentDate=\Carbon\Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
-                            } catch (Exception $ex){
-                                 $currentDate=\Carbon\Carbon::createFromFormat('m-Y',now()->format('m-Y'));
-                            }
-                        @endphp
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"> Seleccionar Mes</span>
-                            </div>
-                            <div class="input-group-prepend">
-                                <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subYear()->format('m-Y')])}}"
-                                   class="btn m-0 p-0"
-                                   data-toggle="tooltip" data-placement="top" title="Un año atras">
-                            <span class="input-group-text">
-                                <
-                            </span>
-                                </a>
-                                <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subMonth()->format('m-Y')])}}"
-                                   class="btn m-0 p-0"
-                                   data-toggle="tooltip" data-placement="top" title="Un mes atras">
-                                    <span class="input-group-text"><</span>
-                                </a>
-                            </div>
-                            <select class="form-control" id="datepickerDashborad"
-                                    aria-describedby="basic-addon3">
 
-                                @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
-                                    @php
-                                        $currentMonth=$currentDate->clone()->startOfYear()->addMonths($month-1);
-                                    @endphp
-                                    <option
-                                        {{$currentMonth->format('m-Y')==request('selected_date',now()->format('m-Y'))?'selected':''}}
-                                        value="{{$currentMonth->format('m-Y')}}"
-                                    >{{Str::ucfirst($currentMonth->monthName)}} {{$currentMonth->year}}</option>
-                                @endforeach
-                            </select>
-
-                            <div class="input-group-append">
-                                <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addMonths()->format('m-Y')])}}"
-                                   class="btn m-0 p-0"
-                                   data-toggle="tooltip" data-placement="top" title="Un mes adelante">
-                                    <span class="input-group-text">></span>
-                                </a>
-                            </div>
-                            <div class="input-group-append">
-                                <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addYear()->format('m-Y')])}}"
-                                   class="btn m-0 p-0"
-                                   data-toggle="tooltip" data-placement="top" title="Un año adelante">
-                                    <span class="input-group-text">></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>--}}
-        {{--        <div class="col-lg-12">
-                    <x-grafico-metas-mes></x-grafico-metas-mes>
-                </div>--}}
-
-        {{--      DATATABLE--}}
         <div class="col-lg-12 " id="contenedor-fullscreen">
 
             <div class="d-flex justify-content-center flex-column mb-2 bg-white">
@@ -158,19 +92,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             </div>
             {{-- FIN-TABLA-DUAL --}}
         </div>
-        {{--FIN-DATATABLE--}}
-
-{{--        <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog- modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <img alt="Dia de la mujer" src="{{ asset('/img/diaMujer.jpg') }}" style="width: 100%">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Fin Modal -->--}}
 
         <div class="col-md-12">
             <div class="row" id="widget-container">
