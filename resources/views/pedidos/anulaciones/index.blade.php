@@ -1089,9 +1089,22 @@
                 formVerImagenAnularSol.append("pedidoAnulacionId", data.idanulacion);*/
 
                 /*cargar imagenes*/
-                $.ajax({
+                /*$.ajax({
                     url: "{{ route('operaciones.veratencionanulacion',':id') }}".replace(':id', idPedidoAnulacion),
                     data: idPedidoAnulacion,
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idPedidoAnulacion)
+                        $('#imagenAnulacionUsuario').html("");
+                        $('#imagenAnulacionUsuario').html(data);
+                    }
+                });*/
+                var fd=new FormData();
+                fd.append('idPedidoAnulacion',idPedidoAnulacion);
+                $.ajax({
+                    url: "{{ route('operaciones.veratencionanulacion.show') }}",
+                    data: fd,
                     method: 'POST',
                     success: function (data) {
                         console.log(data)

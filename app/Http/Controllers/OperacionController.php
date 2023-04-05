@@ -1443,6 +1443,43 @@ class OperacionController extends Controller
         return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenesasesores','imagenesrespases'));
     }
 
+    public function verAtencionAnulacionShow(Request $request)
+    {
+        $pedidosanulacions=PedidosAnulacion::where('id', $request->idPedidoAnulacion)->select([
+            'files_asesor_ids',
+            'files_responsable_asesor',
+            'filesadmin_ids',
+        ])->first();
+
+        $arrayfiles_asesor_ids=array();
+        $arrayfiles_resp_ases_ids=array();
+        $imagenesasesores=null;
+        $imagenesrespases=null;
+        $pedidosanulacion=$pedidosanulacions;
+        //foreach ($pedidosanulacions as $pedidosanulacion){
+            if ($pedidosanulacion->files_asesor_ids){
+                $valfiles_asesor_ids = explode("-", $pedidosanulacion->files_asesor_ids);
+
+                for ($i = 0; $i < count($valfiles_asesor_ids); $i++) {
+                    if ($valfiles_asesor_ids[$i]!=""){
+                        array_push($arrayfiles_asesor_ids, $valfiles_asesor_ids[$i]);
+                    }
+                }
+                $imagenesasesores = FileUploadAnulacion::whereIn('id', $arrayfiles_asesor_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+            }
+            if ($pedidosanulacion->files_responsable_asesor){
+                $valfiles_resp_ases_ids = explode("-", $pedidosanulacion->files_responsable_asesor);
+                for ($i = 0; $i < count($valfiles_resp_ases_ids); $i++) {
+                    if ($valfiles_resp_ases_ids[$i]!=""){
+                        array_push($arrayfiles_resp_ases_ids, $valfiles_resp_ases_ids[$i]);
+                    }
+                }
+                $imagenesrespases = FileUploadAnulacion::whereIn('id', $arrayfiles_resp_ases_ids)->where('pedido_anulacion_id',$pedido->id)->get();
+            }
+        //}
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenesasesores','imagenesrespases'));
+    }
+
     public function verAdjuntosOperaciones(Pedido $pedido)
     {
         $pedidosanulacions=PedidosAnulacion::where('pedido_id', $pedido->id)->where('state_solicitud',1)->select([
