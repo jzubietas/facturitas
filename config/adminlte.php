@@ -960,12 +960,12 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
+                    'location' => 'plugins/sweetalert2/sweetalert2.all.min.js',
                 ],
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => 'css/boot-dev.css?t=v1',
+                    'location' => 'plugins/sweetalert2/sweetalert2.min.css',
                 ],
             ],
         ],
@@ -975,12 +975,12 @@ return [
                 [
                     'type' => 'css',
                     'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-center-radar.min.css',
+                    'location' => 'plugins/pace-progress/themes/blue/pace-theme-center-radar.min.css',
                 ],
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                    'location' => 'plugins/pace-progress/pace.min.js',
                 ],
             ],
         ],
