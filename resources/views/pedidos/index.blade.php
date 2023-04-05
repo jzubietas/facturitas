@@ -1334,7 +1334,9 @@ ${data.foto3 ? `
                     {data: 'fecha_up', name: 'fecha_up', "visible": false,},
                     {data: 'total', name: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '')},
                     {
-                        data: 'condicion_pa', name: 'condicion_pa', render: function (data, type, row, meta) {
+                        data: 'condicion_pa',
+                        name: 'condicion_pa',
+                        render: function (data, type, row, meta) {
                             if (row.condiciones == 'ANULADO' || row.condicion_code == 4 || row.estado == 0) {
                                 /*return 'ANULADO';*/
                                 if (row.estado == '0' && row.condicion_code != '5'){
