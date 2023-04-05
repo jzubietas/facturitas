@@ -1115,7 +1115,7 @@ class DashboardController extends Controller
 
             if ($count_asesor[$idencargado]['total_pedido_mespasado'] == 0) {
                 $html .= '<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
-                         style="height: 30px !important;width: ' . round(($count_asesor[$idencargado]['total_pagado'] / $count_asesor[$idencargado]['total_pedido_mespasado']) * 100, 2) . '%;background: #03af03;"
+                         style="height: 30px !important;width: 0%;background: #03af03;"
                          aria-valuenow="0"
                          aria-valuemin="0" aria-valuemax="100"></div>';
             }
