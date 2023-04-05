@@ -114,6 +114,9 @@ class OperacionController extends Controller
                 'pedidos.estado',
                 'pedidos.estado_ruta',
                 'dp.sobre_valida',
+                DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id
+                    and cast(ped.created_at as date) >='" . now()->startOfMonth()->format('Y-m-d') . "'
+                    order by dp.created_at asc limit 1) as primer_pedido_mes "),
             ])
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
