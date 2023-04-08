@@ -607,7 +607,7 @@
                         {
                             $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
                         }else{
-                            $(row).css('background', '#FFD4D4').css('text-align', 'center').css('font-weight', 'bold');
+                            $(row).css('background', '#FFD4D4')/*.css('text-align', 'center')*/.css('font-weight', 'bold');
                         }
                     }else{
                         if(data["sobre_valida"]=='No')
