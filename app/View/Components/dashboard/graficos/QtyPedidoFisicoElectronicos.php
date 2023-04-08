@@ -71,6 +71,7 @@ class QtyPedidoFisicoElectronicos extends Widgets
 
       $pedidosPendienteAnulacion = Pedido::query()
         ->pendienteAnulacion()
+          ->activo()
         ->join('users as u', 'pedidos.user_id', 'u.id')
         ->whereNotNull('pedidos.pendiente_anulacion')
         /*->whereBetween( Db::raw('cast(pedidos.created_at  as date)'),
