@@ -528,6 +528,15 @@ class PdfController extends Controller
             $mes_artificio=$periodo_origen->addMonths($i)->subMonth();
             //$mes_actual_artificio=Carbon::now();
 
+            //saer si es mes diciembre 2022
+            if($mes_artificio->year=='2022' && $mes_artificio->month=='12')
+            {
+                //solo considerar pagos de dia 17 en adelante
+                continue;
+            }/*else{
+
+            }*/
+
             $total_pagado_mespasado = Pedido::query()
                 ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->where('pedidos.codigo', 'not like', "%-C%")
