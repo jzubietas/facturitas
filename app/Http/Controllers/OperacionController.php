@@ -158,7 +158,7 @@ class OperacionController extends Controller
         }
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
-            ->addColumn('primer_pedido',function($pedido){
+            ->addColumn('primer_pedidod',function($pedido){
                 if($pedido->primer_pedido_mes == $pedido->codigos)
                 {
                     return '#FFD4D4';
