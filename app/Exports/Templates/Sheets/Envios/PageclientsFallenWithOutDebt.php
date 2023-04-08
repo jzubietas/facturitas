@@ -204,7 +204,7 @@ class PageclientsFallenWithOutDebt extends Export implements WithColumnFormattin
     }
     public function title(): string
     {
-        return 'Cuatro meses sin pedir- No deben';
+        return 'Clientes caidos sin deuda';
     }
     public function map($model): array
     {
