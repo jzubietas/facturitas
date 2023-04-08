@@ -175,10 +175,14 @@
                 });
 
                 //recupera imagenes adjuntas
+                var fd=new FormData();
+                fd.append('pedidoid',idunico);
                 $.ajax({
-                    url: "{{ route('operaciones.veratencion',':id') }}".replace(':id', idunico),
-                    data: idunico,
+                    data: fd,
+                    processData: false,
+                    contentType: false,
                     method: 'POST',
+                    url: "{{ route('operaciones.veratencionidunico') }}",
                     success: function (data) {
                         console.log(data)
                         console.log("obtuve las imagenes atencion del pedido " + idunico)

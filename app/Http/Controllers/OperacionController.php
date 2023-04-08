@@ -1570,6 +1570,56 @@ class OperacionController extends Controller
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 
+    public function verAtencionIdUnico(Request $request)
+    {
+        $pedidoid=$request->pedidoid;
+        $pedido=Pedido::find($request->pedidoid);
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select([
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.name as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.adjunto',
+                'dp.total',
+
+                'pedidos.condicion as condiciones',
+                'pedidos.envio',
+                'pedidos.condicion_envio',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'pedidos.created_at as fecha'
+            ])
+            ->where('pedidos.estado', '1')
+            ->where('pedidos.id', $pedidoid)
+            ->where('dp.estado', '1')
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+
+        $imagenespedido = ImagenPedido::where('imagen_pedidos.pedido_id', $pedidoid)->where('estado', '1')->get();
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedidoid)->where('estado', '1')->where('confirm', '1')->get();
+
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
+        //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+    }
+
     public function verAtencionAnulacion(Pedido $pedido)
     {
         $pedidosanulacions=PedidosAnulacion::where('id', $pedido->id)->select([
