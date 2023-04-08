@@ -601,18 +601,18 @@
                     },
                 ],
                 "createdRow": function (row, data, dataIndex) {
-                    if(data["primer_pedidod"]!='')
+                    if(data["primer_pedidod"]=='')
                     {
-                        if(data["sobre_valida"]=='No')
-                        {
-                            $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
-                        }
-                    }else{
                         if(data["sobre_valida"]=='No')
                         {
                             $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
                         }else{
                             $(row).css('background', '#FFD4D4').css('text-align', 'center').css('font-weight', 'bold');
+                        }
+                    }else{
+                        if(data["sobre_valida"]=='No')
+                        {
+                            $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
                         }
                     }
                 },
