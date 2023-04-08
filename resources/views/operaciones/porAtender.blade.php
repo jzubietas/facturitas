@@ -517,8 +517,8 @@
                 searching: true,
                 order: [[6, "desc"]],
                 ajax: "{{ route('operaciones.poratendertabla') }}",
-                createdRow: function (row, data, dataIndex) {
-                },
+                /*createdRow: function (row, data, dataIndex) {
+                },*/
                 rowCallback: function (row, data, index) {
                     if (data.pendiente_anulacion == 1) {
                         $('td', row).css('background', 'red').css('font-weight', 'bold');
@@ -601,10 +601,20 @@
                     },
                 ],
                 "createdRow": function (row, data, dataIndex) {
-                  if(data["sobre_valida"]=='No')
-                  {
-                    $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
-                  }
+                    if(data["primer_pedidod"]!='')
+                    {
+                        if(data["sobre_valida"]=='No')
+                        {
+                            $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
+                        }else{
+                            $(row).css('background', '#FFD4D4').css('text-align', 'center').css('font-weight', 'bold');
+                        }
+                    }else{
+                        if(data["sobre_valida"]=='No')
+                        {
+                            $(row).css('background', '#E7EB05').css('text-align', 'center').css('font-weight', 'bold');
+                        }
+                    }
                 },
                 'columnDefs': [
                   {

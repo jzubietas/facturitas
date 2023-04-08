@@ -158,6 +158,14 @@ class OperacionController extends Controller
         }
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->adColumn('primer_pedido',function($pedido){
+                if($pedido->primer_pedido_mes == $pedido->codigos)
+                {
+                    return '#FFD4D4';
+                }else{
+                    return '';
+                }
+            })
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
