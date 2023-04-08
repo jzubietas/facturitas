@@ -38,6 +38,8 @@ use App\Exports\Templates\PlantillaExportBasefriaMultiple;
 use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesReporteMultiple;
+use App\Exports\Templates\PlantillaExportClientsFallendDebtMultiple;
+use App\Exports\Templates\PlantillaExportClientsFallendWithOutDebtMultiple;
 use App\Exports\Templates\PlantillaExportMovimientosReporteMultiple;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportPedidoMultiple;
@@ -195,6 +197,22 @@ class ExcelController extends Controller
         return (new PlantillaExportClientesdosmesesMultiple())
             ->download('Lista de Clientes_pedidos_2_meses.xlsx');
     }
+
+    public function clientsFallenDebtExcel(Request $request)
+    {
+        return (new PlantillaExportClientsFallendDebtMultiple())
+            ->download('Clientes Caidos con Deuda.xlsx');
+    }
+
+    public function clientsFallenWithOutDebtExcel(Request $request)
+    {
+        return (new PlantillaExportClientsFallendWithOutDebtMultiple())
+            ->download('Clientes Caidos sin Deuda.xlsx');
+    }
+
+
+
+
 
     public function basefriaAllAsesorExcel(Request $request)
     {

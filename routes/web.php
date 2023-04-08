@@ -711,8 +711,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('excel/clientes/four_month_ago', [ExcelController::class, 'clientesFourMonthAgoExcel'])->name('excel.clientes-four-month-ago-excel');
 
 
-    Route::get('excel.clientes.caidos.deuda.excel', [ExcelController::class, 'clientesFourMonthAgoExcel'])->name('excel.clientes.caidos.deuda.excel');
-    Route::get('excel.clientes.caidos.sindeuda.excel', [ExcelController::class, 'clientesFourMonthAgoExcel'])->name('excel.clientes.caidos.sindeuda.excel');
+    Route::get('excel.clientes.caidos.deuda.excel', [ExcelController::class, 'clientsFallenDebtExcel'])->name('excel.clientes.caidos.deuda.excel');
+    Route::get('excel.clientes.caidos.sindeuda.excel', [ExcelController::class, 'clientsFallenWithOutDebtExcel'])->name('excel.clientes.caidos.sindeuda.excel');
 
     Route::get('excel/basefria/exportar', [ExcelController::class, 'excelBaseFriaExportar'])->name('excel/basefria/exportar');
 
