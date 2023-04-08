@@ -213,6 +213,159 @@ class OperacionController extends Controller
 
     }
 
+    public function EnAtencion()
+    {
+        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
+        $dateMax = Carbon::now()->format('d/m/Y');
+
+        $condiciones = [
+            //"POR ATENDER" => Pedido::POR_ATENDER,
+            //"EN PROCESO ATENCION" => Pedido::EN_PROCESO_ATENCION,
+            "ATENDIDO" => Pedido::ATENDIDO
+        ];
+
+        PedidoMovimientoEstado::where('condicion_envio_code', Pedido::EN_ATENCION_OPE_INT)->update([
+            'notificado' => 1,
+        ]);
+
+
+        $imagenespedido = ImagenPedido::get();
+        $imagenes = ImagenAtencion::get();
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('operaciones.enAtencion', compact('dateMin', 'dateMax', 'condiciones', 'imagenespedido', 'imagenes', 'superasesor'));
+    }
+
+    public function EnAtenciontabla(Request $request)
+    {
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select([
+                'pedidos.id',
+                'pedidos.correlativo as id2',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.mes','dp.anio',
+                'dp.total as total',
+                DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s")) as fecha'),
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'dp.tipo_banca',
+                'pedidos.condicion_envio',
+                'pedidos.condicion_envio_code',
+                'pedidos.estado_sobre',
+                DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes "),
+                'pedidos.pendiente_anulacion',
+                'pedidos.condicion_code',
+                'pedidos.estado',
+                'pedidos.estado_ruta',
+                'dp.sobre_valida',
+                DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.codigo not like '%-C%' and dp.cliente_id=c.id
+                    and cast(dp.created_at as date) >='" . now()->startOfMonth()->format('Y-m-d') . "'
+                    order by dp.created_at asc limit 1) as primer_pedido_mes "),
+            ])
+            ->where('pedidos.estado', '1')
+            ->where('dp.estado', '1')
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::EN_ATENCION_OPE_INT]);
+            //->whereNotIn('pedidos.condicion', [Pedido::EN_PROCESO_ATENCION]);
+
+
+        if (Auth::user()->rol == "Operario") {
+
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+
+
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
+
+            $operarios = User::where('users.rol', 'Operario')
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+        }
+        return Datatables::of(DB::table($pedidos))
+            ->addIndexColumn()
+            ->addColumn('primer_pedidod',function($pedido){
+                if($pedido->primer_pedido_mes == $pedido->codigos)
+                {
+                    return '#FFD4D4';
+                }else{
+                    return '';
+                }
+            })
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado='';
+                if($pedido->pendiente_anulacion=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
+                    return $badge_estado;
+                }
+                if($pedido->condicion_code=='4' || $pedido->estado=='0')
+                {
+                    return '<span class="badge badge-danger">ANULADO</span>';
+                }
+                if($pedido->estado_sobre=='1')
+                {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+                }
+                if($pedido->estado_ruta=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    padding: 4px 8px !important;
+                    font-size: 8px;
+                    margin-bottom: -4px;
+                    color: black !important;">Con ruta</span>';
+                }
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado.= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
+            })
+            ->editColumn('mes', function ($pedido) {
+                return $pedido->mes.'-'.$pedido->anio;
+            })
+            ->addColumn('action', function ($pedido) {
+                $btn = '';
+                return $btn;
+            })
+            ->addColumn('action2', function ($pedido) {
+                $btn = '';
+                return $btn;
+            })
+            ->rawColumns(['action', 'action2','condicion_envio'])
+            ->make(true);
+
+    }
+
     public function Atendidos()
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
