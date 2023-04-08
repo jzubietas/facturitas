@@ -140,6 +140,7 @@ class QtyPedidoFisicoElectronicos extends Widgets
 
       $an = Pedido::query()
         ->pendienteAnulacion()
+        ->activo()
         ->whereIn('user_id', $asesores)
         ->join('users as u', 'pedidos.user_id', 'u.id')
         ->whereNotNull('pedidos.pendiente_anulacion')
