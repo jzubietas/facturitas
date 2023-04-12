@@ -975,7 +975,7 @@ class OperacionController extends Controller
 
                 $btn[] = '<a href="" class="btn-sm dropdown-item btn-fontsize" data-target="#modal-veradjuntos-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-veradjuntos=' . $pedido->id . ' data-toggle="modal" >
                                 <i class="fa fa-paperclip text-primary" aria-hidden="true"></i>
-                                Ver Adjuntos
+                                Ver Adjuntos (Facturadora)
                                </a>';
 
                 if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)

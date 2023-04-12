@@ -63,7 +63,7 @@
                     <th scope="col" class="align-middle">Fecha de registro</th>
                     <th scope="col" class="align-middle">Destino</th>
                     <th scope="col" class="align-middle">Estado</th>
-                    <th scope="col" class="align-middle">Adjuntos</th>
+                    <th scope="col" class="align-middle">Adjuntos (Pedido)</th>
                     <th scope="col" class="align-middle">Atendido por</th>
                     <th scope="col" class="align-middle">Jefe</th>
                     <th scope="col" class="align-middle">Accion</th>
