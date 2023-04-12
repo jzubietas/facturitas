@@ -248,25 +248,25 @@ class PedidosAnulacionController extends Controller
                     }
                 }
                 if (Auth::user()->rol == User::ROL_ENCARGADO) {
-                    if ($pedido->estado_aprueba_encargado==0 && ($pedido->itipoanulacion=="C" || $pedido->itipoanulacion=="F")){
+                    if ($pedido->estado_aprueba_encargado==0 && (in_array($pedido->itipoanulacion,["F","C"])) ) {
                         $btn[] = '<button class="btn btn-warning btn-lg btnApruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Aprobar Anulacion"><i class="fa fa-check-double"></i></button>';
                         $btn[] = '<button class="btn btn-danger btn-lg btnDesapruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Desaprobar Anulacion"><i class="fas fa-ban"></i></button>';
                         if ($pedido->estado_aprueba_administrador==2){
                             $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_admin  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
                         }
-                    }else if($pedido->estado_aprueba_encargado==2 && ($pedido->itipoanulacion=="C" || $pedido->itipoanulacion=="F")){
+                    }else if($pedido->estado_aprueba_encargado==2 && (in_array($pedido->itipoanulacion,["F","C"])) ){
                         $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_encargado  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
                         /*$btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';*/
                     }
                 }
                 if (Auth::user()->rol == User::ROL_JEFE_LLAMADAS) {
-                    if ($pedido->estado_aprueba_encargado==0 && $pedido->itipoanulacion=="Q"){
+                    if ($pedido->estado_aprueba_encargado==0 &&  in_array($pedido->itipoanulacion,["Q","C"]) ){
                         $btn[] = '<button class="btn btn-warning btn-lg btnApruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Aprobar Anulacion"><i class="fa fa-check-double"></i></button>';
                         $btn[] = '<button class="btn btn-danger btn-lg btnDesapruebaEncargado mr-2" data-idanulacion="' . $pedido->idanulacion . '" title="Desaprobar Anulacion"><i class="fas fa-ban"></i></button>';
                         if ($pedido->estado_aprueba_administrador==2){
                             $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_admin  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
                         }
-                    }else if($pedido->estado_aprueba_encargado==2 && $pedido->itipoanulacion=="Q"){
+                    }else if($pedido->estado_aprueba_encargado==2 && in_array($pedido->itipoanulacion,["Q","C"]) ){
                         $btn[] = '<a class="btn btn-info btn-sm" data-target="#modal-ver_rechazo_encargado" data-idanulacion="' . $pedido->idanulacion . '" data-motivo-rechazo="' . $pedido->motivo_sol_encargado  . '"  data-toggle="modal" title="Ver Sustento de rechazo"><i class="fa fa-eye"></i></a>  ';
                         /*$btn[] = '<button class="btn btn-danger btn-sm btnAnularSolicitudByAsesor mr-2" data-idanulacion="' . $pedido->idanulacion . '"><i class="fa fa-trash"></i></button>';*/
                     }
