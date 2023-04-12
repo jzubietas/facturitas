@@ -1614,9 +1614,9 @@ class OperacionController extends Controller
             ->get();
 
         $imagenespedido = ImagenPedido::where('imagen_pedidos.pedido_id', $pedidoid)->where('estado', '1')->get();
-        $imagenesasesores = ImagenAtencion::where('imagen_atencions.pedido_id', $pedidoid)->where('estado', '1')->where('confirm', '1')->get();
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedidoid)->where('estado', '1')->where('confirm', '1')->get();
 
-        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenesasesores', 'pedido'));
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntosAtencion', compact('imagenes', 'pedido'));
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 
