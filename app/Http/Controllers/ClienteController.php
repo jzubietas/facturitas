@@ -2973,7 +2973,7 @@ class ClienteController extends Controller
         $cliente_ruc=Ruc::where('id',$request->codigo_ruc)->first();
         if (isset($cliente_ruc)){
             //
-            $cliente_=Clientes::where('id',$request->codigo_cliente)->first();
+            $cliente_=Cliente::where('id',$request->codigo_cliente)->first();
             $pedido_up=Pedido::where('id',$request->codigo_pedido)->first();
             $pedido_up->update([
                 'cliente_id'=>$cliente_->id,
