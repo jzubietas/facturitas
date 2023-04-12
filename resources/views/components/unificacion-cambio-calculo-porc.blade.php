@@ -480,7 +480,7 @@
             $(document).on("change","#cbxClientePedidoClienteUpd",function(){
 
                 var frmRucsRucUpd = new FormData();
-                frmRucsRucUpd.append('codigo_pedido', txtNumeroPedido);
+                frmRucsRucUpd.append('codigo_pedido', $("#txtNumeroPedido").val());
                 frmRucsRucUpd.append('codigo_cliente', $(this).val());
                 $.ajax({
                     processData: false,
