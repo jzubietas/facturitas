@@ -139,16 +139,14 @@ class PedidosAnulacionController extends Controller
 
         if (Auth::user()->rol == User::ROL_ASESOR) {
             $pedidos=$pedidos->whereIn('pea.estado_aprueba_asesor',[0,1])->whereIn('pea.estado_aprueba_encargado',[0,2])->whereIn('pea.estado_aprueba_administrador',[0,2]);
-            $usersasesores = User::where('users.rol', 'Asesor')
+            $usersasesores = User::where('users.rol', User::ROL_ASESOR)
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores)->whereIn('pea.tipo',["C","F"]);
         } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
             $usersasesores = User::where('users.rol', User::ROL_ASESOR)
                 ->where('users.estado', '1')
@@ -159,7 +157,19 @@ class PedidosAnulacionController extends Controller
                 ->pluck('users.identificador');
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores)->whereIn('pea.tipo',["C","F"]);
             $pedidos=$pedidos->whereIn('estado_aprueba_encargado',[0]);
-        } else if (Auth::user()->rol == User::ROL_JEFE_LLAMADAS) {
+        } else if (Auth::user()->rol == User::ROL_COBRANZAS) {
+            $pedidos=$pedidos->whereIn('pea.estado_aprueba_asesor',[0,1])->whereIn('pea.estado_aprueba_encargado',[0,2])->whereIn('pea.estado_aprueba_administrador',[0,2]);
+            $usersasesores = User::where('users.rol', User::ROL_COBRANZAS)
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores)->whereIn('pea.tipo',["Q"]);;
+
+        }else if (Auth::user()->rol == User::ROL_JEFE_LLAMADAS) {
             $asesor_cobranza=Users::where('rol',User::ROL_COBRANZAS)
                 ->where('users.estado','1')
                 ->where('users.supervisor', Auth::user()->id)
