@@ -5128,3 +5128,9 @@ metas_dp .animated-progress {
     border-radius: 3px;
     font-weight: bold;
 }*/
+
+.color-recuperado-abandono
+{
+    font-family: "Comic Sans MS" !important;
+    color:blue !important;
+}

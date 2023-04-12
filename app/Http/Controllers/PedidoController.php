@@ -327,9 +327,19 @@ class PedidoController extends Controller
             })
             ->editColumn('celulares',function($pedido){
                 if ($pedido->icelulares != null) {
-                    return $pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
+                    if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                    {
+                        return '<span class="color-recuperado-abandono">'.$pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span></span>';
+                    }else{
+                        return $pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
+                    }
                 } else {
-                    return $pedido->celulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
+                    if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                    {
+                        return '<span class="color-recuperado-abandono">'.$pedido->celulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span></span>';
+                    }else{
+                        return $pedido->celulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
+                    }
                 }
             })
             ->addColumn('action', function ($pedido) use ($miidentificador) {
