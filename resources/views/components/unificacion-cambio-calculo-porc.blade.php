@@ -489,12 +489,12 @@
                     url: "{{ route('getRucComboPedidos') }}",
                     success: function (dataruc) {
                         console.log(dataruc);
-                        if (dataruc.pedido_id=="0") {
+                        /*if (dataruc.pedido_id=="0") {
                             Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
                             $('#txtIdPedido').val(0);
                             $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
-                        }else{
+                        }else*/{
                             $('#cbxRucPedidoRucUpd').html(dataruc.datoscbx);
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
                             $('#txtIdPedido').val(dataruc.pedido_id);
