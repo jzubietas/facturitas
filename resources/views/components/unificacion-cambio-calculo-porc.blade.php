@@ -648,6 +648,7 @@
             function limpiarUpdRucPedido() {
 
                 $('#txtIdPedido').val(0);
+                $('#txtIdCliente').val(0);
                 $('#txtNumeroPedido').val("");
                 $('#cbxRucPedidoRucUpd').html("");
                 $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
