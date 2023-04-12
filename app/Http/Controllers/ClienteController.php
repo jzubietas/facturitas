@@ -2912,7 +2912,7 @@ class ClienteController extends Controller
                 if($cliente->id==$pedido->cliente_id) /*4425*/
                 {
                     $datoscbx .= '<option style="color:black" selected value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
-                    $idcliente=$cliente->id;
+                    //$idcliente=$pedido->id;
                 }else{
                     $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
                     //$idcliente=0;
@@ -2920,6 +2920,7 @@ class ClienteController extends Controller
 
             }
             $idpedido=$pedido->id;
+            $idcliente=$pedido->cliente_id;
         }
 
         return response()->json(['datoscbx' => $datoscbx,'cliente_id'=>$idcliente,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
