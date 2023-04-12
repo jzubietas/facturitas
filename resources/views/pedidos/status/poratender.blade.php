@@ -63,7 +63,7 @@
 
 @endsection
 
-@push('css')
+@section('css')
     <style>
     .color-recuperado-abandono
     {
@@ -71,7 +71,7 @@
     color:blue !important;
     }
     </style>
-@endpush
+@stop
 
 @section('js')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
