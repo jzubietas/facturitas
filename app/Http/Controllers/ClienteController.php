@@ -2921,21 +2921,38 @@ class ClienteController extends Controller
     }
     public  function  getRucComboPedidos(Request  $request){
         $datoscbx = '<option value="-1">' . trans('---- SELECCIONE RUC ----') . '</option>';
-        $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
+
         $idpedido=0;
         //if (isset($pedido))
         {
-            $detalle_pedidos=DetallePedido::where('pedido_id',$pedido->id)->first();
-            $rucs = Ruc::where('estado', '1')->where('cliente_id',$request->codigo_cliente)->where('num_ruc','<>',$detalle_pedidos->ruc)
-                ->get([
-                    'id',
-                    'num_ruc',
-                    'empresa',
-                    'porcentaje',
-                ]);
-            foreach ($rucs as $cliente) {
-                $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->empresa . '" data-ruc="' . $cliente->num_ruc . '" >' . $cliente->num_ruc . '  -  ' . $cliente->empresa . '</option>';
+            if($request->codigo_pedido!='')
+            {
+                $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
+                $detalle_pedidos=DetallePedido::where('pedido_id',$pedido->id)->first();
+                $rucs = Ruc::where('estado', '1')->where('cliente_id',$request->codigo_cliente)->where('num_ruc','<>',$detalle_pedidos->ruc)
+                    ->get([
+                        'id',
+                        'num_ruc',
+                        'empresa',
+                        'porcentaje',
+                    ]);
+            }else
+            {
+                $rucs = Ruc::where('estado', '1')->where('cliente_id',$request->codigo_cliente)->where('num_ruc','<>','')
+                    ->get([
+                        'id',
+                        'num_ruc',
+                        'empresa',
+                        'porcentaje',
+                    ]);
             }
+            if(count($rucs)>0)
+            {
+                foreach ($rucs as $cliente) {
+                    $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->empresa . '" data-ruc="' . $cliente->num_ruc . '" >' . $cliente->num_ruc . '  -  ' . $cliente->empresa . '</option>';
+                }
+            }
+
             $idpedido=$pedido->id;
         }
 
