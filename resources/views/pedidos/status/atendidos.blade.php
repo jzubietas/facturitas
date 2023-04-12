@@ -58,6 +58,11 @@
       -ms-user-select: all !important;
       user-select: all !important;
     }
+    .color-recuperado-abandono
+    {
+        font-family: "Comic Sans MS" !important;
+        color:blue !important;
+    }
 
   </style>
 @endpush
@@ -251,16 +256,6 @@
           {
             data: 'celulares',
             name: 'celulares',
-            render: function (data, type, row, meta) {
-              if (row.icelulares != null) {
-                return row.celulares + '-' + row.icelulares + ' - ' + row.nombres;
-              } else {
-                return row.celulares + ' - ' + row.nombres;
-              }
-
-            },
-            //searchable: true
-            //data tabla de atendidos
           },
           {data: 'empresas', name: 'empresas',},
           {data: 'mes', name: 'mes',}, //se llama a mes

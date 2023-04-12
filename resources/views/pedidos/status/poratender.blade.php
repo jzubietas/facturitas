@@ -64,7 +64,11 @@
 @endsection
 
 @section('css')
-
+    .color-recuperado-abandono
+    {
+    font-family: "Comic Sans MS" !important;
+    color:blue !important;
+    }
 @stop
 
 @section('js')
@@ -214,16 +218,6 @@
           {
             data: 'celulares',
             name: 'celulares',
-            render: function (data, type, row, meta) {
-              if (row.icelulares != null) {
-                return row.celulares + '-' + row.icelulares + ' - ' + row.nombres;
-              } else {
-                return row.celulares + ' - ' + row.nombres;
-              }
-
-            },
-            //searchable: true
-            //datos de tabla por atender
           },
           {data: 'empresas', name: 'empresas',},
           {data: 'mes', name: 'mes',},

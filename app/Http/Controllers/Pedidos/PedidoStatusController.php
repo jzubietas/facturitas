@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pedidos;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttachCorrection;
+use App\Models\Cliente;
 use App\Models\Correction;
 use App\Models\ImagenAtencion;
 use App\Models\Pedido;
@@ -215,6 +216,7 @@ class PedidoStatusController extends Controller
                     'pedidos.correlativo as id2',
                     'c.nombre as nombres',
                     'c.celular as celulares',
+                    'c.situacion as s_cliente',
                     'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
@@ -329,6 +331,23 @@ class PedidoStatusController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                     return $badge_estado;
                 })
+                ->editColumn('celulares',function($pedido){
+                    if ($pedido->icelulares != null) {
+                        if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                        {
+                            return '<span class="color-recuperado-abandono">'.$pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span></span>';
+                        }else{
+                            return $pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
+                        }
+                    } else {
+                        if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                        {
+                            return '<span class="color-recuperado-abandono">'.$pedido->celulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span></span>';
+                        }else{
+                            return $pedido->celulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
+                        }
+                    }
+                })
                 ->addColumn('action', function ($pedido) use ($request) {
                     $btn = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
                     //$btn .= '<a href="" data-target="#modal-atender" data-atender=' . $pedido->id . ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
@@ -387,6 +406,7 @@ class PedidoStatusController extends Controller
                     'pedidos.correlativo as id2',
                     'c.nombre as nombres',
                     'c.celular as celulares',
+                    'c.situacion as s_cliente',
                     'u.identificador as users',
                     //'dp.mes',
                     'dp.codigo as codigos',
@@ -514,6 +534,23 @@ class PedidoStatusController extends Controller
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                     return $badge_estado;
+                })
+                ->editColumn('celulares',function($pedido){
+                    if ($pedido->icelulares != null) {
+                        if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                        {
+                            return '<span class="color-recuperado-abandono">'.$pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span></span>';
+                        }else{
+                            return $pedido->celulares . '-' . $pedido->icelulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
+                        }
+                    } else {
+                        if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                        {
+                            return '<span class="color-recuperado-abandono">'.$pedido->celulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span></span>';
+                        }else{
+                            return $pedido->celulares . ' - ' . $pedido->nombres.' : <span class="badge">'.$pedido->s_cliente.'</span>';
+                        }
+                    }
                 })
                 ->addColumn('action', function ($pedido) use ($request) {
                     $btn = '';
