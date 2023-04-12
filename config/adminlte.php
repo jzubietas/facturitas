@@ -280,6 +280,14 @@ return [
             'active' => ['pagos perdonar courier'],
         ],
         [
+            'text' => 'Bandeja de llamados de atencion',
+            'can' => 'pagos.create',
+            'icon_color' => 'green',
+            'route' => 'llamados.atencion',
+            'icon' => 'far fa-id-card',
+            'active' => ['registrar pagos*'],
+        ],
+        [
             'text' => 'Configuracion',
             'route' => 'settings.admin-settings',
             'can' => 'admin.configuration',

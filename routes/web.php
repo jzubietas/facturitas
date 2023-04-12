@@ -55,6 +55,12 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('alertas/cargarstore', [AlertaController::class, 'cargarstore'])->name('cargarstore');
 
 
+
+    Route::get('llamados.atencion', [AnulacionController::class, 'pedidosanulaciones'])->name('llamados.atencion');
+    Route::get('llamados.atencion.tabla', [PedidosAnulacionController::class, 'indexanulacionestabla'])->name('llamados.atencion.tabla');
+
+
+
     Route::post('escaneo/envio.escaneoqr/{id}', [EscaneoController::class, 'EscaneoQR'])->name('escaneo/envio.escaneoqr');
     Route::post('escaneo.estado_pedidos', [EscaneoController::class, 'EstadoSobresScan'])->name('escaneo.estado_pedidos');
 
