@@ -540,10 +540,9 @@
                     success: function (datacliente) {
                         console.log(datacliente);
                         $('#txtIdPedido').val(datacliente.pedido_id);
-                        if (data.cliente_id=="0") {
+                        if (datacliente.cliente_id=="0") {
                             Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
                             $('#txtIdCliente').val(0);
-
                             $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
                         }else {
