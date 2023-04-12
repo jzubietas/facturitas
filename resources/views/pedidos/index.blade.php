@@ -57,13 +57,13 @@
                 </button>
                 <div class="dropdown-menu">
                     <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="dropdown-item">
-                        <i class="fa fa-download"></i>
-                        <i class="fa fa-file-excel"></i>
+                        <i class="fa fa-xl fa-download text-success"></i>
+                        <i class="fa fa-xl fa-file-excel text-success"></i>
                         DEJARON DE PEDIR (4) meses
                     </a>
                     <a href="{{route('excel.clientes-two-month-ago-excel')}}" target="_blank" class="dropdown-item">
-                        <i class="fa fa-download"></i>
-                        <i class="fa fa-file-excel"></i>
+                        <i class="fa fa-xl fa-download text-success"></i>
+                        <i class="fa fa-xl fa-file-excel text-success"></i>
                         DEJARON DE PEDIR
                     </a>
                 </div>
@@ -87,13 +87,13 @@
                 </button>
                 <div class="dropdown-menu">
                     <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="dropdown-item">
-                        <i class="fa fa-lg fa-download text-success"></i>
-                        <i class="fa  fa-lg fa-file-excel text-success"></i>
+                        <i class="fa fa-xl fa-download text-success"></i>
+                        <i class="fa fa-xl fa-file-excel text-success"></i>
                         Destino Lima (Desarrollo)
                     </a>
                     <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="dropdown-item">
-                        <i class="fa fa-download"></i>
-                        <i class="fa fa-file-excel"></i>
+                        <i class="fa fa-xl fa-download text-success"></i>
+                        <i class="fa fa-xl fa-file-excel text-success"></i>
                         Destino Provincia (Desarrollo)
                     </a>
                 </div>
