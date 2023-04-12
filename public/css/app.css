@@ -1575,4 +1575,8 @@ select {
 		padding-right: 2rem;
 	}
 }
-
+.color-recuperado-abandono
+{
+    font-family: "Comic Sans MS" !important;
+    color:blue !important;
+}
