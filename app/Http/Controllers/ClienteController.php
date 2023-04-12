@@ -2895,6 +2895,8 @@ class ClienteController extends Controller
                 ->get([
                     'id','nombre','celular'
                 ]);
+            //$idpedido=0;
+            //$idcliente=$request->codigo_cliente;
             //$detalle_pedidos=DetallePedido::where('pedido_id',$pedido->id)->first();
             /*$rucs = Ruc::where('estado', '1')->where('cliente_id',$pedido->cliente_id)->where('num_ruc','<>',$detalle_pedidos->ruc)
                 ->get([
@@ -2908,16 +2910,18 @@ class ClienteController extends Controller
                 if($cliente->id==$pedido->cliente_id)
                 {
                     $datoscbx .= '<option style="color:black" selected value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
+                    $idcliente=$request->codigo_cliente;
                 }else{
                     $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
+                    $idcliente=0;
                 }
 
             }
             //$idpedido=$pedido->id;
         }
 
-        //return response()->json(['datoscbx' => $datoscbx,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
-        return response()->json(['datoscbx' => $datoscbx,'Params'=>$request->all()]);
+        return response()->json(['datoscbx' => $datoscbx,'cliente_id'=>$idcliente,'pedido_id'=>0,'Pedidos'=>$pedido,'Params'=>$request->all()]);
+        //return response()->json(['datoscbx' => $datoscbx,'Params'=>$request->all()]);
     }
     public  function  getRucComboPedidos(Request  $request){
         $datoscbx = '<option value="-1">' . trans('---- SELECCIONE RUC ----') . '</option>';
@@ -2937,6 +2941,7 @@ class ClienteController extends Controller
                         'porcentaje',
                     ]);
                 $idpedido=$pedido->id;
+                $idcliente=$request->codigo_cliente;
             }else
             {
                 $pedido=null;
@@ -2948,6 +2953,7 @@ class ClienteController extends Controller
                         'porcentaje',
                     ]);
                 $idpedido=0;
+                $idcliente=$request->codigo_cliente;
             }
             if(count($rucs)>0)
             {
@@ -2955,11 +2961,9 @@ class ClienteController extends Controller
                     $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->empresa . '" data-ruc="' . $cliente->num_ruc . '" >' . $cliente->num_ruc . '  -  ' . $cliente->empresa . '</option>';
                 }
             }
-
-
         }
 
-        return response()->json(['datoscbx' => $datoscbx,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
+        return response()->json(['datoscbx' => $datoscbx,'cliente_id'=>$idcliente,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
     }
 
     public function uptRucPedidos(Request $request)
