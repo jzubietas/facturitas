@@ -2933,7 +2933,7 @@ class ClienteController extends Controller
             {
                 $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
                 $detalle_pedidos=DetallePedido::where('pedido_id',$pedido->id)->first();
-                $rucs = Ruc::where('estado', '1')->where('cliente_id',$request->codigo_cliente)->where('num_ruc','<>',$detalle_pedidos->ruc)
+                $rucs = Ruc::where('estado', '1')->where('cliente_id',$request->codigo_cliente)->where('num_ruc','<>','')
                     ->get([
                         'id',
                         'num_ruc',
