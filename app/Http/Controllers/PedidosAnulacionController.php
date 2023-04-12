@@ -150,15 +150,25 @@ class PedidosAnulacionController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
         } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
-            $pedidos=$pedidos->whereIn('estado_aprueba_encargado',[0])->whereIn('pea.tipo',["C","F"]);
-            $usersasesores = User::where('users.rol', 'Asesor')
+            $usersasesores = User::where('users.rol', User::ROL_ASESOR)
                 ->where('users.estado', '1')
                 ->where('users.supervisor', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores)->whereIn('pea.tipo',["C","F"]);
+            $pedidos=$pedidos->whereIn('estado_aprueba_encargado',[0]);
+        } else if (Auth::user()->rol == User::ROL_JEFE_LLAMADAS) {
+            $asesor_cobranza=Users::where('rol',User::ROL_COBRANZAS)
+                ->where('users.estado','1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $pedidos = $pedidos->whereIn('u.identificador', $asesor_cobranza)->where('pea.tipo',"Q");
+            $pedidos=$pedidos->whereIn('estado_aprueba_encargado',[0]);
         } else if (Auth::user()->rol == User::ROL_LLAMADAS) {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -167,11 +177,7 @@ class PedidosAnulacionController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-        } else if (Auth::user()->rol == User::ROL_JEFE_LLAMADAS) {
-            $pedidos = $pedidos->where('u.identificador', '<>', 'B');
-            $pedidos=$pedidos->whereIn('estado_aprueba_encargado',[0])->where('pea.tipo',"Q");
         } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
             $usersasesores = User::where('users.rol', User::ROL_ASESOR_ADMINISTRATIVO)
                 ->where('users.estado', '1')
