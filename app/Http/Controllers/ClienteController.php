@@ -2936,6 +2936,7 @@ class ClienteController extends Controller
                         'empresa',
                         'porcentaje',
                     ]);
+                $idpedido=$pedido->id;
             }else
             {
                 $rucs = Ruc::where('estado', '1')->where('cliente_id',$request->codigo_cliente)->where('num_ruc','<>','')
@@ -2945,6 +2946,7 @@ class ClienteController extends Controller
                         'empresa',
                         'porcentaje',
                     ]);
+                $idpedido=0;
             }
             if(count($rucs)>0)
             {
@@ -2953,7 +2955,7 @@ class ClienteController extends Controller
                 }
             }
 
-            $idpedido=$pedido->id;
+
         }
 
         return response()->json(['datoscbx' => $datoscbx,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
