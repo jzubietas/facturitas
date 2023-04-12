@@ -3762,7 +3762,7 @@ class DashboardController extends Controller
                             </div>
                             '.$sub_html;
                     }
-                    else if (34<=$data["progress_pedidos"] && $data["progress_pedidos"] < 37)
+                    else if (34<=$data["progress_pedidos"] && $data["progress_pedidos"] < 38)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
@@ -3777,7 +3777,7 @@ class DashboardController extends Controller
                                   '.$sub_html;
 
                     }
-                    else if (37<=$data["progress_pedidos"] && $data["progress_pedidos"] < 55)
+                    else if (38<=$data["progress_pedidos"] && $data["progress_pedidos"] < 55)
                     {
                         $html .= '<div class="w-100 bg-white rounded">
                                     <div class="position-relative rounded">
