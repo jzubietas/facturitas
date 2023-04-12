@@ -56,12 +56,12 @@
                     Dejaron de pedir
                 </button>
                 <div class="dropdown-menu">
-                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="dropdown-item">
                         <i class="fa fa-download"></i>
                         <i class="fa fa-file-excel"></i>
                         DEJARON DE PEDIR (4) meses
                     </a>
-                    <a href="{{route('excel.clientes-two-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                    <a href="{{route('excel.clientes-two-month-ago-excel')}}" target="_blank" class="dropdown-item">
                         <i class="fa fa-download"></i>
                         <i class="fa fa-file-excel"></i>
                         DEJARON DE PEDIR
@@ -86,12 +86,12 @@
                     Pedidos Destino
                 </button>
                 <div class="dropdown-menu">
-                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="dropdown-item">
                         <i class="fa fa-download"></i>
                         <i class="fa fa-file-excel"></i>
                         Destino Lima (Desarrollo)
                     </a>
-                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="dropdown-item">
                         <i class="fa fa-download"></i>
                         <i class="fa fa-file-excel"></i>
                         Destino Provincia (Desarrollo)
