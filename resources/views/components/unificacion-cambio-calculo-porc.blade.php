@@ -512,6 +512,7 @@
                             $('#cbxRucPedidoRucUpd').html(dataruc.datoscbx);
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
                             $('#txtIdPedido').val(dataruc.pedido_id);
+                            $('#txtIdCliente').val(dataruc.cliente_id);
                         }
                     }
                 });
