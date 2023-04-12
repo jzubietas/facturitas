@@ -160,6 +160,12 @@
 
     <style>
 
+        .color-recuperado-abandono
+        {
+            font-family: "Comic Sans MS" !important;
+            color:blue !important;
+        }
+
         .yellow {
             /*background-color: yellow !important;*/
             color: #fcd00e !important;
