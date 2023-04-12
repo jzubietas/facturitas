@@ -2885,6 +2885,33 @@ class ClienteController extends Controller
 
     }
 
+    public  function  getClienteComboPedidos(Request  $request){
+        $datoscbx = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        //$pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
+        //$idpedido=0;
+        //if (isset($pedido))
+        {
+            $clientes=Cliente::where('tipo','=','1')->where('estado','=','1')
+                ->get([
+                    'id','nombre','celular'
+                ]);
+            //$detalle_pedidos=DetallePedido::where('pedido_id',$pedido->id)->first();
+            /*$rucs = Ruc::where('estado', '1')->where('cliente_id',$pedido->cliente_id)->where('num_ruc','<>',$detalle_pedidos->ruc)
+                ->get([
+                    'id',
+                    'num_ruc',
+                    'empresa',
+                    'porcentaje',
+                ]);*/
+            foreach ($clientes as $cliente) {
+                $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
+            }
+            //$idpedido=$pedido->id;
+        }
+
+        return response()->json(['datoscbx' => $datoscbx,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
+        return response()->json(['datoscbx' => $datoscbx,'Params'=>$request->all()]);
+    }
     public  function  getRucComboPedidos(Request  $request){
         $datoscbx = '<option value="-1">' . trans('---- SELECCIONE RUC ----') . '</option>';
         $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();

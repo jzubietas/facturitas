@@ -869,6 +869,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('excel/envios/olva', [ExcelController::class, 'listadoEnviosTiendaOlva'])->name('excel.envios-olva');
     Route::post('pedidosanul.verfilessolicasesores/{pedidosanulacion}', [PedidosAnulacionController::class, 'verFilesSolicitudAsesorAnulacion'])->name('anulaciones.verfilessolicasesores');
 
+    Route::post('getClienteComboPedidos', [ClienteController::class, 'getClienteComboPedidos'])->name('getClienteComboPedidos');
     Route::post('getRucComboPedidos', [ClienteController::class, 'getRucComboPedidos'])->name('getRucComboPedidos');
     Route::post('uptRucPedidos', [ClienteController::class, 'uptRucPedidos'])->name('uptRucPedidos');
 });

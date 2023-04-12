@@ -448,6 +448,36 @@
                 });
             })
 
+            //load
+            function load_cliente(){
+                var frmClienteLoadUpd = new FormData();
+                frmClienteLoadUpd.append('codigo_pedido', '');
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    data: frmClienteLoadUpd,
+                    type: 'POST',
+                    url: "{{ route('getClienteComboPedidos') }}",
+                    success: function (data) {
+                        console.log(data);
+                        /*if (data.pedido_id=="0") {
+                            Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
+                            $('#txtIdPedido').val(0);
+                            $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
+                            $("#cbxRucPedidoRucUpd").selectpicker("refresh");
+                        }else */{
+                            $('#cbxClientePedidoClienteUpd').html(data.datoscbx);
+                            $("#cbxClientePedidoClienteUpd").selectpicker("refresh");
+                            //$('#txtIdPedido').val(data.pedido_id);
+                        }
+
+                    }
+                });
+            }
+
+            load_cliente();
+
+
             $(document).on("click", "#btnGetRucPedido", function () {
                 var txtNumeroPedido = $('#txtNumeroPedido').val();
                 if (txtNumeroPedido == '') {
