@@ -480,6 +480,7 @@
             $(document).on("change","#cbxClientePedidoClienteUpd",function(){
 
                 var frmRucsRucUpd = new FormData();
+                frmRucsRucUpd.append('codigo_pedido', txtNumeroPedido);
                 frmRucsRucUpd.append('codigo_cliente', $(this).val());
                 $.ajax({
                     processData: false,
@@ -489,6 +490,7 @@
                     url: "{{ route('getRucComboPedidos') }}",
                     success: function (dataruc) {
                         console.log(dataruc);
+                        console.log(dataruc.pedido_id);
                         /*if (dataruc.pedido_id=="0") {
                             Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
                             $('#txtIdPedido').val(0);
