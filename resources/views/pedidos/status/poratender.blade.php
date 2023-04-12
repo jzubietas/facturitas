@@ -63,13 +63,15 @@
 
 @endsection
 
-@section('css')
+@push('css')
+    <style>
     .color-recuperado-abandono
     {
     font-family: "Comic Sans MS" !important;
     color:blue !important;
     }
-@stop
+    </style>
+@endpush
 
 @section('js')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
