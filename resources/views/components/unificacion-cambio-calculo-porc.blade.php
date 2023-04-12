@@ -546,10 +546,9 @@
                             $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
                         }else {
-                            $('#txtIdPedido').val(datacliente.pedido_id);
+                            $('#txtIdCliente').val(datacliente.cliente_id);
                             $('#cbxClientePedidoClienteUpd').html(datacliente.datoscbx);
                             $("#cbxClientePedidoClienteUpd").selectpicker("refresh");
-
 
                             console.log( $("#cbxClientePedidoClienteUpd").prop('selectedIndex') );
                             if($("#cbxClientePedidoClienteUpd").prop('selectedIndex')>0)
@@ -566,6 +565,7 @@
                                     url: "{{ route('getRucComboPedidos') }}",
                                     success: function (dataruc) {
                                         console.log(dataruc);
+                                        $('#txtIdRuc').val(0);
                                         /*if (dataruc.pedido_id=="0") {
                                             Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
                                             $('#txtIdPedido').val(0);
@@ -574,7 +574,7 @@
                                         }else*/{
                                             $('#cbxRucPedidoRucUpd').html(dataruc.datoscbx);
                                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
-                                            $('#txtIdPedido').val(dataruc.pedido_id);
+                                            //$('#txtIdPedido').val(dataruc.pedido_id);
                                         }
                                     }
                                 });
