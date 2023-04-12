@@ -475,7 +475,7 @@
                 });
             }
 
-            load_cliente();
+            //load_cliente();
 
 
             $(document).on("click", "#btnGetRucPedido", function () {
@@ -493,18 +493,18 @@
                     contentType: false,
                     data: frmPedidoRucUpd,
                     type: 'POST',
-                    url: "{{ route('getRucComboPedidos') }}",
+                    url: "{{ route('getClienteComboPedidos') }}",
                     success: function (data) {
                         console.log(data);
-                        if (data.pedido_id=="0") {
+                        /*if (data.pedido_id=="0") {
                             Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
                             $('#txtIdPedido').val(0);
                             $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
-                        }else {
-                            $('#cbxRucPedidoRucUpd').html(data.datoscbx);
-                            $("#cbxRucPedidoRucUpd").selectpicker("refresh");
-                            $('#txtIdPedido').val(data.pedido_id);
+                        }else */{
+                            $('#cbxClientePedidoClienteUpd').html(data.datoscbx);
+                            $("#cbxClientePedidoClienteUpd").selectpicker("refresh");
+                            //$('#txtIdPedido').val(data.pedido_id);
                         }
 
                     }

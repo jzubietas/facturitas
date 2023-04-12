@@ -2887,9 +2887,9 @@ class ClienteController extends Controller
 
     public  function  getClienteComboPedidos(Request  $request){
         $datoscbx = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-        //$pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
-        //$idpedido=0;
-        //if (isset($pedido))
+        $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
+        $idpedido=0;
+        if (isset($pedido))
         {
             $clientes=Cliente::where('tipo','=','1')->where('estado','=','1')
                 ->get([
@@ -2903,8 +2903,15 @@ class ClienteController extends Controller
                     'empresa',
                     'porcentaje',
                 ]);*/
-            foreach ($clientes as $cliente) {
-                $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
+            foreach ($clientes as $cliente)
+            {
+                if($cliente->id==$pedido->cliente_id)
+                {
+                    $datoscbx .= '<option style="color:black" selected value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
+                }else{
+                    $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
+                }
+
             }
             //$idpedido=$pedido->id;
         }
