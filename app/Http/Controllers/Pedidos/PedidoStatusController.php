@@ -358,7 +358,7 @@ class PedidoStatusController extends Controller
                     $btn .= '</ul></div>';
                     return $btn;
                 })
-                ->rawColumns(['action', 'action2', 'condicion_envio'])
+                ->rawColumns(['celulares','action', 'action2', 'condicion_envio'])
                 ->toJson();
         }
 
@@ -573,7 +573,7 @@ class PedidoStatusController extends Controller
                     }
                     return $btn;
                 })
-                ->rawColumns(['action', 'action2', 'condicion_envio'])
+                ->rawColumns(['celulares','action', 'action2', 'condicion_envio'])
                 ->toJson();
         }
 
