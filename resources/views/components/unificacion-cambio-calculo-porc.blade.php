@@ -422,6 +422,7 @@
             $(document).on("click", "#btnCambiarPedidoRucUpd", function () {
                 var txtIdPedido = $('#txtIdPedido').val();
                 var txtIdCliente = $('#txtIdCliente').val();
+                var txtIdRuc = $('#txtIdRuc').val();
                 var txtCodPedido = $('#txtNumeroPedido').val();
                 var cbxRucPedidoRucUpd = $('#cbxRucPedidoRucUpd').val();
                 if (txtIdPedido == '' || txtIdPedido == '0') {
