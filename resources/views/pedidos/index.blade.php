@@ -50,26 +50,37 @@
         @endcan --}}
         <div class="float-right btn-group dropleft" style="display: contents">
 
-            <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
-                <i class="fa fa-download"></i>
-                <i class="fa fa-file-excel"></i>
-                DEJARON DE PEDIR (4) meses
-            </a>
-
-            <a href="{{route('excel.clientes-two-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
-                <i class="fa fa-download"></i>
-                <i class="fa fa-file-excel"></i>
-                DEJARON DE PEDIR
-            </a>
-
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                Exportar
-            </button>
-            <div class="dropdown-menu">
-                <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
-                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                    Dejaron de pedir
+                </button>
+                <div class="dropdown-menu">
+                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                        <i class="fa fa-download"></i>
+                        <i class="fa fa-file-excel"></i>
+                        DEJARON DE PEDIR (4) meses
+                    </a>
+                    <a href="{{route('excel.clientes-two-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                        <i class="fa fa-download"></i>
+                        <i class="fa fa-file-excel"></i>
+                        DEJARON DE PEDIR
+                    </a>
+                </div>
             </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                    Exportar
+                </button>
+                <div class="dropdown-menu">
+                    <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
+                            src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+                </div>
+            </div>
+
+
         </div>
         @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos', 'key' => '3'])
     </h1>
