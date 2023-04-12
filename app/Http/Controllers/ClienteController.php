@@ -2923,9 +2923,10 @@ class ClienteController extends Controller
         $datoscbx = '<option value="-1">' . trans('---- SELECCIONE RUC ----') . '</option>';
         $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
         $idpedido=0;
-        if (isset($pedido)){
+        //if (isset($pedido))
+        {
             $detalle_pedidos=DetallePedido::where('pedido_id',$pedido->id)->first();
-            $rucs = Ruc::where('estado', '1')->where('cliente_id',$pedido->cliente_id)->where('num_ruc','<>',$detalle_pedidos->ruc)
+            $rucs = Ruc::where('estado', '1')->where('cliente_id',$request->codigo_cliente)->where('num_ruc','<>',$detalle_pedidos->ruc)
                 ->get([
                     'id',
                     'num_ruc',
