@@ -175,6 +175,7 @@
                 });
 
                 //recupera imagenes adjuntas
+                console.log("idunico es "+idunico)
                 var fd=new FormData();
                 fd.append('pedidoid',idunico);
                 $.ajax({
