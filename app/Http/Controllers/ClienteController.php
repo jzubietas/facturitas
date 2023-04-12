@@ -2972,6 +2972,13 @@ class ClienteController extends Controller
         $statusupdte=false;
         $cliente_ruc=Ruc::where('id',$request->codigo_ruc)->first();
         if (isset($cliente_ruc)){
+            //
+            $cliente_=Clientes::where('id',$request->codigo_cliente)->first();
+            $pedido_up=Pedido::where('id',$request->codigo_pedido)->first();
+            $pedido_up->update([
+                'cliente_id'=>$cliente_->id,
+                'user_id'=>$cliente_->user_id
+            ]);
             $pedidos_id=Pedido::where('id',$request->codigo_pedido)->first()->id;
             $detalle_pedidos=DetallePedido::where('pedido_id',$pedidos_id)->first();
 

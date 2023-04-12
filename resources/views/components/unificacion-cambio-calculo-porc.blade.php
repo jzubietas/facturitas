@@ -288,6 +288,7 @@
                                             {!! Form::label('txtNumeroPedido', 'PEDIDO*') !!} &nbsp; &nbsp; &nbsp;
                                            {!! Form::text('txtNumeroPedido', '',['id'=>'txtNumeroPedido','class' => 'form-control', 'placeholder' => 'Codigo Pedido', 'required' => 'required']) !!}
                                             <input type="hidden" id="txtIdPedido" name="txtIdPedido" value="0">
+                                            <input type="hidden" id="txtIdCliente" name="txtIdCliente" value="0">
                                         </div>
                                         <div class="form-group col-lg-2 d-flex align-items-center justify-content-center border-right">
                                             <button type="button" id="btnGetRucPedido"
@@ -418,10 +419,15 @@
 
             $(document).on("click", "#btnCambiarPedidoRucUpd", function () {
                 var txtIdPedido = $('#txtIdPedido').val();
+                var txtIdCliente = $('#txtIdCliente').val();
                 var txtCodPedido = $('#txtNumeroPedido').val();
                 var cbxRucPedidoRucUpd = $('#cbxRucPedidoRucUpd').val();
                 if (txtIdPedido == '' || txtIdPedido == '0') {
                     Swal.fire('Error', 'Debe ingresar el codigo del pedido', 'error');
+                    return false;
+                }
+                if (txtIdCliente == '' || txtIdCliente == '0') {
+                    Swal.fire('Error', 'Debe ingresar el codigo del cliente', 'error');
                     return false;
                 }
                 if (cbxRucPedidoRucUpd == '' || cbxRucPedidoRucUpd == '-1') {
@@ -430,6 +436,7 @@
                 }
                 var frmPedidoRucUpd = new FormData();
                 frmPedidoRucUpd.append('codigo_pedido', txtIdPedido);
+                frmPedidoRucUpd.append('codigo_cliente', txtIdCliente);
                 frmPedidoRucUpd.append('codigo_ruc', cbxRucPedidoRucUpd);
 
                 $.ajax({
