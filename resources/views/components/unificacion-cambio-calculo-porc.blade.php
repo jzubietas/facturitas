@@ -484,6 +484,11 @@
 
             //load_cliente();
 
+            $(document).on("change","#cbxRucPedidoRucUpd",function(){
+                let idruccliente=$(this).val();
+                $("#txtIdCliente").val(idruccliente);
+            });
+
             $(document).on("change","#cbxClientePedidoClienteUpd",function(){
 
                 var frmRucsRucUpd = new FormData();
