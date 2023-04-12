@@ -477,6 +477,32 @@
 
             //load_cliente();
 
+            $(document).on("change","cbxclientePedidoClienteUpd",function(){
+
+                var frmRucsRucUpd = new FormData();
+                frmRucsRucUpd.append('codigo_cliente', $("#cbxClientePedidoClienteUpd").val());
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    data: frmRucsRucUpd,
+                    type: 'POST',
+                    url: "{{ route('getRucComboPedidos') }}",
+                    success: function (dataruc) {
+                        console.log(dataruc);
+                        if (dataruc.pedido_id=="0") {
+                            Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
+                            $('#txtIdPedido').val(0);
+                            $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
+                            $("#cbxRucPedidoRucUpd").selectpicker("refresh");
+                        }else{
+                            $('#cbxRucPedidoRucUpd').html(dataruc.datoscbx);
+                            $("#cbxRucPedidoRucUpd").selectpicker("refresh");
+                            $('#txtIdPedido').val(dataruc.pedido_id);
+                        }
+                    }
+                });
+            });
+
 
             $(document).on("click", "#btnGetRucPedido", function () {
                 var txtNumeroPedido = $('#txtNumeroPedido').val();
