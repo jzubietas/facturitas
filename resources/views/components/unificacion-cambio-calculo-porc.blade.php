@@ -288,7 +288,7 @@
                                             {!! Form::label('txtNumeroPedido', 'PEDIDO*') !!} &nbsp; &nbsp; &nbsp;
                                            {!! Form::text('txtNumeroPedido', '',['id'=>'txtNumeroPedido','class' => 'form-control', 'placeholder' => 'Codigo Pedido', 'required' => 'required']) !!}
                                             <input type="text" id="txtIdPedido" name="txtIdPedido" value="0">
-                                            <input type="text" id="txtIdCliente" name="txtIdCliente" value="0">
+
                                         </div>
                                         <div class="form-group col-lg-2 d-flex align-items-center justify-content-center border-right">
                                             <button type="button" id="btnGetRucPedido"
@@ -306,6 +306,7 @@
                                                     id="cbxClientePedidoClienteUpd" data-live-search="true">
                                                 <option value="-1">---- SELECCIONE CLIENTE ----</option>
                                             </select>
+                                            <input type="text" id="txtIdCliente" name="txtIdCliente" value="0">
 
                                         </div>
                                         <div class="form-group col-lg-3">
@@ -315,6 +316,7 @@
                                                     id="cbxRucPedidoRucUpd" data-live-search="true">
                                                 <option value="-1">---- SELECCIONE RUC ----</option>
                                             </select>
+                                            <input type="text" id="txtIdRuc" name="txtIdRuc" value="0">
 
                                         </div>
                                         <div class="col-lg-6"></div>
