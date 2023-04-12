@@ -494,19 +494,46 @@
                     data: frmPedidoRucUpd,
                     type: 'POST',
                     url: "{{ route('getClienteComboPedidos') }}",
-                    success: function (data) {
-                        console.log(data);
+                    success: function (datacliente) {
+                        console.log(datacliente);
                         /*if (data.pedido_id=="0") {
                             Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
                             $('#txtIdPedido').val(0);
                             $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
                         }else */{
-                            $('#cbxClientePedidoClienteUpd').html(data.datoscbx);
+                            $('#cbxClientePedidoClienteUpd').html(datacliente.datoscbx);
                             $("#cbxClientePedidoClienteUpd").selectpicker("refresh");
-                            $('#txtIdPedido').val(data.pedido_id);
+                            $('#txtIdPedido').val(datacliente.pedido_id);
 
                             console.log( $("#cbxClientePedidoClienteUpd").prop('selectedIndex') );
+                            if($("#cbxClientePedidoClienteUpd").prop('selectedIndex')>0)
+                            {
+                                //ajax a rucs
+                                var frmRucsRucUpd = new FormData();
+                                frmRucsRucUpd.append('codigo_cliente', $("#cbxClientePedidoClienteUpd").val());
+                                frmRucsRucUpd.append('codigo_pedido', txtNumeroPedido);
+                                $.ajax({
+                                    processData: false,
+                                    contentType: false,
+                                    data: frmRucsRucUpd,
+                                    type: 'POST',
+                                    url: "{{ route('getRucComboPedidos') }}",
+                                    success: function (dataruc) {
+                                        console.log(dataruc);
+                                        if (dataruc.pedido_id=="0") {
+                                            Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
+                                            $('#txtIdPedido').val(0);
+                                            $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
+                                            $("#cbxRucPedidoRucUpd").selectpicker("refresh");
+                                        }else{
+                                            $('#cbxRucPedidoRucUpd').html(dataruc.datoscbx);
+                                            $("#cbxRucPedidoRucUpd").selectpicker("refresh");
+                                            $('#txtIdPedido').val(dataruc.pedido_id);
+                                        }
+                                    }
+                                });
+                            }
                             //if se selecciona un cliente
 
                         }
