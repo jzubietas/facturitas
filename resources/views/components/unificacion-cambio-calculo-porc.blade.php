@@ -546,6 +546,7 @@
                             $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
                         }else {
+                            console.log(" clienteid = "+datacliente.cliente_id);
                             $('#txtIdCliente').val(datacliente.cliente_id);
                             $('#cbxClientePedidoClienteUpd').html(datacliente.datoscbx);
                             $("#cbxClientePedidoClienteUpd").selectpicker("refresh");
