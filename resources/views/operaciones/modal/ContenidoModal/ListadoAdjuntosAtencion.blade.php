@@ -6,7 +6,7 @@
         <tr class="adjuntos" data-adjunto="{{ $img->adjunto }}">
             <td>
                 <a target="_blank" download
-                   href="{{ \Storage::disk('pstorage')->url( $img->adjunto) }}">
+                   href="{{ \Storage::disk('pstorage')->url( 'adjuntos/'.$img->adjunto) }}">
                     <span class="text-primary">{{ $img->adjunto }}</span>
                 </a>
             </td>
