@@ -166,10 +166,10 @@ class PedidosAnulacionController extends Controller
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.id as id")
                 )
-                ->pluck('users.identificador');
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+                ->pluck('users.id');
+            $pedidos = $pedidos->WhereIn('pea.user_id_asesor', $usersasesores);
         }else if (Auth::user()->rol == User::ROL_JEFE_LLAMADAS) {
             $asesor_cobranza=User::where('rol',User::ROL_COBRANZAS)
                 ->where('users.estado','1')
@@ -178,7 +178,7 @@ class PedidosAnulacionController extends Controller
                     DB::raw("users.id as id")
                 )
                 ->pluck('users.id');
-            $pedidos = $pedidos->whereIn('u.id', $asesor_cobranza)->whereIn('pea.tipo',["C","Q"]);
+            $pedidos = $pedidos->whereIn('pea.user_id_asesor', $asesor_cobranza)->whereIn('pea.tipo',["C","Q"]);
             $pedidos = $pedidos->whereIn('estado_aprueba_encargado',[0]);
         } else if (Auth::user()->rol == User::ROL_LLAMADAS) {
             $usersasesores = User::where('users.rol', 'Asesor')
