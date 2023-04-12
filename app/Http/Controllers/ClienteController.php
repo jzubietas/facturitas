@@ -2889,6 +2889,7 @@ class ClienteController extends Controller
         $datoscbx = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
         $idpedido=0;
+        $idcliente=0;
         if (isset($pedido))
         {
             $clientes=Cliente::where('tipo','=','1')->where('estado','=','1')
@@ -2913,7 +2914,7 @@ class ClienteController extends Controller
                     $idcliente=$request->codigo_cliente;
                 }else{
                     $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
-                    $idcliente=0;
+                    //$idcliente=0;
                 }
 
             }
