@@ -2939,6 +2939,7 @@ class ClienteController extends Controller
                 $idpedido=$pedido->id;
             }else
             {
+                $pedido=null;
                 $rucs = Ruc::where('estado', '1')->where('cliente_id',$request->codigo_cliente)->where('num_ruc','<>','')
                     ->get([
                         'id',
