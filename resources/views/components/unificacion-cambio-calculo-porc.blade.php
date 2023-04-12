@@ -298,7 +298,7 @@
                                                     class="btn btn-danger btn-lg "><i class="fas fa-eraser"></i>
                                             </button>
                                         </div>
-                                        <div class="form-group col-lg-6">
+                                        <div class="form-group col-lg-3">
                                             {!! Form::label('cbxClientePedidoClienteUpd"', 'CLIENTE*') !!} &nbsp; &nbsp; &nbsp;
                                             <select name="cbxClientePedidoClienteUpd"
                                                     class="border form-control border-secondary"
@@ -307,7 +307,7 @@
                                             </select>
 
                                         </div>
-                                        <div class="form-group col-lg-6">
+                                        <div class="form-group col-lg-3">
                                             {!! Form::label('cbxRucPedidoRucUpd"', 'RUC*') !!} &nbsp; &nbsp; &nbsp;
                                             <select name="cbxRucPedidoRucUpd"
                                                     class="border form-control border-secondary"
