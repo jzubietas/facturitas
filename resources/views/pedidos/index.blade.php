@@ -80,6 +80,25 @@
                 </div>
             </div>
 
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                    Pedidos Destino
+                </button>
+                <div class="dropdown-menu">
+                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                        <i class="fa fa-download"></i>
+                        <i class="fa fa-file-excel"></i>
+                        Destino Lima (Desarrollo)
+                    </a>
+                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                        <i class="fa fa-download"></i>
+                        <i class="fa fa-file-excel"></i>
+                        Destino Provincia (Desarrollo)
+                    </a>
+                </div>
+            </div>
+
 
         </div>
         @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos', 'key' => '3'])
