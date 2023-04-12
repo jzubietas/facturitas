@@ -2888,6 +2888,7 @@ class ClienteController extends Controller
     public  function  getClienteComboPedidos(Request  $request){
         $datoscbx = '<option value="-1">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         $pedido=Pedido::where('codigo',$request->codigo_pedido)->where('estado',1)->first();
+        dd($pedido);
         $idpedido=0;
         $idcliente=0;
         if (isset($pedido))
