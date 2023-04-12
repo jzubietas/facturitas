@@ -2912,7 +2912,7 @@ class ClienteController extends Controller
                 if($cliente->id==$pedido->cliente_id) /*4425*/
                 {
                     $datoscbx .= '<option style="color:black" selected value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
-                    $idcliente=$request->codigo_cliente;
+                    $idcliente=$cliente->id;
                 }else{
                     $datoscbx .= '<option style="color:black" value="' . $cliente->id . '" data-raz-soc="' . $cliente->nombre . '" data-ruc="' . $cliente->celular . '" >' . $cliente->celular . '  -  ' . $cliente->nombre . '</option>';
                     //$idcliente=0;
@@ -2923,7 +2923,6 @@ class ClienteController extends Controller
         }
 
         return response()->json(['datoscbx' => $datoscbx,'cliente_id'=>$idcliente,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
-        //return response()->json(['datoscbx' => $datoscbx,'Params'=>$request->all()]);
     }
     public  function  getRucComboPedidos(Request  $request){
         $datoscbx = '<option value="-1">' . trans('---- SELECCIONE RUC ----') . '</option>';
