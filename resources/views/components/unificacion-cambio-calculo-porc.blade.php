@@ -477,10 +477,10 @@
 
             //load_cliente();
 
-            $(document).on("change","cbxclientePedidoClienteUpd",function(){
+            $(document).on("change","#cbxclientePedidoClienteUpd",function(){
 
                 var frmRucsRucUpd = new FormData();
-                frmRucsRucUpd.append('codigo_cliente', $("#cbxClientePedidoClienteUpd").val());
+                frmRucsRucUpd.append('codigo_cliente', $(this).val());
                 $.ajax({
                     processData: false,
                     contentType: false,
