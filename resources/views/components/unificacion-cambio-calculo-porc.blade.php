@@ -279,7 +279,7 @@
                          aria-labelledby="navPedidoRucUpd">
                         <div class="card">
                             <div class="card-header">
-                                <h3>Actualizacion de RUC por Pedido</h3>
+                                <h3>Actualizacion de Cliente/RUC por Pedido</h3>
                             </div>
                             <div class="card-body">
                                 <div class="card-body border border-secondary rounded">
@@ -297,6 +297,15 @@
                                             <button type="button" id="btnLimpiarBusquedaRP"
                                                     class="btn btn-danger btn-lg "><i class="fas fa-eraser"></i>
                                             </button>
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            {!! Form::label('cbxClientePedidoClienteUpd"', 'CLIENTE*') !!} &nbsp; &nbsp; &nbsp;
+                                            <select name="cbxClientePedidoClienteUpd"
+                                                    class="border form-control border-secondary"
+                                                    id="cbxClientePedidoClienteUpd" data-live-search="true">
+                                                <option value="-1">---- SELECCIONE CLIENTE ----</option>
+                                            </select>
+
                                         </div>
                                         <div class="form-group col-lg-6">
                                             {!! Form::label('cbxRucPedidoRucUpd"', 'RUC*') !!} &nbsp; &nbsp; &nbsp;
