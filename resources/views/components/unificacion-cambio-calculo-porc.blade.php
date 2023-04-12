@@ -504,7 +504,11 @@
                         }else */{
                             $('#cbxClientePedidoClienteUpd').html(data.datoscbx);
                             $("#cbxClientePedidoClienteUpd").selectpicker("refresh");
-                            //$('#txtIdPedido').val(data.pedido_id);
+                            $('#txtIdPedido').val(data.pedido_id);
+
+                            console.log( $("#cbxClientePedidoClienteUpd").prop('selectedIndex') );
+                            //if se selecciona un cliente
+
                         }
 
                     }
