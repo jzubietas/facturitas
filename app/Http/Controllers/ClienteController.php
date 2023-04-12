@@ -2917,10 +2917,10 @@ class ClienteController extends Controller
                 }
 
             }
-            //$idpedido=$pedido->id;
+            $idpedido=$pedido->id;
         }
 
-        return response()->json(['datoscbx' => $datoscbx,'cliente_id'=>$idcliente,'pedido_id'=>0,'Pedidos'=>$pedido,'Params'=>$request->all()]);
+        return response()->json(['datoscbx' => $datoscbx,'cliente_id'=>$idcliente,'pedido_id'=>$idpedido,'Pedidos'=>$pedido,'Params'=>$request->all()]);
         //return response()->json(['datoscbx' => $datoscbx,'Params'=>$request->all()]);
     }
     public  function  getRucComboPedidos(Request  $request){

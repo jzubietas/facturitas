@@ -539,15 +539,18 @@
                     url: "{{ route('getClienteComboPedidos') }}",
                     success: function (datacliente) {
                         console.log(datacliente);
-                        /*if (data.pedido_id=="0") {
+                        $('#txtIdPedido').val(datacliente.pedido_id);
+                        if (data.cliente_id=="0") {
                             Swal.fire('Notificacion', 'El pedido no tiene clientes registrados', 'error');
-                            $('#txtIdPedido').val(0);
+                            $('#txtIdCliente').val(0);
+
                             $('#cbxRucPedidoRucUpd').html("<option value='-1'>---- SELECCIONE RUC ----</option>");
                             $("#cbxRucPedidoRucUpd").selectpicker("refresh");
-                        }else */{
+                        }else {
+                            $('#txtIdPedido').val(datacliente.pedido_id);
                             $('#cbxClientePedidoClienteUpd').html(datacliente.datoscbx);
                             $("#cbxClientePedidoClienteUpd").selectpicker("refresh");
-                            $('#txtIdPedido').val(datacliente.pedido_id);
+
 
                             console.log( $("#cbxClientePedidoClienteUpd").prop('selectedIndex') );
                             if($("#cbxClientePedidoClienteUpd").prop('selectedIndex')>0)
