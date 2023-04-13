@@ -414,6 +414,7 @@ class UserController extends Controller
                     || $user->exidentificador == '25'
                     || $user->exidentificador == '26'
                     || $user->exidentificador == '28'
+                    || $user->identificador == '17'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
