@@ -6,7 +6,7 @@
 @section('content_header')
     <div class="row p-0">
         <div class="form-group col-md-3">
-            <h3>Bandeja de Anulaciones</h3>
+            <h3>Bandeja de Llamados de atencion</h3>
         </div>
         <div class="form-group col-md-6">
             @if(Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ENCARGADO || Auth::user()->rol == \App\Models\User::ROL_ASESOR || Auth::user()->rol == \App\Models\User::ROL_COBRANZAS || Auth::user()->rol == \App\Models\User::ROL_ASESOR_ADMINISTRATIVO  )
@@ -31,7 +31,7 @@
         <div class="tab-content" id="myTabContent" style="overflow-x: scroll !important;">
 
             <div class="tab-pane fade show active" id="enmotorizado" role="tabpanel" aria-labelledby="enmotorizado-tab">
-                <table id="tblListadoAnulaciones" class="table table-striped">{{-- display nowrap  --}}
+                <table id="tblLlamadosAtencion" class="table table-striped">{{-- display nowrap  --}}
                     <thead>
                     <tr>
                         <th></th>
@@ -88,7 +88,7 @@
     <script>
 
 
-        let tblListadoAnulaciones = null;
+        let tblLlamadosAtencion = null;
         let dataForm_agregaranulacion_f = {};
         let dataForm_agregaranulacion_pc = {};
 
@@ -110,7 +110,7 @@
 
             }
 
-            tblListadoAnulaciones = $('#tblListadoAnulaciones').DataTable({
+            tblLlamadosAtencion = $('#tblLlamadosAtencion').DataTable({
                 dom: 'Blfrtip',
                 processing: true,
                 serverSide: true,
@@ -231,12 +231,12 @@
                         $("#modal-envio-recojo .textcode").text('');
                         $("#modal-envio-recojo").modal("hide");
                         Swal.fire('Mensaje', data.mensaje, 'success')
-                        $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                        $('#tblLlamadosAtencion').DataTable().ajax.reload();
                     }
                 });
             });
 
-            tblListadoAnulaciones.on('responsive-display', function (e, datatable, row, showHide, update) {
+            tblLlamadosAtencion.on('responsive-display', function (e, datatable, row, showHide, update) {
                 if (showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
@@ -363,7 +363,7 @@
                             if (data.pedidosinpago==1){
                                 Swal.fire('Notificacion', 'Se registró la solicitud de anulacion, correctamente.', 'success');
                                 limpiarFormSolAnulCompl();
-                                $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                $('#tblLlamadosAtencion').DataTable().ajax.reload();
                             }else {
                                 Swal.fire('Error', 'El pedido tiene pagos o adelantos, verifique.', 'warning');
                             }
@@ -615,7 +615,7 @@
                             if (data.pedidosinpago==1){
                                 Swal.fire('Notificacion', 'Se registró la solicitud de anulacion, correctamente.', 'success');
                                 limpiarFormSolAnulFact();
-                                $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                $('#tblLlamadosAtencion').DataTable().ajax.reload();
                             }else {
                                 Swal.fire('Error', 'El pedido tiene pagos o adelantos, verifique.', 'warning');
                             }
@@ -705,7 +705,7 @@
                             if (data.pedidosinpago==0){
                                 Swal.fire('Notificacion', 'Se registró la solicitud de anulacion, correctamente.', 'success');
                                 limpiarFormSolAnulCobr();
-                                $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                $('#tblLlamadosAtencion').DataTable().ajax.reload();
                             }else {
                                 Swal.fire('Error', 'El pedido tiene pagos o adelantos, verifique.', 'warning');
                             }
@@ -719,30 +719,30 @@
 
             });
 
-            $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaAsesor', function () {
-                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+            $('#tblLlamadosAtencion tbody').on('click', 'button.btnApruebaAsesor', function () {
+                var data = tblLlamadosAtencion.row($(this).parents('tr')).data();
                 aprobacionAnulacion(data.idanulacion,1,1);
             })
-            $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaEncargado', function () {
-                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+            $('#tblLlamadosAtencion tbody').on('click', 'button.btnApruebaEncargado', function () {
+                var data = tblLlamadosAtencion.row($(this).parents('tr')).data();
                 aprobacionAnulacion(data.idanulacion,2,1);
             })
-            $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaAdmin', function () {
-                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+            $('#tblLlamadosAtencion tbody').on('click', 'button.btnApruebaAdmin', function () {
+                var data = tblLlamadosAtencion.row($(this).parents('tr')).data();
                 aprobacionAnulacion(data.idanulacion,3,1);
             })
-            $('#tblListadoAnulaciones tbody').on('click', 'button.btnApruebaJefeOp', function () {
-                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+            $('#tblLlamadosAtencion tbody').on('click', 'button.btnApruebaJefeOp', function () {
+                var data = tblLlamadosAtencion.row($(this).parents('tr')).data();
                 aprobacionAnulacion(data.idanulacion,4,1);
             })
 0
-            $('#tblListadoAnulaciones tbody').on('click', 'button.btnDesapruebaEncargado', function () {
-                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+            $('#tblLlamadosAtencion tbody').on('click', 'button.btnDesapruebaEncargado', function () {
+                var data = tblLlamadosAtencion.row($(this).parents('tr')).data();
                 aprobacionAnulacion(data.idanulacion,2,2);
             })
 
-            $('#tblListadoAnulaciones tbody').on('click', 'button.btnDesapruebaAdministrador', function () {
-                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+            $('#tblLlamadosAtencion tbody').on('click', 'button.btnDesapruebaAdministrador', function () {
+                var data = tblLlamadosAtencion.row($(this).parents('tr')).data();
                 aprobacionAnulacion(data.idanulacion,3,2);
             })
 
@@ -816,7 +816,7 @@
                                         success: function (data) {
                                             console.log(data);
                                             Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
-                                            $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                            $('#tblLlamadosAtencion').DataTable().ajax.reload();
                                         }
                                     });
                                 }else{
@@ -850,7 +850,7 @@
                                 success: function (data) {
                                     console.log(data);
                                     Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
-                                    $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                    $('#tblLlamadosAtencion').DataTable().ajax.reload();
                                 }
                             });
                         }
@@ -891,7 +891,7 @@
                                         success: function (data) {
                                             console.log(data);
                                             Swal.fire('Notificacion', 'Se '+v_respuesta+' correctamente.', 'success');
-                                            $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                            $('#tblLlamadosAtencion').DataTable().ajax.reload();
                                         }
                                     });
                                 }else{
@@ -1012,7 +1012,7 @@
                         if (data.contpedanulacions==1){
                             Swal.fire('Notificacion', 'Se confirmo la solicitud de anulacion, correctamente.', 'success');
                             $("#modal-confirma-anulacion").modal("hide");
-                            $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                            $('#tblLlamadosAtencion').DataTable().ajax.reload();
                         }else {
                             Swal.fire('Error', 'No existe la anulacion para confirmar, verifique.', 'warning');
                         }
@@ -1026,7 +1026,7 @@
                         Swal.fire('Notificacion', 'Se confirmo la solicitud de anulacion, correctamente.', 'success');
                         $("#modal-confirma-anulacion").modal("hide");
                         resetearcampossolanu();
-                        $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                        $('#tblLlamadosAtencion').DataTable().ajax.reload();
                     }else {
                         Swal.fire('Error', 'No existe la anulacion para confirmar, verifique.', 'warning');
                     }
@@ -1125,8 +1125,8 @@
                 $("#txtMotivoRechazo").html(motivo_rechazo);
             });
 
-            $('#tblListadoAnulaciones tbody').on('click', 'button.btnAnularSolicitudByAsesor', function () {
-                var data = tblListadoAnulaciones.row($(this).parents('tr')).data();
+            $('#tblLlamadosAtencion tbody').on('click', 'button.btnAnularSolicitudByAsesor', function () {
+                var data = tblLlamadosAtencion.row($(this).parents('tr')).data();
                 /*console.log(data.idanulacion); return false;*/
                 Swal.fire({
                     title:'Cancelar',
@@ -1149,7 +1149,7 @@
                             success: function (data) {
                                 console.log(data);
                                 Swal.fire('Notificacion', 'Se anuló la solicitud correctamente.', 'success');
-                                $('#tblListadoAnulaciones').DataTable().ajax.reload();
+                                $('#tblLlamadosAtencion').DataTable().ajax.reload();
                             }
                         });
                     }

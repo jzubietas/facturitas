@@ -60,11 +60,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('llamados.atencion', [CallAtentionController::class, 'index'])->name('llamados.atencion');
     Route::get('llamados.atencion.tabla', [CallAtentionController::class, 'tabla'])->name('llamados.atencion.tabla');
 
-
-
     Route::post('escaneo/envio.escaneoqr/{id}', [EscaneoController::class, 'EscaneoQR'])->name('escaneo/envio.escaneoqr');
     Route::post('escaneo.estado_pedidos', [EscaneoController::class, 'EstadoSobresScan'])->name('escaneo.estado_pedidos');
-
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard/widgets-fetch', [DashboardController::class, 'widgets'])->name('dashboard.widgets');
