@@ -453,7 +453,8 @@ class AnalisisSituacionCliente_Individual extends Command
                                                         "situacion" => 'NUEVO',"flag_fp" => '1'
                                                     ]);
                                                 }
-                                            }else if($situacion_antes->activos>0)
+                                            }
+                                            else if($situacion_antes->activos>0)
                                             {
                                                 $situacion_create->update([
                                                     "situacion" => 'NUEVO',"flag_fp" => '1'

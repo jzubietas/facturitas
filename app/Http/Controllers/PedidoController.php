@@ -326,6 +326,13 @@ class PedidoController extends Controller
                 $badge_estado .= '<span class="rounded etiquetas_asignacion" style="margin: 0px !important; background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
+            ->editColumn('fecha_up',function($pedido){
+                if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
+                    return '--';
+                }else{
+                    return $pedido->fecha_up;
+                }
+            })
             ->editColumn('celulares',function($pedido){
                 if ($pedido->icelulares != null) {
                     if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
