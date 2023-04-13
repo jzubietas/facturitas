@@ -21,7 +21,28 @@ class CallAtentionController extends Controller
     public function index()
     {
         //
-        return view('pedidos.anulaciones.index');
+        $mirol = Auth::user()->rol;
+        $users = User::where('cant_vidas_cero', '>', 0)
+            ->select([
+                'users.*',
+                DB::raw("(CASE WHEN users.rol in ('Asesor','COBRANZAS','Llamadas') THEN (select u.name  from users u where u.id=users.supervisor limit 1) ELSE
+        (select us.name  from users us where us.id=users.jefe limit 1)
+         END) AS nombre_jefe"),
+            ]);
+        if ($mirol == User::ROL_JEFE_LLAMADAS) { User::ROL_LLAMADAS;
+            $users = $users->where('jefe', Auth::user()->id)->where("rol", User::ROL_LLAMADAS);
+            $users = $users->orderBy('name', 'ASC')->get();
+        } else if ($mirol == User::ROL_JEFE_OPERARIO) {
+            $users = $users->where('jefe', Auth::user()->id)->where("rol", User::ROL_OPERARIO);
+            $users = $users->orderBy('name', 'ASC')->get();
+        } else if ($mirol == User::ROL_ENCARGADO) {
+            $users = $users->where('supervisor', Auth::user()->id)->where("rol", User::ROL_ASESOR);
+            $users = $users->orderBy('exidentificador', 'ASC')->get();
+        }else{
+            $users = $users->orderBy('name', 'ASC')->get();
+        }
+
+        return view('callatention.index',compact("users"));
     }
 
     public function tabla(Request $request)
