@@ -479,7 +479,7 @@ class PedidoController extends Controller
                 $btn[] = '</ul></div>';
                 return join('', $btn);
             })
-            ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color','celulares'])
+            ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color','celulares','fecha_up'])
             ->make(true);
     }
 
