@@ -573,9 +573,14 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 var parts = valorr.split("-");
                 valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
 
+                const ddd = new Date();
+                ddd_1=(ddd.getFullYear()+'-'+ddd.getMonth()+'-'+ddd.getDay())
+                console.log(" "+ddd_1)
+
                 fd.append('fechametames', valorr);
                 console.log()
                 fd.append('ii', entero);
+
                 $.ajax({
                     data: fd,
                     processData: false,
@@ -600,6 +605,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         {
                             console.log("cambiar color")
                             //$(".h1-change-day").css("color","blue");
+                            if(valorr!=ddd_1)
                             $(".h1-change-day").attr('style', 'color: blue !important');
                         }
                         if (entero == 1) {
