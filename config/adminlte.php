@@ -281,11 +281,11 @@ return [
         ],
         [
             'text' => 'Llamados de atencion (DES)',
-            'can' => 'pagos.create',
+            'can' => 'llamados.atencion',
             'icon_color' => 'green',
             'route' => 'llamados.atencion',
             'icon' => 'far fa-id-card',
-            'active' => ['registrar pagos*'],
+            'active' => ['llamados atencion*'],
         ],
         [
             'text' => 'Configuracion',
