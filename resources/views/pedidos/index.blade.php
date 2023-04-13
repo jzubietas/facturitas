@@ -1367,7 +1367,7 @@ ${data.foto3 ? `
                     {data: 'users', name: 'users',},
                     {data: 'ruc', name: 'ruc',},
                     {data: 'fecha', name: 'fecha',},
-                    {data: 'fecha_anulacion', name: 'fecha_anulacion', "visible": true,},
+                    {data: 'fecha_up', name: 'fecha_up', "visible": false,},
                     {data: 'total', name: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '')},
                     {
                         data: 'condicion_pa',
