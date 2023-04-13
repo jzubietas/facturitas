@@ -1,7 +1,6 @@
-{{--pedidos.recojo--}}
 @extends('adminlte::page')
 
-@section('title', 'Anulaciones')
+@section('title', 'Bandeja de Llamados de Atencion')
 
 @section('content_header')
     <div class="row p-0">
