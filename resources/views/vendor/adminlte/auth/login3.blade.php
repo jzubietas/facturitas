@@ -21,71 +21,59 @@
 @section('auth_header', __('adminlte::adminlte.login_message'))
 
 @section('auth_body')
-    <form action="{{ $login_url }}" method="post">
-        {{ csrf_field() }}
 
-        {{-- Email field --}}
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                </div>
-            </div>
-            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                   value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}" autofocus>
+    <form class="form-horizontal" method="POST" action="{{ $login_url }}">
+        @csrf
 
-            @error('email')
-            <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
+        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+            <label for="email" class="col-md-8 control-label">Correo</label>
+
+            <div class="col-md-12">
+                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+
+                @if ($errors->has('email'))
+                    <span class="help-block">
+                    <strong>{{ $errors->first('email') }}</strong>
                 </span>
-            @enderror
+                @endif
+            </div>
         </div>
 
-        {{-- Password field --}}
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                </div>
-            </div>
-            <input type="password" name="password" id="password"
-                   class="form-control @error('password') is-invalid @enderror"
-                   placeholder="{{ __('adminlte::adminlte.password') }}">
+        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+            <label for="password" class="col-md-8 control-label">Clave</label>
 
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span id="show_password" class="fas fa-eye" role="button"></span>
-                </div>
-            </div>
+            <div class="col-md-12">
+                <input id="password" type="password" class="form-control" name="password" required>
 
-            @error('password')
-            <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
+                @if ($errors->has('password'))
+                    <span class="help-block">
+                    <strong>{{ $errors->first('password') }}</strong>
                 </span>
-            @enderror
+                @endif
+            </div>
         </div>
 
-        {{-- Login field --}}
-        <div class="row">
-            <div class="col-7">
-                <div class="icheck-primary" title="{{ __('adminlte::adminlte.remember_me_hint') }}">
-                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                    <label for="remember">
-                        {{ __('adminlte::adminlte.remember_me') }}
+        <div class="form-group d-none">
+            <div class="col-md-6 col-md-offset-4">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
                     </label>
                 </div>
             </div>
-
-            <div class="col-5">
-                <button type=submit
-                        class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
-                    <span class="fas fa-sign-in-alt"></span>
-                    {{ __('adminlte::adminlte.sign_in') }}
-                </button>
-            </div>
         </div>
 
+        <div class="form-group ">
+            <div class="col-md-12 col-md-offset-4">
+                <button type="submit" class="btn btn-primary">
+                    Acceder
+                </button>
+
+                <a class="btn btn-link d-none" href="{{ route('password.request') }}">
+                    Forgot Your Password?
+                </a>
+            </div>
+        </div>
     </form>
 @stop
 
