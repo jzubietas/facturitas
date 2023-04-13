@@ -1195,20 +1195,20 @@
                     var pedidodiferencia = data.diferencia;
 
                     if (data.condicion_code == 4 || data.estado == 0) {
-                        $('td:eq(10)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                        $('td:eq(11)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                     } else {
                         if (pedidodiferencia == null) {
-                            $('td:eq(10)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                            $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                         } else {
                             if (pedidodiferencia > 3 && pedidodiferencia < 19) {
                                 //naranja
-                                $('td:eq(10)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                                $('td:eq(11)', row).css('background', '#FBBA72').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                             } else if (pedidodiferencia >= 19) {
                                 //rojo
-                                $('td:eq(10)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                                $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                             } else {
                                 //verde
-                                $('td:eq(10)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
+                                $('td:eq(11)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
                             }
                         }
                     }
