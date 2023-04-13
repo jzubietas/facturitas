@@ -162,7 +162,7 @@
                     <th class="align-middle" scope="col">Id</th>
                     <th class="align-middle" scope="col">RUC</th>
                     <th class="align-middle" scope="col">F. Registro</th>
-                    <th class="align-middle" scope="col">F. Actualizacion</th>
+                    <th class="align-middle" scope="col">F. Anulacion</th>
                     <th class="align-middle" scope="col">Total (S/)</th>
                     <th class="align-middle" scope="col">Est. pago</th>
                     <th class="align-middle" scope="col">Con. pago</th>
@@ -1367,7 +1367,7 @@ ${data.foto3 ? `
                     {data: 'users', name: 'users',},
                     {data: 'ruc', name: 'ruc',},
                     {data: 'fecha', name: 'fecha',},
-                    {data: 'fecha_up', name: 'fecha_up', "visible": false,},
+                    {data: 'fecha_anulacion', name: 'fecha_anulacion', "visible": true,},
                     {data: 'total', name: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '')},
                     {
                         data: 'condicion_pa',
