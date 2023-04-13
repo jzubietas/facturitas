@@ -428,29 +428,47 @@ class AnalisisSituacionCliente_Individual extends Command
                                         {
                                             if($situacion_antes->activos==0)
                                             {
-                                                //es febrero
-                                                if($situacion_antes_2->activos==0)
+                                                if($situacion_antes->flag_fp==1)
                                                 {
-                                                    //es enero
-                                                    if($situacion_antes_3->activos==0)
+                                                    if($situacion_antes_2->activos==0)
                                                     {
-                                                        // es diciembre
-                                                        //a abandono
-                                                        $situacion_create->update([
-                                                            "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
-                                                        ]);
-
-                                                    }else if($situacion_antes_3->activos>0)
+                                                        if($situacion_antes_2->flag_fp==1)
+                                                        {
+                                                            if($situacion_antes_3->activos==0)
+                                                            {
+                                                                if($situacion_antes_3->flag_fp==1)
+                                                                {
+                                                                    $situacion_create->update([
+                                                                        "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
+                                                                    ]);
+                                                                }
+                                                                else{
+                                                                    $situacion_create->update([
+                                                                        "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                                    ]);
+                                                                }
+                                                            }else if($situacion_antes_3->activos>0)
+                                                            {
+                                                                //a abandono reciente
+                                                                $situacion_create->update([
+                                                                    "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                                ]);
+                                                            }
+                                                        }
+                                                        else{
+                                                            $situacion_create->update([
+                                                                "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                            ]);
+                                                        }
+                                                    }else if($situacion_antes_2->activos>0)
                                                     {
-                                                        //a abandono reciente
                                                         $situacion_create->update([
-                                                            "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                            "situacion" => 'NUEVO',"flag_fp" => '1'
                                                         ]);
                                                     }
-                                                }else if($situacion_antes_2->activos>0)
-                                                {
+                                                }else{
                                                     $situacion_create->update([
-                                                        "situacion" => 'NUEVO',"flag_fp" => '1'
+                                                        "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
                                                     ]);
                                                 }
                                             }
