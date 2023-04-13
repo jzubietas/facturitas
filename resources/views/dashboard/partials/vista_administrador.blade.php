@@ -118,7 +118,7 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
-                <h1 class="text-uppercase justify-center text-center " style="color: #FFFFFF;
+                <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
 background: #FFFFFF;
 text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">Metas del mes
                     de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
@@ -662,6 +662,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         // Handle the error
                     },
                     success: function (resultado) {
+                        if(entero==1 || entero==2)
+                        {
+                            $(".h1-change-day").css("color","blue");
+                        }
                         if (entero == 1) {
                             $('#metas_dp').html(resultado);
                         } else if (entero == 2) {
