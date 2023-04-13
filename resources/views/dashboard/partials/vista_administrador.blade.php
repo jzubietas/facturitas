@@ -664,7 +664,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     success: function (resultado) {
                         if(entero==1 || entero==2)
                         {
-                            $(".h1-change-day").css("color","blue");
+                            //$(".h1-change-day").css("color","blue");
+                            $(".h1-change-day").attr('style', 'color: blue !important');
                         }
                         if (entero == 1) {
                             $('#metas_dp').html(resultado);
