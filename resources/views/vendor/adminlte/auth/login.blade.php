@@ -23,7 +23,7 @@
 @section('auth_body')
 
     <form class="form-horizontal" method="POST" action="{{ $login_url }}">
-        {{ csrf_field() }}
+        @csrf
 
         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
             <label for="email" class="col-md-8 control-label">Correo</label>
