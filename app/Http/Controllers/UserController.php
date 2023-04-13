@@ -377,7 +377,7 @@ class UserController extends Controller
             //$users = $usersB->union($users);
 
         }else if($mirol==User::ROL_ASISTENTE_PUBLICIDAD){
-            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16']);
+            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17']);
         }
         else {
 
@@ -529,7 +529,7 @@ class UserController extends Controller
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
             $users = User::where("rol", "ASESOR ADMINISTRATIVO");
         }else if($mirol==User::ROL_ASISTENTE_PUBLICIDAD){
-            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16']);
+            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17']);
         }
         else {
             $usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO", User::ROL_ASESOR]);
