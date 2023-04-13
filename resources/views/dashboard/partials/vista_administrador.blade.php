@@ -596,6 +596,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         // Handle the error
                     },
                     success: function (resultado) {
+                        if(entero==1 || entero==2)
+                        {
+                            console.log("cambiar color")
+                            //$(".h1-change-day").css("color","blue");
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                        }
                         if (entero == 1) {
                             $('#metas_dp').html(resultado);
                         } else if (entero == 2) {
@@ -662,12 +668,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         // Handle the error
                     },
                     success: function (resultado) {
-                        if(entero==1 || entero==2)
-                        {
-                            console.log("cambiar color")
-                            //$(".h1-change-day").css("color","blue");
-                            $(".h1-change-day").attr('style', 'color: blue !important');
-                        }
+
                         if (entero == 1) {
                             $('#metas_dp').html(resultado);
                         } else if (entero == 2) {
