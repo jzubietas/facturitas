@@ -328,9 +328,10 @@ class PedidoController extends Controller
             })
             ->editColumn('fecha_up',function($pedido){
                 if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
-                    return '--';
-                }else{
                     return $pedido->fecha_up;
+
+                }else{
+                    return '--';
                 }
             })
             ->editColumn('celulares',function($pedido){
