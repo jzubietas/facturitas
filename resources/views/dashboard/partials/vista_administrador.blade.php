@@ -106,6 +106,15 @@
     </div>
 </div>
 
+<div class="col-lg-12 bg-white">
+    <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
+        <label class="p-0 m-0" for="ingresar">Fecha: </label>
+        <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
+               value="" readonly>
+        <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
+
+    </div>
+</div>
 
 <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
     <div class="d-flex justify-content-center flex-column mb-2 bg-white">
@@ -136,14 +145,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         </div>
 
 
-        <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
-            <label class="p-0 m-0" for="ingresar">Fecha: </label>
-            <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
-                   value="" readonly>
-            <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
 
-
-        </div>
     </div>
 
 
