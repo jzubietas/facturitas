@@ -163,6 +163,18 @@
                       @endif
                   @endforeach
               </div>
+              <div class="card-body text-secondary">
+                  @foreach ($permissions as $permission)
+                      @if ($permission->modulo == 'AccesoRapido')
+                          <div>
+                              <label>
+                                  {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
+                                  {{ $permission->description }}
+                              </label>
+                          </div>
+                      @endif
+                  @endforeach
+              </div>
           </div>
       </div>
 
