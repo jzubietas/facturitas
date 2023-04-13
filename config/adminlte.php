@@ -281,7 +281,7 @@ return [
         ],
         [
             'text' => 'Llamados de atencion (DES)',
-            'can' => 'llamados.atencion',
+            'can' => 'access.llamados',
             'icon_color' => 'green',
             'route' => 'llamados.atencion',
             'icon' => 'far fa-id-card',
