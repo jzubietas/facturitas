@@ -148,10 +148,28 @@
       </div>
     </div>
 
+      <!--Acceso Rapido-->
+      <div class="form-group col-lg-8">
+          <div class="mb-3 card border-secondary">
+              <div class="card-header bg-success">
+                  @foreach ($permissions as $permission)
+                      @if ($permission->modulo == 'moduloAccesoRapido')
+                          <div>
+                              <label>
+                                  {!! Form::checkbox('permissions[]', $permission->id, null, ['class' => 'mr-1']) !!}
+                                  {{ $permission->description }}
+                              </label>
+                          </div>
+                      @endif
+                  @endforeach
+              </div>
+          </div>
+      </div>
+
     {{-- MODULO CONFIGURACION --}}
     <div class="form-group col-lg-8">
       <div class="mb-3 card border-secondary">
-        <div class="card-header">
+        <div class="card-header bg-success">
           @foreach ($permissions as $permission)
             @if ($permission->modulo == 'moduloConfiguracion')
               <div>
