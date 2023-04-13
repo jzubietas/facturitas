@@ -574,7 +574,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
 
                 const ddd = new Date();
-                ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDay().toString().padStart(2, "0"))
+                ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
                 console.log(" "+ddd_1)
 
                 fd.append('fechametames', valorr);
