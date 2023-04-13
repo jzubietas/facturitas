@@ -173,7 +173,7 @@ class PedidoController extends Controller
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
                     DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha2_up'),
-                    DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
+                    DB::raw('DATE_FORMAT(pedidos.fecha_anulacion_confirm, "%Y-%m-%d %H:%i:%s") as fecha_up'),
                     //DB::raw('DATE_FORMAT(pedidos.fecha_anulacion_confirm,, "%Y-%m-%d %H:%i:%s") as fecha_anulacion'),
                     'dp.saldo as diferencia',
                     'direccion_grupos.motorizado_status',
