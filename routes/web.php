@@ -32,6 +32,7 @@ use App\Http\Controllers\SobreController;
 use App\Http\Controllers\OperacionController;
 use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\EscaneoController;
+use App\Http\Controllers\CallAtentionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,8 +57,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
 
 
-    Route::get('llamados.atencion', [AnulacionController::class, 'pedidosanulaciones'])->name('llamados.atencion');
-    Route::get('llamados.atencion.tabla', [PedidosAnulacionController::class, 'indexanulacionestabla'])->name('llamados.atencion.tabla');
+    Route::get('llamados.atencion', [CallAtentionController::class, 'index'])->name('llamados.atencion');
+    Route::get('llamados.atencion.tabla', [CallAtentionController::class, 'tabla'])->name('llamados.atencion.tabla');
 
 
 
