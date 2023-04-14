@@ -28,7 +28,7 @@ class PageBasefria extends Export implements WithColumnFormatting,WithColumnWidt
             ->activo()->where('tipo','0')->select([
                 DB::raw('@rownum  := @rownum  + 1 AS rownum'),
                 'clientes.*','u.identificador as identificador',
-                DB::raw("concat(clientes.celular,'-',clientes.icelular) as celular_"),
+                DB::raw("concat(clientes.celular,'-',ifnull(clientes.icelular,'') ) as celular_"),
                 'clientes.id as ide'
             ]);
 
