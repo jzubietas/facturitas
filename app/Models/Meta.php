@@ -38,6 +38,9 @@ class Meta extends Model
         'meta_quincena_nuevo',
         'meta_quincena_recuperado_abandono',
         'meta_quincena_recuperado_reciente',
-        'meta_intermedia'
+        'meta_intermedia',
+        'meta_quincena_activo',
+        'cliente_activo',
+        'cliente_activo_2'
     ];
 }

@@ -457,8 +457,10 @@ class PdfController extends Controller
 
         foreach ($situaciones_clientes as $situacion_cliente_2)
         {
+
             if($situacion_cliente_2->situacion=='LEVANTADO')
             {
+                dd($situacion_cliente_2);
                 $html[] = '<tr>';
                 $html[] = '<td style="width:20%;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
@@ -468,12 +470,51 @@ class PdfController extends Controller
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
                 $porcentaje = 0;
-                $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
-                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*0.7 - $activos_cuenta;
+
+                $diferenciameta=0;
+
+                if ($situacion_cliente_2->total < $situacion_cliente_2->meta_quincena)
+                {
+                    $valor_mayor_cero=intval($situacion_cliente_2->meta_quincena);
+                    if ($valor_mayor_cero>0){
+                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero/100) , 2);
+                        $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
+                    }else{
+                        $porcentaje = round(0, 2);
+                    }
+
+                }
+                else if ($situacion_cliente_2->total < $situacion_cliente_2->meta_1)
+                {
+                    $valor_mayor_cero=intval($situacion_cliente_2->meta_1);
+                    if ($valor_mayor_cero>0){
+                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero/100) , 2);
+                        $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
+                    }else{
+                        $porcentaje = round(0, 2);
+                    }
+                }
+                else
+                {
+                    $valor_mayor_cero=intval($situacion_cliente_2->meta_2);
+                    if ($valor_mayor_cero>0){
+                        //$porcentaje = round(($situacion_cliente_2->total / $situacion_cliente_2->meta_2) * 100, 2);
+                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero/100) , 2);
+                        $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
+                    }else{
+                        $porcentaje = round(0, 2);
+                    }
+                }
+
+                //$porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
+
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
                 $color_progress = '#FFD4D4';  /*ROSADO*/
-                $html[] = '<div class="w-100 bg-white rounded">
+
+                if ($porcentaje >= 0)
+                {
+                    $html[] = '<div class="w-100 bg-white rounded">
                                         <div class="position-relative rounded">
                                             <div class="progress bg-white rounded" style="height: 40px">
                                                     <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
@@ -482,8 +523,8 @@ class PdfController extends Controller
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>- '
-                                                                . $activos_cuenta .
-                                                                ' /  (levantados. ' . ($activos_cuenta).'   + caidos. '.($recurrentes_cuenta) . ')
+                        . $activos_cuenta .
+                        ' /  (levantados. ' . ($activos_cuenta).'   + caidos. '.($recurrentes_cuenta) . ')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    '.$diferenciameta.'
                                                                   </p>
@@ -492,6 +533,9 @@ class PdfController extends Controller
                                          </div>
                                         <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
+                }
+
+
 
                 $html[] = '</td>';
                 $html[] = '</tr>';
