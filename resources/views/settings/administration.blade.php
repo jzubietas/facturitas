@@ -59,6 +59,31 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Definir contraseña para agenda sub usuarios</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input id="agenda_sub_password" name="agenda_sub_password" type="password" class="form-control"
+                                           placeholder="Generar contraseña">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button class="btn btn-success" type="button" id="agenda_sub_change_password">
+                                        Guardar contraseña
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
 
         <div class="col-lg-8 col-md-12 col-sm-12">
