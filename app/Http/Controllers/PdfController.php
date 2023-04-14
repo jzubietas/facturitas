@@ -460,7 +460,7 @@ class PdfController extends Controller
 
             if($situacion_cliente_2->situacion=='LEVANTADO')
             {
-                dd($situacion_cliente_2);
+                //dd($situacion_cliente_2);
                 $html[] = '<tr>';
                 $html[] = '<td style="width:20%;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
