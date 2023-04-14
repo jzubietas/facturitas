@@ -89,12 +89,12 @@
                     <a href="{{route('excel.pedidos-destino-lima-excel')}}" target="_blank" class="dropdown-item">
                         <i class="fa fa-xl fa-download text-success"></i>
                         <i class="fa fa-xl fa-file-excel text-success"></i>
-                        Destino Lima (Desarrollo)
+                        Destino Lima
                     </a>
                     <a href="{{route('excel.pedidos-destino-provincia-excel')}}" target="_blank" class="dropdown-item">
                         <i class="fa fa-xl fa-download text-success"></i>
                         <i class="fa fa-xl fa-file-excel text-success"></i>
-                        Destino Provincia (Desarrollo)
+                        Destino Provincia
                     </a>
                 </div>
             </div>
