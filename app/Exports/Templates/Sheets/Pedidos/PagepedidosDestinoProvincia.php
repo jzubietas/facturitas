@@ -7,7 +7,9 @@ use App\Exports\Templates\Sheets\AfterSheet;
 use App\Exports\Templates\Sheets\Fill;
 use App\Models\Cliente;
 use App\Models\DetallePedido;
+use App\Models\DireccionGrupo;
 use App\Models\ListadoResultado;
+use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -28,144 +30,46 @@ class PagepedidosDestinoProvincia extends Export implements WithColumnFormatting
 {
     public function collection()
     {
-        $ultimos_pedidos=Cliente::activo()
-            ->where('situacion','=','CAIDO')
+        $pedidos = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.estado', '1')
+            ->where('direccion_grupos.destino', 'PROVINCIA')
+            ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
+            ->whereNotIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
             ->select([
-                'clientes.id',
-                'clientes.tipo',
-                DB::raw("(select dp1.pago from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as pagoultimopedido"),
-                DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as pagadoultimopedido"),
-                DB::raw("(select dp1.codigo from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as codigoultimopedido"),
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido"),
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%m') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido_mes"),
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido_anio"),
-                DB::raw("(select dp1.pago from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido_pago"),
-                DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
-                DB::raw("(select count(dp1.pagado) from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' and dp1.pagado in (1,2) ) as debe_nodebe"),
-            ])->get();
-
-        /*$dosmeses_ini=[];
-        for($i=4;$i>0;$i--)
-        {
-            $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
-        }*/
-
-        $lista=[];
-        foreach ($ultimos_pedidos as $procesada){
-            if($procesada->debe_nodebe==0)
-            {
-                $lista[]=$procesada->id;
-            }
-
-            /*if($procesada->fechaultimopedido)
-            {
-                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//->tostring();
-                if(in_array($fecha_analizar,$dosmeses_ini))
-                {
-                    if( in_array($procesada->fechaultimopedido_pagado,["2"]) )
-                    {
-                        $lista[]=$procesada->id;
-                    }
-                }
-            }*/
-        }
-
-        $data=Cliente::
-        join('users as u','u.id','clientes.user_id')
-            ->whereIn("clientes.id",$lista)
-            ->select([
-                'clientes.id as item',
-                DB::raw("concat(u.identificador,' ',ifnull(u.letra,'') ) as asesor_identificador"),
-                DB::raw("concat(clientes.celular,'-',clientes.icelular)  as celular"),
-                DB::raw("(select group_concat(r.num_ruc) from rucs r where r.cliente_id=clientes.id) as rucs"),
-                DB::raw("(select case when dp1.pagado=0 then 'DEUDA'
-                                        when dp1.pagado=1 then 'DEUDA'
-                                        else 'NO DEUDA' end from pedidos dp1
-                                        where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' order by dp1.created_at desc limit 1) as deuda"),
-                DB::raw("(select dp2.saldo from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
-                                        where dp2.estado=1 and a.cliente_id=clientes.id and a.codigo not like '%-C%' order by dp2.created_at desc limit 1) as importeultimopedido"),
-                DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
-                                        where dp3.estado=1 and a.cliente_id=clientes.id and a.codigo not like '%-C%' order by dp3.created_at desc limit 1) as mesultimopedido"),
-                DB::raw("(select dp2.porcentaje from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
-                                        where dp2.estado=1 and a.cliente_id=clientes.id and a.codigo not like '%-C%' order by dp2.created_at desc limit 1) as porcentajeultimopedido"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - sin banca' limit 1) as porcentajes_1"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - banca' limit 1) as porcentajes_2"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - sin banca' limit 1) as porcentajes_3"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - banca' limit 1) as porcentajes_4"),
+                'c.celular as correlativo',
+                'u.identificador as identificador',
+                'direccion_grupos.destino',
+                'de.cantidad',
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+                'de.tracking as direccion',
+                'de.foto as referencia',
+                'c.nombre as nombre_cli',
+                'direccion_grupos.created_at as fecha',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_sobre',
             ]);
 
-
-        if (Auth::user()->rol == User::ROL_LLAMADAS) {
-
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.llamada', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-            $data = $data->WhereIn("u.identificador", $usersasesores);
-
-        }elseif (Auth::user()->rol == User::ROL_ASESOR) {
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.identificador', Auth::user()->identificador)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-            $data = $data->WhereIn("u.identificador", $usersasesores);
-        }else if (Auth::user()->rol == User::ROL_ENCARGADO) {
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.supervisor', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $data = $data->WhereIn("u.identificador", $usersasesores);
-        }elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
-            $data = $data->Where("u.identificador", '=', 'B');
-        }elseif (Auth::user()->rol == "Operario") {
-            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
-                ->where('users.estado', '1')
-                ->Where('users.operario', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-            $pedidos = $data->WhereIn('u.identificador', $asesores);
-
-        }
-
-        $resultado=$data->get();
-        $final=[];
-        foreach($resultado as $filas)
-        {
-            if($filas->deuda=='NO DEUDA')
-            {
-                $final[]=($filas);
-            }
-        }
-        $final_r=collect($final);
-
-        return $final_r;
+        $resultado=$pedidos->get();
+        return $resultado;
     }
     public function fields(): array
     {
         return [
-            "item"=>"Item"
-            ,"asesor_identificador"=>"Asesor"
-            ,"celular"=>"Celular"
-            ,"rucs"=>"Rucs"
-            ,"deuda"=>"Deuda"
-            ,"importeultimopedido"=>"Importe ultimo pedido"
-            ,"mesultimopedido"=>"Mes ultimo pedido"
-            ,"porcentajes_1"=>"Porcentaje FISICO - sin banca"
-            ,"porcentajes_2"=>"Porcentaje FISICO - banca"
-            ,"porcentajes_3"=>"Porcentaje ELECTRONICA - sin banca"
-            ,"porcentajes_4"=>"Porcentaje ELECTRONICA - banca"
+            "correlativo"=>"correlativo"
+            ,"identificador"=>"identificador"
+            ,"destino"=>"destino"
+            ,"cantidad"=>"cantidad"
+            ,"codigos"=>"codigos"
+            ,"producto"=>"producto"
+            ,"direccion"=>"direccion"
+            ,"referencia"=>"referencia"
+            ,"nombre_cli"=>"nombre_cli"
+            ,"fecha"=>"fecha"
+            ,"distribucion"=>"distribucion"
+            ,"condicion_sobre"=>"condicion_sobre"
         ];
     }
     public function columnWidths(): array
@@ -204,7 +108,7 @@ class PagepedidosDestinoProvincia extends Export implements WithColumnFormatting
     }
     public function title(): string
     {
-        return 'Clientes caidos sin deuda';
+        return 'Destino Provincia';
     }
     public function map($model): array
     {
