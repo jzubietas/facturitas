@@ -178,6 +178,7 @@
                             <th scope="col">Código</th>
                             <th scope="col">Razón social</th>
                             <th scope="col">Fecha de entrega</th>
+                            <th scope="col">Observacion</th>
                             <th scope="col">Foto del sobre</th>
                             <th scope="col">Foto del domicilio</th>
                             <th scope="col">Foto de quien recibe</th>
@@ -863,6 +864,10 @@
                         data: 'fechaentrega',
                         name: 'fechaentrega',
                         //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
+                    },
+                    {
+                        data: 'observacion',
+                        name: 'observacion'
                     },
                     {
                         data: 'foto1',

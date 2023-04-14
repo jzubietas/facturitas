@@ -2626,7 +2626,8 @@ class EnvioController extends Controller
             } else if ($opcion == 'anulado_courier') {
                 $pedidos = $pedidos->where('pedidos.estado', '0')->whereNotNull('pedidos.direccion_grupo');
             }
-        } else if ($opcion == 'entregado') {
+        }
+        else if ($opcion == 'entregado') {
             $pedidos = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
