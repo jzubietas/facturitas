@@ -43,6 +43,8 @@ use App\Exports\Templates\PlantillaExportClientsFallendWithOutDebtMultiple;
 use App\Exports\Templates\PlantillaExportMovimientosReporteMultiple;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportPedidoMultiple;
+use App\Exports\Templates\PlantillaExportPedidosDestinoLimaMultiple;
+use App\Exports\Templates\PlantillaExportPedidosDestinoProvinciaMultiple;
 use App\Exports\Templates\PlantillaExportPedidosPerdonarCourierReporteMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
@@ -196,6 +198,18 @@ class ExcelController extends Controller
     {
         return (new PlantillaExportClientesdosmesesMultiple())
             ->download('Lista de Clientes_pedidos_2_meses.xlsx');
+    }
+
+    public function pedidosDestinoLimaExcel(Request $request)
+    {
+        return (new PlantillaExportPedidosDestinoLimaMultiple())
+            ->download('Pedidos Destino Lima.xlsx');
+    }
+
+    public function pedidosDestinoProvinciaExcel(Request $request)
+    {
+        return (new PlantillaExportPedidosDestinoProvinciaMultiple())
+            ->download('Pedidos Destino Provincia.xlsx');
     }
 
     public function clientsFallenDebtExcel(Request $request)

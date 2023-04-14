@@ -86,12 +86,12 @@
                     Pedidos Destino
                 </button>
                 <div class="dropdown-menu">
-                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="dropdown-item">
+                    <a href="{{route('excel.pedidos-destino-lima-excel')}}" target="_blank" class="dropdown-item">
                         <i class="fa fa-xl fa-download text-success"></i>
                         <i class="fa fa-xl fa-file-excel text-success"></i>
                         Destino Lima (Desarrollo)
                     </a>
-                    <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="dropdown-item">
+                    <a href="{{route('excel.pedidos-destino-provincia-excel')}}" target="_blank" class="dropdown-item">
                         <i class="fa fa-xl fa-download text-success"></i>
                         <i class="fa fa-xl fa-file-excel text-success"></i>
                         Destino Provincia (Desarrollo)
