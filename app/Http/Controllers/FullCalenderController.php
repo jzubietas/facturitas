@@ -26,14 +26,14 @@ class FullCalenderController extends Controller
         }else{
             $clave=$request->clave;
 
-            if(!\Hash::check($clave,setting("agenda_password")))
+            if(\Hash::check($clave,setting("agenda_password")))
             {
-                return 0;
-            }else if(!\Hash::check($clave,setting("agenda_sub_password")))
-            {
-                return 0;
-            }else{
                 return 1;
+            }else if(\Hash::check($clave,setting("agenda_sub_password")))
+            {
+                return 1;
+            }else{
+                return 0;
             }
         }
     }
