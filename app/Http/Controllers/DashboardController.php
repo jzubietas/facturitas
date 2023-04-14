@@ -309,7 +309,7 @@ class DashboardController extends Controller
                 $encargado = auth()->user()->id;
             }
 
-            if($request->ii=='17')
+            if($request->ii==17)
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     ->where('excluir_meta', '<>', '1')
