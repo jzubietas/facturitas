@@ -194,7 +194,7 @@
             </div>
         </div>
 
-        @if($pedido->condicion_code==\App\Models\Pedido::ANULADO_PARCIAL_INT)
+        @if($pedido->condicion==\App\Models\Pedido::ANULADO_PARCIAL)
             <div class="card col-md-6">
                 <div class="card-header bg-danger text-white">
                     Motivos Anulado Parcial
