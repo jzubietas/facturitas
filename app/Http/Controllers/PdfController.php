@@ -478,7 +478,7 @@ class PdfController extends Controller
                     $valor_mayor_cero=intval($situacion_cliente_2->meta_quincena);
                     echo "<br>meta quincena activo = ".$valor_mayor_cero."%<br>";
                     if ($valor_mayor_cero>0){
-                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero/100) , 2);
+                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero) , 2);
                         $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
                     }else{
                         $porcentaje = round(0, 2);
@@ -490,7 +490,7 @@ class PdfController extends Controller
                     $valor_mayor_cero=intval($situacion_cliente_2->meta_1);
                     echo "<br>meta 1 activo = ".$valor_mayor_cero."%<br>";
                     if ($valor_mayor_cero>0){
-                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero/100) , 2);
+                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero) , 2);
                         $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
                     }else{
                         $porcentaje = round(0, 2);
@@ -502,7 +502,7 @@ class PdfController extends Controller
                     echo "<br>meta 2 activo = ".$valor_mayor_cero."%<br>";
                     if ($valor_mayor_cero>0){
                         //$porcentaje = round(($situacion_cliente_2->total / $situacion_cliente_2->meta_2) * 100, 2);
-                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero/100) , 2);
+                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero) , 2);
                         $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
                     }else{
                         $porcentaje = round(0, 2);
