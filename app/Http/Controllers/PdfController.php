@@ -472,7 +472,7 @@ class PdfController extends Controller
                 $porcentaje = 0;
 
                 $diferenciameta=0;
-                echo "<br>activos total  = ".$situacion_cliente_2->total."<br>";
+                /*echo "<br>activos total  = ".$situacion_cliente_2->total."<br>";
                 if ($situacion_cliente_2->total < $situacion_cliente_2->meta_quincena)
                 {
                     $valor_mayor_cero=intval($situacion_cliente_2->meta_quincena);
@@ -501,15 +501,15 @@ class PdfController extends Controller
                     $valor_mayor_cero=intval($situacion_cliente_2->meta_2);
                     echo "<br>meta 2 activo = ".$valor_mayor_cero."%<br>";
                     if ($valor_mayor_cero>0){
-                        //$porcentaje = round(($situacion_cliente_2->total / $situacion_cliente_2->meta_2) * 100, 2);
                         $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero) , 2);
                         $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
                     }else{
                         $porcentaje = round(0, 2);
                     }
-                }
+                }*/
 
-                //$porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
+                $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
+                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(70/100) - $activos_cuenta;
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
