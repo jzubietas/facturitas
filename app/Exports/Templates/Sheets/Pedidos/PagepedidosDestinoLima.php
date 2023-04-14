@@ -25,7 +25,7 @@ class PagepedidosDestinoLima extends Export implements WithColumnFormatting,With
 {
     public function collection()
     {
-        $pedidos = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+        $pedidos = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado', '1')
