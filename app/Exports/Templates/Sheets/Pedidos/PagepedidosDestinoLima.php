@@ -25,8 +25,7 @@ class PagepedidosDestinoLima extends Export implements WithColumnFormatting,With
 {
     public function collection()
     {
-        $pedidos = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
+        $pedidos = DireccionGrupo::join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado', '1')
             ->where('direccion_grupos.destino', 'LIMA')
@@ -36,11 +35,14 @@ class PagepedidosDestinoLima extends Export implements WithColumnFormatting,With
                 'c.celular as correlativo',
                 'u.identificador as identificador',
                 'direccion_grupos.destino',
-                'de.cantidad',
+                'direccion_grupos.cantidad',
+                'direccion_grupos.celular',
+                'direccion_grupos.nombre',
                 'direccion_grupos.codigos',
                 'direccion_grupos.producto',
-                'de.tracking as direccion',
-                'de.foto as referencia',
+                'direccion_grupos.direccion',
+                'direccion_grupos.referencia',
+                'direccion_grupos.observacion',
                 'c.nombre as nombre_cli',
                 'direccion_grupos.created_at as fecha',
                 'direccion_grupos.distribucion',
@@ -57,10 +59,13 @@ class PagepedidosDestinoLima extends Export implements WithColumnFormatting,With
             ,"identificador"=>"identificador"
             ,"destino"=>"destino"
             ,"cantidad"=>"cantidad"
+            ,"celular"=>"celular"
+            ,"nombre"=>"nombre"
             ,"codigos"=>"codigos"
             ,"producto"=>"producto"
             ,"direccion"=>"direccion"
             ,"referencia"=>"referencia"
+            ,"observacion"=>"observacion"
             ,"nombre_cli"=>"nombre_cli"
             ,"fecha"=>"fecha"
             ,"distribucion"=>"distribucion"
