@@ -312,7 +312,7 @@ class DashboardController extends Controller
             if($request->ii==17)
             {
                 $asesores = User::query()->activo()->rolAsesor()
-                    ->where('excluir_meta', '<>', '1')
+                    //->where('excluir_meta', '<>', '1')
                     ->where('identificador','=','17')
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
