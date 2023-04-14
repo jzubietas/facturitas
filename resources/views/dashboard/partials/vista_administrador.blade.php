@@ -106,12 +106,26 @@
     </div>
 </div>
 
-<div class="col-lg-12 bg-white">
-    <div class="d-flex justify-content-center align-items-center ml-5 bg-white">
-        <label class="p-0 m-0" for="ingresar">Fecha: </label>
-        <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
-               value="" readonly>
-        <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
+<div class="card">
+    <div class="card-header">
+        Eleccion de Fecha Calendario
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-center align-items-center ml-5">
+            <label class="p-0 m-0" for="ingresar">Fecha: </label>
+            <input type="text" id="fechametames" class="border-0 ml-3" name="fechametames"
+                   value="" readonly>
+            <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
+        </div>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+<!--grafico metas de asesor de pedidos-->
+<div class="row">
+    <div class="col-lg-12 white" id="contenedor-fullscreen">
+        <!--contenedor fullscreen-->
+        <div id="grafico_metas_asesor_pedidos"></div>
 
     </div>
 </div>
@@ -143,8 +157,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </div>
             </div>
         </div>
-
-
 
     </div>
 
