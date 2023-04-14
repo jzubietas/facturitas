@@ -348,6 +348,31 @@
                 })
             })
 
+            $("#agenda_sub_change_password").click(function () {
+                let passwordsub = $("#agenda_sub_password").val();
+                if (!passwordsub) {
+                    Swal.fire(
+                        'El campo de contraseña no debe estar vacio',
+                        '',
+                        'warning'
+                    )
+                }
+                $.post('{{route('settings.store.agenda-sub-setting')}}', {
+                    key: 'agenda_sub_password',
+                    value: passwordsub
+                }).done(function (a, b, c) {
+                    if (c.status === 200) {
+                        Swal.fire(
+                            'Contraseña cambiada',
+                            '',
+                            'success'
+                        )
+                    }
+                }).always(function () {
+                    $("#agenda_sub_password").val("");
+                })
+            })
+
         });
 
         {{--

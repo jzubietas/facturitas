@@ -123,6 +123,18 @@ class SettingsController extends Controller
         return setting()->all();
     }
 
+    public function settingStoreAgendaSub(Request $request)
+    {
+        $this->validate($request, [
+            'key' => 'required',
+            'value' => 'required'
+        ]);
+        setting()->load();
+        setting([$request->key => bcrypt($request->value)])
+            ->save();
+        return setting()->all();
+    }
+
     public function authorizationMotorizado(Request $request, $user)
     {
         if ($request->has('direccion_grupo') && $request->get('action') == 'reprogramacion') {

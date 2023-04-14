@@ -72,6 +72,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('/setting/store', [SettingsController::class, 'settingStore'])->name('settings.store-setting');
     Route::post('/setting/store/agenda', [SettingsController::class, 'settingStoreAgenda'])->name('settings.store.agenda-setting');
+    Route::post('/setting/store/agendasub', [SettingsController::class, 'settingStoreAgendaSub'])->name('settings.store.agenda-sub-setting');
     Route::post('/setting/authorizar/motorizado/{user}', [SettingsController::class, 'authorizationMotorizado'])->name('settings.authorization-motorizado');
 
 
