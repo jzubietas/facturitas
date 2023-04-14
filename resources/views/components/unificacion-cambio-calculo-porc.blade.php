@@ -259,7 +259,13 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-lg-6">
-                                            {!! Form::label('pcantidad_tiempo', 'Empresa (Razon social)') !!}
+                                            {!! Form::label('txtRazonSocialChangeRuc', 'Empresa (RUC)') !!}
+                                            <input type="text" name="txtRazonSocialChangeRuc"
+                                                   id="txtRazonSocialChangeRuc"
+                                                   class="form-control number" placeholder="Empresa (RUC)...">
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            {!! Form::label('txtRazonSocialChangeName', 'Empresa (Razon social)') !!}
                                             <input type="text" name="txtRazonSocialChangeName"
                                                    id="txtRazonSocialChangeName"
                                                    class="form-control number" placeholder="Empresa (Razon social)...">
