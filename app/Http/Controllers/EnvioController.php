@@ -2073,14 +2073,13 @@ class EnvioController extends Controller
 
     public function DireccionEnvio(Request $request)
     {
-
+        //  $request->urgente
 
         $attach_pedidos_data = [];
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
             return '0';
         } else {
-
 
             $_destino = $request->destino;
             $_pedido = Pedido::find($request->cod_pedido);
