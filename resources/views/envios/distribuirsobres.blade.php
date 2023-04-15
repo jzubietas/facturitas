@@ -181,7 +181,10 @@
                     }
                 },
                 createdRow: function (row, data, dataIndex) {
-                    //console.log(row);
+                    if (data["urgente"] == "1")
+                    {
+                        $('td', row).css('background', 'red').css('font-weight', 'bold');
+                    }
 
                 },
                 rowCallback: function (row, data, index) {
