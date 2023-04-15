@@ -2126,7 +2126,8 @@ class EnvioController extends Controller
                     'cantidad' => $cantidad,
                     'destino' => $request->destino,
                     'estado' => '1',
-                    "salvado" => "0"
+                    "salvado" => "0",
+                    "urgente" => $request->urgente
                 ];
                 if (intval($request->model_id) > 0) {
                     $direccionLima = DireccionEnvio::query()->find($request->model_id);
@@ -2257,7 +2258,8 @@ class EnvioController extends Controller
                     //'direcciongrupo' => $direccion_grupo_id,
                     'destino' => $request->destino,
                     'estado' => '1',
-                    "salvado" => "0"
+                    "salvado" => "0",
+                    "urgente" => $request->urgente
                 ];
                 if (intval($request->model_id) > 0) {
                     $gastoProvincia = GastoEnvio::find($request->model_id);
@@ -2323,6 +2325,7 @@ class EnvioController extends Controller
                         'referencia' => (($request->destino == 'PROVINCIA') ? $request->tracking : $request->referencia),
                         'cliente_recibe' => ($request->nombre),
                         'telefono' => ($request->contacto),
+                        'urgente'=>$request->urgente
                     ]);
                 } else {
                     $grupoPedido = GrupoPedido::createGroupByArray([
@@ -2333,6 +2336,7 @@ class EnvioController extends Controller
                         'referencia' => $request->tracking,
                         'cliente_recibe' => $request->nombre,
                         'telefono' => $request->contacto,
+                        'urgente'=>$request->urgente
                     ]);
                 }
                 $grupoPedido->pedidos()->syncWithoutDetaching($attach_pedidos_data);

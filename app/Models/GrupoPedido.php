@@ -101,6 +101,7 @@ class GrupoPedido extends Model
         if ($zona == 'olva') {
             $data = [
                 "zona" => data_get($array, 'zona'),
+                "urgente" => data_get($array, 'urgente'),
             ];
             $data2 = [
                 "provincia" => 'OLVA',//LIMA
@@ -122,6 +123,7 @@ class GrupoPedido extends Model
             /*PEDIDO*/
             $data = [
                 "zona" => data_get($array, 'zona') ?? 'n/a',
+                "urgente" => data_get($array, 'urgente') ?? '0',
                 "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
                 'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
                 'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
