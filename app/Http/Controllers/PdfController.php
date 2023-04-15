@@ -149,7 +149,7 @@ class PdfController extends Controller
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
-            /*->orWhere([
+            ->orWhere([
                 ['situacion_clientes.situacion', '=', 'NUEVO'],
                 ['a.situacion', '=', 'BASE FRIA'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
@@ -158,7 +158,7 @@ class PdfController extends Controller
                 ['u.identificador', '=', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
-            ])*/
+            ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'LEVANTADO'],

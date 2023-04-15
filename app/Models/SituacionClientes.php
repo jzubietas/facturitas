@@ -19,6 +19,8 @@ class SituacionClientes extends Model implements HasMedia
 
   protected $fillable = [
     'cliente_id',
+      'user_id',
+      'user_identificador',
     'situacion',
     'cantidad_pedidos',
     'anulados',
