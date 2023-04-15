@@ -183,7 +183,7 @@
                 createdRow: function (row, data, dataIndex) {
                     if (data["urgente"] == "1")
                     {
-                        $('td', row).css('background', 'red').css('font-weight', 'bold');
+                        $('td', row).css('background', '#FFCCCB').css('font-weight', 'bold');
                     }
 
                 },
