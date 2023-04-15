@@ -27,6 +27,7 @@ class GrupoPedido extends Model
     'deleted_at',
     'cod_recojo',
     'env_sustento_recojo',
+    'urgente'
   ];
 
     public function pedidos()
