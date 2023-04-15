@@ -41,6 +41,7 @@
                         <div class="col-4 contenedor-formulario"><!--formulario-->
                             <div class="row">
                                 <div class="col-12">
+                                    {!! Form::label('envio_urgente', 'Marque si el envio tiene urgencia') !!}
                                     {!! Form::checkbox('envio_urgente', 'no', true) !!}
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
