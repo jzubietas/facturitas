@@ -630,9 +630,11 @@
         let val_cliente = $("#cliente_id").val();
         let val_cod_pedido = $("#cod_pedido").val();
         let val_cod_ase = $("#cod_ase").val();
+        let val_check=($('#envio_urgente').is(':checked')) ? '1' : '0';
         fd2.append('cliente_id', val_cliente);
         fd2.append('cod_pedido', val_cod_pedido);
         fd2.append('cod_asesor', val_cod_ase);
+        fd2.append('urgente', val_check);
 
         let val_nombre = $("#nombre").val();
         let val_contacto = $("#celular").val();
