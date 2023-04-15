@@ -82,6 +82,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         <div id="metas_total"></div>
                     </div>
 
+                    <div class="col-lg-12" id="metas_dp_17"></div>
+
                 </div>
 
             </div>
@@ -301,6 +303,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         }else if (entero == 7) {
                             $('#porcentaje_pedidos_metas').html(resultado);
                         }
+                        else if (entero == 17) {
+                            $('#metas_dp_17').html(resultado);
+                        }
                     }
                 })
             }
@@ -324,6 +329,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva(6);//totales porcentajes arriba de metas cobranzas
             cargaNueva(7);//totales porcentajes arriba de metas pedidos
 
+            cargaNueva(17);//asesor 17
 
             setInterval(myTimer, 10000);
             function myTimer() {
@@ -340,6 +346,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 cargaNueva(6);//totales porcentajes arriba de metas cobranzas
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
+                cargaNueva(17);//asesor 17
             }
 
             $('a[href$="#myModal"]').on("click", function () {

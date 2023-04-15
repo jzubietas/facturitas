@@ -2511,7 +2511,6 @@ class DashboardController extends Controller
                 $round=round( ( ($count_asesor[46]['all_situacion_activo'])/ ($count_asesor[46]['all_situacion_recurrente']+$count_asesor[46]['all_situacion_activo']) )*100 ,2);
             }else{
                 $round=0.00;
-                //cuando pedidos es 0
             }
 
             if ($count_asesor[46]['all_situacion_recurrente'] == 0) {
