@@ -70,6 +70,7 @@
                 <table id="tablaCourierSobresconDireccion" class="table table-striped">
                     <thead>
                     <tr>
+                        <th scope="col" class="align-middle" style="font-size:14px;">Urgente</th>
                         <th scope="col" class="align-middle" style="font-size:14px;">Sobres</th>
                         <th scope="col" class="align-middle" style="font-size:14px;">Razón social</th>
                         <th scope="col" class="align-middle">Quien recibe</th>
@@ -250,6 +251,7 @@
                     })
                 },
                 columns: [
+                    {data: 'urgente', name: 'urgente','visible':false},
                     {data: 'codigos', name: 'codigos', searchable: true, sWidth: '10%', sClass: 'cod_dir'},
                     {data: 'productos', name: 'productos', searchable: true, sClass: 'cod_dir cod_dir_w'},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},

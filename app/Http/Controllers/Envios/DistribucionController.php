@@ -72,6 +72,7 @@ class DistribucionController extends Controller
             //->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', '=', 'grupo_pedidos.id')
             ->select([
                 'grupo_pedidos.id',
+                'grupo_pedidos.urgente',
                 //DB::raw('GROUP_CONCAT(grupo_pedido_items.codigo) as codigos'),
                 //DB::raw('GROUP_CONCAT(grupo_pedido_items.razon_social) as productos'),
                 'grupo_pedidos.zona',
