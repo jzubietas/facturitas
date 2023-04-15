@@ -99,7 +99,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ABANDONO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -108,7 +108,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -117,7 +117,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NULO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -126,7 +126,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'CAIDO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -135,7 +135,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NULO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -144,29 +144,29 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'BASE FRIA'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '21'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
-            /*->orWhere([
+            ->orWhere([
                 ['situacion_clientes.situacion', '=', 'NUEVO'],
                 ['a.situacion', '=', 'BASE FRIA'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '=', '21'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '=', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
-            ])*/
+            ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'LEVANTADO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '15'],
-                ['u.identificador', '<>', '16'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '15'],
+                ['situacion_clientes.user_identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -175,9 +175,9 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '15'],
-                ['u.identificador', '<>', '16'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '15'],
+                ['situacion_clientes.user_identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -186,9 +186,9 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '15'],
-                ['u.identificador', '<>', '16'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '15'],
+                ['situacion_clientes.user_identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -197,9 +197,9 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '15'],
-                ['u.identificador', '<>', '16'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '15'],
+                ['situacion_clientes.user_identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -208,9 +208,9 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'LEVANTADO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '15'],
-                ['u.identificador', '<>', '16'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '15'],
+                ['situacion_clientes.user_identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -219,9 +219,9 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '15'],
-                ['u.identificador', '<>', '16'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '15'],
+                ['situacion_clientes.user_identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -230,9 +230,9 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '15'],
-                ['u.identificador', '<>', '16'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '15'],
+                ['situacion_clientes.user_identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -241,18 +241,19 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['u.identificador', '<>', 'B'],
-                ['u.identificador', '<>', '15'],
-                ['u.identificador', '<>', '16'],
+                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_identificador', '<>', '15'],
+                ['situacion_clientes.user_identificador', '<>', '16'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
             ->groupBy([
                 'situacion_clientes.situacion',
-                'situacion_clientes.situacion'
+                'situacion_clientes.user_identificador'
             ])
             ->select([
                 'situacion_clientes.situacion',
+                'situacion_clientes.user_identificador',
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
@@ -291,6 +292,100 @@ class PdfController extends Controller
                 DB::raw('count(situacion_clientes.situacion) as total')
             ])
             ->get();
+        $_estados=['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','LEVANTADO'];
+        $_resultado_grafico=[];
+
+        $metas_llamadas=Meta::where('rol','=','Jefe de llamadas')->where('mes','=',$mes_w)->where('anio','=',$anio_w)->first();
+
+        foreach ($_estados as $_estado_)
+        {
+            $_resultado_grafico[$_estado_]=[
+                'label'=>$_estado_,
+                'dividendo'=>0,
+                'divisor'=>0,
+                'restante'=>0,
+                'meta_quincena'=>0,
+                'meta_1_'=>0,
+                'meta_2'=>0,
+                'porcentaje'=>0
+            ];
+            if($_estado_=='RECUPERADO ABANDONO')
+            {
+                $_resultado_grafico[$_estado_]['meta_quincena']=$metas_llamadas->meta_quincena_recuperado_abandono;
+                $_resultado_grafico[$_estado_]['meta_1']=$metas_llamadas->cliente_recuperado_abandono;
+                $_resultado_grafico[$_estado_]['meta_2']=$metas_llamadas->cliente_recuperado_abandono_2;
+            }else if($_estado_=='RECUPERADO RECIENTE')
+            {
+                $_resultado_grafico[$_estado_]['meta_quincena']=$metas_llamadas->meta_quincena_recuperado_reciente;
+                $_resultado_grafico[$_estado_]['meta_1']=$metas_llamadas->cliente_recuperado_reciente;
+                $_resultado_grafico[$_estado_]['meta_2']=$metas_llamadas->cliente_recuperado_reciente_2;
+            }else if($_estado_=='NUEVO')
+            {
+                $_resultado_grafico[$_estado_]['meta_quincena']=$metas_llamadas->meta_quincena_nuevo;
+                $_resultado_grafico[$_estado_]['meta_1']=$metas_llamadas->cliente_nuevo;
+                $_resultado_grafico[$_estado_]['meta_2']=$metas_llamadas->cliente_nuevo_2;
+            }
+        }
+
+        foreach ($situaciones_clientes as $situaciones_clientes_)
+        {
+            if($situaciones_clientes_->situacion=='LEVANTADO' || $situaciones_clientes_->situacion=='CAIDO')continue;
+
+            if($situaciones_clientes_->situacion=='RECUPERADO ABANDONO')
+            {
+                $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+1);
+            }else if($situaciones_clientes_->situacion=='RECUPERADO RECIENTE')
+            {
+                $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+1);
+            }
+            else if($situaciones_clientes_->situacion=='NUEVO')
+            {
+                if($situaciones_clientes_->user_identificador=='21')
+                {
+                    $_resultado_grafico['RECUPERADO ABANDONO']['dividendo']=($_resultado_grafico['RECUPERADO ABANDONO']['dividendo']+1);
+                }else{
+                    $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+1);
+                }
+            }
+        }
+        foreach ($_estados as $_estados_)
+        {
+            //if($_estado_=='RECUPERADO ABANDONO')
+            {
+                //dividendo
+                if ($situacion_cliente->total < $situacion_cliente->meta_quincena)
+                {
+
+                }
+                if($_resultado_grafico[$_estado_]['meta_quincena']==0)
+                {
+                    if($_resultado_grafico[$_estado_]['meta_1']==0)
+                    {
+                        if($_resultado_grafico[$_estado_]['meta_2']==0)
+                        {
+
+                        }
+                        else{
+
+                        }
+                    }
+                    else{
+
+                    }
+                }else{
+                    $_resultado_grafico[$_estado_]['porcentaje']=$_resultado_grafico[$_estado_]['dividendo']/$_resultado_grafico[$_estado_]['meta_quincena'];
+                }
+
+            }
+            /*else if($_estado_=='RECUPERADO RECIENTE')
+            {
+            }else if($_estado_=='NUEVO')
+            {
+
+            }*/
+        }
+
+
         /*dd($situaciones_clientes);*/
         $activos_cuenta=0;
         $recurrentes_cuenta=0;
@@ -319,7 +414,7 @@ class PdfController extends Controller
             $html[] = '<td style="width:20%;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-                $situacion_cliente->situacion .
+                $situacion_cliente->situacion .' '.$situacion_cliente->user_identificador.
                 '</span>';
             $html[] = '</td>';
 
