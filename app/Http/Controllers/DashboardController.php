@@ -300,6 +300,7 @@ class DashboardController extends Controller
             $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
         }
         else if (auth()->user()->rol == User::ROL_PRESENTACION) {
+            $encargado = null;
             if($request->ii==17)
             {
                 $asesores = User::query()->activo()->rolAsesor()
