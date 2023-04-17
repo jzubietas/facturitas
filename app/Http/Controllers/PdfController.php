@@ -250,11 +250,11 @@ class PdfController extends Controller
             ])
             ->groupBy([
                 'situacion_clientes.situacion',
-                //'situacion_clientes.user_identificador'
+                'situacion_clientes.user_identificador'
             ])
             ->select([
                 'situacion_clientes.situacion',
-                //'situacion_clientes.user_identificador',
+                'situacion_clientes.user_identificador',
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
@@ -298,6 +298,7 @@ class PdfController extends Controller
 
         $metas_llamadas=Meta::where('rol','=','Jefe de llamadas')->where('mes','=',$mes_w)->where('anio','=',$anio_w)->first();
 
+        //inicializacion
         foreach ($_estados as $_estado_)
         {
             $_resultado_grafico[$_estado_]=[
@@ -315,12 +316,14 @@ class PdfController extends Controller
                 $_resultado_grafico[$_estado_]['meta_quincena']=$metas_llamadas->meta_quincena_recuperado_abandono;
                 $_resultado_grafico[$_estado_]['meta_1']=$metas_llamadas->cliente_recuperado_abandono;
                 $_resultado_grafico[$_estado_]['meta_2']=$metas_llamadas->cliente_recuperado_abandono_2;
-            }else if($_estado_=='RECUPERADO RECIENTE')
+            }
+            else if($_estado_=='RECUPERADO RECIENTE')
             {
                 $_resultado_grafico[$_estado_]['meta_quincena']=$metas_llamadas->meta_quincena_recuperado_reciente;
                 $_resultado_grafico[$_estado_]['meta_1']=$metas_llamadas->cliente_recuperado_reciente;
                 $_resultado_grafico[$_estado_]['meta_2']=$metas_llamadas->cliente_recuperado_reciente_2;
-            }else if($_estado_=='NUEVO')
+            }
+            else if($_estado_=='NUEVO')
             {
                 $_resultado_grafico[$_estado_]['meta_quincena']=$metas_llamadas->meta_quincena_nuevo;
                 $_resultado_grafico[$_estado_]['meta_1']=$metas_llamadas->cliente_nuevo;
@@ -334,18 +337,20 @@ class PdfController extends Controller
 
             if($situaciones_clientes_->situacion=='RECUPERADO ABANDONO')
             {
-                $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+1);
-            }else if($situaciones_clientes_->situacion=='RECUPERADO RECIENTE')
+                $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+$situaciones_clientes_->total);
+            }
+            else if($situaciones_clientes_->situacion=='RECUPERADO RECIENTE')
             {
-                $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+1);
+                $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+$situaciones_clientes_->total);
             }
             else if($situaciones_clientes_->situacion=='NUEVO')
             {
                 if($situaciones_clientes_->user_identificador=='21')
                 {
-                    $_resultado_grafico['RECUPERADO ABANDONO']['dividendo']=($_resultado_grafico['RECUPERADO ABANDONO']['dividendo']+1);
-                }else{
-                    $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+1);
+                    $_resultado_grafico['RECUPERADO ABANDONO']['dividendo']=($_resultado_grafico['RECUPERADO ABANDONO']['dividendo']+$situaciones_clientes_->total);
+                }
+                else{
+                    $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+$situaciones_clientes_->total);
                 }
             }
         }
@@ -377,7 +382,7 @@ class PdfController extends Controller
         }*/
 
 
-        /*dd($situaciones_clientes);*/
+        dd($_resultado_grafico);
         $activos_cuenta=0;
         $recurrentes_cuenta=0;
         $html = [];
@@ -405,7 +410,7 @@ class PdfController extends Controller
             $html[] = '<td style="width:20%;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-                $situacion_cliente->situacion .' '.  //$situacion_cliente->user_identificador.
+                $situacion_cliente->situacion .' '.$situacion_cliente->user_identificador.
                 '</span>';
             $html[] = '</td>';
 
