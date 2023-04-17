@@ -665,7 +665,7 @@ class PdfController extends Controller
 
             $total_pagado_mespasado = Pedido::query()
                 ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->where('pedidos.codigo', 'not like', "%-C%")
+                //->where('pedidos.codigo', 'not like', "%-C%")
                 ->whereNotIn('pedidos.user_id',[51,77,75])
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
@@ -679,7 +679,7 @@ class PdfController extends Controller
                 ->count();
 
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.codigo', 'not like', "%-C%")
+                //->where('pedidos.codigo', 'not like', "%-C%")
                 ->whereNotIn('pedidos.user_id',[51,77,75])
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
