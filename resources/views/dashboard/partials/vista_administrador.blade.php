@@ -234,7 +234,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                            style="font-size: 20px"></i>
                     </button>
                 </div>
-                <div id="metas_situacion_clientes col-lg-12"></div>
+                <div id="metas_situacion_clientes" class="col-lg-12"></div>
             </div>
         </div>
 
