@@ -125,7 +125,7 @@
 <div class="row">
     <div class="col-lg-12 white" id="contenedor-fullscreen">
         <!--contenedor fullscreen-->
-        <div class="d-flex justify-content-center flex-column mb-2 bg-white">
+        <div class="d-flex justify-content-center flex-column mb-2 bg-white ">
             <div class="d-flex justify-content-center row bg-white">
 
                 <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
@@ -211,7 +211,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div class="col-lg-12" id="metas_dp_17"></div>
 
     </div>
-        <div class="col-lg-12" id="metas_dp_17"></div>
+        
 
     </div>
 </div>
