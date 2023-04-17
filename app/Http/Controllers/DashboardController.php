@@ -300,15 +300,6 @@ class DashboardController extends Controller
             $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
         }
         else if (auth()->user()->rol == User::ROL_PRESENTACION) {
-            $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
-            $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
-        }
-        else {
-            $encargado = null;
-            if (auth()->user()->rol == User::ROL_ENCARGADO) {
-                $encargado = auth()->user()->id;
-            }
-
             if($request->ii==17)
             {
                 $asesores = User::query()->activo()->rolAsesor()
@@ -335,7 +326,12 @@ class DashboardController extends Controller
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
             }
-
+        }
+        else {
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
 
             if($request->ii==17)
             {
