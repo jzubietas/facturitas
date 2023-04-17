@@ -64,25 +64,6 @@
     </div>
 </div>
 
-{{-- BUSCAR / QUITAR VIDA --}}
-<div class="row mb-3">
-    @include('dashboard.widgets.buscar_cliente')
-    @include('dashboard.partials.vista_quitar_vidas')
-</div>
-
-{{-- LLAMADA DE ATENCION --}}
-<div class="col-md-12">
-    <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
-</div>
-<div class="col-lg-12">
-    <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
-</div>
-
-{{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
-<div class="col-lg-12">
-    <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
-</div>
-
 <!-- MODAL -->
 {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
