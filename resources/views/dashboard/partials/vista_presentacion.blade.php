@@ -64,6 +64,25 @@
     </div>
 </div>
 
+{{-- BUSCAR / QUITAR VIDA --}}
+<div class="row mb-3">
+    @include('dashboard.widgets.buscar_cliente')
+    @include('dashboard.partials.vista_quitar_vidas')
+</div>
+
+{{-- LLAMADA DE ATENCION --}}
+<div class="col-md-12">
+    <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
+</div>
+<div class="col-lg-12">
+    <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
+</div>
+
+{{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
+<div class="col-lg-12">
+    <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
+</div>
+
 <!-- MODAL -->
 {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
@@ -80,6 +99,7 @@
 {{-- FULLSCREEN --}}
 
 <div id="spinner" class="d-none"><!--position-relative d-flex justify-content-center -->
+
 
     <div class="position-relative top-50 start-50 translate-middle">
         <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
@@ -197,6 +217,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 </div>
 
+
+
 <br>
 
 {{-- METAS ASESOR DE LLAMADAS --}}
@@ -218,25 +240,23 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="card bg-cyan">
-                <div class="card-header">
-                    <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
-                </div>
-                <div class="card-body">
-                    <div id="metas_cobranzas_general"></div>
-                </div>
-                <div class="card-fotter"></div>
-            </div>
-
-        </div>
-
     </div>
 </div>
 
 {{-- METAS COBRANZA --}}
 <div class="container-fluid">
+    <div class="col-md-12">
+        <div class="card bg-cyan">
+            <div class="card-header">
+                <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
+            </div>
+            <div class="card-body">
+                <div id="metas_cobranzas_general"></div>
+            </div>
+            <div class="card-fotter"></div>
+        </div>
 
+    </div>
 </div>
 
 {{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
@@ -334,6 +354,67 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 </div>
 
+
+
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="far fa-chart-bar"></i>
+            Cuadro comparativo de Pedidos Anulados
+        </h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool disabled" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                        </div>
+
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 
@@ -342,6 +423,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 </div>--}}
 
+<div class="container-fluid">
+    <canvas id="my-chart-dejaronpedir"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
+</div>
 
 @section('js-datatables')
     <script>
