@@ -123,7 +123,7 @@
 
 <!--grafico metas de asesor de pedidos-->
 <div class="row">
-    <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
+    <div class="col-lg-12 white" id="contenedor-fullscreen">
         <!--contenedor fullscreen-->
         <div class="d-flex justify-content-center flex-column mb-2 bg-white">
             <div class="d-flex justify-content-center row bg-white">
@@ -153,8 +153,17 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             </div>
 
         </div>
+        </div>
 
 
+        {{-- TABLA DUAL --}}
+        <div class="" style=" overflow: hidden !important;">
+            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
+                <div class="row">
+                    <div class="contain-table-dual row" style="width: 100% !important;">
+                        <div class="col-lg-6" id="meta"></div>
+                        <div class="col-lg-6" id="metas_dp"></div>
+                    </div>
         {{-- TABLA DUAL --}}
         <div class="" style=" overflow: hidden !important;">
             <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
@@ -176,9 +185,25 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div id="metas_total"></div>
                     </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_total"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_A"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_B"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="metas_total"></div>
+                    </div>
 
                 </div>
+                </div>
 
+            </div>
+        </div>
+        {{-- FIN-TABLA-DUAL --}}
             </div>
         </div>
         {{-- FIN-TABLA-DUAL --}}
@@ -186,7 +211,13 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div class="col-lg-12" id="metas_dp_17"></div>
 
     </div>
+        <div class="col-lg-12" id="metas_dp_17"></div>
+
+    </div>
 </div>
+
+
+
 
 
 
@@ -222,23 +253,14 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 <br>
 
 {{-- METAS ASESOR DE LLAMADAS --}}
-
-<div class="row container-fluid">
-    <div class="col-md-12 bg-white" id="contenedor-fullscreen-llamadas">
-        <div class="d-flex justify-content-center flex-column mb-2 bg-white">
-            <div class="d-flex justify-content-center row bg-white">
-                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-middle order-change-2 ">
-                    <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;background: #FFFFFF;
-text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">
-                        Metas Asesores de Llamadas {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
-                    <button style="background: none; border: none" onclick="openFullscreenllamada();">
-                        <i class="fas fa-expand-arrows-alt ml-3"
-                           style="font-size: 20px"></i>
-                    </button>
-                </div>
-                <div id="metas_situacion_clientes" class="col-lg-12 align-middle"></div>
-            </div>
+<div class="container-fluid">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-center">
+            <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
         </div>
+        <div id="metas_situacion_clientes"></div>
+    </div>
+</div>
 
     </div>
 </div>
@@ -667,6 +689,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         else if (entero == 17) {
                             $('#metas_dp_17').html(resultado);
                         }
+                        else if (entero == 17) {
+                            $('#metas_dp_17').html(resultado);
+                        }
 
                     }
                 })
@@ -798,6 +823,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(15);//paola
                 cargaNueva(13);//totales porcentajes debajo de metas
                 cargaNueva(17);
+                cargaNueva(17);
 
                 cargReporteMetasSituacionClientes();
 
@@ -818,6 +844,18 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     elem.msRequestFullscreen();
                 }
             }
+
+            var elem_llamada = document.querySelector("#contenedor-fullscreen-llamadas");
+            window.openFullscreenllamada = function () {
+                if (elem_llamada.requestFullscreen) {
+                    elem_llamada.requestFullscreen();
+                } else if (elem_llamada.webkitRequestFullscreen) { /* Safari */
+                    elem_llamada.webkitRequestFullscreen();
+                } else if (elem_llamada.msRequestFullscreen) { /* IE11 */
+                    elem_llamada.msRequestFullscreen();
+                }
+            }
+
 
             var elem_llamada = document.querySelector("#contenedor-fullscreen-llamadas");
             window.openFullscreenllamada = function () {
