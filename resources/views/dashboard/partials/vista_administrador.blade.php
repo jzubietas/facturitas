@@ -125,71 +125,69 @@
 <div class="row">
     <div class="col-lg-12 white" id="contenedor-fullscreen">
         <!--contenedor fullscreen-->
-        <div id="grafico_metas_asesor_pedidos"></div>
+        <div class="d-flex justify-content-center flex-column mb-2 bg-white">
+            <div class="d-flex justify-content-center row bg-white">
 
-    </div>
-</div>
-
-<div class="col-lg-12 bg-white" id="contenedor-fullscreen">
-    <div class="d-flex justify-content-center flex-column mb-2 bg-white">
-        <div class="d-flex justify-content-center row bg-white">
-
-            <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
-                <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
-                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
-                    <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
+                    <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                        <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
+                        <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
-                <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
+                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
+                    <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
 background: #FFFFFF;
 text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">Metas del mes
-                    de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
-                <button style="background: none; border: none" onclick="openFullscreen();">
-                    <i class="fas fa-expand-arrows-alt ml-3"
-                       style="font-size: 20px"></i>
-                </button>
-            </div>
-            <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
-                <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
-                    <h5 class="card-title text-uppercase">Total de pedidos:</h5>
-                    <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                        de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+                    <button style="background: none; border: none" onclick="openFullscreen();">
+                        <i class="fas fa-expand-arrows-alt ml-3"
+                           style="font-size: 20px"></i>
+                    </button>
                 </div>
-            </div>
-        </div>
-
-    </div>
-
-
-    {{-- TABLA DUAL --}}
-    <div class="" style=" overflow: hidden !important;">
-        <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
-            <div class="row">
-                <div class="contain-table-dual row" style="width: 100% !important;">
-                    <div class="col-lg-6" id="meta"></div>
-                    <div class="col-lg-6" id="metas_dp"></div>
+                <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
+                    <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
+                        <h5 class="card-title text-uppercase">Total de pedidos:</h5>
+                        <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                    </div>
                 </div>
-
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div id="supervisor_total"></div>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div id="supervisor_A"></div>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div id="supervisor_B"></div>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div id="metas_total"></div>
-                </div>
-
             </div>
 
         </div>
-    </div>
-    {{-- FIN-TABLA-DUAL --}}
 
+
+        {{-- TABLA DUAL --}}
+        <div class="" style=" overflow: hidden !important;">
+            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
+                <div class="row">
+                    <div class="contain-table-dual row" style="width: 100% !important;">
+                        <div class="col-lg-6" id="meta"></div>
+                        <div class="col-lg-6" id="metas_dp"></div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_total"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_A"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="supervisor_B"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="metas_total"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {{-- FIN-TABLA-DUAL --}}
+
+    </div>
 </div>
+
+
+
 
 <div class ="container-fluid">
     <div class="row">
@@ -222,12 +220,24 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 <br>
 
 {{-- METAS ASESOR DE LLAMADAS --}}
-<div class="container-fluid">
-    <div class="col-md-12">
-        <div class="d-flex justify-content-center">
-            <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
+
+<div class="row container-fluid">
+    <div class="col-md-12 bg-white" id="contenedor-fullscreen_llamadas">
+        <div class="d-flex justify-content-center flex-column mb-2 bg-white">
+            <div class="d-flex justify-content-center row bg-white">
+                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
+                    <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;background: #FFFFFF;
+text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">
+                        Metas Asesores de Llamadas {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+                    <button style="background: none; border: none" onclick="openFullscreenllamada();">
+                        <i class="fas fa-expand-arrows-alt ml-3"
+                           style="font-size: 20px"></i>
+                    </button>
+                </div>
+                <div id="metas_situacion_clientes"></div>
+            </div>
         </div>
-        <div id="metas_situacion_clientes"></div>
+
     </div>
 </div>
 
@@ -800,6 +810,18 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     elem.msRequestFullscreen();
                 }
             }
+
+            var elem_llamada = document.querySelector("#contenedor-fullscreen-llamadas");
+            window.openFullscreenllamada = function () {
+                if (elem_llamada.requestFullscreen) {
+                    elem_llamada.requestFullscreen();
+                } else if (elem_llamada.webkitRequestFullscreen) { /* Safari */
+                    elem_llamada.webkitRequestFullscreen();
+                } else if (elem_llamada.msRequestFullscreen) { /* IE11 */
+                    elem_llamada.msRequestFullscreen();
+                }
+            }
+
         });
     </script>
 
