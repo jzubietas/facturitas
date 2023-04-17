@@ -250,11 +250,11 @@ class PdfController extends Controller
             ])
             ->groupBy([
                 'situacion_clientes.situacion',
-                'situacion_clientes.user_identificador'
+                //'situacion_clientes.user_identificador'
             ])
             ->select([
                 'situacion_clientes.situacion',
-                'situacion_clientes.user_identificador',
+                //'situacion_clientes.user_identificador',
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
@@ -405,7 +405,7 @@ class PdfController extends Controller
             $html[] = '<td style="width:20%;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-                $situacion_cliente->situacion .' '.$situacion_cliente->user_identificador.
+                $situacion_cliente->situacion .' '.  //$situacion_cliente->user_identificador.
                 '</span>';
             $html[] = '</td>';
 
