@@ -345,9 +345,16 @@ class PdfController extends Controller
             }
             else if($situaciones_clientes_->situacion=='NUEVO')
             {
+                /*echo "<pre>";
+                print_r($situaciones_clientes_);
+                echo "</pre>";*/
                 if($situaciones_clientes_->user_identificador=='21')
                 {
+
                     $_resultado_grafico['RECUPERADO ABANDONO']['dividendo']=($_resultado_grafico['RECUPERADO ABANDONO']['dividendo']+$situaciones_clientes_->total);
+                    /*echo "<pre>";
+                    print_r($_resultado_grafico);
+                    echo "</pre>";*/
                 }
                 else{
                     $_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']=($_resultado_grafico[$situaciones_clientes_->situacion]['dividendo']+$situaciones_clientes_->total);
@@ -382,7 +389,10 @@ class PdfController extends Controller
         }*/
 
 
-        dd($_resultado_grafico);
+        /*echo "<pre>";
+        print_r($_resultado_grafico);
+        echo "</pre>";*/
+        //dd($_resultado_grafico);
         $activos_cuenta=0;
         $recurrentes_cuenta=0;
         $html = [];
@@ -400,17 +410,18 @@ class PdfController extends Controller
             }
         }
 
-
-        foreach ($situaciones_clientes as $situacion_cliente)
+        foreach($_resultado_grafico as $_resultado_grafico_k=>$_resultado_grafico_v)
         {
-            if($situacion_cliente->situacion=='LEVANTADO' || $situacion_cliente->situacion=='CAIDO')
+            //var_dump($_resultado_grafico_);
+
+            if($_resultado_grafico_k=='LEVANTADO' || $_resultado_grafico_k=='CAIDO')
                 continue;
 
             $html[] = '<tr>';
             $html[] = '<td style="width:20%;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-                $situacion_cliente->situacion .' '.$situacion_cliente->user_identificador.
+                $_resultado_grafico_v["label"] .
                 '</span>';
             $html[] = '</td>';
 
@@ -420,28 +431,29 @@ class PdfController extends Controller
             $valor_meta = 0;
             $color_progress = '';
             $color_degradado = 0;
-            if ($situacion_cliente->total < $situacion_cliente->meta_quincena) {
+            if ($_resultado_grafico_v["dividendo"] < $_resultado_grafico_v["meta_quincena"])
+            {
                 //meta quincena
-                $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_quincena) * 100, 2);
-                $diferenciameta = $situacion_cliente->meta_quincena - $situacion_cliente->total;
+                $porcentaje = round(($_resultado_grafico_v["dividendo"] / $_resultado_grafico_v["meta_quincena"]) * 100, 2);
+                $diferenciameta = $_resultado_grafico_v["meta_quincena"] - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
-                $valor_meta = $situacion_cliente->meta_quincena;
+                $valor_meta = $_resultado_grafico_v["meta_quincena"];
                 if($porcentaje < 90){
                     $color_progress = '#FFD4D4';  /*ROSADO*/
                 }else{
                     $color_progress = 'linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%)';   /*ROSADO-ROJO*/
                 }
-
             }
-            else if ($situacion_cliente->total < $situacion_cliente->meta_1) {
+            else if ($_resultado_grafico_v["dividendo"] < $_resultado_grafico_v["meta_1"]) {
                 //meta 1
-                $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_1) * 100, 2);
-                $diferenciameta = $situacion_cliente->meta_1 - $situacion_cliente->total;
+                $porcentaje = round(($_resultado_grafico_v["dividendo"] / $_resultado_grafico_v["meta_1"]) * 100, 2);
+                $diferenciameta = $_resultado_grafico_v["meta_1"] - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
-                $valor_meta = $situacion_cliente->meta_1;
+                $valor_meta = $_resultado_grafico_v["meta_1"];
                 if($porcentaje < 45){
                     $color_progress = '#DC3545FF';  /*ROJO*/
-                }else if($porcentaje < 50){
+                }
+                else if($porcentaje < 50){
                     $color_progress = 'linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%)';  /*ROJO-AMARILLO*/
                 }else if($porcentaje < 95){
                     $color_progress = '#ffc107';  /*AMARILLO*/
@@ -450,15 +462,15 @@ class PdfController extends Controller
                 }
             }
             else {
-                $valor_mayor_cero=intval($situacion_cliente->meta_2);
+                $valor_mayor_cero=intval($_resultado_grafico_v["meta_2"]);
                 if ($valor_mayor_cero>0){
-                    $porcentaje = round(($situacion_cliente->total / $situacion_cliente->meta_2) * 100, 2);
+                    $porcentaje = round(($_resultado_grafico_v["dividendo"] / $_resultado_grafico_v["meta_2"]) * 100, 2);
                 }else{
                     $porcentaje = round(0, 2);
                 }
-                $diferenciameta = $situacion_cliente->meta_2 - $situacion_cliente->total;
+                $diferenciameta = $_resultado_grafico_v["meta_2"] - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
-                $valor_meta = $situacion_cliente->meta_2;
+                $valor_meta = $_resultado_grafico_v["meta_2"];
                 if ($porcentaje < 99){
                     $color_progress = '#008ffb';  /*VERDE*/
                 }else if ($porcentaje < 98){
@@ -468,7 +480,7 @@ class PdfController extends Controller
                 }
 
             }
-
+            //
             if ($porcentaje >= 90) {
                 $html[] = '<div class=" w-100 bg-white rounded">
                                         <div class="position-relative rounded">
@@ -479,7 +491,7 @@ class PdfController extends Controller
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>
-                                                               - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                               - ' . $_resultado_grafico_v["dividendo"] . ' /  ' . $valor_meta . '
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    ' . $diferenciameta . '
                                                                   </p>
@@ -500,7 +512,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                         - ' . $_resultado_grafico_v["dividendo"] . ' /  ' . $valor_meta . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
@@ -521,7 +533,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                         - ' . $_resultado_grafico_v["dividendo"] . ' /  ' . $valor_meta . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
@@ -541,7 +553,7 @@ class PdfController extends Controller
                                               <span style="font-weight: lighter">
                                                         <b style="font-weight: bold !important; font-size: 18px">
                                                           ' . $porcentaje . '% </b>
-                                                         - ' . $situacion_cliente->total . ' /  ' . $valor_meta . '
+                                                         - ' . $_resultado_grafico_v["dividendo"] . ' /  ' . $valor_meta . '
                                                              <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                              ' . $diferenciameta . '
                                                             </p>
@@ -551,63 +563,28 @@ class PdfController extends Controller
                                   <sub class="d-none">% -  Pagados/ Asignados</sub>
                             </div>';
             }
-
+            //
             $html[] = '</td>';
             $html[] = '</tr>';
+
         }
 
-        foreach ($situaciones_clientes as $situacion_cliente_2)
+        foreach ($_resultado_grafico as $_resultado_grafico_k2=>$_resultado_grafico_v2)
         {
 
-            if($situacion_cliente_2->situacion=='LEVANTADO')
+            if($_resultado_grafico_k=='LEVANTADO')
             {
-                //dd($situacion_cliente_2);
                 $html[] = '<tr>';
                 $html[] = '<td style="width:20%;height:150px;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-                    $situacion_cliente_2->situacion .
+                    $_resultado_grafico_k .
                     '</span>';
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
                 $porcentaje = 0;
 
                 $diferenciameta=0;
-                /*echo "<br>activos total  = ".$situacion_cliente_2->total."<br>";
-                if ($situacion_cliente_2->total < $situacion_cliente_2->meta_quincena)
-                {
-                    $valor_mayor_cero=intval($situacion_cliente_2->meta_quincena);
-                    echo "<br>meta quincena activo = ".$valor_mayor_cero."%<br>";
-                    if ($valor_mayor_cero>0){
-                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero) , 2);
-                        $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
-                    }else{
-                        $porcentaje = round(0, 2);
-                    }
-
-                }
-                else if ($situacion_cliente_2->total < $situacion_cliente_2->meta_1)
-                {
-                    $valor_mayor_cero=intval($situacion_cliente_2->meta_1);
-                    echo "<br>meta 1 activo = ".$valor_mayor_cero."%<br>";
-                    if ($valor_mayor_cero>0){
-                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero) , 2);
-                        $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
-                    }else{
-                        $porcentaje = round(0, 2);
-                    }
-                }
-                else
-                {
-                    $valor_mayor_cero=intval($situacion_cliente_2->meta_2);
-                    echo "<br>meta 2 activo = ".$valor_mayor_cero."%<br>";
-                    if ($valor_mayor_cero>0){
-                        $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * ($valor_mayor_cero) , 2);
-                        $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*($valor_mayor_cero/100) - $activos_cuenta;
-                    }else{
-                        $porcentaje = round(0, 2);
-                    }
-                }*/
 
                 $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
                 $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(70/100) - $activos_cuenta;
@@ -638,8 +615,6 @@ class PdfController extends Controller
                                         <sub class="d-none">% -  Pagados/ Asignados</sub>
                                   </div>';
                 }
-
-
 
                 $html[] = '</td>';
                 $html[] = '</tr>';
