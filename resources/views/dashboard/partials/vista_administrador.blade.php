@@ -222,7 +222,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 {{-- METAS ASESOR DE LLAMADAS --}}
 
 <div class="row container-fluid">
-    <div class="col-md-12 bg-white" id="contenedor-fullscreen_llamadas">
+    <div class="col-md-12 bg-white" id="contenedor-fullscreen-llamadas">
         <div class="d-flex justify-content-center flex-column mb-2 bg-white">
             <div class="d-flex justify-content-center row bg-white">
                 <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
