@@ -123,7 +123,7 @@
 
 <!--grafico metas de asesor de pedidos-->
 <div class="row">
-    <div class="col-lg-12 white" id="contenedor-fullscreen">
+    <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
         <!--contenedor fullscreen-->
         <div class="d-flex justify-content-center flex-column mb-2 bg-white ">
             <div class="d-flex justify-content-center row bg-white">
