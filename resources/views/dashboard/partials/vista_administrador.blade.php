@@ -225,7 +225,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <div class="col-md-12 bg-white" id="contenedor-fullscreen-llamadas">
         <div class="d-flex justify-content-center flex-column mb-2 bg-white">
             <div class="d-flex justify-content-center row bg-white">
-                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
+                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-middle order-change-2 ">
                     <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;background: #FFFFFF;
 text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">
                         Metas Asesores de Llamadas {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
@@ -234,7 +234,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                            style="font-size: 20px"></i>
                     </button>
                 </div>
-                <div id="metas_situacion_clientes" class="col-lg-12 align-items-center"></div>
+                <div id="metas_situacion_clientes" class="col-lg-12 align-middle"></div>
             </div>
         </div>
 
