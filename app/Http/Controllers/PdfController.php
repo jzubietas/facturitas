@@ -316,7 +316,7 @@ class PdfController extends Controller
                 continue;
 
             $html[] = '<tr>';
-            $html[] = '<td style="width:20%;height:100px;" class="text-center">';
+            $html[] = '<td style="width:20%;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
                 $situacion_cliente->situacion .
