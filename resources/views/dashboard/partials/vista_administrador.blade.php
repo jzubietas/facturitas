@@ -153,8 +153,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             </div>
 
         </div>
-        </div>
-
 
         {{-- TABLA DUAL --}}
         <div class="" style=" overflow: hidden !important;">
@@ -211,7 +209,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div class="col-lg-12" id="metas_dp_17"></div>
 
     </div>
-        
+
 </div>
 
 
