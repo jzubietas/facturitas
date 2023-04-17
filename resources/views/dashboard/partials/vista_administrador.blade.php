@@ -246,14 +246,14 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 
 
-    <div class="col-md-12">
+    <div class="col-md-12 bg-white">
         <div class="d-flex justify-content-center">
             <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
         </div>
         <div id="metas_situacion_clientes"></div>
     </div>
 
-    <div class="col-md-12">
+    <div class="col-md-12 bg-white">
         <div class="card bg-cyan">
             <div class="card-header">
                 <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
