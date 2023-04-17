@@ -295,7 +295,7 @@ class PdfController extends Controller
         $activos_cuenta=0;
         $recurrentes_cuenta=0;
         $html = [];
-        $html[] = '<table class="table table-situacion-clientes" style="background: #ade0db; color: #0a0302">';
+        $html[] = '<table class="table table-situacion-clientes align-self-center" style="background: #ade0db; color: #0a0302">';
 
         foreach ($situaciones_clientes as $situacion_cliente_3)
         {
