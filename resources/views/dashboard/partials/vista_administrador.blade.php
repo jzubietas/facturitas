@@ -162,14 +162,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         <div class="col-lg-6" id="meta"></div>
                         <div class="col-lg-6" id="metas_dp"></div>
                     </div>
-        {{-- TABLA DUAL --}}
-        <div class="" style=" overflow: hidden !important;">
-            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
-                <div class="row">
-                    <div class="contain-table-dual row" style="width: 100% !important;">
-                        <div class="col-lg-6" id="meta"></div>
-                        <div class="col-lg-6" id="metas_dp"></div>
-                    </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div id="supervisor_total"></div>
@@ -197,11 +189,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     </div>
 
                 </div>
-                </div>
 
-            </div>
-        </div>
-        {{-- FIN-TABLA-DUAL --}}
             </div>
         </div>
         {{-- FIN-TABLA-DUAL --}}
