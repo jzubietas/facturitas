@@ -472,7 +472,7 @@ class PdfController extends Controller
             {
                 //dd($situacion_cliente_2);
                 $html[] = '<tr>';
-                $html[] = '<td style="width:20%;" class="text-center">';
+                $html[] = '<td style="width:20%;height:150px;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
                     $situacion_cliente_2->situacion .
@@ -529,7 +529,7 @@ class PdfController extends Controller
                 {
                     $html[] = '<div class="w-100 bg-white rounded">
                                         <div class="position-relative rounded">
-                                            <div class="progress bg-white rounded" style="height: 40px">
+                                            <div class="progress bg-white rounded" style="height: 150px">
                                                     <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
                                              </div>
                                              <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
