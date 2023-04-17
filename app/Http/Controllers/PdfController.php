@@ -354,10 +354,7 @@ class PdfController extends Controller
             //if($_estado_=='RECUPERADO ABANDONO')
             {
                 //dividendo
-                if ($situacion_cliente->total < $situacion_cliente->meta_quincena)
-                {
-
-                }
+                
                 if($_resultado_grafico[$_estado_]['meta_quincena']==0)
                 {
                     if($_resultado_grafico[$_estado_]['meta_1']==0)
