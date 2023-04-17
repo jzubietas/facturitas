@@ -174,6 +174,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         </div>
         {{-- FIN-TABLA-DUAL --}}
 
+        <div class="col-lg-12" id="metas_dp_17"></div>
+
     </div>
 </div>
 
@@ -511,6 +513,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             $('#dejaronpedir_supervisor_A').html(resultado);
                         } else if (entero == 15) {
                             $('#dejaronpedir_supervisor_B').html(resultado);
+                        }
+                        else if (entero == 17) {
+                            $('#metas_dp_17').html(resultado);
                         }
 
                     }
