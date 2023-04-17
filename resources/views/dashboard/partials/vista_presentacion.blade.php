@@ -227,6 +227,20 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </div>
                 <div id="metas_situacion_clientes" class="col-lg-12 align-middle"></div>
             </div>
+
+            <div class="col-md-12">
+                <div class="card bg-cyan">
+                    <div class="card-header">
+                        <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
+                    </div>
+                    <div class="card-body">
+                        <div id="metas_cobranzas_general"></div>
+                    </div>
+                    <div class="card-fotter"></div>
+                </div>
+
+            </div>
+
         </div>
 
     </div>
@@ -234,18 +248,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 {{-- METAS COBRANZA --}}
 <div class="container-fluid">
-    <div class="col-md-12">
-        <div class="card bg-cyan">
-            <div class="card-header">
-                <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
-            </div>
-            <div class="card-body">
-                <div id="metas_cobranzas_general"></div>
-            </div>
-            <div class="card-fotter"></div>
-        </div>
 
-    </div>
 </div>
 
 {{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
