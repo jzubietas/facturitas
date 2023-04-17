@@ -232,8 +232,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 {{-- METAS ASESOR DE LLAMADAS --}}
 <div class="container-fluid" id="contenedor-fullscreen-llamadas">
-
-    <div class="col-md-12">
+    <div class="col-md-12 d-flex justify-content-center align-items-center">
         <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
 background: #FFFFFF;
 text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">
