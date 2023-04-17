@@ -316,7 +316,7 @@ class PdfController extends Controller
                 continue;
 
             $html[] = '<tr>';
-            $html[] = '<td style="width:20%;height:100px;" class="text-center">';
+            $html[] = '<td style="width:20%;height:300px;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
                 $situacion_cliente->situacion .
@@ -379,7 +379,7 @@ class PdfController extends Controller
             }
 
             if ($porcentaje >= 90) {
-                $html[] = '<div class="w-100 bg-white rounded">
+                $html[] = '<div class="height:300px w-100 bg-white rounded">
                                         <div class="position-relative rounded">
                                             <div class="progress bg-white rounded" style="height: 40px">
                                                     <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
@@ -400,7 +400,7 @@ class PdfController extends Controller
             }
             else if ($porcentaje > 75)
             {
-                $html[] = '<div class="w-100 bg-white rounded">
+                $html[] = '<div class="height:300px w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                               <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
@@ -421,7 +421,7 @@ class PdfController extends Controller
             }
             else if ($porcentaje > 50)
             {
-                $html[] = '<div class="w-100 bg-white rounded">
+                $html[] = '<div class="height:300px w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                               <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
@@ -441,7 +441,7 @@ class PdfController extends Controller
                             </div>';
             }
             else {
-                $html[] = '<div class="w-100 bg-white rounded">
+                $html[] = '<div class="height:300px w-100 bg-white rounded">
                                   <div class="position-relative rounded">
                                       <div class="progress bg-white rounded" style="height: 40px">
                                               <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
