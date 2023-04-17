@@ -619,6 +619,7 @@ class PdfController extends Controller
                 $html[] = '</td>';
                 $html[] = '</tr>';
 
+                break;
             }
             continue;
 
