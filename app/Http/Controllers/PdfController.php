@@ -349,12 +349,10 @@ class PdfController extends Controller
                 }
             }
         }
-        foreach ($_estados as $_estados_)
+        /*foreach ($_estados as $_estados_)
         {
-            //if($_estado_=='RECUPERADO ABANDONO')
             {
-                //dividendo
-                
+
                 if($_resultado_grafico[$_estado_]['meta_quincena']==0)
                 {
                     if($_resultado_grafico[$_estado_]['meta_1']==0)
@@ -375,13 +373,8 @@ class PdfController extends Controller
                 }
 
             }
-            /*else if($_estado_=='RECUPERADO RECIENTE')
-            {
-            }else if($_estado_=='NUEVO')
-            {
 
-            }*/
-        }
+        }*/
 
 
         /*dd($situaciones_clientes);*/
