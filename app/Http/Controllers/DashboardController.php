@@ -755,14 +755,6 @@ class DashboardController extends Controller
 
         }
 
-        }
-
-        }
-
-        }
-
-        }
-
         $newData = [];
         $union = collect($progressData)->groupBy('identificador');
         foreach ($union as $identificador => $items) {
@@ -869,10 +861,6 @@ class DashboardController extends Controller
         })->sortBy('meta_new', SORT_NUMERIC, true)
             ->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
 
-        if ($request->ii == 17) {
-            $progressData->all();
-        }
-        else if ($request->ii == 1) {
         if ($request->ii == 17) {
             $progressData->all();
         }
