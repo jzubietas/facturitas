@@ -200,12 +200,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 </div>
 
-
-
-
-
-
-
 <div class ="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
@@ -237,20 +231,28 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 <br>
 
 {{-- METAS ASESOR DE LLAMADAS --}}
-<div class="container-fluid">
+<div class="container-fluid" id="contenedor-fullscreen-llamadas">
+
+    <div class="col-md-12">
+        <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
+background: #FFFFFF;
+text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">
+            Metas Llamadas/Cobranzas
+            de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+        <button style="background: none; border: none" onclick="openFullscreenllamadas();">
+            <i class="fas fa-expand-arrows-alt ml-3"
+               style="font-size: 20px"></i>
+        </button>
+    </div>
+
+
     <div class="col-md-12">
         <div class="d-flex justify-content-center">
             <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
         </div>
         <div id="metas_situacion_clientes"></div>
     </div>
-</div>
 
-    </div>
-</div>
-
-{{-- METAS COBRANZA --}}
-<div class="container-fluid">
     <div class="col-md-12">
         <div class="card bg-cyan">
             <div class="card-header">
@@ -830,19 +832,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             }
 
             var elem_llamada = document.querySelector("#contenedor-fullscreen-llamadas");
-            window.openFullscreenllamada = function () {
-                if (elem_llamada.requestFullscreen) {
-                    elem_llamada.requestFullscreen();
-                } else if (elem_llamada.webkitRequestFullscreen) { /* Safari */
-                    elem_llamada.webkitRequestFullscreen();
-                } else if (elem_llamada.msRequestFullscreen) { /* IE11 */
-                    elem_llamada.msRequestFullscreen();
-                }
-            }
-
-
-            var elem_llamada = document.querySelector("#contenedor-fullscreen-llamadas");
-            window.openFullscreenllamada = function () {
+            window.openFullscreenllamadas = function () {
                 if (elem_llamada.requestFullscreen) {
                     elem_llamada.requestFullscreen();
                 } else if (elem_llamada.webkitRequestFullscreen) { /* Safari */
