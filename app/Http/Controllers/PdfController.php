@@ -657,6 +657,8 @@ class PdfController extends Controller
             {
                 //solo considerar pagos de dia 17 en adelante
                 continue;
+            }else if($mes_artificio->year=='2022' && $mes_artificio->month=='11'){
+                continue;
             }/*else{
 
             }*/
