@@ -2690,6 +2690,19 @@ class EnvioController extends Controller
                         $pedido->condicion_envio . $subestado . '</span>';
                     return $badge_estado;
                 })
+                ->addColumn('botones', function ($pedido) use ($opcion) {
+                    $btn = [];
+                    if ($opcion == 'recepcionado'):
+                        $btn[]='<button type="button" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-desktop" aria-hidden="true"></i>
+                                </button>
+                                ';
+
+                    endif;
+                })
                 ->addColumn('action', function ($pedido) use ($opcion) {
                     $btn = [];
                     if ($opcion == 'recepcionado'):
@@ -2705,7 +2718,7 @@ class EnvioController extends Controller
                     endif;
                     return join('', $btn);
                 })
-                ->rawColumns(['action', 'condicion_envio_color', 'condicion_envio'])
+                ->rawColumns(['botones','action', 'condicion_envio_color', 'condicion_envio'])
                 ->make(true);
         } else if ($opcion == 'entregado') {
             return Datatables::of(DB::table($pedidos))

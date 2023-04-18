@@ -723,6 +723,10 @@
                         },
                     },
                     {
+                        data: 'botones',
+                        name: 'botones',
+                    },
+                    {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                     },
