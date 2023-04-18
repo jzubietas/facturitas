@@ -343,7 +343,7 @@ class DashboardController extends Controller
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
-                    ->where('excluir_meta', '<>', '1')
+                    //->where('excluir_meta', '<>', '1')
                     ->where('identificador','=','17')
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
@@ -408,10 +408,18 @@ class DashboardController extends Controller
             }
         }
 
-
-        foreach ($asesores as $asesor) {
+        //dd($progressData);
+        foreach ($asesores as $asesor)
+        {
             /*if (!$asesor->identificador == '01') continue;*/
-            if (in_array(auth()->user()->rol, [User::ROL_FORMACION, User::ROL_ADMIN, User::ROL_PRESENTACION, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])) {
+            if (in_array(auth()->user()->rol, [
+                User::ROL_FORMACION
+                , User::ROL_ADMIN
+                , User::ROL_PRESENTACION
+                , User::ROL_ASESOR
+                , User::ROL_LLAMADAS
+                , User::ROL_JEFE_LLAMADAS
+            ])) {
             } else {
                 if (auth()->user()->rol != User::ROL_ADMIN) {
                     if (auth()->user()->rol != User::ROL_ENCARGADO) {
@@ -552,7 +560,7 @@ class DashboardController extends Controller
             ];
 
             if (array_key_exists($encargado_asesor, $count_asesor)) {
-                if ($encargado_asesor == 46) {
+                /*if ($encargado_asesor == 46) {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
                     $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
                     $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
@@ -564,7 +572,7 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['meta_2'] = $metatotal_2 + $count_asesor[$encargado_asesor]['meta_2'];
                     $count_asesor[$encargado_asesor]['total_pedido'] = $total_pedido + $count_asesor[$encargado_asesor]['total_pedido'];
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
-                } else if ($encargado_asesor == 24) {
+                } else*/ if ($encargado_asesor == 24) {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
                     $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
                     $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
@@ -592,63 +600,75 @@ class DashboardController extends Controller
                 }
             }
 
-            if($request->ii==17)
+            if($request->ii=="17")
             {
+                dd($item);
                 $progressData[] = $item;
-            }else{
-                if ($asesor->excluir_meta) {
-                    if ($total_pedido_mespasado > 0) {
+                //
+            }
+            else{
+                if ($asesor->excluir_meta)
+                {
+                    if ($total_pedido_mespasado > 0)
+                    {
                         $p_pagos = round(($total_pagado / $total_pedido_mespasado) * 100, 2);
-                    } else {
-                        $p_pagos = 0;
                     }
-            if($request->ii==17)
-            {
-                $progressData[] = $item;
-            }else{
-                if ($asesor->excluir_meta) {
-                    if ($total_pedido_mespasado > 0) {
-                        $p_pagos = round(($total_pagado / $total_pedido_mespasado) * 100, 2);
-                    } else {
+                    else {
                         $p_pagos = 0;
                     }
 
-                    if ($metatotal_quincena > 0) {
+                    if ($metatotal_quincena > 0)
+                    {
                         $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
-                    } else {
+                    }
+                    else
+                    {
                         $p_quincena = 0;
                     }
-                    if ($metatotal_quincena > 0) {
+                    if ($metatotal_quincena > 0)
+                    {
                         $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
-                    } else {
+                    }
+                    else
+                    {
                         $p_quincena = 0;
                     }
 
-                    if ($metatotal_intermedia > 0) {
+                    if ($metatotal_intermedia > 0)
+                    {
                         $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
-                    } else {
+                    }
+                    else
+                    {
                         $p_intermedia = 0;
                     }
-                    if ($metatotal_intermedia > 0) {
+                    if ($metatotal_intermedia > 0)
+                    {
                         $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
-                    } else {
+                    }
+                    else
+                    {
                         $p_intermedia = 0;
                     }
 
                     if ($metatotal_1 > 0) {
                         $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                    } else {
+                    }
+                    else {
                         $p_pedidos = 0;
                     }
-                    if ($metatotal_1 > 0) {
+                    if ($metatotal_1 > 0)
+                    {
                         $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                    } else {
+                    }
+                    else {
                         $p_pedidos = 0;
                     }
 
                     if ($metatotal_2 > 0) {
                         $p_pedidos_2 = round(($total_pedido / $metatotal_2) * 100, 2);
-                    } else {
+                    }
+                    else {
                         $p_pedidos_2 = 0;
                     }
                     if ($metatotal_2 > 0) {
@@ -698,7 +718,8 @@ class DashboardController extends Controller
                         $item['progress_pedidos'] = $p_pedidos;
                         /*meta 2*/
                     }
-                    else if ($total_pedido>=$metatotal_1) {
+                    else if ($total_pedido>=$metatotal_1)
+                    {
                         if ($metatotal_2 > 0) {
                             $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
                         } else {
@@ -714,20 +735,28 @@ class DashboardController extends Controller
                     $item['meta_intermedia'] = $p_intermedia;
                     $item['meta'] = $p_pedidos;
                     $item['meta_2'] = $p_pedidos_2;
-                    if ($total_pedido>=0 && $total_pedido < $metatotal_1) {
-                        if ($metatotal_1 > 0) {
+                    if ($total_pedido>=0 && $total_pedido < $metatotal_1)
+                    {
+                        if ($metatotal_1 > 0)
+                        {
                             $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                        } else {
+                        }
+                        else
+                        {
                             $p_pedidos = 0;
                         }
                         $item['meta_new'] = 1;
                         $item['progress_pedidos'] = $p_pedidos;
                         /*meta 2*/
                     }
-                    else if ($total_pedido>=$metatotal_1) {
-                        if ($metatotal_2 > 0) {
+                    else if ($total_pedido>=$metatotal_1)
+                    {
+                        if ($metatotal_2 > 0)
+                        {
                             $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
-                        } else {
+                        }
+                        else
+                        {
                             $p_pedidos = 0;
                         }
                         $item['meta_new'] = 2;
@@ -741,10 +770,6 @@ class DashboardController extends Controller
                     $item['meta'] = $p_pedidos;
                     $item['meta_2'] = $p_pedidos_2;
 
-                } else {
-                    $progressData[] = $item;
-                }
-            }
                 } else {
                     $progressData[] = $item;
                 }
@@ -752,6 +777,7 @@ class DashboardController extends Controller
 
         }
 
+        //dd($progressData);
         $newData = [];
         $union = collect($progressData)->groupBy('identificador');
         foreach ($union as $identificador => $items) {
