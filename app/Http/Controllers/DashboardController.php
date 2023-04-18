@@ -338,13 +338,13 @@ class DashboardController extends Controller
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->where('identificador','=','17')
+                    ->whereIn('identificador',['17','18'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->where('identificador','=','17')
+                    ->whereIn('identificador',['17','18'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
@@ -600,180 +600,174 @@ class DashboardController extends Controller
                 }
             }
 
-            if($request->ii=="17")
+            if ($asesor->excluir_meta)
             {
-                dd($item);
-                $progressData[] = $item;
-                //
-            }
-            else{
-                if ($asesor->excluir_meta)
+                if ($total_pedido_mespasado > 0)
                 {
-                    if ($total_pedido_mespasado > 0)
-                    {
-                        $p_pagos = round(($total_pagado / $total_pedido_mespasado) * 100, 2);
-                    }
-                    else {
-                        $p_pagos = 0;
-                    }
+                    $p_pagos = round(($total_pagado / $total_pedido_mespasado) * 100, 2);
+                }
+                else {
+                    $p_pagos = 0;
+                }
 
-                    if ($metatotal_quincena > 0)
-                    {
+                if ($metatotal_quincena > 0)
+                {
+                    $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
+                }
+                else
+                {
+                    $p_quincena = 0;
+                }
+                if ($metatotal_quincena > 0)
+                {
+                    $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
+                }
+                else
+                {
+                    $p_quincena = 0;
+                }
+
+                if ($metatotal_intermedia > 0)
+                {
+                    $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
+                }
+                else
+                {
+                    $p_intermedia = 0;
+                }
+                if ($metatotal_intermedia > 0)
+                {
+                    $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
+                }
+                else
+                {
+                    $p_intermedia = 0;
+                }
+
+                if ($metatotal_1 > 0) {
+                    $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
+                }
+                else {
+                    $p_pedidos = 0;
+                }
+                if ($metatotal_1 > 0)
+                {
+                    $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
+                }
+                else {
+                    $p_pedidos = 0;
+                }
+
+                if ($metatotal_2 > 0) {
+                    $p_pedidos_2 = round(($total_pedido / $metatotal_2) * 100, 2);
+                }
+                else {
+                    $p_pedidos_2 = 0;
+                }
+                if ($metatotal_2 > 0) {
+                    $p_pedidos_2 = round(($total_pedido / $metatotal_2) * 100, 2);
+                } else {
+                    $p_pedidos_2 = 0;
+                }
+
+                /*-----------------------*/
+                /*if ($total_pedido>=0 && $total_pedido < $metatotal_quincena) {
+                    if ($metatotal_quincena > 0) {
                         $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
-                    }
-                    else
-                    {
+                    } else {
                         $p_quincena = 0;
+                        $item['meta_new'] = 0;
+                        $item['progress_pedidos'] = $p_quincena;
                     }
-                    if ($metatotal_quincena > 0)
-                    {
+                }
+                else *//*if ($total_pedido>=$metatotal_quincena && $total_pedido < $metatotal_intermedia) {
+                /*-----------------------*/
+                /*if ($total_pedido>=0 && $total_pedido < $metatotal_quincena) {
+                    if ($metatotal_quincena > 0) {
                         $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
-                    }
-                    else
-                    {
+                    } else {
                         $p_quincena = 0;
+                        $item['meta_new'] = 0;
+                        $item['progress_pedidos'] = $p_quincena;
                     }
-
-                    if ($metatotal_intermedia > 0)
-                    {
-                        $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
-                    }
-                    else
-                    {
-                        $p_intermedia = 0;
-                    }
-                    if ($metatotal_intermedia > 0)
-                    {
-                        $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
-                    }
-                    else
-                    {
-                        $p_intermedia = 0;
-                    }
-
+                }
+                else *//*if ($total_pedido>=$metatotal_quincena && $total_pedido < $metatotal_intermedia) {
+                if ($metatotal_intermedia > 0) {
+                    $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
+                } else {
+                    $p_intermedia = 0;
+                    $item['meta_new'] = 0.5;
+                    $item['progress_pedidos'] = $p_intermedia;
+                }
+            }
+            else */
+                if ($total_pedido>=0 && $total_pedido < $metatotal_1) {
                     if ($metatotal_1 > 0) {
                         $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                    }
-                    else {
+                    } else {
                         $p_pedidos = 0;
                     }
+                    $item['meta_new'] = 1;
+                    $item['progress_pedidos'] = $p_pedidos;
+                    /*meta 2*/
+                }
+                else if ($total_pedido>=$metatotal_1)
+                {
+                    if ($metatotal_2 > 0) {
+                        $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
+                    } else {
+                        $p_pedidos = 0;
+                    }
+                    $item['meta_new'] = 2;
+                    $item['progress_pedidos'] = $p_pedidos;
+                }
+                /*-----------------------*/
+                $item['progress_pagos'] = $p_pagos;
+                $item['progress_pedidos'] = $p_pedidos;
+                $item['meta_quincena'] = $p_quincena;
+                $item['meta_intermedia'] = $p_intermedia;
+                $item['meta'] = $p_pedidos;
+                $item['meta_2'] = $p_pedidos_2;
+                if ($total_pedido>=0 && $total_pedido < $metatotal_1)
+                {
                     if ($metatotal_1 > 0)
                     {
                         $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
                     }
-                    else {
+                    else
+                    {
                         $p_pedidos = 0;
                     }
-
-                    if ($metatotal_2 > 0) {
-                        $p_pedidos_2 = round(($total_pedido / $metatotal_2) * 100, 2);
-                    }
-                    else {
-                        $p_pedidos_2 = 0;
-                    }
-                    if ($metatotal_2 > 0) {
-                        $p_pedidos_2 = round(($total_pedido / $metatotal_2) * 100, 2);
-                    } else {
-                        $p_pedidos_2 = 0;
-                    }
-
-                    /*-----------------------*/
-                    /*if ($total_pedido>=0 && $total_pedido < $metatotal_quincena) {
-                        if ($metatotal_quincena > 0) {
-                            $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
-                        } else {
-                            $p_quincena = 0;
-                            $item['meta_new'] = 0;
-                            $item['progress_pedidos'] = $p_quincena;
-                        }
-                    }
-                    else *//*if ($total_pedido>=$metatotal_quincena && $total_pedido < $metatotal_intermedia) {
-                    /*-----------------------*/
-                    /*if ($total_pedido>=0 && $total_pedido < $metatotal_quincena) {
-                        if ($metatotal_quincena > 0) {
-                            $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
-                        } else {
-                            $p_quincena = 0;
-                            $item['meta_new'] = 0;
-                            $item['progress_pedidos'] = $p_quincena;
-                        }
-                    }
-                    else *//*if ($total_pedido>=$metatotal_quincena && $total_pedido < $metatotal_intermedia) {
-                    if ($metatotal_intermedia > 0) {
-                        $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
-                    } else {
-                        $p_intermedia = 0;
-                        $item['meta_new'] = 0.5;
-                        $item['progress_pedidos'] = $p_intermedia;
-                    }
-                }
-                else */
-                    if ($total_pedido>=0 && $total_pedido < $metatotal_1) {
-                        if ($metatotal_1 > 0) {
-                            $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                        } else {
-                            $p_pedidos = 0;
-                        }
-                        $item['meta_new'] = 1;
-                        $item['progress_pedidos'] = $p_pedidos;
-                        /*meta 2*/
-                    }
-                    else if ($total_pedido>=$metatotal_1)
-                    {
-                        if ($metatotal_2 > 0) {
-                            $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
-                        } else {
-                            $p_pedidos = 0;
-                        }
-                        $item['meta_new'] = 2;
-                        $item['progress_pedidos'] = $p_pedidos;
-                    }
-                    /*-----------------------*/
-                    $item['progress_pagos'] = $p_pagos;
+                    $item['meta_new'] = 1;
                     $item['progress_pedidos'] = $p_pedidos;
-                    $item['meta_quincena'] = $p_quincena;
-                    $item['meta_intermedia'] = $p_intermedia;
-                    $item['meta'] = $p_pedidos;
-                    $item['meta_2'] = $p_pedidos_2;
-                    if ($total_pedido>=0 && $total_pedido < $metatotal_1)
-                    {
-                        if ($metatotal_1 > 0)
-                        {
-                            $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                        }
-                        else
-                        {
-                            $p_pedidos = 0;
-                        }
-                        $item['meta_new'] = 1;
-                        $item['progress_pedidos'] = $p_pedidos;
-                        /*meta 2*/
-                    }
-                    else if ($total_pedido>=$metatotal_1)
-                    {
-                        if ($metatotal_2 > 0)
-                        {
-                            $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
-                        }
-                        else
-                        {
-                            $p_pedidos = 0;
-                        }
-                        $item['meta_new'] = 2;
-                        $item['progress_pedidos'] = $p_pedidos;
-                    }
-                    /*-----------------------*/
-                    $item['progress_pagos'] = $p_pagos;
-                    $item['progress_pedidos'] = $p_pedidos;
-                    $item['meta_quincena'] = $p_quincena;
-                    $item['meta_intermedia'] = $p_intermedia;
-                    $item['meta'] = $p_pedidos;
-                    $item['meta_2'] = $p_pedidos_2;
-
-                } else {
-                    $progressData[] = $item;
+                    /*meta 2*/
                 }
+                else if ($total_pedido>=$metatotal_1)
+                {
+                    if ($metatotal_2 > 0)
+                    {
+                        $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
+                    }
+                    else
+                    {
+                        $p_pedidos = 0;
+                    }
+                    $item['meta_new'] = 2;
+                    $item['progress_pedidos'] = $p_pedidos;
+                }
+                /*-----------------------*/
+                $item['progress_pagos'] = $p_pagos;
+                $item['progress_pedidos'] = $p_pedidos;
+                $item['meta_quincena'] = $p_quincena;
+                $item['meta_intermedia'] = $p_intermedia;
+                $item['meta'] = $p_pedidos;
+                $item['meta_2'] = $p_pedidos_2;
+
             }
+            else {
+                $progressData[] = $item;
+            }
+
 
         }
 
@@ -885,6 +879,9 @@ class DashboardController extends Controller
             ->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
 
         if ($request->ii == 17) {
+            $progressData->all();
+        }
+        else if ($request->ii == 18) {
             $progressData->all();
         }
         else if ($request->ii == 1) {
