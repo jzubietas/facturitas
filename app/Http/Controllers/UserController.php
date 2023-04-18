@@ -415,6 +415,7 @@ class UserController extends Controller
                     || $user->exidentificador == '26'
                     || $user->exidentificador == '28'
                     || $user->identificador == '17'
+                    || $user->identificador == '18'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
@@ -480,7 +481,7 @@ class UserController extends Controller
             $users = User::where("rol", "ASESOR ADMINISTRATIVO");
         }
         else if($mirol==User::ROL_ASISTENTE_PUBLICIDAD){
-            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16']);
+            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17','18']);
         }
         else {
             $usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO"]);
@@ -559,6 +560,7 @@ class UserController extends Controller
                     || $user->exidentificador == '26'
                     || $user->exidentificador == '28'
                     || $user->identificador == '17'
+                    || $user->identificador == '18'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
