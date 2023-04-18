@@ -1363,118 +1363,20 @@ ${data.foto3 ? `
                     {data: 'codigos', name: 'codigos',},
                     {data: 'celulares',name: 'celulares',},
                     {data: 'empresas', name: 'empresas',},
-                    {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
+                    {data: 'cantidad', name: 'cantidad'},
                     {data: 'users', name: 'users',},
                     {data: 'ruc', name: 'ruc',},
                     {data: 'fecha', name: 'fecha',},
                     {data: 'fecha_up', name: 'fecha_up', "visible": true,},
-                    {data: 'total', name: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '')},
+                    {data: 'total', name: 'total'},
                     {
                         data: 'condicion_pa',
                         name: 'condicion_pa',
-                        render: function (data, type, row, meta) {
-                            if (row.condiciones == 'ANULADO' || row.condicion_code == 4 || row.estado == 0) {
-                                /*return 'ANULADO';*/
-                                if (row.estado == '0' && row.condicion_code != '5'){
-                                    return 'ANULADO';
-                                }else if(row.condicion_code == '5'){
-                                    return 'ANULADO PARCIAL';
-                                }
-                            } else {
-                                if (row.condicion_pa == null) {
-                                    return 'SIN PAGO REGISTRADO';
-                                } else {
-                                    if (row.condicion_pa == '0') {
-                                        return '<p>SIN PAGO REGISTRADO</p>'
-                                    }
-                                    if (row.condicion_pa == '1') {
-                                        return '<p>ADELANTO</p>'
-                                    }
-                                    if (row.condicion_pa == '2') {
-                                        return '<p>PAGO</p>'
-                                    }
-                                    if (row.condicion_pa == '3') {
-                                        return '<p>ABONADO</p>'
-                                    }
-                                    //return data;
-                                }
-                            }
-
-                        }
                     },
-                    /*{data: 'condiciones_aprobado', name: 'condiciones_aprobado', render: function (data, type, row, meta) {
-                        if (row.condicion_code == 4 || row.estado == 0) {
-                          return 'ANULADO';
-                        }
-                        if (data != null) {
-                          return data;
-                        } else {
-                          return 'SIN REVISAR';
-                        }
-
-                      }
-                    },*/
-                    /*
-                    {
-                      //estado del sobre
-                      data: 'envio',
-                      name: 'envio',
-                      render: function ( data, type, row, meta ) {
-                        if(row.envio==null){
-                          return '';
-                        }else{
-                          {
-                            if(row.envio=='1'){
-                              return '<span class="badge badge-success">Enviado</span><br>'+
-                                      '<span class="badge badge-warning">Por confirmar recepcion</span>';
-                            }else if(row.envio=='2'){
-                              return '<span class="badge badge-success">Enviado</span><br>'+
-                                      '<span class="badge badge-info">Recibido</span>';
-                            }else{
-                              return '<span class="badge badge-danger">Pendiente</span>';
-                            }
-                          }
-
-
-                        }
-                      }
-                    },  */
-                    //{data: 'responsable', name: 'responsable', },//estado de envio
-
-                    {data: 'condicion_pa', name: 'condicion_pa', 'visible': false},
                     {data: 'condicion_envio', name: 'condicion_envio'},
-
-                    /*
-                    {
-                      data: 'estado',
-                      name: 'estado',
-                      render: function ( data, type, row, meta ) {
-                          if(row.estado==1){
-                            return '<span class="badge badge-success">Activo</span>';
-                          }else{
-                            return '<span class="badge badge-danger">Anulado</span>';
-                          }
-                        }
-                    },
-
-                    */
                     {
                         data: 'diferencia',
                         name: 'diferencia',
-                        render: function (data, type, row, meta) {
-                            if (row.condicion_code == 4 || row.estado == 0) {
-                                return '0';
-                            }
-                            if (row.diferencia == null) {
-                                return 'NO REGISTRA PAGO';
-                            } else {
-                                if (row.diferencia > 0) {
-                                    return row.diferencia;
-                                } else {
-                                    return row.diferencia;
-                                }
-                            }
-                        }
                     },
                     //{data: 'responsable', name: 'responsable', },
                     {

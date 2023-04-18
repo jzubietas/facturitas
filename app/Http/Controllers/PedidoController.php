@@ -137,7 +137,6 @@ class PedidoController extends Controller
         }
     }
 
-
     public function indextabla(Request $request)
     {
         $mirol = Auth::user()->rol;
@@ -334,6 +333,112 @@ class PedidoController extends Controller
                     return '--';
                 }
             })
+            ->editColumn('codigos',function($pedido){
+                if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                {
+                    return '<span class="color-recuperado-abandono">'.$pedido->codigos.'</span>';
+                }else{
+                    return $pedido->codigos;
+                }
+            })
+            ->editColumn('empresas',function($pedido){
+                if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                {
+                    return '<span class="color-recuperado-abandono">'.$pedido->empresas.'</span>';
+                }else{
+                    return $pedido->empresas;
+                }
+            })
+            ->editColumn('cantidad',function($pedido){
+                if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                {
+                    return '<span class="color-recuperado-abandono">'.number_format($pedido->cantidad,2,'.','').'</span>';
+                }else{
+                    return $pedido->cantidad;
+                }
+            })
+            ->editColumn('users',function($pedido){
+                if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                {
+                    return '<span class="color-recuperado-abandono">'.$pedido->users.'</span>';
+                }else{
+                    return $pedido->users;
+                }
+            })
+            ->editColumn('ruc',function($pedido){
+                if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                {
+                    return '<span class="color-recuperado-abandono">'.$pedido->ruc.'</span>';
+                }else{
+                    return $pedido->ruc;
+                }
+            })
+            ->editColumn('fecha',function($pedido){
+                if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                {
+                    return '<span class="color-recuperado-abandono">'.$pedido->fecha.'</span>';
+                }else{
+                    return $pedido->fecha;
+                }
+            })
+            ->editColumn('fecha_up',function($pedido){
+                if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                {
+                    return '<span class="color-recuperado-abandono">'.$pedido->fecha_up.'</span>';
+                }else{
+                    return $pedido->fecha_up;
+                }
+            })
+            ->editColumn('total',function($pedido){
+                if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
+                {
+                    return '<span class="color-recuperado-abandono">'.number_format($pedido->total,2,'.','').'</span>';
+                }else{
+                    return $pedido->total;
+                }
+            })
+            ->editColumn('condicion_pa',function($pedido){
+                if ($pedido->condiciones == 'ANULADO' || $pedido->condicion_code == 4 || $pedido->estado == 0)
+                {
+                    if ($pedido->estado == '0' && $pedido->condicion_code != '5'){
+                        return 'ANULADO';
+                    }else if($pedido->condicion_code == '5'){
+                        return 'ANULADO PARCIAL';
+                    }
+                } else {
+                    if ($pedido->condicion_pa == null) {
+                        return 'SIN PAGO REGISTRADO';
+                    } else {
+                        if ($pedido->condicion_pa == '0') {
+                            return '<p>SIN PAGO REGISTRADO</p>';
+                                    }
+                        if ($pedido->condicion_pa == '1') {
+                            return '<p>ADELANTO</p>';
+                                    }
+                        if ($pedido->condicion_pa == '2') {
+                            return '<p>PAGO</p>';
+                                    }
+                        if ($pedido->condicion_pa == '3') {
+                            return '<p>ABONADO</p>';
+                                    }
+                        //return data;
+                    }
+                }
+            })
+            ->editColumn('diferencia',function($pedido){
+                if ($pedido->condicion_code == 4 || $pedido->estado == 0) {
+                    return '0';
+                }
+                if ($pedido->diferencia == null) {
+                    return 'NO REGISTRA PAGO';
+                } else {
+                    if ($pedido->diferencia > 0) {
+                        return $pedido->diferencia;
+                    } else {
+                        return $pedido->diferencia;
+                    }
+                }
+            })
             ->editColumn('celulares',function($pedido){
                 if ($pedido->icelulares != null) {
                     if($pedido->s_cliente==Cliente::RECUPERADO_ABANDONO)
@@ -480,7 +585,23 @@ class PedidoController extends Controller
                 $btn[] = '</ul></div>';
                 return join('', $btn);
             })
-            ->rawColumns(['action', 'condicion_envio', 'condicion_envio_color','celulares','fecha_up'])
+            ->rawColumns([
+                'codigos'
+                ,'celulares'
+                ,'empresas'
+                ,'cantidad'
+                ,'users'
+                ,'ruc'
+                ,'fecha'
+                ,'fecha_up'
+                ,'total'
+                ,'condicion_pa'
+                ,'action'
+                ,'condicion_envio'
+                ,'condicion_envio_color'
+                ,'celulares'
+                ,'fecha_up'
+            ])
             ->make(true);
     }
 
