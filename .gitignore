@@ -12,5 +12,4 @@ npm-debug.log
 yarn-error.log
 .idea
 *.log
-/vendor/
-bk.sql
+*.sql

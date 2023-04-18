@@ -657,15 +657,18 @@ class PdfController extends Controller
             {
                 //solo considerar pagos de dia 17 en adelante
                 continue;
+            }else if($mes_artificio->year=='2022' && $mes_artificio->month=='11'){
+                continue;
             }/*else{
 
             }*/
 
             $total_pagado_mespasado = Pedido::query()
                 ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->where('pedidos.codigo', 'not like', "%-C%")
-                ->whereNotIn('pedidos.user_id',[51])
+                //->where('pedidos.codigo', 'not like', "%-C%")
+                ->whereNotIn('pedidos.user_id',[51,77,75])
                 ->where('pedidos.estado', '1')
+                ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->where('pedidos.pago','1')
                 ->where('pedidos.pagado','2')
@@ -676,9 +679,10 @@ class PdfController extends Controller
                 ->count();
 
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.codigo', 'not like', "%-C%")
-                ->whereNotIn('pedidos.user_id',[51])
+                //->where('pedidos.codigo', 'not like', "%-C%")
+                ->whereNotIn('pedidos.user_id',[51,77,75])
                 ->where('pedidos.estado', '1')
+                ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
                 ->count();
