@@ -1373,6 +1373,7 @@ ${data.foto3 ? `
                         data: 'condicion_pa',
                         name: 'condicion_pa',
                     },
+                    {data: 'condicion_pa', name: 'condicion_pa', 'visible': false},
                     {data: 'condicion_envio', name: 'condicion_envio'},
                     {
                         data: 'diferencia',
