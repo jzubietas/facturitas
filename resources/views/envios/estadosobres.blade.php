@@ -157,6 +157,7 @@
                             <th scope="col" class="align-middle">Fecha de entrega</th>
                             <th scope="col" class="align-middle">Destino</th>
                             <th scope="col" class="align-middle">Dirección de envío</th>
+                            <th scope="col" class="align-middle">Botones</th>
                             <th scope="col" class="align-middle">Estado de envio</th>
                             <th scope="col" class="align-middle">Estado de sobre</th>
                             <th scope="col" class="align-middle">Observacion Devolucion</th>
