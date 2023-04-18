@@ -2700,8 +2700,8 @@ class EnvioController extends Controller
                                     <i class="fa fa-desktop" aria-hidden="true"></i>
                                 </button>
                                 ';
-
                     endif;
+                    return join('', $btn);
                 })
                 ->addColumn('action', function ($pedido) use ($opcion) {
                     $btn = [];
