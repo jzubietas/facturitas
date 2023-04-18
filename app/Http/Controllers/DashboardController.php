@@ -288,12 +288,24 @@ class DashboardController extends Controller
             $total_asesor = User::query()->activo()->rolAsesor()->where('identificador', auth()->user()->identificador)->where('excluir_meta', '<>', '1')->count();
         }
         else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
-            $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
-            $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
+            $asesores = User::query()->activo()->rolAsesor()
+                ->whereNotIn('identificador',['17','18'])
+                //->where('excluir_meta', '<>', '1')
+                ->get();
+            $total_asesor = User::query()->activo()->rolAsesor()
+                ->whereNotIn('identificador',['17','18'])
+                //->where('excluir_meta', '<>', '1')
+                ->count();
         }
         else if (auth()->user()->rol == User::ROL_LLAMADAS) {
-            $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
-            $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
+            $asesores = User::query()->activo()->rolAsesor()
+                ->whereNotIn('identificador',['17','18'])
+                //->where('excluir_meta', '<>', '1')
+                ->get();
+            $total_asesor = User::query()->activo()->rolAsesor()
+                ->whereNotIn('identificador',['17','18'])
+                //->where('excluir_meta', '<>', '1')
+                ->count();
         }
         else if (auth()->user()->rol == User::ROL_FORMACION) {
             $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
