@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alerta;
+use App\Models\CallAtention;
 use App\Models\Cliente;
 use App\Models\HistorialVidas;
 use App\Models\PasswordReset;
@@ -687,11 +688,21 @@ class UserController extends Controller
                 $tipomensaje = "success";
                 $titulo = "TE QUEDAN " . $contadorquitavidas . " VIDAS";
                 $mensaje = "Se te ha quitado una vida por un error cometido. Recuerda estar mas pendiente en tu gestión.";
+                HistorialVidas::create([
+                    'user_id'=>$user->id,
+                    'accion'=>'Agregado quitar vida: '.strval($contadorquitavidas+1).' a '.strval($contadorquitavidas),
+                    'created_at' => Carbon::now()
+                ]);
             }
             if ($contadorquitavidas == 1) {
                 $tipomensaje = "warning";
                 $titulo = "TE QUEDA " . $contadorquitavidas . " VIDA";
                 $mensaje = "Solo te queda una vida. Ten mucho cuidado y revisa tu gestion correctamente. Evita un llamado de atención.";
+                HistorialVidas::create([
+                    'user_id'=>$user->id,
+                    'accion'=>'Agregado quitar vida: '.strval($contadorquitavidas+1).' a '.strval($contadorquitavidas),
+                    'created_at' => Carbon::now()
+                ]);
             }
             if ($contadorquitavidas == 0) {
                 $tipomensaje = "error";
@@ -704,7 +715,14 @@ class UserController extends Controller
                 ]);
                 HistorialVidas::create([
                     'user_id'=>$user->id,
-                    'accion'=>'Agregado llamado de atencion: '.strval($user->cant_vidas_cero).' a '.strval($user->cant_vidas_cero+1),
+                    'accion'=>'Agregado llamado de atencion: '.strval($contadorquitavidas+1).' a '.strval($contadorquitavidas),
+                    'created_at' => Carbon::now()
+                ]);
+                CallAtention::create([
+                    'user_id'=>$user->id,
+                    'user_identificador' => $user->identificador,
+                    'accion'=>'Agregado llamado de atencion: '.strval($contadorquitavidas+1).' a '.strval($contadorquitavidas),
+                    'responsable'=>$user->supervisor,
                     'created_at' => Carbon::now()
                 ]);
             }
