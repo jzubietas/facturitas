@@ -293,7 +293,7 @@ class PdfController extends Controller
                 DB::raw('count(situacion_clientes.situacion) as total')
             ])
             ->get();
-        $_estados=['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','LEVANTADO'];
+        $_estados=['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','LEVANTADO','CAIDO'];
         $_resultado_grafico=[];
 
         $metas_llamadas=Meta::where('rol','=','Jefe de llamadas')->where('mes','=',$mes_w)->where('anio','=',$anio_w)->first();
@@ -398,17 +398,21 @@ class PdfController extends Controller
         $html = [];
         $html[] = '<table class="table table-situacion-clientes align-self-center" style="background: #ade0db; color: #0a0302">';
 
+        /*echo "<pre>";
+        print_r($situaciones_clientes);
+        echo "</pre>";*/
         foreach ($situaciones_clientes as $situacion_cliente_3)
         {
             if($situacion_cliente_3->situacion=='LEVANTADO')
             {
-                $activos_cuenta=$situacion_cliente_3->total;
+                $activos_cuenta=$situacion_cliente_3->total+$activos_cuenta;
             }
             else if($situacion_cliente_3->situacion=='CAIDO')
             {
-                $recurrentes_cuenta=$situacion_cliente_3->total;
+                $recurrentes_cuenta=$situacion_cliente_3->total+$recurrentes_cuenta;
             }
         }
+//dd($activos_cuenta,$recurrentes_cuenta);//14//51//307/1006
 
         foreach($_resultado_grafico as $_resultado_grafico_k=>$_resultado_grafico_v)
         {
@@ -569,16 +573,21 @@ class PdfController extends Controller
 
         }
 
+        /*echo "<pre>";
+        print_r($_resultado_grafico);
+        echo "</pre>";*/
+
+
         foreach ($_resultado_grafico as $_resultado_grafico_k2=>$_resultado_grafico_v2)
         {
 
-            if($_resultado_grafico_k=='LEVANTADO')
+            if($_resultado_grafico_k2=='LEVANTADO')
             {
                 $html[] = '<tr>';
                 $html[] = '<td style="width:20%;height:150px;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
-                    $_resultado_grafico_k .
+                    $_resultado_grafico_k2 .
                     '</span>';
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
