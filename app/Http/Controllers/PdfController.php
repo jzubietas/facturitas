@@ -147,6 +147,8 @@ class PdfController extends Controller
                 ['a.periodo', '=', $periodo_antes],
                 ['situacion_clientes.user_identificador', '<>', 'B'],
                 ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_identificador', '<>', '17'],
+                ['situacion_clientes.user_identificador', '<>', '18'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
