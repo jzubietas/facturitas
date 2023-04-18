@@ -272,59 +272,6 @@ class PedidoController extends Controller
             ->addColumn('tipo_letra', function ($pedido) {
                 return Pedido::getTipoLetraByCliente($pedido->cliente_id);
             })
-            ->editColumn('condicion_envio', function ($pedido) {
-                $badge_estado = '';
-                if ($pedido->codigo_regularizado == '1') {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">REGULARIZACION</span>';
-
-                }
-                if ($pedido->pendiente_anulacion == '1') {
-                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION. '</span>';
-                    return $badge_estado;
-                }
-                if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
-                    return '<span class="badge badge-danger">ANULADO</span>';
-                }
-                if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #cd11af; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; ">Observado</span>';
-                } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #ff0014; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Contesto</span>';
-                } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #00b972; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Recibido</span>';
-                }
-                if ($pedido->estado_sobre == '1') {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
-                }
-                if ($pedido->condiciones==Pedido::PENDIENTE_ANULACION_PARCIAL ) {
-                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::PENDIENTE_ANULACION_PARCIAL.'</span>';
-                }
-
-                if ( $pedido->condiciones==Pedido::ANULADO_PARCIAL) {
-                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULADO_PARCIAL.'</span>';
-                }
-
-                if ($pedido->condiciones==Pedido::PENDIENTE_ANULACION_COBRANZA ) {
-                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::PENDIENTE_ANULACION_COBRANZA.'</span>';
-                }
-
-                if ( $pedido->condiciones==Pedido::ANULACION_COBRANZA) {
-                    $badge_estado .= '<span class="badge bg-indigo p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULACION_COBRANZA.'</span>';
-                }
-                if ($pedido->vStateSolicitud=='0' && $pedido->vStateSolicitud!='') {
-                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">ANULACION RECHAZADA</span>';
-                }
-
-                if ($pedido->estado_ruta == '1') {
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
-                    padding: 8px !important;
-                    margin: 0px !important;
-                    font-size: 8px;
-                    color: black !important;">Con ruta</span>';
-                }
-                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $badge_estado .= '<span class="rounded etiquetas_asignacion" style="margin: 0px !important; background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
-                return $badge_estado;
-            })
             ->editColumn('fecha_up',function($pedido){
                 if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
                     return $pedido->fecha_up;
@@ -424,6 +371,64 @@ class PedidoController extends Controller
                         //return data;
                     }
                 }
+            })
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado = '';
+                if ($pedido->codigo_regularizado == '1') {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">REGULARIZACION</span>';
+                }
+                if ($pedido->pendiente_anulacion == '1') {
+                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION. '</span>';
+                    //return $badge_estado;
+                }
+
+                if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #cd11af; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; ">Observado</span>';
+                } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #ff0014; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Contesto</span>';
+                } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #00b972; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Recibido</span>';
+                }
+                if ($pedido->estado_sobre == '1') {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
+                }
+                if ($pedido->condiciones==Pedido::PENDIENTE_ANULACION_PARCIAL ) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::PENDIENTE_ANULACION_PARCIAL.'</span>';
+                }
+
+                if ( $pedido->condiciones==Pedido::ANULADO_PARCIAL) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULADO_PARCIAL.'</span>';
+                }
+
+                if ($pedido->condiciones==Pedido::PENDIENTE_ANULACION_COBRANZA ) {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::PENDIENTE_ANULACION_COBRANZA.'</span>';
+                }
+
+                if ( $pedido->condiciones==Pedido::ANULACION_COBRANZA) {
+                    $badge_estado .= '<span class="badge bg-indigo p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">'.Pedido::ANULACION_COBRANZA.'</span>';
+                }
+                if ($pedido->vStateSolicitud=='0' && $pedido->vStateSolicitud!='') {
+                    $badge_estado .= '<span class="badge badge-danger p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: 4px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">ANULACION RECHAZADA</span>';
+                }
+
+                if ($pedido->estado_ruta == '1') {
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    padding: 8px !important;
+                    margin: 0px !important;
+                    font-size: 8px;
+                    color: black !important;">Con ruta</span>';
+                }
+
+                if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
+                    $badge_estado='<span class="badge badge-danger es-anulado">ANULADO</span>';
+                    return $badge_estado;
+                }else{
+                    $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                    $badge_estado .= '<span class="rounded etiquetas_asignacion" style="margin: 0px !important; background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                    return $badge_estado;
+                }
+
+
             })
             ->editColumn('diferencia',function($pedido){
                 if ($pedido->condicion_code == 4 || $pedido->estado == 0) {

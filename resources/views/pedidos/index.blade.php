@@ -1178,7 +1178,7 @@
                 order: [[6, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
-                    if (data["estado"] == "1") {
+                    /*if (data["estado"] == "1") {
                         if (data.pendiente_anulacion == 1 && data.vtipoAnulacion!='F') {
                             $('td', row).css('background', 'red').css('font-weight', 'bold');
                         }else if (data.pendiente_anulacion == 1 && data.vtipoAnulacion=='F'){
@@ -1189,7 +1189,7 @@
                         }
                     } else {
                         $(row).addClass('textred');
-                    }
+                    }*/
                 },
                 rowCallback: function (row, data, index) {
                     var pedidodiferencia = data.diferencia;

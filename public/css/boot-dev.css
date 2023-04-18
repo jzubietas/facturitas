@@ -111,7 +111,7 @@ body {
     color: #ffffff !important;
     background-color: #e74c3c !important;
     padding: 0px 4px !important;
-    position: absolute !important;
+    /*position: absolute !important;*/
     right: 0px !important;
 }
 
