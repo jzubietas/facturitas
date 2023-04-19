@@ -14,11 +14,11 @@ class AlterTablePagosClavepedido extends Migration
     public function up()
     {
         Schema::table('pagos', function (Blueprint $table) {
-            if(!Schema::hasColumn('clientes','user_identificador'))
+            //if(!Schema::hasColumn('clientes','user_identificador'))
             {
                 $table->string('user_identificador')->nullable()->default('')->after('user_id');
             }
-            if(!Schema::hasColumn('pagos','user_clavepedido'))
+            //if(!Schema::hasColumn('pagos','user_clavepedido'))
             {
                 $table->string('user_clavepedido')->nullable()->default('')->after('user_identificador');
             }
