@@ -212,12 +212,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         </div>
 
 
-        <div class="col-lg-12 col-md-12 col-sm-12">
+        <!--<div class="col-lg-12 col-md-12 col-sm-12">
             <div id="dejaronpedir_supervisor_A"></div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div id="dejaronpedir_supervisor_B"></div>
-        </div>
+        </div>-->
 
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div id="dejaronpedir_supervisor_total"></div>
@@ -779,8 +779,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNuevaRecurrenteActivo(8);
             cargaNuevaRecurrenteActivo(9);
 
-            cargaNueva(14);//fernando
-            cargaNueva(15);//paola
+            //cargaNueva(14);//fernando
+            //cargaNueva(15);//paola
             cargaNueva(13);//totales porcentajes debajo de metas
 
             cargaNueva(17);
@@ -804,8 +804,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNuevaRecurrenteActivo(8);
                 cargaNuevaRecurrenteActivo(9);
 
-                cargaNueva(14);//fernando
-                cargaNueva(15);//paola
+                //cargaNueva(14);//fernando
+                //cargaNueva(15);//paola
                 cargaNueva(13);//totales porcentajes debajo de metas
                 cargaNueva(17);
                 cargaNueva(17);
