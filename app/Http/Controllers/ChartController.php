@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
@@ -403,4 +404,226 @@ class ChartController extends Controller
     }
 
     //Fin de las funciones
+
+    public function caidosDeudaConSin(Request $request)
+    {
+        $arregloasesores = [];
+
+        $gDataporc1 = [];
+        $oDataporc2 = [];
+        $rDataporc3 = [];
+
+        $caidos=Cliente::where('situacion','=','CAIDO')->activo()->where('tipo','=','1');
+        $caidos_total=$caidos->count();
+
+        $caidos_deben=$caidos->clone()->where('deuda','1')->count();
+        $caidos_no_deben=$caidos->clone()->where('deuda','0')->count();
+
+        dd($caidos_total,$caidos_deben,$caidos_no_deben);
+
+        /*dd($ids_asesores);*/
+        $mes= Carbon::now()->month;
+        $anio=Carbon::now()->year;
+        foreach ($arrayasesores as $item => $asslst){
+            $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
+
+            $pedidosActivosPorAsesores = Pedido::where('pedidos.user_id',$asslst->id)
+                ->where('pedidos.estado',1)
+                ->where('pedidos.pendiente_anulacion','<>',1)
+                ->where('pedidos.codigo','not like', "%-C%")
+                ->whereMonth('pedidos.created_at', $mes)
+                ->whereYear('pedidos.created_at',$anio)
+                ->count();
+
+            $pedidosPendAnulPorAsesores = Pedido::where('pedidos.user_id',$asslst->id)
+                ->where('pedidos.estado',1)
+                ->where('pedidos.pendiente_anulacion',1)
+                ->where('pedidos.codigo','not like', "%-C%")
+                ->whereMonth('pedidos.created_at', $mes)
+                ->whereYear('pedidos.created_at',$anio)
+                ->count();
+
+            $pedidosAnuladosPorAsesores = Pedido::where('pedidos.user_id',$asslst->id)
+                ->where('pedidos.estado',0)
+                ->where('pedidos.pendiente_anulacion',0)
+                ->where('pedidos.codigo','not like', "%-C%")
+                ->whereMonth('pedidos.created_at', $mes)
+                ->whereYear('pedidos.created_at',$anio)
+                ->count();
+
+            $totalfila=$pedidosActivosPorAsesores+$pedidosPendAnulPorAsesores+$pedidosAnuladosPorAsesores;
+
+            $pedidosActivosPorAsesores=round($pedidosActivosPorAsesores,1);
+            $pedidosPendAnulPorAsesores=round($pedidosPendAnulPorAsesores,1);
+            $pedidosAnuladosPorAsesores=round($pedidosAnuladosPorAsesores,1);
+
+            $pedidosAnuladosPorAsesores=$totalfila-$pedidosPendAnulPorAsesores-$pedidosActivosPorAsesores;
+
+            if ($pedidosActivosPorAsesores != 0.0 || $totalfila!=0.0) {
+                $gDataporc1[$item]=round((($pedidosActivosPorAsesores /$totalfila)*100),1);
+            } else {
+                $gDataporc1[$item]=0;
+            }
+
+            if ($pedidosPendAnulPorAsesores != 0.0 || $totalfila!=0.0) {
+                $oDataporc2[$item]=round((($pedidosPendAnulPorAsesores /$totalfila)*100),1);
+            } else {
+                $oDataporc2[$item]=0;
+            }
+
+            if ($pedidosAnuladosPorAsesores != 0.0 || $totalfila!=0.0) {
+                $rDataporc3[$item]=round((($pedidosAnuladosPorAsesores /$totalfila)*100),1);
+            } else {
+                $rDataporc3[$item]=0;
+            }
+        }
+        return response()->json([
+            'labels' => $arregloasesores,
+            'datasets' => [
+                [
+                    'label' => 'Activos %',
+                    'data' => $gDataporc1,
+                    'backgroundColor' => 'rgb(32, 201, 151)',
+                    'borderColor' => 'rgb(32, 201, 151)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+                [
+                    'label' => 'Pendiente Anulacion %',
+                    'data' => $oDataporc2,
+                    'backgroundColor' => 'rgb(253, 126, 20)',
+                    'borderColor' => 'rgb(253, 126, 20)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+                [
+                    'label' => 'Anulados %',
+                    'data' => $rDataporc3,
+                    'backgroundColor' => 'rgb(220, 53, 69)',
+                    'borderColor' => 'rgb(220, 53, 69)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+            ],
+        ]);
+    }
+
+    public function caidosVienenDe(Request $request)
+    {
+        $arregloasesores = [];
+
+        $gDataporc1 = [];
+        $oDataporc2 = [];
+        $rDataporc3 = [];
+
+        $totalasesores=User::where('rol',User::ROL_ENCARGADO)->where('estado',1)
+            ->select(['id','identificador','name','letra',])
+            ->orderBy('id','desc')->count();
+
+
+        $arrayasesores=User::where('rol',User::ROL_ENCARGADO)->where('estado',1)
+            ->select(['id','identificador','name','letra',])
+            ->orderBy('supervisor','asc')
+            ->pluck('id');
+
+
+        /*dd($ids_asesores);*/
+        $mes= Carbon::now()->month;
+        $anio=Carbon::now()->year;
+        foreach ($arrayasesores as $item => $asslst){
+            $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
+
+            $pedidosActivosPorAsesores = Pedido::where('pedidos.user_id',$asslst->id)
+                ->where('pedidos.estado',1)
+                ->where('pedidos.pendiente_anulacion','<>',1)
+                ->where('pedidos.codigo','not like', "%-C%")
+                ->whereMonth('pedidos.created_at', $mes)
+                ->whereYear('pedidos.created_at',$anio)
+                ->count();
+
+            $pedidosPendAnulPorAsesores = Pedido::where('pedidos.user_id',$asslst->id)
+                ->where('pedidos.estado',1)
+                ->where('pedidos.pendiente_anulacion',1)
+                ->where('pedidos.codigo','not like', "%-C%")
+                ->whereMonth('pedidos.created_at', $mes)
+                ->whereYear('pedidos.created_at',$anio)
+                ->count();
+
+            $pedidosAnuladosPorAsesores = Pedido::where('pedidos.user_id',$asslst->id)
+                ->where('pedidos.estado',0)
+                ->where('pedidos.pendiente_anulacion',0)
+                ->where('pedidos.codigo','not like', "%-C%")
+                ->whereMonth('pedidos.created_at', $mes)
+                ->whereYear('pedidos.created_at',$anio)
+                ->count();
+
+            $totalfila=$pedidosActivosPorAsesores+$pedidosPendAnulPorAsesores+$pedidosAnuladosPorAsesores;
+
+            $pedidosActivosPorAsesores=round($pedidosActivosPorAsesores,1);
+            $pedidosPendAnulPorAsesores=round($pedidosPendAnulPorAsesores,1);
+            $pedidosAnuladosPorAsesores=round($pedidosAnuladosPorAsesores,1);
+
+            $pedidosAnuladosPorAsesores=$totalfila-$pedidosPendAnulPorAsesores-$pedidosActivosPorAsesores;
+
+            if ($pedidosActivosPorAsesores != 0.0 || $totalfila!=0.0) {
+                $gDataporc1[$item]=round((($pedidosActivosPorAsesores /$totalfila)*100),1);
+            } else {
+                $gDataporc1[$item]=0;
+            }
+
+            if ($pedidosPendAnulPorAsesores != 0.0 || $totalfila!=0.0) {
+                $oDataporc2[$item]=round((($pedidosPendAnulPorAsesores /$totalfila)*100),1);
+            } else {
+                $oDataporc2[$item]=0;
+            }
+
+            if ($pedidosAnuladosPorAsesores != 0.0 || $totalfila!=0.0) {
+                $rDataporc3[$item]=round((($pedidosAnuladosPorAsesores /$totalfila)*100),1);
+            } else {
+                $rDataporc3[$item]=0;
+            }
+        }
+        return response()->json([
+            'labels' => $arregloasesores,
+            'datasets' => [
+                [
+                    'label' => 'Activos %',
+                    'data' => $gDataporc1,
+                    'backgroundColor' => 'rgb(32, 201, 151)',
+                    'borderColor' => 'rgb(32, 201, 151)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+                [
+                    'label' => 'Pendiente Anulacion %',
+                    'data' => $oDataporc2,
+                    'backgroundColor' => 'rgb(253, 126, 20)',
+                    'borderColor' => 'rgb(253, 126, 20)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+                [
+                    'label' => 'Anulados %',
+                    'data' => $rDataporc3,
+                    'backgroundColor' => 'rgb(220, 53, 69)',
+                    'borderColor' => 'rgb(220, 53, 69)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+            ],
+        ]);
+    }
+
 }

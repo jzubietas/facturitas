@@ -872,6 +872,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('chart-pedidos-asesores-faltantes', [ChartController::class,'getPedidosAsesoresfaltantes'])->name('chart-pedidos-asesores-faltantes');
     Route::get('chart-pedidos-encargados', [ChartController::class,'getPedidosEncargadosfaltantes'])->name('chart-pedidos-encargados');
 
+    Route::get('chart/clientes.caidos/condeuda.sindeuda', [ChartController::class,'caidosDeudaConSin'])->name('chart/clientes.caidos/condeuda.sindeuda');
+    Route::get('chart/clientes.caidos/vienen.de', [ChartController::class,'caidosVienenDe'])->name('chart/clientes.caidos/vienen.de');
 
     Route::get('excel/envios/olva', [ExcelController::class, 'listadoEnviosTiendaOlva'])->name('excel.envios-olva');
     Route::post('pedidosanul.verfilessolicasesores/{pedidosanulacion}', [PedidosAnulacionController::class, 'verFilesSolicitudAsesorAnulacion'])->name('anulaciones.verfilessolicasesores');
