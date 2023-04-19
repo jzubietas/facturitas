@@ -1518,14 +1518,14 @@ class DashboardController extends Controller
                   </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
-                <div class="progress rounded h-40 h-60-res height-bar-progress" style="height: 30px !important;">';
+                <div class="progress rounded h-40 h-60-res height-bar-progress" style="height: 25px !important;">';
 
             $round=$object_totales['progress_pagos'];
 
             if(0<$round && $round<=40)
             {
                 $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
-                 style="height: 30px !important;width: ' . ($object_totales['progress_pagos']) . '%"
+                 style="height: 25px !important;width: ' . ($object_totales['progress_pagos']) . '%"
                  aria-valuenow="' . ($object_totales['progress_pagos']) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
@@ -1533,7 +1533,7 @@ class DashboardController extends Controller
             else if(40<$round && $round<=50)
             {
                 $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
-                 style="height: 30px !important;width: ' . ($object_totales['progress_pagos']) . '%"
+                 style="height: 25px !important;width: ' . ($object_totales['progress_pagos']) . '%"
                  aria-valuenow="70"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
@@ -1555,7 +1555,7 @@ class DashboardController extends Controller
             else if(70<$round && $round<=80)
             {
                 $html .= '<div class="progress-bar bg-warning rounded  h-60-res height-bar-progress" role="progressbar"
-                         style="height: 30px !important;width: ' . ($object_totales['progress_pagos']) . '%"
+                         style="height: 25px !important;width: ' . ($object_totales['progress_pagos']) . '%"
                          aria-valuenow="70"
                          aria-valuemin="0"
                          aria-valuemax="100"></div>
@@ -1569,27 +1569,27 @@ class DashboardController extends Controller
             else if(80<$round && $round<=100)
             {
                 $html .= '<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
-                 style="height: 30px !important;width: ' . $object_totales['progress_pagos'] . '%;background: #03af03;"
+                 style="height: 25px !important;width: ' . $object_totales['progress_pagos'] . '%;background: #03af03;"
                  aria-valuenow="' . $object_totales['progress_pagos'] . '"
                  aria-valuemin="0" aria-valuemax="100"></div>';
             }
             else
             {
                 $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
-                 style="height: 30px !important;width: ' . ($object_totales['progress_pagos']) . '%"
+                 style="height: 25px !important;width: ' . ($object_totales['progress_pagos']) . '%"
                  aria-valuenow="' . ($object_totales['progress_pagos']) . '"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>';
             }
 
             $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
+    <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 25px !important;font-size: 12px;">
 <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
 
             $html .= ' </th>
                   <th class="col-lg-4 col-md-12 col-sm-12">';
             $html .= '<div class="position-relative rounded">
-                <div class="progress rounded height-bar-progress" style="height: 30px !important;">';
+                <div class="progress rounded height-bar-progress" style="height: 25px !important;">';
 
             //40 50 70 80 100 <
 
