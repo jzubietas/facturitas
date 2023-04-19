@@ -2763,26 +2763,26 @@ class DashboardController extends Controller
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
             }else{
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
@@ -2801,26 +2801,26 @@ class DashboardController extends Controller
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
             }else{
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
@@ -3396,7 +3396,7 @@ class DashboardController extends Controller
                     <th width="8%">Asesor</th>
                     <th width="11%">Id</th>
 
-                    <th width="33%">ACTIVOS/RECURRENTES (%)  ' . Carbon::parse($date_pagos)->monthName . ' </th>
+                    <th width="33%">LEVANTADOS/(LEVANTADOS+CAIDOS) (%)  ' . Carbon::parse($date_pagos)->monthName . ' </th>
                 </tr>
                 </thead>
                 <tbody>';

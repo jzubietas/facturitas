@@ -171,6 +171,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
                 ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -183,6 +184,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
                 ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -195,6 +197,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
                 ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -207,6 +210,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
                 ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -219,6 +223,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
                 ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -231,6 +236,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
                 ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -243,6 +249,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
                 ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -255,6 +262,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
                 ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_identificador', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
