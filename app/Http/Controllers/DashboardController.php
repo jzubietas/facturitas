@@ -2742,8 +2742,8 @@ class DashboardController extends Controller
     {
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
-            $asesores = User::query()->activo()->rolAsesor()->where('identificador', auth()->user()->identificador)->where('excluir_meta', '<>', '1')->get();
-            $total_asesor = User::query()->activo()->rolAsesor()->where('identificador', auth()->user()->identificador)->where('excluir_meta', '<>', '1')->count();
+            $asesores = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->get();
+            $total_asesor = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->count();
         } else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->get();
             $total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
@@ -2852,7 +2852,7 @@ class DashboardController extends Controller
         foreach ($asesores as $asesori)
         {
             $clientes_situacion_activo_mayor_ = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
-                ->where('user_id', $asesori->id)
+                ->where('clientes.user_clavepedido', $asesori->clave_pedidos)
                 ->where('clientes.situacion', '=', 'ACTIVO')
                 ->activo()
                 ->count();
@@ -2899,7 +2899,7 @@ class DashboardController extends Controller
                 ->where('pendiente_anulacion', '<>', '1')->count();
 
             $meta_calculo_row = Meta::where('rol', User::ROL_ASESOR)
-                ->where('user_id', $asesor->id)
+                ->where('identificador', $asesor->clave_pedidos)
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
 
@@ -2919,7 +2919,7 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
-            $total_pedido = Pedido::query()->where('identificador', $asesor->clave_pedidos)
+            $total_pedido = Pedido::query()->where('user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
@@ -2927,7 +2927,7 @@ class DashboardController extends Controller
 
             $total_pagado = Pedido::query()
                 ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->where('pedidos.identificador', $asesor->clave_pedidos)
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
@@ -2940,7 +2940,7 @@ class DashboardController extends Controller
                 ->count();
 
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.identificador', $asesor->clave_pedidos)
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
@@ -2955,8 +2955,6 @@ class DashboardController extends Controller
 
             $periodo_antes = Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m');
             $periodo_actual = Carbon::now()->clone()->startOfMonth()->format('Y-m');
-
-
 
             /*$clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_id', $asesor->id)
