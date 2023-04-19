@@ -414,7 +414,7 @@ class ChartController extends Controller
         $rDataporc3 = [];
 
         $caidos=Cliente::where('situacion','=','CAIDO')->activo()->where('tipo','=','1')
-        ->whereNotIn('user_identificador',['17','18','19','21','B']);
+        ->whereNotIn('user_clavepedido',['17','18','19','21','B']);
         $caidos_total=$caidos->count();
 
         $caidos_deben=$caidos->clone()->where('deuda','1')->count();
