@@ -419,6 +419,8 @@ class PedidoController extends Controller
                     color: black !important;">Con ruta</span>';
                 }
 
+
+                
                 if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
                     $badge_estado='<span class="badge badge-danger es-anulado">ANULADO</span>';
                     return $badge_estado;
