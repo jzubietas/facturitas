@@ -545,6 +545,8 @@ class PagoController extends Controller
 
                 $pago = Pago::create([
                     'user_id' => $identi_asesor->id,
+                    'user_identificador' => $identi_asesor->identificador,
+                    'user_clavepedido' => $identi_asesor->clave_pedidos,
                     'cliente_id' => $request->cliente_id,
                     'total_cobro' => $deuda_total,
                     'total_pagado' => $pagado,
@@ -796,6 +798,8 @@ class PagoController extends Controller
 
                 $pago = Pago::create([
                     'user_id' => $identi_asesor->id,
+                    'user_identificador' => $identi_asesor->identificador,
+                    'user_clavepedido' => $identi_asesor->clave_pedidos,
                     'cliente_id' => $request->cliente_id,
                     'total_cobro' => $deuda_total,//total_pedido_pagar
                     'total_pagado' => $pagado,//total_pago_pagar
@@ -2303,6 +2307,8 @@ class PagoController extends Controller
 
                 $pago = Pago::create([
                     'user_id' => $cliente_perdondarcourier->user_id,
+                    'user_identificador' => $cliente_perdondarcourier->user_identificador,
+                    'user_clavepedido' => $cliente_perdondarcourier->user_clavepedido,
                     'cliente_id' => $cliente_perdondarcourier->id,
                     'total_cobro' => '0',
                     'total_pagado' => '0',
