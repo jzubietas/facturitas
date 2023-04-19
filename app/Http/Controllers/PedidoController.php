@@ -1456,7 +1456,7 @@ class PedidoController extends Controller
                 ->where("c.tipo", "1")
                 //->where("pedidos.estado_correccion", "0")
                 ->whereDate('pedidos.created_at', $dia)
-                ->where('u.identificador', $request->user_id)
+                ->where('u.clave', $request->user_id)
                 ->count();
             $numped = $numped + 1;
 
@@ -1470,7 +1470,7 @@ class PedidoController extends Controller
                 ->where("c.tipo", "1")
                 //->where("pedidos.estado_correccion", "0")
                 ->whereDate('pedidos.created_at', $dia)
-                ->where('u.identificador', $request->user_id)
+                ->where('u.clave', $request->user_id)
                 ->count();
             $numped = $numped + 1;
         } else {
@@ -1483,7 +1483,7 @@ class PedidoController extends Controller
                 ->where("c.tipo", "1")
                 //->where("pedidos.estado_correccion", "0")
                 ->whereDate('pedidos.created_at', $dia)
-                ->where('u.identificador', $request->user_id)
+                ->where('u.clave', $request->user_id)
                 ->count();
             $numped = $numped + 1;
         }
