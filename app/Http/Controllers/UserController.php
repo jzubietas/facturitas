@@ -378,7 +378,7 @@ class UserController extends Controller
             //$users = $usersB->union($users);
 
         }else if($mirol==User::ROL_ASISTENTE_PUBLICIDAD){
-            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17','18']);
+            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17','18','19']);
         }
         else {
 
@@ -417,6 +417,7 @@ class UserController extends Controller
                     || $user->exidentificador == '28'
                     || $user->identificador == '17'
                     || $user->identificador == '18'
+                    || $user->identificador == '19'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
@@ -482,7 +483,7 @@ class UserController extends Controller
             $users = User::where("rol", "ASESOR ADMINISTRATIVO");
         }
         else if($mirol==User::ROL_ASISTENTE_PUBLICIDAD){
-            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17','18']);
+            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17','18','19']);
         }
         else {
             $usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO"]);
@@ -531,7 +532,7 @@ class UserController extends Controller
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
             $users = User::where("rol", "ASESOR ADMINISTRATIVO");
         }else if($mirol==User::ROL_ASISTENTE_PUBLICIDAD){
-            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17','18']);
+            $users = User::where('estado', '1')->where("rol", "Asesor")->whereIn('identificador',['15','16','17','18','19']);
         }
         else {
             $usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO", User::ROL_ASESOR]);
@@ -562,6 +563,7 @@ class UserController extends Controller
                     || $user->exidentificador == '28'
                     || $user->identificador == '17'
                     || $user->identificador == '18'
+                    || $user->identificador == '19'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
