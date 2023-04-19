@@ -3410,11 +3410,11 @@ class DashboardController extends Controller
             $object_totales['all_situacion_recurrente']=0;
             foreach ($progressData as $data)
             {
-                if($object_totales["all_situacion_recurrente"]>0)
+                if($data["all_situacion_recurrente"]>0)
                 {
                     $object_totales["all_situacion_recurrente"]+=$data["all_situacion_recurrente"];
                 }
-                if($object_totales["all_situacion_activo"]>0)
+                if($data["all_situacion_activo"]>0)
                 {
                     $object_totales["all_situacion_activo"]+=$data["all_situacion_activo"];
                 }
