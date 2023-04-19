@@ -100,7 +100,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ABANDONO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -109,7 +109,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -118,7 +118,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NULO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -127,7 +127,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'CAIDO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -136,7 +136,7 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NULO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -145,11 +145,11 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'BASE FRIA'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -158,8 +158,8 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'BASE FRIA'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '=', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '=', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -168,11 +168,11 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'LEVANTADO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -181,11 +181,11 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -194,11 +194,11 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -207,11 +207,11 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -220,11 +220,11 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'LEVANTADO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -233,11 +233,11 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -246,11 +246,11 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -259,22 +259,22 @@ class PdfController extends Controller
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
-                ['situacion_clientes.user_identificador', '<>', 'B'],
-                ['situacion_clientes.user_identificador', '<>', '17'],
-                ['situacion_clientes.user_identificador', '<>', '18'],
-                ['situacion_clientes.user_identificador', '<>', '19'],
-                ['situacion_clientes.user_identificador', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
             ->groupBy([
                 'situacion_clientes.situacion',
-                'situacion_clientes.user_identificador'
+                'situacion_clientes.user_clavepedido'
             ])
             ->orderBy('situacion_clientes.situacion','asc')
             ->select([
                 'situacion_clientes.situacion',
-                'situacion_clientes.user_identificador',
+                'situacion_clientes.user_clavepedido as user_identificador',
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
                                                     WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
