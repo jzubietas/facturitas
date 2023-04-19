@@ -112,7 +112,6 @@
                 initComplete: function (settings, json) {
                 },
                 columns: [
-
                     {
                         data: 'tipo',
                         name: 'tipo',
