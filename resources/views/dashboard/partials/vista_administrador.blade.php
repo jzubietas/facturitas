@@ -719,6 +719,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         else if (entero == 9) {/*derecha*/
                             $('#grafico_dejaronpedir_left').html(resultado);
                         }
+                        else if (entero == 13) {
+                            $('#dejaronpedir_supervisor_total').html(resultado);
+                        }
 
                     }
                 })
@@ -781,7 +784,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             //cargaNueva(14);//fernando
             //cargaNueva(15);//paola
-            cargaNueva(13);//totales porcentajes debajo de metas
+            cargaNuevaRecurrenteActivo(13);//totales porcentajes debajo de metas
 
             cargaNueva(17);
 
@@ -806,8 +809,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 //cargaNueva(14);//fernando
                 //cargaNueva(15);//paola
-                cargaNueva(13);//totales porcentajes debajo de metas
-                cargaNueva(17);
+                cargaNuevaRecurrenteActivo(13);//totales porcentajes debajo de metas
                 cargaNueva(17);
 
                 cargReporteMetasSituacionClientes();
