@@ -704,7 +704,7 @@ class ClienteController extends Controller
             //->where('users.estado', '1')
             ->whereIdentificador($request->user_id)
             ->select(
-              DB::raw("users.clavepedido as id")
+              DB::raw("users.clave_pedidos as id")
             )
             ->pluck('users.id');
 
