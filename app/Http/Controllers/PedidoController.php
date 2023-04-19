@@ -1571,7 +1571,7 @@ class PedidoController extends Controller
 
             $pedido = Pedido::create([
                 'cliente_id' => $request->cliente_id,
-                'user_id' => $identi_asesor->id, //usuario que registra
+
                 'creador' => 'USER0' . Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
                 'condicion' => Pedido::POR_ATENDER,
                 'condicion_code' => 1,
@@ -1586,8 +1586,10 @@ class PedidoController extends Controller
                 'modificador' => 'USER0' . Auth::user()->id,
                 'pagado' => '0',
                 'direccion' => '0',
+                'user_id' => $identi_asesor->id, //usuario que registra
                 'identificador' => $identi_asesor->identificador,
                 'exidentificador' => $identi_asesor->exidentificador,
+                'user_clavepedido' => $identi_asesor->clave_pedidos,
                 'icelular_asesor' => $identi_asesor->letra,
                 'icelular_cliente' => $cliente_AB->icelular,
                 'celular_cliente' => $cliente_AB->celular,
