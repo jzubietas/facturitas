@@ -604,7 +604,6 @@ class PdfController extends Controller
         print_r($_resultado_grafico);
         echo "</pre>";*/
 
-
         foreach ($_resultado_grafico as $_resultado_grafico_k2=>$_resultado_grafico_v2)
         {
 
@@ -622,7 +621,7 @@ class PdfController extends Controller
 
                 $diferenciameta=0;
 
-                $porcentaje = round(($activos_cuenta / ($activos_cuenta+$recurrentes_cuenta) ) * 100, 2);
+                $porcentaje = round(($activos_cuenta / (($activos_cuenta+$recurrentes_cuenta)*0.7) ) * 100, 2);
                 $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(70/100) - $activos_cuenta;
 
                 $diferenciameta=round($diferenciameta);
