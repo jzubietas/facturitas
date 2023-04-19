@@ -150,6 +150,12 @@ class PagoController extends Controller
                 ->pluck('identificador');
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
 
+        }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->whereIn('users.identificador', ['15','16','17','18','19'])
+                ->pluck('identificador');
+            $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
         }
 
         //$pagos = $pagos->get();

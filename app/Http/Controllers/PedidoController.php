@@ -253,7 +253,7 @@ class PedidoController extends Controller
         }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
             $usersasesores = User::where('users.rol', User::ROL_ASESOR)
                 ->where('users.estado', '1')
-                ->whereIn('users.identificador', ['15','16'])
+                ->whereIn('users.identificador', ['15','16','17','18','19'])
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
@@ -420,7 +420,7 @@ class PedidoController extends Controller
                 }
 
 
-                
+
                 if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
                     $badge_estado='<span class="badge badge-danger es-anulado">ANULADO</span>';
                     return $badge_estado;
