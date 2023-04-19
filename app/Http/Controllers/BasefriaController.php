@@ -214,6 +214,8 @@ class BasefriaController extends Controller
                 'celular' => $request->celular,
                 'icelular'=> $letra,
                 'user_id' => $request->user_id,
+                'user_identificador' => $user->identificador,
+                'user_clavepedido' => $user->clave_pedidos,
                 'tipo' => $request->tipo,
                 'provincia' => $request->provincia,
                 'distrito' => $request->distrito,
