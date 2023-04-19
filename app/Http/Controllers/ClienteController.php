@@ -704,14 +704,14 @@ class ClienteController extends Controller
             //->where('users.estado', '1')
             ->whereIdentificador($request->user_id)
             ->select(
-              DB::raw("users.id as id")
+              DB::raw("users.clavepedido as id")
             )
             ->pluck('users.id');
 
         $clientes = Cliente::query()
             ->where('clientes.estado', '=', '1')
             ->where('clientes.tipo', '=', '1')
-            ->whereIn('clientes.user_id',$usersasesores)
+            ->whereIn('clientes.user_clavepedido',$usersasesores)
             /*->when($request->user_id, function ($query) use ($request) {
                 return $query->whereIn('clientes.user_id', User::query()->select('users.id')->whereIdentificador($request->user_id));
             })*/
@@ -786,7 +786,7 @@ class ClienteController extends Controller
         //$user_id=User::where('identificador',$request->user_id)->pluck('id');
         $clientes = Cliente::where('clientes.estado', '1')
             ->when($request->user_id, function ($query) use ($request) {
-                return $query->whereIn('clientes.user_id', User::query()->select('users.id')->whereIdentificador($request->user_id));
+                return $query->whereIn('clientes.user_clavepedido', User::query()->select('users.clave_pedidos')->whereIdentificador($request->user_id));
             })
             //->where('clientes.estado', '1')
             ->where("clientes.tipo", "1");
