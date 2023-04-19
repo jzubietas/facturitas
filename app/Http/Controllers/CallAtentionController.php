@@ -51,7 +51,7 @@ class CallAtentionController extends Controller
             ->select(
                 [
                     'call_atentions.*',
-                    DB::raw(" select 'Llamado de atencion' as tipo")
+                    DB::raw(" ( select 'Llamado de atencion' ) as tipo ")
                 ]
             )
             ->whereNotNull('call_atentions.user_id');
