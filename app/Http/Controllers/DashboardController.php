@@ -2759,17 +2759,17 @@ class DashboardController extends Controller
                 $encargado = auth()->user()->id;
             }
 
-            if($request->ii!=13)
+            if($request->ii==13)
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
@@ -2797,17 +2797,17 @@ class DashboardController extends Controller
                 $encargado = auth()->user()->id;
             }
 
-            if($request->ii!=13)
+            if($request->ii==13)
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereIn('identificador',['17','18','19'])
+                    ->whereNotIn('identificador',['17','18','19'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
