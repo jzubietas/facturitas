@@ -2763,26 +2763,26 @@ class DashboardController extends Controller
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
             }else{
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
@@ -2801,26 +2801,26 @@ class DashboardController extends Controller
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
             }else{
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('identificador',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
@@ -2835,6 +2835,7 @@ class DashboardController extends Controller
                     'total_pedido_mespasado' => 0,
                     'meta_quincena' => 0,
                     'meta_intermedia' => 0,
+                    'meta_new' => 0,
                     'meta' => 0,
                     'meta_2' => 0,
                     'total_pagado' => 0,
@@ -2892,7 +2893,7 @@ class DashboardController extends Controller
             }
 
 
-            $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.identificador', $asesor->identificador)
+            $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.clave_pedidos', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")->activo()
                 ->whereDate('pedidos.created_at', $fechametames)
                 ->where('pendiente_anulacion', '<>', '1')->count();
@@ -2908,7 +2909,7 @@ class DashboardController extends Controller
             $metatotal_1 = (float)$meta_calculo_row->meta_pedido;
             $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
 
-            $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
+            //$asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
 
             if (!request()->has("fechametames")) {
                 $fechametames = Carbon::now()->clone();
@@ -2918,7 +2919,7 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
-            $total_pedido = Pedido::query()->where('user_id', $asesor->id)
+            $total_pedido = Pedido::query()->where('identificador', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
@@ -2926,7 +2927,7 @@ class DashboardController extends Controller
 
             $total_pagado = Pedido::query()
                 ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.identificador', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
@@ -2939,15 +2940,15 @@ class DashboardController extends Controller
                 ->count();
 
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.identificador', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->count();
 
-            $supervisor = User::where('rol', User::ROL_ASESOR)->where('identificador', $asesor->identificador)->activo()->first()->supervisor;
-            $pedidos_totales = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('user_id', $asesor->id)
+            $supervisor = User::where('rol', User::ROL_ASESOR)->where('clave_pedidos', $asesor->clave_pedidos)->activo()->first()->supervisor;
+            $pedidos_totales = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('pedidos.identificador', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")->activo()
                 ->where('pendiente_anulacion', '<>', '1')
                 ->whereDate('pedidos.created_at', $fechametames)->count();
@@ -2977,7 +2978,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'LEVANTADO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['c.user_id', $asesor->id],
+                    ['c.user_clavepedido', $asesor->clave_pedidos],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -2986,7 +2987,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['c.user_id', $asesor->id],
+                    ['c.user_clavepedido', $asesor->clave_pedidos],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -2995,7 +2996,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['c.user_id', $asesor->id],
+                    ['c.user_clavepedido', $asesor->clave_pedidos],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -3004,7 +3005,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'NUEVO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['c.user_id', $asesor->id],
+                    ['c.user_clavepedido', $asesor->clave_pedidos],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -3020,7 +3021,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'LEVANTADO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['c.user_id', $asesor->id],
+                    ['c.user_clavepedido', $asesor->clave_pedidos],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -3029,7 +3030,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['c.user_id', $asesor->id],
+                    ['c.user_clavepedido', $asesor->clave_pedidos],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -3038,7 +3039,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['c.user_id', $asesor->id],
+                    ['c.user_clavepedido', $asesor->clave_pedidos],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -3047,7 +3048,7 @@ class DashboardController extends Controller
                     ['a.situacion', '=', 'NUEVO'],
                     ['situacion_clientes.periodo', '=', $periodo_actual],
                     ['a.periodo', '=', $periodo_antes],
-                    ['c.user_id', $asesor->id],
+                    ['c.user_clavepedido', $asesor->clave_pedidos],
                     ['c.estado', '=', '1'],
                     ['c.tipo', '=', '1']
                 ])
@@ -3075,7 +3076,7 @@ class DashboardController extends Controller
             $encargado_asesor = $asesor->supervisor;
 
             $item = [
-                "identificador" => $asesor->identificador,
+                "identificador" => $asesor->clave_pedidos,
                 "code" => "{$asesor->name}",
                 "pedidos_dia" => $asesor_pedido_dia,
                 "name" => $asesor->name,
@@ -3084,6 +3085,7 @@ class DashboardController extends Controller
                 "total_pagado" => $total_pagado,
                 "meta_quincena" => $metatotal_quincena,
                 "meta_intermedia" => $metatotal_intermedia,
+                "meta_new" => 0,
                 "meta" => $metatotal_1,
                 "meta_2" => $metatotal_2,
                 "pedidos_totales" => $pedidos_totales,
@@ -3097,6 +3099,7 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
                     $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
                     $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
+                    $count_asesor[$encargado_asesor]['meta_new'] = 0;
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -3109,6 +3112,7 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
                     $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
                     $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
+                    $count_asesor[$encargado_asesor]['meta_new'] = 0;
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -3121,6 +3125,7 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = 0;
                     $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = 0;
                     $count_asesor[$encargado_asesor]['all_situacion_activo'] = 0;
+                    $count_asesor[$encargado_asesor]['meta_new'] = 0;
                     $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
                     $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
                     $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
@@ -3183,7 +3188,8 @@ class DashboardController extends Controller
                         $item['progress_pedidos'] = $p_intermedia;
                     }
                 }
-                else */if ($total_pedido>=0 && $total_pedido < $metatotal_1) {
+                else */
+                if ($total_pedido>=0 && $total_pedido < $metatotal_1) {
                     if ($metatotal_1 > 0) {
                         $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
                     } else {
@@ -3217,6 +3223,7 @@ class DashboardController extends Controller
 
         $newData = [];
         $union = collect($progressData)->groupBy('identificador');
+        //dd($union);
         foreach ($union as $identificador => $items) {
             foreach ($items as $item) {
                 if (!isset($newData[$identificador])) {

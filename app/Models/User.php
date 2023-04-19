@@ -59,6 +59,7 @@ class User extends Authenticatable
         'rol',
         'identificador',
         'exidentificador',
+        'clave_pedidos',
         'estado',
         'equipo',
         'meta_pedido',
