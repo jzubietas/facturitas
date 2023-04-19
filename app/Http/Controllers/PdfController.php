@@ -149,6 +149,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_identificador', '<>', '21'],
                 ['situacion_clientes.user_identificador', '<>', '17'],
                 ['situacion_clientes.user_identificador', '<>', '18'],
+                ['situacion_clientes.user_identificador', '<>', '19'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -270,6 +271,7 @@ class PdfController extends Controller
                 'situacion_clientes.situacion',
                 'situacion_clientes.user_identificador'
             ])
+            ->orderBy('situacion_clientes.situacion','asc')
             ->select([
                 'situacion_clientes.situacion',
                 'situacion_clientes.user_identificador',
@@ -311,6 +313,13 @@ class PdfController extends Controller
                 DB::raw('count(situacion_clientes.situacion) as total')
             ])
             ->get();
+
+        /*foreach($situaciones_clientes as $recorer)
+        {
+            if($recorer->situacion=='CAIDO' || $recorer->situacion=='LEVANTADO')
+            echo "<br>".$recorer->user_identificador." -- ".$recorer->situacion."--".$recorer->total."<br>";
+        }
+        exit;*/
         $_estados=['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','LEVANTADO','CAIDO'];
         $_resultado_grafico=[];
 
