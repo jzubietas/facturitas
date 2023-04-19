@@ -280,7 +280,7 @@ return [
             'active' => ['pagos perdonar courier'],
         ],
         [
-            'text' => 'Llamados de atencion (DES)',
+            'text' => 'Llamados de atencion',
             'can' => 'access.llamados',
             'icon_color' => 'green',
             'route' => 'llamados.atencion',
