@@ -139,6 +139,7 @@ class Cliente extends Model
                       'cliente_id'=>$cliente->id,
                       'user_id'=>$cliente->user_id,
                       'user_identificador'=>$cliente->user->identificador,
+                      'user_clavepedido'=>$cliente->user->clave_pedidos,
                       'situacion'=>'',
                       'cantidad_pedidos'=>$cont_mes,
                       'anulados'=>$cont_mes_anulado,
