@@ -691,7 +691,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
 
                 fd.append('fechametames', valorr);
-                console.log()
+
                 fd.append('ii', entero);
                 $.ajax({
                     data: fd,
@@ -781,10 +781,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             cargaNuevaRecurrenteActivo(8);
             cargaNuevaRecurrenteActivo(9);
-
+            cargaNuevaRecurrenteActivo(13);
             //cargaNueva(14);//fernando
             //cargaNueva(15);//paola
-            cargaNuevaRecurrenteActivo(13);//totales porcentajes debajo de metas
+            //totales porcentajes debajo de metas
 
             cargaNueva(17);
 
@@ -806,10 +806,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 cargaNuevaRecurrenteActivo(8);
                 cargaNuevaRecurrenteActivo(9);
+                cargaNuevaRecurrenteActivo(13);
 
                 //cargaNueva(14);//fernando
                 //cargaNueva(15);//paola
-                cargaNuevaRecurrenteActivo(13);//totales porcentajes debajo de metas
+                //totales porcentajes debajo de metas
                 cargaNueva(17);
 
                 cargReporteMetasSituacionClientes();
