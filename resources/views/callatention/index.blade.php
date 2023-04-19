@@ -105,7 +105,7 @@
                 serverSide: true,
                 searching: true,
                 //stateSave: true,
-                order: [[7, "desc"]],
+                order: [[2, "desc"]],
                 ajax: "{{ route('llamados.atencion.tabla') }}",
                 rowCallback: function (row, data, index) {
                 },
