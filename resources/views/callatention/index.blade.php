@@ -33,7 +33,6 @@
                 <table id="tblLlamadosAtencion" class="table table-striped">{{-- display nowrap  --}}
                     <thead>
                     <tr>
-                        <th></th>
                         <th scope="col" class="align-middle">Tipo</th>
                         <th scope="col" class="align-middle">Identificador</th>
                         <th scope="col" class="align-middle">Accion</th>
