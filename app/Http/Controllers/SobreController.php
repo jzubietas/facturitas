@@ -211,7 +211,10 @@ class SobreController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->whereIn('u.identificador', $usersasesores);
+        } else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+            $pedidos = $pedidos->whereIn('u.identificador', ['15','16','17','18','19']);
         }
+
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {

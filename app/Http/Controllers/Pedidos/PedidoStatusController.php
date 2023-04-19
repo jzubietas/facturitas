@@ -290,6 +290,8 @@ class PedidoStatusController extends Controller
                 $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
             } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
                 $pedidos = $pedidos->where('u.identificador', \auth()->user()->identificador);
+            } else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+                $pedidos = $pedidos->whereIn('u.identificador', ['15','16','17','18','19']);
             }
 
 
@@ -501,6 +503,8 @@ class PedidoStatusController extends Controller
                 $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
             } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
                 $pedidos = $pedidos->where('u.identificador', Auth::user()->identificador);
+            }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+                $pedidos = $pedidos->whereIn('u.identificador', ['15','16','17','18','19']);
             }
 
             $pedidos->where('pedidos.da_confirmar_descarga', '0')

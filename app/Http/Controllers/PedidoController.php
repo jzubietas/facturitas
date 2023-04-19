@@ -2618,6 +2618,8 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
+        }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+            $pedidos = $pedidos->WhereIn('u.identificador', ['15','16','17','18','19']);
         }
 
         return Datatables::of(DB::table($pedidos))
