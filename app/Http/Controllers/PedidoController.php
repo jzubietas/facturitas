@@ -173,8 +173,8 @@ class PedidoController extends Controller
                     'dp.saldo as diferencia',
                     'direccion_grupos.motorizado_status',
                     'direccion_grupos.observacion as dg_observacion',
-                    DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
-                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' and pea.state_solicitud=1 limit 1) as vtipoAnulacion"),
+                    /*DB::raw("(select  pea.tipo from pedidos_anulacions as pea where pea.pedido_id= pedidos.id and pea.estado_aprueba_asesor=1 and
+                    pea.estado_aprueba_encargado =1 and pea.estado_aprueba_administrador=1 and estado_aprueba_jefeop=0  and pea.tipo='F' and pea.state_solicitud=1 limit 1) as vtipoAnulacion"),*/
                     DB::raw("(select NULLIF(pea.state_solicitud,-1) from pedidos_anulacions as pea where pea.pedido_id= pedidos.id order by pea.created_at desc limit 1) as vStateSolicitud"),
                 ]
             );
