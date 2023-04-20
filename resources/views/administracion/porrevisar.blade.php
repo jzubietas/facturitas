@@ -261,6 +261,7 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
+                stateSave:true,
                 "order": [[0, "asc"]],
                 ajax: {
                     url: "{{ route('administracion.porrevisartabla') }}",
