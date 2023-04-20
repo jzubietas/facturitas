@@ -887,7 +887,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         borderColor: '#17a2b8',
                         pointBorderColor: '#17a2b8',
                         pointBackgroundColor: '#17a2b8',
-                        fill: true
+                        fill: false,
+                        tension:0.1
                     }]
                 },
                 options: {
