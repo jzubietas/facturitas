@@ -420,7 +420,7 @@ class ChartController extends Controller
         $mes= Carbon::now()->month;
         $anio=Carbon::now()->year;
 
-        $labels=['Con deuda','Sin deuda'];
+        $labels=['Con deuda: '.$caidos_deben,'Sin deuda: '.$caidos_no_deben];
         $datas=[$caidos_deben, $caidos_no_deben];
         return response()->json([
             'labels' => $labels,
