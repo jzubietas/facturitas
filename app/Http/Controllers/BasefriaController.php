@@ -87,6 +87,15 @@ class BasefriaController extends Controller
                 )
                 ->pluck('users.clave_pedidos');
             $data = $data->WhereIn("u.clave_pedidos", $usersasesores);
+        }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+            $usersasesores = User::where('users.rol', User::ROL_ASESOR)
+                ->where('users.estado', '1')
+                ->whereIn('users.clave_pedidos', ['15','16','17','18','19'])
+                ->select(
+                    DB::raw("users.clave_pedidos as clave_pedidos")
+                )
+                ->pluck('users.clave_pedidos');
+            $data = $data->WhereIn('u.clave_pedidos', $usersasesores);
         } else {
             $data = $data;
         }
