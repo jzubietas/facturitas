@@ -497,6 +497,53 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 }
             });
 
+            $.ajax({
+                method:'GET',
+                dataType: "json",
+                url:"{{ route('chart/clientes.caidos/vienen.de') }}",
+                success:function(data){
+                    console.log(data)
+                    var data_vienende = [{
+                        data: data.datasets[0].data,
+                        backgroundColor: [
+                            "#4b77a9",
+                            "#5f255f"
+                        ],
+                        borderColor: "#fff"
+                    }];
+
+                    var options_vienende = {
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    console.log(value);
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    return percentage;
+
+
+                                },
+                                color: '#fff',
+                            }
+                        }
+                    };
+
+                    var ctx_vienende = document.getElementById("my-chart-caidosvienende").getContext('2d');
+                    var myChart_vienende = new Chart(ctx_vienende, {
+                        type: 'pie',
+                        data: {
+                            labels: data.labels,
+                            datasets: data_vienende
+                        },
+                        options: options_vienende
+                    });
+                }
+            });
+
 
             $('#exampleModalCenter').modal('show');
 
