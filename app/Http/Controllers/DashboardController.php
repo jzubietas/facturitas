@@ -1055,11 +1055,11 @@ class DashboardController extends Controller
             $html .= '<table class="table tabla-metas_pagos_pedidos_17 table-dark" style="background: #e4dbc6; color: #232121; margin-bottom: 3px !important;">';
             $html .= '<thead>
                 <tr>
-                    <th width="8%">Asesor</th>
-                    <th width="11%">Id</th>
-                    <th width="8%"><span style="font-size:10px;">Pedidos del día ' . Carbon::now()->day . '  </span></th>
-                    <th width="33%">Cobranza  ' . Carbon::parse($date_pagos)->monthName . ' </th>
-                    <th width="40%">Pedidos  ' . Carbon::parse($fechametames)->monthName . ' </th>
+                    <th width="8%" style="font-weight: bold;color:blue;">Asesor</th>
+                    <th width="11%" style="font-weight: bold;color:blue;">Id</th>
+                    <th width="8%"><span style="font-size:10px;font-weight: bold;color:blue;">Pedidos del día ' . Carbon::now()->day . '  </span></th>
+                    <th width="33%" style="font-weight: bold;color:blue;">Cobranza  ' . Carbon::parse($date_pagos)->monthName . ' </th>
+                    <th width="40%" style="font-weight: bold;color:blue;">Pedidos  ' . Carbon::parse($fechametames)->monthName . ' </th>
                 </tr>
                 </thead>
                 <tbody>';
