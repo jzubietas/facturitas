@@ -59,17 +59,32 @@ class UserController extends Controller
     }
 
     public  function  tableUsuarios(Request $request){
+        $resultado=[];
+
         if (Auth::user()->rol == "Encargado") {
             $users = User::where('users.supervisor', Auth::user()->id)
-                ->where('users.rol', 'Asesor')
-                ->get();
+                ->where('users.rol', 'Asesor');
         } else if (Auth::user()->rol == "Jefe de operaciones") {
             $users = User::where('users.jefe', Auth::user()->id)
-                ->where('users.rol', 'Operario')
-                ->get();
+                ->where('users.rol', 'Operario');
         } else {
             $users = User::all();
         }
+
+        foreach ($users as $user)
+        {
+            if($user->rol=='Asesor')
+            {
+                if($user->estado==1)
+                {
+                    $resultado[]=$user;
+                }
+            }else{
+                $resultado[]=$user;
+            }
+        }
+        $users=$resultado;
+
         return datatables()->collection($users)
             ->addIndexColumn()
             ->addColumn('id', function ($user) {
