@@ -827,6 +827,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     /*eje x: dias*/
                     labels: $arrr,
                     datasets: [{
+                        label:'Mes actual',
                         /*azul*/
                         type: 'line',
                         data: $mes_actual,
@@ -836,6 +837,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         pointBackgroundColor: '#007bff',
                         fill: false
                     }, {
+                        label:'Mes anterior',
                         /*plomo*/
                         type: 'line',
                         data: $mes_anterior,
@@ -878,20 +880,21 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 data: {
                     labels: $arrr,
                     datasets: [{
+                        label:'Gasto Olva',
                         type: 'line',
                         data: $gasto_olva_dia,
                         backgroundColor: 'transparent',
                         borderColor: '#17a2b8',
                         pointBorderColor: '#17a2b8',
                         pointBackgroundColor: '#17a2b8',
-                        fill: false
+                        fill: true
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     tooltips: {mode: mode, intersect: intersect},
                     hover: {mode: mode, intersect: intersect},
-                    legend: {display: false},
+                    legend: {display: true},
                     /*scales: {
                         yAxes: [{
                             gridLines: {
@@ -902,6 +905,14 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             }, ticks: $.extend({beginAtZero: true, suggestedMax: 400}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
                     }*/
+                    plugins:{
+                        legend:{
+                            display:true,
+                            labels:{
+                                color: 'rgb(255,99,132)'
+                            }
+                        }
+                    }
                 }
             })
         })
