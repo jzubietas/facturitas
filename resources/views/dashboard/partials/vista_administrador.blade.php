@@ -823,6 +823,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             let $mes_actual = [{{$contadores_mes_actual}}]
             let $mes_anterior = [{{$contadores_mes_anterior}}]
             var visitorsChart = new Chart($visitorsChart, {
+                type: 'line',
                 data: {
                     /*eje x: dias*/
                     labels: $arrr,
@@ -835,7 +836,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         borderColor: '#007bff',
                         pointBorderColor: '#007bff',
                         pointBackgroundColor: '#007bff',
-                        fill: false
+                        fill: false,
+                        tension:0.1
                     }, {
                         label:'Mes anterior',
                         /*plomo*/
@@ -845,7 +847,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         borderColor: '#ced4da',
                         pointBorderColor: '#ced4da',
                         pointBackgroundColor: '#ced4da',
-                        fill: false
+                        fill: false,
+                        tension:0.1
                     }]
                 },
                 options: {
