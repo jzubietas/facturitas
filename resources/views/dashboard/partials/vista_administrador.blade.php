@@ -417,7 +417,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>--}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <!--<script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>-->
 
     <script>
@@ -453,53 +455,47 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 dataType: "json",
                 url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
                 success:function(data){
-                    var ctxcaidosconsindeuda = document.getElementById('my-chart-caidosconsindeuda').getContext('2d');
-                    var chartcaidosconsindeuda = new Chart(ctxcaidosconsindeuda, {
+
+                    var data_consindeuda = [{
+                        data: [50, 55, 60, 33],
+                        backgroundColor: [
+                            "#4b77a9",
+                            "#5f255f",
+                            "#d21243",
+                            "#B27200"
+                        ],
+                        borderColor: "#fff"
+                    }];
+
+                    var options = {
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    return percentage;
+
+
+                                },
+                                color: '#fff',
+                            }
+                        }
+                    };
+
+
+                    var ctx = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
+                    var myChart = new Chart(ctx, {
                         type: 'pie',
                         data: {
-                            labels: data.labels,
-                            datasets: data.datasets,
+                            labels: ["India", "China", "US", "Canada"],
+                            datasets: data_consindeuda
                         },
-                        options: {
-                            plugins: {
-                                labels:{
-                                    render: function (args) {
-                                        return args.value + ' (' + args.percentage.toFixed(2) + '%)';
-                                    },
-                                    fontSize: 12,
-                                    fontColor: '#fff'
-                                },
-                                datalabels: {
-                                    color: 'white',
-                                    font: {
-                                        weight: 'bold'
-                                    },
-                                    formatter: function(value, context) {
-                                        console.log(value);
-                                        console.log(context);
-                                        return Math.round(value / context.dataset._meta.total * 100) + '%';
-                                    }
-                                },
-                                /*title:{
-                                    display:true,
-                                    text:data.title
-                                },
-                                subtitle:{
-                                    display:true,
-                                    text:'Title goes',
-                                    color: '#ff0000',
-                                    font:{
-                                        size:20
-                                    }
-                                },*/
-                                legend:{
-                                    display:true,
-                                    labels:{
-                                        color: 'rgb(255,99,132)'
-                                    }
-                                }
-                            },
-                        }
+                        options: options
                     });
                 }
             });
