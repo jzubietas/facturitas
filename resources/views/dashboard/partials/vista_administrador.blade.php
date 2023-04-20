@@ -457,21 +457,19 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 success:function(data){
 
                     var data_consindeuda = [{
-                        data: [50, 55, 60, 33],
+                        data: [50, 55],
                         backgroundColor: [
                             "#4b77a9",
-                            "#5f255f",
-                            "#d21243",
-                            "#B27200"
+                            "#5f255f"
                         ],
                         borderColor: "#fff"
                     }];
 
-                    var options = {
+                    var options_consindeuda = {
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
-
+                                    console.log(value);
                                     let sum = 0;
                                     let dataArr = ctx.chart.data.datasets[0].data;
                                     dataArr.map(data => {
@@ -487,59 +485,18 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         }
                     };
 
-
-                    var ctx = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
-                    var myChart = new Chart(ctx, {
+                    var ctx_consindeuda = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
+                    var myChart_consindeuda = new Chart(ctx_consindeuda, {
                         type: 'pie',
                         data: {
-                            labels: ["India", "China", "US", "Canada"],
+                            labels: ["Caido sin deuda", "Caido con deuda"],
                             datasets: data_consindeuda
                         },
-                        options: options
+                        options: options_consindeuda
                     });
                 }
             });
 
-            /*$.get("{{ route('chart/clientes.caidos/vienen.de') }}", function(data) {
-                var ctxcaidosvienende = document.getElementById('my-chart-caidosvienende').getContext('2d');
-                var chartcaidosvienende = new Chart(ctxcaidosvienende, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: data.labels,
-                        datasets: data.datasets,
-                    },
-                    options: {
-                        responsive              : true,
-                        aintainAspectRatio     : false,
-                        scales: {
-                            xAxes: [{
-                                stacked: true,
-                                max: 100,
-                                ticks: {
-                                    beginAtZero: false,
-                                    callback: function (value) {
-                                        return value + '%';
-                                    },
-                                },
-                            }],
-                            yAxes: [{
-                                stacked: true,
-                            }]
-                        },
-                        plugins: {
-                            datalabels: {
-                                color: 'red',
-                                anchor: 'end',
-                                align: 'end',
-                                formatter: function(value, context) {
-                                    console.log('aaaaaaaaaaa:',value,context)
-                                    return value + '%';
-                                }
-                            },
-                        },
-                    }
-                });
-            });*/
 
             $('#exampleModalCenter').modal('show');
 

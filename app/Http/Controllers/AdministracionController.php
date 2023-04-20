@@ -130,6 +130,10 @@ class AdministracionController extends Controller
                     $btn = $btn . '<a href="' . route('administracion.revisar', $pago->id) . '" class="btn btn-success btn-sm">Revisar</a>';
 
                     $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pago->id . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                }else if (Auth::user()->rol == 'Apoyo administrativo') {
+                    $btn = $btn . '<a href="' . route('pagos.show', $pago->id) . '" class="btn btn-info btn-sm">Ver</a>';
+
+                    $btn = $btn . '<a href="' . route('administracion.revisar', $pago->id) . '" class="btn btn-success btn-sm">Revisar</a>';
                 }
 
                 return $btn;
@@ -323,6 +327,9 @@ class AdministracionController extends Controller
                     $btn = $btn . '<a href="' . route('administracion.revisarpendiente', $pago->id) . '" class="btn btn-success btn-sm">Revisar</a>';
 
                     $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pago->id . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                }else if (Auth::user()->rol == 'Apoyo administrativo') {
+                    $btn = $btn . '<a href="' . route('pagos.show', $pago->id) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('administracion.revisarpendiente', $pago->id) . '" class="btn btn-success btn-sm">Revisar</a>';
                 }
 
                 return $btn;
@@ -510,6 +517,9 @@ class AdministracionController extends Controller
                     $btn = $btn . '<a href="' . route('pagos.show', $pago->id) . '" class="btn btn-info btn-sm">Ver</a>';
                     $btn = $btn . '<a href="' . route('administracion.revisarobservado', $pago->id) . '" class="btn btn-success btn-sm">Revisar</a>';
                     $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pago->id . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                }else if (Auth::user()->rol == 'Apoyo administrativo') {
+                    $btn = $btn . '<a href="' . route('pagos.show', $pago->id) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('administracion.revisarobservado', $pago->id) . '" class="btn btn-success btn-sm">Revisar</a>';
                 }
                 return $btn;
             })
