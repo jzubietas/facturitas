@@ -877,6 +877,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             let $gasto_olva_dia = [{{$contadores_mes_actual_olva}}]
 
             var $visitorsChartOlva = new Chart($visitorsChartOlva, {
+                type: 'line',
                 data: {
                     labels: $arrr,
                     datasets: [{
