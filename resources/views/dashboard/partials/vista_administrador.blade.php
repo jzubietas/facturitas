@@ -368,7 +368,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <div class="card-header">
         <h3 class="card-title">
             <i class="far fa-chart-bar"></i>
-            Cuadro comparativo de Pedidos Anulados
+            Cuadro comparativo de clientes caidos
         </h3>
 
         <div class="card-tools">
@@ -386,37 +386,18 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                            <canvas id="my-chart-caidosconsindeuda"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                            <canvas id="my-chart-caidosvienende"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
                         </div>
 
                     </div>
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                                    </div>
 
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -489,50 +470,63 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $('#fechametames').datepicker('setDate', new Date());
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
-            $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
-                var ctxpedidosporasesor1 = document.getElementById('my-chart-pedidosporasesorpar1').getContext('2d');
-                var chartpedidosporasesor1 = new Chart(ctxpedidosporasesor1, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: data.labels,
-                        datasets: data.datasets,
-                    },
-                    options: {
-                        responsive              : true,
-                        aintainAspectRatio     : false,
-                        scales: {
-                            xAxes: [{
-                                stacked: true,
-                                max: 100,
-                                ticks: {
-                                    beginAtZero: false,
-                                    callback: function (value) {
-                                        return value + '%';
-                                    },
-                                },
-                            }],
-                            yAxes: [{
-                                stacked: true,
-                            }]
+            $.ajax({
+                method:'GET',
+                dataType: "json",
+                url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
+                success:function(data){
+                    var ctxcaidosconsindeuda = document.getElementById('my-chart-caidosconsindeuda').getContext('2d');
+                    var chartcaidosconsindeuda = new Chart(ctxcaidosconsindeuda, {
+                        type: 'pie',
+                        data: {
+                            labels: data.labels,
+                            datasets: data.datasets,
                         },
-                        plugins: {
-                            datalabels: {
-                                color: 'white',
-                                font: {
-                                    weight: 'bold'
+                        options: {
+                            /*title:{
+                                display:true,
+                                text:'s'
+                            },*/
+                            plugins: {
+                                labels:{
+                                    render: function (args) {
+                                        return args.value + ' (' + args.percentage.toFixed(2) + '%)';
+                                    },
+                                    fontSize: 12,
+                                    fontColor: '#fff'
                                 },
-                                formatter: function(value, context) {
-                                    return Math.round(value) + '%';
+                                datalabels: {
+                                    color: 'white',
+                                    font: {
+                                        weight: 'bold'
+                                    },
+                                    formatter: function(value, context) {
+                                        console.log(value);
+                                        console.log(context);
+                                        return Math.round(value / context.dataset._meta.total * 100) + '%';
+                                    }
+                                },
+                                title:{
+                                    display:true,
+                                    text:data.title
+                                },
+                                subtitle:{
+                                    display:true,
+                                    text:'Title goes',
+                                    color: '#ff0000',
+                                    font:{
+                                        size:20
+                                    }
                                 }
                             },
-                        },
-                    }
-                });
+                        }
+                    });
+                }
             });
 
-            $.get("{{ route('chart-pedidos-asesores-faltantes') }}", function(data) {
-                var ctxpedidosporasesor2 = document.getElementById('my-chart-pedidosporasesorpar2').getContext('2d');
-                var chartpedidosporasesor2 = new Chart(ctxpedidosporasesor2, {
+            /*$.get("{{ route('chart/clientes.caidos/vienen.de') }}", function(data) {
+                var ctxcaidosvienende = document.getElementById('my-chart-caidosvienende').getContext('2d');
+                var chartcaidosvienende = new Chart(ctxcaidosvienende, {
                     type: 'horizontalBar',
                     data: {
                         labels: data.labels,
@@ -569,56 +563,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         },
                     }
                 });
-            });
-
-            $.get("{{ route('chart-data') }}", function(data) {
-                var ctxpedidosdejaronpedir = document.getElementById('my-chart-dejaronpedir').getContext('2d');
-                var chartpedidosdejaronpedir = new Chart(ctxpedidosdejaronpedir, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels  : data.labels,
-                        datasets: data.datasets
-                    },
-                    options: {
-                        responsive              : true,
-                        maintainAspectRatio     : false,
-                        datasetFill             : false
-                    }
-                });
-            });
-
-            $.get("{{ route('chart/clientes.caidos/condeuda.sindeuda') }}", function(data) {
-                var ctxpedidosdejaronpedir = document.getElementById('my-chart-caidos-deuda-consin').getContext('2d');
-                var chartpedidosdejaronpedir = new Chart(ctxpedidosdejaronpedir, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels  : data.labels,
-                        datasets: data.datasets
-                    },
-                    options: {
-                        responsive              : true,
-                        maintainAspectRatio     : false,
-                        datasetFill             : false
-                    }
-                });
-            });
-
-            $.get("{{ route('chart/clientes.caidos/vienen.de') }}", function(data) {
-                var ctxpedidosdejaronpedir = document.getElementById('my-chart-caidos-vienen-de').getContext('2d');
-                var chartpedidosdejaronpedir = new Chart(ctxpedidosdejaronpedir, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels  : data.labels,
-                        datasets: data.datasets
-                    },
-                    options: {
-                        responsive              : true,
-                        maintainAspectRatio     : false,
-                        datasetFill             : false
-                    }
-                });
-            });
-
+            });*/
 
             $('#exampleModalCenter').modal('show');
 
