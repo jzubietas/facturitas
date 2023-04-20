@@ -431,11 +431,8 @@ class ChartController extends Controller
                     'backgroundColor' => [
                         'rgb(32, 201, 151)','rgb(54, 162, 235)'
                     ],
-                    'borderColor' => 'rgb(32, 201, 151)',
+                    'borderColor' => ['rgb(32, 201, 151)','rgb(32, 201, 151)'],
                     'borderWidth' => '1',
-                    'datalabels'  => [
-                        'display'=> 'true'
-                    ],
                     'hoverOffset'=>4,
                 ],
             ],

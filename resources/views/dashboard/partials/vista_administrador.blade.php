@@ -277,44 +277,28 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </div>
             </div>
             <div class="card-body">
-                <div class="d-flex">
-                    <p class="d-flex flex-column">
-                        <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
-                        <span>Cantidad de pedidos del día</span>
-                    </p>
-                    {{--
-                    <p class="ml-auto d-flex flex-column text-right">
-                                            <span class="text-success">
-                                                <i class="fas fa-arrow-up"></i> 12.5%
-                                            </span>
-                                            <span class="text-muted">Since last week</span>
-                                        </p>
-                    --}}
-                </div>
-
-                <div class="position-relative mb-4">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                            <div class=""></div>
-                        </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="d-flex flex-column">
+                            <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
+                            <span>Cantidad de pedidos del día</span>
+                        </p>
                     </div>
-                    <canvas id="visitors-chart" style="display: block; height: 200px; max-width: 100%; "
-                            class="chartjs-render-monitor" height="200"></canvas>
                 </div>
-                <div class="d-flex flex-row justify-content-end">
 
-                    <span class="text-uppercase">
-                        <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
+                <canvas id="visitors-chart" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
 
-                    </span>
-                    <span class="mr-2 text-uppercase">
+                <div class="row">
+                    <div class="col">
+                        <span class="text-uppercase">
+                            <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
+                        </span>
+                        <span class="mr-2 text-uppercase">
                         <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
                     </span>
-
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -332,30 +316,23 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </div>
             </div>
             <div class="card-body">
-                <div class="d-flex">
-                    <p class="d-flex flex-column">
+                <div class="row">
+                    <div class="col">
                         <span class="text-bold text-lg">{{$gasto_total_olva}}</span>
                         <span>Cantidad total del día</span>
-                    </p>
+                    </div>
                 </div>
 
-                <div class="position-relative mb-4">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                            <div class=""></div>
-                        </div>
+                <canvas id="visitors-chart-olva" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+
+                <div class="row">
+                    <div class="col">
+                        <span class="mr-2 text-uppercase">
+                            <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
+                        </span>
                     </div>
-                    <canvas id="visitors-chart-olva" style="display: block; height: 200px;  max-width: 100%;"
-                            class="chartjs-render-monitor"  height="200"></canvas>
                 </div>
-                <div class="d-flex flex-row justify-content-end">
-                    <span class="mr-2 text-uppercase">
-                        <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
-                    </span>
-                </div>
+
             </div>
         </div>
     </div>
@@ -440,8 +417,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
 
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--<script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>-->
+
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -483,10 +461,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             datasets: data.datasets,
                         },
                         options: {
-                            /*title:{
-                                display:true,
-                                text:'s'
-                            },*/
                             plugins: {
                                 labels:{
                                     render: function (args) {
@@ -506,7 +480,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                         return Math.round(value / context.dataset._meta.total * 100) + '%';
                                     }
                                 },
-                                title:{
+                                /*title:{
                                     display:true,
                                     text:data.title
                                 },
@@ -516,6 +490,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                     color: '#ff0000',
                                     font:{
                                         size:20
+                                    }
+                                },*/
+                                legend:{
+                                    display:true,
+                                    labels:{
+                                        color: 'rgb(255,99,132)'
                                     }
                                 }
                             },
@@ -833,7 +813,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         });
     </script>
 
-    <script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>
     <script>
         $(function () {
             var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
@@ -872,7 +851,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     tooltips: {mode: mode, intersect: intersect},
                     hover: {mode: mode, intersect: intersect},
                     legend: {display: false},
-                    scales: {
+                    /*scales: {
                         yAxes: [{
                             gridLines: {
                                 display: true,
@@ -881,7 +860,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                 zeroLineColor: 'transparent'
                             }, ticks: $.extend({beginAtZero: true, suggestedMax: 100}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
-                    }
+                    }*/
                 }
             })
         })
@@ -913,7 +892,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     tooltips: {mode: mode, intersect: intersect},
                     hover: {mode: mode, intersect: intersect},
                     legend: {display: false},
-                    scales: {
+                    /*scales: {
                         yAxes: [{
                             gridLines: {
                                 display: true,
@@ -922,7 +901,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                 zeroLineColor: 'transparent'
                             }, ticks: $.extend({beginAtZero: true, suggestedMax: 400}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
-                    }
+                    }*/
                 }
             })
         })

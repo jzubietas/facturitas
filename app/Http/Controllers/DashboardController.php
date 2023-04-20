@@ -1066,7 +1066,7 @@ class DashboardController extends Controller
             foreach ($progressData as $data) {
                 $html .= '<tr>
              <td class="name-size">' . $data["name"] . '</td>
-             <td>' . $data["identificador"] . ' ';
+             <td style="font-weight: bold;color:blue;">' . $data["identificador"] . ' ';
 
                 if ($data["supervisor"] == 46) {
                     $html .= '- A';
