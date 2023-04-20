@@ -1475,7 +1475,7 @@
             render: function (data, type, row, meta) {
               datass = '';
 
-              @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador" || Auth::user()->rol=='Llamadas' || Auth::user()->rol=='Encargado' || Auth::user()->rol=='ASESOR ADMINISTRATIVO')
+              @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador" || Auth::user()->rol=='Llamadas' || Auth::user()->rol=='Encargado' || Auth::user()->rol=='ASESOR ADMINISTRATIVO' || Auth::user()->rol=='ASISTENTE PUBLICIDAD')
 
                 datass = datass + '<button type="button" class="btn btn-dark btn-sm ' + (row.da_confirmar_descarga == '1' ? '' : '') + '" data-target="#modal-direccion" data-toggle="modal" data-pedido_codigo="' + row.codigo + '" data-confirm_descarga="' + row.da_confirmar_descarga + '" data-cliente="' + row.cliente_id + '" data-asesor="' + row.user_id + '" data-direccion="' + row.id + '" data-codigo="' + row.id + '"><i class="fa  ' + (row.da_confirmar_descarga != '1' ? 'fa-exclamation-triangle text-warning font-12 mr-8' : 'fa-map-marker-alt text-success mr-8') + '" aria-hidden="true"></i> Direccion</button>';
               @endif

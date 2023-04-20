@@ -455,9 +455,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 dataType: "json",
                 url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
                 success:function(data){
-
+                    console.log(data)
                     var data_consindeuda = [{
-                        data: [50, 55],
+                        data: data.datasets[0].data,
                         backgroundColor: [
                             "#4b77a9",
                             "#5f255f"
@@ -489,7 +489,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     var myChart_consindeuda = new Chart(ctx_consindeuda, {
                         type: 'pie',
                         data: {
-                            labels: ["Caido sin deuda", "Caido con deuda"],
+                            labels: data.labels,
                             datasets: data_consindeuda
                         },
                         options: options_consindeuda
