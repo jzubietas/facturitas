@@ -1065,7 +1065,7 @@ class DashboardController extends Controller
                 <tbody>';
             foreach ($progressData as $data) {
                 $html .= '<tr>
-             <td class="name-size">' . $data["name"] . '</td>
+             <td class="name-size" style="font-weight: bold;color:blue;">' . $data["name"] . '</td>
              <td style="font-weight: bold;color:blue;">' . $data["identificador"] . ' ';
 
                 if ($data["supervisor"] == 46) {
@@ -1094,7 +1094,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p> </span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p> </span>
                                         </div>
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -1107,7 +1107,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: rgba(3,175,3,1) !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b  class="bold-size">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                            <span style="font-weight: lighter"> <b  class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
                                         </div>
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -1121,7 +1121,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
                                         </div>
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -1134,7 +1134,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
                                         </div>
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -1147,7 +1147,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%) !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
                                         </div>
                                     </div>
                                     <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -1160,7 +1160,7 @@ class DashboardController extends Controller
                                       <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pagos"] . '%" aria-valuenow="34.25" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                      <span style="font-weight: lighter"> <b class="bold-size">   ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
+                                      <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">   ' . $data["progress_pagos"] . '% </b> - ' . $data["total_pagado"] . ' / ' . $data["total_pedido_mespasado"] . ' <p class="text-red d-inline format-size" style="color: #d9686!important"> ' . ((($data["total_pedido_mespasado"] - $data["total_pagado"]) > 0) ? ($data["total_pedido_mespasado"] - $data["total_pagado"]) : '0') . '</p></span>
                                   </div>
                               </div>
                               <sub class="d-none">% -  Pagados/ Asignados</sub>
@@ -1221,7 +1221,7 @@ class DashboardController extends Controller
                                                       <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                       </div>
                                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                      <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
                                                   </div>
                                               </div>
                                             </div>
@@ -1235,7 +1235,7 @@ class DashboardController extends Controller
                                                           <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                           </div>
                                                           <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                              <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                              <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
                                                           </div>
                                                     </div>
                                                   </div>
@@ -1249,7 +1249,7 @@ class DashboardController extends Controller
                                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                           </div>
                                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_quincena"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_quincena"] - $data["total_pedido"]) > 0) ? ($data["meta_quincena"] - $data["total_pedido"]) : '0') . '</p></span>
                                                         </div>
                                                     </div>
                                                   </div>
@@ -1270,7 +1270,7 @@ class DashboardController extends Controller
                                                       <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                       </div>
                                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                      <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
                                                   </div>
                                               </div>
                                             </div>
@@ -1284,7 +1284,7 @@ class DashboardController extends Controller
                                                       <div class="rounded" role="progressbar" style="background: #dc3545 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                       </div>
                                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                      <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
                                                   </div>
                                               </div>
                                             </div>
@@ -1299,7 +1299,7 @@ class DashboardController extends Controller
                                                       <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                       </div>
                                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                      <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
                                                   </div>
                                               </div>
                                             </div>
@@ -1313,56 +1313,13 @@ class DashboardController extends Controller
                                                       <div class="rounded" role="progressbar" style="background: #59db35 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                                       </div>
                                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
+                                                      <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
                                                   </div>
                                               </div>
                                             </div>
                                             '.$sub_html;
 
                     }
-
-                    /*if (0<=$data["progress_pedidos"] && $data["progress_pedidos"]<90)
-                    {
-                        $html .= '<div class="w-100 bg-white rounded">
-                                              <div class="position-relative rounded">
-                                                  <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                                      <div class="rounded" role="progressbar" style="background: #e35260 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                                      </div>
-                                                  <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
-                                                  </div>
-                                              </div>
-                                            </div>
-                                            '.$sub_html;
-                    }
-                    else if (90<=$data["progress_pedidos"] && $data["progress_pedidos"]<99)
-                    {
-                        $html .= '<div class="w-100 bg-white rounded">
-                                                    <div class="position-relative rounded">
-                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                                          <div class="rounded" role="progressbar" style="background: #FFD4D4 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                                          </div>
-                                                          <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                              <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_intermedia"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
-                                                          </div>
-                                                    </div>
-                                                  </div>
-                                                  '.$sub_html;
-                    }
-                    else if(99<=$data["progress_pedidos"])
-                    {
-                        $html .= '<div class="w-100 bg-white rounded">
-                                                    <div class="position-relative rounded">
-                                                      <div class="progress bg-white rounded height-bar-progress" style="height: 30px !important">
-                                                          <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) ; width: ' . $data["progress_pedidos"] . '%" ></div>
-                                                          </div>
-                                                        <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_intermedia"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . ((($data["meta_intermedia"] - $data["total_pedido"]) > 0) ? ($data["meta_intermedia"] - $data["total_pedido"]) : '0') . '</p></span>
-                                                        </div>
-                                                    </div>
-                                                  </div>
-                                                  '.$sub_html;
-                    }*/
                 }
                 if ($data["meta_new"] == '1') {
 
@@ -1374,7 +1331,7 @@ class DashboardController extends Controller
                                       <div class="rounded" role="progressbar" style="background: #FFD4D4;width: ' . $data["progress_pedidos"] . '%" ></div>
                                       </div>
                                   <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                      <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                      <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' /' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                   </div>
                               </div>
                             </div>
@@ -1388,7 +1345,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, #FFD4D4 0%, #d08585 89%, #dc3545 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
@@ -1403,7 +1360,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: rgba(220,53,69,1) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
@@ -1418,7 +1375,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
@@ -1432,7 +1389,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: #ffc107 !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
@@ -1446,7 +1403,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(255,193,7,1) 0%, rgba(255,193,7,1) 89%, rgba(113,193,27,1) 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
@@ -1460,7 +1417,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background:rgba(3,175,3,1) ; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . '  <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
@@ -1474,7 +1431,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: linear-gradient(90deg, rgba(3,175,3,1) 0%, rgba(24,150,24,1) 60%, rgba(0,143,251,1) 100%) !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta"] . ' <p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
@@ -1492,7 +1449,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_2"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_2"] . '<p class="text-red d-inline format-size" style="color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
@@ -1505,7 +1462,7 @@ class DashboardController extends Controller
                                           <div class="rounded" role="progressbar" style="background: #008ffb !important; width: ' . $data["progress_pedidos"] . '%" ></div>
                                           </div>
                                         <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
-                                            <span style="font-weight: lighter"> <b class="bold-size">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_2"] . '<p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
+                                            <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important;font-size: 18px;color:blue;">  ' . $data["progress_pedidos"] . '% </b> - ' . $data["total_pedido"] . ' / ' . $data["meta_2"] . '<p class="text-red d-inline format-size" style="font-size: 18px; color: #d9686!important"> ' . $diferencia_mostrar . '</p></span>
                                         </div>
                                     </div>
                                   </div>
