@@ -379,13 +379,18 @@ class DashboardController extends Controller
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
-            }else{
+            }
+            else{
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
                     ->whereNotIn('clave_pedidos',['17','18','19','21'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
+                /*echo "<pre>";
+                print_r($asesores);
+                echo "</pre>";*/
+
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
                     ->whereNotIn('clave_pedidos',['17','18','19','21'])
@@ -442,7 +447,9 @@ class DashboardController extends Controller
         //dd($progressData);
         foreach ($asesores as $asesor)
         {
-
+            /*echo "<pre>";
+            print_r($asesor);
+            echo "</pre>";*/
             if (in_array(auth()->user()->rol, [
                 User::ROL_FORMACION
                 , User::ROL_ADMIN
@@ -799,6 +806,9 @@ class DashboardController extends Controller
                 if (!isset($newData[$identificador])) {
                     $newData[$identificador] = $item;
                 } else {
+                    /*echo "<pre>";
+                    print_r($item);
+                    echo "</pre>";*/
                     $newData[$identificador]['total_pedido'] += data_get($item, 'total_pedido');
                     $newData[$identificador]['total_pedido_mespasado'] += data_get($item, 'total_pedido_mespasado');
                     $newData[$identificador]['total_pagado'] += data_get($item, 'total_pagado');
