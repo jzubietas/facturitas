@@ -86,9 +86,7 @@ class BasefriaController extends Controller
                     DB::raw("users.clave_pedidos as clave_pedidos")
                 )
                 ->pluck('users.clave_pedidos');
-
             $data = $data->WhereIn("u.clave_pedidos", $usersasesores);
-
         } else {
             $data = $data;
         }

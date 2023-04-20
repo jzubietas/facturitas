@@ -181,81 +181,49 @@ class PedidoController extends Controller
 
 
         if (Auth::user()->rol == User::ROL_LLAMADAS) {
-            /*$usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.llamada', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
 
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);*/
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-            /*$usersasesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> where('users.llamada', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); */
             $pedidos = $pedidos->where('u.identificador', '<>', 'B');
         } else if (Auth::user()->rol == "Asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
-                ->where('users.identificador', Auth::user()->identificador)
+                ->where('users.clave_pedidos', Auth::user()->clave_pedidos)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
+                ->pluck('users.clave_pedidos');
 
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-
-        } else if (Auth::user()->rol == "Super asesor") {
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.identificador', Auth::user()->identificador)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            $pedidos = $pedidos->WhereIn('u.clave_pedidos', $usersasesores);
 
         } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
             $usersasesores = User::where('users.rol', User::ROL_ASESOR_ADMINISTRATIVO)
                 ->where('users.estado', '1')
-                ->where('users.identificador', Auth::user()->identificador)
+                ->where('users.clave_pedidos', Auth::user()->clave_pedidos)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
+                ->pluck('users.clave_pedidos');
 
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            $pedidos = $pedidos->WhereIn('u.clave_pedidos', $usersasesores);
 
         } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
-
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.supervisor', Auth::user()->id)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+                ->pluck('users.clave_pedidos');
+            $pedidos = $pedidos->WhereIn('u.clave_pedidos', $usersasesores);
         }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
             $usersasesores = User::where('users.rol', User::ROL_ASESOR)
                 ->where('users.estado', '1')
-                ->whereIn('users.identificador', ['15','16','17','18','19'])
+                ->whereIn('users.clave_pedidos', ['15','16','17','18','19'])
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-
+                ->pluck('users.clave_pedidos');
+            $pedidos = $pedidos->WhereIn('u.clave_pedidos', $usersasesores);
         }
 
         $miidentificador = Auth::user()->name;
