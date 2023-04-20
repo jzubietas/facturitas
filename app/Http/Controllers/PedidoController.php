@@ -160,14 +160,14 @@ class PedidoController extends Controller
                     'dp.total as total',
                     'dp.cantidad as cantidad',
                     'dp.ruc as ruc',
-                    DB::raw("
+                    /*DB::raw("
                     concat(
                         (case when pedidos.pago=1 and pedidos.pagado=1 then 'ADELANTO' when pedidos.pago=1 and pedidos.pagado=2 then 'PAGO' else '' end),
                         ' ',
                         (
                             select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1
                         )
-                    )  as condiciones_aprobado"),
+                    )  as condiciones_aprobado"),*/
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
                     DB::raw('DATE_FORMAT(ifnull(pedidos.fecha_anulacion_confirm,pedidos.updated_at), "%Y-%m-%d %H:%i:%s") as fecha_up'),
                     'dp.saldo as diferencia',
