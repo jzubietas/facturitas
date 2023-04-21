@@ -224,7 +224,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <div class="col-md-12 d-flex justify-content-center align-items-center">
         <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
 background: #FFFFFF;
-text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0 0 #242120, 0 2px 0 #242120, -2px 0 0 #242120, 0 -2px 0 #242120;">
+text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">
             Metas Llamadas/Cobranzas
             de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
         <button style="background: none; border: none" onclick="openFullscreenllamadas();">
@@ -397,10 +397,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <!--<script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>-->
 
     <script>
-        function cargaNueva(number) {
-
-        }
-
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -408,19 +404,25 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 }
             });
 
-            /*$('#fechametames').datepicker({
+            var date = new Date();
+            var currentMonth = date.getMonth();
+            var currentDate = date.getDate();
+            var currentYear = date.getFullYear();
+
+            $('#fechametames').datepicker({
                 dateFormat: 'dd-mm-yy'
-            });*/
+            });
 
             $("#fechametames-button").click(function() {
                 //$("#fechametames").datepicker("show");
 
                 //$('#fechametames').datepicker('setDate', new Date());
-                $('#fechametames').datepicker('setDate', new Date()).trigger('change');
-                //$('#fechametames').trigger('change');
+                $('#fechametames').datepicker('setDate', new Date());
+                $('#fechametames').trigger('change');
             });
 
             $('#fechametames').datepicker('setDate', new Date());
+            //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
             $.ajax({
                 method:'GET',
@@ -428,7 +430,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
                 success:function(data){
                     //console.log(data)
-                    let data_consindeuda = [{
+                    var data_consindeuda = [{
                         data: data.datasets[0].data,
                         backgroundColor: [
                             "#4b77a9",
@@ -437,7 +439,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         borderColor: "#fff"
                     }];
 
-                    let options_consindeuda = {
+                    var options_consindeuda = {
                         title: {
                             display: true,
                             text: data.title
@@ -461,8 +463,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         }
                     };
 
-                    let ctx_consindeuda = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
-                    let myChart_consindeuda = new Chart(ctx_consindeuda, {
+                    var ctx_consindeuda = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
+                    var myChart_consindeuda = new Chart(ctx_consindeuda, {
                         type: 'pie',
                         data: {
                             labels: data.labels,
@@ -479,13 +481,13 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 url:"{{ route('chart/clientes.caidos/vienen.de') }}",
                 success:function(data){
                     //console.log(data)
-                    let data_vienende = [{
+                    var data_vienende = [{
                         data: data.datasets[0].data,
                         backgroundColor: data.datasets[0].backgroundColor,
                         borderColor: "#fff"
                     }];
 
-                    let options_vienende = {
+                    var options_vienende = {
                         title: {
                             display: true,
                             text: data.title
@@ -509,8 +511,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         }
                     };
 
-                    let ctx_vienende = document.getElementById("my-chart-caidosvienende").getContext('2d');
-                    let myChart_vienende = new Chart(ctx_vienende, {
+                    var ctx_vienende = document.getElementById("my-chart-caidosvienende").getContext('2d');
+                    var myChart_vienende = new Chart(ctx_vienende, {
                         type: 'pie',
                         data: {
                             labels: data.labels,
@@ -534,9 +536,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         { label: 'Asesor 03', value: 25, superar:100 }
                     ];
 
-                    let ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
+                    var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
 
-                    let myChart = new Chart(ctx, {
+                    var myChart = new Chart(ctx, {
                         type: 'horizontalBar',
                         data: {
                             labels: data.map(function(item) {
@@ -671,46 +673,50 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         // Handle the error
                     },
                     success: function (resultado) {
-                        if(entero===1 || entero===2)
+                        if(entero==1 || entero==2)
                         {
                             console.log("cambiar color")
                             //$(".h1-change-day").css("color","blue");
-                            if(valorr!==ddd_1)
+                            if(valorr!=ddd_1)
                                 $(".h1-change-day").attr('style', 'color: blue !important');
                         }
-                        if (entero === 1) {
+                        if (entero == 1) {
                             $('#metas_dp').html(resultado);
-                        } else if (entero === 2) {
+                        } else if (entero == 2) {
                             $('#meta').html(resultado);
-                        } else if (entero === 3) {
+                        } else if (entero == 3) {
                             $('#metas_total').html(resultado);
-                        } else if (entero === 4) {
+                        } else if (entero == 4) {
                             $('#supervisor_total').html(resultado);
-                        } else if (entero === 5) {
+                        } else if (entero == 5) {
                             $('#supervisor_A').html(resultado);
-                        }else if (entero === 6) {
+                        }else if (entero == 6) {
                             $('#porcentaje_cobranzas_metas').html(resultado);
-                        }else if (entero === 7) {
+                        }else if (entero == 7) {
                             $('#porcentaje_pedidos_metas').html(resultado);
                         }
-                        else if (entero === 8) {/*izquierda*/
+                        else if (entero == 8) {/*izquierda*/
                             $('#grafico_dejaronpedir_right').html(resultado);
                         }
-                        else if (entero === 9) {/*derecha*/
+                        else if (entero == 9) {/*derecha*/
 
                             $('#grafico_dejaronpedir_left').html(resultado);
                         }
-                        else if (entero === 13) {
+                        else if (entero == 13) {
                             $('#dejaronpedir_supervisor_total').html(resultado);
                         }
-                        else if (entero === 14) {
+                        else if (entero == 14) {
                             $('#dejaronpedir_supervisor_A').html(resultado);
-                        } else if (entero === 15) {
+                        } else if (entero == 15) {
                             $('#dejaronpedir_supervisor_B').html(resultado);
                         }
-                        else if (entero === 17) {
+                        else if (entero == 17) {
                             $('#metas_dp_17').html(resultado);
                         }
+                        else if (entero == 17) {
+                            $('#metas_dp_17').html(resultado);
+                        }
+
                     }
                 })
             }
@@ -746,15 +752,16 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         // Handle the error
                     },
                     success: function (resultado) {
-                        if (entero === 8) {/*izquierda*/
+                        if (entero == 8) {/*izquierda*/
                             $('#grafico_dejaronpedir_right').html(resultado);
                         }
-                        else if (entero === 9) {/*derecha*/
+                        else if (entero == 9) {/*derecha*/
                             $('#grafico_dejaronpedir_left').html(resultado);
                         }
-                        else if (entero === 13) {
+                        else if (entero == 13) {
                             $('#dejaronpedir_supervisor_total').html(resultado);
                         }
+
                     }
                 })
             }
@@ -938,14 +945,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         })
 
         $(function () {
-            let ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
-            let mode = 'index'
-            let intersect = true
+            var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
+            var mode = 'index'
+            var intersect = true
 
+            var $visitorsChartOlva = $('#visitors-chart-olva')
             let $arrr = [{{$contadores_arr}}]
             let $gasto_olva_dia = [{{$contadores_mes_actual_olva}}]
 
-            let $visitorsChartOlva = new Chart($('#visitors-chart-olva'), {
+            var $visitorsChartOlva = new Chart($visitorsChartOlva, {
                 type: 'line',
                 data: {
                     labels: $arrr,
