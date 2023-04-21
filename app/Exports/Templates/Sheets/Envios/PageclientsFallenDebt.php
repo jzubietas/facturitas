@@ -37,7 +37,6 @@ class PageclientsFallenDebt extends Export implements WithColumnFormatting,WithC
                 DB::raw("(select count(dp1.pagado) from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id and dp1.codigo not like '%-C%' and dp1.pagado in (1,2) ) as debe_nodebe"),
             ])->get();
 
-
         /*$dosmeses_ini=[];
         for($i=4;$i>0;$i--)
         {
@@ -50,19 +49,6 @@ class PageclientsFallenDebt extends Export implements WithColumnFormatting,WithC
             {
                 $lista[]=$procesada->id;
             }
-
-            /*if($procesada->fechaultimopedido)
-            {
-                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//->tostring();
-
-                if(in_array($fecha_analizar,$dosmeses_ini))
-                {
-                    if( in_array($procesada->fechaultimopedido_pagado,["0","1"]) )
-                    {
-                        $lista[]=$procesada->id;
-                    }
-                }
-            }*/
         }
 
         $data=Cliente::

@@ -175,18 +175,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div id="metas_total"></div>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="supervisor_total"></div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="supervisor_A"></div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="supervisor_B"></div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="metas_total"></div>
-                    </div>
 
                 </div>
 
@@ -195,6 +183,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         {{-- FIN-TABLA-DUAL --}}
 
         <div class="col-lg-12" id="metas_dp_17"></div>
+        <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
 
     </div>
 
@@ -802,6 +791,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     method: 'POST',
                     url: "{{ route('dashboard.graficoSituacionClientes') }}",
                     success: function (resultado) {
+                        $('#metas_situacion_clientes_metasasesores').html(resultado);
                         $('#metas_situacion_clientes').html(resultado);
                     }
                 })

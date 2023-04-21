@@ -83,7 +83,6 @@ class PdfController extends Controller
 
     public function SituacionClientes(Request $request)
     {
-
         $inicio_s = Carbon::now()->clone()->startOfMonth()->format('Y-m-d');
         $inicio_f = Carbon::now()->clone()->endOfMonth()->format('Y-m-d');
         $periodo_antes = Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m');
@@ -610,7 +609,7 @@ class PdfController extends Controller
             if($_resultado_grafico_k2=='LEVANTADO')
             {
                 $html[] = '<tr>';
-                $html[] = '<td style="width:20%;height:150px;" class="text-center">';
+                $html[] = '<td style="width:20%;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
                                     style="align-items: center;height: 40px !important; color: black !important;">' .
                     $_resultado_grafico_k2 .
