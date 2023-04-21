@@ -110,12 +110,12 @@
                         data: 'tipo',
                         name: 'tipo',
                     },
-                    {data: 'user_identificador', name: 'user_identificador',},
+                    {data: 'usuario_afectado', name: 'usuario_afectado',},
                     {
                         data: 'accion',
                         name: 'accion',
                     },
-                    {data: 'responsable', name: 'responsable',},
+                    {data: 'responsable_atencion', name: 'responsable_atencion',},
                     {data: 'created_at', name: 'created_at',},
                 ],
                 language: {

@@ -48,9 +48,12 @@ class CallAtentionController extends Controller
     public function tabla(Request $request)
     {
         $call_atentions = CallAtention::join('users as u', 'call_atentions.user_id', 'u.id')
+            ->join('users as res','call_atentions.responsable','res.id')
             ->select(
                 [
                     'call_atentions.*',
+                    'u.name as usuario_afectado',
+                    'res.name as responsable_atencion',
                     DB::raw(" ( select 'Llamado de atencion' ) as tipo ")
                 ]
             )
