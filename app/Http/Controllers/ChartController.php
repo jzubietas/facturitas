@@ -555,4 +555,117 @@ class ChartController extends Controller
         ]);
     }
 
+    public function metasAsesores(Request $request)
+    {
+        $caidos=Cliente::where('situacion','=','CAIDO')->activo()->where('tipo','=','1')
+            ->whereNotIn('user_clavepedido',['17','18','19','21','B']);
+        $caidos_total=$caidos->count();
+
+        $periodo_antes = Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m');
+        $periodo_actual = Carbon::now()->clone()->startOfMonth()->format('Y-m');
+
+        $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
+            ->join('clientes as c','c.id','situacion_clientes.cliente_id')
+            ->join('users as u','u.id','c.user_id')
+            ->Where([
+                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['a.situacion', '=', 'LEVANTADO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['a.situacion', '=', 'RECUPERADO ABANDONO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['a.situacion', '=', 'RECUPERADO RECIENTE'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['a.situacion', '=', 'NUEVO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->groupBy([
+                //'situacion_clientes.situacion',
+                'a.situacion',
+                //'situacion_clientes.user_clavepedido'
+            ])
+            ->orderBy('a.situacion','asc')
+            ->select([
+                //'situacion_clientes.situacion',
+                'a.situacion  as situacion_anterior',
+                //'situacion_clientes.user_clavepedido as user_identificador',
+                DB::raw('count(situacion_clientes.situacion) as total')
+            ])
+            ->get();
+
+        $_resultado_grafico=[];
+        /*foreach ($situaciones_clientes as $situaciones_clientes_)
+        {
+            echo "<br>Caidos -- ".$situaciones_clientes_->situacion_anterior." -- ".$situaciones_clientes_->user_identificador." -- ".$situaciones_clientes_->total;
+        }*/
+
+        /*dd($ids_asesores);*/
+        $mes= Carbon::now()->month;
+        $anio=Carbon::now()->year;
+
+        $labels=[];
+        $datas=[];
+        $backgroundColor=['rgb(30, 144, 255, 1)','rgb(178, 34, 34, 1 )','rgb(0, 128, 0, 1)','rgb(255, 160, 122, 1)'];
+        foreach ($situaciones_clientes as $situaciones_clientes_)
+        {
+            $labels[]='Caidos de '.$situaciones_clientes_->situacion_anterior;
+            $datas[]=$situaciones_clientes_->total;
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Caidos con o sin deuda',
+                    'data' => $datas,
+                    'backgroundColor' => $backgroundColor,
+                    'borderColor' => ['rgb(32, 201, 151)','rgb(32, 201, 151)'],
+                    'borderWidth' => '1',
+                    'hoverOffset'=>4,
+                ],
+            ],
+            'title'=>'Total caidos: '.$caidos_total
+        ]);
+    }
+
 }

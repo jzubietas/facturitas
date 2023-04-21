@@ -374,6 +374,13 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         </div>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="my-chart-metasasesores"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -524,6 +531,100 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         },
                         options: options_vienende
                     });
+                }
+            });
+
+            $.ajax({
+                method:'GET',
+                dataType: "json",
+                url:"{{ route('chart/metas/asesores') }}",
+                success:function(data){
+                    console.log(data)
+                    //var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
+                    data = [
+                        { label: 'Asesor 01', value: 75, superar:100 },
+                        { label: 'Asesor 02', value: 50, superar:100 },
+                        { label: 'Asesor 03', value: 25, superar:100 }
+                    ];
+
+                    var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
+
+                    var myChart = new Chart(ctx, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: data.map(function(item) {
+                                return item.label;
+                            }),
+                            datasets: [{
+                                data: data.map(function(item) {
+                                    return (item.value/item.superar)*100;
+                                }),
+                                backgroundColor: ['#007bff', '#28a745', '#dc3545'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'Desarrollo (actualizacion metas asesores)'
+                            },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        console.log(value);
+                                        let sum = 0;
+                                        let dataArr = ctx.chart.data.datasets[0].data;
+                                        dataArr.map(data => {
+                                            sum += data;
+                                        });
+                                        let superar_=ctx.dataIndex;
+                                        let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                        return percentage + '('+value+')';
+
+
+                                    },
+                                    color: '#fff',
+                                },
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        max: 100
+                                    },
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }]
+                            },
+                            legend: {
+                                display: false
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            animation: {
+                                duration: 2000
+                            }
+                        }
+                    });
+
+                    setInterval(function() {
+                        data.forEach(function(item, index) {
+                            console.log(item);
+                            //item.value = Math.floor(Math.random() * 100) + 1;
+                            myChart.data.datasets[0].data[index] = item.value;
+                        });
+                        myChart.update();
+                    }, 3000);
+
                 }
             });
 
