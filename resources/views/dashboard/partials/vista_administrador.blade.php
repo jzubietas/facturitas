@@ -433,47 +433,44 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     // Handle the error
                 },
                 success: function (resultado) {
-                    if(entero==1 || entero==2)
+                    if(entero===1 || entero===2)
                     {
                         console.log("cambiar color")
                         //$(".h1-change-day").css("color","blue");
                         if(valorr!=ddd_1)
                             $(".h1-change-day").attr('style', 'color: blue !important');
                     }
-                    if (entero == 1) {
+                    if (entero === 1) {
                         $('#metas_dp').html(resultado);
-                    } else if (entero == 2) {
+                    } else if (entero === 2) {
                         $('#meta').html(resultado);
-                    } else if (entero == 3) {
+                    } else if (entero === 3) {
                         $('#metas_total').html(resultado);
-                    } else if (entero == 4) {
+                    } else if (entero === 4) {
                         $('#supervisor_total').html(resultado);
-                    } else if (entero == 5) {
+                    } else if (entero === 5) {
                         $('#supervisor_A').html(resultado);
-                    }else if (entero == 6) {
+                    }else if (entero === 6) {
                         $('#porcentaje_cobranzas_metas').html(resultado);
-                    }else if (entero == 7) {
+                    }else if (entero === 7) {
                         $('#porcentaje_pedidos_metas').html(resultado);
                     }
-                    else if (entero == 8) {/*izquierda*/
+                    else if (entero === 8) {/*izquierda*/
                         $('#grafico_dejaronpedir_right').html(resultado);
                     }
-                    else if (entero == 9) {/*derecha*/
+                    else if (entero === 9) {/*derecha*/
 
                         $('#grafico_dejaronpedir_left').html(resultado);
                     }
-                    else if (entero == 13) {
+                    else if (entero === 13) {
                         $('#dejaronpedir_supervisor_total').html(resultado);
                     }
-                    else if (entero == 14) {
+                    else if (entero === 14) {
                         $('#dejaronpedir_supervisor_A').html(resultado);
-                    } else if (entero == 15) {
+                    } else if (entero === 15) {
                         $('#dejaronpedir_supervisor_B').html(resultado);
                     }
-                    else if (entero == 17) {
-                        $('#metas_dp_17').html(resultado);
-                    }
-                    else if (entero == 17) {
+                    else if (entero === 17) {
                         $('#metas_dp_17').html(resultado);
                     }
 
@@ -512,19 +509,21 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     // Handle the error
                 },
                 success: function (resultado) {
-                    if (entero == 8) {/*izquierda*/
+                    if (entero === 8) {/*izquierda*/
                         $('#grafico_dejaronpedir_right').html(resultado);
                     }
-                    else if (entero == 9) {/*derecha*/
+                    else if (entero === 9) {/*derecha*/
                         $('#grafico_dejaronpedir_left').html(resultado);
                     }
-                    else if (entero == 13) {
+                    else if (entero === 13) {
                         $('#dejaronpedir_supervisor_total').html(resultado);
                     }
 
                 }
             })
         }
+
+        
 
         $(document).ready(function () {
             $.ajaxSetup({
