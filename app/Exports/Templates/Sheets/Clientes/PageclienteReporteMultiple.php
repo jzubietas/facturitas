@@ -39,11 +39,12 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
     public function collection()
     {
         $clientes=Cliente::activo()
-            ->join('users as u', 'clientes.user_id', 'u.id')
+            //->join('users as u', 'clientes.user_id', 'u.id')
             ->select([
                 'clientes.id',
                 'clientes.tipo',
-                'u.identificador as asesor',
+                'clientes.user_clavepedido as asesor',
+                //'u.identificador as asesor',
                 'clientes.nombre',
                 'clientes.dni',
                 'clientes.icelular',
