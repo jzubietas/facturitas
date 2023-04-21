@@ -77,6 +77,9 @@
 </div>
 
 {{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
+<div class="col-lg-12">
+    <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
+</div>
 
 <!-- MODAL -->
 {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -207,12 +210,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         </div>
 
 
-        <div class="col-lg-12 col-md-12 col-sm-12">
+        <!--<div class="col-lg-12 col-md-12 col-sm-12">
             <div id="dejaronpedir_supervisor_A"></div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div id="dejaronpedir_supervisor_B"></div>
-        </div>
+        </div>-->
 
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div id="dejaronpedir_supervisor_total"></div>
@@ -272,44 +275,28 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </div>
             </div>
             <div class="card-body">
-                <div class="d-flex">
-                    <p class="d-flex flex-column">
-                        <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
-                        <span>Cantidad de pedidos del día</span>
-                    </p>
-                    {{--
-                    <p class="ml-auto d-flex flex-column text-right">
-                                            <span class="text-success">
-                                                <i class="fas fa-arrow-up"></i> 12.5%
-                                            </span>
-                                            <span class="text-muted">Since last week</span>
-                                        </p>
-                    --}}
-                </div>
-
-                <div class="position-relative mb-4">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                            <div class=""></div>
-                        </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="d-flex flex-column">
+                            <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
+                            <span>Cantidad de pedidos del día</span>
+                        </p>
                     </div>
-                    <canvas id="visitors-chart" style="display: block; height: 200px; max-width: 100%; "
-                            class="chartjs-render-monitor" height="200"></canvas>
                 </div>
-                <div class="d-flex flex-row justify-content-end">
 
-                    <span class="text-uppercase">
-                        <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
+                <canvas id="visitors-chart" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
 
-                    </span>
-                    <span class="mr-2 text-uppercase">
+                <div class="row">
+                    <div class="col">
+                        <span class="text-uppercase">
+                            <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
+                        </span>
+                        <span class="mr-2 text-uppercase">
                         <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
                     </span>
-
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -327,30 +314,23 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </div>
             </div>
             <div class="card-body">
-                <div class="d-flex">
-                    <p class="d-flex flex-column">
+                <div class="row">
+                    <div class="col">
                         <span class="text-bold text-lg">{{$gasto_total_olva}}</span>
                         <span>Cantidad total del día</span>
-                    </p>
+                    </div>
                 </div>
 
-                <div class="position-relative mb-4">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                            <div class=""></div>
-                        </div>
+                <canvas id="visitors-chart-olva" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+
+                <div class="row">
+                    <div class="col">
+                        <span class="mr-2 text-uppercase">
+                            <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
+                        </span>
                     </div>
-                    <canvas id="visitors-chart-olva" style="display: block; height: 200px;  max-width: 100%;"
-                            class="chartjs-render-monitor"  height="200"></canvas>
                 </div>
-                <div class="d-flex flex-row justify-content-end">
-                    <span class="mr-2 text-uppercase">
-                        <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
-                    </span>
-                </div>
+
             </div>
         </div>
     </div>
@@ -363,7 +343,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <div class="card-header">
         <h3 class="card-title">
             <i class="far fa-chart-bar"></i>
-            Cuadro comparativo de Pedidos Anulados
+            Cuadro comparativo de clientes caidos
         </h3>
 
         <div class="card-tools">
@@ -381,52 +361,20 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                            <canvas id="my-chart-caidosconsindeuda"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                        </div>
-
-                    </div>
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="my-chart-pedidosporasesorpar1"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="my-chart-pedidosporasesorpar2"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                                    </div>
-
-                                </div>
-
-                            </div>
+                            <canvas id="my-chart-caidosvienende"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
-</div>
-
-{{--<div class="container-fluid">
-    <h1> Cuadro comparativo de Pedidos Anulados</h1>
-
-</div>--}}
-
-<div class="container-fluid">
-    <canvas id="my-chart-dejaronpedir"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
 </div>
 
 @section('js-datatables')
@@ -445,8 +393,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
 
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
+    {{--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>--}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!--<script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>-->
+
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -475,102 +426,103 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $('#fechametames').datepicker('setDate', new Date());
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
-            $.get("{{ route('chart-pedidos-asesores') }}", function(data) {
-                var ctxpedidosporasesor1 = document.getElementById('my-chart-pedidosporasesorpar1').getContext('2d');
-                var chartpedidosporasesor1 = new Chart(ctxpedidosporasesor1, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: data.labels,
-                        datasets: data.datasets,
-                    },
-                    options: {
-                        responsive              : true,
-                        aintainAspectRatio     : false,
-                        scales: {
-                            xAxes: [{
-                                stacked: true,
-                                max: 100,
-                                ticks: {
-                                    beginAtZero: false,
-                                    callback: function (value) {
-                                        return value + '%';
-                                    },
-                                },
-                            }],
-                            yAxes: [{
-                                stacked: true,
-                            }]
+            $.ajax({
+                method:'GET',
+                dataType: "json",
+                url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
+                success:function(data){
+                    console.log(data)
+                    var data_consindeuda = [{
+                        data: data.datasets[0].data,
+                        backgroundColor: [
+                            "#4b77a9",
+                            "#5f255f"
+                        ],
+                        borderColor: "#fff"
+                    }];
+
+                    var options_consindeuda = {
+                        title: {
+                            display: true,
+                            text: data.title
                         },
                         plugins: {
                             datalabels: {
-                                color: 'white',
-                                font: {
-                                    weight: 'bold'
+                                formatter: (value, ctx) => {
+                                    console.log(value);
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    return percentage + '('+value+')';
+
+
                                 },
-                                formatter: function(value, context) {
-                                    return Math.round(value) + '%';
-                                }
-                            },
+                                color: '#fff',
+                            }
+                        }
+                    };
+
+                    var ctx_consindeuda = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
+                    var myChart_consindeuda = new Chart(ctx_consindeuda, {
+                        type: 'pie',
+                        data: {
+                            labels: data.labels,
+                            datasets: data_consindeuda
                         },
-                    }
-                });
+                        options: options_consindeuda
+                    });
+                }
             });
 
-            $.get("{{ route('chart-pedidos-asesores-faltantes') }}", function(data) {
-                var ctxpedidosporasesor2 = document.getElementById('my-chart-pedidosporasesorpar2').getContext('2d');
-                var chartpedidosporasesor2 = new Chart(ctxpedidosporasesor2, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: data.labels,
-                        datasets: data.datasets,
-                    },
-                    options: {
-                        responsive              : true,
-                        aintainAspectRatio     : false,
-                        scales: {
-                            xAxes: [{
-                                stacked: true,
-                                max: 100,
-                                ticks: {
-                                    beginAtZero: false,
-                                    callback: function (value) {
-                                        return value + '%';
-                                    },
-                                },
-                            }],
-                            yAxes: [{
-                                stacked: true,
-                            }]
+            $.ajax({
+                method:'GET',
+                dataType: "json",
+                url:"{{ route('chart/clientes.caidos/vienen.de') }}",
+                success:function(data){
+                    console.log(data)
+                    var data_vienende = [{
+                        data: data.datasets[0].data,
+                        backgroundColor: data.datasets[0].backgroundColor,
+                        borderColor: "#fff"
+                    }];
+
+                    var options_vienende = {
+                        title: {
+                            display: true,
+                            text: data.title
                         },
                         plugins: {
                             datalabels: {
-                                color: 'red',
-                                anchor: 'end',
-                                align: 'end',
-                                formatter: function(value, context) {
-                                    console.log('aaaaaaaaaaa:',value,context)
-                                    return value + '%';
-                                }
-                            },
-                        },
-                    }
-                });
-            });
+                                formatter: (value, ctx) => {
+                                    console.log(value);
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    return percentage + '('+value+')';
 
-            $.get("{{ route('chart-data') }}", function(data) {
-                var ctxpedidosdejaronpedir = document.getElementById('my-chart-dejaronpedir').getContext('2d');
-                var chartpedidosdejaronpedir = new Chart(ctxpedidosdejaronpedir, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels  : data.labels,
-                        datasets: data.datasets
-                    },
-                    options: {
-                        responsive              : true,
-                        maintainAspectRatio     : false,
-                        datasetFill             : false
-                    }
-                });
+
+                                },
+                                color: '#fff',
+                            },
+                        }
+                    };
+
+                    var ctx_vienende = document.getElementById("my-chart-caidosvienende").getContext('2d');
+                    var myChart_vienende = new Chart(ctx_vienende, {
+                        type: 'pie',
+                        data: {
+                            labels: data.labels,
+                            datasets: data_vienende
+                        },
+                        options: options_vienende
+                    });
+                }
             });
 
 
@@ -686,7 +638,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
 
                 fd.append('fechametames', valorr);
-                console.log()
+
                 fd.append('ii', entero);
                 $.ajax({
                     data: fd,
@@ -713,6 +665,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         }
                         else if (entero == 9) {/*derecha*/
                             $('#grafico_dejaronpedir_left').html(resultado);
+                        }
+                        else if (entero == 13) {
+                            $('#dejaronpedir_supervisor_total').html(resultado);
                         }
 
                     }
@@ -773,10 +728,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             cargaNuevaRecurrenteActivo(8);
             cargaNuevaRecurrenteActivo(9);
-
-            cargaNueva(14);//fernando
-            cargaNueva(15);//paola
-            cargaNueva(13);//totales porcentajes debajo de metas
+            cargaNuevaRecurrenteActivo(13);
+            //cargaNueva(14);//fernando
+            //cargaNueva(15);//paola
+            //totales porcentajes debajo de metas
 
             cargaNueva(17);
 
@@ -798,11 +753,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 cargaNuevaRecurrenteActivo(8);
                 cargaNuevaRecurrenteActivo(9);
+                cargaNuevaRecurrenteActivo(13);
 
-                cargaNueva(14);//fernando
-                cargaNueva(15);//paola
-                cargaNueva(13);//totales porcentajes debajo de metas
-                cargaNueva(17);
+                //cargaNueva(14);//fernando
+                //cargaNueva(15);//paola
+                //totales porcentajes debajo de metas
                 cargaNueva(17);
 
                 cargReporteMetasSituacionClientes();
@@ -839,7 +794,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         });
     </script>
 
-    <script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>
     <script>
         $(function () {
             var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
@@ -850,10 +804,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             let $mes_actual = [{{$contadores_mes_actual}}]
             let $mes_anterior = [{{$contadores_mes_anterior}}]
             var visitorsChart = new Chart($visitorsChart, {
+                type: 'line',
                 data: {
                     /*eje x: dias*/
                     labels: $arrr,
                     datasets: [{
+                        label:'Mes actual',
                         /*azul*/
                         type: 'line',
                         data: $mes_actual,
@@ -861,8 +817,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         borderColor: '#007bff',
                         pointBorderColor: '#007bff',
                         pointBackgroundColor: '#007bff',
-                        fill: false
+                        fill: false,
+                        tension:0.1
                     }, {
+                        label:'Mes anterior',
                         /*plomo*/
                         type: 'line',
                         data: $mes_anterior,
@@ -870,7 +828,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         borderColor: '#ced4da',
                         pointBorderColor: '#ced4da',
                         pointBackgroundColor: '#ced4da',
-                        fill: false
+                        fill: false,
+                        tension:0.1
                     }]
                 },
                 options: {
@@ -878,7 +837,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     tooltips: {mode: mode, intersect: intersect},
                     hover: {mode: mode, intersect: intersect},
                     legend: {display: false},
-                    scales: {
+                    /*scales: {
                         yAxes: [{
                             gridLines: {
                                 display: true,
@@ -887,7 +846,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                 zeroLineColor: 'transparent'
                             }, ticks: $.extend({beginAtZero: true, suggestedMax: 100}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
-                    }
+                    }*/
                 }
             })
         })
@@ -902,24 +861,27 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             let $gasto_olva_dia = [{{$contadores_mes_actual_olva}}]
 
             var $visitorsChartOlva = new Chart($visitorsChartOlva, {
+                type: 'line',
                 data: {
                     labels: $arrr,
                     datasets: [{
+                        label:'Gasto Olva',
                         type: 'line',
                         data: $gasto_olva_dia,
                         backgroundColor: 'transparent',
                         borderColor: '#17a2b8',
                         pointBorderColor: '#17a2b8',
                         pointBackgroundColor: '#17a2b8',
-                        fill: false
+                        fill: false,
+                        tension:0.1
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     tooltips: {mode: mode, intersect: intersect},
                     hover: {mode: mode, intersect: intersect},
-                    legend: {display: false},
-                    scales: {
+                    legend: {display: true},
+                    /*scales: {
                         yAxes: [{
                             gridLines: {
                                 display: true,
@@ -928,6 +890,14 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                 zeroLineColor: 'transparent'
                             }, ticks: $.extend({beginAtZero: true, suggestedMax: 400}, ticksStyle)
                         }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
+                    }*/
+                    plugins:{
+                        legend:{
+                            display:true,
+                            labels:{
+                                color: 'rgb(255,99,132)'
+                            }
+                        }
                     }
                 }
             })

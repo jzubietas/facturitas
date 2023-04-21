@@ -372,34 +372,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         <div class="card-body">
                             <canvas id="my-chart-caidosvienende"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-</div>
-
-{{--<div class="container-fluid">
-    <h1> Cuadro comparativo de Pedidos Anulados</h1>
-
-</div>--}}
-
-<div class="container-fluid">
-    <canvas id="my-chart-dejaronpedir"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
-</div>
-
-<div class="container-fluid">
-    <canvas id="my-chart-caidos-deuda-consin"  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
-</div>
-
-<div class="container-fluid">
-    <canvas id="my-chart-caidos-deuda-consin  style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
-</div>
-
 
 @section('js-datatables')
     <script>
