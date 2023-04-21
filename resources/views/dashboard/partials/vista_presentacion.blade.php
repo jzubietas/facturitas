@@ -180,35 +180,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 </div>
 
-<div class ="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <br><br>
-            <h1 class="text-center">CLIENTES LEVANTADOS/CAIDOS (%)</h1>
-        </div>
-        <div class="contain-table-dual row" style="width: 100% !important;">
-            <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
-            <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
-        </div>
-
-
-        <!--<div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="dejaronpedir_supervisor_A"></div>
-        </div>
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="dejaronpedir_supervisor_B"></div>
-        </div>-->
-
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="dejaronpedir_supervisor_total"></div>
-        </div>
-
-    </div>
-</div>
-
-
-
-<br>
 
 {{-- METAS ASESOR DE LLAMADAS --}}
 <div class="container-fluid bg-white" id="contenedor-fullscreen-llamadas">
@@ -223,7 +194,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                style="font-size: 20px"></i>
         </button>
     </div>
-
 
     <div class="col-md-12 bg-white">
         <div class="d-flex justify-content-center">
@@ -246,125 +216,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 </div>
 
-{{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
-<div class="conatiner-fluid">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card">
-            <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                    <h3 class="card-title text-uppercase">Pedidos actuales por día</h3>
-                    {{--<a href="javascript:void(0);">View Report</a>--}}
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <p class="d-flex flex-column">
-                            <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
-                            <span>Cantidad de pedidos del día</span>
-                        </p>
-                    </div>
-                </div>
 
-                <canvas id="visitors-chart" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-
-                <div class="row">
-                    <div class="col">
-                        <span class="text-uppercase">
-                            <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
-                        </span>
-                        <span class="mr-2 text-uppercase">
-                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
-                    </span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<br>
-
-{{-- SPARKLINE OLVA --}}
-<div class="conatiner-fluid">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card">
-            <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                    <h3 class="card-title text-uppercase">TOTAL RECAUDADO DE OLVA POR DÍA</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <span class="text-bold text-lg">{{$gasto_total_olva}}</span>
-                        <span>Cantidad total del día</span>
-                    </div>
-                </div>
-
-                <canvas id="visitors-chart-olva" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-
-                <div class="row">
-                    <div class="col">
-                        <span class="mr-2 text-uppercase">
-                            <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
-                        </span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<div class="card card-primary card-outline">
-    <div class="card-header">
-        <h3 class="card-title">
-            <i class="far fa-chart-bar"></i>
-            Cuadro comparativo de clientes caidos
-        </h3>
-
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-tool disabled" data-card-widget="remove">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="content">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="my-chart-caidosconsindeuda"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="my-chart-caidosvienende"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="my-chart-metasasesores"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 @section('js-datatables')
     <script>
@@ -414,200 +266,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             $('#fechametames').datepicker('setDate', new Date());
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
-
-            $.ajax({
-                method:'GET',
-                dataType: "json",
-                url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
-                success:function(data){
-                    console.log(data)
-                    var data_consindeuda = [{
-                        data: data.datasets[0].data,
-                        backgroundColor: [
-                            "#4b77a9",
-                            "#5f255f"
-                        ],
-                        borderColor: "#fff"
-                    }];
-
-                    var options_consindeuda = {
-                        title: {
-                            display: true,
-                            text: data.title
-                        },
-                        plugins: {
-                            datalabels: {
-                                formatter: (value, ctx) => {
-                                    console.log(value);
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => {
-                                        sum += data;
-                                    });
-                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                    return percentage + '('+value+')';
-
-
-                                },
-                                color: '#fff',
-                            }
-                        }
-                    };
-
-                    var ctx_consindeuda = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
-                    var myChart_consindeuda = new Chart(ctx_consindeuda, {
-                        type: 'pie',
-                        data: {
-                            labels: data.labels,
-                            datasets: data_consindeuda
-                        },
-                        options: options_consindeuda
-                    });
-                }
-            });
-
-            $.ajax({
-                method:'GET',
-                dataType: "json",
-                url:"{{ route('chart/clientes.caidos/vienen.de') }}",
-                success:function(data){
-                    console.log(data)
-                    var data_vienende = [{
-                        data: data.datasets[0].data,
-                        backgroundColor: data.datasets[0].backgroundColor,
-                        borderColor: "#fff"
-                    }];
-
-                    var options_vienende = {
-                        title: {
-                            display: true,
-                            text: data.title
-                        },
-                        plugins: {
-                            datalabels: {
-                                formatter: (value, ctx) => {
-                                    console.log(value);
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => {
-                                        sum += data;
-                                    });
-                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                    return percentage + '('+value+')';
-
-
-                                },
-                                color: '#fff',
-                            },
-                        }
-                    };
-
-                    var ctx_vienende = document.getElementById("my-chart-caidosvienende").getContext('2d');
-                    var myChart_vienende = new Chart(ctx_vienende, {
-                        type: 'pie',
-                        data: {
-                            labels: data.labels,
-                            datasets: data_vienende
-                        },
-                        options: options_vienende
-                    });
-                }
-            });
-
-            $.ajax({
-                method:'GET',
-                dataType: "json",
-                url:"{{ route('chart/metas/asesores') }}",
-                success:function(data){
-                    console.log(data)
-                    //var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
-                    data = [
-                        { label: 'Asesor 01', value: 75, superar:100 },
-                        { label: 'Asesor 02', value: 50, superar:100 },
-                        { label: 'Asesor 03', value: 25, superar:100 }
-                    ];
-
-                    var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
-
-                    var myChart = new Chart(ctx, {
-                        type: 'horizontalBar',
-                        data: {
-                            labels: data.map(function(item) {
-                                return item.label;
-                            }),
-                            datasets: [{
-                                data: data.map(function(item) {
-                                    return (item.value/item.superar)*100;
-                                }),
-                                backgroundColor: ['#007bff', '#28a745', '#dc3545'],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: {
-                            title: {
-                                display: true,
-                                text: 'Desarrollo (actualizacion metas asesores)'
-                            },
-                            plugins: {
-                                datalabels: {
-                                    formatter: (value, ctx) => {
-                                        console.log(value);
-                                        let sum = 0;
-                                        let dataArr = ctx.chart.data.datasets[0].data;
-                                        dataArr.map(data => {
-                                            sum += data;
-                                        });
-                                        let superar_=ctx.dataIndex;
-                                        let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                        return percentage + '('+value+')';
-
-
-                                    },
-                                    color: '#fff',
-                                },
-                            },
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                xAxes: [{
-                                    ticks: {
-                                        beginAtZero: true,
-                                        max: 100
-                                    },
-                                    gridLines: {
-                                        display: false
-                                    }
-                                }],
-                                yAxes: [{
-                                    gridLines: {
-                                        display: false
-                                    }
-                                }]
-                            },
-                            legend: {
-                                display: false
-                            },
-                            tooltips: {
-                                enabled: false
-                            },
-                            animation: {
-                                duration: 2000
-                            }
-                        }
-                    });
-
-                    setInterval(function() {
-                        data.forEach(function(item, index) {
-                            console.log(item);
-                            //item.value = Math.floor(Math.random() * 100) + 1;
-                            myChart.data.datasets[0].data[index] = item.value;
-                        });
-                        myChart.update();
-                    }, 3000);
-
-                }
-            });
-
 
             $('#exampleModalCenter').modal('show');
 
@@ -810,9 +468,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //cargaNueva(4);//fernando
             //cargaNueva(5);//paola
 
-            cargaNuevaRecurrenteActivo(8);
-            cargaNuevaRecurrenteActivo(9);
-            cargaNuevaRecurrenteActivo(13);
+            //cargaNuevaRecurrenteActivo(8);
+            //cargaNuevaRecurrenteActivo(9);
+            //cargaNuevaRecurrenteActivo(13);
             //cargaNueva(14);//fernando
             //cargaNueva(15);//paola
             //totales porcentajes debajo de metas
@@ -835,9 +493,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //cargaNueva(4);
                 //cargaNueva(5);
 
-                cargaNuevaRecurrenteActivo(8);
-                cargaNuevaRecurrenteActivo(9);
-                cargaNuevaRecurrenteActivo(13);
+                //cargaNuevaRecurrenteActivo(8);
+                //cargaNuevaRecurrenteActivo(9);
+                //cargaNuevaRecurrenteActivo(13);
 
                 //cargaNueva(14);//fernando
                 //cargaNueva(15);//paola
@@ -876,116 +534,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             }
 
         });
-    </script>
-
-    <script>
-        $(function () {
-            var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
-            var mode = 'index'
-            var intersect = true
-            var $visitorsChart = $('#visitors-chart')
-            let $arrr = [{{$contadores_arr}}]
-            let $mes_actual = [{{$contadores_mes_actual}}]
-            let $mes_anterior = [{{$contadores_mes_anterior}}]
-            var visitorsChart = new Chart($visitorsChart, {
-                type: 'line',
-                data: {
-                    /*eje x: dias*/
-                    labels: $arrr,
-                    datasets: [{
-                        label:'Mes actual',
-                        /*azul*/
-                        type: 'line',
-                        data: $mes_actual,
-                        backgroundColor: 'transparent',
-                        borderColor: '#007bff',
-                        pointBorderColor: '#007bff',
-                        pointBackgroundColor: '#007bff',
-                        fill: false,
-                        tension:0.1
-                    }, {
-                        label:'Mes anterior',
-                        /*plomo*/
-                        type: 'line',
-                        data: $mes_anterior,
-                        backgroundColor: 'tansparent',
-                        borderColor: '#ced4da',
-                        pointBorderColor: '#ced4da',
-                        pointBackgroundColor: '#ced4da',
-                        fill: false,
-                        tension:0.1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    tooltips: {mode: mode, intersect: intersect},
-                    hover: {mode: mode, intersect: intersect},
-                    legend: {display: false},
-                    /*scales: {
-                        yAxes: [{
-                            gridLines: {
-                                display: true,
-                                lineWidth: '4px',
-                                color: 'rgba(0, 0, 0, .2)',
-                                zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 100}, ticksStyle)
-                        }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
-                    }*/
-                }
-            })
-        })
-
-        $(function () {
-            var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
-            var mode = 'index'
-            var intersect = true
-
-            var $visitorsChartOlva = $('#visitors-chart-olva')
-            let $arrr = [{{$contadores_arr}}]
-            let $gasto_olva_dia = [{{$contadores_mes_actual_olva}}]
-
-            var $visitorsChartOlva = new Chart($visitorsChartOlva, {
-                type: 'line',
-                data: {
-                    labels: $arrr,
-                    datasets: [{
-                        label:'Gasto Olva',
-                        type: 'line',
-                        data: $gasto_olva_dia,
-                        backgroundColor: 'transparent',
-                        borderColor: '#17a2b8',
-                        pointBorderColor: '#17a2b8',
-                        pointBackgroundColor: '#17a2b8',
-                        fill: false,
-                        tension:0.1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    tooltips: {mode: mode, intersect: intersect},
-                    hover: {mode: mode, intersect: intersect},
-                    legend: {display: true},
-                    /*scales: {
-                        yAxes: [{
-                            gridLines: {
-                                display: true,
-                                lineWidth: '4px',
-                                color: 'rgba(0, 0, 0, .2)',
-                                zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 400}, ticksStyle)
-                        }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
-                    }*/
-                    plugins:{
-                        legend:{
-                            display:true,
-                            labels:{
-                                color: 'rgb(255,99,132)'
-                            }
-                        }
-                    }
-                }
-            })
-        })
     </script>
 
 
