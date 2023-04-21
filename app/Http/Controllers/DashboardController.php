@@ -1945,30 +1945,33 @@ class DashboardController extends Controller
             $medall_icon='';
             foreach ($progressData as $data) {
 
-                if($data["meta_quincena"]-$data["total_pedido"]>0)
+                if($data["meta_new"]=='0')
                 {
                     //bronce
                     $medall_icon='bron<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
 
                 }
-                else if($data["meta_intermedia"]-$data["total_pedido"]>0)
+                else if($data["meta_new"]=='0.5')
                 {
                     //bronce
-                    $medall_icon='inter<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
+                    $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
 
                 }
-                else if($data["meta"]-$data["total_pedido"]>0)
+                else if($data["meta_new"]=='1')
                 {
                     //plata
-                    $medall_icon='pl<i class="fas fa-medal fa-xs" style="font-size:18px;color:silver;"></i>';
+                    $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:silver;"></i>';
+                    $medall_icon='';
                 }
-                else if($data["meta_2"]-$data["total_pedido"]>0)
+                else if($data["meta_new"]=='2')
                 {
                     //oro
                     $medall_icon='oro';
+                    $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
                 }else{
                     //nada
-                    $medall_icon='oro<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
+                    $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
+                    $medall_icon='';
                 }
 
                 $html .= '<tr>
@@ -2095,7 +2098,7 @@ class DashboardController extends Controller
                                       <span class="badge bg-success text-dark font-'.$font_size_sub.'"">Pri. . '.$data["meta"].'</span>
                                       <span class="badge bg-primary text-dark font-'.$font_size_sub.'"">Seg. . '.$data["meta_2"].'</span>
                                   </sub>';
-                //$sub_html='';
+                $sub_html='';
 
                 /*calculo para la diferencia en color rojo a la derecha*/
                 $diferencia_mostrar=0;
