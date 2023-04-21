@@ -65,8 +65,13 @@
 </div>
 
 {{-- BUSCAR / QUITAR VIDA --}}
+<div class="row mb-3">
+    @include('dashboard.widgets.buscar_cliente')
+    @include('dashboard.partials.vista_quitar_vidas')
+</div>
 
 {{-- LLAMADA DE ATENCION --}}
+
 
 {{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
 
@@ -86,7 +91,6 @@
 {{-- FULLSCREEN --}}
 
 <div id="spinner" class="d-none"><!--position-relative d-flex justify-content-center -->
-
 
     <div class="position-relative top-50 start-50 translate-middle">
         <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
@@ -111,35 +115,35 @@
 <!--grafico metas de asesor de pedidos-->
 <div class="row">
     <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
-        <!--contenedor fullscreen-->
-        <div class="d-flex justify-content-center flex-column mb-2 bg-white ">
-            <div class="d-flex justify-content-center row bg-white">
 
-                <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-1 ">
-                    <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
-                        <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
-                        <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
-                    </div>
+        <div class="row">
+            <div class="col-3 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
+                    <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center order-change-2 ">
-                    <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
+            </div>
+            <div class="col-6 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h2 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
 background: #FFFFFF;
 text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0px 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">Metas del mes
-                        de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+                        de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h2>
                     <button style="background: none; border: none" onclick="openFullscreen();">
                         <i class="fas fa-expand-arrows-alt ml-3"
                            style="font-size: 20px"></i>
                     </button>
                 </div>
-                <div class="card col-lg-3 col-md-3 col-sm-12 d-flex align-items-center order-change-3">
-                    <div class="card-body d-flex justify-content-center align-items-center" style="grid-gap: 20px">
-                        <h5 class="card-title text-uppercase">Total de pedidos:</h5>
-                        <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
-                    </div>
+            </div>
+            <div class="col-3 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h5 class="card-title text-uppercase">Total de pedidos:</h5>
+                    <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
                 </div>
             </div>
 
         </div>
+        <!--contenedor fullscreen-->
 
         {{-- TABLA DUAL --}}
         <div class="" style=" overflow: hidden !important;">
