@@ -1947,24 +1947,32 @@ class DashboardController extends Controller
 
                 if($data["meta_quincena"]-$data["total_pedido"]>0)
                 {
-                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:#cd7f32"></i>';
-                }else if($data["meta_intermedia"]-$data["total_pedido"]>0)
+                    //bronce
+                    $medall_icon='bron<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
+
+                }
+                else if($data["meta_intermedia"]-$data["total_pedido"]>0)
                 {
-                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:transparent;"></i>';
+                    //bronce
+                    $medall_icon='inter<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
+
                 }
                 else if($data["meta"]-$data["total_pedido"]>0)
                 {
-                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:silver;"></i>';
+                    //plata
+                    $medall_icon='pl<i class="fas fa-medal fa-xs" style="font-size:18px;color:silver;"></i>';
                 }
                 else if($data["meta_2"]-$data["total_pedido"]>0)
                 {
-                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:rgba(255,193,7,1);"></i>';
+                    //oro
+                    $medall_icon='oro';
                 }else{
-                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:rgba(255,193,7,1);"></i>';
+                    //nada
+                    $medall_icon='oro<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
                 }
 
                 $html .= '<tr>
-             <td class="">'. $medall_icon . $data["name"] . '</td>
+             <td class=""><span class="d-inline-block">'. $medall_icon . $data["name"] . '</span></td>
              <td>' . $data["identificador"] . ' ';
 
                 if ($data["supervisor"] == 46) {
@@ -2087,7 +2095,7 @@ class DashboardController extends Controller
                                       <span class="badge bg-success text-dark font-'.$font_size_sub.'"">Pri. . '.$data["meta"].'</span>
                                       <span class="badge bg-primary text-dark font-'.$font_size_sub.'"">Seg. . '.$data["meta_2"].'</span>
                                   </sub>';
-                $sub_html='';
+                //$sub_html='';
 
                 /*calculo para la diferencia en color rojo a la derecha*/
                 $diferencia_mostrar=0;
