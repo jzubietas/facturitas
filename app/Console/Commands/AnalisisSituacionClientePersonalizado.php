@@ -60,7 +60,7 @@ class AnalisisSituacionClientePersonalizado extends Command
 
     $clientes=Cliente:://join('clientes_b18 as a','a.celular','clientes.celular')->whereIn('clientes.tipo',['0','1'])
       //where('situacion','=','RECUPERADO RECIENTE')
-        whereNull('situacion')
+        where('situacion','BASE FRIA')->where('tipo',1)
       ->orderBy('clientes.id','asc')->get();
 
     $progress = $this->output->createProgressBar($clientes->count());

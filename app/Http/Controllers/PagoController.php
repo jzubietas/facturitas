@@ -545,7 +545,7 @@ class PagoController extends Controller
                 $identi_asesor = User::where("identificador", $request->user_id)->first();
                 $clave_pedidos=User::where('clave_pedidos',$identi_asesor->clave_pedidos)
                     ->where('estado',1)->first();
-                
+
                 $pago = Pago::create([
                     'user_id' => $clave_pedidos->id,
                     'user_identificador' => $clave_pedidos->identificador,
