@@ -392,7 +392,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <script src="{{asset('js/datepicker-es.js')}}" charset="UTF-8"></script>
 
     {{--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>--}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    
+    <script src="{{asset('js/Chart.min.js.js')}}"></script>
     <script src="{{asset('js/chartjs-plugin-datalabels.js')}}"></script>
 
     <!--<script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>-->
