@@ -466,6 +466,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }];
 
                     var options_consindeuda = {
+                        title: {
+                            display: true,
+                            text: data.title
+                        },
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
@@ -476,7 +480,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                         sum += data;
                                     });
                                     let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                    return percentage;
+                                    return percentage + '('+value+')';
 
 
                                 },
@@ -505,14 +509,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     console.log(data)
                     var data_vienende = [{
                         data: data.datasets[0].data,
-                        backgroundColor: [
-                            "#4b77a9",
-                            "#5f255f"
-                        ],
+                        backgroundColor: data.datasets[0].backgroundColor,
                         borderColor: "#fff"
                     }];
 
                     var options_vienende = {
+                        title: {
+                            display: true,
+                            text: data.title
+                        },
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
@@ -523,12 +528,12 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                         sum += data;
                                     });
                                     let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                    return percentage;
+                                    return percentage + '('+value+')';
 
 
                                 },
                                 color: '#fff',
-                            }
+                            },
                         }
                     };
 
