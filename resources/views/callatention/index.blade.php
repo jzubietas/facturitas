@@ -348,7 +348,7 @@
 
         });
     </script>
-    
+
 @stop
 
 @push('css')

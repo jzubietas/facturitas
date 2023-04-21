@@ -794,12 +794,16 @@ class PagoController extends Controller
                 $pagado = $request->total_pago_pagar;
                 $pagado = str_replace(',', '', $pagado);
 
-                $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
+                $identi_asesor = User::where("identificador", $request->user_id)->first();
+                $clave_pedidos=User::where('clave_pedidos',$identi_asesor->clave_pedidos)
+                    ->where('estado',1)->first();
+
+                    //->where("unificado", "NO")->first();
 
                 $pago = Pago::create([
-                    'user_id' => $identi_asesor->id,
-                    'user_identificador' => $identi_asesor->identificador,
-                    'user_clavepedido' => $identi_asesor->clave_pedidos,
+                    'user_id' => $clave_pedidos->id,
+                    'user_identificador' => $clave_pedidos->identificador,
+                    'user_clavepedido' => $clave_pedidos->clave_pedidos,
                     'cliente_id' => $request->cliente_id,
                     'total_cobro' => $deuda_total,//total_pedido_pagar
                     'total_pagado' => $pagado,//total_pago_pagar
