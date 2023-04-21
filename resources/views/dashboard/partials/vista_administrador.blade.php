@@ -429,7 +429,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 dataType: "json",
                 url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
                 success:function(data){
-                    console.log(data)
+                    //console.log(data)
                     var data_consindeuda = [{
                         data: data.datasets[0].data,
                         backgroundColor: [
@@ -447,7 +447,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
-                                    console.log(value);
+                                    //console.log(value);
                                     let sum = 0;
                                     let dataArr = ctx.chart.data.datasets[0].data;
                                     dataArr.map(data => {
@@ -480,7 +480,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 dataType: "json",
                 url:"{{ route('chart/clientes.caidos/vienen.de') }}",
                 success:function(data){
-                    console.log(data)
+                    //console.log(data)
                     var data_vienende = [{
                         data: data.datasets[0].data,
                         backgroundColor: data.datasets[0].backgroundColor,
@@ -495,7 +495,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
-                                    console.log(value);
+                                    //console.log(value);
                                     let sum = 0;
                                     let dataArr = ctx.chart.data.datasets[0].data;
                                     dataArr.map(data => {
@@ -528,7 +528,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 dataType: "json",
                 url:"{{ route('chart/metas/asesores') }}",
                 success:function(data){
-                    console.log(data)
+                    //console.log(data)
                     //var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
                     data = [
                         { label: 'Asesor 01', value: 75, superar:100 },
@@ -560,7 +560,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             plugins: {
                                 datalabels: {
                                     formatter: (value, ctx) => {
-                                        console.log(value);
+                                        //console.log(value);
                                         let sum = 0;
                                         let dataArr = ctx.chart.data.datasets[0].data;
                                         dataArr.map(data => {
@@ -607,7 +607,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                     setInterval(function() {
                         data.forEach(function(item, index) {
-                            console.log(item);
+                            //console.log(item);
                             //item.value = Math.floor(Math.random() * 100) + 1;
                             myChart.data.datasets[0].data[index] = item.value;
                         });
