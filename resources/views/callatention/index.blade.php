@@ -348,7 +348,7 @@
 
         });
     </script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    
 @stop
 
 @push('css')
