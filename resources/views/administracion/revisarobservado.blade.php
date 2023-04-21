@@ -1160,8 +1160,8 @@
                         if(importe_dpa!=importe_con)
                         {
                           let importe_dpa_n=parseFloat(importe_dpa);
-                          let importe_dpa_ma=parseFloat(importe_dpa)+3;
-                          let importe_dpa_me=parseFloat(importe_dpa)-3;
+                          let importe_dpa_ma=parseFloat(importe_dpa)+500;//limite era 3
+                          let importe_dpa_me=parseFloat(importe_dpa)-500;//limite era 3
                           console.log(parseFloat(importe_dpa))
                           console.log(parseFloat(importe_dpa)+3)
                           console.log(parseFloat(importe_dpa)-3)
