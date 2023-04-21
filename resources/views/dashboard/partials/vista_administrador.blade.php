@@ -397,6 +397,135 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <!--<script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>-->
 
     <script>
+        window.cargaNueva = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable') }}",
+                /*beforeSend: function() {
+                    $('#contenedor-fullscreen').hide()
+                    $('.spinner').show()
+                    $('#spinner').show()
+                },
+                complete: function() {
+                    $('#contenedor-fullscreen').show()
+                    $('.spinner').hide()
+                    $('#spinner').hide()
+                },*/
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero==1 || entero==2)
+                    {
+                        console.log("cambiar color")
+                        //$(".h1-change-day").css("color","blue");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+                    if (entero == 1) {
+                        $('#metas_dp').html(resultado);
+                    } else if (entero == 2) {
+                        $('#meta').html(resultado);
+                    } else if (entero == 3) {
+                        $('#metas_total').html(resultado);
+                    } else if (entero == 4) {
+                        $('#supervisor_total').html(resultado);
+                    } else if (entero == 5) {
+                        $('#supervisor_A').html(resultado);
+                    }else if (entero == 6) {
+                        $('#porcentaje_cobranzas_metas').html(resultado);
+                    }else if (entero == 7) {
+                        $('#porcentaje_pedidos_metas').html(resultado);
+                    }
+                    else if (entero == 8) {/*izquierda*/
+                        $('#grafico_dejaronpedir_right').html(resultado);
+                    }
+                    else if (entero == 9) {/*derecha*/
+
+                        $('#grafico_dejaronpedir_left').html(resultado);
+                    }
+                    else if (entero == 13) {
+                        $('#dejaronpedir_supervisor_total').html(resultado);
+                    }
+                    else if (entero == 14) {
+                        $('#dejaronpedir_supervisor_A').html(resultado);
+                    } else if (entero == 15) {
+                        $('#dejaronpedir_supervisor_B').html(resultado);
+                    }
+                    else if (entero == 17) {
+                        $('#metas_dp_17').html(resultado);
+                    }
+                    else if (entero == 17) {
+                        $('#metas_dp_17').html(resultado);
+                    }
+
+                }
+            })
+        }
+
+        window.cargaNuevaRecurrenteActivo = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            fd.append('fechametames', valorr);
+
+            fd.append('ii', entero);
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable.Recurrente.Activo') }}",
+                /*beforeSend: function() {
+                    $('#contenedor-fullscreen').hide()
+                    $('.spinner').show()
+                    $('#spinner').show()
+                },
+                complete: function() {
+                    $('#contenedor-fullscreen').show()
+                    $('.spinner').hide()
+                    $('#spinner').hide()
+                },*/
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if (entero == 8) {/*izquierda*/
+                        $('#grafico_dejaronpedir_right').html(resultado);
+                    }
+                    else if (entero == 9) {/*derecha*/
+                        $('#grafico_dejaronpedir_left').html(resultado);
+                    }
+                    else if (entero == 13) {
+                        $('#dejaronpedir_supervisor_total').html(resultado);
+                    }
+
+                }
+            })
+        }
+        
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -636,137 +765,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargReporteMetasCobranzasGeneral();
 
             });
-
-            window.cargaNueva = function (entero) {
-                console.log(' ' + entero)
-                var fd = new FormData();
-                //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
-                let valorr=$('#fechametames').val();
-                var parts = valorr.split("-");
-                valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
-
-                const ddd = new Date();
-                ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
-                console.log(" "+ddd_1)
-
-                fd.append('fechametames', valorr);
-                console.log()
-                fd.append('ii', entero);
-
-                $.ajax({
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    method: 'POST',
-                    url: "{{ route('dashboard.viewMetaTable') }}",
-                    /*beforeSend: function() {
-                        $('#contenedor-fullscreen').hide()
-                        $('.spinner').show()
-                        $('#spinner').show()
-                    },
-                    complete: function() {
-                        $('#contenedor-fullscreen').show()
-                        $('.spinner').hide()
-                        $('#spinner').hide()
-                    },*/
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        // Handle the error
-                    },
-                    success: function (resultado) {
-                        if(entero==1 || entero==2)
-                        {
-                            console.log("cambiar color")
-                            //$(".h1-change-day").css("color","blue");
-                            if(valorr!=ddd_1)
-                                $(".h1-change-day").attr('style', 'color: blue !important');
-                        }
-                        if (entero == 1) {
-                            $('#metas_dp').html(resultado);
-                        } else if (entero == 2) {
-                            $('#meta').html(resultado);
-                        } else if (entero == 3) {
-                            $('#metas_total').html(resultado);
-                        } else if (entero == 4) {
-                            $('#supervisor_total').html(resultado);
-                        } else if (entero == 5) {
-                            $('#supervisor_A').html(resultado);
-                        }else if (entero == 6) {
-                            $('#porcentaje_cobranzas_metas').html(resultado);
-                        }else if (entero == 7) {
-                            $('#porcentaje_pedidos_metas').html(resultado);
-                        }
-                        else if (entero == 8) {/*izquierda*/
-                            $('#grafico_dejaronpedir_right').html(resultado);
-                        }
-                        else if (entero == 9) {/*derecha*/
-
-                            $('#grafico_dejaronpedir_left').html(resultado);
-                        }
-                        else if (entero == 13) {
-                            $('#dejaronpedir_supervisor_total').html(resultado);
-                        }
-                        else if (entero == 14) {
-                            $('#dejaronpedir_supervisor_A').html(resultado);
-                        } else if (entero == 15) {
-                            $('#dejaronpedir_supervisor_B').html(resultado);
-                        }
-                        else if (entero == 17) {
-                            $('#metas_dp_17').html(resultado);
-                        }
-                        else if (entero == 17) {
-                            $('#metas_dp_17').html(resultado);
-                        }
-
-                    }
-                })
-            }
-
-            window.cargaNuevaRecurrenteActivo = function (entero) {
-                console.log(' ' + entero)
-                var fd = new FormData();
-                //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
-                let valorr=$('#fechametames').val();
-                var parts = valorr.split("-");
-                valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
-
-                fd.append('fechametames', valorr);
-
-                fd.append('ii', entero);
-                $.ajax({
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    method: 'POST',
-                    url: "{{ route('dashboard.viewMetaTable.Recurrente.Activo') }}",
-                    /*beforeSend: function() {
-                        $('#contenedor-fullscreen').hide()
-                        $('.spinner').show()
-                        $('#spinner').show()
-                    },
-                    complete: function() {
-                        $('#contenedor-fullscreen').show()
-                        $('.spinner').hide()
-                        $('#spinner').hide()
-                    },*/
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        // Handle the error
-                    },
-                    success: function (resultado) {
-                        if (entero == 8) {/*izquierda*/
-                            $('#grafico_dejaronpedir_right').html(resultado);
-                        }
-                        else if (entero == 9) {/*derecha*/
-                            $('#grafico_dejaronpedir_left').html(resultado);
-                        }
-                        else if (entero == 13) {
-                            $('#dejaronpedir_supervisor_total').html(resultado);
-                        }
-
-                    }
-                })
-            }
-
-
 
             window.cargReporteAnalisis = function () {
                 var fd = new FormData();
