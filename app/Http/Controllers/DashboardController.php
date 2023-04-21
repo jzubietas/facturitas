@@ -1942,9 +1942,29 @@ class DashboardController extends Controller
                 </tr>
                 </thead>
                 <tbody>';
+            $medall_icon='';
             foreach ($progressData as $data) {
+
+                if($data["meta_quincena"]-$data["total_pedido"]>0)
+                {
+                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:#cd7f32"></i>';
+                }else if($data["meta_intermedia"]-$data["total_pedido"]>0)
+                {
+                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:transparent;"></i>';
+                }
+                else if($data["meta"]-$data["total_pedido"]>0)
+                {
+                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:silver;"></i>';
+                }
+                else if($data["meta_2"]-$data["total_pedido"]>0)
+                {
+                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:rgba(255,193,7,1);"></i>';
+                }else{
+                    $medall_icon='<i class="fas fa-medal" style="font-size:48px;color:rgba(255,193,7,1);"></i>';
+                }
+
                 $html .= '<tr>
-             <td class="name-size"><i class="fa-solid fa-medal text-"></i>' . $data["name"] . '</td>
+             <td class="">'. $medall_icon . $data["name"] . '</td>
              <td>' . $data["identificador"] . ' ';
 
                 if ($data["supervisor"] == 46) {
