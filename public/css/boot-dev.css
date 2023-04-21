@@ -4119,7 +4119,7 @@ metas_dp .animated-progress {
 
 #meta td:nth-child(3),
 #metas_dp td:nth-child(3) {
-    display: flex !important;
+    /*display: flex !important;*/
     justify-content: center !important;
     align-items: center !important;
 }
