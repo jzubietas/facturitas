@@ -525,7 +525,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 }
             })
         }
-        
+
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -553,138 +553,27 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $('#fechametames').datepicker('setDate', new Date());
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
-            $.ajax({
-                method:'GET',
-                dataType: "json",
-                url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
-                success:function(data){
-                    //console.log(data)
-                    var data_consindeuda = [{
-                        data: data.datasets[0].data,
-                        backgroundColor: [
-                            "#4b77a9",
-                            "#5f255f"
-                        ],
-                        borderColor: "#fff"
-                    }];
+            function grafico_condeuda_sindeuda()
+            {
+                $.ajax({
+                    method:'GET',
+                    dataType: "json",
+                    url:"{{ route('chart/clientes.caidos/condeuda.sindeuda') }}",
+                    success:function(data){
+                        //console.log(data)
+                        var data_consindeuda = [{
+                            data: data.datasets[0].data,
+                            backgroundColor: [
+                                "#4b77a9",
+                                "#5f255f"
+                            ],
+                            borderColor: "#fff"
+                        }];
 
-                    var options_consindeuda = {
-                        title: {
-                            display: true,
-                            text: data.title
-                        },
-                        plugins: {
-                            datalabels: {
-                                formatter: (value, ctx) => {
-                                    //console.log(value);
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => {
-                                        sum += data;
-                                    });
-                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                    return percentage + '('+value+')';
-
-
-                                },
-                                color: '#fff',
-                            }
-                        }
-                    };
-
-                    var ctx_consindeuda = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
-                    var myChart_consindeuda = new Chart(ctx_consindeuda, {
-                        type: 'pie',
-                        data: {
-                            labels: data.labels,
-                            datasets: data_consindeuda
-                        },
-                        options: options_consindeuda
-                    });
-                }
-            });
-
-            $.ajax({
-                method:'GET',
-                dataType: "json",
-                url:"{{ route('chart/clientes.caidos/vienen.de') }}",
-                success:function(data){
-                    //console.log(data)
-                    var data_vienende = [{
-                        data: data.datasets[0].data,
-                        backgroundColor: data.datasets[0].backgroundColor,
-                        borderColor: "#fff"
-                    }];
-
-                    var options_vienende = {
-                        title: {
-                            display: true,
-                            text: data.title
-                        },
-                        plugins: {
-                            datalabels: {
-                                formatter: (value, ctx) => {
-                                    //console.log(value);
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => {
-                                        sum += data;
-                                    });
-                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                    return percentage + '('+value+')';
-
-
-                                },
-                                color: '#fff',
-                            },
-                        }
-                    };
-
-                    var ctx_vienende = document.getElementById("my-chart-caidosvienende").getContext('2d');
-                    var myChart_vienende = new Chart(ctx_vienende, {
-                        type: 'pie',
-                        data: {
-                            labels: data.labels,
-                            datasets: data_vienende
-                        },
-                        options: options_vienende
-                    });
-                }
-            });
-
-            $.ajax({
-                method:'GET',
-                dataType: "json",
-                url:"{{ route('chart/metas/asesores') }}",
-                success:function(data){
-                    //console.log(data)
-                    //var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
-                    data = [
-                        { label: 'Asesor 01', value: 75, superar:100 },
-                        { label: 'Asesor 02', value: 50, superar:100 },
-                        { label: 'Asesor 03', value: 25, superar:100 }
-                    ];
-
-                    var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
-
-                    var myChart = new Chart(ctx, {
-                        type: 'horizontalBar',
-                        data: {
-                            labels: data.map(function(item) {
-                                return item.label;
-                            }),
-                            datasets: [{
-                                data: data.map(function(item) {
-                                    return (item.value/item.superar)*100;
-                                }),
-                                backgroundColor: ['#007bff', '#28a745', '#dc3545'],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: {
+                        var options_consindeuda = {
                             title: {
                                 display: true,
-                                text: 'Desarrollo (actualizacion metas asesores)'
+                                text: data.title
                             },
                             plugins: {
                                 datalabels: {
@@ -695,7 +584,57 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                         dataArr.map(data => {
                                             sum += data;
                                         });
-                                        let superar_=ctx.dataIndex;
+                                        let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                        return percentage + '('+value+')';
+
+
+                                    },
+                                    color: '#fff',
+                                }
+                            }
+                        };
+
+                        var ctx_consindeuda = document.getElementById("my-chart-caidosconsindeuda").getContext('2d');
+                        var myChart_consindeuda = new Chart(ctx_consindeuda, {
+                            type: 'pie',
+                            data: {
+                                labels: data.labels,
+                                datasets: data_consindeuda
+                            },
+                            options: options_consindeuda
+                        });
+                    }
+                });
+            }
+
+            function grafico_vienen_de()
+            {
+                $.ajax({
+                    method:'GET',
+                    dataType: "json",
+                    url:"{{ route('chart/clientes.caidos/vienen.de') }}",
+                    success:function(data){
+                        //console.log(data)
+                        var data_vienende = [{
+                            data: data.datasets[0].data,
+                            backgroundColor: data.datasets[0].backgroundColor,
+                            borderColor: "#fff"
+                        }];
+
+                        var options_vienende = {
+                            title: {
+                                display: true,
+                                text: data.title
+                            },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        //console.log(value);
+                                        let sum = 0;
+                                        let dataArr = ctx.chart.data.datasets[0].data;
+                                        dataArr.map(data => {
+                                            sum += data;
+                                        });
                                         let percentage = (value * 100 / sum).toFixed(2) + "%";
                                         return percentage + '('+value+')';
 
@@ -703,51 +642,122 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                                     },
                                     color: '#fff',
                                 },
+                            }
+                        };
+
+                        var ctx_vienende = document.getElementById("my-chart-caidosvienende").getContext('2d');
+                        var myChart_vienende = new Chart(ctx_vienende, {
+                            type: 'pie',
+                            data: {
+                                labels: data.labels,
+                                datasets: data_vienende
                             },
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                xAxes: [{
-                                    ticks: {
-                                        beginAtZero: true,
-                                        max: 100
-                                    },
-                                    gridLines: {
-                                        display: false
-                                    }
-                                }],
-                                yAxes: [{
-                                    gridLines: {
-                                        display: false
-                                    }
+                            options: options_vienende
+                        });
+                    }
+                });
+            }
+
+            function grafico_metas_asesores()
+            {
+                $.ajax({
+                    method:'GET',
+                    dataType: "json",
+                    url:"{{ route('chart/metas/asesores') }}",
+                    success:function(data){
+                        //console.log(data)
+                        //var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
+                        data = [
+                            { label: 'Asesor 01', value: 75, superar:100 },
+                            { label: 'Asesor 02', value: 50, superar:100 },
+                            { label: 'Asesor 03', value: 25, superar:100 }
+                        ];
+
+                        var ctx = document.getElementById('my-chart-metasasesores').getContext('2d');
+
+                        var myChart = new Chart(ctx, {
+                            type: 'horizontalBar',
+                            data: {
+                                labels: data.map(function(item) {
+                                    return item.label;
+                                }),
+                                datasets: [{
+                                    data: data.map(function(item) {
+                                        return (item.value/item.superar)*100;
+                                    }),
+                                    backgroundColor: ['#007bff', '#28a745', '#dc3545'],
+                                    borderWidth: 0
                                 }]
                             },
-                            legend: {
-                                display: false
-                            },
-                            tooltips: {
-                                enabled: false
-                            },
-                            animation: {
-                                duration: 2000
+                            options: {
+                                title: {
+                                    display: true,
+                                    text: 'Desarrollo (actualizacion metas asesores)'
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            //console.log(value);
+                                            let sum = 0;
+                                            let dataArr = ctx.chart.data.datasets[0].data;
+                                            dataArr.map(data => {
+                                                sum += data;
+                                            });
+                                            let superar_=ctx.dataIndex;
+                                            let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                            return percentage + '('+value+')';
+
+
+                                        },
+                                        color: '#fff',
+                                    },
+                                },
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            max: 100
+                                        },
+                                        gridLines: {
+                                            display: false
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        gridLines: {
+                                            display: false
+                                        }
+                                    }]
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltips: {
+                                    enabled: false
+                                },
+                                animation: {
+                                    duration: 2000
+                                }
                             }
-                        }
-                    });
-
-                    setInterval(function() {
-                        data.forEach(function(item, index) {
-                            //console.log(item);
-                            //item.value = Math.floor(Math.random() * 100) + 1;
-                            myChart.data.datasets[0].data[index] = item.value;
                         });
-                        myChart.update();
-                    }, 3000);
 
-                }
-            });
+                        setInterval(function() {
+                            data.forEach(function(item, index) {
+                                //console.log(item);
+                                //item.value = Math.floor(Math.random() * 100) + 1;
+                                myChart.data.datasets[0].data[index] = item.value;
+                            });
+                            myChart.update();
+                        }, 3000);
+
+                    }
+                });
+            }
 
 
-            $('#exampleModalCenter').modal('show');
+
+            //$('#exampleModalCenter').modal('show');
 
             $(document).on('change', '#fechametames', function () {
                 //const value = e.target.value;
@@ -830,6 +840,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargReporteMetasSituacionClientes();
             cargReporteMetasCobranzasGeneral();
 
+            grafico_condeuda_sindeuda();
+            grafico_vienen_de();
+            grafico_metas_asesores();
+
             setInterval(myTimer, 30000);
 
             function myTimer() {
@@ -856,9 +870,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargReporteMetasCobranzasGeneral();
             }
 
-            $('a[href$="#myModal"]').on("click", function () {
+            /*$('a[href$="#myModal"]').on("click", function () {
                 $('#myModal').modal();
-            });
+            });*/
 
             var elem = document.querySelector("#contenedor-fullscreen");
             window.openFullscreen = function () {
