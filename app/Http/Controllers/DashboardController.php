@@ -1966,8 +1966,11 @@ class DashboardController extends Controller
                 else if($data["meta_new"]=='2')
                 {
                     //oro
-                    $medall_icon='oro';
-                    $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
+                    $medall_icon='';
+                    $medall_icon=$medall_icon.'<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
+                    $medall_icon=$medall_icon.'<i class="fas fa-medal fa-xs" style="font-size:18px;color:silver;"></i>';
+                    //$medall_icon=$medall_icon.'<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
+                    $medall_icon=$medall_icon.'<i class="fas fa-trophy fa-xs" style="font-size:18px;color:goldenrod;"></i>';
                 }else{
                     //nada
                     $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
