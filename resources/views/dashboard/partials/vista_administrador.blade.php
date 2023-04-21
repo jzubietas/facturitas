@@ -523,8 +523,49 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             })
         }
 
-        
+        window.cargReporteAnalisis = function () {
+            var fd = new FormData();
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewAnalisis') }}",
+                success: function (resultado) {
+                    $('#reporteanalisis').html(resultado);
+                }
+            })
+        }
 
+        window.cargReporteMetasSituacionClientes = function () {
+            var fd = new FormData();
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.graficoSituacionClientes') }}",
+                success: function (resultado) {
+                    $('#metas_situacion_clientes_metasasesores').html(resultado);
+                    $('#metas_situacion_clientes').html(resultado);
+                }
+            })
+        }
+
+        window.cargReporteMetasCobranzasGeneral = function () {
+            var fd = new FormData();
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
+                success: function (resultado) {
+                    $('#metas_cobranzas_general').html(resultado);
+                }
+            })
+        }
+        
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -775,48 +816,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             });
 
-            window.cargReporteAnalisis = function () {
-                var fd = new FormData();
-                $.ajax({
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    method: 'POST',
-                    url: "{{ route('dashboard.viewAnalisis') }}",
-                    success: function (resultado) {
-                        $('#reporteanalisis').html(resultado);
-                    }
-                })
-            }
 
-            window.cargReporteMetasSituacionClientes = function () {
-                var fd = new FormData();
-                $.ajax({
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    method: 'POST',
-                    url: "{{ route('dashboard.graficoSituacionClientes') }}",
-                    success: function (resultado) {
-                        $('#metas_situacion_clientes_metasasesores').html(resultado);
-                        $('#metas_situacion_clientes').html(resultado);
-                    }
-                })
-            }
-
-            window.cargReporteMetasCobranzasGeneral = function () {
-                var fd = new FormData();
-                $.ajax({
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    method: 'POST',
-                    url: "{{ route('dashboard.graficoCobranzasGeneral') }}",
-                    success: function (resultado) {
-                        $('#metas_cobranzas_general').html(resultado);
-                    }
-                })
-            }
 
             cargaNueva(1);
             cargaNueva(2);
