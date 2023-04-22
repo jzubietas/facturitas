@@ -720,7 +720,8 @@ class UserController extends Controller
                 HistorialVidas::create([
                     'user_id'=>$user->id,
                     'accion'=>'Agregado quitar vida: '.strval($contadorquitavidas+1).' a '.strval($contadorquitavidas),
-                    'created_at' => Carbon::now()
+                    'created_at' => Carbon::now(),
+                    'responsable' => Auth::user()->id
                 ]);
             }
             if ($contadorquitavidas == 1) {
@@ -730,7 +731,8 @@ class UserController extends Controller
                 HistorialVidas::create([
                     'user_id'=>$user->id,
                     'accion'=>'Agregado quitar vida: '.strval($contadorquitavidas+1).' a '.strval($contadorquitavidas),
-                    'created_at' => Carbon::now()
+                    'created_at' => Carbon::now(),
+                    'responsable' => Auth::user()->id
                 ]);
             }
             if ($contadorquitavidas == 0) {
@@ -745,13 +747,14 @@ class UserController extends Controller
                 HistorialVidas::create([
                     'user_id'=>$user->id,
                     'accion'=>'Agregado llamado de atencion: '.strval($contadorquitavidas+1).' a '.strval($contadorquitavidas),
-                    'created_at' => Carbon::now()
+                    'created_at' => Carbon::now(),
+                    'responsable' => Auth::user()->id
                 ]);
                 CallAtention::create([
                     'user_id'=>$user->id,
                     'user_identificador' => $user->identificador,
                     'accion'=>'Agregado llamado de atencion: '.strval($contadorquitavidas+1).' a '.strval($contadorquitavidas),
-                    'responsable'=>$user->supervisor,
+                    'responsable'=>Auth::user()->id,
                     'created_at' => Carbon::now()
                 ]);
             }

@@ -12,6 +12,6 @@ class HistorialVidas extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'id','user_id','created_at','updated_at'
+        'id','user_id','accion','created_at','updated_at'
     ];
 }
