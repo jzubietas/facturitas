@@ -662,7 +662,13 @@ return [
             'icon' => 'fas fa-users',
             'can' => 'personas.modulo',
             'submenu' => [
-
+                [
+                    'text' => 'Lista Negra',
+                    'route' => 'clientes.bloqueados',
+                    'can' => 'clientes.bloqueados',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['bloqueados'],
+                ],
                 [
                     'text' => 'Clientes',
                     'route' => 'clientes.index',
