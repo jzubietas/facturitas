@@ -671,6 +671,13 @@ return [
                     'active' => ['clientes'],
                 ],
                 [
+                    'text' => 'Clientes Pretendidos',
+                    'route' => 'clientes.pretendidos',
+                    'can' => 'clientes.pretendidos',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['pretendidos'],
+                ],
+                [
                     'text' => 'Clientes Caidos',
                     'route' => 'clientes.recurrentes',
                     'can' => 'clientes.recurrentes',

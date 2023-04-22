@@ -19,6 +19,8 @@
             NULOS
             @elseif($key === '9')
                 ACTIVOS
+            @elseif($key === '10')
+                PRETENDIDOS
 
           @endif
 
@@ -46,8 +48,9 @@
         {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'ABANDONO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '9')
             {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'ACTIVO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
-
-      @endif
+        @elseif($key === '10')
+            {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'PRETENDIDO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @endif
             <div class="card-body">
               <div class="form-row">
                 <div class="form-group col-lg-12" style="text-align: center; font-size:16px">
