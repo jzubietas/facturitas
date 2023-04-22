@@ -78,6 +78,9 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
         //$clientes=$clientes->limit(10);
         switch($cal_sit)
             {
+                case 'PRETENDIDO':
+                    $clientes=$clientes->whereIn('clientes.situacion',['PRETENDIDO']);
+                    break;
                 case 'ABANDONO':
                     $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO','ABANDONO RECIENTE']);
                     break;

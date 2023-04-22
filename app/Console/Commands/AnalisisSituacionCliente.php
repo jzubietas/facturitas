@@ -653,6 +653,15 @@ class AnalisisSituacionCliente extends Command
                               'situacion'=>'NULO'
                           ]);
                       }*/
+                      if( ($situacion_final->situacion=='BASE FRIA') && $cliente->tipo==1 )
+                      {
+                          $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
+                              ->where('periodo',$mes_actual->format('Y-m'))
+                              ->first();
+                          $situacion_cambia->update([
+                              'situacion'=>'PRETENDIDO'
+                          ]);
+                      }
 
                       $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 
