@@ -699,13 +699,23 @@ class Cliente extends Model
                               'situacion'=>'NULO'
                           ]);
                       }*/
-                      if( ($situacion_final->situacion=='BASE FRIA') && $cliente->tipo==1 )
+                      if($cliente->estado==1)
                       {
+                          if( ($situacion_final->$situacion_final=='BASE FRIA') && $cliente->tipo==1 )
+                          {
+                              $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
+                                  ->where('periodo',$mes_actual->format('Y-m'))
+                                  ->first();
+                              $situacion_cambia->update([
+                                  'situacion'=>'PRETENDIDO'
+                              ]);
+                          }
+                      }else{
                           $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
                               ->where('periodo',$mes_actual->format('Y-m'))
                               ->first();
                           $situacion_cambia->update([
-                              'situacion'=>'PRETENDIDO'
+                              'situacion'=>'BLOQUEADO'
                           ]);
                       }
 
