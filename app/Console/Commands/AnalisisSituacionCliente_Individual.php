@@ -669,18 +669,16 @@ class AnalisisSituacionCliente_Individual extends Command
                             {
                                 $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
                                     ->where('periodo',$mes_actual->format('Y-m'))
-                                    ->first();
-                                $situacion_cambia->update([
-                                    'situacion'=>'PRETENDIDO'
-                                ]);
+                                    ->update([
+                                        'situacion'=>'PRETENDIDO'
+                                    ]);
                             }
                         }else{
                             $situacion_cambia=SituacionClientes::where('cliente_id',$cliente->id)
                                 ->where('periodo',$mes_actual->format('Y-m'))
-                                ->first();
-                            $situacion_cambia->update([
-                                'situacion'=>'BLOQUEADO'
-                            ]);
+                                ->update([
+                                    'situacion'=>'BLOQUEADO'
+                                ]);
                         }
 
 
