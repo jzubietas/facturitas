@@ -1,8 +1,8 @@
-<?php //3882b3ab5841e36b0522d6d114dd63da
+<?php //cc377c3f9530961b9728b31242930b62
 /** @noinspection all */
 
 namespace Illuminate\Contracts\View {
-
+    
     /**
      * @method $this extends($view, $params = [])
      * @method $this layout($view, $params = [])
@@ -14,7 +14,7 @@ namespace Illuminate\Contracts\View {
 }
 
 namespace Illuminate\Database\Eloquent {
-
+    
     /**
      * @method $this onlyTrashed()
      * @method int restore()
@@ -25,24 +25,21 @@ namespace Illuminate\Database\Eloquent {
 }
 
 namespace Illuminate\Http {
-
+    
     /**
      * @method void banner($message)
      * @method void dangerBanner($message)
      */
     class RedirectResponse {}
-
+    
     /**
      * @method bool hasValidRelativeSignature()
-     * @method bool hasValidSignature($absolute = true)
-     * @method array validate(array $rules, ...$params)
-     * @method void validateWithBag(string $errorBag, array $rules, ...$params)
      */
     class Request {}
 }
 
 namespace Illuminate\Routing {
-
+    
     /**
      * @method $this permission($permissions = [])
      * @method $this role($roles = [])
@@ -51,7 +48,7 @@ namespace Illuminate\Routing {
 }
 
 namespace Illuminate\Support {
-
+    
     /**
      * @method void downloadExcel(string $fileName, string $writerType = null, $withHeadings = false, array $responseHeaders = [])
      * @method void storeExcel(string $filePath, string $disk = null, string $writerType = null, $withHeadings = false)
@@ -61,7 +58,7 @@ namespace Illuminate\Support {
 }
 
 namespace Illuminate\Support\Facades {
-
+    
     /**
      * @method void auth($options = [])
      * @method void confirmPassword()
@@ -72,13 +69,13 @@ namespace Illuminate\Support\Facades {
 }
 
 namespace Illuminate\Testing {
-
+    
     /**
      * @method $this assertDontSeeLivewire($component)
      * @method $this assertSeeLivewire($component)
      */
     class TestResponse {}
-
+    
     /**
      * @method $this assertDontSeeLivewire($component)
      * @method $this assertSeeLivewire($component)
@@ -89,12 +86,12 @@ namespace Illuminate\Testing {
 namespace Illuminate\View {
 
     use Livewire\WireDirective;
-
+    
     /**
      * @method WireDirective wire($name)
      */
     class ComponentAttributeBag {}
-
+    
     /**
      * @method $this extends($view, $params = [])
      * @method $this layout($view, $params = [])
@@ -106,7 +103,7 @@ namespace Illuminate\View {
 }
 
 namespace Yajra\DataTables {
-
+    
     /**
      * @method $this addTransformer($transformer)
      * @method $this setSerializer($serializer)
