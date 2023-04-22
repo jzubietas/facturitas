@@ -38,9 +38,9 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
     }
     public function collection()
     {
-        $clientes=Cliente::activo()
+        $clientes=Cliente::
             //->join('users as u', 'clientes.user_id', 'u.id')
-            ->select([
+            select([
                 'clientes.id',
                 'clientes.tipo',
                 'clientes.user_clavepedido as asesor',
@@ -70,7 +70,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - sin banca' limit 1) as porcentajeesb"),
                 DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - banca' limit 1) as porcentajeeb"),
             ])
-            ->where('clientes.estado','1')
+            //->where('clientes.estado','1')
             ->whereNotIn('clientes.user_clavepedido',['B'])
             ->where('clientes.tipo','1');
             //->whereNotNull('clientes.situacion');
