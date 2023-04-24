@@ -719,7 +719,7 @@ class ChartController extends Controller
         $backgroundColor=['rgb(30, 144, 255, 1)','rgb(178, 34, 34, 1 )','rgb(0, 128, 0, 1)','rgb(255, 160, 122, 1)'];
         foreach ($situaciones_clientes as $situaciones_clientes_)
         {
-            $labels[]=$situaciones_clientes_->situacion_anterior.'-'.'Caidos';
+            $labels[]=$situaciones_clientes_->situacion_anterior;
             //$datas[]=$situaciones_clientes_->total;
             //$datas_a[]=$situaciones_clientes_->total_antes;
         }
