@@ -634,7 +634,7 @@ class ChartController extends Controller
             ->join('clientes as c','c.id','situacion_clientes.cliente_id')
             ->join('users as u','u.id','c.user_id')
             ->Where([
-                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'LEVANTADO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -647,7 +647,7 @@ class ChartController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -660,7 +660,7 @@ class ChartController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'RECUPERADO RECIENTE'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
@@ -673,7 +673,7 @@ class ChartController extends Controller
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['situacion_clientes.situacion', '=', 'CAIDO'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
                 ['a.situacion', '=', 'NUEVO'],
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
