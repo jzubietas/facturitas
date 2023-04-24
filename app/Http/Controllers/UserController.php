@@ -63,10 +63,10 @@ class UserController extends Controller
 
         if (Auth::user()->rol == "Encargado") {
             $users = User::where('users.supervisor', Auth::user()->id)
-                ->where('users.rol', 'Asesor');
+                ->where('users.rol', 'Asesor')->get();
         } else if (Auth::user()->rol == "Jefe de operaciones") {
             $users = User::where('users.jefe', Auth::user()->id)
-                ->where('users.rol', 'Operario');
+                ->where('users.rol', 'Operario')->get();
         } else {
             $users = User::all();
         }

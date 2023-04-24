@@ -611,6 +611,28 @@ class ChartController extends Controller
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'NULO'],
+                ['situacion_clientes.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'PRETENDIDO'],
+                ['situacion_clientes.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
             ->groupBy([
                 'situacion_clientes.situacion',
             ])
@@ -685,6 +707,32 @@ class ChartController extends Controller
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
+                ['a.situacion', '=', 'NULO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
+                ['a.situacion', '=', 'PRETENDIDO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
             ->groupBy([
                 'a.situacion',
             ])
@@ -701,7 +749,6 @@ class ChartController extends Controller
         {
             $datas[]=$item_->total;
         }
-
 
         $_resultado_grafico=[];
         /*foreach ($situaciones_clientes as $situaciones_clientes_)
