@@ -18,10 +18,10 @@ class AlterTableClienteColsPedido extends Migration
             $table->string('codigo_ultimopedido')->nullable();
             $table->integer('pago_ultimopedido')->nullable()->default(0);
             $table->integer('pagado_ultimopedido')->nullable()->default(0);
-            $table->decimal('fsb_porcentaje',2,1)->nullable(0)->comment('fisico sin banca');
-            $table->decimal('fcb_porcentaje',2,1)->nullable(0)->comment('fisico con banca');
-            $table->decimal('esb_porcentaje',2,1)->nullable(0)->comment('electronico sin banca');
-            $table->decimal('ecb_porcentaje',2,1)->nullable(0)->comment('electronico con banca');
+            $table->decimal('fsb_porcentaje',2,1)->nullable()->default(0)->comment('fisico sin banca');
+            $table->decimal('fcb_porcentaje',2,1)->nullable()->default(0)->comment('fisico con banca');
+            $table->decimal('esb_porcentaje',2,1)->nullable()->default(0)->comment('electronico sin banca');
+            $table->decimal('ecb_porcentaje',2,1)->nullable()->default(0)->comment('electronico con banca');
 
         });
     }
