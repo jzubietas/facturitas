@@ -125,6 +125,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas id="my-chart-caidosvienende_barra"  style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
@@ -346,6 +353,62 @@
             });
         }
 
+        function grafico_vienen_de_barra()
+        {
+            $.ajax({
+                method:'GET',
+                dataType: "json",
+                url:"{{ route('chart/clientes.caidos/vienen.de.barra') }}",
+                success:function(data){
+                    //console.log(data)
+                    var data_vienendebarra ={
+                        labels:data.labels,
+                        datasets:data.datasets,
+                    };
+
+                    var options_vienendebarra = {
+                        title: {
+                            display: true,
+                            text: 'Chart.js Bar Chart - Stacked'
+                        },
+                        plugins: {
+                            datalabels: {
+                                /*formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    return percentage + '('+value+')';
+                                },*/
+                                color: '#fff',
+                            },
+                        },
+                        responsive:true,
+                        interaction:{
+                            intersect:false,
+                        },
+                        scales:{
+                            x:{
+                                stacked:true,
+                            },
+                            y:{
+                                stacked:true,
+                            }
+                        }
+                    };
+
+                    var ctx_vienendebarra = document.getElementById("my-chart-caidosvienende_barra").getContext('2d');
+                    var myChart_vienendebarra = new Chart(ctx_vienendebarra, {
+                        type: 'bar',
+                        data: data_vienendebarra,
+                        options: options_vienendebarra
+                    });
+                }
+            });
+        }
+
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -355,6 +418,7 @@
 
             grafico_condeuda_sindeuda();
             grafico_vienen_de();
+            grafico_vienen_de_barra();
         });
 
 
