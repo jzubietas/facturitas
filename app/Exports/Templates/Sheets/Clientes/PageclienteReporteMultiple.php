@@ -44,7 +44,6 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 'clientes.id',
                 'clientes.tipo',
                 'clientes.user_clavepedido as asesor',
-                //'u.identificador as asesor',
                 'clientes.nombre',
                 'clientes.dni',
                 'clientes.icelular',
