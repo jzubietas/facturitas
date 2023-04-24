@@ -734,6 +734,7 @@ class ChartController extends Controller
                     'borderColor' => 'rgb(32, 201, 151)',
                     'borderWidth' => '1',
                     'stack'=>'Stack 0',
+                    'order' =>2
                 ],
                 [
                     'label' => strtoupper(Carbon::now()->startOfMonth()->translatedFormat('F')),
@@ -742,11 +743,12 @@ class ChartController extends Controller
                     'borderColor' => 'rgb(32, 201, 151)',
                     'borderWidth' => '1',
                     'stack'=>'Stack 1',
+                    'order' => 1
                 ],
                 [
                     'label' => 'Derivada',
                     'borderColor' => 'rgba(33,104,163,1)',
-                    'data' => $datas,
+                    'data' => $datas_a,
                     'type' => 'line',
                     'order' => 0,
                 ]
