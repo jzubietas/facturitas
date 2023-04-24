@@ -117,7 +117,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                     DB::raw("users.clave_pedidos as clave_pedidos")
                 )
                 ->pluck('users.clave_pedidos');
-            $clientes = $clientes->WhereIn("u.clave_pedidos", $usersasesores);
+            $clientes = $clientes->WhereIn("clientes.user_clavepedido", $usersasesores);
         }
         elseif (Auth::user()->rol == "Asesor")
         {
@@ -128,7 +128,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                     DB::raw("users.clave_pedidos as clave_pedidos")
                 )
                 ->pluck('users.clave_pedidos');
-            $clientes = $clientes->WhereIn("u.clave_pedidos", $usersasesores);
+            $clientes = $clientes->WhereIn("clientes.user_clavepedido", $usersasesores);
         }
         else if (Auth::user()->rol == "Encargado")
         {
@@ -139,7 +139,7 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                     DB::raw("users.clave_pedidos as clave_pedidos")
                 )
                 ->pluck('users.clave_pedidos');
-            $clientes = $clientes->WhereIn("u.clave_pedidos", $usersasesores);
+            $clientes = $clientes->WhereIn("clientes.user_clavepedido", $usersasesores);
         }
 
         return $clientes->get();
