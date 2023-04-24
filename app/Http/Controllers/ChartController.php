@@ -564,60 +564,60 @@ class ChartController extends Controller
         $periodo_antes = Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m');
         $periodo_actual = Carbon::now()->clone()->startOfMonth()->format('Y-m');
 
-        $situaciones_clientes_a = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
-            ->join('clientes as c','c.id','situacion_clientes.cliente_id')
+        $situaciones_clientes_a = SituacionClientes::
+            join('clientes as c','c.id','situacion_clientes.cliente_id')
             ->join('users as u','u.id','c.user_id')
             ->Where([
-                ['a.situacion', '=', 'LEVANTADO'],
-                ['a.periodo', '=', $periodo_antes],
-                ['a.user_clavepedido', '<>', 'B'],
-                ['a.user_clavepedido', '<>', '17'],
-                ['a.user_clavepedido', '<>', '18'],
-                ['a.user_clavepedido', '<>', '19'],
-                ['a.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.situacion', '=', 'LEVANTADO'],
+                ['situacion_clientes.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['a.situacion', '=', 'RECUPERADO ABANDONO'],
-                ['a.periodo', '=', $periodo_antes],
-                ['a.user_clavepedido', '<>', 'B'],
-                ['a.user_clavepedido', '<>', '17'],
-                ['a.user_clavepedido', '<>', '18'],
-                ['a.user_clavepedido', '<>', '19'],
-                ['a.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
+                ['situacion_clientes.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['a.situacion', '=', 'RECUPERADO RECIENTE'],
-                ['a.periodo', '=', $periodo_antes],
-                ['a.user_clavepedido', '<>', 'B'],
-                ['a.user_clavepedido', '<>', '17'],
-                ['a.user_clavepedido', '<>', '18'],
-                ['a.user_clavepedido', '<>', '19'],
-                ['a.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.situacion', '=', 'RECUPERADO RECIENTE'],
+                ['situacion_clientes.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
             ->orWhere([
-                ['a.situacion', '=', 'NUEVO'],
-                ['a.periodo', '=', $periodo_antes],
-                ['a.user_clavepedido', '<>', 'B'],
-                ['a.user_clavepedido', '<>', '17'],
-                ['a.user_clavepedido', '<>', '18'],
-                ['a.user_clavepedido', '<>', '19'],
-                ['a.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.situacion', '=', 'NUEVO'],
+                ['situacion_clientes.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '17'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
             ->groupBy([
-                'a.situacion',
+                'situacion_clientes.situacion',
             ])
-            ->orderBy('a.situacion','asc')
+            ->orderBy('situacion_clientes.situacion','asc')
             ->select([
-                'a.situacion  as situacion_anterior',
-                DB::raw('count(a.situacion) as total_antes')
+                'situacion_clientes.situacion  as situacion_anterior',
+                DB::raw('count(situacion_clientes.situacion) as total_antes')
             ])
             ->get();
 
