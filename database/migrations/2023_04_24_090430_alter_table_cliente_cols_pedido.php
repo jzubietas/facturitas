@@ -14,7 +14,7 @@ class AlterTableClienteColsPedido extends Migration
     public function up()
     {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->timestamp('fecha_ultimopedido')->nullable(false);
+            $table->timestamp('fecha_ultimopedido')->nullable(false)->default('1900-01-01');
             $table->string('codigo_ultimopedido')->nullable(false);
             $table->integer('pago_ultimopedido')->nullable(0);
             $table->integer('pagado_ultimopedido')->nullable(0);
