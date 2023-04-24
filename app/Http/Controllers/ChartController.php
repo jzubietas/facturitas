@@ -734,7 +734,7 @@ class ChartController extends Controller
                     'borderColor' => 'rgb(32, 201, 151)',
                     'borderWidth' => '1',
                     'stack'=>'Stack 0',
-                    'order' =>2
+                    'order' =>0
                 ],
                 [
                     'label' => strtoupper(Carbon::now()->startOfMonth()->translatedFormat('F')),
@@ -750,7 +750,7 @@ class ChartController extends Controller
                     'borderColor' => 'rgba(33,104,163,1)',
                     'data' => $datas_a,
                     'type' => 'line',
-                    'order' => 0,
+                    'order' => 2,
                 ]
             ],
             'title'=>'Total caidos: '.$caidos_total
