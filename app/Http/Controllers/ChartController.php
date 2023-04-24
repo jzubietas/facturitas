@@ -728,7 +728,7 @@ class ChartController extends Controller
             'labels' => $labels,
             'datasets' => [
                 [
-                    'label' => 'Mes pasado',
+                    'label' => strtoupper(Carbon::now()->startOfMonth()->subMonth()->translatedFormat('F')),
                     'data' => $datas_a,
                     'backgroundColor' => 'rgb(30, 144, 255, 1)',
                     'borderColor' => 'rgb(32, 201, 151)',
@@ -736,12 +736,19 @@ class ChartController extends Controller
                     'stack'=>'Stack 0',
                 ],
                 [
-                    'label' => 'Mes actual',
+                    'label' => strtoupper(Carbon::now()->startOfMonth()->translatedFormat('F')),
                     'data' => $datas,
                     'backgroundColor' => 'rgb(178, 34, 34, 1 )',
                     'borderColor' => 'rgb(32, 201, 151)',
                     'borderWidth' => '1',
                     'stack'=>'Stack 1',
+                ],
+                [
+                    'label' => 'Derivada',
+                    'borderColor' => 'rgba(33,104,163,1)',
+                    'data' => $datas,
+                    'type' => 'line',
+                    'order' => 0,
                 ]
             ],
             'title'=>'Total caidos: '.$caidos_total

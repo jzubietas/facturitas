@@ -149,6 +149,7 @@
 @section('js-datatables')
     <script src="{{asset('js/Chart.min.js.js')}}"></script>
     <script src="{{asset('js/chartjs-plugin-datalabels.js')}}"></script>
+    <script src="{{asset('js/chartjs-plugin-annotation.js')}}"></script>
 
     <script>
         function grafico_condeuda_sindeuda()
@@ -367,6 +368,20 @@
                     };
 
                     var options_vienendebarra = {
+                        /*annotation:{
+                          annotations:[{
+                              type:'line',
+                              mode:'horizontal',
+                              scaleID: 'y-axis-0',
+                              value: 300,
+                              borderColor: 'red',
+                              borderWidth: 2,
+                              label: {
+                                  enabled: true,
+                                  content: 'Target'
+                              }
+                          }]
+                        },*/
                         title: {
                             display: true,
                             text: 'Chart.js Bar Chart - Stacked'
