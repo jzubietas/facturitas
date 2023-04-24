@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\CommonModel;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -92,6 +93,59 @@ class Cliente extends Model
         }else{
             Clientes::where('id',$cliente->id)->update(['situacion'=>'BASE FRIA']);
         }
+    }
+
+    public static function updateUltimoPedidoCliente($cliente_id)
+    {
+        $query=Pedido::query()->where('estado',1)->orderBy('created_at','desc')->limit(1)
+                ->select([
+                    "created_at as fechaultimopedido",
+                    //"DATE_FORMAT(dp0.created_at,'%d') as fechaultimopedido_dia",
+                    //"DATE_FORMAT(dp0.created_at,'%m') as fechaultimopedido_mes",
+                    //"DATE_FORMAT(dp0.created_at,'%m') as fechaultimopedido_anio",
+                    "codigo as fechaultimopedido_codigo",
+                    "pago as fechaultimopedido_pago",
+                    "pagado as fechaultimopedido_pagado"
+                ])->where('cliente_id',$cliente_id)->first();
+
+        $cliente=Cliente::where('id',$cliente_id)->first();
+        $cliente->update([
+            'fecha_ultimopedido'=>$query->fechaultimopedido,
+            'codigo_ultimopedido'=>$query->fechaultimopedido_codigo,
+            'pago_ultimopedido' => $query->fechaultimopedido_pago,
+            'pagado_ultimopedido' => $query->fechaultimopedido_pagado
+        ]);
+        $porcentajes=Porcentaje::query()->where('cliente_id',$cliente_id)->get();
+        foreach ($porcentajes as $porcentaje)
+        {
+            if($porcentaje->nombre=='FISICO - sin banca')
+            {
+                $cliente->update([
+                    'fsb_porcentaje' => ($porcentaje->porcentaje || 0)
+                ]);
+            }else if($porcentaje->nombre=='FISICO - banca')
+            {
+                $cliente->update([
+                    'fcb_porcentaje' => ($porcentaje->porcentaje || 0)
+                ]);
+            }
+            else if($porcentaje->nombre=='ELECTRONICA - sin banca')
+            {
+                $cliente->update([
+                    'esb_porcentaje' => ($porcentaje->porcentaje || 0)
+                ]);
+            }
+            else if($porcentaje->nombre=='ELECTRONICA - banca')
+            {
+                $cliente->update([
+                    'ecb_porcentaje' => ($porcentaje->porcentaje || 0)
+                ]);
+            }
+        }
+
+
+        //
+
     }
 
   public static function createSituacionByCliente($cliente_id){

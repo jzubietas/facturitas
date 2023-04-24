@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Jobs\PostCreatePedido;
+use App\Jobs\PostCreatePedidoClienteUltimoPedido;
 use App\Jobs\PostUpdatePedido;
 use App\Jobs\PostUpdateSituacion;
 use App\Models\Cliente;
@@ -21,6 +22,7 @@ class PedidoObserver
     {
         \Log::info("PostCreatePedido -> ".$pedido->cliente_id);
         PostUpdateSituacion::dispatchSync($pedido->cliente_id);
+        PostCreatePedidoClienteUltimoPedido::dispatchSync($pedido->cliente_id);
     }
 
     /**
