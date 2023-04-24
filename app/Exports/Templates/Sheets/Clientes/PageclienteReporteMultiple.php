@@ -114,21 +114,21 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
-            $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+                ->pluck('users.clave_pedidos');
+            $clientes = $clientes->WhereIn("u.clave_pedidos", $usersasesores);
         }
         elseif (Auth::user()->rol == "Asesor")
         {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
-                ->where('users.identificador', Auth::user()->identificador)
+                ->where('users.clave_pedidos', Auth::user()->clave_pedidos)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
-            $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+                ->pluck('users.clave_pedidos');
+            $clientes = $clientes->WhereIn("u.clave_pedidos", $usersasesores);
         }
         else if (Auth::user()->rol == "Encargado")
         {
@@ -136,10 +136,10 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 ->where('users.estado', '1')
                 ->where('users.supervisor', Auth::user()->id)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
-            $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+                ->pluck('users.clave_pedidos');
+            $clientes = $clientes->WhereIn("u.clave_pedidos", $usersasesores);
         }
 
         return $clientes->get();
