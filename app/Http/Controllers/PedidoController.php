@@ -1536,7 +1536,7 @@ class PedidoController extends Controller
 
             $pedido = Pedido::create([
                 'cliente_id' => $request->cliente_id,
-
+                'user_reg' => auth()->user()->id,
                 'creador' => 'USER0' . Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
                 'condicion' => Pedido::POR_ATENDER,
                 'condicion_code' => 1,
@@ -1669,6 +1669,7 @@ class PedidoController extends Controller
 
                 $detallepedido = DetallePedido::create([
                     'pedido_id' => $pedido->id,
+                    'user_reg' => auth()->user()->id,
                     'codigo' => $codigo_generado,//$codigo[$contP],
                     'nombre_empresa' => $nombre_empresa[$contP],
                     'mes' => $mes[$contP],

@@ -267,7 +267,8 @@ class Pedido extends Model
         'codigo_anterior',
         'pedidoid_anterior',
         'resultado_correccion',
-        'env_sustento'
+        'env_sustento',
+        'user_reg'
     ];
 
     /* public function user()
