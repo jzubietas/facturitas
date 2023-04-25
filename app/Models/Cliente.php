@@ -122,24 +122,24 @@ class Cliente extends Model
         {
             if($porcentaje->nombre=='FISICO - sin banca')
             {
-                $cliente->update([
+                Cliente::where('id',$cliente_id)->update([
                     'fsb_porcentaje' => ($porcentaje->porcentaje || 0)
                 ]);
             }else if($porcentaje->nombre=='FISICO - banca')
             {
-                $cliente->update([
+                Cliente::where('id',$cliente_id)->update([
                     'fcb_porcentaje' => ($porcentaje->porcentaje || 0)
                 ]);
             }
             else if($porcentaje->nombre=='ELECTRONICA - sin banca')
             {
-                $cliente->update([
+                Cliente::where('id',$cliente_id)->update([
                     'esb_porcentaje' => ($porcentaje->porcentaje || 0)
                 ]);
             }
             else if($porcentaje->nombre=='ELECTRONICA - banca')
             {
-                $cliente->update([
+                Cliente::where('id',$cliente_id)->update([
                     'ecb_porcentaje' => ($porcentaje->porcentaje || 0)
                 ]);
             }
