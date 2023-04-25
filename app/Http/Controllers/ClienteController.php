@@ -507,15 +507,41 @@ class ClienteController extends Controller
         $idporcentaje = $request->idporcentaje;
         $valoresporcentaje = $request->porcentaje;
         $cont = 0;
-        /* return $request->all(); */
+        /* return $request->all();*/
         $valor = Porcentaje::find($idporcentaje); /* return $valor; */
+        //dd($valoresporcentaje);
+        //1 fisico sin banca
+        //2 electronica sin banca
+        //3 fisico con banca
+        //4 electronica con banca
         while ($cont < count((array)$idporcentaje)) {
+            //dd($valor[$cont]);
             $valor[$cont]->update([
                 'porcentaje' => $valoresporcentaje[$cont]
             ]);
+            if($cont==1)
+            {
+                $cliente->update([
+                    'fsb_porcentaje'=>$valoresporcentaje[$cont]
+                ]);
+            }else if($cont==2)
+            {
+                $cliente->update([
+                    'esb_porcentaje'=>$valoresporcentaje[$cont]
+                ]);
+            }else if($cont==3)
+            {
+                $cliente->update([
+                    'fcb_porcentaje'=>$valoresporcentaje[$cont]
+                ]);
+            }else if($cont==4)
+            {
+                $cliente->update([
+                    'ecb_porcentaje'=>$valoresporcentaje[$cont]
+                ]);
+            }
             $cont++;
         }
-
         if ($request->tipo === '1') {
             return redirect()->route('clientes.index')->with('info', 'actualizado');
         } else {
