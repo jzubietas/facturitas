@@ -42,7 +42,7 @@
                     <label for="id_ingresomaterial">Asesor</label>
                     <p>{{ $pedido->users }}</p>
                 </div>
-                <div class="col">
+                <div class="col-12 mx-auto">
                     <label for="id_ingresomaterial">Estado</label>
                     <p>{{ $pedido->condiciones }}</p>
                 </div>
