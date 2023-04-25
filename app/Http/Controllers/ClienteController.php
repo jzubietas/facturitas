@@ -347,7 +347,9 @@ class ClienteController extends Controller
             $cont = 0;
 
             /* return $porcentaje; */
+            dd($nombreporcentaje);
             while ($cont < count((array)$nombreporcentaje)) {
+
 
                 $porcentaje = Porcentaje::create([
                     'cliente_id' => $cliente->id,
