@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col">
+                <div class="col-4">
                     <label for="id_ingresomaterial">SUBIO PEDIDO</label>
                     <p>{{ $pedido->subio_pedido }}</p>
                 </div>
