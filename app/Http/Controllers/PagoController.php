@@ -1123,7 +1123,7 @@ class PagoController extends Controller
             ->where('pago_pedidos.pago_id', $pago->id)
             ->get();
 
-        $detallePagos = DetallePago::inner('users as u','u.id','detalle_pagos.user_reg')
+        $detallePagos = DetallePago::join('users as u','u.id','detalle_pagos.user_reg')
             ->select(['detalle_pagos.id',
                 'detalle_pagos.monto',
                 'detalle_pagos.banco',
