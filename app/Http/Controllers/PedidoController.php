@@ -1458,7 +1458,9 @@ class PedidoController extends Controller
 
         //calculo de letras
         $codigo = null;
-        if ($identi_asesor->identificador == 'B') {
+        if ($identi_asesor->clave_pedidos == 'B') {
+            $codigo = $identi_asesor->clave_pedidos;
+        }else if ($identi_asesor->clave_pedidos == '21') {
             $codigo = $identi_asesor->identificador;
         } else {
             $codigo = intval($identi_asesor->identificador);
