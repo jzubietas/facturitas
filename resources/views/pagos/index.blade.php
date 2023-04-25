@@ -60,6 +60,7 @@
                     <th scope="col" class="align-middle">Codigo pedido</th>
                     <th scope="col" class="align-middle">Asesor</th>
                     <th scope="col" class="align-middle">Cliente</th>
+                    <th scope="col" class="align-middle">Subio pago</th>
                     <th scope="col" class="align-middle">Celular</th>
                     {{--<th scope="col">Observacion</th>--}}
                     {{--<th scope="col">Total cobro</th>--}}
@@ -318,6 +319,7 @@
 
                         },
                     },
+                    {data:'subio_pago',name:'subio_pago'},
                     {data: 'ccliente', name: 'ccliente', "visible": false,},
                     /*{//observacion
                       data: 'observacion', name: 'observacion'

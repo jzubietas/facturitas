@@ -91,6 +91,7 @@ class PagoController extends Controller
     {
 
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+            ->lefJoin('users as ub','pagos.user_reg','ub.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select(['pagos.id as id',
                 'pagos.correlativo as id2',
@@ -101,6 +102,7 @@ class PagoController extends Controller
                 'pagos.observacion',
                 'pagos.total_cobro',
                 'pagos.condicion',
+                'ub.name as subio_pago',
                 DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
                 DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
                 DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
