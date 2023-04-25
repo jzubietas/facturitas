@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col mx-auto">
+                <div class="col align-self-center">
                     <label for="id_ingresomaterial">SUBIO PEDIDO</label>
                     <p>{{ $pedido->subio_pedido }}</p>
                 </div>
