@@ -91,7 +91,7 @@ class PagoController extends Controller
     {
 
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
-            ->lefJoin('users as ub','pagos.user_reg','ub.id')
+            ->leftJoin('users as ub','pagos.user_reg','ub.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select(['pagos.id as id',
                 'pagos.correlativo as id2',
