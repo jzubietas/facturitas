@@ -43,6 +43,7 @@ class CalcularUltimoPedido extends Command
         foreach($clientes as $cliente)
         {
             $idcliente=$cliente->id;
+            $this->warn($cliente->id);
             Cliente::updateUltimoPedidoCliente($idcliente);
             $progress->advance();
         }

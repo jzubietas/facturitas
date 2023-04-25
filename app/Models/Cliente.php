@@ -100,9 +100,6 @@ class Cliente extends Model
         $query=Pedido::query()->where('estado',1)->orderBy('created_at','desc')->limit(1)
                 ->select([
                     "created_at as fechaultimopedido",
-                    //"DATE_FORMAT(dp0.created_at,'%d') as fechaultimopedido_dia",
-                    //"DATE_FORMAT(dp0.created_at,'%m') as fechaultimopedido_mes",
-                    //"DATE_FORMAT(dp0.created_at,'%m') as fechaultimopedido_anio",
                     "codigo as fechaultimopedido_codigo",
                     "pago as fechaultimopedido_pago",
                     "pagado as fechaultimopedido_pagado"
