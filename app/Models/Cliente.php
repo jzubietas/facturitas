@@ -107,7 +107,7 @@ class Cliente extends Model
 
         $cliente=Cliente::where('id',$cliente_id)->first();
 
-        if($query->count())
+        if($query!==null)
         {
             $cliente->update([
                 'fecha_ultimopedido'=>$query->fechaultimopedido,
@@ -116,7 +116,7 @@ class Cliente extends Model
                 'pagado_ultimopedido' => $query->fechaultimopedido_pagado
             ]);
         }
-        
+
         $porcentajes=Porcentaje::query()->where('cliente_id',$cliente_id)->get();
         foreach ($porcentajes as $porcentaje)
         {
