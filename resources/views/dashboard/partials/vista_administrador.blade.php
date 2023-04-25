@@ -582,7 +582,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargReporteMetasCobranzasGeneral();
 
 
-            grafico_metas_asesores();
+            //grafico_metas_asesores();
 
             setInterval(myTimer, 30000);
 
