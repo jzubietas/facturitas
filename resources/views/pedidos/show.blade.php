@@ -49,7 +49,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <label for="id_ingresomaterial">Estado</label>
+                    <label for="id_ingresomaterial">SUBIO PEDIDO</label>
                     <p>{{ $pedido->subio_pedido }}</p>
                 </div>
             </div>
