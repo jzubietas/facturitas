@@ -47,7 +47,7 @@
                     <p>{{ $pedido->condiciones }}</p>
                 </div>
             </div>
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col">
                     <label for="id_ingresomaterial">SUBIO PEDIDO</label>
                     <p>{{ $pedido->subio_pedido }}</p>
