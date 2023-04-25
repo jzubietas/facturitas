@@ -42,13 +42,13 @@
                     <label for="id_ingresomaterial">Asesor</label>
                     <p>{{ $pedido->users }}</p>
                 </div>
-                <div class="col-12 mx-auto">
+                <div class="col">
                     <label for="id_ingresomaterial">Estado</label>
                     <p>{{ $pedido->condiciones }}</p>
                 </div>
             </div>
             <div class="row">
-                <div class="col">
+                <div class="col mx-auto">
                     <label for="id_ingresomaterial">SUBIO PEDIDO</label>
                     <p>{{ $pedido->subio_pedido }}</p>
                 </div>
