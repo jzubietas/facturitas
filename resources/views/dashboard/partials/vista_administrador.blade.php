@@ -405,16 +405,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }else if (entero === 7) {
                         $('#porcentaje_pedidos_metas').html(resultado);
                     }
-                    else if (entero === 8) {/*izquierda*/
-                        $('#grafico_dejaronpedir_right').html(resultado);
-                    }
-                    else if (entero === 9) {/*derecha*/
-
-                        $('#grafico_dejaronpedir_left').html(resultado);
-                    }
-                    else if (entero === 13) {
-                        $('#dejaronpedir_supervisor_total').html(resultado);
-                    }
                     else if (entero === 14) {
                         $('#dejaronpedir_supervisor_A').html(resultado);
                     } else if (entero === 15) {
