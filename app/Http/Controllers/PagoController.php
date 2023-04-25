@@ -1123,15 +1123,18 @@ class PagoController extends Controller
             ->where('pago_pedidos.pago_id', $pago->id)
             ->get();
 
-        $detallePagos = DetallePago::select(['id',
-            'monto',
-            'banco',
-            'imagen',
-            'fecha',
-            'titular',
-            'cuenta',
-            'fecha_deposito',
-            'observacion'])
+        $detallePagos = DetallePago::inner('users as u','u.id','detalle_pagos.user_reg')
+            ->select(['detalle_pagos.id',
+                'detalle_pagos.monto',
+                'detalle_pagos.banco',
+                'detalle_pagos.imagen',
+                'detalle_pagos.fecha',
+                'detalle_pagos.titular',
+                'detalle_pagos.cuenta',
+                'detalle_pagos.fecha_deposito',
+                'detalle_pagos.observacion',
+                'u.name as subio_pago'
+            ])
             ->where('estado', '1')
             ->where('pago_id', $pago->id)
             ->get();
