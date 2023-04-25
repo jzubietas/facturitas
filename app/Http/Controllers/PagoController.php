@@ -550,6 +550,7 @@ class PagoController extends Controller
                     'user_id' => $clave_pedidos->id,
                     'user_identificador' => $clave_pedidos->identificador,
                     'user_clavepedido' => $clave_pedidos->clave_pedidos,
+                    'user_reg' => auth()->user()->id,
                     'cliente_id' => $request->cliente_id,
                     'total_cobro' => $deuda_total,
                     'total_pagado' => $pagado,
@@ -807,6 +808,7 @@ class PagoController extends Controller
                     'user_id' => $clave_pedidos->id,
                     'user_identificador' => $clave_pedidos->identificador,
                     'user_clavepedido' => $clave_pedidos->clave_pedidos,
+                    'user_reg' => auth()->user()->id,
                     'cliente_id' => $request->cliente_id,
                     'total_cobro' => $deuda_total,//total_pedido_pagar
                     'total_pagado' => $pagado,//total_pago_pagar
@@ -2316,6 +2318,7 @@ class PagoController extends Controller
                     'user_id' => $cliente_perdondarcourier->user_id,
                     'user_identificador' => $cliente_perdondarcourier->user_identificador,
                     'user_clavepedido' => $cliente_perdondarcourier->user_clavepedido,
+                    'user_reg' => auth()->user()->id,
                     'cliente_id' => $cliente_perdondarcourier->id,
                     'total_cobro' => '0',
                     'total_pagado' => '0',
