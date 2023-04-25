@@ -49,6 +49,8 @@ class CalcularUltimoPedidoIndividual extends Command
             $porcentajes=Porcentaje::query()->where('cliente_id',$idcliente)->get();
             foreach ($porcentajes as $porcentaje)
             {
+                $this->warn($porcentaje->nombre);
+                $this->warn($porcentaje->porcentaje);
                 if($porcentaje->nombre=='FISICO - sin banca')
                 {
                     Cliente::where('id',$idcliente)->update([
