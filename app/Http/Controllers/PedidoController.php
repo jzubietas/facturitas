@@ -143,6 +143,7 @@ class PedidoController extends Controller
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->leftJoin('users as ub','pedidos.user_reg','ub.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftJoin('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
             ->select(
@@ -160,6 +161,7 @@ class PedidoController extends Controller
                     'dp.total as total',
                     'dp.cantidad as cantidad',
                     'dp.ruc as ruc',
+                    'ub.name as  subio_pedido',
                     /*DB::raw("
                     concat(
                         (case when pedidos.pago=1 and pedidos.pagado=1 then 'ADELANTO' when pedidos.pago=1 and pedidos.pagado=2 then 'PAGO' else '' end),
@@ -1732,6 +1734,7 @@ class PedidoController extends Controller
         //ver pedido anulado y activo
         $pedido = Pedido::with('cliente')->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->leftJoin('users as ub','pedidos.user_reg','ub.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftJoin('pedidos_anulacions as pea','pedidos.id','pea.pedido_id')
             ->leftJoin('users as peau', 'pea.user_id_administrador', 'peau.id')
@@ -1739,7 +1742,7 @@ class PedidoController extends Controller
                 'pedidos.*',
                 'pedidos.condicion as condiciones',
                 'pedidos.created_at as fecha',
-
+                'ub.name as subio_pedido',
                 'c.nombre as nombres',
                 'c.celular as celulares',
                 'u.name as users',
