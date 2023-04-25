@@ -652,6 +652,7 @@ class PagoController extends Controller
                             'fecha' => $fecha[$monto_key],
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => $fileList[$monto_key]['file_name'],
+                            'user_reg' => auth()->user()->id,
                             'estado' => '1'
                         ]);
 
@@ -667,6 +668,7 @@ class PagoController extends Controller
                             'fecha' => $fecha[$monto_key],
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => 'logo_facturas.png',
+                            'user_reg' => auth()->user()->id,
                             'estado' => '1'
                         ]);
                     }
@@ -910,6 +912,7 @@ class PagoController extends Controller
                             'fecha' => $fecha[$monto_key],
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => $fileList[$monto_key]['file_name'],
+                            'user_reg' => auth()->user()->id,
                             'estado' => '1',
                             'observacion' => $nota[$monto_key] ?? 'N/A',
                         ]);
@@ -925,6 +928,7 @@ class PagoController extends Controller
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => 'logo_facturas.png',
                             'estado' => '1',
+                            'user_reg' => auth()->user()->id,
                             'observacion' => $nota[$monto_key] ?? 'N/A',
                         ]);
                     }
@@ -1300,6 +1304,7 @@ class PagoController extends Controller
                     'banco' => $banco[$contPa],
                     'fecha' => $fecha[$contPa],
                     'imagen' => $fileList[$contPa]['file_name'],
+                    'user_reg' => auth()->user()->id,
                     'estado' => '1'
                 ]);
 
@@ -2372,6 +2377,7 @@ class PagoController extends Controller
                     'fecha' => Carbon::now(),
                     'fecha_deposito' => Carbon::now(),
                     'imagen' => $capturapercur,
+                    'user_reg' => auth()->user()->id,
                     'estado' => '1'
                 ]);
                 $identi_asesor = User::where("id", $cliente_perdondarcourier->user_id)->where("unificado", "NO")->first();
