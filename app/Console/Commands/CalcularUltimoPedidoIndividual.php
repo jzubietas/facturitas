@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Cliente;
-use App\Models\Porcentaje;
 use Illuminate\Console\Command;
 
 class CalcularUltimoPedidoIndividual extends Command
@@ -45,36 +44,7 @@ class CalcularUltimoPedidoIndividual extends Command
         {
             $idcliente=$cliente->id;
             $this->warn($cliente->id);
-            //Cliente::updateUltimoPedidoCliente($idcliente);
-            $porcentajes=Porcentaje::query()->where('cliente_id',$idcliente)->get();
-            foreach ($porcentajes as $porcentaje)
-            {
-                $this->warn($porcentaje->nombre);
-                $this->warn($porcentaje->porcentaje);
-                if($porcentaje->nombre=='FISICO - sin banca')
-                {
-                    Cliente::where('id',$idcliente)->update([
-                        'fsb_porcentaje' => $porcentaje->porcentaje
-                    ]);
-                }else if($porcentaje->nombre=='FISICO - banca')
-                {
-                    Cliente::where('id',$idcliente)->update([
-                        'fcb_porcentaje' => $porcentaje->porcentaje
-                    ]);
-                }
-                else if($porcentaje->nombre=='ELECTRONICA - sin banca')
-                {
-                    Cliente::where('id',$idcliente)->update([
-                        'esb_porcentaje' => $porcentaje->porcentaje
-                    ]);
-                }
-                else if($porcentaje->nombre=='ELECTRONICA - banca')
-                {
-                    Cliente::where('id',$idcliente)->update([
-                        'ecb_porcentaje' => $porcentaje->porcentaje
-                    ]);
-                }
-            }
+            Cliente::updateUltimoPedidoCliente($idcliente);
             $progress->advance();
         }
         $progress->finish();
