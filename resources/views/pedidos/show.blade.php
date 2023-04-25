@@ -39,7 +39,7 @@
                     <p>{{ $pedido->nombres }} - {{ $pedido->celulares }}</p>
                 </div>
                 <div class="col">
-                    <label for="id_ingresomaterial">Asesor</label>
+                    <label for="id_ingresomaterial">Asesor:</label>
                     <p>{{ $pedido->users }}</p>
                 </div>
                 <div class="col">
@@ -49,7 +49,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-4">
-                    <label for="id_ingresomaterial">SUBIO PEDIDO</label>
+                    <label for="id_ingresomaterial">Pedido subido por:</label>
                     <p>{{ $pedido->subio_pedido }}</p>
                 </div>
             </div>
