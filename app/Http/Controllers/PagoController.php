@@ -1135,8 +1135,8 @@ class PagoController extends Controller
                 'detalle_pagos.observacion',
                 'u.name as subio_pago'
             ])
-            ->where('estado', '1')
-            ->where('pago_id', $pago->id)
+            ->where('detalle_pagos.estado', '1')
+            ->where('detalle_pagos.pago_id', $pago->id)
             ->get();
         //DB::raw('sum(detalle_pagos.monto) as total')
         $devoluciones = Devolucion::query()->wherePagoId($pago->id)->get();
