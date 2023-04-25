@@ -54,24 +54,24 @@ class CalcularUltimoPedidoIndividual extends Command
                 if($porcentaje->nombre=='FISICO - sin banca')
                 {
                     Cliente::where('id',$idcliente)->update([
-                        'fsb_porcentaje' => 1.8
+                        'fsb_porcentaje' => $porcentaje->porcentaje
                     ]);
                 }else if($porcentaje->nombre=='FISICO - banca')
                 {
                     Cliente::where('id',$idcliente)->update([
-                        'fcb_porcentaje' => 1.8
+                        'fcb_porcentaje' => $porcentaje->porcentaje
                     ]);
                 }
                 else if($porcentaje->nombre=='ELECTRONICA - sin banca')
                 {
                     Cliente::where('id',$idcliente)->update([
-                        'esb_porcentaje' => 1.8
+                        'esb_porcentaje' => $porcentaje->porcentaje
                     ]);
                 }
                 else if($porcentaje->nombre=='ELECTRONICA - banca')
                 {
                     Cliente::where('id',$idcliente)->update([
-                        'ecb_porcentaje' => 1.8
+                        'ecb_porcentaje' => $porcentaje->porcentaje
                     ]);
                 }
             }
