@@ -1427,6 +1427,7 @@ class PedidoController extends Controller
 
         } else if ($mirol == 'Jefe de llamadas') {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
+            //dd($identi_asesor);
             $fecha = Carbon::now()->format('dm');
             $dia = Carbon::now();
             $numped = Pedido::join('clientes as c', 'c.id', 'pedidos.cliente_id')
@@ -1440,6 +1441,7 @@ class PedidoController extends Controller
             $numped = $numped + 1;
         } else {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
+            //return $request->all();
             $fecha = Carbon::now()->format('dm');
             $dia = Carbon::now();
             $numped = Pedido::join('clientes as c', 'c.id', 'pedidos.cliente_id')
