@@ -1,4 +1,4 @@
-<?php //c28fda8c14ba5baaa103ad76674ccbee
+<?php //75d151d63bc112948981b1a54758630e
 /** @noinspection all */
 
 namespace LaravelIdea\Helper\Spatie\MediaLibrary\MediaCollections\Models {
@@ -10,7 +10,33 @@ namespace LaravelIdea\Helper\Spatie\MediaLibrary\MediaCollections\Models {
     use LaravelIdea\Helper\_BaseBuilder;
     use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
     use Spatie\MediaLibrary\MediaCollections\Models\Media;
-
+    
+    /**
+     * @method Media|null getOrPut($key, $value)
+     * @method Media|$this shift(int $count = 1)
+     * @method Media|null firstOrFail($key = null, $operator = null, $value = null)
+     * @method Media|$this pop(int $count = 1)
+     * @method Media|null pull($key, $default = null)
+     * @method Media|null last(callable $callback = null, $default = null)
+     * @method Media|$this random(int|null $number = null)
+     * @method Media|null sole($key = null, $operator = null, $value = null)
+     * @method Media|null get($key, $default = null)
+     * @method Media|null first(callable $callback = null, $default = null)
+     * @method Media|null firstWhere(string $key, $operator = null, $value = null)
+     * @method Media|null find($key, $default = null)
+     * @method Media[] all()
+     */
+    class _IH_Media_C extends MediaCollection {
+        /**
+         * @param int $size
+         * @return Media[][]
+         */
+        public function chunk($size)
+        {
+            return [];
+        }
+    }
+    
     /**
      * @method _IH_Media_QB whereId($value)
      * @method _IH_Media_QB whereModelId($value)
@@ -32,11 +58,11 @@ namespace LaravelIdea\Helper\Spatie\MediaLibrary\MediaCollections\Models {
      * @method _IH_Media_QB whereUpdatedAt($value)
      * @method Media baseSole(array|string $columns = ['*'])
      * @method Media create(array $attributes = [])
-     * @method MediaCollection|Media[] cursor()
-     * @method Media|null|MediaCollection|Media[] find($id, array $columns = ['*'])
-     * @method MediaCollection|Media[] findMany(array|Arrayable $ids, array $columns = ['*'])
-     * @method Media|MediaCollection|Media[] findOrFail($id, array $columns = ['*'])
-     * @method Media|MediaCollection|Media[] findOrNew($id, array $columns = ['*'])
+     * @method _IH_Media_C|Media[] cursor()
+     * @method Media|null|_IH_Media_C|Media[] find($id, array $columns = ['*'])
+     * @method _IH_Media_C|Media[] findMany(array|Arrayable $ids, array $columns = ['*'])
+     * @method Media|_IH_Media_C|Media[] findOrFail($id, array $columns = ['*'])
+     * @method Media|_IH_Media_C|Media[] findOrNew($id, array $columns = ['*'])
      * @method Media first(array|string $columns = ['*'])
      * @method Media firstOr(array|\Closure $columns = ['*'], \Closure $callback = null)
      * @method Media firstOrCreate(array $attributes = [], array $values = [])
@@ -44,15 +70,15 @@ namespace LaravelIdea\Helper\Spatie\MediaLibrary\MediaCollections\Models {
      * @method Media firstOrNew(array $attributes = [], array $values = [])
      * @method Media firstWhere(array|\Closure|Expression|string $column, $operator = null, $value = null, string $boolean = 'and')
      * @method Media forceCreate(array $attributes)
-     * @method MediaCollection|Media[] fromQuery(string $query, array $bindings = [])
-     * @method MediaCollection|Media[] get(array|string $columns = ['*'])
+     * @method _IH_Media_C|Media[] fromQuery(string $query, array $bindings = [])
+     * @method _IH_Media_C|Media[] get(array|string $columns = ['*'])
      * @method Media getModel()
      * @method Media[] getModels(array|string $columns = ['*'])
-     * @method MediaCollection|Media[] hydrate(array $items)
+     * @method _IH_Media_C|Media[] hydrate(array $items)
      * @method Media make(array $attributes = [])
      * @method Media newModelInstance(array $attributes = [])
-     * @method LengthAwarePaginator|Media[]|MediaCollection paginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
-     * @method Paginator|Media[]|MediaCollection simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method LengthAwarePaginator|Media[]|_IH_Media_C paginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method Paginator|Media[]|_IH_Media_C simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
      * @method Media sole(array|string $columns = ['*'])
      * @method Media updateOrCreate(array $attributes, array $values = [])
      * @method _IH_Media_QB ordered()

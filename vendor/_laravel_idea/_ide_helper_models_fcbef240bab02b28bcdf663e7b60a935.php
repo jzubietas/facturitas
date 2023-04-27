@@ -1,4 +1,4 @@
-<?php //99b64598b6d29b2acf20df9b2c56d23f
+<?php //a7049bc7ffdf78f4c6f7c612f0c5ea26
 /** @noinspection all */
 
 namespace App\Models {
@@ -11,7 +11,6 @@ namespace App\Models {
     use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     use Illuminate\Database\Eloquent\Relations\HasMany;
     use Illuminate\Database\Eloquent\Relations\HasOne;
-    use Illuminate\Database\Eloquent\Relations\MorphTo;
     use Illuminate\Database\Eloquent\Relations\MorphToMany;
     use Illuminate\Notifications\DatabaseNotification;
     use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -21,6 +20,8 @@ namespace App\Models {
     use LaravelIdea\Helper\App\Models\_IH_Alerta_QB;
     use LaravelIdea\Helper\App\Models\_IH_AttachCorrection_C;
     use LaravelIdea\Helper\App\Models\_IH_AttachCorrection_QB;
+    use LaravelIdea\Helper\App\Models\_IH_CallAtention_C;
+    use LaravelIdea\Helper\App\Models\_IH_CallAtention_QB;
     use LaravelIdea\Helper\App\Models\_IH_Cliente_C;
     use LaravelIdea\Helper\App\Models\_IH_Cliente_QB;
     use LaravelIdea\Helper\App\Models\_IH_Correction_C;
@@ -117,6 +118,8 @@ namespace App\Models {
     use LaravelIdea\Helper\App\Models\_IH_TipoMovimiento_QB;
     use LaravelIdea\Helper\App\Models\_IH_Titular_C;
     use LaravelIdea\Helper\App\Models\_IH_Titular_QB;
+    use LaravelIdea\Helper\App\Models\_IH_UpdateMovimiento_C;
+    use LaravelIdea\Helper\App\Models\_IH_UpdateMovimiento_QB;
     use LaravelIdea\Helper\App\Models\_IH_User_C;
     use LaravelIdea\Helper\App\Models\_IH_User_QB;
     use LaravelIdea\Helper\Illuminate\Notifications\_IH_DatabaseNotification_QB;
@@ -172,6 +175,28 @@ namespace App\Models {
     
     /**
      * @property int $id
+     * @property Carbon|null $created_at
+     * @property Carbon|null $updated_at
+     * @property int|null $user_id
+     * @property string|null $user_identificador
+     * @property string|null $accion
+     * @property int|null $responsable
+     * @method static _IH_CallAtention_QB onWriteConnection()
+     * @method _IH_CallAtention_QB newQuery()
+     * @method static _IH_CallAtention_QB on(null|string $connection = null)
+     * @method static _IH_CallAtention_QB query()
+     * @method static _IH_CallAtention_QB with(array|string $relations)
+     * @method _IH_CallAtention_QB newModelQuery()
+     * @method false|int increment(string $column, float|int $amount = 1, array $extra = [])
+     * @method false|int decrement(string $column, float|int $amount = 1, array $extra = [])
+     * @method static _IH_CallAtention_C|CallAtention[] all()
+     * @ownLinks user_id,\App\Models\User,id
+     * @mixin _IH_CallAtention_QB
+     */
+    class CallAtention extends Model {}
+    
+    /**
+     * @property int $id
      * @property int $user_id
      * @property string|null $nombre
      * @property string|null $icelular
@@ -200,6 +225,16 @@ namespace App\Models {
      * @property string|null $path_adjunto_anular
      * @property string|null $path_adjunto_anular_disk
      * @property string|null $agenda
+     * @property string|null $user_identificador
+     * @property string|null $user_clavepedido
+     * @property Carbon|null $fecha_ultimopedido
+     * @property string|null $codigo_ultimopedido
+     * @property int|null $pago_ultimopedido
+     * @property int|null $pagado_ultimopedido
+     * @property float|null $fsb_porcentaje
+     * @property float|null $fcb_porcentaje
+     * @property float|null $esb_porcentaje
+     * @property float|null $ecb_porcentaje
      * @property _IH_DireccionGrupo_C|DireccionGrupo[] $direccion_grupos
      * @property-read int $direccion_grupos_count
      * @method HasMany|_IH_DireccionGrupo_QB direccion_grupos()
@@ -356,6 +391,7 @@ namespace App\Models {
      * @property Carbon|null $created_at
      * @property Carbon|null $updated_at
      * @property string|null $nota
+     * @property int|null $user_reg
      * @property Pago $pago
      * @method BelongsTo|_IH_Pago_QB pago()
      * @method static _IH_DetallePago_QB onWriteConnection()
@@ -403,6 +439,7 @@ namespace App\Models {
      * @property Carbon|null $updated_at
      * @property int|null $atendido_por_id
      * @property string|null $sobre_valida
+     * @property int|null $user_reg
      * @method static _IH_DetallePedido_QB onWriteConnection()
      * @method _IH_DetallePedido_QB newQuery()
      * @method static _IH_DetallePedido_QB on(null|string $connection = null)
@@ -555,6 +592,7 @@ namespace App\Models {
      * @property mixed|null $courier_data
      * @property int $relacionado
      * @property Carbon|null $add_screenshot_at
+     * @property int|null $urgente
      * @property-read $fecha_salida_format attribute
      * @property-read bool $is_reprogramado attribute
      * @property DireccionEnvio $direccionEnvio
@@ -816,6 +854,7 @@ namespace App\Models {
      * @property Carbon|null $created_at
      * @property Carbon|null $updated_at
      * @property Carbon|null $deleted_at
+     * @property int|null $urgente
      * @property _IH_PedidoMotorizadoHistory_C|PedidoMotorizadoHistory[] $motorizadoHistories
      * @property-read int $motorizado_histories_count
      * @method HasMany|_IH_PedidoMotorizadoHistory_QB motorizadoHistories()
@@ -916,6 +955,8 @@ namespace App\Models {
      * @property int|null $user_id
      * @property Carbon|null $created_at
      * @property Carbon|null $updated_at
+     * @property string|null $accion
+     * @property int|null $responsable
      * @method static _IH_HistorialVidas_QB onWriteConnection()
      * @method _IH_HistorialVidas_QB newQuery()
      * @method static _IH_HistorialVidas_QB on(null|string $connection = null)
@@ -1064,12 +1105,7 @@ namespace App\Models {
      * @property Carbon|null $created_at
      * @property Carbon|null $updated_at
      * @property-read $created_at_format attribute
-     * @property-read string $extension attribute
-     * @property-read string $human_readable_size attribute
      * @property-read $media_link attribute
-     * @property-read string $type attribute
-     * @property Model $model
-     * @method MorphTo model()
      * @method static _IH_Media_QB onWriteConnection()
      * @method _IH_Media_QB newQuery()
      * @method static _IH_Media_QB on(null|string $connection = null)
@@ -1148,6 +1184,8 @@ namespace App\Models {
      * @property int|null $status
      * @property Carbon|null $created_at
      * @property Carbon|null $updated_at
+     * @property string|null $numerotrack
+     * @property string|null $aniotrack
      * @method static _IH_OlvaMovimiento_QB onWriteConnection()
      * @method _IH_OlvaMovimiento_QB newQuery()
      * @method static _IH_OlvaMovimiento_QB on(null|string $connection = null)
@@ -1180,6 +1218,9 @@ namespace App\Models {
      * @property Carbon|null $updated_at
      * @property int|null $condicion_code
      * @property string|null $correlativo
+     * @property string|null $user_identificador
+     * @property string|null $user_clavepedido
+     * @property int|null $user_reg
      * @property-read string $code_id attribute
      * @property-read string $id_code attribute
      * @property _IH_DetallePago_C|DetallePago[] $detalle_pagos
@@ -1328,6 +1369,8 @@ namespace App\Models {
      * @property int $pedidoid_anterior
      * @property string|null $env_sustento
      * @property int $estado_correccion
+     * @property string|null $user_clavepedido
+     * @property int|null $user_reg
      * @property-read string $condicion_envio_color attribute
      * @property-read $id_code attribute
      * @property Cliente $cliente
@@ -1473,6 +1516,7 @@ namespace App\Models {
      * @property string|null $resposable_aprob_admin
      * @property float|null $cantidad
      * @property float|null $cantidad_resta
+     * @property float|null $difanterior
      * @method static _IH_PedidosAnulacion_QB onWriteConnection()
      * @method _IH_PedidosAnulacion_QB newQuery()
      * @method static _IH_PedidosAnulacion_QB on(null|string $connection = null)
@@ -1559,6 +1603,9 @@ namespace App\Models {
      * @property Carbon|null $created_at
      * @property Carbon|null $updated_at
      * @property int|null $flag_fp
+     * @property int|null $user_id
+     * @property string $user_identificador
+     * @property string|null $user_clavepedido
      * @property _IH_Media_C|Media[] $media
      * @property-read int $media_count
      * @method MorphToMany|_IH_Media_QB media()
@@ -1571,7 +1618,7 @@ namespace App\Models {
      * @method false|int increment(string $column, float|int $amount = 1, array $extra = [])
      * @method false|int decrement(string $column, float|int $amount = 1, array $extra = [])
      * @method static _IH_SituacionClientes_C|SituacionClientes[] all()
-     * @ownLinks cliente_id,\App\Models\User,id
+     * @ownLinks cliente_id,\App\Models\User,id|user_id,\App\Models\User,id
      * @mixin _IH_SituacionClientes_QB
      */
     class SituacionClientes extends Model {}
@@ -1648,6 +1695,27 @@ namespace App\Models {
     
     /**
      * @property int $id
+     * @property string|null $obs
+     * @property string $valores_ant
+     * @property string $valores_act
+     * @property Carbon|null $fecha_creacion
+     * @property Carbon|null $created_at
+     * @property Carbon|null $updated_at
+     * @method static _IH_UpdateMovimiento_QB onWriteConnection()
+     * @method _IH_UpdateMovimiento_QB newQuery()
+     * @method static _IH_UpdateMovimiento_QB on(null|string $connection = null)
+     * @method static _IH_UpdateMovimiento_QB query()
+     * @method static _IH_UpdateMovimiento_QB with(array|string $relations)
+     * @method _IH_UpdateMovimiento_QB newModelQuery()
+     * @method false|int increment(string $column, float|int $amount = 1, array $extra = [])
+     * @method false|int decrement(string $column, float|int $amount = 1, array $extra = [])
+     * @method static _IH_UpdateMovimiento_C|UpdateMovimiento[] all()
+     * @mixin _IH_UpdateMovimiento_QB
+     */
+    class UpdateMovimiento extends Model {}
+    
+    /**
+     * @property int $id
      * @property string $name
      * @property string $email
      * @property Carbon|null $email_verified_at
@@ -1684,6 +1752,7 @@ namespace App\Models {
      * @property int|null $cant_vidas_cero
      * @property int|null $meta_quincena
      * @property Carbon|null $birthday
+     * @property string|null $clave_pedidos
      * @property-read string $profile_photo_url attribute
      * @property User|null $asesoroperario
      * @method BelongsTo|_IH_User_QB asesoroperario()
@@ -1722,7 +1791,7 @@ namespace App\Models {
      * @method false|int increment(string $column, float|int $amount = 1, array $extra = [])
      * @method false|int decrement(string $column, float|int $amount = 1, array $extra = [])
      * @method static _IH_User_C|User[] all()
-     * @foreignLinks id,\App\Models\PedidoHistory,user_id|id,\App\Models\SituacionClientes,cliente_id|id,\App\Models\Cliente,user_id|id,\App\Models\DireccionEnvio,user_id|id,\App\Models\DireccionGrupo,user_id|id,\App\Models\GastoEnvio,user_id|id,\App\Models\Pago,user_id|id,\App\Models\Pedido,user_id|id,\App\Models\Ruc,user_id|id,\App\Models\Directions,user_id|id,\App\Models\HistoriaPedidos,user_id|id,\App\Models\HistorialVidas,user_id
+     * @foreignLinks id,\App\Models\PedidoHistory,user_id|id,\App\Models\SituacionClientes,cliente_id|id,\App\Models\Cliente,user_id|id,\App\Models\DireccionEnvio,user_id|id,\App\Models\DireccionGrupo,user_id|id,\App\Models\GastoEnvio,user_id|id,\App\Models\Pago,user_id|id,\App\Models\Pedido,user_id|id,\App\Models\Ruc,user_id|id,\App\Models\SituacionClientes,user_id|id,\App\Models\Directions,user_id|id,\App\Models\HistoriaPedidos,user_id|id,\App\Models\HistorialVidas,user_id|id,\App\Models\CallAtention,user_id
      * @mixin _IH_User_QB
      * @method static UserFactory factory(...$parameters)
      */

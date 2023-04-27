@@ -1,10 +1,11 @@
-<?php //4b343a95b8d7e0caa7bc12f2b8117691
+<?php //0c8455869a88f52ea796d0ae3bf7370e
 /** @noinspection all */
 
 namespace LaravelIdea\Helper\App\Models {
 
     use App\Models\Alerta;
     use App\Models\AttachCorrection;
+    use App\Models\CallAtention;
     use App\Models\Cliente;
     use App\Models\Correction;
     use App\Models\CourierRegistro;
@@ -53,6 +54,7 @@ namespace LaravelIdea\Helper\App\Models {
     use App\Models\TeamInvitation;
     use App\Models\TipoMovimiento;
     use App\Models\Titular;
+    use App\Models\UpdateMovimiento;
     use App\Models\User;
     use Carbon\CarbonInterface;
     use Illuminate\Contracts\Support\Arrayable;
@@ -62,6 +64,7 @@ namespace LaravelIdea\Helper\App\Models {
     use Illuminate\Support\Collection;
     use LaravelIdea\Helper\_BaseBuilder;
     use LaravelIdea\Helper\_BaseCollection;
+    use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
     use Spatie\Permission\Contracts\Permission;
     use Spatie\Permission\Contracts\Role;
     
@@ -192,6 +195,68 @@ namespace LaravelIdea\Helper\App\Models {
     class _IH_AttachCorrection_QB extends _BaseBuilder {}
     
     /**
+     * @method CallAtention|null getOrPut($key, $value)
+     * @method CallAtention|$this shift(int $count = 1)
+     * @method CallAtention|null firstOrFail($key = null, $operator = null, $value = null)
+     * @method CallAtention|$this pop(int $count = 1)
+     * @method CallAtention|null pull($key, $default = null)
+     * @method CallAtention|null last(callable $callback = null, $default = null)
+     * @method CallAtention|$this random(int|null $number = null)
+     * @method CallAtention|null sole($key = null, $operator = null, $value = null)
+     * @method CallAtention|null get($key, $default = null)
+     * @method CallAtention|null first(callable $callback = null, $default = null)
+     * @method CallAtention|null firstWhere(string $key, $operator = null, $value = null)
+     * @method CallAtention|null find($key, $default = null)
+     * @method CallAtention[] all()
+     */
+    class _IH_CallAtention_C extends _BaseCollection {
+        /**
+         * @param int $size
+         * @return CallAtention[][]
+         */
+        public function chunk($size)
+        {
+            return [];
+        }
+    }
+    
+    /**
+     * @method _IH_CallAtention_QB whereId($value)
+     * @method _IH_CallAtention_QB whereCreatedAt($value)
+     * @method _IH_CallAtention_QB whereUpdatedAt($value)
+     * @method _IH_CallAtention_QB whereUserId($value)
+     * @method _IH_CallAtention_QB whereUserIdentificador($value)
+     * @method _IH_CallAtention_QB whereAccion($value)
+     * @method _IH_CallAtention_QB whereResponsable($value)
+     * @method CallAtention baseSole(array|string $columns = ['*'])
+     * @method CallAtention create(array $attributes = [])
+     * @method _IH_CallAtention_C|CallAtention[] cursor()
+     * @method CallAtention|null|_IH_CallAtention_C|CallAtention[] find($id, array $columns = ['*'])
+     * @method _IH_CallAtention_C|CallAtention[] findMany(array|Arrayable $ids, array $columns = ['*'])
+     * @method CallAtention|_IH_CallAtention_C|CallAtention[] findOrFail($id, array $columns = ['*'])
+     * @method CallAtention|_IH_CallAtention_C|CallAtention[] findOrNew($id, array $columns = ['*'])
+     * @method CallAtention first(array|string $columns = ['*'])
+     * @method CallAtention firstOr(array|\Closure $columns = ['*'], \Closure $callback = null)
+     * @method CallAtention firstOrCreate(array $attributes = [], array $values = [])
+     * @method CallAtention firstOrFail(array $columns = ['*'])
+     * @method CallAtention firstOrNew(array $attributes = [], array $values = [])
+     * @method CallAtention firstWhere(array|\Closure|Expression|string $column, $operator = null, $value = null, string $boolean = 'and')
+     * @method CallAtention forceCreate(array $attributes)
+     * @method _IH_CallAtention_C|CallAtention[] fromQuery(string $query, array $bindings = [])
+     * @method _IH_CallAtention_C|CallAtention[] get(array|string $columns = ['*'])
+     * @method CallAtention getModel()
+     * @method CallAtention[] getModels(array|string $columns = ['*'])
+     * @method _IH_CallAtention_C|CallAtention[] hydrate(array $items)
+     * @method CallAtention make(array $attributes = [])
+     * @method CallAtention newModelInstance(array $attributes = [])
+     * @method LengthAwarePaginator|CallAtention[]|_IH_CallAtention_C paginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method Paginator|CallAtention[]|_IH_CallAtention_C simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method CallAtention sole(array|string $columns = ['*'])
+     * @method CallAtention updateOrCreate(array $attributes, array $values = [])
+     */
+    class _IH_CallAtention_QB extends _BaseBuilder {}
+    
+    /**
      * @method Cliente|null getOrPut($key, $value)
      * @method Cliente|$this shift(int $count = 1)
      * @method Cliente|null firstOrFail($key = null, $operator = null, $value = null)
@@ -247,6 +312,16 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_Cliente_QB wherePathAdjuntoAnular($value)
      * @method _IH_Cliente_QB wherePathAdjuntoAnularDisk($value)
      * @method _IH_Cliente_QB whereAgenda($value)
+     * @method _IH_Cliente_QB whereUserIdentificador($value)
+     * @method _IH_Cliente_QB whereUserClavepedido($value)
+     * @method _IH_Cliente_QB whereFechaUltimopedido($value)
+     * @method _IH_Cliente_QB whereCodigoUltimopedido($value)
+     * @method _IH_Cliente_QB wherePagoUltimopedido($value)
+     * @method _IH_Cliente_QB wherePagadoUltimopedido($value)
+     * @method _IH_Cliente_QB whereFsbPorcentaje($value)
+     * @method _IH_Cliente_QB whereFcbPorcentaje($value)
+     * @method _IH_Cliente_QB whereEsbPorcentaje($value)
+     * @method _IH_Cliente_QB whereEcbPorcentaje($value)
      * @method Cliente baseSole(array|string $columns = ['*'])
      * @method Cliente create(array $attributes = [])
      * @method _IH_Cliente_C|Cliente[] cursor()
@@ -638,6 +713,7 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_DetallePago_QB whereCreatedAt($value)
      * @method _IH_DetallePago_QB whereUpdatedAt($value)
      * @method _IH_DetallePago_QB whereNota($value)
+     * @method _IH_DetallePago_QB whereUserReg($value)
      * @method DetallePago baseSole(array|string $columns = ['*'])
      * @method DetallePago create(array $attributes = [])
      * @method _IH_DetallePago_C|DetallePago[] cursor()
@@ -723,6 +799,7 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_DetallePedido_QB whereUpdatedAt($value)
      * @method _IH_DetallePedido_QB whereAtendidoPorId($value)
      * @method _IH_DetallePedido_QB whereSobreValida($value)
+     * @method _IH_DetallePedido_QB whereUserReg($value)
      * @method DetallePedido baseSole(array|string $columns = ['*'])
      * @method DetallePedido create(array $attributes = [])
      * @method _IH_DetallePedido_C|DetallePedido[] cursor()
@@ -986,6 +1063,7 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_DireccionGrupo_QB whereCourierData($value)
      * @method _IH_DireccionGrupo_QB whereRelacionado($value)
      * @method _IH_DireccionGrupo_QB whereAddScreenshotAt($value)
+     * @method _IH_DireccionGrupo_QB whereUrgente($value)
      * @method DireccionGrupo baseSole(array|string $columns = ['*'])
      * @method DireccionGrupo create(array $attributes = [])
      * @method _IH_DireccionGrupo_C|DireccionGrupo[] cursor()
@@ -1643,6 +1721,7 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_GrupoPedido_QB whereCreatedAt($value)
      * @method _IH_GrupoPedido_QB whereUpdatedAt($value)
      * @method _IH_GrupoPedido_QB whereDeletedAt($value)
+     * @method _IH_GrupoPedido_QB whereUrgente($value)
      * @method GrupoPedido baseSole(array|string $columns = ['*'])
      * @method GrupoPedido create(array $attributes = [])
      * @method _IH_GrupoPedido_C|GrupoPedido[] cursor()
@@ -1819,6 +1898,8 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_HistorialVidas_QB whereUserId($value)
      * @method _IH_HistorialVidas_QB whereCreatedAt($value)
      * @method _IH_HistorialVidas_QB whereUpdatedAt($value)
+     * @method _IH_HistorialVidas_QB whereAccion($value)
+     * @method _IH_HistorialVidas_QB whereResponsable($value)
      * @method HistorialVidas baseSole(array|string $columns = ['*'])
      * @method HistorialVidas create(array $attributes = [])
      * @method _IH_HistorialVidas_C|HistorialVidas[] cursor()
@@ -2138,7 +2219,7 @@ namespace LaravelIdea\Helper\App\Models {
      * @method Media|null find($key, $default = null)
      * @method Media[] all()
      */
-    class _IH_Media_C extends _BaseCollection {
+    class _IH_Media_C extends MediaCollection {
         /**
          * @param int $size
          * @return Media[][]
@@ -2193,7 +2274,6 @@ namespace LaravelIdea\Helper\App\Models {
      * @method Paginator|Media[]|_IH_Media_C simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
      * @method Media sole(array|string $columns = ['*'])
      * @method Media updateOrCreate(array $attributes, array $values = [])
-     * @method _IH_Media_QB ordered()
      */
     class _IH_Media_QB extends _BaseBuilder {}
     
@@ -2416,6 +2496,8 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_OlvaMovimiento_QB whereStatus($value)
      * @method _IH_OlvaMovimiento_QB whereCreatedAt($value)
      * @method _IH_OlvaMovimiento_QB whereUpdatedAt($value)
+     * @method _IH_OlvaMovimiento_QB whereNumerotrack($value)
+     * @method _IH_OlvaMovimiento_QB whereAniotrack($value)
      * @method OlvaMovimiento baseSole(array|string $columns = ['*'])
      * @method OlvaMovimiento create(array $attributes = [])
      * @method _IH_OlvaMovimiento_C|OlvaMovimiento[] cursor()
@@ -2557,6 +2639,9 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_Pago_QB whereUpdatedAt($value)
      * @method _IH_Pago_QB whereCondicionCode($value)
      * @method _IH_Pago_QB whereCorrelativo($value)
+     * @method _IH_Pago_QB whereUserIdentificador($value)
+     * @method _IH_Pago_QB whereUserClavepedido($value)
+     * @method _IH_Pago_QB whereUserReg($value)
      * @method Pago baseSole(array|string $columns = ['*'])
      * @method Pago create(array $attributes = [])
      * @method _IH_Pago_C|Pago[] cursor()
@@ -2954,6 +3039,8 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_Pedido_QB wherePedidoidAnterior($value)
      * @method _IH_Pedido_QB whereEnvSustento($value)
      * @method _IH_Pedido_QB whereEstadoCorreccion($value)
+     * @method _IH_Pedido_QB whereUserClavepedido($value)
+     * @method _IH_Pedido_QB whereUserReg($value)
      * @method Pedido baseSole(array|string $columns = ['*'])
      * @method Pedido create(array $attributes = [])
      * @method _IH_Pedido_C|Pedido[] cursor()
@@ -3074,6 +3161,7 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_PedidosAnulacion_QB whereResposableAprobAdmin($value)
      * @method _IH_PedidosAnulacion_QB whereCantidad($value)
      * @method _IH_PedidosAnulacion_QB whereCantidadResta($value)
+     * @method _IH_PedidosAnulacion_QB whereDifanterior($value)
      * @method PedidosAnulacion baseSole(array|string $columns = ['*'])
      * @method PedidosAnulacion create(array $attributes = [])
      * @method _IH_PedidosAnulacion_C|PedidosAnulacion[] cursor()
@@ -3319,6 +3407,9 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_SituacionClientes_QB whereCreatedAt($value)
      * @method _IH_SituacionClientes_QB whereUpdatedAt($value)
      * @method _IH_SituacionClientes_QB whereFlagFp($value)
+     * @method _IH_SituacionClientes_QB whereUserId($value)
+     * @method _IH_SituacionClientes_QB whereUserIdentificador($value)
+     * @method _IH_SituacionClientes_QB whereUserClavepedido($value)
      * @method SituacionClientes baseSole(array|string $columns = ['*'])
      * @method SituacionClientes create(array $attributes = [])
      * @method _IH_SituacionClientes_C|SituacionClientes[] cursor()
@@ -3573,6 +3664,68 @@ namespace LaravelIdea\Helper\App\Models {
     class _IH_Titular_QB extends _BaseBuilder {}
     
     /**
+     * @method UpdateMovimiento|null getOrPut($key, $value)
+     * @method UpdateMovimiento|$this shift(int $count = 1)
+     * @method UpdateMovimiento|null firstOrFail($key = null, $operator = null, $value = null)
+     * @method UpdateMovimiento|$this pop(int $count = 1)
+     * @method UpdateMovimiento|null pull($key, $default = null)
+     * @method UpdateMovimiento|null last(callable $callback = null, $default = null)
+     * @method UpdateMovimiento|$this random(int|null $number = null)
+     * @method UpdateMovimiento|null sole($key = null, $operator = null, $value = null)
+     * @method UpdateMovimiento|null get($key, $default = null)
+     * @method UpdateMovimiento|null first(callable $callback = null, $default = null)
+     * @method UpdateMovimiento|null firstWhere(string $key, $operator = null, $value = null)
+     * @method UpdateMovimiento|null find($key, $default = null)
+     * @method UpdateMovimiento[] all()
+     */
+    class _IH_UpdateMovimiento_C extends _BaseCollection {
+        /**
+         * @param int $size
+         * @return UpdateMovimiento[][]
+         */
+        public function chunk($size)
+        {
+            return [];
+        }
+    }
+    
+    /**
+     * @method _IH_UpdateMovimiento_QB whereId($value)
+     * @method _IH_UpdateMovimiento_QB whereObs($value)
+     * @method _IH_UpdateMovimiento_QB whereValoresAnt($value)
+     * @method _IH_UpdateMovimiento_QB whereValoresAct($value)
+     * @method _IH_UpdateMovimiento_QB whereFechaCreacion($value)
+     * @method _IH_UpdateMovimiento_QB whereCreatedAt($value)
+     * @method _IH_UpdateMovimiento_QB whereUpdatedAt($value)
+     * @method UpdateMovimiento baseSole(array|string $columns = ['*'])
+     * @method UpdateMovimiento create(array $attributes = [])
+     * @method _IH_UpdateMovimiento_C|UpdateMovimiento[] cursor()
+     * @method UpdateMovimiento|null|_IH_UpdateMovimiento_C|UpdateMovimiento[] find($id, array $columns = ['*'])
+     * @method _IH_UpdateMovimiento_C|UpdateMovimiento[] findMany(array|Arrayable $ids, array $columns = ['*'])
+     * @method UpdateMovimiento|_IH_UpdateMovimiento_C|UpdateMovimiento[] findOrFail($id, array $columns = ['*'])
+     * @method UpdateMovimiento|_IH_UpdateMovimiento_C|UpdateMovimiento[] findOrNew($id, array $columns = ['*'])
+     * @method UpdateMovimiento first(array|string $columns = ['*'])
+     * @method UpdateMovimiento firstOr(array|\Closure $columns = ['*'], \Closure $callback = null)
+     * @method UpdateMovimiento firstOrCreate(array $attributes = [], array $values = [])
+     * @method UpdateMovimiento firstOrFail(array $columns = ['*'])
+     * @method UpdateMovimiento firstOrNew(array $attributes = [], array $values = [])
+     * @method UpdateMovimiento firstWhere(array|\Closure|Expression|string $column, $operator = null, $value = null, string $boolean = 'and')
+     * @method UpdateMovimiento forceCreate(array $attributes)
+     * @method _IH_UpdateMovimiento_C|UpdateMovimiento[] fromQuery(string $query, array $bindings = [])
+     * @method _IH_UpdateMovimiento_C|UpdateMovimiento[] get(array|string $columns = ['*'])
+     * @method UpdateMovimiento getModel()
+     * @method UpdateMovimiento[] getModels(array|string $columns = ['*'])
+     * @method _IH_UpdateMovimiento_C|UpdateMovimiento[] hydrate(array $items)
+     * @method UpdateMovimiento make(array $attributes = [])
+     * @method UpdateMovimiento newModelInstance(array $attributes = [])
+     * @method LengthAwarePaginator|UpdateMovimiento[]|_IH_UpdateMovimiento_C paginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method Paginator|UpdateMovimiento[]|_IH_UpdateMovimiento_C simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+     * @method UpdateMovimiento sole(array|string $columns = ['*'])
+     * @method UpdateMovimiento updateOrCreate(array $attributes, array $values = [])
+     */
+    class _IH_UpdateMovimiento_QB extends _BaseBuilder {}
+    
+    /**
      * @method User|null getOrPut($key, $value)
      * @method User|$this shift(int $count = 1)
      * @method User|null firstOrFail($key = null, $operator = null, $value = null)
@@ -3636,6 +3789,7 @@ namespace LaravelIdea\Helper\App\Models {
      * @method _IH_User_QB whereCantVidasCero($value)
      * @method _IH_User_QB whereMetaQuincena($value)
      * @method _IH_User_QB whereBirthday($value)
+     * @method _IH_User_QB whereClavePedidos($value)
      * @method User baseSole(array|string $columns = ['*'])
      * @method User create(array $attributes = [])
      * @method _IH_User_C|User[] cursor()

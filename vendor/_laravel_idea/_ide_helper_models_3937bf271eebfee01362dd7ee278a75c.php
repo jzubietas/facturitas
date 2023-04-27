@@ -1,4 +1,4 @@
-<?php //212f6f5bdbeb3fa97cd708d6e0814b7b
+<?php //4c5368b62f14e4d3a7ad7b19e2e50a34
 /** @noinspection all */
 
 namespace Spatie\MediaLibrary\MediaCollections\Models {
@@ -6,9 +6,9 @@ namespace Spatie\MediaLibrary\MediaCollections\Models {
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\Relations\MorphTo;
     use Illuminate\Support\Carbon;
+    use LaravelIdea\Helper\Spatie\MediaLibrary\MediaCollections\Models\_IH_Media_C;
     use LaravelIdea\Helper\Spatie\MediaLibrary\MediaCollections\Models\_IH_Media_QB;
-    use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
-
+    
     /**
      * @property int $id
      * @property int $model_id
@@ -41,7 +41,7 @@ namespace Spatie\MediaLibrary\MediaCollections\Models {
      * @method _IH_Media_QB newModelQuery()
      * @method false|int increment(string $column, float|int $amount = 1, array $extra = [])
      * @method false|int decrement(string $column, float|int $amount = 1, array $extra = [])
-     * @method static MediaCollection|Media[] all()
+     * @method static _IH_Media_C|Media[] all()
      * @mixin _IH_Media_QB
      */
     class Media extends Model {}
