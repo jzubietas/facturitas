@@ -587,31 +587,36 @@ class Cliente extends Model
                                       {
                                           if($situacion_antes->activos==0)
                                           {
-                                              //es febrero
-                                              if($situacion_antes_2->activos==0)
+                                              if($situacion_antes->situacion=='NULO')
                                               {
-                                                  //es enero
-                                                  if($situacion_antes_3->activos==0)
-                                                  {
-                                                      // es diciembre
-                                                      //a abandono
-                                                      $situacion_create->update([
-                                                          "situacion" => 'NULO',"flag_fp" => '1'
-                                                      ]);
+                                                  //verificar si tuvo algun pedido
 
-                                                  }else if($situacion_antes_3->activos>0)
+                                                  //si tuvo un pedido
+                                                  $verificar_fecha=Carbon::createFromDate($where_anio, $where_mes,1)->startOfMonth()->subMonth()->endOfMonth()->format('Y-m-d');
+                                                  $pedidos_c=Pedido::query()->where('cliente_id',$situacion_periodo->cliente_id)
+                                                      ->whereDate('created_at','<=',$verificar_fecha)
+                                                      ->where('estado','=',1)
+                                                      ->count();
+
+                                                  if($pedidos_c>0)
                                                   {
-                                                      //a abandono reciente
+                                                      if($situacion_antes_2=='NULO')
+                                                      {
+                                                          $situacion_create->update([
+                                                              "situacion" => 'RECUPERADO ABANDONO',"flag_fp" => '1'
+                                                          ]);
+                                                      }else{
+                                                          $situacion_create->update([
+                                                              "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                          ]);
+                                                      }
+                                                  }else{
                                                       $situacion_create->update([
-                                                          "situacion" => 'RECUPERADO RECIENTE',"flag_fp" => '1'
+                                                          "situacion" => 'NUEVO',"flag_fp" => '1'
                                                       ]);
                                                   }
-                                              }else if($situacion_antes_2->activos>0)
-                                              {
-                                                  $situacion_create->update([
-                                                      "situacion" => 'NUEVO',"flag_fp" => '1'
-                                                  ]);
                                               }
+
                                           }else if($situacion_antes->activos>0)
                                           {
                                               $situacion_create->update([
@@ -772,6 +777,7 @@ class Cliente extends Model
                                   'situacion'=>'BLOQUEADO'
                               ]);
                       }
+
 
                       $situacion_actual=SituacionClientes::where('cliente_id',$cliente->id)->where('periodo',$mes_actual->format('Y-m'))->first();
 

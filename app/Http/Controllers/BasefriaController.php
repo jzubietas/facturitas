@@ -158,21 +158,26 @@ class BasefriaController extends Controller
      */
     public function create()
     {
-        $usersB = User::where('users.estado', '1')
+        $users = User::query()->where('estado','=',1)->whereIn('rol',[User::ROL_ASESOR_ADMINISTRATIVO,User::ROL_ASESOR])
+            ->select([
+                'identificador', 'id'
+            ])
+            ->pluck('identificador', 'id');
+        /*$usersB = User::where('users.estado', '1')
             ->whereIn('rol', [User::ROL_ASESOR_ADMINISTRATIVO])//51
-            ->first();
+            ->first();*/
         //dd($usersB);
-        $users = collect();
-        $users->put($usersB->id, $usersB->identificador);
-        $usersall = User::select(
+        //$users = collect();
+        //$users->put($usersB->id, $usersB->identificador);
+        /*$usersall = User::select(
             DB::raw("CONCAT(identificador,' (ex ',IFNULL(exidentificador,''),')') AS identificador"), 'id'
         )
             ->where('users.rol', 'Asesor')
             ->whereIn('users.estado', ['0','1'])
-            ->pluck('identificador', 'id');
-        foreach ($usersall as $key => $value) {
+            ->pluck('identificador', 'id');*/
+       /* foreach ($usersall as $key => $value) {
             $users->put($key, $value);
-        }
+        }*/
         return view('base_fria.create', compact('users'));
     }
 
