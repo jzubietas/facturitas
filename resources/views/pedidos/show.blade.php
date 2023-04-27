@@ -32,20 +32,29 @@
 
     <div class="card">
         <div class="border rounded card-body border-secondary">
-            <div class="form-row">
-                <div class="form-group col-lg-4">
+
+            <div class="row">
+                <div class="col">
                     <label for="id_ingresomaterial">Cliente</label>
                     <p>{{ $pedido->nombres }} - {{ $pedido->celulares }}</p>
                 </div>
-                <div class="form-group col-lg-4">
-                    <label for="id_ingresomaterial">Asesor</label>
+                <div class="col">
+                    <label for="id_ingresomaterial">Asesor:</label>
                     <p>{{ $pedido->users }}</p>
                 </div>
-                <div class="form-group col-lg-4">
+                <div class="col">
                     <label for="id_ingresomaterial">Estado</label>
                     <p>{{ $pedido->condiciones }}</p>
                 </div>
             </div>
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <label for="id_ingresomaterial">Pedido subido por:</label>
+                    <p>{{ $pedido->subio_pedido }}</p>
+                </div>
+            </div>
+
+
         </div>
     </div>
 

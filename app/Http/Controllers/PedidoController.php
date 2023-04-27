@@ -143,6 +143,7 @@ class PedidoController extends Controller
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->leftJoin('users as ub','pedidos.user_reg','ub.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftJoin('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
             ->select(
@@ -160,6 +161,7 @@ class PedidoController extends Controller
                     'dp.total as total',
                     'dp.cantidad as cantidad',
                     'dp.ruc as ruc',
+                    'ub.name as  subio_pedido',
                     /*DB::raw("
                     concat(
                         (case when pedidos.pago=1 and pedidos.pagado=1 then 'ADELANTO' when pedidos.pago=1 and pedidos.pagado=2 then 'PAGO' else '' end),
@@ -1425,6 +1427,7 @@ class PedidoController extends Controller
 
         } else if ($mirol == 'Jefe de llamadas') {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
+            //dd($identi_asesor);
             $fecha = Carbon::now()->format('dm');
             $dia = Carbon::now();
             $numped = Pedido::join('clientes as c', 'c.id', 'pedidos.cliente_id')
@@ -1438,6 +1441,7 @@ class PedidoController extends Controller
             $numped = $numped + 1;
         } else {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
+            //return $request->all();
             $fecha = Carbon::now()->format('dm');
             $dia = Carbon::now();
             $numped = Pedido::join('clientes as c', 'c.id', 'pedidos.cliente_id')
@@ -1454,7 +1458,9 @@ class PedidoController extends Controller
 
         //calculo de letras
         $codigo = null;
-        if ($identi_asesor->identificador == 'B') {
+        if ($identi_asesor->clave_pedidos == 'B') {
+            $codigo = $identi_asesor->clave_pedidos;
+        }else if ($identi_asesor->clave_pedidos == '21') {
             $codigo = $identi_asesor->identificador;
         } else {
             $codigo = intval($identi_asesor->identificador);
@@ -1534,7 +1540,7 @@ class PedidoController extends Controller
 
             $pedido = Pedido::create([
                 'cliente_id' => $request->cliente_id,
-
+                'user_reg' => auth()->user()->id,
                 'creador' => 'USER0' . Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
                 'condicion' => Pedido::POR_ATENDER,
                 'condicion_code' => 1,
@@ -1667,6 +1673,7 @@ class PedidoController extends Controller
 
                 $detallepedido = DetallePedido::create([
                     'pedido_id' => $pedido->id,
+                    'user_reg' => auth()->user()->id,
                     'codigo' => $codigo_generado,//$codigo[$contP],
                     'nombre_empresa' => $nombre_empresa[$contP],
                     'mes' => $mes[$contP],
@@ -1732,6 +1739,7 @@ class PedidoController extends Controller
         //ver pedido anulado y activo
         $pedido = Pedido::with('cliente')->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->leftJoin('users as ub','pedidos.user_reg','ub.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftJoin('pedidos_anulacions as pea','pedidos.id','pea.pedido_id')
             ->leftJoin('users as peau', 'pea.user_id_administrador', 'peau.id')
@@ -1739,7 +1747,7 @@ class PedidoController extends Controller
                 'pedidos.*',
                 'pedidos.condicion as condiciones',
                 'pedidos.created_at as fecha',
-
+                'ub.name as subio_pedido',
                 'c.nombre as nombres',
                 'c.celular as celulares',
                 'u.name as users',

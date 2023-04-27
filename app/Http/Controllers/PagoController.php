@@ -91,6 +91,7 @@ class PagoController extends Controller
     {
 
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+            ->leftJoin('users as ub','pagos.user_reg','ub.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select(['pagos.id as id',
                 'pagos.correlativo as id2',
@@ -101,6 +102,7 @@ class PagoController extends Controller
                 'pagos.observacion',
                 'pagos.total_cobro',
                 'pagos.condicion',
+                'ub.name as subio_pago',
                 DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
                 DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
                 DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
@@ -550,6 +552,7 @@ class PagoController extends Controller
                     'user_id' => $clave_pedidos->id,
                     'user_identificador' => $clave_pedidos->identificador,
                     'user_clavepedido' => $clave_pedidos->clave_pedidos,
+                    'user_reg' => auth()->user()->id,
                     'cliente_id' => $request->cliente_id,
                     'total_cobro' => $deuda_total,
                     'total_pagado' => $pagado,
@@ -651,6 +654,7 @@ class PagoController extends Controller
                             'fecha' => $fecha[$monto_key],
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => $fileList[$monto_key]['file_name'],
+                            'user_reg' => auth()->user()->id,
                             'estado' => '1'
                         ]);
 
@@ -666,6 +670,7 @@ class PagoController extends Controller
                             'fecha' => $fecha[$monto_key],
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => 'logo_facturas.png',
+                            'user_reg' => auth()->user()->id,
                             'estado' => '1'
                         ]);
                     }
@@ -807,6 +812,7 @@ class PagoController extends Controller
                     'user_id' => $clave_pedidos->id,
                     'user_identificador' => $clave_pedidos->identificador,
                     'user_clavepedido' => $clave_pedidos->clave_pedidos,
+                    'user_reg' => auth()->user()->id,
                     'cliente_id' => $request->cliente_id,
                     'total_cobro' => $deuda_total,//total_pedido_pagar
                     'total_pagado' => $pagado,//total_pago_pagar
@@ -908,6 +914,7 @@ class PagoController extends Controller
                             'fecha' => $fecha[$monto_key],
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => $fileList[$monto_key]['file_name'],
+                            'user_reg' => auth()->user()->id,
                             'estado' => '1',
                             'observacion' => $nota[$monto_key] ?? 'N/A',
                         ]);
@@ -923,6 +930,7 @@ class PagoController extends Controller
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => 'logo_facturas.png',
                             'estado' => '1',
+                            'user_reg' => auth()->user()->id,
                             'observacion' => $nota[$monto_key] ?? 'N/A',
                         ]);
                     }
@@ -1121,17 +1129,20 @@ class PagoController extends Controller
             ->where('pago_pedidos.pago_id', $pago->id)
             ->get();
 
-        $detallePagos = DetallePago::select(['id',
-            'monto',
-            'banco',
-            'imagen',
-            'fecha',
-            'titular',
-            'cuenta',
-            'fecha_deposito',
-            'observacion'])
-            ->where('estado', '1')
-            ->where('pago_id', $pago->id)
+        $detallePagos = DetallePago::leftjoin('users as u','u.id','detalle_pagos.user_reg')
+            ->select(['detalle_pagos.id',
+                'detalle_pagos.monto',
+                'detalle_pagos.banco',
+                'detalle_pagos.imagen',
+                'detalle_pagos.fecha',
+                'detalle_pagos.titular',
+                'detalle_pagos.cuenta',
+                'detalle_pagos.fecha_deposito',
+                'detalle_pagos.observacion',
+                'u.name as subio_pago'
+            ])
+            ->where('detalle_pagos.estado', '1')
+            ->where('detalle_pagos.pago_id', $pago->id)
             ->get();
         //DB::raw('sum(detalle_pagos.monto) as total')
         $devoluciones = Devolucion::query()->wherePagoId($pago->id)->get();
@@ -1295,6 +1306,7 @@ class PagoController extends Controller
                     'banco' => $banco[$contPa],
                     'fecha' => $fecha[$contPa],
                     'imagen' => $fileList[$contPa]['file_name'],
+                    'user_reg' => auth()->user()->id,
                     'estado' => '1'
                 ]);
 
@@ -2316,6 +2328,7 @@ class PagoController extends Controller
                     'user_id' => $cliente_perdondarcourier->user_id,
                     'user_identificador' => $cliente_perdondarcourier->user_identificador,
                     'user_clavepedido' => $cliente_perdondarcourier->user_clavepedido,
+                    'user_reg' => auth()->user()->id,
                     'cliente_id' => $cliente_perdondarcourier->id,
                     'total_cobro' => '0',
                     'total_pagado' => '0',
@@ -2366,6 +2379,7 @@ class PagoController extends Controller
                     'fecha' => Carbon::now(),
                     'fecha_deposito' => Carbon::now(),
                     'imagen' => $capturapercur,
+                    'user_reg' => auth()->user()->id,
                     'estado' => '1'
                 ]);
                 $identi_asesor = User::where("id", $cliente_perdondarcourier->user_id)->where("unificado", "NO")->first();

@@ -421,24 +421,18 @@ class UserController extends Controller
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
                 if (
-                    $user->exidentificador == '01'
-                    || $user->exidentificador == '02'
-                    || $user->exidentificador == '22'
-                    || $user->exidentificador == '21'
-                    || $user->exidentificador == '23'
-                    || $user->exidentificador == '24'
-                    || $user->exidentificador == '25'
-                    || $user->exidentificador == '26'
-                    || $user->exidentificador == '28'
-                    || $user->identificador == '11'
-                    || $user->identificador == '12'
-                    || $user->identificador == '13'
-                    || $user->identificador == '14'
-                    || $user->identificador == '15'
-                    || $user->identificador == '16'
-                    || $user->identificador == '17'
-                    || $user->identificador == '18'
-                    || $user->identificador == '19'
+                    $user->clave_pedidos == '01'
+                    || $user->clave_pedidos == '01.5'
+                    || $user->clave_pedidos == '11'
+                    || $user->clave_pedidos == '12'
+                    || $user->clave_pedidos == '13'
+                    || $user->clave_pedidos == '14'
+                    || $user->clave_pedidos == '15'
+                    || $user->clave_pedidos == '16'
+                    || $user->clave_pedidos == '17'
+                    || $user->clave_pedidos == '18'
+                    || $user->clave_pedidos == '19'
+                    || $user->clave_pedidos == '21'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
@@ -573,24 +567,18 @@ class UserController extends Controller
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
                 if (
-                    $user->exidentificador == '01'
-                    || $user->exidentificador == '02'
-                    || $user->exidentificador == '22'
-                    || $user->exidentificador == '21'
-                    || $user->exidentificador == '23'
-                    || $user->exidentificador == '24'
-                    || $user->exidentificador == '25'
-                    || $user->exidentificador == '26'
-                    || $user->exidentificador == '28'
-                    || $user->identificador == '11'
-                    || $user->identificador == '12'
-                    || $user->identificador == '13'
-                    || $user->identificador == '14'
-                    || $user->identificador == '15'
-                    || $user->identificador == '16'
-                    || $user->identificador == '17'
-                    || $user->identificador == '18'
-                    || $user->identificador == '19'
+                    $user->clave_pedidos == '01'
+                    || $user->clave_pedidos == '01.5'
+                    || $user->clave_pedidos == '11'
+                    || $user->clave_pedidos == '12'
+                    || $user->clave_pedidos == '13'
+                    || $user->clave_pedidos == '14'
+                    || $user->clave_pedidos == '15'
+                    || $user->clave_pedidos == '16'
+                    || $user->clave_pedidos == '17'
+                    || $user->clave_pedidos == '18'
+                    || $user->clave_pedidos == '19'
+                    || $user->clave_pedidos == '21'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {

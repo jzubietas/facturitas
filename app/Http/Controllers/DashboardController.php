@@ -38,7 +38,7 @@ class DashboardController extends Controller
             $lst_users_vida = $lst_users_vida->where(function ($query) {
                 $query->where('jefe', '=', Auth::user()->id)
                     ->orWhereNull('jefe');
-            })->whereIn("rol", [User::ROL_LLAMADAS, User::ROL_COBRANZAS]);
+            })->whereIn("rol", [User::ROL_LLAMADAS, User::ROL_COBRANZAS,User::ROL_ASISTENTE_PUBLICIDAD]);
             $lst_users_vida = $lst_users_vida->orderBy('name', 'ASC');
         } else if ($mirol == User::ROL_JEFE_OPERARIO) {
             $lst_users_vida = $lst_users_vida->where('jefe', Auth::user()->id)->where("rol", User::ROL_OPERARIO);

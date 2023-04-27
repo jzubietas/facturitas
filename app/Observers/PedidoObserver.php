@@ -35,6 +35,7 @@ class PedidoObserver
     {
       /*\Log::info("PostCreatePedido -> ".$pedido->cliente_id);*/
         PostUpdateSituacion::dispatchSync($pedido->cliente_id);
+        PostCreatePedidoClienteUltimoPedido::dispatchSync($pedido->cliente_id);
     }
 
     /**

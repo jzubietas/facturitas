@@ -56,22 +56,29 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 'clientes.deuda',
                 DB::raw(" (CASE WHEN clientes.deuda=1 then 'DEBE' else 'CANCELADO' end) as deposito "),
                 'clientes.pidio',
-                DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id and dp1.estado=1 order by dp1.created_at desc limit 1) as fecha"),
-                DB::raw("(select DATE_FORMAT(dp0.created_at,'%m') from pedidos dp0 where dp0.cliente_id=clientes.id and dp0.estado=1 order by dp0.created_at desc limit 1) as fechaultimopedido_dia"),
-                DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id and dp2.estado=1 order by dp2.created_at desc limit 1) as fechaultimopedido_mes"),
-                DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id and dp3.estado=1 order by dp3.created_at desc limit 1) as fechaultimopedido_anio"),
-                DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id and dp.estado=1 order by dp.created_at desc limit 1) as codigo "),
+                DB::raw('DATE_FORMAT(clientes.fecha_ultimopedido,"%d %M, %Y") as fecha'),
+                DB::raw('DATE_FORMAT(clientes.fecha_ultimopedido,"%d") as fechaultimopedido_dia'),
+                DB::raw('DATE_FORMAT(clientes.fecha_ultimopedido,"%m") as fechaultimopedido_mes'),
+                DB::raw('DATE_FORMAT(clientes.fecha_ultimopedido,"%Y") as fechaultimopedido_anio'),
+                'clientes.codigo_ultimopedido as codigo',
+                //DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id and dp.estado=1 order by dp.created_at desc limit 1) as codigo "),
                 'clientes.situacion',
-                DB::raw("(select dp1.pago from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pago"),
-                DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - sin banca' limit 1) as porcentajefsb"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - banca' limit 1) as porcentajefb"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - sin banca' limit 1) as porcentajeesb"),
-                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - banca' limit 1) as porcentajeeb"),
+                'clientes.pago_ultimopedido as fechaultimopedido_pago',
+                //DB::raw("(select dp1.pago from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pago"),
+                'clientes.pagado_ultimopedido as fechaultimopedido_pagado',
+                //DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
+                'clientes.fsb_porcentaje as porcentajefsb',
+                'clientes.fcb_porcentaje as porcentajefb',
+                'clientes.esb_porcentaje as porcentajeesb',
+                'clientes.ecb_porcentaje as porcentajeeb',
+                //DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - sin banca' limit 1) as porcentajefsb"),
+                //DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - banca' limit 1) as porcentajefb"),
+                //DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - sin banca' limit 1) as porcentajeesb"),
+                //DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - banca' limit 1) as porcentajeeb"),
             ])
             //->where('clientes.estado','1')
-            ->whereNotIn('clientes.user_clavepedido',['B']);
-            //->where('clientes.tipo','1');
+            ->whereNotIn('clientes.user_clavepedido',['B'])
+            ->where('clientes.tipo','1');
             //->whereNotNull('clientes.situacion');
         $cal_sit=$this->situacion;
         //$clientes=$clientes->limit(10);

@@ -143,6 +143,7 @@
                                     <th scope="col">CUENTA DESTINO</th>
                                     <th scope="col">TITULAR</th>
                                     <th scope="col">FECHA DEPOSITO</th>
+                                    <th scope="col">SUBIO PAGO</th>
                                     <th scope="col">OBSERVACION</th>
                                     <th scope="col">IMAGEN</th>
                                 </tr>
@@ -162,6 +163,7 @@
                                         <td>{{ $detallePago->cuenta }}</td>
                                         <td>{{ $detallePago->titular }}</td>
                                         <td>{{ $detallePago->fecha_deposito }}</td>
+                                        <td>{{ $detallePago->subio_pago }}</td>
                                         <td>{{ $detallePago->observacion }}</td>
                                         <td><a href="" data-target="#modal-imagen-{{ $detallePago->id }}"
                                                data-toggle="modal">
