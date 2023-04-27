@@ -189,7 +189,7 @@ class Pedido extends Model
         'user_id',
         'identificador',
         'exidentificador',
-        'clave_pedidos',
+        'user_clavepedido',
         'icelular_asesor',
         'celular_cliente',
         'icelular_cliente',
