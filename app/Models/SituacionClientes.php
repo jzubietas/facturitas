@@ -21,6 +21,7 @@ class SituacionClientes extends Model implements HasMedia
     'cliente_id',
       'user_id',
       'user_identificador',
+      'user_clavepedido',
     'situacion',
     'cantidad_pedidos',
     'anulados',
