@@ -129,13 +129,15 @@ class AnalisisEstadoOlva extends Command
                                 }
 
 
-                                $progress->advance();
+
                             }
                         }
 
                     }
                 }
             }
+
+            $progress->advance();
 
         }
         $this->info("Finish Cargando ");
