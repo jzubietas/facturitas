@@ -423,6 +423,7 @@ class BasefriaController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+        Cliente::createSituacionByCliente($request->hiddenID);
 
         //return redirect()->route('clientes.index')->with('info','registrado');
     }
