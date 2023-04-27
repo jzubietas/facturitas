@@ -5,6 +5,7 @@
 /vendor
 /vendor*
 vendor
+.env
 .env.example
 .env.backup
 .phpunit.result.cache
