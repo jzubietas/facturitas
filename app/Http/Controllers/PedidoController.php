@@ -1410,7 +1410,7 @@ class PedidoController extends Controller
     public function pedidosstore(Request $request)
     {
         //return $request;
-        $mirol = Auth::user()->rol;//
+        $mirol = Auth::user()->rol;
         if ($mirol == 'Llamadas') {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
             $fecha = Carbon::now()->format('dm');
@@ -1537,6 +1537,7 @@ class PedidoController extends Controller
         try {
 
             DB::beginTransaction();
+
 
             $pedido = Pedido::create([
                 'cliente_id' => $request->cliente_id,
