@@ -1614,11 +1614,13 @@ class DashboardController extends Controller
 
                 if ($object_totales['meta_new'] == 1)
                 {
+                    $object_totales['progress_pedidos']=round(($object_totales['total_pedido']/$object_totales['meta_combinar'])*100,2);
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
                 }else if ($object_totales['meta_new'] == 2)
                 {
+                    $object_totales['progress_pedidos']=round(($object_totales['total_pedido']/$object_totales['meta_combinar'])*100,2);
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">   TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
