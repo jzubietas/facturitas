@@ -148,6 +148,11 @@
                             <i class="fas fa-car-crash"></i>
                             Olva / Extraviado</a>
 
+                        <a type="button" class="btn btn-outline-secondary btn-sm" href="{{ route('envios.seguimientoprovincia.all')  }}">
+                            <span class="badge bg-teal countExtraviado">67</span>
+                            <i class="fas fa-car-crash"></i>
+                            Olva / Seguimiento</a>
+
                     </div>
                 </div>
             </div>

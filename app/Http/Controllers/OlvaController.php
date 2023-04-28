@@ -209,6 +209,166 @@ class OlvaController extends Controller
         ]);
     }
 
+    public function SeguimientoprovinciaAll()
+    {
+
+        $distribuir = [
+            "NORTE" => 'NORTE',
+            "CENTRO" => 'CENTRO',
+            "SUR" => 'SUR',
+        ];
+
+        $condiciones = [
+            "1" => 1,
+            "2" => 2,
+            "3" => 3
+        ];
+
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            ->pluck('distrito', 'distrito');
+
+        $departamento = Departamento::where('estado', "1")
+            ->pluck('departamento', 'departamento');
+
+        $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
+            ->select([
+                'direccion_envios.id',
+                'direccion_envios.distrito',
+                'direccion_envios.direccion',
+                'direccion_envios.referencia',
+                'direccion_envios.nombre',
+                'direccion_envios.celular',
+                'dp.pedido_id as pedido_id',
+            ])
+            ->where('direccion_envios.estado', '1')
+            ->where('dp.estado', '1')
+            ->get();
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        if (Auth::user()->rol == "Asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Super asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Encargado") {
+            $ver_botones_accion = 1;
+        } else {
+            $ver_botones_accion = 1;
+        }
+
+        return view('envios.seguimientoProvinciaAll', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'distribuir'));
+    }
+
+    public function SeguimientoprovinciatablaAll(Request $request)
+    {
+        $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
+            ->join('users', 'users.id', 'clientes.user_id')
+            ->activo()
+            ->inOlva()
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->where('direccion_grupos.motorizado_status', '0')
+            ->where('direccion_grupos.direccion', 'not like', '%-%')
+            ->select([
+                'direccion_grupos.*',
+                "clientes.celular as cliente_celular",
+                "clientes.nombre as cliente_nombre",
+                DB::raw("(select env_tracking from pedidos pe where pe.direccion_grupo=direccion_grupos.id limit 1) as pe_env_tracking"),
+            ]);
+
+        return Datatables::of(
+            DB::table($pedidos_provincia)
+                ->orderByDesc('courier_failed_sync_at')
+                ->orderByDesc('id')
+        )
+            ->addIndexColumn()
+            ->editColumn('created_at_format', function ($pedido) {
+                if ($pedido->created_at != null) {
+                    return Carbon::parse($pedido->created_at)->format('d-m-Y h:i A');
+                } else {
+                    return '';
+                }
+            })
+            ->editColumn('direccion_format', function ($pedido) {
+                return collect(explode(',', $pedido->direccion))->trim()
+                    ->map(function ($f) use ($pedido) {
+                        $verBoton=0;
+                        $trackings= collect(explode(',', $pedido->pe_env_tracking))->trim()->filter()->values();
+                        foreach ($trackings as $item =>  $tracking) {
+                            $tracking = explode('-', $tracking);
+                        }
+                        if (count($tracking) != 2) {
+                            $verBoton=1;
+                        }
+                        if ($pedido->courier_failed_sync_at != null || $verBoton==1) {
+                            return '<b class="d-flex">' . $f . '<i data-jqconfirm="edit_tracking" data-action="' . route('envios.seguimientoprovincia.update', [
+                                    'direccion_grupo_id' => $pedido->id,
+                                    'action' => 'update_tracking',
+                                ]) . '" data-code="' . $f . '" role="button" class="fa fa-pencil-alt rounded p-1 bg-info"></i></b>';
+                        }
+                        return '<b>' . $f . '</b>';
+                    })->join('<br>');
+            })
+            ->editColumn('referencia_format', function ($pedido) {
+                $html = collect(explode(',', $pedido->referencia))->trim()->map(fn($f) => '<b>' . $f . '</b>')->join('<br>') . '<br>';
+
+
+                $html .= collect(explode(',', $pedido->observacion))->trim()->map(fn($f) => '<a target="_blank" class="btn-fontsize text-blue" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rutulo</a>')->join('<br>');
+
+                $html .= '<p>';
+                return $html;
+            })
+            ->addColumn('condicion_envio_format', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $html = '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->courier_estado . '</span>';
+                return $html;
+            })
+            ->addColumn('action', function ($pedido) {
+                $btnAdd = [];
+                /*switch ($pedido->condicion_envio_code) {
+                    case Pedido::RECEPCIONADO_OLVA_INT:
+                        $btnType = [
+                            'icon' => 'fas fa-car',
+                            'btnClass' => 'btn-primary',
+                        ];
+                        break;
+                    case Pedido::EN_CAMINO_OLVA_INT:
+                        $btnType = [
+                            'icon' => 'fas fa-home',
+                            'btnClass' => 'btn-dark',
+                        ];
+                        break;
+                    case Pedido::EN_TIENDA_AGENTE_OLVA_INT:
+                        $btnType = [
+                            'icon' => 'fas fa-envelope',
+                            'btnClass' => 'btn-warning',
+                        ];
+                        break;
+                    case Pedido::ENTREGADO_PROVINCIA_INT:
+                    case Pedido::NO_ENTREGADO_OLVA_INT:
+                        $btnType = [];
+                        break;
+                    default:
+                        $btnType = [];
+                }*/
+                $btn = '';
+                /*if (!empty($btnType)) {
+                    $btn = '<button style="font-size:9px" data-target="" data-toggle="jqconfirm" class="btn ' . $btnType['btnClass'] . ' btn-sm"><i class="' . $btnType['icon'] . '"></i> <b>ACTUALIZAR ESTADO</b></button>';
+                }
+                if (!in_array(\auth()->user()->rol, [User::ROL_JEFE_COURIER, User::ROL_ADMIN])) {
+                    $btn = '';
+                }*/
+                return '<div class="d-flex" style="flex-direction: column; gap:0.5rem">' . $btn . join('', $btnAdd) . '</div>';
+            })
+            ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
+            ->make(true);
+
+    }
 
     public function Seguimientoprovincia()
     {
