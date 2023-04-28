@@ -80,6 +80,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('/search/ruc', [DashboardController::class, 'searchRuc'])->name('dashboard.search-ruc');
 
     //Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
+    Route::any('dashboard.viewMetaTable.General', [DashboardController::class, 'viewMetaTableGeneral'])->name('dashboard.viewMetaTable.General');
     Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
     Route::any('dashboard.viewMetaTable_G2', [DashboardController::class, 'viewMetaTableG2'])->name('dashboard.viewMetaTable_G2');
     Route::any('dashboard.viewMetaTable_G17', [DashboardController::class, 'viewMetaTableG17'])->name('dashboard.viewMetaTable_G17');
