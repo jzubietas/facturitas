@@ -465,7 +465,7 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
-            $total_pedido = Pedido::query()->where('user_id', $asesor->id)
+            $total_pedido = Pedido::query()->where('user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
@@ -473,7 +473,7 @@ class DashboardController extends Controller
 
             $total_pagado = Pedido::query()
                 ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
@@ -2889,7 +2889,7 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
-            $total_pedido = Pedido::query()->where('user_id', $asesor->id)
+            $total_pedido = Pedido::query()->where('user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
@@ -2897,7 +2897,7 @@ class DashboardController extends Controller
 
             $total_pagado = Pedido::query()
                 ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
