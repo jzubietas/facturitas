@@ -164,7 +164,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 //['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
-                //['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']

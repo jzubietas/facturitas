@@ -177,12 +177,78 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     </div>
 
                 </div>
+                <div class="row">
+                    <div class="contain-table-dual row" style="width: 100% !important;">
+                        <div class="col-lg-6" id="metas_asesores_g2_a"></div>
+                        <div class="col-lg-6" id="metas_asesores_g2_b"></div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="metas_asesores_total_g2"></div>
+                    </div>
+                </div>
 
             </div>
         </div>
         {{-- FIN-TABLA-DUAL --}}
 
         <div class="col-lg-12" id="metas_dp_17"></div>
+        <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-lg-12 bg-white" id="contenedor-fullscreen-g2">
+
+        <div class="row">
+            <div class="col-3 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
+                    <p id="porcentaje_cobranzas_metas_g2" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                </div>
+            </div>
+            <div class="col-6 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h2 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
+background: #FFFFFF;
+text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0 0 #242120, 0 2px 0 #242120, -2px 0 0 #242120, 0 -2px 0 #242120;">Metas del mes
+                        de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h2>
+                    <button style="background: none; border: none" onclick="openFullscreen2();">
+                        <i class="fas fa-expand-arrows-alt ml-3"
+                           style="font-size: 20px"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-3 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h5 class="card-title text-uppercase">Total de pedidos:</h5>
+                    <p id="porcentaje_pedidos_metas_g2" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                </div>
+            </div>
+
+        </div>
+
+        {{-- TABLA DUAL --}}
+        <div class="" style=" overflow: hidden !important;">
+            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
+                <div class="row">
+                    <div class="contain-table-dual row" style="width: 100% !important;">
+                        <div class="col-lg-6" id="metas_asesores_g2_a"></div>
+                        <div class="col-lg-6" id="metas_asesores_g2_b"></div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="metas_asesores_total_g2"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {{-- FIN-TABLA-DUAL --}}
+
+        <div class="col-lg-12" id="metas_dp_17_g2"></div>
         <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
 
     </div>
@@ -413,7 +479,104 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     else if (entero === 17) {
                         $('#metas_dp_17').html(resultado);
                     }
+                    //otro bloque segun virginia
+                    else if (entero === 21) {
+                        $('#metas_asesores_g2_a').html(resultado);
+                    } else if (entero === 22) {
+                        $('#metas_asesores_g2_b').html(resultado);
+                    } else if (entero === 23) {
+                        $('#metas_asesores_total_g2').html(resultado);
+                    }
 
+                }
+            })
+        }
+
+        window.cargaNueva2 = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable_G2') }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero===1 || entero===2)
+                    {
+                        console.log("cambiar color")
+                        //$(".h1-change-day").css("color","blue");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+
+                    //otro bloque segun virginia
+                    if (entero === 21) {
+                        $('#metas_asesores_g2_a').html(resultado);
+                    } else if (entero === 22) {
+                        $('#metas_asesores_g2_b').html(resultado);
+                    } else if (entero === 23) {
+                        $('#metas_asesores_total_g2').html(resultado);
+                    }
+                    else if (entero === 6) {
+                        $('#porcentaje_cobranzas_metas_g2').html(resultado);
+                    }else if (entero === 7) {
+                        $('#porcentaje_pedidos_metas_g2').html(resultado);
+                    }
+
+                }
+            })
+        }
+
+        window.cargaNueva17 = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable_G17') }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero===1 || entero===2)
+                    {
+                        console.log("cambiar color");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+                   if (entero === 17) {
+                        $('#metas_dp_17').html(resultado);
+                    }
                 }
             })
         }
@@ -543,26 +706,40 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             $(document).on('change', '#fechametames', function () {
                 //const value = e.target.value;
+
+                //grupo 1
                 cargaNueva(1);
                 cargaNueva(2);
                 cargaNueva(3);
-                //cargaNueva(4);
-                //cargaNueva(5);
+
+                //grupo 2
+                cargaNueva2(21);
+                cargaNueva2(22);
+                cargaNueva2(23);
+
                 cargaNueva(6);//totales porcentajes arriba de metas cobranzas
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
 
                 cargaNueva(8);
                 cargaNueva(9);
 
+                cargaNueva17(17);
+
                 cargReporteMetasCobranzasGeneral();
 
             });
 
 
-
+            //grupo 1
             cargaNueva(1);
             cargaNueva(2);
-            cargaNueva(3);//totales porcentajes debajo de metas
+            cargaNueva(3);
+
+            //grupo 2
+            cargaNueva2(21);
+            cargaNueva2(22);
+            cargaNueva2(23);
+
             cargaNueva(6);//totales porcentajes arriba de metas cobranzas
             cargaNueva(7);//totales porcentajes arriba de metas pedidos
             //cargaNueva(4);//fernando
@@ -575,7 +752,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //cargaNueva(15);//paola
             //totales porcentajes debajo de metas
 
-            cargaNueva(17);
+            cargaNueva17(17);
 
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
@@ -588,9 +765,17 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             function myTimer() {
                 console.log("recargando")
+
+                //grupo 1
                 cargaNueva(1);
                 cargaNueva(2);
                 cargaNueva(3);
+
+                //grupo 2
+                cargaNueva2(21);
+                cargaNueva2(22);
+                cargaNueva2(23);
+
                 cargaNueva(6);//totales porcentajes arriba de metas cobranzas
                 cargaNueva(7);//totales porcentajes arriba de metas pedidos
                 //cargaNueva(4);
@@ -603,7 +788,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //cargaNueva(14);//fernando
                 //cargaNueva(15);//paola
                 //totales porcentajes debajo de metas
-                cargaNueva(17);
+                cargaNueva17(17);
 
                 cargReporteMetasSituacionClientes();
 
