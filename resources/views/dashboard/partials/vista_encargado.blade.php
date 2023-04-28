@@ -232,6 +232,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 </div>
 
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <h3 class="text-center">General (01-16)</h3>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div id="metas_total_general"></div>
+    </div>
+</div>
+
 <div class ="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
@@ -390,6 +399,47 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     <script src="{{asset('js/chartjs-plugin-datalabels.js')}}"></script>
 
     <script>
+        window.cargaNuevaGeneral = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable.General') }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero===1 || entero===2)
+                    {
+                        console.log("cambiar color")
+                        //$(".h1-change-day").css("color","blue");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+                    if (entero === 0)
+                    {
+                        $('#metas_total_general').html(resultado);
+                    }
+
+                }
+            })
+        }
+
         window.cargaNueva = function (entero) {
             console.log(' ' + entero)
             var fd = new FormData();
@@ -683,6 +733,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             $(document).on('change', '#fechametames', function () {
                 //const value = e.target.value;
+                cargaNuevaGeneral(0);
 
                 //grupo 1
                 cargaNueva(1);
@@ -711,6 +762,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             });
 
+            cargaNuevaGeneral(0);
 
             //grupo 1
             cargaNueva(1);
@@ -753,6 +805,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             function myTimer() {
                 console.log("recargando")
+                cargaNuevaGeneral(0);
 
                 //grupo 1
                 cargaNueva(1);
