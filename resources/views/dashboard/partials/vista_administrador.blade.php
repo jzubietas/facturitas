@@ -162,28 +162,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         <div class="col-lg-6" id="meta"></div>
                         <div class="col-lg-6" id="metas_dp"></div>
                     </div>
-
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="supervisor_total"></div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="supervisor_A"></div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="supervisor_B"></div>
-                    </div>
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div id="metas_total"></div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="contain-table-dual row" style="width: 100% !important;">
-                        <div class="col-lg-6" id="metas_asesores_g2_a"></div>
-                        <div class="col-lg-6" id="metas_asesores_g2_b"></div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="metas_asesores_total_g2"></div>
                     </div>
                 </div>
 
