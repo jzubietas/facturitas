@@ -21,7 +21,7 @@
                                     </li>
                                     @if($cliente->user!=null)
                                         <li class="list-group-item bg-info">Asesor:
-                                            <b>{{$cliente->user->identificador}}</b></li>
+                                            <b>{{$cliente->user->clave_pedidos}}</b></li>
                                     @else
                                         <li class="list-group-item bg-info">
                                             <div class="alert alert-warning " role="alert">

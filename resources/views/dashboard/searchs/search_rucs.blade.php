@@ -26,7 +26,7 @@
                                 </li>
                                 @if($ruc->user!=null)
                                     <li class="list-group-item bg-info">Asesor:
-                                        <b>{{$ruc->user->identificador}}</b>
+                                        <b>{{$ruc->user->clave_pedidos}}</b>
                                     </li>
                                 @else
                                     <li class="list-group-item bg-info">
