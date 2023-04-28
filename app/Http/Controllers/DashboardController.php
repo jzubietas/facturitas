@@ -4086,6 +4086,12 @@ class DashboardController extends Controller
 
             $html .= '</table>';
         }
+        else if ($request->ii == 26) {
+            $html.=$object_totales['progress_pagos'].'%';
+        }
+        else if ($request->ii == 27) {
+            $html.=$object_totales['progress_pedidos'].'%';
+        }
 
         return $html;
     }

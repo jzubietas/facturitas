@@ -513,9 +513,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     } else if (entero === 23) {
                         $('#metas_asesores_total_g2').html(resultado);
                     }
-                    else if (entero === 6) {
+                    else if (entero === 26) {
                         $('#porcentaje_cobranzas_metas_g2').html(resultado);
-                    }else if (entero === 7) {
+                    }else if (entero === 27) {
                         $('#porcentaje_pedidos_metas_g2').html(resultado);
                     }
 
@@ -697,8 +697,13 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva2(22);
                 cargaNueva2(23);
 
-                cargaNueva(6);//totales porcentajes arriba de metas cobranzas
-                cargaNueva(7);//totales porcentajes arriba de metas pedidos
+                //porcentajes grupo 1
+                cargaNueva(6);
+                cargaNueva(7);
+
+                //porcentajes grupo 2
+                cargaNueva2(26);
+                cargaNueva2(27);
 
                 cargaNueva(8);
                 cargaNueva(9);
@@ -720,8 +725,14 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva2(22);
             cargaNueva2(23);
 
-            cargaNueva(6);//totales porcentajes arriba de metas cobranzas
-            cargaNueva(7);//totales porcentajes arriba de metas pedidos
+            //porcentaje grupo 2
+            cargaNueva(6);
+            cargaNueva(7);
+
+            //porcentaje grupo 2
+            cargaNueva2(26);
+            cargaNueva2(27);
+
             //cargaNueva(4);//fernando
             //cargaNueva(5);//paola
 
@@ -756,8 +767,14 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva2(22);
                 cargaNueva2(23);
 
-                cargaNueva(6);//totales porcentajes arriba de metas cobranzas
-                cargaNueva(7);//totales porcentajes arriba de metas pedidos
+                //porcentaje grupo 1
+                cargaNueva(6);
+                cargaNueva(7);
+
+                //porcentaje grupo 2
+                cargaNueva2(26);
+                cargaNueva2(27);
+
                 //cargaNueva(4);
                 //cargaNueva(5);
 
@@ -787,6 +804,17 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     elem.webkitRequestFullscreen();
                 } else if (elem.msRequestFullscreen) { /* IE11 */
                     elem.msRequestFullscreen();
+                }
+            }
+
+            var elem_g2 = document.querySelector("#contenedor-fullscreen-g2");
+            window.openFullscreen2 = function () {
+                if (elem_g2.requestFullscreen) {
+                    elem_g2.requestFullscreen();
+                } else if (elem_g2.webkitRequestFullscreen) { /* Safari */
+                    elem_g2.webkitRequestFullscreen();
+                } else if (elem_g2.msRequestFullscreen) { /* IE11 */
+                    elem_g2.msRequestFullscreen();
                 }
             }
 
