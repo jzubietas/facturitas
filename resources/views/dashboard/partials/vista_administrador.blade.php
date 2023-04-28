@@ -736,6 +736,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $(document).on('change', '#fechametames', function () {
                 //const value = e.target.value;
 
+                cargaNuevaGeneral(0);
+
                 //grupo 1
                 cargaNueva(1);
                 cargaNueva(2);
@@ -763,6 +765,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             });
 
+            cargaNuevaGeneral(0);
 
             //grupo 1
             cargaNueva(1);
@@ -805,6 +808,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             function myTimer() {
                 console.log("recargando")
+
+                cargaNuevaGeneral(0);
 
                 //grupo 1
                 cargaNueva(1);
