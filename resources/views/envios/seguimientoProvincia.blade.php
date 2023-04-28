@@ -56,7 +56,7 @@
 @stop
 
 @push('css')
-    <link rel="stylesheet" href="{{asset('/css/admin_custom.css')}}">
+    {{--<link rel="stylesheet" href="{{asset('/css/admin_custom.css')}}">--}}
 @endpush
 
 @section('js')
