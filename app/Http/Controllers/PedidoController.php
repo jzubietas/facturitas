@@ -3731,7 +3731,26 @@ class PedidoController extends Controller
 
         add_query_filtros_por_roles_pedidos($pedidos_provincia3, 'users.identificador');
         $contadorOlvaExtraviado=$pedidos_provincia3->count();
-        return response()->json(['contadorOlvaIndex' => $contadorOlvaIndex,'contadorOlvaNoentregado' => $contadorOlvaNoentregado,'contadorOlvaExtraviado' => $contadorOlvaExtraviado]);
+
+        $pedidos_provincia4 = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
+            ->join('users', 'users.id', 'direccion_grupos.user_id')
+            ->activo()
+            ->whereIn('direccion_grupos.condicion_envio_code', [
+                Pedido::RECEPCIONADO_OLVA_INT,
+                Pedido::EN_CAMINO_OLVA_INT,
+                Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+                Pedido::NO_ENTREGADO_OLVA_INT,
+            ]);
+            //->whereIn('direccion_grupos.courier_estado', ['SINIESTRADO',]);
+        add_query_filtros_por_roles_pedidos($pedidos_provincia4, 'users.identificador');
+        $contadorOlvaSeguimiento=$pedidos_provincia4->count();
+
+        return response()->json([
+            'contadorOlvaIndex' => $contadorOlvaIndex
+            ,'contadorOlvaNoentregado' => $contadorOlvaNoentregado
+            ,'contadorOlvaExtraviado' => $contadorOlvaExtraviado
+            ,'contadorOlvaSeguimiento' => $contadorOlvaSeguimiento
+        ]);
         /*return 0;*/
     }
 }

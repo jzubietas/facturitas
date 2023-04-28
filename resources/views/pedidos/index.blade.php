@@ -149,7 +149,7 @@
                             Olva / Extraviado</a>
 
                         <a type="button" class="btn btn-outline-secondary btn-sm" href="{{ route('envios.seguimientoprovincia.all')  }}">
-                            <span class="badge bg-teal countExtraviado">67</span>
+                            <span class="badge bg-teal countOlvaSeguimiento">67</span>
                             <i class="fas fa-car-crash"></i>
                             Olva / Seguimiento</a>
 
@@ -1560,10 +1560,12 @@ ${data.foto3 ? `
                 $('.countOlvaIndex').html("");
                 $('.countNoEntregado').html("");
                 $('.countExtraviado').html("");
+                $('.countOlvaSeguimiento').html("");
 
                 $('.countOlvaIndex').html(data.contadorOlvaIndex);
                 $('.countNoEntregado').html(data.contadorOlvaNoentregado);
                 $('.countExtraviado').html(data.contadorOlvaExtraviado);
+                $('.countOlvaSeguimiento').html(data.contadorOlvaSeguimiento);
             }).fail(function (err, error, errMsg) {
                 console.log('Error al intentar',arguments, err, errMsg)
             });
