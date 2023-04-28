@@ -162,7 +162,7 @@ class PdfController extends Controller
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                //['situacion_clientes.user_clavepedido', '<>', '21'],
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
