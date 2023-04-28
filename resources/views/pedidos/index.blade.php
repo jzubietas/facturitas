@@ -132,7 +132,7 @@
             <br>-->
             <div class="card">
                 <div class="card-body row p-1">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <a type="button" class="btn btn-outline-warning btn-sm" href="{{ route('envios.olva.index')  }}">
                             <span class="badge bg-success countOlvaIndex">300</span>
                             <i class="fas fa-dolly-flatbed"></i>
