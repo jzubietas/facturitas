@@ -844,6 +844,15 @@ class DashboardController extends Controller
             $item['all_situacion_recurrente'] = $clientes_situacion_recurrente;
             $item['all_situacion_activo'] = $clientes_situacion_activo;
             $item['meta_new'] = $meta_new;
+
+            if($meta_new==1)
+            {
+                $item['meta_combinar']=$item['meta'];
+            }else if($meta_new==2)
+            {
+                $item['meta_combinar']=$item['meta_2'];
+            }
+
             if($allmeta_2==0)
                 $item['porcentaje_general']=0;
             else
@@ -915,6 +924,7 @@ class DashboardController extends Controller
         $meta_intermedia = collect($progressData)->pluck('meta_intermedia')->sum();
         $meta = collect($progressData)->pluck('meta')->sum();
         $meta_2 = collect($progressData)->pluck('meta_2')->sum();
+        $meta_combinar = collect($progressData)->pluck('meta_combinar')->sum();
         $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
         $supervisor = collect($progressData)->pluck('supervisor')->sum();
         $meta_new=0;
@@ -987,6 +997,7 @@ class DashboardController extends Controller
             "total_pagado" => $pay,
             "meta" => $meta,
             "meta_2" => $meta_2,
+            "meta_combinar" => $meta_combinar,
             "pedidos_dia" => $pedidos_dia,
             "supervisor" => $supervisor,
             "meta_new"=>$meta_new,
@@ -1605,12 +1616,12 @@ class DashboardController extends Controller
                 {
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>    </div>';
+             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
                 }else if ($object_totales['meta_new'] == 2)
                 {
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">   TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_2'] . '</span>    </div>';
+             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">   TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
                 }
 
             }
@@ -3257,6 +3268,16 @@ class DashboardController extends Controller
             $item['all_situacion_recurrente'] = $clientes_situacion_recurrente;
             $item['all_situacion_activo'] = $clientes_situacion_activo;
             $item['meta_new'] = $meta_new;
+
+            if($meta_new==1)
+            {
+                $item['meta_combinar']=$item['meta'];
+            }else if($meta_new==2)
+            {
+                $item['meta_combinar']=$item['meta_2'];
+            }
+
+
             if($allmeta_2==0)
                 $item['porcentaje_general']=0;
             else
