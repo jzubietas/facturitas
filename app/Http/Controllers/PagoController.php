@@ -115,7 +115,7 @@ class PagoController extends Controller
             ->where('pagos.estado', '1');
 
         if (Auth::user()->rol == 'Llamadas') {
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
 
@@ -124,7 +124,9 @@ class PagoController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
+            $pagos = $pagos->WhereIn('u.identificador', $usersasesores);*/
+
+            $pagos=$pagos->whereNotIn('u.identificador',['B','ADMIN'] );
 
         } else if (Auth::user()->rol == 'Jefe de llamadas') {
 
