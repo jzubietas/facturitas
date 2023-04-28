@@ -527,6 +527,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
                 ],
+                [
+                    'text' => 'Seguimiento provincia Todos',
+                    'route' => 'envios.seguimientoprovincia.all',
+                    'can' => 'envios.seguimientoprovincia',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['enviados'],
+                ],
                 /*[
                     'text' => 'Courier',
                     'route' => 'courierregistro',
