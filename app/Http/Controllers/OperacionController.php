@@ -130,10 +130,10 @@ class OperacionController extends Controller
                 ->where('users.estado', '1')
                 ->Where('users.operario', Auth::user()->id)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
-            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+                ->pluck('users.clave_pedidos');
+            $pedidos = $pedidos->WhereIn('u.clave_pedidos', $asesores);
 
 
         } else if (Auth::user()->rol == "Jefe de operaciones") {
@@ -150,11 +150,11 @@ class OperacionController extends Controller
                 ->where('users.estado', '1')
                 ->WhereIn('users.operario', $operarios)
                 ->select(
-                    DB::raw("users.identificador as identificador")
+                    DB::raw("users.clave_pedidos as clave_pedidos")
                 )
-                ->pluck('users.identificador');
+                ->pluck('users.clave_pedidos');
 
-            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+            $pedidos = $pedidos->WhereIn('u.clave_pedidos', $asesores);
         }
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
