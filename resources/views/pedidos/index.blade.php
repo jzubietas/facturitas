@@ -5,7 +5,7 @@
 
 @section('content_header')
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
+        {{--@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');--}}
 
         body {
             font-family: 'Work Sans', sans-serif;
