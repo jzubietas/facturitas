@@ -152,7 +152,7 @@
                 $("#input_search_cliente").val('');
             })
 
-            $("#buttom_search_cliente").click(function () { console.log('U- buttom_search_cliente');
+            $(document).on('click','#buttom_search_cliente',function(){
                 var tipo = $("#input_search_type").val()
 
                 if (!document.getElementById("input_search_cliente").value) {
@@ -163,26 +163,37 @@
                     )
                     return;
                 }
-                if (tipo == "CLIENTE") {
+                if (tipo == "CLIENTE")
+                {
+                    var fd=new FormData();
+                    fd.append('q',$('#input_search_cliente').val());
                     $.ajax({
-                        url: "{{route('dashboard.search-cliente')}}",
-                        data: {q: document.getElementById("input_search_cliente").value},
-                        context: document.body
-                    }).done(function (a) {
-                        console.log(a)
-                        $("#search_content_result").html(a);
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        method: 'POST',
+                        url: "{{ route('dashboard.search-cliente') }}",
+                        success: function (resultado)
+                        {
+                            $("#search_content_result").html(resultado);
+                        }
                     });
-                } else if (tipo == "RUC") {
+                }
+                else if (tipo == "RUC")
+                {
+                    var fd2=new FormData();
+                    fd2.append('q',$('#input_search_cliente').val());
                     $.ajax({
-                        url: "{{route('dashboard.search-ruc')}}",
-                        data: {
-                            q: document.getElementById("input_search_cliente").value
-                        },
-                        context: document.body
-                    }).done(function (a) {
-                        console.log(a)
-                        $("#search_content_result").html(a);
-                    });
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        method: 'POST',
+                        url: "{{ route('dashboard.search-ruc') }}",
+                        success: function (resultado)
+                        {
+                            $("#search_content_result").html(resultado);
+                        }
+                    })
                 }
             })
 

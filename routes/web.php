@@ -76,8 +76,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('/setting/authorizar/motorizado/{user}', [SettingsController::class, 'authorizationMotorizado'])->name('settings.authorization-motorizado');
 
 
-    Route::get('/search/cliente', [DashboardController::class, 'searchCliente'])->name('dashboard.search-cliente');
-    Route::get('/search/ruc', [DashboardController::class, 'searchRuc'])->name('dashboard.search-ruc');
+    Route::any('/search/cliente', [DashboardController::class, 'searchCliente'])->name('dashboard.search-cliente');
+    Route::any('/search/ruc', [DashboardController::class, 'searchRuc'])->name('dashboard.search-ruc');
 
     //Route::get('dashboard.graficoMetaTable', [DashboardController::class, 'graficoMetaTable'])->name('dashboard.graficoMetaTable');
     Route::any('dashboard.viewMetaTable.General', [DashboardController::class, 'viewMetaTableGeneral'])->name('dashboard.viewMetaTable.General');
