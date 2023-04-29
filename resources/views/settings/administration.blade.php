@@ -4,7 +4,9 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h3>Configuración del administrador</h3>
+    @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
+        <h3>Configuración del administrador</h3>
+    @endif
 @endsection
 
 @section('content')
@@ -142,25 +144,29 @@
             @endif
         </div>
 
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3>
-                        Botones de accion
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <a href="{{ route("courierregistro") }}" class="btn btn-warning" type="button"
-                           id="courierregistros">
-                            Bandeja de Registros de Courier
-                        </a>
+        @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            Botones de accion
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <a href="{{ route("courierregistro") }}" class="btn btn-warning" type="button"
+                               id="courierregistros">
+                                Bandeja de Registros de Courier
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
 
-        <div class="col-md-12">
+        @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
+            <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h3>
@@ -228,6 +234,8 @@
                 </div>
             </div>
         </div>
+
+        @endif
 
         <div class="col-md-12">
             <div class="card">

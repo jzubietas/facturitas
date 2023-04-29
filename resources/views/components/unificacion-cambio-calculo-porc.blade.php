@@ -22,7 +22,7 @@
     </script>
 @endsection
 
-@if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
+@if(auth()->user()->rol==\App\Models\User::ROL_ADMIN || auth()->user()->rol==\App\Models\User::ROL_FORMACION)
 <section id="tabs" class="project-tab">
     <div class="row">
         <div class="col-md-12">
