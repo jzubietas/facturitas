@@ -2693,10 +2693,10 @@ class EnvioController extends Controller
                 ->addColumn('botones', function ($pedido) use ($opcion) {
                     $btn = [];
                     if ($opcion == 'recepcionado'):
-                        $btn[]='<button type="button" class="btn btn-warning btn-sm">
+                        $btn[]='<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-boton-moto-sobres">
                                     <i class="fa fa-motorcycle" aria-hidden="true"></i>
                                 </button>
-                                <button type="button" class="btn btn-warning btn-sm">
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-boton-pc-sobres">
                                     <i class="fa fa-desktop" aria-hidden="true"></i>
                                 </button>
                                 ';

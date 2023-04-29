@@ -251,6 +251,9 @@
             @include('pedidos.modal.escanear_estado_sobres')
             @include('envios.modal.confirmar_quitardireccion')
 
+            @include('sobres.modal.botonMoto')
+            @include('sobres.modal.botonPc')
+
         </div>
     </div>
     @include('pedidos.modal.imagenid')
@@ -789,7 +792,11 @@
                 }
             });
 
-
+            $('#modal-boton-moto-sobres').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                //var pbanco = button.data('pbanco')
+                $('.modal-body').html('')
+            })
 
             /********************
              * TABLA SOBRES ENTREGADOS
