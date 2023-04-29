@@ -2867,7 +2867,7 @@ class DashboardController extends Controller
                 }
 
                 $html .= '<tr>
-             <td class=""><span class="d-inline-block">'.$medall_icon . $data["name"] . '</span></td>
+             <td class=""><span class="d-inline-block">'. $data["name"] . '</span></td>
              <td>' . $data["identificador"] . ' ';
 
                 if ($data["supervisor"] == 46) {
@@ -4584,7 +4584,7 @@ class DashboardController extends Controller
                 }
 
                 $html .= '<tr>
-             <td class=""><span class="d-inline-block">'.$medall_icon . $data["name"] . '</span></td>
+             <td class=""><span class="d-inline-block">'. $data["name"] . '</span></td>
              <td>' . $data["identificador"] . ' ';
 
                 if ($data["supervisor"] == 46) {
