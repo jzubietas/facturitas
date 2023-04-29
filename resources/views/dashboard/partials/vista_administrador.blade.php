@@ -804,7 +804,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             //grafico_metas_asesores();
 
-            setInterval(myTimer, 30000);
+            setInterval(myTimer, 60000);
 
             function myTimer() {
                 console.log("recargando")
