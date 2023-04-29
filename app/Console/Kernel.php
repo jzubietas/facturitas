@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('fixed:bin')->everyThirtyMinutes();
 
         $schedule->command('backup:database')
-            ->dailyAt('19:30');
+            ->dailyAt('20:00');
 
         $schedule->command('backup:database')
             ->dailyAt('13:15');
@@ -41,10 +41,10 @@ class Kernel extends ConsoleKernel
             ->dailyAt('23:59');
 
         $schedule->command('actualizaestado:masivo')
-            ->dailyAt('06:00');
+            ->dailyAt('04:00');
 
         $schedule->command('actualizaestado:masivo')
-            ->dailyAt('12:00');
+            ->dailyAt('13:00');
 
         $schedule->command('show:analisis:situacion')
             ->monthlyOn(1,'01:00');
