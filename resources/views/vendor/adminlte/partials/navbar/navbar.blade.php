@@ -55,6 +55,7 @@
 
     {{-- Navbar left links --}}
     <ul class="navbar-nav">
+
         {{-- Left sidebar toggler link --}}
         @include('adminlte::partials.navbar.menu-item-left-sidebar-toggler')
 
@@ -67,6 +68,13 @@
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
+        <li>
+            <div style="float: left;">
+                <img width="160" height="60" src="{{asset('imagenes/trabajo-2.jpg')}}" alt="2013 Toyota Tacoma" id="itemImg">
+            </div>
+        </li>
+
+
       @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_JEFE_LLAMADAS,\App\Models\User::ROL_LLAMADAS,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
         <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
           <button class="nav-link btn btn-outline-info btn-sm  font-18 border-0 font-weight-bold btnLlamadas"

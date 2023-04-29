@@ -114,6 +114,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
+
             <!-- Notifications Dropdown Menu -->
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" href="#">
