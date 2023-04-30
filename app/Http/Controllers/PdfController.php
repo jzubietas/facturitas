@@ -735,13 +735,13 @@ class PdfController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
                 ->where([
-                    ['pedidos_anulacions.','=','C'],
+                    ['pedidos_anulacions.tipo','=','C'],
                 ])
                 ->OrWhere([
-                    ['pedidos_anulacions.','=','F'],
+                    ['pedidos_anulacions.tipo','=','F'],
                 ])
                 ->OrWhere([
-                    ['pedidos_anulacions.','=','Q'],
+                    ['pedidos_anulacions.tipo','=','Q'],
                 ])
                 ->OrWhere([
                     ['pedidos.pago','=','1'],
