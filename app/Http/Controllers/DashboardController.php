@@ -5313,9 +5313,9 @@ class DashboardController extends Controller
             $total_pagado=$total_pagado_a+$total_pagado_b;
 
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.user_id', $asesor->id)
-                ->where('pedidos.codigo', 'not like', "%-C%")
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.estado', '1')
+                ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->count();

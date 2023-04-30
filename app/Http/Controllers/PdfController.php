@@ -727,30 +727,45 @@ class PdfController extends Controller
 
             }*/
 
-            $total_pagado_mespasado = Pedido::query()
+            $total_pagado_mespasado_a = Pedido::query()
                 ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
-                //->where('pedidos.codigo', 'not like', "%-C%")
                 ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
-                ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.estado', '1')
                 ->where([
+                    ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','C'],
                 ])
                 ->OrWhere([
+                    ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','F'],
                 ])
                 ->OrWhere([
+                    ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','Q'],
                 ])
-                ->OrWhere([
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
+                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->count();
+
+            $total_pagado_mespasado_b = Pedido::query()
+                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+                ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
+                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.estado', '1')
+                ->where([
                     ['pedidos.pago','=','1'],
                     ['pedidos.pagado','=','2'],
                     ['pago_pedidos.estado','=',1],
                     ['pago_pedidos.pagado','=',2]
                 ])
-                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
+                ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
                 ->count();
+
+            $total_pagado_mespasado=$total_pagado_mespasado_a+$total_pagado_mespasado_b;
 
             $total_pedido_mespasado = Pedido::query()
                 //->where('pedidos.codigo', 'not like', "%-C%")
