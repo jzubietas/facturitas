@@ -3680,12 +3680,12 @@ class DashboardController extends Controller
             $encargado = null;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['15','16'])
+                ->whereIn('clave_pedidos',['15','16','21'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['15','16'])
+                ->whereIn('clave_pedidos',['15','16','21'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
