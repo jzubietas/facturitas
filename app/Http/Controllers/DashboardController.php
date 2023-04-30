@@ -4104,6 +4104,7 @@ class DashboardController extends Controller
         $newData = [];
         $union = collect($progressData)->groupBy('identificador');
         foreach ($union as $identificador => $items) {
+            var_dump($identificador);
             foreach ($items as $item) {
                 if (!isset($newData[$identificador])) {
                     $newData[$identificador] = $item;
@@ -4136,7 +4137,7 @@ class DashboardController extends Controller
                 })->first();
             }
         }
-        dd($newData);
+        //dd($newData);
         $progressData = collect($newData)->values()->map(function ($item) {
 
             $all = data_get($item, 'total_pedido');
