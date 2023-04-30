@@ -1307,8 +1307,8 @@ class PedidoController extends Controller
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         } else {
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-            $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')->where('clientes.tipo', '1')//->where('clientes.celular','925549426')
-            ->where('u.identificador', $request->user_id)
+            $clientes = Cliente::where('clientes.tipo', '1')//->where('clientes.celular','925549426')
+            ->where('clientes.user_clavepedido', $request->user_id)
                 ->where('clientes.estado', '1')
                 ->get([
                     'clientes.id',
