@@ -475,12 +475,15 @@ class DashboardController extends Controller
                 ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.estado', '1')
                 ->where([
+                    ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','C'],
                 ])
                 ->OrWhere([
+                    ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','F'],
                 ])
                 ->OrWhere([
+                    ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','Q'],
                 ])
                 ->OrWhere([
