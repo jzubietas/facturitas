@@ -468,49 +468,23 @@ class DashboardController extends Controller
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
                 ->count();
 
-            $total_pagado_a = Pedido::query()
-                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+            $total_pagado = Pedido::query()
+                ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
-                ->where([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','C'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
-                ])
-                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
-                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
-                ->count();
-
-            $total_pagado_b = Pedido::query()
-                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
-                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
-                ->where('pedidos.estado', '1')
-                ->where([
-                    ['pedidos.pago','=','1'],
-                    ['pedidos.pagado','=','2'],
-                    ['pago_pedidos.estado','=',1],
-                    ['pago_pedidos.pagado','=',2]
-                ])
+                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->where('pedidos.pago', '1')
+                ->where('pedidos.pagado', '2')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->where('pago_pedidos.estado', 1)
+                ->where('pago_pedidos.pagado', 2)
                 ->count();
 
-            $total_pagado=$total_pagado_a+$total_pagado_b;
-
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
@@ -1426,49 +1400,23 @@ class DashboardController extends Controller
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
                 ->count();
 
-            $total_pagado_a = Pedido::query()
-                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+            $total_pagado = Pedido::query()
+                ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
-                ->where([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','C'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
-                ])
-                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
-                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
-                ->count();
-
-            $total_pagado_b = Pedido::query()
-                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
-                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
-                ->where('pedidos.estado', '1')
-                ->where([
-                    ['pedidos.pago','=','1'],
-                    ['pedidos.pagado','=','2'],
-                    ['pago_pedidos.estado','=',1],
-                    ['pago_pedidos.pagado','=',2]
-                ])
+                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->where('pedidos.pago', '1')
+                ->where('pedidos.pagado', '2')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->where('pago_pedidos.estado', 1)
+                ->where('pago_pedidos.pagado', 2)
                 ->count();
 
-            $total_pagado=$total_pagado_a+$total_pagado_b;
-
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
@@ -1683,7 +1631,6 @@ class DashboardController extends Controller
                 $item['meta_intermedia'] = $p_intermedia;
                 $item['meta'] = $p_pedidos;
                 $item['meta_2'] = $p_pedidos_2;
-
 
             }
             else {
@@ -3845,45 +3792,19 @@ class DashboardController extends Controller
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
                 ->count();
 
-            $total_pagado_a = Pedido::query()
-                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+            $total_pagado = Pedido::query()
+                ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
-                ->where([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','C'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
-                ])
-                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
-                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
-                ->count();
-
-            $total_pagado_b = Pedido::query()
-                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
-                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
-                ->where('pedidos.estado', '1')
-                ->where([
-                    ['pedidos.pago','=','1'],
-                    ['pedidos.pagado','=','2'],
-                    ['pago_pedidos.estado','=',1],
-                    ['pago_pedidos.pagado','=',2]
-                ])
+                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->where('pedidos.pago', '1')
+                ->where('pedidos.pagado', '2')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->where('pago_pedidos.estado', 1)
+                ->where('pago_pedidos.pagado', 2)
                 ->count();
-
-            $total_pagado=$total_pagado_a+$total_pagado_b;
 
             $total_pedido_mespasado = Pedido::query()
                 ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
@@ -5272,50 +5193,24 @@ class DashboardController extends Controller
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
                 ->count();
 
-            $total_pagado_a = Pedido::query()
-                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+            $total_pagado = Pedido::query()
+                ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
-                ->where([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','C'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
-                ])
-                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
-                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
-                ->count();
-
-            $total_pagado_b = Pedido::query()
-                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
-                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.estado_correccion','0')
-                ->where('pedidos.estado', '1')
-                ->where([
-                    ['pedidos.pago','=','1'],
-                    ['pedidos.pagado','=','2'],
-                    ['pago_pedidos.estado','=',1],
-                    ['pago_pedidos.pagado','=',2]
-                ])
+                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->where('pedidos.pago', '1')
+                ->where('pedidos.pagado', '2')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->where('pago_pedidos.estado', 1)
+                ->where('pago_pedidos.pagado', 2)
                 ->count();
 
-            $total_pagado=$total_pagado_a+$total_pagado_b;
-
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
+                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
-                ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->count();
@@ -5693,9 +5588,7 @@ class DashboardController extends Controller
 
         if ($request->ii == 17) {
             $progressData->all();
-        }else if ($request->ii == 37) {
-        $progressData->all();
-    }
+        }
 
 
         //aqui la division de  1  o 2
@@ -6217,202 +6110,6 @@ class DashboardController extends Controller
             $html .= '</tbody>';
 
             $html .= '</table>';
-        }
-        if ($request->ii == 37)
-        {
-            $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
-            $html .= '<tbody>
-              <tr class="responsive-table">
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
-
-            $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
-                    style="height: 30px !important;display:flex; align-items: center; color: black !important;">
-                    TOTAL DE PEDIDOS DEL DIA: ' . $object_totales['pedidos_dia'] . ' </span>';
-
-            $html .= '
-                  </th>
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
-            $html .= '<div class="position-relative rounded">
-                <div class="progress rounded h-40 h-60-res height-bar-progress" style="height: 25px !important;">';
-
-            $round=$object_totales['progress_pagos'];
-
-            if(0<$round && $round<=40)
-            {
-                $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
-                 style="height: 25px !important;width: ' . ($object_totales['progress_pagos']) . '%"
-                 aria-valuenow="' . ($object_totales['progress_pagos']) . '"
-                 aria-valuemin="0"
-                 aria-valuemax="100"></div>';
-            }
-            else if(40<$round && $round<=50)
-            {
-                $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
-                 style="height: 25px !important;width: ' . ($object_totales['progress_pagos']) . '%"
-                 aria-valuenow="70"
-                 aria-valuemin="0"
-                 aria-valuemax="100"></div>
-            <div class="progress-bar h-60-res" role="progressbar"
-                 style="width: ' . ($object_totales['progress_pagos'] - 40) . '%;
-             background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                 aria-valuenow="' . ($object_totales['progress_pagos'] - 40) . '"
-                 aria-valuemin="0"
-                 aria-valuemax="100"></div>';
-            }
-            else if(50<$round && $round<=70)
-            {
-                $html .= '<div class="progress-bar bg-warning" role="progressbar"
-                 style="width: ' . ($object_totales['progress_pagos']) . '%"
-                 aria-valuenow="70"
-                 aria-valuemin="0"
-                 aria-valuemax="100"></div>';
-            }
-            else if(70<$round && $round<=80)
-            {
-                $html .= '<div class="progress-bar bg-warning rounded  h-60-res height-bar-progress" role="progressbar"
-                         style="height: 25px !important;width: ' . ($object_totales['progress_pagos']) . '%"
-                         aria-valuenow="70"
-                         aria-valuemin="0"
-                         aria-valuemax="100"></div>
-                    <div class="progress-bar rounded h-60-res" role="progressbar"
-                         style="width: ' . ($object_totales['progress_pagos'] - 70) . '%;
-                     background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                         aria-valuenow="' . ($object_totales['progress_pagos'] - 70) . '"
-                         aria-valuemin="0"
-                         aria-valuemax="100"></div>';
-            }
-            else if(80<$round && $round<=100)
-            {
-                $html .= '<div class="progress-bar bg-success rounded h-60-res" role="progressbar"
-                 style="height: 25px !important;width: ' . $object_totales['progress_pagos'] . '%;background: #03af03;"
-                 aria-valuenow="' . $object_totales['progress_pagos'] . '"
-                 aria-valuemin="0" aria-valuemax="100"></div>';
-            }
-            else
-            {
-                $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
-                 style="height: 25px !important;width: ' . ($object_totales['progress_pagos']) . '%"
-                 aria-valuenow="' . ($object_totales['progress_pagos']) . '"
-                 aria-valuemin="0"
-                 aria-valuemax="100"></div>';
-            }
-
-            $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 25px !important;font-size: 12px;">
-<span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
-
-            $html .= ' </th>
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
-            $html .= '<div class="position-relative rounded">
-                <div class="progress rounded height-bar-progress" style="height: 25px !important;">';
-
-            //40 50 70 80 100 <
-
-            $round=$object_totales['progress_pedidos'];
-
-            if ($object_totales['meta'] == 0)
-            {
-
-            }
-            else if ($object_totales['meta_new'] == 1)
-            {
-                if(0<$round && $round<=40)
-                {
-                    $html .= '<div class="progress-bar bg-danger" role="progressbar"
-                         style="width: ' . $round . '%"
-                         aria-valuenow="' . $round . '"
-                         aria-valuemin="0"
-                         aria-valuemax="100"></div>';
-                }
-                else if(40<$round && $round<=50)
-                {
-                    $html .= '<div class="progress-bar bg-danger h-60-res height-bar-progress" role="progressbar"
-                           style="height: 30px !important;width: ' . $round . '%"
-                           aria-valuenow="70"
-                           aria-valuemin
-                           aria-valuemax="100"></div>
-                          <div class="progress-bar h-60-res" role="progressbar"
-                               style="width: ' . ($round-40) . '%;
-                           background: -webkit-linear-gradient( left, #dc3545,#ffc107);"
-                               aria-valuenow="' . ($round-40) . '"
-                               aria-valuemin="0"
-                               aria-valuemax="100"></div>';
-                }
-                else if(50<$round && $round<=70)
-                {
-                    $html .= '<div class="progress-bar bg-warning height-bar-progress" role="progressbar"
-                 style="height: 30px !important;width: ' . ($round) . '%"
-                 aria-valuenow="70"
-                 aria-valuemin="0"
-                 aria-valuemax="100"></div>';
-                }
-                else if(70<$round && $round<=80)
-                {
-                    $html .= '<div class="progress-bar bg-warning rounded height-bar-progress" role="progressbar"
-                             style="height: 30px !important;width: ' . ($round) . '%"
-                             aria-valuenow="70"
-                             aria-valuemin="0"
-                             aria-valuemax="100"></div>
-                        <div class="progress-bar rounded height-bar-progress" role="progressbar"
-                             style="height: 30px !important;width: ' . ($round-70) . '%;
-                         background: -webkit-linear-gradient( left, #ffc107,#71c11b);"
-                             aria-valuenow="' . ($round-70) . '"
-                             aria-valuemin="0"
-                             aria-valuemax="100"></div>';
-                }
-                else if(80<$round && $round<=100)
-                {
-                    $html .= '<div class="progress-bar bg-success rounded height-bar-progress" role="progressbar"
-                         style="height: 30px !important;width: ' . $round . '%;background: #03af03;"
-                         aria-valuenow="' . $round . '"
-                         aria-valuemin="0" aria-valuemax="100"></div>';
-                }
-                else
-                {
-                    $html .= '<div class="progress-bar bg-primary" role="progressbar"
-                         style="width: ' . ($round) . '%"
-                         aria-valuenow="' . ($round) . '"
-                         aria-valuemin="0"
-                         aria-valuemax="100"></div>';
-                }
-            }
-            else if ($object_totales['meta_new'] == 2)
-            {
-                $html .= '<div class="progress-bar bg-primary" role="progressbar"
-                         style="width: ' . ($round) . '%"
-                         aria-valuenow="' . ($round) . '"
-                         aria-valuemin="0"
-                         aria-valuemax="100"></div>';
-            }
-
-            if ($object_totales['meta'] == 0) {
-                $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>
-    </div>';
-            } else {
-
-                if ($object_totales['meta_new'] == 1)
-                {
-                    $object_totales['progress_pedidos']=round(($object_totales['total_pedido']/$object_totales['meta_combinar'])*100,2);
-                    $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
-                }else if ($object_totales['meta_new'] == 2)
-                {
-                    $object_totales['progress_pedidos']=round(($object_totales['total_pedido']/$object_totales['meta_combinar'])*100,2);
-                    $html .= '</div>
-    <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">   TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
-                }
-
-            }
-
-            $html .= '</th>
-              </tr>
-              </tbody>';
-            $html .= '</table>';
-
         }
 
         return $html;
