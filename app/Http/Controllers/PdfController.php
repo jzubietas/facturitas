@@ -749,11 +749,7 @@ class PdfController extends Controller
                     ['pago_pedidos.estado','=',1],
                     ['pago_pedidos.pagado','=',2]
                 ])
-                /*->OrWhere([
-                    ['pedidos.pendiente_anulacion','=','1']
-                ])*/
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
-                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $mes_actual_artificio->clone()->endOfDay())
                 ->count();
 
             $total_pedido_mespasado = Pedido::query()
