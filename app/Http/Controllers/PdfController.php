@@ -733,7 +733,7 @@ class PdfController extends Controller
                 ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
-                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->whereIn('pedidos.pendiente_anulacion',  ['0','1'])
                 ->where('pedidos.pago','1')
                 ->where('pedidos.pagado','2')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
@@ -747,7 +747,7 @@ class PdfController extends Controller
                 ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
-                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->whereIn('pedidos.pendiente_anulacion',  ['0','1'])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
                 ->count();
 
