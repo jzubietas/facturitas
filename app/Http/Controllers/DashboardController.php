@@ -4138,9 +4138,9 @@ class DashboardController extends Controller
                 })->first();
             }
         }
-        dd($newData);
+        //dd($newData);
         $progressData = collect($newData)->values()->map(function ($item) {
-            //if(data_get($item, 'total_pedido'))
+            if(data_get($item, 'identificador') == "21") return false;;
 
             $all = data_get($item, 'total_pedido');
             $all_mespasado = data_get($item, 'total_pedido_mespasado');
