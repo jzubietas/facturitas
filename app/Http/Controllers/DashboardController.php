@@ -4140,7 +4140,7 @@ class DashboardController extends Controller
         }
         //dd($newData);
         $progressData = collect($newData)->values()->map(function ($item) {
-            if(data_get($item, 'identificador') == "21") return false;;
+            //if(data_get($item, 'identificador') == "21") return false;;
 
             $all = data_get($item, 'total_pedido');
             $all_mespasado = data_get($item, 'total_pedido_mespasado');
@@ -4284,7 +4284,8 @@ class DashboardController extends Controller
                     $count_asesor[$supervisor_2->id]['progress_pedidos']=0;
                 }
                 $count_asesor[$supervisor_2->id]['meta_new']=1;
-            }else if($count_asesor[$supervisor_2->id]['total_pedido'] >= $count_asesor[$supervisor_2->id]['meta'])
+            }
+            else if($count_asesor[$supervisor_2->id]['total_pedido'] >= $count_asesor[$supervisor_2->id]['meta'])
             {
                 if($count_asesor[$supervisor_2->id]['meta_2'] > 0)
                 {
