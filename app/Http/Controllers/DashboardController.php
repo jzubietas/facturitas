@@ -1180,7 +1180,7 @@ class DashboardController extends Controller
             if ($object_totales['meta'] == 0) {
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] . '</span>
+             <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['$meta_combinar'] . '</span>
     </div>';
             } else {
 
@@ -1190,7 +1190,8 @@ class DashboardController extends Controller
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
-                }else if ($object_totales['meta_new'] == 2)
+                }
+                else if ($object_totales['meta_new'] == 2)
                 {
                     $object_totales['progress_pedidos']=round(($object_totales['total_pedido']/$object_totales['meta_combinar'])*100,2);
                     $html .= '</div>
@@ -1619,40 +1620,6 @@ class DashboardController extends Controller
                     if ($metatotal_2 > 0) {
                         $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
                     } else {
-                        $p_pedidos = 0;
-                    }
-                    $item['meta_new'] = 2;
-                    $item['progress_pedidos'] = $p_pedidos;
-                }
-                /*-----------------------*/
-                $item['progress_pagos'] = $p_pagos;
-                $item['progress_pedidos'] = $p_pedidos;
-                $item['meta_quincena'] = $p_quincena;
-                $item['meta_intermedia'] = $p_intermedia;
-                $item['meta'] = $p_pedidos;
-                $item['meta_2'] = $p_pedidos_2;
-                if ($total_pedido>=0 && $total_pedido < $metatotal_1)
-                {
-                    if ($metatotal_1 > 0)
-                    {
-                        $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                    }
-                    else
-                    {
-                        $p_pedidos = 0;
-                    }
-                    $item['meta_new'] = 1;
-                    $item['progress_pedidos'] = $p_pedidos;
-                    /*meta 2*/
-                }
-                else if ($total_pedido>=$metatotal_1)
-                {
-                    if ($metatotal_2 > 0)
-                    {
-                        $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
-                    }
-                    else
-                    {
                         $p_pedidos = 0;
                     }
                     $item['meta_new'] = 2;
@@ -4057,40 +4024,7 @@ class DashboardController extends Controller
                 $item['meta_intermedia'] = $p_intermedia;
                 $item['meta'] = $p_pedidos;
                 $item['meta_2'] = $p_pedidos_2;
-                if ($total_pedido>=0 && $total_pedido < $metatotal_1)
-                {
-                    if ($metatotal_1 > 0)
-                    {
-                        $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                    }
-                    else
-                    {
-                        $p_pedidos = 0;
-                    }
-                    $item['meta_new'] = 1;
-                    $item['progress_pedidos'] = $p_pedidos;
-                    /*meta 2*/
-                }
-                else if ($total_pedido>=$metatotal_1)
-                {
-                    if ($metatotal_2 > 0)
-                    {
-                        $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
-                    }
-                    else
-                    {
-                        $p_pedidos = 0;
-                    }
-                    $item['meta_new'] = 2;
-                    $item['progress_pedidos'] = $p_pedidos;
-                }
-                /*-----------------------*/
-                $item['progress_pagos'] = $p_pagos;
-                $item['progress_pedidos'] = $p_pedidos;
-                $item['meta_quincena'] = $p_quincena;
-                $item['meta_intermedia'] = $p_intermedia;
-                $item['meta'] = $p_pedidos;
-                $item['meta_2'] = $p_pedidos_2;
+
 
             }
             else {
