@@ -4108,27 +4108,33 @@ class DashboardController extends Controller
                 if (!isset($newData[$identificador])) {
                     $newData[$identificador] = $item;
                 } else {
-                    /*echo "<pre>";
+                    if($identificador!=21)
+                    {
+                        /*echo "<pre>";
                     print_r($item);
                     echo "</pre>";*/
-                    $newData[$identificador]['total_pedido'] += data_get($item, 'total_pedido');
-                    $newData[$identificador]['total_pedido_mespasado'] += data_get($item, 'total_pedido_mespasado');
-                    $newData[$identificador]['total_pagado'] += data_get($item, 'total_pagado');
-                    $newData[$identificador]['pedidos_dia'] += data_get($item, 'pedidos_dia');
-                    $newData[$identificador]['supervisor'] += data_get($item, 'supervisor');
-                    $newData[$identificador]['meta_new'] += data_get($item, 'meta_new');//0 quincena //0.5 intermedia //1 meta1//2 meta2
-                    $newData[$identificador]['pedidos_totales'] += data_get($item, 'pedidos_totales');//todo el mes
-                    $newData[$identificador]['clientes_situacion_recurrente'] += data_get($item, 'clientes_situacion_recurrente');//todo el mes
-                    $newData[$identificador]['clientes_situacion_activo'] += data_get($item, 'clientes_situacion_activo');//todo el mes
-                    $newData[$identificador]['meta_quincena'] += data_get($item, 'meta_quincena');
-                    $newData[$identificador]['meta_intermedia'] += data_get($item, 'meta_intermedia');
-                    $newData[$identificador]['meta'] += data_get($item, 'meta');
-                    $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
+                        $newData[$identificador]['total_pedido'] += data_get($item, 'total_pedido');
+                        $newData[$identificador]['total_pedido_mespasado'] += data_get($item, 'total_pedido_mespasado');
+                        $newData[$identificador]['total_pagado'] += data_get($item, 'total_pagado');
+                        $newData[$identificador]['pedidos_dia'] += data_get($item, 'pedidos_dia');
+                        $newData[$identificador]['supervisor'] += data_get($item, 'supervisor');
+                        $newData[$identificador]['meta_new'] += data_get($item, 'meta_new');//0 quincena //0.5 intermedia //1 meta1//2 meta2
+                        $newData[$identificador]['pedidos_totales'] += data_get($item, 'pedidos_totales');//todo el mes
+                        $newData[$identificador]['clientes_situacion_recurrente'] += data_get($item, 'clientes_situacion_recurrente');//todo el mes
+                        $newData[$identificador]['clientes_situacion_activo'] += data_get($item, 'clientes_situacion_activo');//todo el mes
+                        $newData[$identificador]['meta_quincena'] += data_get($item, 'meta_quincena');
+                        $newData[$identificador]['meta_intermedia'] += data_get($item, 'meta_intermedia');
+                        $newData[$identificador]['meta'] += data_get($item, 'meta');
+                        $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
+                    }
                 }
             }
-            $newData[$identificador]['name'] = collect($items)->map(function ($item) {
-                return explode(" ", data_get($item, 'name'))[0];
-            })->first();
+            if($identificador!=21)
+            {
+                $newData[$identificador]['name'] = collect($items)->map(function ($item) {
+                    return explode(" ", data_get($item, 'name'))[0];
+                })->first();
+            }
         }
         dd($newData);
         $progressData = collect($newData)->values()->map(function ($item) {
