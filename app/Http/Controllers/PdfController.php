@@ -728,13 +728,22 @@ class PdfController extends Controller
             }*/
 
             $total_pagado_mespasado = Pedido::query()
-                ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
                 //->where('pedidos.codigo', 'not like', "%-C%")
                 ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
                 ->where([
-                    ['pedidos.pendiente_anulacion','=','0'],
+                    ['pedidos_anulacions.','=','C'],
+                ])
+                ->OrWhere([
+                    ['pedidos_anulacions.','=','F'],
+                ])
+                ->OrWhere([
+                    ['pedidos_anulacions.','=','Q'],
+                ])
+                ->OrWhere([
                     ['pedidos.pago','=','1'],
                     ['pedidos.pagado','=','2'],
                     ['pago_pedidos.estado','=',1],
