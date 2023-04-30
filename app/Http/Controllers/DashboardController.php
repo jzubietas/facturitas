@@ -469,22 +469,33 @@ class DashboardController extends Controller
                 ->count();
 
             $total_pagado = Pedido::query()
-                ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
                 ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
-                ->where('pedidos.codigo', 'not like', "%-C%")
+                ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.estado', '1')
-                ->where('pedidos.pendiente_anulacion', '<>', '1')
-                ->where('pedidos.pago', '1')
-                ->where('pedidos.pagado', '2')
+                ->where([
+                    ['pedidos_anulacions.tipo','=','C'],
+                ])
+                ->OrWhere([
+                    ['pedidos_anulacions.tipo','=','F'],
+                ])
+                ->OrWhere([
+                    ['pedidos_anulacions.tipo','=','Q'],
+                ])
+                ->OrWhere([
+                    ['pedidos.pago','=','1'],
+                    ['pedidos.pagado','=','2'],
+                    ['pago_pedidos.estado','=',1],
+                    ['pago_pedidos.pagado','=',2]
+                ])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
-                ->where('pago_pedidos.estado', 1)
-                ->where('pago_pedidos.pagado', 2)
                 ->count();
 
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.user_id', $asesor->id)
-                ->where('pedidos.codigo', 'not like', "%-C%")
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
+                ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
@@ -1631,40 +1642,7 @@ class DashboardController extends Controller
                 $item['meta_intermedia'] = $p_intermedia;
                 $item['meta'] = $p_pedidos;
                 $item['meta_2'] = $p_pedidos_2;
-                if ($total_pedido>=0 && $total_pedido < $metatotal_1)
-                {
-                    if ($metatotal_1 > 0)
-                    {
-                        $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
-                    }
-                    else
-                    {
-                        $p_pedidos = 0;
-                    }
-                    $item['meta_new'] = 1;
-                    $item['progress_pedidos'] = $p_pedidos;
-                    /*meta 2*/
-                }
-                else if ($total_pedido>=$metatotal_1)
-                {
-                    if ($metatotal_2 > 0)
-                    {
-                        $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
-                    }
-                    else
-                    {
-                        $p_pedidos = 0;
-                    }
-                    $item['meta_new'] = 2;
-                    $item['progress_pedidos'] = $p_pedidos;
-                }
-                /*-----------------------*/
-                $item['progress_pagos'] = $p_pagos;
-                $item['progress_pedidos'] = $p_pedidos;
-                $item['meta_quincena'] = $p_quincena;
-                $item['meta_intermedia'] = $p_intermedia;
-                $item['meta'] = $p_pedidos;
-                $item['meta_2'] = $p_pedidos_2;
+
 
             }
             else {
@@ -4057,7 +4035,7 @@ class DashboardController extends Controller
                 $item['meta_intermedia'] = $p_intermedia;
                 $item['meta'] = $p_pedidos;
                 $item['meta_2'] = $p_pedidos_2;
-                
+
 
             }
             else {
