@@ -9,7 +9,7 @@
                 </div>
 
                 <div class="modal-body pt-3 pr-3 pl-3 pb-0">
-                  <input type="hidden" id="correccion_b" name="correccion_b">
+                  <input type="hidden" id="recojo_b" name="recojo_b">
                   <input type="hidden" name="opcion" value="4">
 
                   <div class="row clase">
