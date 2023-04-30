@@ -743,29 +743,19 @@ class PdfController extends Controller
                 ->OrWhere([
                     ['pedidos.pendiente_anulacion','=','1']
                 ])
-                ->where('pedidos.pago','1')
-                ->where('pedidos.pagado','2')
+                //->where('pedidos.pago','1')
+                //->where('pedidos.pagado','2')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
-                ->where('pago_pedidos.estado', 1)
-                ->where('pago_pedidos.pagado', 2)
+                //->where('pago_pedidos.estado', 1)
+                //->where('pago_pedidos.pagado', 2)
                 ->count();
 
             $total_pedido_mespasado = Pedido::query()
-                ->join("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 //->where('pedidos.codigo', 'not like', "%-C%")
                 ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
-                ->where([
-                    ['pedidos.pendiente_anulacion','=','0'],
-                    ['pedidos.pago','=','1'],
-                    ['pedidos.pagado','=','2'],
-                    ['pago_pedidos.estado','=',1],
-                    ['pago_pedidos.pagado','=',2]
-                ])
-                ->OrWhere([
-                    ['pedidos.pendiente_anulacion','=','1']
-                ])
+                ->whereIn('pedidos.pendiente_anulacion',  ['0','1'])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
                 ->count();
 
