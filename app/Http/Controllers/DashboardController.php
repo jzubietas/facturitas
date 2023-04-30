@@ -3677,12 +3677,12 @@ class DashboardController extends Controller
             $encargado = null;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['15','16'])
+                ->whereIn('clave_pedidos',['15','16','21'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['15','16'])
+                ->whereIn('clave_pedidos',['15','16','21'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -3695,14 +3695,14 @@ class DashboardController extends Controller
 
             $asesores = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereIn('clave_pedidos',['15','16'])
+                ->whereIn('clave_pedidos',['15','16','21'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
 
             $total_asesor = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereIn('clave_pedidos',['15','16'])
+                ->whereIn('clave_pedidos',['15','16','21'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -3789,7 +3789,7 @@ class DashboardController extends Controller
             //dd($fechametames,$date_pagos);
 
 
-            $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.clave_pedidos', $asesor->clave_pedidos)
+            $asesor_pedido_dia = Pedido::query()->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")->activo()
                 ->whereDate('pedidos.created_at', $fechametames)
                 ->where('pendiente_anulacion', '<>', '1')->count();
@@ -4130,7 +4130,9 @@ class DashboardController extends Controller
                 return explode(" ", data_get($item, 'name'))[0];
             })->first();
         }
+        //dd($newData);
         $progressData = collect($newData)->values()->map(function ($item) {
+
             $all = data_get($item, 'total_pedido');
             $all_mespasado = data_get($item, 'total_pedido_mespasado');
             $pay = data_get($item, 'total_pagado');
