@@ -737,14 +737,6 @@ class PdfController extends Controller
                     ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','C'],
                 ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
-                ])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
                 ->count();
 

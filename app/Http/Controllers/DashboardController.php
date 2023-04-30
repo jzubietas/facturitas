@@ -478,14 +478,6 @@ class DashboardController extends Controller
                     ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','C'],
                 ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
-                ])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
                 ->count();
@@ -1435,14 +1427,6 @@ class DashboardController extends Controller
                 ->where([
                     ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','C'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
                 ])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
@@ -3855,14 +3839,6 @@ class DashboardController extends Controller
                     ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','C'],
                 ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
-                ])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
                 ->count();
@@ -5281,14 +5257,6 @@ class DashboardController extends Controller
                 ->where([
                     ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','C'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','F'],
-                ])
-                ->OrWhere([
-                    ['pedidos_anulacions.state_solicitud','=','1'],
-                    ['pedidos_anulacions.tipo','=','Q'],
                 ])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
