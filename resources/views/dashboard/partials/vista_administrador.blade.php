@@ -761,6 +761,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(9);
 
                 cargaNueva17(17);
+                cargaNueva17(37);
 
                 cargReporteMetasCobranzasGeneral();
 
@@ -797,6 +798,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //totales porcentajes debajo de metas
 
             cargaNueva17(17);
+            cargaNueva17(37);
 
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
@@ -841,6 +843,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //cargaNueva(15);//paola
                 //totales porcentajes debajo de metas
                 cargaNueva17(17);
+                cargaNueva17(37);
 
                 cargReporteMetasSituacionClientes();
 
