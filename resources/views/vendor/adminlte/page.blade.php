@@ -33,7 +33,7 @@
 
         {{-- Preloader Animation --}}
         @if($layoutHelper->isPreloaderEnabled())
-            @include('adminlte::partials.common.preloader')
+            {{--@include('adminlte::partials.common.preloader')--}}
         @endif
 
         {{-- Top Navbar --}}
