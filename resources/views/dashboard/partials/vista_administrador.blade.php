@@ -226,6 +226,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         {{-- FIN-TABLA-DUAL --}}
 
         <div class="col-lg-12" id="metas_dp_17"></div>
+        <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
         <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
 
     </div>
@@ -603,6 +604,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }
                    if (entero === 17) {
                         $('#metas_dp_17').html(resultado);
+                    }else if (entero === 37) {
+                        $('#metas_asesores_total_dp17').html(resultado);
                     }
                 }
             })
