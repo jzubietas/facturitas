@@ -83,6 +83,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('dashboard.viewMetaTable.General', [DashboardController::class, 'viewMetaTableGeneral'])->name('dashboard.viewMetaTable.General');
     Route::any('dashboard.viewMetaTable', [DashboardController::class, 'viewMetaTable'])->name('dashboard.viewMetaTable');
     Route::any('dashboard.viewMetaTable_G2', [DashboardController::class, 'viewMetaTableG2'])->name('dashboard.viewMetaTable_G2');
+    Route::any('dashboard.viewMetaTable_G3', [DashboardController::class, 'viewMetaTableG3'])->name('dashboard.viewMetaTable_G3');
     Route::any('dashboard.viewMetaTable_G17', [DashboardController::class, 'viewMetaTableG17'])->name('dashboard.viewMetaTable_G17');
     Route::any('dashboard.viewMetaTable.Recurrente.Activo', [DashboardController::class, 'viewMetaTableRecurrenteActivo'])->name('dashboard.viewMetaTable.Recurrente.Activo');
 
