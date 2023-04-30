@@ -4104,12 +4104,13 @@ class DashboardController extends Controller
         $newData = [];
         $union = collect($progressData)->groupBy('identificador');
         foreach ($union as $identificador => $items) {
-            var_dump($identificador);
+            //var_dump($identificador);
+            if($identificador==21)continue;
             foreach ($items as $item) {
                 if (!isset($newData[$identificador])) {
                     $newData[$identificador] = $item;
                 } else {
-                    if($identificador!=21)
+                    //if($identificador!=21)
                     {
                         /*echo "<pre>";
                     print_r($item);
@@ -4130,7 +4131,7 @@ class DashboardController extends Controller
                     }
                 }
             }
-            if($identificador!=21)
+            //if($identificador!=21)
             {
                 $newData[$identificador]['name'] = collect($items)->map(function ($item) {
                     return explode(" ", data_get($item, 'name'))[0];
