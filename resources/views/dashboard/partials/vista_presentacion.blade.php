@@ -566,6 +566,48 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             })
         }
 
+        window.cargaNueva23 = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable_G2') }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero===1 || entero===2)
+                    {
+                        console.log("cambiar color")
+                        //$(".h1-change-day").css("color","blue");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+
+                    //otro bloque segun virginia
+                    if (entero === 23) {
+                        $('#metas_asesores_total_g2').html(resultado);
+                    }
+
+                }
+            })
+        }
+
         window.cargaNueva17 = function (entero) {
             console.log(' ' + entero)
             var fd = new FormData();
@@ -742,7 +784,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //grupo 2
                 cargaNueva2(21);
                 cargaNueva2(22);
-                cargaNueva2(23);
+                cargaNueva23(23);
 
                 //porcentajes grupo 1
                 cargaNueva(6);
@@ -772,7 +814,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //grupo 2
             cargaNueva2(21);
             cargaNueva2(22);
-            cargaNueva2(23);
+            cargaNueva23(23);
 
             //porcentaje grupo 2
             cargaNueva(6);
@@ -817,7 +859,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //grupo 2
                 cargaNueva2(21);
                 cargaNueva2(22);
-                cargaNueva2(23);
+                cargaNueva23(23);
 
                 //porcentaje grupo 1
                 cargaNueva(6);
