@@ -4232,7 +4232,7 @@ class DashboardController extends Controller
             })
             ->reject(function ($value) {
                 return $value === false;
-            });->sortBy('meta_new', SORT_NUMERIC, true)
+            })->sortBy('meta_new', SORT_NUMERIC, true)
             ->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
 
         if ($request->ii == 21) {
