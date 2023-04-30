@@ -5693,7 +5693,9 @@ class DashboardController extends Controller
 
         if ($request->ii == 17) {
             $progressData->all();
-        }
+        }else if ($request->ii == 37) {
+        $progressData->all();
+    }
 
 
         //aqui la division de  1  o 2
