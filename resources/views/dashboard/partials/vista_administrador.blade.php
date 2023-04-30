@@ -71,9 +71,7 @@
 </div>
 
 {{-- LLAMADA DE ATENCION --}}
-<div class="col-md-12">
-    <x-tabla-list-llamada-atencion></x-tabla-list-llamada-atencion>
-</div>
+
 <div class="col-lg-12">
     <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
 </div>
