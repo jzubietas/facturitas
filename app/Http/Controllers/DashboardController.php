@@ -4202,10 +4202,16 @@ class DashboardController extends Controller
 
                 if($meta_new==1)
                 {
+
                     $item['meta_combinar']=$item['meta'];
                 }else if($meta_new==2)
                 {
                     $item['meta_combinar']=$item['meta_2'];
+                }
+
+                if(data_get($item, 'identificador') == "21")
+                {
+                    $item['total_pedido']=0;
                 }
 
 
@@ -4299,7 +4305,8 @@ class DashboardController extends Controller
                 $progress_pedidos=0;
             }
             $meta_new=1;
-        }else if($all >= $meta)
+        }
+        else if($all >= $meta)
         {
             if($meta_2 > 0)
             {
@@ -4312,7 +4319,8 @@ class DashboardController extends Controller
 
         if ($all_mespasado == 0) {
             $p_pagos = 0;
-        } else {
+        }
+        else {
             if ($pay > 0) {
                 $p_pagos = round(($pay / $all_mespasado) * 100, 2);
             } else {
