@@ -4209,12 +4209,6 @@ class DashboardController extends Controller
                     $item['meta_combinar']=$item['meta_2'];
                 }
 
-                if(data_get($item, 'identificador') == "21")
-                {
-                    $item['total_pedido']=0;
-                }
-
-
                 if($allmeta_2==0)
                     $item['porcentaje_general']=0;
                 else
