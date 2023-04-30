@@ -81,6 +81,7 @@
     <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
 </div>
 
+
 <!-- MODAL -->
 {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
@@ -512,8 +513,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         $('#metas_asesores_g2_a').html(resultado);
                     } else if (entero === 22) {
                         $('#metas_asesores_g2_b').html(resultado);
-                    } else if (entero === 23) {
-                        $('#metas_asesores_total_g2').html(resultado);
                     }
 
                 }
@@ -558,8 +557,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         $('#metas_asesores_g2_a').html(resultado);
                     } else if (entero === 22) {
                         $('#metas_asesores_g2_b').html(resultado);
-                    } else if (entero === 23) {
-                        $('#metas_asesores_total_g2').html(resultado);
                     }
                     else if (entero === 26) {
                         $('#porcentaje_cobranzas_metas_g2').html(resultado);
@@ -591,7 +588,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 processData: false,
                 contentType: false,
                 method: 'POST',
-                url: "{{ route('dashboard.viewMetaTable_G2') }}",
+                url: "{{ route('dashboard.viewMetaTable_G3') }}",
                 error: function(jqXHR, textStatus, errorThrown) {
                     // Handle the error
                 },
@@ -644,7 +641,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         if(valorr!=ddd_1)
                             $(".h1-change-day").attr('style', 'color: blue !important');
                     }
-                   if (entero === 17) {
+                    if (entero === 17) {
                         $('#metas_dp_17').html(resultado);
                     }else if (entero === 37) {
                         $('#metas_asesores_total_dp17').html(resultado);
