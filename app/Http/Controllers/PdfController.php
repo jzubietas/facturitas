@@ -745,8 +745,7 @@ class PdfController extends Controller
                     ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','Q'],
                 ])
-                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
-                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
                 ->count();
 
             $total_pagado_mespasado_b = Pedido::query()
@@ -761,8 +760,7 @@ class PdfController extends Controller
                     ['pago_pedidos.estado','=',1],
                     ['pago_pedidos.pagado','=',2]
                 ])
-                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
-                ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
                 ->count();
 
             $total_pagado_mespasado=$total_pagado_mespasado_a+$total_pagado_mespasado_b;
