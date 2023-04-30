@@ -468,7 +468,7 @@ class DashboardController extends Controller
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
                 ->count();
 
-            $total_pagado = Pedido::query()
+            $total_pagado_a = Pedido::query()
                 ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
                 ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
@@ -486,7 +486,17 @@ class DashboardController extends Controller
                     ['pedidos_anulacions.state_solicitud','=','1'],
                     ['pedidos_anulacions.tipo','=','Q'],
                 ])
-                ->OrWhere([
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
+                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->count();
+
+            $total_pagado_b = Pedido::query()
+                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
+                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.estado', '1')
+                ->where([
                     ['pedidos.pago','=','1'],
                     ['pedidos.pagado','=','2'],
                     ['pago_pedidos.estado','=',1],
@@ -495,6 +505,8 @@ class DashboardController extends Controller
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
                 ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
                 ->count();
+
+            $total_pagado=$total_pagado_a+$total_pagado_b;
 
             $total_pedido_mespasado = Pedido::query()
                 ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
