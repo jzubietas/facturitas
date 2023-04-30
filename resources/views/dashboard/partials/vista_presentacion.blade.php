@@ -582,7 +582,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 processData: false,
                 contentType: false,
                 method: 'POST',
-                url: "{{ route('dashboard.viewMetaTable_G2') }}",
+                url: "{{ route('dashboard.viewMetaTable_G3') }}",
                 error: function(jqXHR, textStatus, errorThrown) {
                     // Handle the error
                 },
