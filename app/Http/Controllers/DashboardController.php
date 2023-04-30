@@ -3820,7 +3820,7 @@ class DashboardController extends Controller
                 $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
             }
 
-            $total_pedido = Pedido::query()->where('user_clavepedido', $asesor->clave_pedidos)
+            $total_pedido = Pedido::query()->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
@@ -3841,7 +3841,7 @@ class DashboardController extends Controller
                 ->count();
 
             $total_pedido_mespasado = Pedido::query()
-                ->where('pedidos.user_id', $asesor->id)
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
                 ->where('pedidos.codigo', 'not like', "%-C%")
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '<>', '1')
@@ -3901,7 +3901,7 @@ class DashboardController extends Controller
                     $count_asesor[$encargado_asesor]['meta_2'] = $metatotal_2 + $count_asesor[$encargado_asesor]['meta_2'];
                     $count_asesor[$encargado_asesor]['total_pedido'] = $total_pedido + $count_asesor[$encargado_asesor]['total_pedido'];
                     $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
-                } else*/ if ($encargado_asesor == 24) {
+                } else*/ if ($encargado_asesor == 46) {
                     $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
                     $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
                     $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
@@ -4130,7 +4130,7 @@ class DashboardController extends Controller
                 return explode(" ", data_get($item, 'name'))[0];
             })->first();
         }
-        //dd($newData);
+        dd($newData);
         $progressData = collect($newData)->values()->map(function ($item) {
 
             $all = data_get($item, 'total_pedido');
