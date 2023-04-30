@@ -507,8 +507,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         $('#metas_asesores_g2_a').html(resultado);
                     } else if (entero === 22) {
                         $('#metas_asesores_g2_b').html(resultado);
-                    } else if (entero === 23) {
-                        $('#metas_asesores_total_g2').html(resultado);
                     }
 
                 }
@@ -553,8 +551,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                         $('#metas_asesores_g2_a').html(resultado);
                     } else if (entero === 22) {
                         $('#metas_asesores_g2_b').html(resultado);
-                    } else if (entero === 23) {
-                        $('#metas_asesores_total_g2').html(resultado);
                     }
                     else if (entero === 26) {
                         $('#porcentaje_cobranzas_metas_g2').html(resultado);
