@@ -4130,7 +4130,7 @@ class DashboardController extends Controller
                 return explode(" ", data_get($item, 'name'))[0];
             })->first();
         }
-        dd($newData);
+        //dd($newData);
         $progressData = collect($newData)->values()->map(function ($item) {
 
             $all = data_get($item, 'total_pedido');
