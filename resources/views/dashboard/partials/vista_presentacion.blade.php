@@ -76,7 +76,6 @@
 </div>
 
 
-
 <!-- MODAL -->
 {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
@@ -222,6 +221,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         {{-- FIN-TABLA-DUAL --}}
 
         <div class="col-lg-12" id="metas_dp_17"></div>
+        <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
         <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
 
     </div>
@@ -599,6 +599,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }
                     if (entero === 17) {
                         $('#metas_dp_17').html(resultado);
+                    }else if (entero === 37) {
+                        $('#metas_asesores_total_dp17').html(resultado);
                     }
                 }
             })
@@ -754,6 +756,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(9);
 
                 cargaNueva17(17);
+                cargaNueva17(37);
 
                 cargReporteMetasCobranzasGeneral();
 
@@ -790,6 +793,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //totales porcentajes debajo de metas
 
             cargaNueva17(17);
+            cargaNueva17(37);
 
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
@@ -834,6 +838,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //cargaNueva(15);//paola
                 //totales porcentajes debajo de metas
                 cargaNueva17(17);
+                cargaNueva17(37);
 
                 cargReporteMetasSituacionClientes();
 
