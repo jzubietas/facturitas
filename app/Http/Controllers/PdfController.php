@@ -730,8 +730,8 @@ class PdfController extends Controller
             $total_pagado_mespasado_a = Pedido::query()
                 ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
                 ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
-                ->where('pedidos.codigo','not like ','%-C%')
-                //->where('pedidos.estado_correccion','0')
+                //->where('pedidos.codigo','not like ','%-C%')
+                ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.estado', '1')
                 ->where([
                     ['pedidos_anulacions.state_solicitud','=','1'],
@@ -744,8 +744,8 @@ class PdfController extends Controller
                 ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 //->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
                 ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
-                ->where('pedidos.codigo','not like ','%-C%')
-                //->where('pedidos.estado_correccion','0')
+                //->where('pedidos.codigo','not like ','%-C%')
+                ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.estado', '1')
                 ->where([
                     ['pedidos.pago','=','1'],
