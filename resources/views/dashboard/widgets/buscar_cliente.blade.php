@@ -16,7 +16,7 @@
                     </select>
                   </div>
                 </div>
-                <input id="input_search_cliente" class="form-control" maxlength="11" placeholder="Buscar cliente">
+                <input id="input_search_cliente" name="input_search_cliente" class="form-control" maxlength="11" placeholder="Buscar cliente">
               </div>
             </div>
 

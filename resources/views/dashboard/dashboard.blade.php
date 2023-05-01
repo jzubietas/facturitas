@@ -163,6 +163,7 @@
                     )
                     return;
                 }
+                console.log(tipo)
                 if (tipo == "CLIENTE")
                 {
                     var fd=new FormData();
