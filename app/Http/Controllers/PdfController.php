@@ -754,7 +754,20 @@ class PdfController extends Controller
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
                 ->count();
 
-            $total_pagado_mespasado=$total_pagado_mespasado_a+$total_pagado_mespasado_b;
+            $total_pagado_mespasado_c = Pedido::query()
+                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+                ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
+                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.estado', '1')
+                ->where([
+                    ['pedidos_anulacions.state_solicitud','=','1'],
+                    ['pedidos_anulacions.tipo','=','Q'],
+                ])
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
+                ->count();
+
+            $total_pagado_mespasado=$total_pagado_mespasado_a+$total_pagado_mespasado_b+$total_pagado_mespasado_c;
+
 
             $total_pedido_mespasado = Pedido::query()
                 //->where('pedidos.codigo', 'not like', "%-C%")
