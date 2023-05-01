@@ -185,7 +185,7 @@
                     var fd2=new FormData();
                     fd2.append('q',$('#input_search_cliente').val());
                     $.ajax({
-                        data: fd,
+                        data: fd2,
                         processData: false,
                         contentType: false,
                         method: 'POST',
