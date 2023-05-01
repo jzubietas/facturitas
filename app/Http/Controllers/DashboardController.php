@@ -7099,6 +7099,7 @@ class DashboardController extends Controller
         $meta_2 = collect($progressData)->pluck('meta_2')->sum();
         $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
         $supervisor = collect($progressData)->pluck('supervisor')->sum();
+        $meta_combinar = collect($progressData)->pluck('meta_combinar')->sum();
         $meta_new=0;
         $progress_pedidos=0;
 
