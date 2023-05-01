@@ -740,7 +740,7 @@ class PdfController extends Controller
                 ->count();
 
             $total_pagado_mespasado_b = Pedido::query()
-                ->innerjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 //->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
                 ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
                 ->where('pedidos.estado_correccion','0')
