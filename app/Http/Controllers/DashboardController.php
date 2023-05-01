@@ -7173,6 +7173,7 @@ class DashboardController extends Controller
             "pedidos_dia" => $pedidos_dia,
             "supervisor" => $supervisor,
             "meta_new"=>$meta_new,
+            "meta_combinar" => $meta_combinar,
             "progress_pedidos"=>$progress_pedidos
         ];
 
