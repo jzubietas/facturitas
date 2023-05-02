@@ -1219,6 +1219,11 @@ class ClienteController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn = "";
+                if (auth()->user()->rol == User::ROL_ADMIN)
+                {
+                    $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> CONGELAR</button></a>';
+                }
+
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -1333,6 +1338,11 @@ class ClienteController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn = "";
+                if (auth()->user()->rol == User::ROL_ADMIN)
+                {
+                    $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> CONGELAR</button></a>';
+                }
+
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -2523,6 +2533,10 @@ class ClienteController extends Controller
       ->addIndexColumn()
       ->addColumn('action', function ($row) {
         $btn = "";
+          if (auth()->user()->rol == User::ROL_ADMIN)
+          {
+              $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> CONGELAR</button></a>';
+          }
         return $btn;
       })
       ->rawColumns(['action'])
