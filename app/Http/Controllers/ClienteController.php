@@ -645,8 +645,8 @@ class ClienteController extends Controller
 
             $cliente->update([
                 'sust_congelado' => $request->motivo,
-                'responsable_anulacion' => $nombre_Responsable,
-                'user_anulacion_id' => Auth::user()->id,
+                'responsable_congelacion' => $nombre_Responsable,
+                'user_congelacion_id' => Auth::user()->id,
                 'fecha_anulacion' => now(),
                 //'fecha_anulacion_confirm' => now(),
                 'estado' => '0',
