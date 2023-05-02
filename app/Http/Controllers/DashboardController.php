@@ -6746,12 +6746,18 @@ class DashboardController extends Controller
                 ->activo()
                 ->count();
 
+            $clientes_actuales=Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
+                ->where('clientes.tipo','=','1')
+                ->activo()
+                ->count();
+
             $encargado_asesor = $asesor->supervisor;
 
             $item = [
                 "identificador" => $asesor->clave_pedidos,
                 "inicio" => Carbon::parse($asesor->created_at)->format('d-m-Y'),
-                "chats" => 0,
+                "chats" => $clientes_actuales,
                 "code" => "{$asesor->name}",
                 "pedidos_dia" => $asesor_pedido_dia,
                 "name" => $asesor->name,
