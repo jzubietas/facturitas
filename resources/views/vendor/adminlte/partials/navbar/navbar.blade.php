@@ -68,11 +68,7 @@
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
-        <li>
-            <div style="float: left;">
-                <img width="160" height="60" src="{{asset('imagenes/trabajo-2.jpg')}}" alt="2013 Toyota Tacoma" id="itemImg" class="rounded">
-            </div>
-        </li>
+        
 
 
       @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_JEFE_LLAMADAS,\App\Models\User::ROL_LLAMADAS,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
