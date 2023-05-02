@@ -7206,13 +7206,16 @@ class DashboardController extends Controller
                 <tr>
                     <th width="8%" style="font-weight: bold;color:blue;">Asesor</th>
                     <th width="11%" style="font-weight: bold;color:blue;">Id</th>
+                    <th width="11%" style="font-weight: bold;color:blue;">Inicio</th>
+                    <th width="11%" style="font-weight: bold;color:blue;">Chats</th>
                     <th width="8%"><span style="font-size:10px;font-weight: bold;color:blue;">Día ' . Carbon::now()->day . '  </span></th>
                     <th width="33%" style="font-weight: bold;color:blue;">Cobranza  ' . Carbon::parse($date_pagos)->monthName . ' </th>
                     <th width="40%" style="font-weight: bold;color:blue;">Pedidos  ' . Carbon::parse($fechametames)->monthName . ' </th>
                 </tr>
                 </thead>
                 <tbody>';
-            foreach ($progressData as $data) {
+            foreach ($progressData as $data)
+            {
                 $html .= '<tr>
              <td class="name-size" style="font-weight: bold;color:blue;">' . $data["name"] . '</td>
              <td style="font-weight: bold;color:blue;">' . $data["identificador"] . ' ';
@@ -7224,6 +7227,8 @@ class DashboardController extends Controller
                 }
                 $html .= '
              </td>
+             <td>0</td>
+             <td>0</td>
              <td>';
                 if ($data["pedidos_dia"] > 0) {
                     $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
