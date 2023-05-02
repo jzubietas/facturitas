@@ -29,7 +29,7 @@
     <a class="nav-link btn btn-info btn-sm m-0 d-flex a-navbar" href="#" data-target="#modal-agregar-contacto" data-toggle="modal">
       <b class="text-white font-weight-bold d-flex align-items-center justify-content-center">
         <i class="fas fa-user-plus p-1"></i>
-        <p class="m-0 text-card-navbar">Agregar Contacto</p>
+        <p class="m-0 text-card-navbar">Agregar Contascto</p>
       </b>
     </a>
   </li>
