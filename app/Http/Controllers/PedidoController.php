@@ -139,6 +139,8 @@ class PedidoController extends Controller
 
     public function indextabla(Request $request)
     {
+        DB::setDefaultConnection('bandejas');
+
         $mirol = Auth::user()->rol;
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
