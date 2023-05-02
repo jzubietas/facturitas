@@ -428,7 +428,7 @@ class ChartController extends Controller
         $mes= Carbon::now()->month;
         $anio=Carbon::now()->year;
 
-        return response()->json(["data"=>$arrayasesores]);
+        return response()->json([$arrayasesores]);
 
         foreach ($arrayasesores as $item => $asslst)
         {
