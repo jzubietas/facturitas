@@ -21,10 +21,7 @@
                         {!! Form::label('motivo', 'Ingrese el motivo para congelar al cliente(Max. 250 caracteres)') !!}
                         {!! Form::textarea('motivo', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Motivo', 'required' => 'required']) !!}
                     </div>
-                    <div class="form-group col lg-12">
-                        {!! Form::label('attachments', 'Adjuntar Foto') !!}
-                        {!! Form::file('attachments[]', ['class' => 'form-control','multiple','id'=>'attachments','accept'=>"image/*"]) !!}
-                    </div>
+                   
                     <div class="form-group col lg-12">
                         {!! Form::label('congelacion_password', 'Contraseña de congelacion') !!}
                         {!! Form::password('congelacion_password', ['class' => 'form-control', 'placeholder' => 'Contraseña de congelacion', 'required' => 'required',]) !!}
