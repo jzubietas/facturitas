@@ -7205,9 +7205,9 @@ class DashboardController extends Controller
             $html .= '<thead>
                 <tr>
                     <th width="8%" style="font-weight: bold;color:blue;">Asesor</th>
-                    <th width="11%" style="font-weight: bold;color:blue;">Id</th>
-                    <th width="11%" style="font-weight: bold;color:blue;">Inicio</th>
-                    <th width="11%" style="font-weight: bold;color:blue;">Chats</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Id</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Inicio</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Chats</th>
                     <th width="8%"><span style="font-size:10px;font-weight: bold;color:blue;">Día ' . Carbon::now()->day . '  </span></th>
                     <th width="33%" style="font-weight: bold;color:blue;">Cobranza  ' . Carbon::parse($date_pagos)->monthName . ' </th>
                     <th width="40%" style="font-weight: bold;color:blue;">Pedidos  ' . Carbon::parse($fechametames)->monthName . ' </th>
@@ -7227,8 +7227,8 @@ class DashboardController extends Controller
                 }
                 $html .= '
              </td>
-             <td>'.$data["inicio"].'</td>
-             <td>'.$data["chats"].'</td>
+             <td style="font-weight: bold;color:blue;">'.$data["inicio"].'</td>
+             <td style="font-weight: bold;color:blue;">'.$data["chats"].'</td>
              <td>';
                 if ($data["pedidos_dia"] > 0) {
                     $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
