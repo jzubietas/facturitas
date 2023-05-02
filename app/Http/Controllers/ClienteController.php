@@ -2096,7 +2096,7 @@ class ClienteController extends Controller
             ->where('clientes.estado', '1')
             ->whereNotIn('u.identificador',['B','15','16'])
             ->where('clientes.tipo', '1')
-            ->whereIn('clientes.situacion', [Cliente::RECUPERADO_ABANDONO,Cliente::RECUPERADO_RECIENTE,Cliente::RECUPERADO,Cliente::LEVANTADO])
+            ->whereIn('clientes.situacion', [Cliente::RECUPERADO_ABANDONO,Cliente::RECUPERADO_RECIENTE,Cliente::RECUPERADO,Cliente::LEVANTADO,Cliente::NUEVO])
             ->groupBy(
                 'clientes.id',
                 'clientes.nombre',
