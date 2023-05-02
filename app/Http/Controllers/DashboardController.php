@@ -4597,11 +4597,18 @@ class DashboardController extends Controller
              <td class=""><span class="d-inline-block">'. $data["name"] . '</span></td>
              <td>' . $data["identificador"] . ' ';
 
-                if ($data["supervisor"] == 46) {
-                    $html .= '- A';
-                } else {
-                    $html .= '- B';
+                if($data["identificador"]==21)
+                {
+                    $html .= '';
+                }else
+                {
+                    if ($data["supervisor"] == 46) {
+                        $html .= '- A';
+                    } else {
+                        $html .= '- B';
+                    }
                 }
+
                 $html .= '
              </td>
              <td>';
