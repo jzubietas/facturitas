@@ -6607,7 +6607,6 @@ class DashboardController extends Controller
             }
         }
 
-        //dd($progressData);
         foreach ($asesores as $asesor)
         {
             /*echo "<pre>";
@@ -6751,6 +6750,8 @@ class DashboardController extends Controller
 
             $item = [
                 "identificador" => $asesor->clave_pedidos,
+                "inicio" => Carbon::parse($asesor->created_at)->format('d-m-Y'),
+                "chats" => 0,
                 "code" => "{$asesor->name}",
                 "pedidos_dia" => $asesor_pedido_dia,
                 "name" => $asesor->name,
@@ -6979,7 +6980,6 @@ class DashboardController extends Controller
 
         }
 
-        //dd($progressData);
         $newData = [];
         $union = collect($progressData)->groupBy('identificador');
         foreach ($union as $identificador => $items) {
@@ -7227,8 +7227,8 @@ class DashboardController extends Controller
                 }
                 $html .= '
              </td>
-             <td>0</td>
-             <td>0</td>
+             <td>'.$data["inicio"].'</td>
+             <td>'.$data["chats"].'</td>
              <td>';
                 if ($data["pedidos_dia"] > 0) {
                     $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
