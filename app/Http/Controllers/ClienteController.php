@@ -1221,7 +1221,7 @@ class ClienteController extends Controller
                 $btn = "";
                 if (auth()->user()->rol == User::ROL_ADMIN)
                 {
-                    $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> CONGELAR</button></a>';
+                    $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fa fa-snowflake-o"></i> CONGELAR</button></a>';
                 }
 
                 return $btn;
@@ -1340,7 +1340,7 @@ class ClienteController extends Controller
                 $btn = "";
                 if (auth()->user()->rol == User::ROL_ADMIN)
                 {
-                    $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> CONGELAR</button></a>';
+                    $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fa fa-snowflake-o"></i> CONGELAR</button></a>';
                 }
 
                 return $btn;
@@ -2535,7 +2535,7 @@ class ClienteController extends Controller
         $btn = "";
           if (auth()->user()->rol == User::ROL_ADMIN)
           {
-              $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> CONGELAR</button></a>';
+              $btn = $btn . '<a href="" data-target="#modal-congelado" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fa fa-snowflake-o"></i> CONGELAR</button></a>';
           }
         return $btn;
       })
