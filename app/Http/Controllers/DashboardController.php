@@ -282,6 +282,8 @@ class DashboardController extends Controller
 
     public function viewMetaTableGeneral(Request $request)
     {
+        DB::setDefaultConnection('reports');
+
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->get();
