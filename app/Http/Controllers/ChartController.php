@@ -405,7 +405,114 @@ class ChartController extends Controller
         ]);
     }
 
-    //Fin de las funciones
+    public function getClientesActivosBloqueados(Request $request)
+    {
+        $arregloasesores = [];
+
+        $gDataporc1 = [];
+        $oDataporc2 = [];
+        $rDataporc3 = [];
+
+        $totalasesores=User::where('rol',User::ROL_ASESOR)
+            ->where('estado',1)
+            ->select(['id','clave_pedidos as identificador','name','letra',])
+            ->orderBy('id','desc')->count();
+
+        $arrayasesores=User::where('rol',User::ROL_ASESOR)
+            ->where('estado',1)
+            ->select(['id','clave_pedidos as identificador','name','letra',])
+            ->orderBy('supervisor','asc')
+            ->pluck('id');
+
+        /*dd($ids_asesores);*/
+        $mes= Carbon::now()->month;
+        $anio=Carbon::now()->year;
+        foreach ($arrayasesores as $item => $asslst){
+            $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
+
+            $clientes_activos=Cliente:://CLIENTES SIN PEDIDOS
+            join('users as u', 'clientes.user_id', 'u.id')
+                ->where('clientes.estado', '1')
+                ->where('clientes.user_clavepedido',$asslst->user_clavepedido)
+                ->where('clientes.tipo', '1')
+                ->whereIn('clientes.situacion',
+                    [
+                        Cliente::RECUPERADO_ABANDONO,
+                        Cliente::RECUPERADO_RECIENTE,
+                        Cliente::RECUPERADO,
+                        Cliente::LEVANTADO,
+                        Cliente::NUEVO
+                    ])
+                ->whereNotIn([Cliente::PRETENDIDO])
+                ->count();
+
+            $clientes_totales=Cliente:://CLIENTES SIN PEDIDOS
+            join('users as u', 'clientes.user_id', 'u.id')
+                ->where('clientes.estado', '1')
+                ->where('clientes.user_clavepedido',$asslst->user_clavepedido)
+                ->where('clientes.tipo', '1')
+                ->whereIn('clientes.situacion',
+                    [
+                        Cliente::RECUPERADO_ABANDONO,
+                        Cliente::RECUPERADO_RECIENTE,
+                        Cliente::RECUPERADO,
+                        Cliente::LEVANTADO,
+                        Cliente::NUEVO
+                    ])
+                ->whereNotIn([Cliente::PRETENDIDO])
+                ->count();
+
+            $totalfila=$clientes_activos+$clientes_totales;
+
+            if ($clientes_activos != 0.0 || $totalfila!=0.0) {
+                $gDataporc1[$item]=round((($clientes_activos /$totalfila)*100),1);
+            } else {
+                $gDataporc1[$item]=0;
+            }
+
+            if ($clientes_totales != 0.0 || $totalfila!=0.0) {
+                $oDataporc2[$item]=round((($clientes_totales /$totalfila)*100),1);
+            } else {
+                $oDataporc2[$item]=0;
+            }
+
+        }
+        return response()->json([
+            'labels' => $arregloasesores,
+            'datasets' => [
+                [
+                    'label' => 'Activos %',
+                    'data' => $gDataporc1,
+                    'backgroundColor' => 'rgb(32, 201, 151)',
+                    'borderColor' => 'rgb(32, 201, 151)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+                [
+                    'label' => 'Pendiente Anulacion %',
+                    'data' => $oDataporc2,
+                    'backgroundColor' => 'rgb(253, 126, 20)',
+                    'borderColor' => 'rgb(253, 126, 20)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+                [
+                    'label' => 'Anulados %',
+                    'data' => $rDataporc3,
+                    'backgroundColor' => 'rgb(220, 53, 69)',
+                    'borderColor' => 'rgb(220, 53, 69)',
+                    'borderWidth' => '1',
+                    'datalabels'  => [
+                        'display'=> 'true'
+                    ]
+                ],
+            ],
+        ]);
+    }
 
     public function caidosDeudaConSin(Request $request)
     {
