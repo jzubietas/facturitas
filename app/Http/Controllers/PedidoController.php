@@ -139,7 +139,7 @@ class PedidoController extends Controller
 
     public function indextabla(Request $request)
     {
-        //DB::setDefaultConnection('bandejas');
+        DB::setDefaultConnection('bandejas');
 
         $mirol = Auth::user()->rol;
 
