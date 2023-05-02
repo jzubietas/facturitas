@@ -901,6 +901,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('uptRucPedidos', [ClienteController::class, 'uptRucPedidos'])->name('uptRucPedidos');
 
 
-    Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
+    Route::post('clientecongelarAction', [ClienteController::class, 'congelar'])->name('clientecongelarAction');
 
 });

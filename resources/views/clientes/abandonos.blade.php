@@ -209,7 +209,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('clientedeleteRequest.post') }}",
+                    url: "{{ route('clientecongelarAction') }}",
                     data: formData,
                     processData: false,
                     contentType: false,

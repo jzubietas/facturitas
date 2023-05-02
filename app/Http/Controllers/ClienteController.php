@@ -614,6 +614,53 @@ class ClienteController extends Controller
         return response()->json(['html' => $html]);
     }
 
+    public function congelar(Request $request)
+    {
+        if (!$request->congelar) {
+            $html = '';
+        } else {
+            $cliente = Cliente::findOrFail($request->congelar);
+            //$filePaths = [];
+            /*$files = $request->attachments;
+            if (is_array($files)) {
+                foreach ($files as $file) {
+                    if ($file instanceof UploadedFile) {
+                        $filePaths[] = $file->store("clientes_adjuntos", "pstorage");
+                    }
+                }
+            }*/
+
+            //setting()->load();
+            /*foreach ($filePaths as $index => $path) {
+                $key = "pedido." . $cliente->id . ".adjuntos_file." . $index;
+                $keyd = "pedido." . $cliente->id . ".adjuntos_disk." . $index;
+                setting([
+                    $key => $path,
+                    $keyd => 'pstorage'
+                ]);
+            }*/
+            //setting()->save();
+
+            $nombre_Responsable = User::where('id', Auth::user()->id)->first()->name;
+
+            $cliente->update([
+                'sust_congelado' => $request->motivo,
+                'responsable_anulacion' => $nombre_Responsable,
+                'user_anulacion_id' => Auth::user()->id,
+                'fecha_anulacion' => now(),
+                //'fecha_anulacion_confirm' => now(),
+                'estado' => '0',
+                'path_adjunto_anular' => null,
+                'path_adjunto_anular_disk' => 'pstorage',
+                'situacion' => 'BLOQUEADO',
+            ]);
+
+            $html = $cliente;
+
+        }
+        return response()->json(['html' => $html]);
+    }
+
     public function createbf()
     {
         $usersB = User::where('users.estado', '1')
