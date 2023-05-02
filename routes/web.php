@@ -899,4 +899,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('getClienteComboPedidos', [ClienteController::class, 'getClienteComboPedidos'])->name('getClienteComboPedidos');
     Route::post('getRucComboPedidos', [ClienteController::class, 'getRucComboPedidos'])->name('getRucComboPedidos');
     Route::post('uptRucPedidos', [ClienteController::class, 'uptRucPedidos'])->name('uptRucPedidos');
+
+
+    Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
+
 });

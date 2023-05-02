@@ -194,6 +194,35 @@
 
             });
 
+            $('#modal-congelado').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('cliente')
+                $("#congelar").val(idunico);
+            });
+
+            $(document).on("submit", "#formcongelar", function (evento) {
+                evento.preventDefault();
+
+                var formData = new FormData();
+                formData.append("congelar", $("#congelar").val())
+                formData.append("motivo", $("#motivo").val())
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('clientedeleteRequest.post') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success:function(response)
+                    {
+                        $("#motivo").val('');
+                        //borrar campos del formulario
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+
+            });
+
 
             $('#tablaPrincipal').DataTable({
                 processing: true,

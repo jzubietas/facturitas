@@ -180,7 +180,7 @@ class ClienteController extends Controller
                     DB::raw("users.clave_pedidos as clave_pedidos")
                 )
                 ->pluck('users.clave_pedidos');
-            $data = $data->WhereIn("u.clave_pedidos", $usersasesores);
+            $data = $data->WhereIn("clientes.user_clavepedido", $usersasesores);
 
         } else if (Auth::user()->rol == "Encargado") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -190,9 +190,9 @@ class ClienteController extends Controller
                     DB::raw("users.clave_pedidos as clave_pedidos")
                 )
                 ->pluck('users.clave_pedidos');
-            $data = $data->WhereIn("u.clave_pedidos", $usersasesores);
+            $data = $data->WhereIn("clientes.user_clavepedido", $usersasesores);
         } elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
-            $data = $data->Where("u.identificador", '=', 'B');
+            $data = $data->Where("clientes.user_clavepedido", '=', 'B');
         }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
             $usersasesores = User::where('users.rol', User::ROL_ASESOR)
                 ->where('users.estado', '1')
