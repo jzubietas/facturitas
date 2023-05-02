@@ -427,11 +427,15 @@ class ChartController extends Controller
         //dd($arrayasesores);
         $mes= Carbon::now()->month;
         $anio=Carbon::now()->year;
+
+        return response()->json(["data"=>$arrayasesores]);
+
         foreach ($arrayasesores as $item => $asslst)
         {
             echo "<pre>";
             print_r($item);
             echo "</pre>";
+
             $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
 
             $clientes_activos=Cliente:://CLIENTES SIN PEDIDOS
