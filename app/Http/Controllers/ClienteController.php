@@ -185,7 +185,7 @@ class ClienteController extends Controller
         } else if (Auth::user()->rol == "Encargado") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
-                ->where('users.supervisor', Auth::user()->clave_pedidos)
+                ->where('users.supervisor', Auth::user()->id)
                 ->select(
                     DB::raw("users.clave_pedidos as clave_pedidos")
                 )
