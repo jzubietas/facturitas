@@ -63,6 +63,7 @@
 
                 </tbody>
             </table>
+            @include('clientes.modal.congelado')
         </div>
     </div>
 
