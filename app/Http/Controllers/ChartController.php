@@ -424,10 +424,14 @@ class ChartController extends Controller
             ->orderBy('supervisor','asc');
             //->pluck('id');
 
-        dd($arrayasesores);
+        //dd($arrayasesores);
         $mes= Carbon::now()->month;
         $anio=Carbon::now()->year;
-        foreach ($arrayasesores as $item => $asslst){
+        foreach ($arrayasesores as $item => $asslst)
+        {
+            echo "<pre>";
+            print_r($item);
+            echo "</pre>";
             $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
 
             $clientes_activos=Cliente:://CLIENTES SIN PEDIDOS
