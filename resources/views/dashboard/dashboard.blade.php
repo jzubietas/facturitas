@@ -78,6 +78,8 @@
             @include('dashboard.partials.vista_llamadas')
         @elseif (Auth::user()->rol == 'COBRANZAS')
             @include('dashboard.partials.vista_cobranzas')
+        @elseif (Auth::user()->rol == 'ASISTENTE PUBLICIDAD')
+            @include('dashboard.partials.vista_publicidad')
         @elseif (Auth::user()->rol == 'Logística')
             @include('dashboard.partials.vista_logistica')
         @else
