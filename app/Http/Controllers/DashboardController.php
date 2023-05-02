@@ -1231,6 +1231,7 @@ class DashboardController extends Controller
 
     public function viewMetaTable(Request $request)
     {
+        DB::setDefaultConnection('metatable1');
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->get();
@@ -3643,6 +3644,7 @@ class DashboardController extends Controller
 
     public function viewMetaTableG2(Request $request)
     {
+        DB::setDefaultConnection('metatable2');
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->get();
@@ -5073,6 +5075,7 @@ class DashboardController extends Controller
 
     public function viewMetaTableG3(Request $request)
     {
+        DB::setDefaultConnection('metatable3');
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->get();
@@ -6492,6 +6495,7 @@ class DashboardController extends Controller
 
     public function viewMetaTableG17(Request $request)
     {
+        DB::setDefaultConnection('metatable17');
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->get();
@@ -7825,6 +7829,7 @@ class DashboardController extends Controller
 
     public function viewMetaTableRecurrenteActivo(Request $request)
     {
+        DB::setDefaultConnection('metatabler');
         $total_asesor = User::query()->activo()->rolAsesor()->count();
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $asesores = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->get();
