@@ -421,10 +421,10 @@ class ChartController extends Controller
         $arrayasesores=User::where('rol',User::ROL_ASESOR)
             ->where('estado',1)
             ->select(['id','clave_pedidos as identificador','name','letra',])
-            ->orderBy('supervisor','asc')
-            ->pluck('id');
+            ->orderBy('supervisor','asc');
+            //->pluck('id');
 
-        /*dd($ids_asesores);*/
+        dd($arrayasesores);
         $mes= Carbon::now()->month;
         $anio=Carbon::now()->year;
         foreach ($arrayasesores as $item => $asslst){
