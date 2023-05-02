@@ -428,20 +428,18 @@ class ChartController extends Controller
         $mes= Carbon::now()->month;
         $anio=Carbon::now()->year;
 
-        return response()->json([$arrayasesores]);
 
-        foreach ($arrayasesores as $item => $asslst)
+        foreach ($arrayasesores as $asesor)
         {
-            echo "<pre>";
-            print_r($item);
-            echo "</pre>";
+            /*echo "<pre>";
+            print_r($asesor);
+            echo "</pre>";*/
 
-            $arregloasesores[$item] =($asslst->identificador)."-".($asslst->letra);
+            $arregloasesores[$asesor->id] =($asesor->identificador)."-".($asesor->letra);
 
-            $clientes_activos=Cliente:://CLIENTES SIN PEDIDOS
-            join('users as u', 'clientes.user_id', 'u.id')
-                ->where('clientes.estado', '1')
-                ->where('clientes.user_clavepedido',$asslst->user_clavepedido)
+            $clientes_activos=Cliente::
+                where('clientes.estado', '1')
+                ->where('clientes.user_clavepedido',$asesor->user_clavepedido)
                 ->where('clientes.tipo', '1')
                 ->whereIn('clientes.situacion',
                     [
@@ -454,10 +452,9 @@ class ChartController extends Controller
                 ->whereNotIn([Cliente::PRETENDIDO])
                 ->count();
 
-            $clientes_totales=Cliente:://CLIENTES SIN PEDIDOS
-            join('users as u', 'clientes.user_id', 'u.id')
-                ->where('clientes.estado', '1')
-                ->where('clientes.user_clavepedido',$asslst->user_clavepedido)
+            $clientes_totales=Cliente::
+                where('clientes.estado', '1')
+                ->where('clientes.user_clavepedido',$asesor->user_clavepedido)
                 ->where('clientes.tipo', '1')
                 ->whereIn('clientes.situacion',
                     [
@@ -472,7 +469,7 @@ class ChartController extends Controller
 
             $totalfila=$clientes_activos+$clientes_totales;
 
-            if ($clientes_activos != 0.0 || $totalfila!=0.0) {
+            /*if ($clientes_activos != 0.0 || $totalfila!=0.0) {
                 $gDataporc1[$item]=round((($clientes_activos /$totalfila)*100),1);
             } else {
                 $gDataporc1[$item]=0;
@@ -482,7 +479,7 @@ class ChartController extends Controller
                 $oDataporc2[$item]=round((($clientes_totales /$totalfila)*100),1);
             } else {
                 $oDataporc2[$item]=0;
-            }
+            }*/
 
         }
         return response()->json([
