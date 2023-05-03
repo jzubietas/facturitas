@@ -450,25 +450,25 @@
             else if (porcentaje_fsb == '0' || porcentaje_fsb == '') {
                 Swal.fire(
                     'Error',
-                    'Registre el porcentaje: FISIO - sin banca',
+                    'Registre el porcentaje: FÍSICO - sin banca',
                     'warning'
                 )
             } else if (porcentaje_esb == '0' || porcentaje_esb == '') {
                 Swal.fire(
                     'Error',
-                    'Registre el porcentaje: ELECTRONICA - sin banca',
+                    'Registre el porcentaje: ELECTRÓNICA - sin banca',
                     'warning'
                 )
             } else if (porcentaje_fcb == '0' || porcentaje_fcb == '') {
                 Swal.fire(
                     'Error',
-                    'Registre el porcentaje: FISICO - banca',
+                    'Registre el porcentaje: FÍSICO - banca',
                     'warning'
                 )
             } else if (porcentaje_ecb == '0' || porcentaje_ecb == '') {
                 Swal.fire(
                     'Error',
-                    'Registre el porcentaje: ELECTRONICA - banca',
+                    'Registre el porcentaje: ELECTRÓNICA - banca',
                     'warning'
                 )
             } else {
