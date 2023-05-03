@@ -3711,7 +3711,27 @@ class DashboardController extends Controller
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
         }
-        else {
+        else if (auth()->user()->rol == User::ROL_ADMIN) {
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
+
+            $asesores = User::query()->activo()->rolAsesor()
+                //->where('excluir_meta', '<>', '1')
+                ->whereIn('clave_pedidos',['15','16','21'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->get();
+
+            $total_asesor = User::query()->activo()->rolAsesor()
+                //->where('excluir_meta', '<>', '1')
+                ->whereIn('clave_pedidos',['15','16','21'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->count();
+        }
+        else{
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
                 $encargado = auth()->user()->id;
