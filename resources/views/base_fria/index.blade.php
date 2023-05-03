@@ -500,14 +500,9 @@
                 url: "{{ route('basefriaRequest.post') }}",
                 data: formData,
             }).done(function (data) {
-
                 $("#modal-convertir").modal("hide");
                 resetearcamposconvertir();
-
                 $('#tablaserverside').DataTable().ajax.reload();
-                //console.log("resultados");
-                //console.log(data);
-
             });
         }
     </script>
