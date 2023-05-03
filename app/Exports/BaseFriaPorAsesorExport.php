@@ -25,7 +25,7 @@ class BaseFriaPorAsesorExport implements FromView, ShouldAutoSize
             'clientes.celular',
             'clientes.estado',
             'clientes.user_clavepedido as users',
-            Db::raw("date_format(clientes.created_at,'%d-%m-%Y') as creacion")
+            'clientes.created_at as creacion',
         ])
         ->where('clientes.estado','1')
         ->where('clientes.tipo','0');
