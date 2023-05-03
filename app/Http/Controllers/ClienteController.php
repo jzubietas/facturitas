@@ -648,11 +648,8 @@ class ClienteController extends Controller
                 'responsable_congelacion' => $nombre_Responsable,
                 'user_congelacion_id' => Auth::user()->id,
                 'fecha_anulacion' => now(),
-                //'fecha_anulacion_confirm' => now(),
                 'estado' => '0',
-                'path_adjunto_anular' => null,
-                'path_adjunto_anular_disk' => 'pstorage',
-                'situacion' => 'BLOQUEADO',
+                'congelado' => 1,
             ]);
 
             $html = $cliente;
