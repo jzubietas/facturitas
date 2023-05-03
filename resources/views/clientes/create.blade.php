@@ -35,7 +35,7 @@
 
     //VALIDAR CAMPOS ANTES DE ENVIAR
     document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });
 
     function validarFormulario(evento) {
@@ -48,11 +48,11 @@
       var distrito = document.getElementById('distrito').value;
       var direccion = document.getElementById('direccion').value;
       var referencia = document.getElementById('referencia').value;
-      var porcentaje1 = document.getElementById('porcentaje1').value;
-      var porcentaje2 = document.getElementById('porcentaje2').value;
-      var porcentaje3 = document.getElementById('porcentaje3').value;
-      var porcentaje4 = document.getElementById('porcentaje4').value;
-      
+      var porcentaje_fsb = document.getElementById('porcentaje_fsb').value;
+      var porcentaje_fcb = document.getElementById('porcentaje_fcb').value;
+      var porcentaje_esb = document.getElementById('porcentaje_esb').value;
+      var porcentaje_ecb = document.getElementById('porcentaje_ecb').value;
+
       if (usuario == '') {
           Swal.fire(
             'Error',
@@ -123,28 +123,28 @@
             'warning'
           )
         }
-        else if (porcentaje1 == '0' || porcentaje1 == ''){
+        else if (porcentaje_fsb == '0' || porcentaje_fsb == ''){
           Swal.fire(
             'Error',
             'Registre el porcentaje: FISICO - sin banca',
             'warning'
           )
         }
-        else if (porcentaje2 == '0' || porcentaje2 == ''){
+        else if (porcentaje_fcb == '0' || porcentaje_fcb == ''){
           Swal.fire(
             'Error',
-            'Registre el porcentaje: FISICO - sin banca',
+            'Registre el porcentaje: FISICO - banca',
             'warning'
           )
         }
-        else if (porcentaje3 == '0' || porcentaje3 == ''){
+        else if (porcentaje_ecb == '0' || porcentaje_ecb == ''){
           Swal.fire(
             'Error',
             'Registre el porcentaje: ELECTRONICA - banca',
             'warning'
           )
         }
-        else if (porcentaje4 == '0' || porcentaje4 == ''){
+        else if (porcentaje_esb == '0' || porcentaje_esb == ''){
           Swal.fire(
             'Error',
             'Registre el porcentaje: ELECTRONICA - sin banca',
@@ -153,7 +153,7 @@
         }
         else {
           this.submit();
-        }      
+        }
     }
   </script>
 @stop

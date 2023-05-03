@@ -317,7 +317,7 @@ class ClienteController extends Controller
             'celular' => 'required|unique:clientes',
         ]);
 
-        $user = User::where('id', $request->user_id)->first();//el asesor
+        $user = User::where('id', $request->user_id)->activo()->first();//el asesor
         $letra = $user->letra;
 
         try {
