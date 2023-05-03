@@ -6,6 +6,7 @@
       <th style="background-color: #4c5eaf; text-align: center; color: white;">NOMBRE</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">CELULAR</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">ASESOR ASIGNADO</th>
+        <th style="background-color: #4c5eaf; text-align: center; color: white;">CREADO</th>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +18,7 @@
         <td>{{ $bf->nombre }}</td>
         <td>{{ $bf->celular }} - {{ $bf->icelular }}</td>
         <td>{{ $bf->users }}</td>
+          <td>{{ $bf->creacion }}</td>
       </tr>
       <?php $cont++; ?>
     @endforeach

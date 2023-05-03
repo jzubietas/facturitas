@@ -18,13 +18,15 @@ class BaseFriaPorAsesorExport implements FromView, ShouldAutoSize
 
     public function clientes($request) {
         $base_fria = Cliente::
-        join('users as u', 'clientes.user_id', 'u.id')
-        ->select(['clientes.id',
-                'clientes.nombre',
-                'clientes.icelular',
-                'clientes.celular',
-                'clientes.estado',
-                'u.identificador as users'])
+        select([
+            'clientes.id',
+            'clientes.nombre',
+            'clientes.icelular',
+            'clientes.celular',
+            'clientes.estado',
+            'clientes.user_clavepedido as users',
+            Db::raw("date_format(clientes.created_at,'%d-%m-%Y') as creacion")
+        ])
         ->where('clientes.estado','1')
         ->where('clientes.tipo','0');
 
