@@ -170,20 +170,7 @@ class AdministracionController extends Controller
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select([
                 'pagos.id',
-                DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
-                                DATE_FORMAT(pagos.created_at, '%d%m'),
-                                '-',pagos.id
-                                )
-                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
-                                DATE_FORMAT(pagos.created_at, '%d%m'),
-                                '-',pagos.id)
-                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
-                                DATE_FORMAT(pagos.created_at, '%d%m'),
-                                '-',pagos.id)
-                            ELSE concat('PAG',u.identificador,'-',
-                                DATE_FORMAT(pagos.created_at, '%d%m'),
-                                '-',pagos.id) END) AS codigo_mostrar"),
-
+                'pagos.correlativo as codigo_mostrar',
                 DB::raw(" (CASE WHEN (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1 then 'V' else 'I' end) as cantidad_voucher "),
                 DB::raw(" (CASE WHEN (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  )>1 then 'V' else 'I' end) as cantidad_pedido "),
                 'u.identificador as users',
@@ -451,6 +438,35 @@ class AdministracionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         return view('administracion.observados', compact('superasesor', 'dateMin', 'dateMax'));
+    }
+
+    public function RevisarPedidosAPagar(Request $request)
+    {
+        $pagoPedidos = PagoPedido::join('pedidos as p', 'pago_pedidos.pedido_id', 'p.id')
+            ->join('detalle_pedidos as dp', 'p.id', 'dp.pedido_id')
+            ->select(['pago_pedidos.id',
+                'dp.codigo',
+                'p.id as pedidos',
+                'p.condicion',
+                'dp.total',
+                'pago_pedidos.pagado',
+                'pago_pedidos.abono'
+            ])
+            ->where('pago_pedidos.estado', '1')
+            ->where('p.estado', '1')
+            ->where('dp.estado', '1')
+            ->where('pago_pedidos.pago_id', $request->pagoid);
+        return Datatables::of(DB::table($pagoPedidos))
+            ->addIndexColumn()
+            ->addColumn('action', function ($pago) {
+                $btn = '';
+                if (Auth::user()->rol == User::ROL_ADMIN) {
+                    $btn = $btn . '<a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pago="' . $pago->id .'" data-pedido="' . $pago->id . '"><button class="btn btn-danger btn-sm"><i class="fas history"></i> Historial</button></a>';
+                }
+                return $btn;
+            })
+            ->rawColumns(['action','id'])
+            ->make(true);
     }
 
     public function Observadostabla(Request $request)
