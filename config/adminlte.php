@@ -670,6 +670,13 @@ return [
             'can' => 'personas.modulo',
             'submenu' => [
                 [
+                    'text' => 'Congelados',
+                    'route' => 'clientes.congelados',
+                    'can' => 'clientes.congelados',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['congelados'],
+                ],
+                [
                     'text' => 'Lista Negra',
                     'route' => 'clientes.bloqueados',
                     'can' => 'clientes.bloqueados',
