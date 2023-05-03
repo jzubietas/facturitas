@@ -22,7 +22,7 @@
                     </a>
                 @endif
 
-                @if(Auth::user()->rol == \App\Models\User::ROL_LLAMADAS || Auth::user()->rol == \App\Models\User::ROL_JEFE_LLAMADAS || Auth::user()->rol == \App\Models\User::ROL_ADMIN)
+                @if(Auth::user()->rol == \App\Models\User::ROL_LLAMADAS || Auth::user()->rol == \App\Models\User::ROL_JEFE_LLAMADAS || Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ASISTENTE_PUBLICIDAD)
                     <a href="{{route('excel.basefria-all_asesor-excel')}}" target="_blank" class="btn btn-dark mr-4">
                         <i class="fa fa-download"></i>
                         <i class="fa fa-file-excel"></i>
