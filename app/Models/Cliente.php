@@ -34,7 +34,9 @@ class Cliente extends Model
 
     protected $guarded = ['id'];
     protected $dates=[
-        'temporal_update'
+        'temporal_update',
+        'created_at',
+        'updated_at'
     ];
     protected $casts=[
         'activado_pedido'=>'integer'
