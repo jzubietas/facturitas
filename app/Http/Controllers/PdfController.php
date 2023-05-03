@@ -717,11 +717,17 @@ class PdfController extends Controller
             //$mes_actual_artificio=Carbon::now();
 
             //saer si es mes diciembre 2022
-            if($mes_artificio->year=='2022' && $mes_artificio->month=='12')
+            if($mes_artificio->year=='2023' && $mes_artificio->month=='01')
             {
                 //solo considerar pagos de dia 17 en adelante
                 continue;
-            }else if($mes_artificio->year=='2022' && $mes_artificio->month=='11'){
+            }
+            else if($mes_artificio->year=='2022' && $mes_artificio->month=='12')
+            {
+                //solo considerar pagos de dia 17 en adelante
+                continue;
+            }
+            else if($mes_artificio->year=='2022' && $mes_artificio->month=='11'){
                 continue;
             }/*else{
 
