@@ -382,7 +382,10 @@ class BasefriaController extends Controller
             //'distrito' => 'required',
             // 'direccion' => 'required',
             // 'referencia' => 'required',
-            'porcentaje' => 'required',
+            'porcentaje_fsb' => 'required',
+            'porcentaje_esb' => 'required',
+            'porcentaje_fcb' => 'required',
+            'porcentaje_ecb' => 'required',
         ]);
 
         $cliente = Cliente::where('clientes.id', $request->hiddenID)->update([
