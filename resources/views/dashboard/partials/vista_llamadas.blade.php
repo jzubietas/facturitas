@@ -109,6 +109,7 @@
 </div>
 
 <!--grafico metas de asesor de pedidos-->
+@if (auth()->user()->id!=49)
 <div class="row">
     <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
 
@@ -163,7 +164,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 
 </div>
-
+@endif
+@if (auth()->user()->id!=49)
 <div class="row">
     <div class="col-lg-12 bg-white" id="contenedor-fullscreen-g2">
 
@@ -221,7 +223,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 
 </div>
+@endif
 
+@if (auth()->user()->id!=49)
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <h3 class="text-center">General (01-16)</h3>
@@ -230,7 +234,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div id="metas_total_general"></div>
     </div>
 </div>
+@endif
 
+@if (auth()->user()->id==49)
 <div class ="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
@@ -257,10 +263,11 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 </div>
 
-
+@endif
 
 <br>
 
+@if (auth()->user()->id==49)
 {{-- METAS ASESOR DE LLAMADAS --}}
 <div class="container-fluid bg-white" id="contenedor-fullscreen-llamadas">
     <div class="col-md-12 d-flex justify-content-center align-items-center">
@@ -296,6 +303,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
     </div>
 </div>
+@endif
 
 {{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
 <div class="conatiner-fluid">
