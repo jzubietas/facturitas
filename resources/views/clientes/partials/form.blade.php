@@ -74,7 +74,6 @@
           <thead class="bg-primary">
             <tr>
               <th scope="col">ITEM</th>
-              <th scope="col"></th>
               <th scope="col">TIPO</th>
               <th scope="col">%</th>
             </tr>
@@ -84,27 +83,23 @@
           <tbody>
             <tr class="selected" id="filas2">
               <td>1</td>
-              <td><input type="hidden" name="nombreporcentaje[]" requerid value="FISICO - sin banca" class="form-control"></td>
-              <td><input type="text" name="nporcentaje[]" value="FISICO - sin banca" disabled class="form-control"></td>
-              <td><input type="number" step="0.1" name="porcentaje[]" id="porcentaje2" value="0" min="0" class="form-control"></td>
+              <td>FISICO - sin banca</td>
+              <td><input type="number" step="0.1" name="porcentaje_fsb" id="porcentaje_fsb" min="0" max="8" value="0" class="form-control" required></td>
             </tr>
             <tr class="selected" id="filas1">
               <td>2</td>
-              <td><input type="hidden" name="nombreporcentaje[]" requerid value="FISICO - banca" class="form-control"></td>
-              <td><input type="text" name="nporcentaje[]" value="FISICO - banca" disabled class="form-control"></td>
-              <td><input type="number" step="0.1" name="porcentaje[]" id="porcentaje1" value="0" min="0" class="form-control"></td>
+              <td>FISICO - banca</td>
+              <td><input type="number" step="0.1" name="porcentaje_fcb" id="porcentaje_fcb" min="0" max="8" value="0" class="form-control" required></td>
             </tr>
             <tr class="selected" id="filas4">
               <td>3</td>
-              <td><input type="hidden" name="nombreporcentaje[]" requerid value="ELECTRONICA - sin banca" class="form-control"></td>
-              <td><input type="text" name="nporcentaje[]" value="ELECTRONICA - sin banca" disabled class="form-control"></td>
-              <td><input type="number" step="0.1" name="porcentaje[]" id="porcentaje4" value="0" min="0" class="form-control"></td>
+              <td>ELECTRONICA - sin banca</td>
+              <td><input type="number" step="0.1" name="porcentaje_esb" id="porcentaje_esb" min="0" max="8" value="0" class="form-control" required></td>
             </tr>
             <tr class="selected" id="filas3">
               <td>4</td>
-              <td><input type="hidden" name="nombreporcentaje[]" requerid value="ELECTRONICA - banca" class="form-control"></td>
-              <td><input type="text" name="nporcentaje[]" value="ELECTRONICA - banca" disabled class="form-control"></td>
-              <td><input type="number" step="0.1" name="porcentaje[]" id="porcentaje3" value="0" min="0" class="form-control"></td>
+              <td>ELECTRONICA - banca</td>
+              <td><input type="number" step="0.1" name="porcentaje_ecb" id="porcentaje_ecb" min="0" max="8" value="0" class="form-control" required></td>
             </tr>
 
           </tbody>

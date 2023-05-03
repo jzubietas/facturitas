@@ -347,18 +347,55 @@ class ClienteController extends Controller
             $cont = 0;
 
             /* return $porcentaje; */
-            dd($nombreporcentaje);
-            while ($cont < count((array)$nombreporcentaje)) {
 
-
-                $porcentaje = Porcentaje::create([
+            $p_fsb = Porcentaje::where('cliente_id', '=', $cliente->id)
+                ->where('nombre','=','FISICO - sin banca')->first();
+            if($p_fsb===null)
+            {
+                Porcentaje::create([
                     'cliente_id' => $cliente->id,
-                    'nombre' => $nombreporcentaje[$cont],
-                    'porcentaje' => $valoresporcentaje[$cont],
-
+                    'cod_porcentaje' => 'FSB',
+                    'nombre' => 'FISICO - sin banca',
+                    'porcentaje' => $request->porcentaje_fsb,
                 ]);
-                $cont++;
             }
+
+            $p_esb = Porcentaje::where('cliente_id', '=', $cliente->id)
+                ->where('nombre','=','ELECTRONICA - sin banca')->first();
+            if($p_esb===null)
+            {
+                Porcentaje::create([
+                    'cliente_id' => $cliente->id,
+                    'cod_porcentaje' => 'ESB',
+                    'nombre' => 'ELECTRONICA - sin banca',
+                    'porcentaje' => $request->porcentaje_esb,
+                ]);
+            }
+
+            $p_fcb = Porcentaje::where('cliente_id', '=', $cliente->id)
+                ->where('nombre','=','FISICO - banca')->first();
+            if($p_fcb===null)
+            {
+                Porcentaje::create([
+                    'cliente_id' => $cliente->id,
+                    'cod_porcentaje' => 'FCB',
+                    'nombre' => 'FISICO - banca',
+                    'porcentaje' => $request->porcentaje_fcb,
+                ]);
+            }
+
+            $p_ecb = Porcentaje::where('cliente_id', '=', $cliente->id)
+                ->where('nombre','=','ELECTRONICA - banca')->first();
+            if($p_ecb===null)
+            {
+                Porcentaje::create([
+                    'cliente_id' => $cliente->id,
+                    'cod_porcentaje' => 'ECB',
+                    'nombre' => 'ELECTRONICA - banca',
+                    'porcentaje' => $request->porcentaje_fsb,
+                ]);
+            }
+
 
             DB::commit();
         } catch (\Throwable $th) {
