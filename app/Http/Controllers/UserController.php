@@ -165,6 +165,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'rol' => $request->role_name,
+            'unificado' =>'NO',
             'password' => bcrypt($request->password),
             'identificador' => $request->identificador,
             'celular' => $request->celular,
