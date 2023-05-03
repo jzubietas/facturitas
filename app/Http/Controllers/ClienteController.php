@@ -1542,9 +1542,10 @@ class ClienteController extends Controller
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '0')
             //->where('clientes.tipo', '1')
-            ->whereNotIn('u.clave_pedidos',['B','15','16','17','18','19','21'])
-            ->where('clientes.situacion',Cliente::BLOQUEADO)
-            ->groupBy(
+            ->whereNotIn('clientes.user_clavepedido',['B','15','16','17','18','19','21'])
+            ->where('clientes.congelado','=',1)
+            //->where('clientes.situacion',Cliente::BLOQUEADO)
+            ->groupBy([
                 'clientes.id',
                 'clientes.nombre',
                 'clientes.icelular',
@@ -1558,7 +1559,7 @@ class ClienteController extends Controller
                 'clientes.deuda',
                 'clientes.pidio',
                 'clientes.situacion'
-            )
+            ])
             ->select(['clientes.id',
                 'clientes.nombre',
                 'clientes.icelular',
