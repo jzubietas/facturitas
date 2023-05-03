@@ -54,7 +54,7 @@ class AutomaticMetasReset extends Command
 
         //crear metas este mes para usuarios
 
-        $usuarios=User::whereIn('rol',[User::ROL_ASESOR])->orderBy('id','asc')->get();
+        $usuarios=User::whereIn('rol',[User::ROL_ASESOR])->activo()->orderBy('id','asc')->get();
 
         $where_anio=$periodo_actual->format('Y');
         $where_mes=$periodo_actual->format('m');
