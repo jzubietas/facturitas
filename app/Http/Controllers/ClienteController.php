@@ -535,55 +535,102 @@ class ClienteController extends Controller
 
         $cliente->update($request->all());
 
-        $user = User::where('id', $request->user_id)->first();//el asesor
+        $user = User::where('id', $request->user_id)->first();
         $letra = $user->letra;
         $cliente->update([
             'icelular' => $letra
         ]);
 
-        $idporcentaje = $request->idporcentaje;
-        $valoresporcentaje = $request->porcentaje;
-        $cont = 0;
-        /* return $request->all();*/
-        $valor = Porcentaje::find($idporcentaje); /* return $valor; */
-        //dd($valoresporcentaje);
-        //1 fisico sin banca
-        //2 electronica sin banca
-        //3 fisico con banca
-        //4 electronica con banca
-        while ($cont < count((array)$idporcentaje)) {
-            //dd($valor[$cont]);
-            $valor[$cont]->update([
-                'porcentaje' => $valoresporcentaje[$cont]
+        $p_fsb = Porcentaje::where('cliente_id', '=', $cliente->id)
+            ->where('nombre','=','FISICO - sin banca')->first();
+        if($p_fsb===null)
+        {
+            Porcentaje::create([
+                'cliente_id' => $cliente->id,
+                'cod_porcentaje' => 'FSB',
+                'nombre' => 'FISICO - sin banca',
+                'porcentaje' => $request->porcentaje_fsb,
             ]);
-            if($cont==1)
-            {
-                $cliente->update([
-                    'fsb_porcentaje'=>$valoresporcentaje[$cont]
-                ]);
-            }else if($cont==2)
-            {
-                $cliente->update([
-                    'esb_porcentaje'=>$valoresporcentaje[$cont]
-                ]);
-            }else if($cont==3)
-            {
-                $cliente->update([
-                    'fcb_porcentaje'=>$valoresporcentaje[$cont]
-                ]);
-            }else if($cont==4)
-            {
-                $cliente->update([
-                    'ecb_porcentaje'=>$valoresporcentaje[$cont]
-                ]);
-            }
-            $cont++;
+        }else{
+            $p_fsb->update([
+                'cliente_id' => $cliente->id,
+                'cod_porcentaje' => 'FSB',
+                'nombre' => 'FISICO - sin banca',
+                'porcentaje' => $request->porcentaje_fsb,
+            ]);
         }
-        if ($request->tipo === '1') {
-            return redirect()->route('clientes.index')->with('info', 'actualizado');
-        } else {
-            return redirect()->route('basefria')->with('info', 'actualizado');
+        $cliente->update([
+            'fsb_porcentaje'=> $request->porcentaje_fsb
+        ]);
+
+        $p_esb = Porcentaje::where('cliente_id', '=', $cliente->id)
+            ->where('nombre','=','ELECTRONICA - sin banca')->first();
+        if($p_esb===null)
+        {
+            Porcentaje::create([
+                'cliente_id' => $cliente->id,
+                'cod_porcentaje' => 'ESB',
+                'nombre' => 'ELECTRONICA - sin banca',
+                'porcentaje' => $request->porcentaje_esb,
+            ]);
+        }else{
+            $p_fsb->update([
+                'cliente_id' => $cliente->id,
+                'cod_porcentaje' => 'ESB',
+                'nombre' => 'ELECTRONICA - sin banca',
+                'porcentaje' => $request->porcentaje_esb,
+            ]);
         }
+        $cliente->update([
+            'esb_porcentaje'=>$request->porcentaje_esb
+        ]);
+
+        $p_fcb = Porcentaje::where('cliente_id', '=', $cliente->id)
+            ->where('nombre','=','FISICO - banca')->first();
+        if($p_fcb===null)
+        {
+            Porcentaje::create([
+                'cliente_id' => $cliente->id,
+                'cod_porcentaje' => 'FCB',
+                'nombre' => 'FISICO - banca',
+                'porcentaje' => $request->porcentaje_fcb,
+            ]);
+        }else{
+            $p_fcb->update([
+                'cliente_id' => $cliente->id,
+                'cod_porcentaje' => 'FCB',
+                'nombre' => 'FISICO - banca',
+                'porcentaje' => $request->porcentaje_fcb,
+            ]);
+        }
+        $cliente->update([
+            'fcb_porcentaje'=>$request->porcentaje_fcb
+        ]);
+
+        $p_ecb = Porcentaje::where('cliente_id', '=', $cliente->id)
+            ->where('nombre','=','ELECTRONICA - banca')->first();
+        if($p_ecb===null)
+        {
+            Porcentaje::create([
+                'cliente_id' => $cliente->id,
+                'cod_porcentaje' => 'ECB',
+                'nombre' => 'ELECTRONICA - banca',
+                'porcentaje' => $request->porcentaje_ecb,
+            ]);
+        }else{
+            $p_ecb->update([
+                'cliente_id' => $cliente->id,
+                'cod_porcentaje' => 'ECB',
+                'nombre' => 'ELECTRONICA - banca',
+                'porcentaje' => $request->porcentaje_ecb,
+            ]);
+        }
+        $cliente->update([
+            'ecb_porcentaje'=>$request->porcentaje_ecb
+        ]);
+
+        return redirect()->route('basefria')->with('info', 'actualizado');
+
     }
 
     /**

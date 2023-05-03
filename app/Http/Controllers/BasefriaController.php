@@ -376,12 +376,7 @@ class BasefriaController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
-            //'dni' => 'required',
             'celular' => 'required',
-            //'provincia' => 'required',
-            //'distrito' => 'required',
-            // 'direccion' => 'required',
-            // 'referencia' => 'required',
             'porcentaje_fsb' => 'required',
             'porcentaje_esb' => 'required',
             'porcentaje_fcb' => 'required',
