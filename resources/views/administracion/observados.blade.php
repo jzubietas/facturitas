@@ -15,7 +15,7 @@
             </button>
             <div class="dropdown-menu">
                 <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
-                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+                        src="{{ asset('imagenes/icon-excel.png') }}" alt=""> Excel</a>
             </div>
         </div>
         @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '4'])
@@ -24,15 +24,18 @@
 
     <div class="row">
         <div class="col-lg-6">
+            <label for="asesores_pago">Asesores:</label>
             <select name="asesores_pago" class="border form-control selectpicker border-secondary" id="asesores_pago"
                     data-live-search="true">
                 <option value="">---- SELECCIONE ASESOR ----</option>
             </select>
         </div>
         <div class="col-lg-3">
+            <label for="min">Fecha Minima:</label>
             <input type="date" value="" id="min" name="min" class="form-control">
         </div>
         <div class="col-lg-3">
+            <label for="max">Fecha Maxima:</label>
             <input type="date" value="" id="max" name="max" class="form-control">
         </div>
     </div>
@@ -65,7 +68,6 @@
                     <th scope="col" class="align-middle">Cliente</th>
                     <th scope="col" class="align-middle">Codigo pedido</th>
                     <th scope="col" class="align-middle">Fecha Voucher</th>
-                    endpush
                     <th scope="col" class="align-middle">Asesor</th>
                     <th scope="col" class="align-middle">Observacion</th>
                     {{--<th scope="col">Total cobro</th>--}}
@@ -84,19 +86,8 @@
 @stop
 
 @push('css')
-    <link rel="stylesheet" href="../css/admin_custom.css">
+
     <style>
-        .yellow {
-            color: #fcd00e !important;
-        }
-
-        .red {
-            background-color: red !important;
-        }
-
-        .white {
-            background-color: white !important;
-        }
 
         .bg-4 {
             background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
@@ -104,9 +95,7 @@
 
         .t-stroke {
             color: transparent;
-            -moz-text-stroke-width: 2px;
             -webkit-text-stroke-width: 2px;
-            -moz-text-stroke-color: #000000;
             -webkit-text-stroke-color: #ffffff;
         }
 
@@ -117,19 +106,16 @@
         .t-shadow-halftone2::after {
             content: "AWESOME TEXT";
             font-size: 10rem;
-            letter-spacing: 0px;
+            letter-spacing: 0;
             background-size: 100%;
             -webkit-text-fill-color: transparent;
-            -moz-text-fill-color: transparent;
             -webkit-background-clip: text;
-            -moz-background-clip: text;
-            -moz-text-stroke-width: 0;
             -webkit-text-stroke-width: 0;
             position: absolute;
             text-align: center;
-            left: 0px;
+            left: 0;
             right: 0;
-            top: 0px;
+            top: 0;
             z-index: -1;
             background-color: #ff4c00;
             transition: all 0.5s ease;
