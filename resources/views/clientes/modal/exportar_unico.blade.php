@@ -21,7 +21,10 @@
                 ACTIVOS
             @elseif($key === '10')
                 PRETENDIDOS
-
+            @elseif($key === '11')
+                BLOQUEADOS
+            @elseif($key === '12')
+                CONGELADOS
           @endif
 
       </h5>
@@ -50,6 +53,10 @@
             {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'ACTIVO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '10')
             {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'PRETENDIDO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '11')
+            {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'BLOQUEADO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '12')
+            {!! Form::open(['route' => ['excel.clientes.reporte.multiple',['situacion'=>'CONGELADO','anio'=>'2022']], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @endif
             <div class="card-body">
               <div class="form-row">
@@ -76,6 +83,16 @@
                           <input type="hidden" id="situacion" name="situacion" value="RECUPERADO_ABANDONO">
                           @elseif($key === '7')
                           <input type="hidden" id="situacion" name="situacion" value="CASI_ABANDONO">
+                          @elseif($key === '8')
+                              <input type="hidden" id="situacion" name="situacion" value="ABANDONO">
+                          @elseif($key === '9')
+                              <input type="hidden" id="situacion" name="situacion" value="ACTIVO">
+                          @elseif($key === '10')
+                              <input type="hidden" id="situacion" name="situacion" value="PRETENDIDO">
+                          @elseif($key === '11')
+                              <input type="hidden" id="situacion" name="situacion" value="BLOQUEADO">
+                          @elseif($key === '12')
+                              <input type="hidden" id="situacion" name="situacion" value="CONGELADO">
                         @endif
                       </div>
                     </div>

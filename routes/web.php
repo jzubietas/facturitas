@@ -113,6 +113,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientes.edit.recurrente/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.recurrente');
     Route::get('clientes.edit.pretendido/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.pretendido');
     Route::get('clientes.edit.bloqueado/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.bloqueado');
+    Route::get('clientes.edit.congelado/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.congelado');
 
 
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
@@ -166,6 +167,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('clientes.bloqueados', [ClienteController::class, 'indexbloqueado'])->name('clientes.bloqueados');
     Route::get('clientesbloqueadotabla', [ClienteController::class, 'indexbloqueadotabla'])->name('clientesbloqueadotabla');
+
+    Route::get('clientes.congelados', [ClienteController::class, 'indexcongelado'])->name('clientes.congelados');
+    Route::get('clientescongeladotabla', [ClienteController::class, 'indexcongeladotabla'])->name('clientescongeladotabla');
 
     Route::get('clientes.pretendidos', [ClienteController::class, 'indexpretendido'])->name('clientes.pretendidos');
     Route::get('clientespretendidotabla', [ClienteController::class, 'indexpretendidotabla'])->name('clientespretendidotabla');
