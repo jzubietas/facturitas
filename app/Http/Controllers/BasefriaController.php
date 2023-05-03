@@ -405,30 +405,55 @@ class BasefriaController extends Controller
             $valoresporcentaje = $request->porcentaje;
             $cont = 0;
 
-            Porcentaje::create([
-                'cliente_id' => $request->hiddenID,
-                'cod_porcentaje' => 'FSB',
-                'nombre' => 'FISICO - sin banca',
-                'porcentaje' => $request->porcentaje_fsb,
-            ]);
-            Porcentaje::create([
-                'cliente_id' => $request->hiddenID,
-                'cod_porcentaje' => 'ESB',
-                'nombre' => 'ELECTRONICA - sin banca',
-                'porcentaje' => $request->porcentaje_esb,
-            ]);
-            Porcentaje::create([
-                'cliente_id' => $request->hiddenID,
-                'cod_porcentaje' => 'FCB',
-                'nombre' => 'FISICO - banca',
-                'porcentaje' => $request->porcentaje_fcb,
-            ]);
-            Porcentaje::create([
-                'cliente_id' => $request->hiddenID,
-                'cod_porcentaje' => 'ECB',
-                'nombre' => 'ELECTRONICA - banca',
-                'porcentaje' => $request->porcentaje_fsb,
-            ]);
+            $p_fsb = Porcentaje::where('cliente_id', '=', $request->hiddenID)
+                ->where('nombre','=','FISICO - sin banca')->first();
+            if($p_fsb===null)
+            {
+                Porcentaje::create([
+                    'cliente_id' => $request->hiddenID,
+                    'cod_porcentaje' => 'FSB',
+                    'nombre' => 'FISICO - sin banca',
+                    'porcentaje' => $request->porcentaje_fsb,
+                ]);
+            }
+
+            $p_esb = Porcentaje::where('cliente_id', '=', $request->hiddenID)
+                ->where('nombre','=','ELECTRONICA - sin banca')->first();
+            if($p_esb===null)
+            {
+                Porcentaje::create([
+                    'cliente_id' => $request->hiddenID,
+                    'cod_porcentaje' => 'ESB',
+                    'nombre' => 'ELECTRONICA - sin banca',
+                    'porcentaje' => $request->porcentaje_esb,
+                ]);
+            }
+
+            $p_fcb = Porcentaje::where('cliente_id', '=', $request->hiddenID)
+                ->where('nombre','=','FISICO - banca')->first();
+            if($p_fcb===null)
+            {
+                Porcentaje::create([
+                    'cliente_id' => $request->hiddenID,
+                    'cod_porcentaje' => 'FCB',
+                    'nombre' => 'FISICO - banca',
+                    'porcentaje' => $request->porcentaje_fcb,
+                ]);
+            }
+
+            $p_ecb = Porcentaje::where('cliente_id', '=', $request->hiddenID)
+                ->where('nombre','=','ELECTRONICA - banca')->first();
+            if($p_ecb===null)
+            {
+                Porcentaje::create([
+                    'cliente_id' => $request->hiddenID,
+                    'cod_porcentaje' => 'ECB',
+                    'nombre' => 'ELECTRONICA - banca',
+                    'porcentaje' => $request->porcentaje_fsb,
+                ]);
+            }
+
+
 
             DB::commit();
         } catch (\Throwable $th) {
