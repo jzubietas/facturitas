@@ -384,48 +384,58 @@ class BasefriaController extends Controller
             // 'referencia' => 'required',
             'porcentaje' => 'required',
         ]);
-        //$id=null;
-        //Selection::whereId($id)->update($request->all());
+
         $cliente = Cliente::where('clientes.id', $request->hiddenID)->update([
             'nombre' => $request->nombre,
-            //'dni' => $request->dni,
             'celular' => $request->celular,
-            //'provincia' => $request->provincia,
-            // 'distrito' => $request->distrito,
-            // 'direccion' => $request->direccion,
-            //'referencia' => $request->referencia,
             'deuda' => '0',
             'pidio' => '0',
             'tipo' => '1',
-            'saldo' => '0'
-
+            'saldo' => '0',
+            'fsb_porcentaje' => $request->porcentaje_fsb,
+            'esb_porcentaje' => $request->porcentaje_esb,
+            'fcb_porcentaje' => $request->porcentaje_fcb,
+            'ecb_porcentaje' => $request->porcentaje_ecb
         ]);
 
         try {
             DB::beginTransaction();
 
-            // ALMACENANDO PAGO-PEDIDOS
             $nombreporcentaje = $request->nombreporcentaje;
             $valoresporcentaje = $request->porcentaje;
             $cont = 0;
 
-            /* return $porcentaje; */
-            while ($cont < count((array)$nombreporcentaje)) {
+            Porcentaje::create([
+                'cliente_id' => $request->hiddenID,
+                'cod_porcentaje' => 'FSB',
+                'nombre' => 'FISICO - sin banca',
+                'porcentaje' => $request->porcentaje_fsb,
+            ]);
+            Porcentaje::create([
+                'cliente_id' => $request->hiddenID,
+                'cod_porcentaje' => 'ESB',
+                'nombre' => 'ELECTRONICA - sin banca',
+                'porcentaje' => $request->porcentaje_esb,
+            ]);
+            Porcentaje::create([
+                'cliente_id' => $request->hiddenID,
+                'cod_porcentaje' => 'FCB',
+                'nombre' => 'FISICO - banca',
+                'porcentaje' => $request->porcentaje_fcb,
+            ]);
+            Porcentaje::create([
+                'cliente_id' => $request->hiddenID,
+                'cod_porcentaje' => 'ECB',
+                'nombre' => 'ELECTRONICA - banca',
+                'porcentaje' => $request->porcentaje_fsb,
+            ]);
 
-                Porcentaje::create([
-                    'cliente_id' => $request->hiddenID,//$cliente->id,//
-                    'nombre' => $nombreporcentaje[$cont],
-                    'porcentaje' => $valoresporcentaje[$cont],
-                ]);
-                $cont++;
-            }
             DB::commit();
         } catch (\Throwable $th) {
             throw $th;
         }
         Cliente::createSituacionByCliente($request->hiddenID);
 
-        //return redirect()->route('clientes.index')->with('info','registrado');
     }
 
     public function updatebf(Request $request, Cliente $cliente)

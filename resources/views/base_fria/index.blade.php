@@ -423,10 +423,10 @@
             var distrito = document.getElementById('distrito').value;
             //var direccion = document.getElementById('direccion').value;
             var referencia = document.getElementById('referencia').value;*/
-            var porcentaje1 = document.getElementById('porcentaje1').value;
-            var porcentaje2 = document.getElementById('porcentaje2').value;
-            var porcentaje3 = document.getElementById('porcentaje3').value;
-            var porcentaje4 = document.getElementById('porcentaje4').value;
+            var porcentaje_fsb = document.getElementById('porcentaje_fsb').value;
+            var porcentaje_esb = document.getElementById('porcentaje_esb').value;
+            var porcentaje_fcb = document.getElementById('porcentaje_fcb').value;
+            var porcentaje_ecb = document.getElementById('porcentaje_ecb').value;
 
             if (nombre == '') {
                 Swal.fire(
@@ -447,68 +447,25 @@
                     'warning'
                 )
             }
-                /*else if (provincia == ''){
-                  Swal.fire(
-                    'Error',
-                    'Registre la provincia del cliente',
-                    'warning'
-                  )
-                }
-                else if (distrito == ''){
-                  Swal.fire(
-                    'Error',
-                    'Registre el distrito del cliente',
-                    'warning'
-                  )
-                }*/
-                /*
-                else if (direccion == ''){
-                  Swal.fire(
-                    'Error',
-                    'Registre la direccion del cliente',
-                    'warning'
-                  )
-                }*/
-            /*else if (referencia == ''){
-              Swal.fire(
-                'Error',
-                'Registre la referencia del cliente',
-                'warning'
-              )
-            }
-            else if (dni.length == 0){//provincia.toUpperCase() != ('lima').toUpperCase() &&
-              Swal.fire(
-                'Error',
-                'Clientes de provincia necesitan registrar el DNI',
-                'warning'
-              )
-            }
-            else if (dni.length != 8){//provincia.toUpperCase() != ('lima').toUpperCase() &&
-              Swal.fire(
-                'Error',
-                'El DNI debe tener 8 dígitos',
-                'warning'
-              )
-            }*/
-            else if (porcentaje1 == '0' || porcentaje1 == '') {
+            else if (porcentaje_fsb == '0' || porcentaje_fsb == '') {
                 Swal.fire(
                     'Error',
                     'Registre el porcentaje: FISIO - sin banca',
                     'warning'
                 )
-            } else if (porcentaje2 == '0' || porcentaje2 == '') {
+            } else if (porcentaje_esb == '0' || porcentaje_esb == '') {
                 Swal.fire(
                     'Error',
                     'Registre el porcentaje: ELECTRONICA - sin banca',
                     'warning'
                 )
-            } else if (porcentaje3 == '0' || porcentaje3 == '') {
+            } else if (porcentaje_fcb == '0' || porcentaje_fcb == '') {
                 Swal.fire(
                     'Error',
                     'Registre el porcentaje: FISICO - banca',
                     'warning'
                 )
-            } else if (porcentaje4 == '0' || porcentaje4 == '') {
+            } else if (porcentaje_ecb == '0' || porcentaje_ecb == '') {
                 Swal.fire(
                     'Error',
                     'Registre el porcentaje: ELECTRONICA - banca',

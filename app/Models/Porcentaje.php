@@ -14,4 +14,14 @@ class Porcentaje extends Model
     const ELECTRONICA_SIN_BANCA = 'ELECTRONICA - sin banca';//2
     const FISICO_BANCA = 'FISICO - banca';//3
     const ELECTRONICA_BANCA = 'ELECTRONICA - banca';//4
+
+    protected $fillable = [
+        'id',
+        'cliente_id',
+        'cod_porcentaje',
+        'nombre',
+        'porcentaje',
+        'created_at',
+        'updated_at'
+    ];
 }

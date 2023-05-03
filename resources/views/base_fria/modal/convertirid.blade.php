@@ -104,16 +104,14 @@
                         <div class="row">
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="input-group">
-                              <input type="hidden" name="nombreporcentaje[]" requerid value="FISICO - sin banca" class="form-control">
-                              <input type="text" name="nporcentaje[]" value="FISICO - sin banca" disabled class="form-control">
-                              <input type="number" step="0.1" name="porcentaje[]" id="porcentaje1" min="0" class="form-control" required>
+                                <label for="porcentaje_fsb">FISICO - sin banca</label>
+                                <input type="number" step="0.1" name="porcentaje_fsb" id="porcentaje_fsb" min="0" max="8" value="0" class="form-control" required>
                             </div>
                           </div>
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="input-group">
-                              <input type="hidden" name="nombreporcentaje[]" requerid value="ELECTRONICA - sin banca" class="form-control">
-                              <input type="text" name="nporcentaje[]" value="ELECTRONICA - sin banca" disabled class="form-control">
-                              <input type="number" step="0.1" name="porcentaje[]" id="porcentaje2" min="0" class="form-control" required>
+                                <label for="porcentaje_esb">ELECTRONICA - sin banca</label>
+                                <input type="number" step="0.1" name="porcentaje_esb" id="porcentaje_esb" min="0" max="8" value="0" class="form-control" required>
                             </div>
                           </div>
                         </div>
@@ -123,16 +121,14 @@
                         <div class="row">
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="input-group">
-                              <input type="hidden" name="nombreporcentaje[]" requerid value="FISICO - banca" class="form-control">
-                              <input type="text" name="nporcentaje[]" value="FISICO - banca" disabled class="form-control">
-                              <input type="number" step="0.1" name="porcentaje[]" id="porcentaje3" min="0" class="form-control" required>
+                                <label for="porcentaje_esb">FISICO - banca</label>
+                                <input type="number" step="0.1" name="porcentaje_fcb" id="porcentaje_fcb" min="0" max="8" value="0" class="form-control" required>
                             </div>
                           </div>
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="input-group">
-                              <input type="hidden" name="nombreporcentaje[]" requerid value="ELECTRONICA - banca" class="form-control">
-                              <input type="text" name="nporcentaje[]" value="ELECTRONICA - banca" disabled class="form-control">
-                              <input type="number" step="0.1" name="porcentaje[]" id="porcentaje4" min="0" class="form-control" required>
+                                <label for="porcentaje_esb">ELECTRONICA - banca</label>
+                                <input type="number" step="0.1" name="porcentaje_ecb" id="porcentaje_ecb" min="0" max="8" value="0" class="form-control" required>
                             </div>
                           </div>
                         </div>
