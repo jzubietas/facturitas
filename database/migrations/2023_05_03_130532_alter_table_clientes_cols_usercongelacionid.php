@@ -14,7 +14,7 @@ class AlterTableClientesColsUsercongelacionid extends Migration
     public function up()
     {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->integer('user_congelacion_id')->default(0);
+            $table->integer('user_congelacion_id')->default(0)->change();
         });
     }
 
