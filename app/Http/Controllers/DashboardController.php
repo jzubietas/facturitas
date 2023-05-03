@@ -1262,10 +1262,10 @@ class DashboardController extends Controller
             //$total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['15','16','17','18','19','21','B'])
+                ->whereNotIn('clave_pedidos',['15','16','17','18','19','20','21','B'])
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['15','16','17','18','19','21','B'])
+                ->whereNotIn('clave_pedidos',['15','16','17','18','19','20','21','B'])
                 ->count();
 
         }
