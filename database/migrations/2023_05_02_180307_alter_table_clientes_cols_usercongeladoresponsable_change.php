@@ -14,7 +14,7 @@ class AlterTableClientesColsUsercongeladoresponsableChange extends Migration
     public function up()
     {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->int('user_congelacion_id')->change();
+            $table->integer('user_congelacion_id')->change();
         });
     }
 
