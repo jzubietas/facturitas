@@ -155,7 +155,7 @@
 
         function clickformdelete() {
             console.log("action delete action")
-            var formData = $("#formdelete").serialize();
+            let formData = $("#formdelete").serialize();
             console.log(formData);
             $.ajax({
                 type: 'POST',
@@ -200,8 +200,8 @@
 
             //para opcion eliminar  pagos
             $('#modal-delete').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                var idunico = button.data('delete')
+                let button = $(event.relatedTarget)
+                let idunico = button.data('delete')
                 $("#hiddenId").val(idunico);
                 if (idunico < 10) {
                     idunico = 'PAG000' + idunico;
@@ -269,8 +269,8 @@
                                 return "SIN PEDIDOS";
                             } else {
                                 /*var jsonArray = JSON.parse(JSON.stringify(data));*/
-                                var returndata = '';
-                                var jsonArray = data.split(",");
+                                let returndata = '';
+                                let jsonArray = data.split(",");
                                 $.each(jsonArray, function (i, item) {
                                     returndata += item + '<br>';
                                 });
@@ -325,7 +325,7 @@
             });
 
             $('#tablaPrincipal_filter label input').on('paste', function (e) {
-                var pasteData = e.originalEvent.clipboardData.getData('text')
+                let pasteData = e.originalEvent.clipboardData.getData('text')
                 localStorage.setItem("search_tabla", pasteData);
             });
 
