@@ -1498,16 +1498,16 @@ class UserController extends Controller
 
         $p_fcb = Porcentaje::where('cliente_id', '=', $request->cliente_id)
             ->where('nombre','=','FISICO - banca')->first();
-        $respuesta[]=['FSB'=> ( ($p_fcb===null)? 0:$p_fcb->porcentaje ) ];
+        $respuesta[]=['FCB'=> ( ($p_fcb===null)? 0:$p_fcb->porcentaje ) ];
 
         $p_esb = Porcentaje::where('cliente_id', '=', $request->cliente_id)
             ->where('nombre','=','ELECTRONICO - sin banca')->first();
-        $respuesta[]=['FSB'=> ( ($p_esb===null)? 0:$p_esb->porcentaje ) ];
+        $respuesta[]=['ESB'=> ( ($p_esb===null)? 0:$p_esb->porcentaje ) ];
 
         $p_ecb = Porcentaje::where('cliente_id', '=', $request->cliente_id)
             ->where('nombre','=','ELECTRONICO - banca')->first();
-        $respuesta[]=['FSB'=> ( ($p_ecb===null)? 0:$p_ecb->porcentaje ) ];
-                
+        $respuesta[]=['ECB'=> ( ($p_ecb===null)? 0:$p_ecb->porcentaje ) ];
+
         return response()->json([$respuesta]);
     }
 

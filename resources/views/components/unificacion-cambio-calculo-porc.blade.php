@@ -392,7 +392,9 @@
                     type: 'POST',
                     url: "{{ route('getPorcClientes') }}",
                     success: function (data) {
-                        console.log(data);
+                        console.log(data[0]);
+
+                        $("#porcentaje_fsb").val(data[0]);
 
                         $('#porcentaje1').val(data.html[0].porcentaje);
                         $('#porcentaje2').val(data.html[2].porcentaje);
