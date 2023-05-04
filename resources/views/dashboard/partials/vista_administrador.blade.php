@@ -784,9 +784,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(3);
 
                 //grupo 2
-                cargaNueva2(21);
-                cargaNueva2(22);
-                cargaNueva23(23);
+                //cargaNueva2(21);
+                //cargaNueva2(22);
+                //cargaNueva23(23);
 
                 //porcentajes grupo 1
                 cargaNueva(6);
@@ -814,9 +814,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva(3);
 
             //grupo 2
-            cargaNueva2(21);
-            cargaNueva2(22);
-            cargaNueva23(23);
+            //cargaNueva2(21);
+            //cargaNueva2(22);
+            //cargaNueva23(23);
 
             //porcentaje grupo 2
             cargaNueva(6);
@@ -859,9 +859,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(3);
 
                 //grupo 2
-                cargaNueva2(21);
-                cargaNueva2(22);
-                cargaNueva23(23);
+                //cargaNueva2(21);
+                //cargaNueva2(22);
+                //cargaNueva23(23);
 
                 //porcentaje grupo 1
                 cargaNueva(6);
