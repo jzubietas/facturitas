@@ -56,6 +56,7 @@
 
                 </tbody>
             </table>
+            @include('clientes.modal.modalrevertircongelado')
         </div>
     </div>
 
@@ -151,7 +152,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            
+
             $(document).on("click", "#delete", function () {
                 var formData = $("#formdelete").serialize();
                 console.log(formData);

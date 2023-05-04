@@ -1667,7 +1667,7 @@ class ClienteController extends Controller
 
                 if (\auth()->user()->can('clientes.destroy'))
                 {
-                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-correlativo="' . $row->correlativo . '" data-opcion="' . $row->id . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Revertir</button></a>';
+                    $btn = $btn . '<a href="" data-target="#modal-revertir-congelado" data-toggle="modal" data-correlativo="' . $row->correlativo . '" data-opcion="' . $row->id . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Revertir</button></a>';
                 }
                 return $btn;
             })
