@@ -390,9 +390,10 @@
                     contentType: false,
                     data: frmPorc,
                     type: 'POST',
+                    dataType:'json',
                     url: "{{ route('getPorcClientes') }}",
                     success: function (data) {
-                        console.log(data[0]);
+                        console.log(data);
 
                         $("#porcentaje_fsb").val(data[0]['FSB']);
                         $("#porcentaje_fcb").val(data[0]['FCB']);
