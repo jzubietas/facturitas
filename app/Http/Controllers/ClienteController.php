@@ -1552,6 +1552,7 @@ class ClienteController extends Controller
             ->where('clientes.congelado','=',1)
             ->groupBy([
                 'clientes.id',
+                'clientes.correlativo',
                 'clientes.nombre',
                 'clientes.icelular',
                 'clientes.celular',
