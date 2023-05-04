@@ -153,19 +153,19 @@
                 }
             });
 
-            $(document).on("click", "#delete", function () {
-                var formData = $("#formdelete").serialize();
-                console.log(formData);
+            $(document).on("submit","#formrevertircongelado",function(event) {
+                event.preventDefault();
+                let formData = $("#formdeleteformrevertircongelado").serialize();
                 $.ajax({
                     type: 'POST',
                     url: "{{ route('cliente.revertir.congelado') }}",
                     data: formData,
-                }).done(function (data) {
-                    $("#modal-delete").modal("hide");
-                    resetearcamposdelete();
-                    $('#tablaPrincipal').DataTable().ajax.reload();
+                    success:function(data)
+                    {
+                        $("#modal-revertir-congelado").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
                 });
-
             });
 
             $('#modal-revertir-congelado').on('show.bs.modal', function (event) {
