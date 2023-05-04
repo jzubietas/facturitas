@@ -582,36 +582,36 @@
             })
             $(document).on("click", "#btnChangeProc", function () {
                 var cbChangePor = $('#cbxChangePorc').val();
-                var porcentaje1 = $('#porcentaje1').val();
-                var porcentaje2 = $('#porcentaje2').val();
-                var porcentaje3 = $('#porcentaje3').val();
-                var porcentaje4 = $('#porcentaje4').val();
+                var porcentaje_fsb = $('#porcentaje_fsb').val();
+                var porcentaje_fcb = $('#porcentaje_fcb').val();
+                var porcentaje_esb = $('#porcentaje_esb').val();
+                var porcentaje_ecb = $('#porcentaje_ecb').val();
                 if (cbChangePor == '-1') {
                     Swal.fire('Error', 'Debe seleccionar el cliente.', 'error');
                     return false;
                 }
-                if (porcentaje1 < 1.3) {
+                if (porcentaje_fsb < 1.3) {
                     Swal.fire('Error', 'El porcentaje [FISICO - sin banca] debe ser mayor a 1.3%', 'error');
                     return false;
                 }
-                if (porcentaje2 < 1.3) {
+                if (porcentaje_fcb < 1.3) {
                     Swal.fire('Error', 'El porcentaje [FISICO - banca] debe ser mayor a 1.3%', 'error');
                     return false;
                 }
-                if (porcentaje3 < 1.3) {
+                if (porcentaje_esb < 1.3) {
                     Swal.fire('Error', 'El porcentaje [ELECTRONICA - sin banca] debe ser mayor a 1.3%', 'error');
                     return false;
                 }
-                if (porcentaje4 < 1.3) {
+                if (porcentaje_ecb < 1.3) {
                     Swal.fire('Error', 'El porcentaje [ELECTRONICA - banca] debe ser mayor a 1.3%', 'error');
                     return false;
                 }
                 var frmPorcentaje = new FormData();
                 frmPorcentaje.append('cliente_id', cbChangePor);
-                frmPorcentaje.append('porcentaje1', porcentaje1);
-                frmPorcentaje.append('porcentaje2', porcentaje2);
-                frmPorcentaje.append('porcentaje3', porcentaje3);
-                frmPorcentaje.append('porcentaje4', porcentaje4);
+                frmPorcentaje.append('porcentaje_fsb', porcentaje_fsb);
+                frmPorcentaje.append('porcentaje_fcb', porcentaje_fcb);
+                frmPorcentaje.append('porcentaje_esb', porcentaje_esb);
+                frmPorcentaje.append('porcentaje_ecb', porcentaje_ecb);
 
                 $.ajax({
                     processData: false,

@@ -1514,28 +1514,28 @@ class UserController extends Controller
     public function uptPorcClientes(Request $request)
     {
         /*return $request->all();*/
-        $porcentaje1 = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::FISICO_SIN_BANCA)->update([
-            'porcentaje' => $request->porcentaje1,
+        $porcentaje_fsb = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::FISICO_SIN_BANCA)->update([
+            'porcentaje' => $request->porcentaje_fsb,
         ]);
 
-        $porcentaje2 = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::FISICO_BANCA)->update([
-            'porcentaje' => $request->porcentaje2,
+        $porcentaje_fcb = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::FISICO_BANCA)->update([
+            'porcentaje' => $request->porcentaje_fcb,
         ]);
 
-        $porcentaje3 = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::ELECTRONICA_SIN_BANCA)->update([
-            'porcentaje' => $request->porcentaje3,
+        $porcentaje_esb = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::ELECTRONICA_SIN_BANCA)->update([
+            'porcentaje' => $request->porcentaje_esb,
         ]);
 
-        $porcentaje4 = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::ELECTRONICA_BANCA)->update([
-            'porcentaje' => $request->porcentaje4,
+        $porcentaje_ecb = Porcentaje::query()->where("cliente_id", $request->cliente_id)->where("nombre", Porcentaje::ELECTRONICA_BANCA)->update([
+            'porcentaje' => $request->porcentaje_ecb,
         ]);
 
         return response()->json([
             "success" => true,
-            '$porcentaje1' => $porcentaje1,
-            '$porcentaje2' => $porcentaje2,
-            '$porcentaje3' => $porcentaje3,
-            '$porcentaje4' => $porcentaje4,
+            'porcentaje_fsb' => $porcentaje_fsb,
+            'porcentaje_fcb' => $porcentaje_fcb,
+            'porcentaje_esb' => $porcentaje_esb,
+            'porcentaje_ecb' => $porcentaje_ecb,
         ]);
     }
 
