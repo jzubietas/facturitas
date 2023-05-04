@@ -393,6 +393,7 @@
                     url: "{{ route('getPorcClientes') }}",
                     success: function (data) {
                         console.log(data);
+
                         $('#porcentaje1').val(data.html[0].porcentaje);
                         $('#porcentaje2').val(data.html[2].porcentaje);
                         $('#porcentaje3').val(data.html[1].porcentaje);

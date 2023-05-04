@@ -1492,12 +1492,34 @@ class UserController extends Controller
     public function getPorcClientes(Request $request)
     {
         /*return $request->all();*/
-        $clientesporc = Porcentaje::where('cliente_id', $request->cliente_id)
+        $respuesta=[];
+        /*$clientesporc = Porcentaje::where('cliente_id', $request->cliente_id)
             ->get([
                 'porcentajes.*',
-            ]);
+            ]);*/
 
-        return response()->json(['html' => $clientesporc]);
+        $porcentajes = Porcentaje::where('cliente_id', $request->cliente_id)->get()->map(function ($porcentaje, $index) {
+            switch ($porcentaje->cod_porcentaje)
+            {
+                case 'FSB':
+                    $respuesta[]=['FSB'=>$porcentaje->porcentaje];
+                    break;
+                case 'ESB':
+                    $respuesta[]=['ESB'=>$porcentaje->porcentaje];
+                    break;
+                case 'FCB':
+                    $respuesta[]=['FCB'=>$porcentaje->porcentaje];
+                    break;
+                case 'ECB':
+                    $respuesta[]=['ECB'=>$porcentaje->porcentaje];
+                    break;
+            }
+            //$porcentaje->rownumber = $index + 1;
+            return $porcentaje;
+        });
+
+
+        return response()->json([$respuesta]);
     }
 
     public function uptPorcClientes(Request $request)
