@@ -1487,6 +1487,7 @@ class DashboardController extends Controller
             $clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.situacion','=','LEVANTADO')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
@@ -1495,6 +1496,7 @@ class DashboardController extends Controller
                 ->where('cv.periodo',Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m'))
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.situacion','=','CAIDO')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
@@ -3919,6 +3921,7 @@ class DashboardController extends Controller
             $clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.situacion','=','LEVANTADO')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
@@ -3927,6 +3930,7 @@ class DashboardController extends Controller
                 ->where('cv.periodo',Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m'))
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.situacion','=','CAIDO')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
@@ -5350,6 +5354,7 @@ class DashboardController extends Controller
             $clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.situacion','=','LEVANTADO')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
@@ -5358,6 +5363,7 @@ class DashboardController extends Controller
                 ->where('cv.periodo',Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m'))
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.situacion','=','CAIDO')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
@@ -6772,6 +6778,7 @@ class DashboardController extends Controller
             $clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.situacion','=','LEVANTADO')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
@@ -6780,12 +6787,14 @@ class DashboardController extends Controller
                 ->where('cv.periodo',Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m'))
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.situacion','=','CAIDO')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
             $clientes_actuales=Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
                 ->where('clientes.tipo','=','1')
+                ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
 
