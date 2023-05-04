@@ -394,12 +394,11 @@
                     success: function (data) {
                         console.log(data[0]);
 
-                        $("#porcentaje_fsb").val(data[0]);
+                        $("#porcentaje_fsb").val(data[0]['FSB']);
+                        $("#porcentaje_fcb").val(data[0]['FCB']);
+                        $("#porcentaje_esb").val(data[0]['ESB']);
+                        $("#porcentaje_ecb").val(data[0]['ECB']);
 
-                        $('#porcentaje1').val(data.html[0].porcentaje);
-                        $('#porcentaje2').val(data.html[2].porcentaje);
-                        $('#porcentaje3').val(data.html[1].porcentaje);
-                        $('#porcentaje4').val(data.html[3].porcentaje);
                     }
                 });
 
