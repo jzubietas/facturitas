@@ -417,38 +417,7 @@ class PdfController extends Controller
                 }
             }
         }
-        /*foreach ($_estados as $_estados_)
-        {
-            {
 
-                if($_resultado_grafico[$_estado_]['meta_quincena']==0)
-                {
-                    if($_resultado_grafico[$_estado_]['meta_1']==0)
-                    {
-                        if($_resultado_grafico[$_estado_]['meta_2']==0)
-                        {
-
-                        }
-                        else{
-
-                        }
-                    }
-                    else{
-
-                    }
-                }else{
-                    $_resultado_grafico[$_estado_]['porcentaje']=$_resultado_grafico[$_estado_]['dividendo']/$_resultado_grafico[$_estado_]['meta_quincena'];
-                }
-
-            }
-
-        }*/
-
-
-        /*echo "<pre>";
-        print_r($_resultado_grafico);
-        echo "</pre>";*/
-        //dd($_resultado_grafico);
         $activos_cuenta=0;
         $recurrentes_cuenta=0;
         $r_abandono_cuenta=0;
@@ -457,9 +426,6 @@ class PdfController extends Controller
         $html = [];
         $html[] = '<table class="table table-situacion-clientes align-self-center" style="background: #ade0db; color: #0a0302">';
 
-        /*echo "<pre>";
-        print_r($situaciones_clientes);
-        echo "</pre>";*/
         foreach ($situaciones_clientes as $situacion_cliente_3)
         {
             if($situacion_cliente_3->situacion=='LEVANTADO')
@@ -483,6 +449,17 @@ class PdfController extends Controller
                 $nuevos_cuenta=$situacion_cliente_3->total+$nuevos_cuenta;
             }
         }
+
+
+        /*echo "activo :".$activos_cuenta."<br>";
+        echo "recurrente :".$recurrentes_cuenta."<br>";
+        echo "abandono :".$r_abandono_cuenta."<br>";
+        echo "reciente :".$r_reciente_cuenta."<br>";
+        echo "nuevos :".$nuevos_cuenta."<br>";*/
+
+        $suma=intval($activos_cuenta)+intval($recurrentes_cuenta)+intval($r_abandono_cuenta)+intval($r_reciente_cuenta)+intval($nuevos_cuenta);
+
+
 //dd($activos_cuenta,$recurrentes_cuenta);//14//51//307/1006
 
         foreach($_resultado_grafico as $_resultado_grafico_k=>$_resultado_grafico_v)
@@ -778,8 +755,8 @@ class PdfController extends Controller
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
 
-                $porcentaje = round(( ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta) / (1625) ) * 100, 2);
-                $diferenciameta = ((1625)) - ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta);
+                $porcentaje = round(( ($suma) / (1625) ) * 100, 2);
+                $diferenciameta = ((1625)) - ($suma);
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
@@ -796,7 +773,7 @@ class PdfController extends Controller
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>- '
-                        . ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta) .
+                        . ($suma) .
                         ' /  (Meta total. ' . (1625) .')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    '.$diferenciameta.'
