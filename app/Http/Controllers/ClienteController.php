@@ -992,7 +992,6 @@ class ClienteController extends Controller
         return response()->json(['html' => $html]);
     }
 
-
     public function clientedeasesorparapagos(Request $request)
     {
         if (!$request->user_id || $request->user_id == '') {
@@ -1103,7 +1102,6 @@ class ClienteController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
-
 
     public function indexabandono()
     {
@@ -1271,7 +1269,7 @@ class ClienteController extends Controller
             ->where('clientes.tipo', '1')
             ->whereNotIn('u.identificador',['B','15','16'])
             ->when($request->has("situacion"), function ($query) use ($request) {
-                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE]);
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE])->where('congelar');
             })
             ->when(!$request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [Cliente::ABANDONO]);
@@ -1624,11 +1622,10 @@ class ClienteController extends Controller
         $data = Cliente::
         join('users as u', 'clientes.user_id', 'u.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
-            ->where('clientes.estado', '0')
+            ->where('clientes.estado', '1')
             //->where('clientes.tipo', '1')
             ->whereNotIn('clientes.user_clavepedido',['B','15','16','17','18','19','21'])
             ->where('clientes.congelado','=',1)
-            //->where('clientes.situacion',Cliente::BLOQUEADO)
             ->groupBy([
                 'clientes.id',
                 'clientes.nombre',
