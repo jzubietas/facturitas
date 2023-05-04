@@ -652,6 +652,11 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('info', 'eliminado');
     }
 
+    public function clienteRevertirCongelado(Request $request)
+    {
+        //$request->hiddenID
+
+    }
     public function destroyid(Request $request)
     {
         if (!$request->hiddenID) {
@@ -1548,7 +1553,7 @@ class ClienteController extends Controller
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
             //->where('clientes.tipo', '1')
-            ->whereNotIn('clientes.user_clavepedido',['B','15','16','17','18','19'])
+            ->whereNotIn('clientes.user_clavepedido',['B','15','16','17','18','19','20'])
             ->where('clientes.congelado','=',1)
             ->groupBy([
                 'clientes.id',
@@ -1662,7 +1667,7 @@ class ClienteController extends Controller
 
                 if (\auth()->user()->can('clientes.destroy'))
                 {
-                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="' . $row->id . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-correlativo="' . $row->correlativo . '" data-opcion="' . $row->id . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Revertir</button></a>';
                 }
                 return $btn;
             })

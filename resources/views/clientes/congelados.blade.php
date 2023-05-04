@@ -151,15 +151,13 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
+            
             $(document).on("click", "#delete", function () {
-
-                console.log("action delete action")
                 var formData = $("#formdelete").serialize();
                 console.log(formData);
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('clientedeleteRequest.post') }}",
+                    url: "{{ route('cliente.revertir.congelado') }}",
                     data: formData,
                 }).done(function (data) {
                     $("#modal-delete").modal("hide");
@@ -169,21 +167,12 @@
 
             });
 
-            $('#modal-delete').on('show.bs.modal', function (event) {
+            $('#modal-revertir-congelado').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
-                var idunico = button.data('delete')
+                var idunico = button.data('opcion')
+                var idunico_c = button.data('correlativo')
                 $("#hiddenClienteId").val(idunico);
-                if (idunico < 10) {
-                    idunico = 'PAG000' + idunico;
-                } else if (idunico < 100) {
-                    idunico = 'PAG00' + idunico;
-                } else if (idunico < 1000) {
-                    idunico = 'PAG0' + idunico;
-                } else {
-                    idunico = 'PAG' + idunico;
-                }
-                $(".textcode").html(idunico);
-
+                $(".textcode").html(idunico_c);
             });
 
             $('#tablaPrincipal').DataTable({
