@@ -684,9 +684,9 @@ class PdfController extends Controller
             }
             else if($_resultado_grafico_k2=='RECUPERADO RECIENTE')
             {
-                echo "<pre>";
+                /*echo "<pre>";
                 print_r($_resultado_grafico_v2);
-                echo "</pre>";
+                echo "</pre>";*/
                 $html[] = '<tr>';
                 $html[] = '<td style="width:20%;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
@@ -696,8 +696,8 @@ class PdfController extends Controller
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
 
-                $porcentaje = round(($activos_cuenta / (($activos_cuenta+$recurrentes_cuenta)*0.7) ) * 100, 2);
-                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(70/100) - $activos_cuenta;
+                $porcentaje = round(($_resultado_grafico_v2["dividendo"] / (($_resultado_grafico_v2["meta_1"])*0.75) ) * 100, 2);
+                $diferenciameta = (($_resultado_grafico_v2["meta_1"])*0.75) - $_resultado_grafico_v2["dividendo"];
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
@@ -714,8 +714,8 @@ class PdfController extends Controller
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>- '
-                        . $activos_cuenta .
-                        ' /  (levantados. ' . ($activos_cuenta).'   + caidos. '.($recurrentes_cuenta) . ')
+                        . $_resultado_grafico_v2["dividendo"] .
+                        ' /  (levantados. ' . ((($_resultado_grafico_v2["meta_1"])*0.75)). ')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    '.$diferenciameta.'
                                                                   </p>
