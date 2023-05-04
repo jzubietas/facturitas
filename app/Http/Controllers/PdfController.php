@@ -474,7 +474,7 @@ class PdfController extends Controller
         {
             //var_dump($_resultado_grafico_);
 
-            if($_resultado_grafico_k=='LEVANTADO' || $_resultado_grafico_k=='CAIDO')
+            if($_resultado_grafico_k=='LEVANTADO' || $_resultado_grafico_k=='CAIDO' || $_resultado_grafico_k=='RECUPERADO RECIENTE')
                 continue;
 
             $html[] = '<tr>';
@@ -646,9 +646,6 @@ class PdfController extends Controller
                     '</span>';
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
-                $porcentaje = 0;
-
-                $diferenciameta=0;
 
                 $porcentaje = round(($activos_cuenta / (($activos_cuenta+$recurrentes_cuenta)*0.7) ) * 100, 2);
                 $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(70/100) - $activos_cuenta;
@@ -685,7 +682,56 @@ class PdfController extends Controller
 
                 break;
             }
-            continue;
+            else if($_resultado_grafico_k2=='RECUPERADO RECIENTE')
+            {
+                echo "<pre>";
+                print_r($_resultado_grafico_v2);
+                echo "</pre>";
+                $html[] = '<tr>';
+                $html[] = '<td style="width:20%;" class="text-center">';
+                $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
+                                    style="align-items: center;height: 40px !important; color: black !important;">' .
+                    $_resultado_grafico_k2 .
+                    '</span>';
+                $html[] = '</td>';
+                $html[] = '<td style="width:80%">';
+
+                $porcentaje = round(($activos_cuenta / (($activos_cuenta+$recurrentes_cuenta)*0.7) ) * 100, 2);
+                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(70/100) - $activos_cuenta;
+
+                $diferenciameta=round($diferenciameta);
+                if($diferenciameta<0)$diferenciameta=0;
+                $color_progress = '#FFD4D4';  /*ROSADO*/
+
+                if ($porcentaje >= 0)
+                {
+                    $html[] = '<div class="w-100 bg-white rounded">
+                                        <div class="position-relative rounded">
+                                            <div class="progress bg-white rounded" style="height: 40px">
+                                                    <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
+                                             </div>
+                                             <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                    <span style="font-weight: lighter">
+                                                              <b style="font-weight: bold !important; font-size: 18px">
+                                                                ' . $porcentaje . '% </b>- '
+                        . $activos_cuenta .
+                        ' /  (levantados. ' . ($activos_cuenta).'   + caidos. '.($recurrentes_cuenta) . ')
+                                                                   <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                                   '.$diferenciameta.'
+                                                                  </p>
+                                                    </span>
+                                             </div>
+                                         </div>
+                                        <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                  </div>';
+                }
+
+                $html[] = '</td>';
+                $html[] = '</tr>';
+
+                break;
+            }
+
 
         }
 
