@@ -1647,11 +1647,27 @@ class ClienteController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn = "";
+                //if (auth()->user()->rol == User::ROL_ADMIN)
+
+                if (\auth()->user()->can('clientes.edit.bloqueado'))
+                {
+                    $btn = $btn . '<a href="'.route('clientes.edit.congelado', $row->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
+
+                }
+                //if (\auth()->user()->can('clientes.show.bloqueado'))
+                {
+                    $btn = $btn . '<a href="'.route('clientes.show', $row->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Ver</a>';
+                }
+
+                if (\auth()->user()->can('clientes.destroy'))
+                {
+                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="' . $row->id . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                }
                 return $btn;
             })
             ->rawColumns(['action'])
             ->make(true);
-        //}
+
     }
 
     public function indexabandonointermediotabla(Request $request)
