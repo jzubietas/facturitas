@@ -451,6 +451,9 @@ class PdfController extends Controller
         //dd($_resultado_grafico);
         $activos_cuenta=0;
         $recurrentes_cuenta=0;
+        $r_abandono_cuenta=0;
+        $r_reciente_cuenta=0;
+        $nuevos_cuenta=0;
         $html = [];
         $html[] = '<table class="table table-situacion-clientes align-self-center" style="background: #ade0db; color: #0a0302">';
 
@@ -466,6 +469,18 @@ class PdfController extends Controller
             else if($situacion_cliente_3->situacion=='CAIDO')
             {
                 $recurrentes_cuenta=$situacion_cliente_3->total+$recurrentes_cuenta;
+            }
+            else if($situacion_cliente_3->situacion=='RECUPERADO ABANDONO')
+            {
+                $r_abandono_cuenta=$situacion_cliente_3->total+$r_abandono_cuenta;
+            }
+            else if($situacion_cliente_3->situacion=='RECUPERADO RECIENTE')
+            {
+                $r_reciente_cuenta=$situacion_cliente_3->total+$r_reciente_cuenta;
+            }
+            else if($situacion_cliente_3->situacion=='NUEVO')
+            {
+                $nuevos_cuenta=$situacion_cliente_3->total+$nuevos_cuenta;
             }
         }
 //dd($activos_cuenta,$recurrentes_cuenta);//14//51//307/1006
@@ -723,6 +738,66 @@ class PdfController extends Controller
                                                                 ' . $porcentaje . '% </b>- '
                         . $activos_cuenta .
                         ' /  (levantados. ' . ($activos_cuenta).'   + caidos. '.($recurrentes_cuenta) . ')
+                                                                   <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
+                                                                   '.$diferenciameta.'
+                                                                  </p>
+                                                    </span>
+                                             </div>
+                                         </div>
+                                        <sub class="d-none">% -  Pagados/ Asignados</sub>
+                                  </div>';
+                }
+
+                $html[] = '</td>';
+                $html[] = '</tr>';
+
+                break;
+            }
+
+
+        }
+
+        /*
+         * $activos_cuenta=0;
+        $recurrentes_cuenta=0;
+        $r_abandono_cuenta=0;
+        $r_reciente_cuenta=0;
+        $nuevos_cuenta=0;
+         * */
+        foreach ($_resultado_grafico as $_resultado_grafico_k2=>$_resultado_grafico_v2)
+        {
+
+            if($_resultado_grafico_k2=='LEVANTADO')
+            {
+                $html[] = '<tr>';
+                $html[] = '<td style="width:20%;" class="text-center">';
+                $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
+                                    style="align-items: center;height: 40px !important; color: black !important;">' .
+                    'GLOBAL' .
+                    '</span>';
+                $html[] = '</td>';
+                $html[] = '<td style="width:80%">';
+
+                $porcentaje = round(( ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta) / (1625*0.75) ) * 100, 2);
+                $diferenciameta = ((1625*0.75)) - ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta);
+
+                $diferenciameta=round($diferenciameta);
+                if($diferenciameta<0)$diferenciameta=0;
+                $color_progress = '#FFD4D4';  /*ROSADO*/
+
+                if ($porcentaje >= 0)
+                {
+                    $html[] = '<div class="w-100 bg-white rounded">
+                                        <div class="position-relative rounded">
+                                            <div class="progress bg-white rounded" style="height: 40px">
+                                                    <div class="rounded" role="progressbar" style="background: '.$color_progress.' !important; width: ' . $porcentaje . '%" ></div>
+                                             </div>
+                                             <div class="position-absolute rounded w-100 text-center" style="top: 5px;font-size: 12px;">
+                                                    <span style="font-weight: lighter">
+                                                              <b style="font-weight: bold !important; font-size: 18px">
+                                                                ' . $porcentaje . '% </b>- '
+                        . ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta) .
+                        ' /  (Meta total. ' . (1625*0.75) .')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    '.$diferenciameta.'
                                                                   </p>
