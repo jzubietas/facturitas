@@ -764,6 +764,31 @@ class PdfController extends Controller
         $r_reciente_cuenta=0;
         $nuevos_cuenta=0;
          * */
+        $sumas=0;
+        foreach ($_resultado_grafico as $_resultado_grafico_k5=>$_resultado_grafico_v5)
+        {
+            if($_resultado_grafico_k5=='LEVANTADO')
+            {
+                $sumas+=$_resultado_grafico_v5["dividendo"];
+            }
+            else if($_resultado_grafico_k5=='CAIDO')
+            {
+                $sumas+=$_resultado_grafico_v5["dividendo"];
+            }
+            else if($_resultado_grafico_k5=='RECUPERADO ABANDONO')
+            {
+                $sumas+=$_resultado_grafico_v5["dividendo"];
+            }
+            else if($_resultado_grafico_k5=='RECUPERADO RECIENTE')
+            {
+                $sumas+=$_resultado_grafico_v5["dividendo"];
+            }
+            else if($_resultado_grafico_k5=='NUEVO')
+            {
+                $sumas+=$_resultado_grafico_v5["dividendo"];
+            }
+        }
+
         foreach ($_resultado_grafico as $_resultado_grafico_k2=>$_resultado_grafico_v2)
         {
 
@@ -778,8 +803,8 @@ class PdfController extends Controller
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
 
-                $porcentaje = round(( ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta) / (1625) ) * 100, 2);
-                $diferenciameta = ((1625)) - ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta);
+                $porcentaje = round(( ($sumas) / (1625) ) * 100, 2);
+                $diferenciameta = ((1625)) - ($sumas);
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
@@ -796,7 +821,7 @@ class PdfController extends Controller
                                                     <span style="font-weight: lighter">
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>- '
-                        . ($recurrentes_cuenta+$r_abandono_cuenta+$r_reciente_cuenta+$nuevos_cuenta) .
+                        . ($sumas) .
                         ' /  (Meta total. ' . (1625) .')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    '.$diferenciameta.'
