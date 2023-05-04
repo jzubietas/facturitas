@@ -669,7 +669,7 @@ class PdfController extends Controller
                                                               <b style="font-weight: bold !important; font-size: 18px">
                                                                 ' . $porcentaje . '% </b>- '
                         . $_resultado_grafico_v2["dividendo"] .
-                        ' /  (levantados. ' . ((($_resultado_grafico_v2["meta_1"])*0.75)). ')
+                        ' /  (Meta Recientes 0.75 . ' . ((($_resultado_grafico_v2["meta_1"])*0.75)). ')
                                                                    <p class="text-red p-0 d-inline font-weight-bold ml-5" style="font-size: 18px; color: #d96866 !important">
                                                                    '.$diferenciameta.'
                                                                   </p>
