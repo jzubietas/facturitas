@@ -1565,16 +1565,16 @@ class ClienteController extends Controller
                 'clientes.pidio',
                 'clientes.situacion'
             ])
-            ->select(['clientes.id',
+            ->select([
+                'clientes.id',
+                'clientes.correlativo',
                 'clientes.nombre',
                 'clientes.icelular',
-                'clientes.celular',
+                DB::raw("CONCAT(clientes.celular,' ',clientes.icelular) as celular"),
                 'clientes.estado',
                 'u.name as user',
                 'u.identificador',
-                'clientes.provincia',
-                'clientes.distrito',
-                'clientes.direccion',
+                DB::raw("CONCAT(clientes.direccion,' - ',clientes.provincia,'(',clientes.distrito,')') as direccion"),
                 'clientes.pidio',
                 DB::raw('count(p.created_at) as cantidad'),
                 DB::raw('MAX(p.created_at) as fecha'),

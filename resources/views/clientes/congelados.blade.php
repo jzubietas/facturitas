@@ -196,57 +196,14 @@
 
                 },
                 columns: [
-                    {
-                        data: 'id',
-                        name: 'id',
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                return 'CL' + row.identificador + '000' + row.id;
-                            } else if (row.id < 100) {
-                                return 'CL' + row.identificador + '00' + row.id;
-                            } else if (row.id < 1000) {
-                                return 'CL' + row.identificador + '00' + row.id;
-                            } else {
-                                return 'CL' + row.identificador + '' + row.id;
-                            }
-                        }
-                    },
+                    {data: 'correlativo',name: 'correlativo',},
                     {data: 'nombre', name: 'nombre'},
-                    {
-                        data: 'celular',
-                        name: 'celular',
-                        render: function (data, type, row, meta) {
-                            if (row.icelular != null) {
-                                return row.celular + '-' + row.icelular;
-                            } else {
-                                return row.celular;
-                            }
-                        }
-                    },
-                    //{data: 'estado', name: 'estado'},
-                    //{data: 'user', name: 'user'},
-                    //{data: 'identificador', name: 'identificador'},
-                    //{data: 'provincia', name: 'provincia'},
-                    {
-                        data: 'direccion',
-                        name: 'direccion',
-                        render: function (data, type, row, meta) {
-                            return row.direccion + ' - ' + row.provincia + ' (' + row.distrito + ')';
-                        }
-                    },
-                    //{data: 'direccion', name: 'direccion'},
+                    {data: 'celular',name: 'celular',},
+                    {data: 'direccion',name: 'direccion',},
                     {data: 'identificador', name: 'identificador'},
                     {data: 'situacion', name: 'situacion'},
-                    //{data: 'cantidad', name: 'cantidad'},
-                    //{data: 'dateY', name: 'dateY'},
-                    //{data: 'dateM', name: 'dateM'},
-                    //{data: 'anio', name: 'anio'},
-                    //{data: 'mes', name: 'mes'},
-                    //{data: 'deuda', name: 'deuda'},
-                    {data: 'fechaultimopedido', name: 'fechaultimopedido'}, {
-                        data: 'codigoultimopedido',
-                        name: 'codigoultimopedido'
-                    },
+                    {data: 'fechaultimopedido', name: 'fechaultimopedido'},
+                    {data: 'codigoultimopedido',name: 'codigoultimopedido'},
                     {
                         data: 'action',
                         name: 'action',
