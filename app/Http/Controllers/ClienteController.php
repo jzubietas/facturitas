@@ -1269,10 +1269,10 @@ class ClienteController extends Controller
             ->where('clientes.tipo', '1')
             ->whereNotIn('u.identificador',['B','15','16'])
             ->when($request->has("situacion"), function ($query) use ($request) {
-                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE])->where('congelar','<>',1);
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE])->where('clientes.congelado','<>',1);
             })
             ->when(!$request->has("situacion"), function ($query) use ($request) {
-                $query->whereIn('clientes.situacion', [Cliente::ABANDONO])->where('congelar','<>',1);
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO])->where('clientes.congelado','<>',1);
             })
             ->groupBy(
                 'clientes.id',
