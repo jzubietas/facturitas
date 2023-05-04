@@ -1459,8 +1459,11 @@ class PedidoController extends Controller
         $codigo = null;
         if ($identi_asesor->clave_pedidos == 'B') {
             $codigo = $identi_asesor->clave_pedidos;
+        }
+        else if ($identi_asesor->clave_pedidos == '20') {
+            $codigo = $identi_asesor->clave_pedidos;
         }else if ($identi_asesor->clave_pedidos == '21') {
-            $codigo = $identi_asesor->identificador;
+            $codigo = $identi_asesor->clave_pedidos;
         } else {
             $codigo = intval($identi_asesor->identificador);
         }
