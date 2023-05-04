@@ -389,16 +389,16 @@
                     processData: false,
                     contentType: false,
                     data: frmPorc,
-                    type: 'POST',
                     dataType:'json',
+                    type: 'POST',
                     url: "{{ route('getPorcClientes') }}",
                     success: function (data) {
-                        console.log(data);
+                        console.log(data[0]);
 
-                        $("#porcentaje_fsb").val(data[0]['FSB']);
-                        $("#porcentaje_fcb").val(data[0]['FCB']);
-                        $("#porcentaje_esb").val(data[0]['ESB']);
-                        $("#porcentaje_ecb").val(data[0]['ECB']);
+                        $("#porcentaje_fsb").val(data[0].FSB);
+                        $("#porcentaje_fcb").val(data[0].FCB);
+                        $("#porcentaje_esb").val(data[0].ESB);
+                        $("#porcentaje_ecb").val(data[0].ECB);
 
                     }
                 });
