@@ -42,6 +42,7 @@ class Cliente extends Model
         'activado_pedido'=>'integer'
     ];
 
+
     public function user()
     {
         return $this->belongsTo(User::class);

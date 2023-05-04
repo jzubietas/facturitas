@@ -341,6 +341,10 @@ class ClienteController extends Controller
                 'estado' => '1'
             ]);
 
+            $cliente->update([
+                'correlativo'=>'CL'.($user->clave_pedidos).$cliente->id
+            ]);
+
             // ALMACENANDO PORCENTAJES
             $nombreporcentaje = $request->nombreporcentaje;
             $valoresporcentaje = $request->porcentaje;
@@ -760,86 +764,6 @@ class ClienteController extends Controller
             $users->put($key, $value);
         }
         return view('base_fria.create', compact('users'));
-    }
-
-    public function storebf(Request $request)
-    {
-        /* $request->validate([
-                'celular' => 'required|unique:clientes',*/
-
-        $cliente = Cliente::where('celular', $request->celular)->first();
-        $letra = "";
-        if ($cliente !== null) {
-
-            $user = User::where('id', $cliente->user_id)->first();
-
-            $messages = [
-                'unique' => 'EL CELULAR INGRESADO SE ENCUENTA ASIGNADO AL ASESOR ' . $user->identificador,
-            ];
-
-
-            if ($user->exidentificador == '01' ||
-                $user->exidentificador == '03' ||
-                $user->exidentificador == '05' ||
-                $user->exidentificador == '07' ||
-                $user->exidentificador == '09' ||
-                $user->exidentificador == '11' ||
-                $user->exidentificador == '13' ||
-                $user->exidentificador == '15' ||
-                $user->exidentificador == '17' ||
-                $user->exidentificador == '19'
-            ) {
-                $letra = "A";
-            }
-
-            if ($user->exidentificador == '02' ||
-                $user->exidentificador == '04' ||
-                $user->exidentificador == '06' ||
-                $user->exidentificador == '08' ||
-                $user->exidentificador == '10' ||
-                $user->exidentificador == '12' ||
-                $user->exidentificador == '14' ||
-                $user->exidentificador == '16' ||
-                $user->exidentificador == '18' ||
-                $user->exidentificador == '20'
-            ) {
-                $letra = "B";
-            }
-
-            $validator = Validator::make($request->all(), [
-                'celular' => 'required|unique:clientes',
-            ], $messages);
-
-            if ($validator->fails()) {
-                return redirect('clientes.createbf')
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-        }
-
-        $cliente = Cliente::create([
-            'nombre' => $request->nombre,
-            'celular' => $request->celular,
-            'user_id' => $request->user_id,
-            'user_identificador' => $user->identificador,
-            'user_clavepedido' => $user->clave_pedidos,
-            'tipo' => $request->tipo,
-            'deuda' => '0',
-            'pidio' => '0',
-            'estado' => '1',
-            'icelular' => $letra,
-        ]);
-
-        return redirect()->route('basefria')->with('info', 'registrado');
-    }
-
-    public function editbf(Cliente $cliente)
-    {
-        $users = User::where('users.estado', '1')
-            ->where('users.rol', 'Asesor')
-            ->pluck('name', 'id');
-
-        return view('base_fria.edit', compact('cliente', 'users'));
     }
 
     public function clientedeasesor(Request $request)

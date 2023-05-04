@@ -226,6 +226,9 @@ class BasefriaController extends Controller
                 'pidio' => '0',
                 'estado' => '1'
             ]);
+            $cliente->update([
+                'correlativo'=>'BF'.($user->clave_pedidos).$cliente->id
+            ]);
             DB::commit();
         } catch (\Throwable $th) {
             throw $th;
