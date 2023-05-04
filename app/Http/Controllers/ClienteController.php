@@ -342,7 +342,7 @@ class ClienteController extends Controller
             ]);
 
             $cliente->update([
-                'correlativo'=>'CL'.($user->clave_pedidos).$cliente->id
+                'correlativo'=>'CL'.($user->clave_pedidos).str_pad($cliente->id,6,0)
             ]);
 
             // ALMACENANDO PORCENTAJES

@@ -227,7 +227,7 @@ class BasefriaController extends Controller
                 'estado' => '1'
             ]);
             $cliente->update([
-                'correlativo'=>'BF'.($user->clave_pedidos).$cliente->id
+                'correlativo'=>'BF'.($user->clave_pedidos).str_pad($cliente->id,6,0)
             ]);
             DB::commit();
         } catch (\Throwable $th) {
