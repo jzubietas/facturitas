@@ -67,7 +67,6 @@
                                             <thead class="bg-primary">
                                             <tr>
                                                 <th scope="col">ITEM</th>
-                                                <th scope="col"></th>
                                                 <th scope="col">TIPO</th>
                                                 <th scope="col">%</th>
                                             </tr>
