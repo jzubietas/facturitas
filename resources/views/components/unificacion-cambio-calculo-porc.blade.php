@@ -395,10 +395,10 @@
                     success: function (data) {
                         console.log(data[0]);
 
-                        $("#porcentaje_fsb").val(data[0]['FSB']);
-                        $("#porcentaje_fcb").val(data[0]['FCB']);
-                        $("#porcentaje_esb").val(data[0]['ESB']);
-                        $("#porcentaje_ecb").val(data[0]['ECB']);
+                        $("#porcentaje_fsb").val(data[0][0]['FSB']);
+                        $("#porcentaje_fcb").val(data[0][1]['FCB']);
+                        $("#porcentaje_esb").val(data[0][2]['ESB']);
+                        $("#porcentaje_ecb").val(data[0][3]['ECB']);
 
                     }
                 });
