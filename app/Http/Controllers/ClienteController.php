@@ -545,6 +545,8 @@ class ClienteController extends Controller
             'icelular' => $letra
         ]);
 
+        return $request->all();
+
         $p_fsb = Porcentaje::where('cliente_id', '=', $cliente->id)
             ->where('nombre','=','FISICO - sin banca')->first();
         if($p_fsb===null)
