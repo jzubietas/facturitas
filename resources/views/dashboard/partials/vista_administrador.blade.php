@@ -124,49 +124,15 @@
 <div class="row">
     <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
 
-        <div class="row">
-            <div class="col-3 bg-white">
-                <div class="d-flex justify-content-center align-items-center">
-                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
-                    <p id="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
-                </div>
-            </div>
-            <div class="col-6 bg-white">
-                <div class="d-flex justify-content-center align-items-center">
-                    <h2 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
-background: #FFFFFF;
-text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0 0 #242120, 0 2px 0 #242120, -2px 0 0 #242120, 0 -2px 0 #242120;">Metas del mes
-                        de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h2>
-                    <button style="background: none; border: none" onclick="openFullscreen();">
-                        <i class="fas fa-expand-arrows-alt ml-3"
-                           style="font-size: 20px"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="col-3 bg-white">
-                <div class="d-flex justify-content-center align-items-center">
-                    <h5 class="card-title text-uppercase">Total de pedidos:</h5>
-                    <p id="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
-                </div>
-            </div>
-
-        </div>
-        <!--contenedor fullscreen-->
-
-        {{-- TABLA DUAL --}}
         <div class="" style=" overflow: hidden !important;">
             <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
                 <div class="row">
-                    <div class="contain-table-dual row" style="width: 100% !important;">
-                        <div class="col-lg-6" id="meta"></div>
-                        <div class="col-lg-6" id="metas_dp"></div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="metas_total"></div>
-                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6" id="metas_dp_1"></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6" id="metas_dp_2"></div>
                 </div>
-
-
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12" id="metas_dp_3"></div>
+                </div>
 
             </div>
         </div>
@@ -464,16 +430,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 contentType: false,
                 method: 'POST',
                 url: "{{ route('dashboard.viewMetaTable') }}",
-                /*beforeSend: function() {
-                    $('#contenedor-fullscreen').hide()
-                    $('.spinner').show()
-                    $('#spinner').show()
-                },
-                complete: function() {
-                    $('#contenedor-fullscreen').show()
-                    $('.spinner').hide()
-                    $('#spinner').hide()
-                },*/
                 error: function(jqXHR, textStatus, errorThrown) {
                     // Handle the error
                 },
@@ -486,19 +442,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             $(".h1-change-day").attr('style', 'color: blue !important');
                     }
                     if (entero === 1) {
-                        $('#metas_dp').html(resultado);
+                        $('#metas_dp_1').html(resultado);
                     } else if (entero === 2) {
-                        $('#meta').html(resultado);
+                        $('#metas_dp_2').html(resultado);
                     } else if (entero === 3) {
-                        $('#metas_total').html(resultado);
+                        $('#metas_dp_3').html(resultado);
                     } else if (entero === 4) {
                         $('#supervisor_total').html(resultado);
                     } else if (entero === 5) {
                         $('#supervisor_A').html(resultado);
-                    }else if (entero === 6) {
-                        $('#porcentaje_cobranzas_metas').html(resultado);
-                    }else if (entero === 7) {
-                        $('#porcentaje_pedidos_metas').html(resultado);
                     }
                     else if (entero === 14) {
                         $('#dejaronpedir_supervisor_A').html(resultado);
@@ -765,12 +717,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             $('#fechametames').datepicker('setDate', new Date());
             //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
 
-
-
-
-
-
-
             //$('#exampleModalCenter').modal('show');
 
             $(document).on('change', '#fechametames', function () {
@@ -782,15 +728,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(1);
                 cargaNueva(2);
                 cargaNueva(3);
-
-                //grupo 2
-                //cargaNueva2(21);
-                //cargaNueva2(22);
-                //cargaNueva23(23);
-
-                //porcentajes grupo 1
-                cargaNueva(6);
-                cargaNueva(7);
 
                 //porcentajes grupo 2
                 cargaNueva2(26);
@@ -813,21 +750,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva(2);
             cargaNueva(3);
 
-            //grupo 2
-            //cargaNueva2(21);
-            //cargaNueva2(22);
-            //cargaNueva23(23);
-
-            //porcentaje grupo 2
-            cargaNueva(6);
-            cargaNueva(7);
-
             //porcentaje grupo 2
             cargaNueva2(26);
             cargaNueva2(27);
-
-            //cargaNueva(4);//fernando
-            //cargaNueva(5);//paola
 
             cargaNuevaRecurrenteActivo(8);
             cargaNuevaRecurrenteActivo(9);
@@ -858,21 +783,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(2);
                 cargaNueva(3);
 
-                //grupo 2
-                //cargaNueva2(21);
-                //cargaNueva2(22);
-                //cargaNueva23(23);
-
-                //porcentaje grupo 1
-                cargaNueva(6);
-                cargaNueva(7);
-
                 //porcentaje grupo 2
                 cargaNueva2(26);
                 cargaNueva2(27);
-
-                //cargaNueva(4);
-                //cargaNueva(5);
 
                 cargaNuevaRecurrenteActivo(8);
                 cargaNuevaRecurrenteActivo(9);
