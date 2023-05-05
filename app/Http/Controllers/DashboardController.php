@@ -1960,9 +1960,9 @@ class DashboardController extends Controller
             if ($request->ii == 1 )
             {
                 $html .= '<div class="row">';
-                    $html .= '<div class="col-12">';
+                    $html .= '<div class="col-12 text-center">';
 
-                    $html .='PAOLA';
+                    $html .='<b>PAOLA</b>';
 
                     $html .= '</div>';
                 $html .= '</div>';
@@ -1970,9 +1970,9 @@ class DashboardController extends Controller
             else if ($request->ii == 2 )
             {
                 $html .= '<div class="row">';
-                $html .= '<div class="col-12">';
+                $html .= '<div class="col-12 text-center">';
 
-                $html .='ALEXANDRA';
+                $html .='<b>ALEXANDRA</b>';
 
                 $html .= '</div>';
                 $html .= '</div>';
