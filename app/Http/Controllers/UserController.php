@@ -1423,7 +1423,6 @@ class UserController extends Controller
         $html = "";
         foreach ($users as $user) {
 
-
             if ($user->rol == 'ASESOR ADMINISTRATIVO') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } elseif ($user->rol == 'Administrador') {
@@ -1454,7 +1453,6 @@ class UserController extends Controller
                         $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                     }
                 }
-
 
             }
         }
