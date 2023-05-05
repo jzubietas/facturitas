@@ -127,23 +127,20 @@
         <div class="" style=" overflow: hidden !important;">
             <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6" id="metas_dp_1"></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6" id="metas_dp_2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12" id="metas_dp_3"></div>
+
+                    @if (auth()->user()->id==24)
+                        <div class="col-lg-12 col-md-12 col-sm-12" id="metas_dp_1"></div>
+                    @endif
+
+                    @if (auth()->user()->id==46)
+                        <div class="col-lg-12 col-md-12 col-sm-12" id="metas_dp_2"></div>
+                    @endif
+
                 </div>
 
             </div>
         </div>
         {{-- FIN-TABLA-DUAL --}}
-
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <h3 class="text-center">General (01-16)</h3>
-        </div>
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="metas_total_general"></div>
-        </div>
 
     </div>
 
@@ -795,12 +792,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 @if (auth()->user()->id==24)
                 cargaNueva(1);
-                cargaNueva(3);
                 @endif
 
                 @if (auth()->user()->id==46)
                 cargaNueva(2);
-                cargaNueva(3);
                 @endif
 
                 //porcentaje grupo 2
