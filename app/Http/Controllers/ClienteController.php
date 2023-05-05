@@ -441,6 +441,7 @@ class ClienteController extends Controller
             ->whereIn('users.rol', ['Asesor', 'ASESOR ADMINISTRATIVO'])
             ->pluck('name', 'id');
 
+        dd($cliente->id);
         $p_fsb = Porcentaje::where('cliente_id', '=', $cliente->id)
             ->where('cod_porcentaje','FSB')->first();
 
