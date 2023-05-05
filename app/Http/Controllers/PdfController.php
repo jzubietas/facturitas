@@ -332,38 +332,42 @@ class PdfController extends Controller
                 'situacion_clientes.user_clavepedido as user_identificador',
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.meta_quincena_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                   WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
                                                     THEN (select sum(m.meta_quincena_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                   WHEN situacion_clientes.situacion='NUEVO'
                                                     THEN (select sum(m.meta_quincena_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='LEVANTADO'
-                                                    THEN (select sum(m.meta_quincena_activo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_quincena "),
+                                   WHEN situacion_clientes.situacion='LEVANTADO'
+                                                    THEN (select sum(m.meta_quincena_activo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                   ELSE 0 end) as meta_quincena "),
 
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                   THEN (select sum(m.cliente_recuperado_abandono) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
                                                     THEN (select sum(m.cliente_recuperado_reciente) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                    WHEN situacion_clientes.situacion='NUEVO'
                                                     THEN (select sum(m.cliente_nuevo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='LEVANTADO'
-                                                    THEN (select sum(m.cliente_activo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_1 "),
+                                    WHEN situacion_clientes.situacion='LEVANTADO'
+                                                    THEN (select sum(m.cliente_activo) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                    ELSE 0 end) as meta_1 "),
 
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
                                                     THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                    WHEN situacion_clientes.situacion='NUEVO'
                                                     THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='LEVANTADO'
-                                                    THEN (select sum(m.cliente_activo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
+                                    WHEN situacion_clientes.situacion='LEVANTADO'
+                                                    THEN (select sum(m.cliente_activo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                    ELSE 0 end) as meta_2 "),
                 DB::raw(" (CASE WHEN situacion_clientes.situacion='RECUPERADO ABANDONO'
                                                     THEN (select sum(m.cliente_recuperado_abandono_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
+                                    WHEN situacion_clientes.situacion='RECUPERADO RECIENTE'
                                                     THEN (select sum(m.cliente_recuperado_reciente_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='NUEVO'
+                                    WHEN situacion_clientes.situacion='NUEVO'
                                                     THEN (select sum(m.cliente_nuevo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
-                                                    WHEN situacion_clientes.situacion='LEVANTADO'
-                                                    THEN (select sum(m.cliente_activo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas') end) as meta_2 "),
+                                    WHEN situacion_clientes.situacion='LEVANTADO'
+                                                    THEN (select sum(m.cliente_activo_2) from metas m where m.anio='" . $anio_w . "' and m.mes='" . $mes_w . "' and m.rol='Jefe de llamadas')
+                                    ELSE 0 end) as meta_2 "),
 
                 DB::raw('count(situacion_clientes.situacion) as total')
             ])
@@ -471,9 +475,9 @@ class PdfController extends Controller
             {
                 $r_reciente_cuenta=$situacion_cliente_3->total+$r_reciente_cuenta;
             }
-            else if($situacion_cliente_3->situacion=='RECUPERADO RECIENTE')
+            else if($situacion_cliente_3->situacion=='ABANDONO RECIENTE')
             {
-                $r_reciente_cuenta=$situacion_cliente_3->total+$r_reciente_cuenta;
+                $a_reciente_cuenta=$situacion_cliente_3->total+$a_reciente_cuenta;
             }
             else if($situacion_cliente_3->situacion=='NUEVO')
             {
@@ -673,7 +677,7 @@ class PdfController extends Controller
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
 
-                $porcentaje = round(($_resultado_grafico_v2["dividendo"] / (($_resultado_grafico_v2["meta_1"])*0.75) ) * 100, 2);
+                $porcentaje = round(($r_reciente_cuenta / (($a_reciente_cuenta+$r_reciente_cuenta)*0.75) ) * 100, 2);
                 $diferenciameta = (($_resultado_grafico_v2["meta_1"])*0.75) - $_resultado_grafico_v2["dividendo"];
 
                 $diferenciameta=round($diferenciameta);
