@@ -640,18 +640,13 @@ class PdfController extends Controller
 
         }
 
-        /*echo "<pre>";
-        print_r($_resultado_grafico);
-        echo "</pre>";*/
-
+        //recuperado reciente
         foreach ($_resultado_grafico as $_resultado_grafico_k2=>$_resultado_grafico_v2)
         {
 
             if($_resultado_grafico_k2=='RECUPERADO RECIENTE')
             {
-                /*echo "<pre>";
-                print_r($_resultado_grafico_v2);
-                echo "</pre>";*/
+
                 $html[] = '<tr>';
                 $html[] = '<td style="width:20%;" class="text-center">';
                 $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
