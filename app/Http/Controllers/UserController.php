@@ -437,6 +437,7 @@ class UserController extends Controller
                     || $user->clave_pedidos == '20'
                     || $user->clave_pedidos == '21'
                     || $user->clave_pedidos == '22'
+                    || $user->clave_pedidos == '23'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
@@ -535,6 +536,7 @@ class UserController extends Controller
                     || $user->clave_pedidos == '20'
                     || $user->clave_pedidos == '21'
                     || $user->clave_pedidos == '22'
+                    || $user->clave_pedidos == '23'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
@@ -600,6 +602,9 @@ class UserController extends Controller
                     || $user->clave_pedidos == '19'
                     || $user->clave_pedidos == '99'
                     || $user->clave_pedidos == '20'
+                    || $user->clave_pedidos == '21'
+                    || $user->clave_pedidos == '22'
+                    || $user->clave_pedidos == '23'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
