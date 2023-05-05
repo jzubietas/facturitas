@@ -1957,6 +1957,26 @@ class DashboardController extends Controller
 
         if ($request->ii == 1 || $request->ii == 2 )
         {
+            if ($request->ii == 1 )
+            {
+                $html .= '<div class="row">';
+                    $html .= '<div class="col-12">';
+
+                    $html .='PAOLA';
+
+                    $html .= '</div>';
+                $html .= '</div>';
+            }
+            else if ($request->ii == 2 )
+            {
+                $html .= '<div class="row">';
+                $html .= '<div class="col-12">';
+
+                $html .='ALEXANDRA';
+
+                $html .= '</div>';
+                $html .= '</div>';
+            }
 
             $html .= '<div class="row">';
             $html .= '<div class="col-3">';
