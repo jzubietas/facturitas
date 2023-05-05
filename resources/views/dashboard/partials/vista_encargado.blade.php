@@ -727,9 +727,16 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNuevaGeneral(0);
 
                 //grupo 1
+                @if (auth()->user()->id==24)
                 cargaNueva(1);
+                cargaNueva(3);
+                @endif
+
+                @if (auth()->user()->id==46)
                 cargaNueva(2);
                 cargaNueva(3);
+                @endif
+
 
                 //porcentajes grupo 2
                 cargaNueva2(26);
@@ -747,10 +754,16 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             cargaNuevaGeneral(0);
 
-            //grupo 1
+
+            @if (auth()->user()->id==24)
             cargaNueva(1);
+            cargaNueva(3);
+            @endif
+
+            @if (auth()->user()->id==46)
             cargaNueva(2);
             cargaNueva(3);
+            @endif
 
             //porcentaje grupo 2
             cargaNueva2(26);
@@ -780,10 +793,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 cargaNuevaGeneral(0);
 
-                //grupo 1
+                @if (auth()->user()->id==24)
                 cargaNueva(1);
+                cargaNueva(3);
+                @endif
+
+                @if (auth()->user()->id==46)
                 cargaNueva(2);
                 cargaNueva(3);
+                @endif
 
                 //porcentaje grupo 2
                 cargaNueva2(26);
