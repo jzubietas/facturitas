@@ -136,7 +136,7 @@ class PdfController extends Controller
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
@@ -149,7 +149,7 @@ class PdfController extends Controller
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
@@ -162,7 +162,7 @@ class PdfController extends Controller
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
-                //['situacion_clientes.user_clavepedido', '<>', '21'],
+                //['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
@@ -175,7 +175,7 @@ class PdfController extends Controller
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
-                //['situacion_clientes.user_clavepedido', '<>', '21'],
+                //['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
@@ -188,7 +188,7 @@ class PdfController extends Controller
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
-                ['situacion_clientes.user_clavepedido', '=', '21'],
+                ['situacion_clientes.user_clavepedido', '=', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])*/
@@ -201,7 +201,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -214,7 +214,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -227,7 +227,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -240,7 +240,7 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -253,7 +253,7 @@ class PdfController extends Controller
                 //['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -266,7 +266,7 @@ class PdfController extends Controller
                 //['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -279,7 +279,7 @@ class PdfController extends Controller
                 //['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -292,7 +292,7 @@ class PdfController extends Controller
                 //['situacion_clientes.user_clavepedido', '<>', '17'],
                 ['situacion_clientes.user_clavepedido', '<>', '18'],
                 ['situacion_clientes.user_clavepedido', '<>', '19'],
-                ['situacion_clientes.user_clavepedido', '<>', '21'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
@@ -404,7 +404,7 @@ class PdfController extends Controller
                 /*echo "<pre>";
                 print_r($situaciones_clientes_);
                 echo "</pre>";*/
-                if($situaciones_clientes_->user_identificador=='21')
+                if($situaciones_clientes_->user_identificador=='99')
                 {
 
                     $_resultado_grafico['RECUPERADO ABANDONO']['dividendo']=($_resultado_grafico['RECUPERADO ABANDONO']['dividendo']+$situaciones_clientes_->total);
@@ -840,7 +840,7 @@ class PdfController extends Controller
 
             $total_pagado_mespasado_a = Pedido::query()
                 ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
-                ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
+                ->whereNotIn('pedidos.user_clavepedido',['B','99','17','18','19'])
                 ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.estado', '1')
                 ->where([
@@ -852,7 +852,7 @@ class PdfController extends Controller
 
             $total_pagado_mespasado_b = Pedido::query()
                 ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
-                ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
+                ->whereNotIn('pedidos.user_clavepedido',['B','99','17','18','19'])
                 ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.estado', '1')
                 ->where([
@@ -866,7 +866,7 @@ class PdfController extends Controller
 
             $total_pagado_mespasado_c = Pedido::query()
                 ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
-                ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
+                ->whereNotIn('pedidos.user_clavepedido',['B','99','17','18','19'])
                 ->where('pedidos.estado_correccion','0')
                 ->where('pedidos.estado', '1')
                 ->where([
@@ -881,7 +881,7 @@ class PdfController extends Controller
 
             $total_pedido_mespasado = Pedido::query()
                 //->where('pedidos.codigo', 'not like', "%-C%")
-                ->whereNotIn('pedidos.user_clavepedido',['B','21','17','18','19'])
+                ->whereNotIn('pedidos.user_clavepedido',['B','99','17','18','19'])
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.estado_correccion','0')
                 ->whereIn('pedidos.pendiente_anulacion',  ['0','1'])

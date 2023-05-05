@@ -314,10 +314,10 @@ class DashboardController extends Controller
             //$total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19','21','20'])
+                ->whereNotIn('clave_pedidos',['17','18','19','20','99'])
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19','21','20'])
+                ->whereNotIn('clave_pedidos',['17','18','19','20','99'])
                 ->count();
 
         }
@@ -325,12 +325,12 @@ class DashboardController extends Controller
             $encargado = null;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19','21','20'])
+                ->whereNotIn('clave_pedidos',['17','18','19','20','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19','21','20'])
+                ->whereNotIn('clave_pedidos',['17','18','19','20','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -343,14 +343,14 @@ class DashboardController extends Controller
 
             $asesores = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereNotIn('clave_pedidos',['17','18','19','21','20'])
+                ->whereNotIn('clave_pedidos',['17','18','19','20','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
 
             $total_asesor = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereNotIn('clave_pedidos',['17','18','19','21','20'])
+                ->whereNotIn('clave_pedidos',['17','18','19','20','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -1262,17 +1262,17 @@ class DashboardController extends Controller
             //$total_asesor = User::query()->activo()->rolAsesor()->where('excluir_meta', '<>', '1')->count();
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['15','16','17','18','19','20','21','B'])
+                ->whereNotIn('clave_pedidos',['15','16','17','18','19','20','B','99'])
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['15','16','17','18','19','20','21','B'])
+                ->whereNotIn('clave_pedidos',['15','16','17','18','19','20','B','99'])
                 ->count();
 
         }
         else if (auth()->user()->rol == User::ROL_PRESENTACION) {
             $encargado = null;
 
-            $asesores = User::query()->activo()->rolAsesor()//,'15','16','17','18','19','21','B'
+            $asesores = User::query()->activo()->rolAsesor()//,'15','16','17','18','19','B','99'
                 ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
@@ -3693,10 +3693,10 @@ class DashboardController extends Controller
         else if (auth()->user()->rol == User::ROL_FORMACION) {
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['15','16','17','18','19','21'])
+                ->whereNotIn('clave_pedidos',['15','16','17','18','19','99'])
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['15','16','17','18','19','21'])
+                ->whereNotIn('clave_pedidos',['15','16','17','18','19','99'])
                 ->count();
 
         }
@@ -3704,12 +3704,12 @@ class DashboardController extends Controller
             $encargado = null;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['15','16','21'])
+                ->whereIn('clave_pedidos',['15','16','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['15','16','21'])
+                ->whereIn('clave_pedidos',['15','16','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -3722,14 +3722,14 @@ class DashboardController extends Controller
 
             $asesores = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereIn('clave_pedidos',['15','16','21'])
+                ->whereIn('clave_pedidos',['15','16','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
 
             $total_asesor = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereIn('clave_pedidos',['15','16','21'])
+                ->whereIn('clave_pedidos',['15','16','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -3742,14 +3742,14 @@ class DashboardController extends Controller
 
             $asesores = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereIn('clave_pedidos',['15','16','21'])
+                ->whereIn('clave_pedidos',['15','16','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
 
             $total_asesor = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereIn('clave_pedidos',['15','16','21'])
+                ->whereIn('clave_pedidos',['15','16','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -5147,10 +5147,10 @@ class DashboardController extends Controller
         else if (auth()->user()->rol == User::ROL_FORMACION) {
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['15','16','17','18','19','21'])
+                ->whereNotIn('clave_pedidos',['15','16','17','18','19','99'])
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['15','16','17','18','19','21'])
+                ->whereNotIn('clave_pedidos',['15','16','17','18','19','99'])
                 ->count();
 
         }
@@ -5158,12 +5158,12 @@ class DashboardController extends Controller
             $encargado = null;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['15','16'])
+                ->whereIn('clave_pedidos',['15','16','17','18','19','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['15','16'])
+                ->whereIn('clave_pedidos',['15','16','17','18','19','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -5176,14 +5176,14 @@ class DashboardController extends Controller
 
             $asesores = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereIn('clave_pedidos',['15','16','21'])
+                ->whereIn('clave_pedidos',['15','16','17','18','19','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
 
             $total_asesor = User::query()->activo()->rolAsesor()
                 //->where('excluir_meta', '<>', '1')
-                ->whereIn('clave_pedidos',['15','16','21'])
+                ->whereIn('clave_pedidos',['15','16','17','18','19','99'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -7919,26 +7919,26 @@ class DashboardController extends Controller
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','99'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','99'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
             }else{
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','99'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','99'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
@@ -7958,13 +7958,13 @@ class DashboardController extends Controller
             {
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','99'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','99'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
@@ -7972,13 +7972,13 @@ class DashboardController extends Controller
             else{
                 $asesores = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','99'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->get();
                 $total_asesor = User::query()->activo()->rolAsesor()
                     //->where('excluir_meta', '<>', '1')
-                    ->whereNotIn('clave_pedidos',['17','18','19','21'])
+                    ->whereNotIn('clave_pedidos',['17','18','19','99'])
                     ->when($encargado != null, function ($query) use ($encargado) {
                         return $query->where('supervisor', '=', $encargado);
                     })->count();
