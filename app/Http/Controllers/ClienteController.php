@@ -442,17 +442,16 @@ class ClienteController extends Controller
             ->pluck('name', 'id');
 
         $p_fsb = Porcentaje::where('cliente_id', '=', $cliente->id)
-            ->where('nombre','=','FISICO - sin banca')->first();
+            ->where('cod_porcentaje','FSB')->first();
 
         $p_fcb = Porcentaje::where('cliente_id', '=', $cliente->id)
-            ->where('nombre','=','FISICO - banca')->first();
+            ->where('cod_porcentaje','FCB')->first();
 
         $p_esb = Porcentaje::where('cliente_id', '=', $cliente->id)
-            ->where('nombre','=','ELECTRONICO - sin banca')->first();
+            ->where('cod_porcentaje','ESB')->first();
 
         $p_ecb = Porcentaje::where('cliente_id', '=', $cliente->id)
-            ->where('nombre','=','ELECTRONICO - banca')->first();
-
+            ->where('cod_porcentaje','ECB')->first();
 
         $ultimopedido=Pedido::where('cliente_id',$cliente->id)
             ->activo()
