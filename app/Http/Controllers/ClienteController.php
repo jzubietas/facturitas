@@ -633,7 +633,7 @@ class ClienteController extends Controller
             'ecb_porcentaje'=>$request->porcentaje_ecb
         ]);
 
-        return redirect()->route('basefria')->with('info', 'actualizado');
+        return redirect()->route('cliente')->with('info', 'actualizado');
 
     }
 
