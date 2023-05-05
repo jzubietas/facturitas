@@ -741,7 +741,7 @@ class PdfController extends Controller
         $r_reciente_cuenta=0;
         $nuevos_cuenta=0;
          * */
-        foreach ($_resultado_grafico as $_resultado_grafico_k2=>$_resultado_grafico_v2)
+        /*foreach ($_resultado_grafico as $_resultado_grafico_k2=>$_resultado_grafico_v2)
         {
 
             if($_resultado_grafico_k2=='LEVANTADO')
@@ -760,7 +760,7 @@ class PdfController extends Controller
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
-                $color_progress = '#FFD4D4';  /*ROSADO*/
+                $color_progress = '#FFD4D4';
 
                 if ($porcentaje >= 0)
                 {
@@ -791,8 +791,7 @@ class PdfController extends Controller
                 break;
             }
 
-
-        }
+        }*/
 
         $html[] = '</table>';
         $html = join('', $html);
