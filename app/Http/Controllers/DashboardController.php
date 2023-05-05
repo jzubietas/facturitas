@@ -1960,9 +1960,9 @@ class DashboardController extends Controller
             if ($request->ii == 1 )
             {
                 $html .= '<div class="row">';
-                    $html .= '<div class="col-12 text-center">';
+                    $html .= '<div class="col-12 text-center b">';
 
-                    $html .='<b class="font-16">PAOLA</b>';
+                    $html .='<b class="font-16 text-success">PAOLA</b>';
 
                     $html .= '</div>';
                 $html .= '</div>';
@@ -1972,7 +1972,7 @@ class DashboardController extends Controller
                 $html .= '<div class="row">';
                 $html .= '<div class="col-12 text-center">';
 
-                $html .='<b class="font-16">ALEXANDRA</b>';
+                $html .='<b class="font-16 text-success">ALEXANDRA</b>';
 
                 $html .= '</div>';
                 $html .= '</div>';
