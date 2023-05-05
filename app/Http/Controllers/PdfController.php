@@ -469,6 +469,11 @@ class PdfController extends Controller
             if($_resultado_grafico_k=='LEVANTADO' || $_resultado_grafico_k=='CAIDO' || $_resultado_grafico_k=='RECUPERADO RECIENTE')
                 continue;
 
+            if($_resultado_grafico_k=='NUEVO')
+            {
+                $_resultado_grafico_v["label"]='BASE FRIA';
+            }
+
             $html[] = '<tr>';
             $html[] = '<td style="width:20%;" class="text-center">';
             $html[] = '<span class="px-4 pt-1 pb-1 bg-info text-center w-20 rounded font-weight-bold"
