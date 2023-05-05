@@ -441,18 +441,18 @@ class ClienteController extends Controller
             ->whereIn('users.rol', ['Asesor', 'ASESOR ADMINISTRATIVO'])
             ->pluck('name', 'id');
 
-        dd($cliente->id);
+        //dd($cliente->id);
         $p_fsb = Porcentaje::where('cliente_id', '=', $cliente->id)
-            ->where('cod_porcentaje','FSB')->first();
+            ->where('cod_porcentaje','FSB')->first()->porcentaje;
 
         $p_fcb = Porcentaje::where('cliente_id', '=', $cliente->id)
-            ->where('cod_porcentaje','FCB')->first();
+            ->where('cod_porcentaje','FCB')->first()->porcentaje;
 
         $p_esb = Porcentaje::where('cliente_id', '=', $cliente->id)
-            ->where('cod_porcentaje','ESB')->first();
+            ->where('cod_porcentaje','ESB')->first()->porcentaje;
 
         $p_ecb = Porcentaje::where('cliente_id', '=', $cliente->id)
-            ->where('cod_porcentaje','ECB')->first();
+            ->where('cod_porcentaje','ECB')->first()->porcentaje;
 
         $ultimopedido=Pedido::where('cliente_id',$cliente->id)
             ->activo()
