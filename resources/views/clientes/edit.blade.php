@@ -94,16 +94,35 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                   <h5 style="text-align: center"><b>Porcentajes</b></h5>
                 </div>
-                @foreach ($porcentajes as $porcentaje)
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                      <div class="form-group">
-                        <label>{{ $porcentaje->nombre }}</label>
-                        <input type="hidden" name="idporcentaje[]" value="{{ $porcentaje->id }}">
-                        <input autocomplete="off" type="text" step="0.1" name="porcentaje[]" id="porcentaje{{$porcentaje->rownumber }}" min="1.7" class="form-control porcentaje-banca decimal" value={{ $porcentaje->porcentaje}} required>
-                      </div>
-                    </div>
 
-                @endforeach
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      <div class="form-group">
+                          <label>FISICO - sin banca</label>
+                          <input type="number" step="0.1" name="porcentaje_fsb" id="porcentaje_fsb" min="0" max="8" value="0" class="form-control" required>
+                      </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      <div class="form-group">
+                          <label>FISICO - banca</label>
+                          <input type="number" step="0.1" name="porcentaje_fcb" id="porcentaje_fcb" min="0" max="8" value="0" class="form-control" required>
+                      </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      <div class="form-group">
+                          <label>ELECTRONICO - sin banca</label>
+                          <input type="number" step="0.1" name="porcentaje_esb" id="porcentaje_esb" min="0" max="8" value="0" class="form-control" required>
+                      </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      <div class="form-group">
+                          <label>ELECTRONICO - banca</label>
+                          <input type="number" step="0.1" name="porcentaje_ecb" id="porcentaje_ecb" min="0" max="8" value="0" class="form-control" required>
+                      </div>
+                  </div>
+
               </div>
             </div>
           </div>
@@ -285,7 +304,6 @@
             //valida numero que no exista
             var fd2=new FormData();
             fd2.append("celular", celular);
-            console.log(celular)
             fd2.append("id", $('#id').val() );
 
             $.ajax({
