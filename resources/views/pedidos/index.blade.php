@@ -1183,6 +1183,10 @@
                 order: [[6, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 createdRow: function (row, data, dataIndex) {
+                    if (data["condicion_pa"] == "ANULADO")
+                    {
+                        $('td', row).css('color', 'red').css('font-weight', 'bold');
+                    }
                 },
                 rowCallback: function (row, data, index) {
                     var pedidodiferencia = data.diferencia;
