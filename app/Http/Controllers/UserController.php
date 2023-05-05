@@ -433,8 +433,10 @@ class UserController extends Controller
                     || $user->clave_pedidos == '17'
                     || $user->clave_pedidos == '18'
                     || $user->clave_pedidos == '19'
-                    || $user->clave_pedidos == '21'
+                    || $user->clave_pedidos == '99'
                     || $user->clave_pedidos == '20'
+                    || $user->clave_pedidos == '21'
+                    || $user->clave_pedidos == '22'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
@@ -517,7 +519,23 @@ class UserController extends Controller
             } elseif ($user->rol == User::ROL_ADMIN) {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
-                if ($user->exidentificador == '01' || $user->exidentificador == '02' || $user->exidentificador == '22' || $user->exidentificador == '21' || $user->exidentificador == '23') {
+                if (
+                    $user->clave_pedidos == '01'
+                    || $user->clave_pedidos == '01.5'
+                    || $user->clave_pedidos == '11'
+                    || $user->clave_pedidos == '12'
+                    || $user->clave_pedidos == '13'
+                    || $user->clave_pedidos == '14'
+                    || $user->clave_pedidos == '15'
+                    || $user->clave_pedidos == '16'
+                    || $user->clave_pedidos == '17'
+                    || $user->clave_pedidos == '18'
+                    || $user->clave_pedidos == '19'
+                    || $user->clave_pedidos == '99'
+                    || $user->clave_pedidos == '20'
+                    || $user->clave_pedidos == '21'
+                    || $user->clave_pedidos == '22'
+                ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
                     if (intval($user->exidentificador) % 2 == 0) {
@@ -580,7 +598,7 @@ class UserController extends Controller
                     || $user->clave_pedidos == '17'
                     || $user->clave_pedidos == '18'
                     || $user->clave_pedidos == '19'
-                    || $user->clave_pedidos == '21'
+                    || $user->clave_pedidos == '99'
                     || $user->clave_pedidos == '20'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
@@ -1412,13 +1430,22 @@ class UserController extends Controller
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
                 if (
-                    $user->exidentificador == '01'
-                    || $user->exidentificador == '02'
-                    || $user->exidentificador == '22'
-                    || $user->exidentificador == '21'
-                    || $user->exidentificador == '23'
-                    || $user->exidentificador == '24'
-                    || $user->exidentificador == '25') {
+                    $user->clave_pedidos == '01'
+                    || $user->clave_pedidos == '01.5'
+                    || $user->clave_pedidos == '11'
+                    || $user->clave_pedidos == '12'
+                    || $user->clave_pedidos == '13'
+                    || $user->clave_pedidos == '14'
+                    || $user->clave_pedidos == '15'
+                    || $user->clave_pedidos == '16'
+                    || $user->clave_pedidos == '17'
+                    || $user->clave_pedidos == '18'
+                    || $user->clave_pedidos == '19'
+                    || $user->clave_pedidos == '99'
+                    || $user->clave_pedidos == '20'
+                    || $user->clave_pedidos == '21'
+                    || $user->clave_pedidos == '22'
+                ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
                     if (intval($user->exidentificador) % 2 == 0) {
