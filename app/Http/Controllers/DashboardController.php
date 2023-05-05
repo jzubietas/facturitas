@@ -1962,7 +1962,7 @@ class DashboardController extends Controller
                 $html .= '<div class="row">';
                     $html .= '<div class="col-12 text-center">';
 
-                    $html .='<b>PAOLA</b>';
+                    $html .='<b class="font-16">PAOLA</b>';
 
                     $html .= '</div>';
                 $html .= '</div>';
@@ -1972,7 +1972,7 @@ class DashboardController extends Controller
                 $html .= '<div class="row">';
                 $html .= '<div class="col-12 text-center">';
 
-                $html .='<b>ALEXANDRA</b>';
+                $html .='<b class="font-16">ALEXANDRA</b>';
 
                 $html .= '</div>';
                 $html .= '</div>';
