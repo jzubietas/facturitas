@@ -310,6 +310,18 @@ class PdfController extends Controller
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
             ])
+            ->orWhere([
+                ['situacion_clientes.situacion', '=', 'ABANDONO RECIENTE'],
+                ['a.situacion', '=', 'CAIDO'],
+                ['situacion_clientes.periodo', '=', $periodo_actual],
+                ['a.periodo', '=', $periodo_antes],
+                ['situacion_clientes.user_clavepedido', '<>', 'B'],
+                ['situacion_clientes.user_clavepedido', '<>', '18'],
+                ['situacion_clientes.user_clavepedido', '<>', '19'],
+                ['situacion_clientes.user_clavepedido', '<>', '99'],
+                ['c.estado', '=', '1'],
+                ['c.tipo', '=', '1']
+            ])
             ->groupBy([
                 'situacion_clientes.situacion',
                 'situacion_clientes.user_clavepedido'
@@ -437,6 +449,7 @@ class PdfController extends Controller
         $r_abandono_cuenta=0;
         $r_reciente_cuenta=0;
         $nuevos_cuenta=0;
+        $a_reciente_cuenta=0;
         $html = [];
         $html[] = '<table class="table table-situacion-clientes align-self-center" style="background: #ade0db; color: #0a0302">';
 
@@ -453,6 +466,10 @@ class PdfController extends Controller
             else if($situacion_cliente_3->situacion=='RECUPERADO ABANDONO')
             {
                 $r_abandono_cuenta=$situacion_cliente_3->total+$r_abandono_cuenta;
+            }
+            else if($situacion_cliente_3->situacion=='RECUPERADO RECIENTE')
+            {
+                $r_reciente_cuenta=$situacion_cliente_3->total+$r_reciente_cuenta;
             }
             else if($situacion_cliente_3->situacion=='RECUPERADO RECIENTE')
             {
