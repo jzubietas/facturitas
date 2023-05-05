@@ -98,28 +98,28 @@
                   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                       <div class="form-group">
                           <label>FISICO - sin banca</label>
-                          <input type="number" step="0.1" name="porcentaje_fsb" id="porcentaje_fsb" min="0" max="8" value="0" class="form-control" required>
+                          <input type="number" step="0.1" name="porcentaje_fsb" id="porcentaje_fsb" min="0" max="8" value="{{$p_fsb}}" class="form-control" required>
                       </div>
                   </div>
 
                   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                       <div class="form-group">
                           <label>FISICO - banca</label>
-                          <input type="number" step="0.1" name="porcentaje_fcb" id="porcentaje_fcb" min="0" max="8" value="0" class="form-control" required>
+                          <input type="number" step="0.1" name="porcentaje_fcb" id="porcentaje_fcb" min="0" max="8" value="{{$p_fcb}}" class="form-control" required>
                       </div>
                   </div>
 
                   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                       <div class="form-group">
                           <label>ELECTRONICO - sin banca</label>
-                          <input type="number" step="0.1" name="porcentaje_esb" id="porcentaje_esb" min="0" max="8" value="0" class="form-control" required>
+                          <input type="number" step="0.1" name="porcentaje_esb" id="porcentaje_esb" min="0" max="8" value="{{$p_esb}}" class="form-control" required>
                       </div>
                   </div>
 
                   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                       <div class="form-group">
                           <label>ELECTRONICO - banca</label>
-                          <input type="number" step="0.1" name="porcentaje_ecb" id="porcentaje_ecb" min="0" max="8" value="0" class="form-control" required>
+                          <input type="number" step="0.1" name="porcentaje_ecb" id="porcentaje_ecb" min="0" max="8" value="{{$p_ecb}}" class="form-control" required>
                       </div>
                   </div>
 

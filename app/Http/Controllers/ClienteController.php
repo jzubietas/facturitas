@@ -440,10 +440,19 @@ class ClienteController extends Controller
         $users = User::where('users.estado', '1')
             ->whereIn('users.rol', ['Asesor', 'ASESOR ADMINISTRATIVO'])
             ->pluck('name', 'id');
-        $porcentajes = Porcentaje::where('cliente_id', $cliente->id)->get()->map(function ($porcentaje, $index) {
-            $porcentaje->rownumber = $index + 1;
-            return $porcentaje;
-        });
+
+        $p_fsb = Porcentaje::where('cliente_id', '=', $cliente->id)
+            ->where('nombre','=','FISICO - sin banca')->first();
+
+        $p_fcb = Porcentaje::where('cliente_id', '=', $cliente->id)
+            ->where('nombre','=','FISICO - banca')->first();
+
+        $p_esb = Porcentaje::where('cliente_id', '=', $cliente->id)
+            ->where('nombre','=','ELECTRONICO - sin banca')->first();
+
+        $p_ecb = Porcentaje::where('cliente_id', '=', $cliente->id)
+            ->where('nombre','=','ELECTRONICO - banca')->first();
+
 
         $ultimopedido=Pedido::where('cliente_id',$cliente->id)
             ->activo()
@@ -498,7 +507,8 @@ class ClienteController extends Controller
                 {
                     $porcentaje_retorno=1.5;
                 }
-            }else{
+            }
+            else{
                 $mes_submonth_dic=Carbon::now()->startOfMonth()->subMonths(4);//diciembre
                 $mes_submonth_nov=Carbon::now()->startOfMonth()->subMonths(5);//noviembre
                 $mes_submonth_oct=Carbon::now()->startOfMonth()->subMonths(6);//octubre
@@ -521,7 +531,7 @@ class ClienteController extends Controller
                 }
             }
         }
-        return view('clientes.edit', compact('cliente', 'users', 'porcentajes', 'mirol','porcentaje_retorno'));
+        return view('clientes.edit', compact('cliente', 'users', 'p_fsb','p_fcb','p_esb','p_ecb', 'mirol','porcentaje_retorno'));
     }
 
     /**
