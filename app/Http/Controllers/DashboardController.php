@@ -1827,24 +1827,26 @@ class DashboardController extends Controller
             ->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
 
         if ($request->ii == 1) {
-            if ($total_asesor % 2 == 0) {
+            $progressData->all();
+            /*if ($total_asesor % 2 == 0) {
                 $skip = 0;
                 $take = intval($total_asesor / 2);
             } else {
                 $skip = 0;
                 $take = intval($total_asesor / 2) + 1;
             }
-            $progressData->splice($skip, $take)->all();
+            $progressData->splice($skip, $take)->all();*/
         }
         else if ($request->ii == 2) {
-            if ($total_asesor % 2 == 0) {
+            $progressData->all();
+            /*if ($total_asesor % 2 == 0) {
                 $skip = 0;
                 $take = intval($total_asesor / 2);
             } else {
                 $skip = 0;
                 $take = intval($total_asesor / 2) + 1;
             }
-            $progressData->splice($skip, $take)->all();
+            $progressData->splice($skip, $take)->all();*/
         }
         else if ($request->ii == 3) {
             $progressData->all();
