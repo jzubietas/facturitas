@@ -578,7 +578,7 @@ class ClienteController extends Controller
                 'porcentaje' => $request->porcentaje_esb,
             ]);
         }else{
-            $p_fsb->update([
+            $p_esb->update([
                 'cliente_id' => $cliente->id,
                 'cod_porcentaje' => 'ESB',
                 'nombre' => 'ELECTRONICA - sin banca',
