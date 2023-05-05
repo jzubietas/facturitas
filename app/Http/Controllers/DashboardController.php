@@ -2509,7 +2509,7 @@ class DashboardController extends Controller
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
             $html .= '<tbody>
               <tr class="responsive-table">
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
+                  <th class="col-lg-4">';
 
             $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
                     style="height: 30px !important;display:flex; align-items: center; color: black !important;">
@@ -2517,7 +2517,7 @@ class DashboardController extends Controller
 
             $html .= '
                   </th>
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
+                  <th class="col-lg-4">';
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded h-40 h-60-res height-bar-progress" style="height: 25px !important;">';
 
@@ -2585,10 +2585,10 @@ class DashboardController extends Controller
 
             $html .= '</div>
     <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 25px !important;font-size: 12px;">
-<span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
+<span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 12px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
 
             $html .= ' </th>
-                  <th class="col-lg-4 col-md-12 col-sm-12">';
+                  <th class="col-lg-4">';
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded height-bar-progress" style="height: 25px !important;">';
 
@@ -2691,13 +2691,13 @@ class DashboardController extends Controller
 
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
+             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 12px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
                 }else if ($object_totales['meta_new'] == 2)
                 {
                     $object_totales['progress_pedidos']=round(($object_totales['total_pedido']/$object_totales['meta_combinar'])*100,2);
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
-             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">   TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
+             <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 12px; text-transform: uppercase;">   TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] . '</span>    </div>';
                 }
 
             }
