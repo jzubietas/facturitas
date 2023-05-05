@@ -527,7 +527,7 @@ class PdfController extends Controller
             {
                 //meta quincena
                 $porcentaje = round(($_resultado_grafico_v["dividendo"] / $_resultado_grafico_v["meta_quincena"]) * 100, 2);
-                $diferenciameta = $_resultado_grafico_v["meta_quincena"] - $_resultado_grafico_v["dividendo"];
+                $diferenciameta = $_resultado_grafico_v["meta_quincena"]*0.38 - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
                 $valor_meta = $_resultado_grafico_v["meta_quincena"];
                 if($porcentaje < 90){
@@ -539,7 +539,7 @@ class PdfController extends Controller
             else if ($_resultado_grafico_v["dividendo"] < $_resultado_grafico_v["meta_1"]) {
                 //meta 1
                 $porcentaje = round(($_resultado_grafico_v["dividendo"] / $_resultado_grafico_v["meta_1"]) * 100, 2);
-                $diferenciameta = $_resultado_grafico_v["meta_1"] - $_resultado_grafico_v["dividendo"];
+                $diferenciameta = $_resultado_grafico_v["meta_1"]*0.38 - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
                 $valor_meta = $_resultado_grafico_v["meta_1"];
                 if($porcentaje < 45){
@@ -560,7 +560,7 @@ class PdfController extends Controller
                 }else{
                     $porcentaje = round(0, 2);
                 }
-                $diferenciameta = $_resultado_grafico_v["meta_2"] - $_resultado_grafico_v["dividendo"];
+                $diferenciameta = $_resultado_grafico_v["meta_2"]*0.38 - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
                 $valor_meta = $_resultado_grafico_v["meta_2"];
                 if ($porcentaje < 99){
