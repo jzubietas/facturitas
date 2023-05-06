@@ -489,10 +489,10 @@ class PdfController extends Controller
             if ($_resultado_grafico_v["dividendo"] < $_resultado_grafico_v["meta_quincena"])
             {
                 //meta quincena
-                $porcentaje = round(($_resultado_grafico_v["dividendo"] / ($_resultado_grafico_v["meta_quincena"]*0.75)  ) * 100, 2);
+                $porcentaje = round(($_resultado_grafico_v["dividendo"] / ($_resultado_grafico_v["meta_quincena"])  ) * 100, 2);
                 $diferenciameta = $_resultado_grafico_v["meta_quincena"]*0.38 - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
-                $valor_meta = ($_resultado_grafico_v["meta_quincena"]*0.75);
+                $valor_meta = ($_resultado_grafico_v["meta_quincena"]);
                 if($porcentaje < 90){
                     $color_progress = '#FFD4D4';  /*ROSADO*/
                 }else{
@@ -501,10 +501,10 @@ class PdfController extends Controller
             }
             else if ($_resultado_grafico_v["dividendo"] < $_resultado_grafico_v["meta_1"]) {
                 //meta 1
-                $porcentaje = round(($_resultado_grafico_v["dividendo"] / (($_resultado_grafico_v["meta_1"])*0.75) ) * 100, 2);
+                $porcentaje = round(($_resultado_grafico_v["dividendo"] / (($_resultado_grafico_v["meta_1"])) ) * 100, 2);
                 $diferenciameta = $_resultado_grafico_v["meta_1"]*0.38 - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
-                $valor_meta = ($_resultado_grafico_v["meta_1"]*0.75);
+                $valor_meta = ($_resultado_grafico_v["meta_1"]);
                 if($porcentaje < 45){
                     $color_progress = '#DC3545FF';  /*ROJO*/
                 }
@@ -519,13 +519,13 @@ class PdfController extends Controller
             else {
                 $valor_mayor_cero=intval($_resultado_grafico_v["meta_2"]);
                 if ($valor_mayor_cero>0){
-                    $porcentaje = round(($_resultado_grafico_v["dividendo"] / ($_resultado_grafico_v["meta_2"]*0.75)  ) * 100, 2);
+                    $porcentaje = round(($_resultado_grafico_v["dividendo"] / ($_resultado_grafico_v["meta_2"])  ) * 100, 2);
                 }else{
                     $porcentaje = round(0, 2);
                 }
                 $diferenciameta = $_resultado_grafico_v["meta_2"]*0.38 - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
-                $valor_meta = ($_resultado_grafico_v["meta_2"]*0.75);
+                $valor_meta = ($_resultado_grafico_v["meta_2"]);
                 if ($porcentaje < 99){
                     $color_progress = '#008ffb';  /*VERDE*/
                 }else if ($porcentaje < 98){
