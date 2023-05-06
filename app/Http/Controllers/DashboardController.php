@@ -1767,8 +1767,7 @@ class DashboardController extends Controller
             }
 
             /*meta quincena = 0*/
-            if ($all>=0 && $all < $allmeta__quincena) {
-                //meta quincena
+            /*if ($all>=0 && $all < $allmeta__quincena) {
                 if ($allmeta__quincena > 0) {
                     $p_quincena = round(($all / $allmeta__quincena) * 100, 2);
                 } else {
@@ -1784,7 +1783,7 @@ class DashboardController extends Controller
                 }
                 $meta_new = 0.5;
                 $item['progress_pedidos'] = $p_intermedia;
-            }else if ($all>=$allmeta_intermedia  && $all < $allmeta) {
+            }else */if ($all>=0  && $all < $allmeta) {
                 if ($allmeta > 0) {
                     $p_pedidos = round(($all / $allmeta) * 100, 2);
                 } else {
