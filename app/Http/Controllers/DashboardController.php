@@ -1980,13 +1980,13 @@ class DashboardController extends Controller
             $html .= '<div class="row">';
             $html .= '<div class="col-3">';
 
-            $html .='<h5 class="card-title text-uppercase">Total de cobranzas :</h5>';
+            $html .='<h5 class="card-title text-uppercase font-weight-bold">Total de cobranzas :</h5>';
             $html .= '<p class="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px">'.$object_totales['progress_pagos'].'%</p>';
 
             $html .= '</div>';
 
             $html .= '<div class="col-6 d-flex justify-content-center align-items-center">';
-            $html .= '<h2 class="card-title text-uppercase h1-change-day text-center">METAS DEL MES DE '.Carbon::now()->startOfMonth()->translatedFormat('F').' :</h2>';
+            $html .= '<h2 class="card-title text-uppercase h1-change-day text-center font-weight-bold">METAS DEL MES DE '.Carbon::now()->startOfMonth()->translatedFormat('F').' :</h2>';
             $html .= '<buton style="background: none; border: none;" onclick="openFullscreen();">';
             $html .= '<i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i>';
             $html .= '</button>';
@@ -1994,7 +1994,7 @@ class DashboardController extends Controller
 
             $html .= '<div class="col-3">';
 
-            $html .='<h5 class="card-title text-uppercase">Total de pedidos :</h5>';
+            $html .='<h5 class="card-title text-uppercase font-weight-bold">Total de pedidos :</h5>';
             $html .= '<p class="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px">'.$object_totales['progress_pedidos'].'%</p>';
 
             $html .= '</div>';
@@ -2047,8 +2047,8 @@ class DashboardController extends Controller
                 }
 
                 $html .= '<tr>
-             <td class=""><span class="d-inline-block">'. $data["name"] . '</span></td>
-             <td>' . $data["identificador"] . ' ';
+             <td class="font-weight-bold"><span class="d-inline-block">'. $data["name"] . '</span></td>
+             <td class="font-weight-bold">' . $data["identificador"] . ' ';
 
                 if ($data["supervisor"] == 46) {
                     $html .= '- A';
