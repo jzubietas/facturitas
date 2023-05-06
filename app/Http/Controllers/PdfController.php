@@ -93,7 +93,7 @@ class PdfController extends Controller
 
         $situaciones_clientes = SituacionClientes::leftJoin('situacion_clientes as a', 'a.cliente_id', 'situacion_clientes.cliente_id')
             ->join('clientes as c','c.id','situacion_clientes.cliente_id')
-            ->join('users as u','u.id','c.user_id')
+            //->join('users as u','u.id','c.user_id')
             ->where([
                 ['situacion_clientes.situacion', '=', 'RECUPERADO ABANDONO'],
                 ['a.situacion', '=', 'ABANDONO RECIENTE'],
@@ -525,7 +525,7 @@ class PdfController extends Controller
             }
             else if ($_resultado_grafico_v["dividendo"] < $_resultado_grafico_v["meta_1"]) {
                 //meta 1
-                $porcentaje = round(($_resultado_grafico_v["dividendo"] / $_resultado_grafico_v["meta_1"]) * 100, 2);
+                $porcentaje = round(($_resultado_grafico_v["dividendo"] / (($_resultado_grafico_v["meta_1"])*0.75) ) * 100, 2);
                 $diferenciameta = $_resultado_grafico_v["meta_1"]*0.38 - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
                 $valor_meta = $_resultado_grafico_v["meta_1"];
