@@ -15,23 +15,6 @@
             height: 60px !important;
         }
 
-        @media screen and (max-width: 992px){
-            .responsive-table{
-                display: flex !important;
-                flex-wrap: wrap !important;
-            }
-            .h-50-res{
-                height: 50px !important;
-            }
-        }
-        @media screen and (max-width: 767px){
-            .table-total{
-                overflow: hidden !important;
-            }
-            .scrollbar-x{
-                overflow-x: scroll !important;
-            }
-        }
         #spinner {
             display: none;
         }
