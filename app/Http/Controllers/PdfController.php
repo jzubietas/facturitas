@@ -201,7 +201,8 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
+                ['c.tipo', '=', '1'],
+                ['c.congelado', '=', '0']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'LEVANTADO'],
@@ -211,7 +212,8 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
+                ['c.tipo', '=', '1'],
+                ['c.congelado', '=', '0']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'LEVANTADO'],
@@ -221,7 +223,8 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
+                ['c.tipo', '=', '1'],
+                ['c.congelado', '=', '0']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'LEVANTADO'],
@@ -231,7 +234,8 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
+                ['c.tipo', '=', '1'],
+                ['c.congelado', '=', '0']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'CAIDO'],
@@ -241,7 +245,8 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
+                ['c.tipo', '=', '1'],
+                ['c.congelado', '=', '0']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'CAIDO'],
@@ -251,7 +256,8 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
+                ['c.tipo', '=', '1'],
+                ['c.congelado', '=', '0']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'CAIDO'],
@@ -262,7 +268,8 @@ class PdfController extends Controller
 
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
+                ['c.tipo', '=', '1'],
+                ['c.congelado', '=', '0']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'CAIDO'],
@@ -272,7 +279,8 @@ class PdfController extends Controller
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
-                ['c.tipo', '=', '1']
+                ['c.tipo', '=', '1'],
+                ['c.congelado', '=', '0']
             ])
             ->orWhere([
                 ['situacion_clientes.situacion', '=', 'ABANDONO RECIENTE'],
@@ -337,11 +345,11 @@ class PdfController extends Controller
             ])
             ->get();
 
-        foreach($situaciones_clientes as $recorer)
+        /*foreach($situaciones_clientes as $recorer)
         {
             if($recorer->situacion=='CAIDO' || $recorer->situacion=='LEVANTADO')
             echo "<br>".$recorer->user_identificador." -- ".$recorer->situacion."--".$recorer->total."<br>";
-        }
+        }*/
         //exit;
         $_estados=['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','LEVANTADO','CAIDO'];
         $_resultado_grafico=[];
