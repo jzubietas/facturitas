@@ -2507,7 +2507,7 @@ class DashboardController extends Controller
 
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
             $html .= '<tbody>
-              <tr class="responsive-table">
+              <tr class="">
                   <th class="col-lg-4">';
 
             $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center w-100 rounded font-weight-bold height-bar-progress"
