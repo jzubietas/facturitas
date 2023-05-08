@@ -342,7 +342,7 @@ class PdfController extends Controller
             if($recorer->situacion=='CAIDO' || $recorer->situacion=='LEVANTADO')
             echo "<br>".$recorer->user_identificador." -- ".$recorer->situacion."--".$recorer->total."<br>";
         }
-        exit;
+        //exit;
         $_estados=['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','LEVANTADO','CAIDO'];
         $_resultado_grafico=[];
 
