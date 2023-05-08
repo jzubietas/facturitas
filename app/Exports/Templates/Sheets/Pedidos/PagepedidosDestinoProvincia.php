@@ -34,6 +34,7 @@ class PagepedidosDestinoProvincia extends Export implements WithColumnFormatting
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado', '1')
             ->where('direccion_grupos.destino', 'PROVINCIA')
+            ->whereIn('direccion_grupos.distribucion', ['OLVA','NORTE'])
             //->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
             //->whereNotIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
             ->select([
