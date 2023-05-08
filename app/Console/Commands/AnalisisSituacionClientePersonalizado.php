@@ -86,10 +86,13 @@ class AnalisisSituacionClientePersonalizado extends Command
 
                   //contadores
                   $cont_mes=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
+                      ->where('pendiente_anulacion','<>',1)
                       ->whereMonth('created_at',$where_mes)->where('codigo', 'not like', "%-C%")->count();
                   $cont_mes_activo=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
+                      ->where('pendiente_anulacion','<>',1)
                       ->whereMonth('created_at',$where_mes)->activo()->where('codigo', 'not like', "%-C%")->count();
                   $cont_mes_anulado=Pedido::where('cliente_id',$cliente->id)->whereYear('created_at',$where_anio)
+                      ->where('pendiente_anulacion','<>',1)
                       ->whereMonth('created_at',$where_mes)->activo('0')->where('codigo', 'not like', "%-C%")->count();
 
                   //$this->warn('cont_mes '.$cont_mes.' where_anio '.$where_anio.' where_mes '.$where_mes);
