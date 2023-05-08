@@ -190,6 +190,8 @@ class PedidosAnulacionController extends Controller
                 ->pluck('users.identificador');
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
+        }else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO){
+            
         }else{
             $pedidos=$pedidos->whereIn('estado_aprueba_asesor',[0,1,2])
                 ->whereIn('estado_aprueba_encargado',[0,1,2])
