@@ -259,6 +259,7 @@ class PdfController extends Controller
                 ['situacion_clientes.periodo', '=', $periodo_actual],
                 ['a.periodo', '=', $periodo_antes],
                 ['situacion_clientes.user_clavepedido', '<>', 'B'],
+
                 ['situacion_clientes.user_clavepedido', '<>', '99'],
                 ['c.estado', '=', '1'],
                 ['c.tipo', '=', '1']
@@ -336,12 +337,12 @@ class PdfController extends Controller
             ])
             ->get();
 
-        /*foreach($situaciones_clientes as $recorer)
+        foreach($situaciones_clientes as $recorer)
         {
             if($recorer->situacion=='CAIDO' || $recorer->situacion=='LEVANTADO')
             echo "<br>".$recorer->user_identificador." -- ".$recorer->situacion."--".$recorer->total."<br>";
         }
-        exit;*/
+        exit;
         $_estados=['RECUPERADO ABANDONO','RECUPERADO RECIENTE','NUEVO','LEVANTADO','CAIDO'];
         $_resultado_grafico=[];
 
