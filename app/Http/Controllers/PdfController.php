@@ -751,6 +751,7 @@ class PdfController extends Controller
 
                 $porcentaje = round(($activos_cuenta / (($activos_cuenta+$recurrentes_cuenta)*0.75) ) * 100, 2);
                 $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(0.75)*0.38 - $activos_cuenta;
+                $diferenciameta = round($diferenciameta,2,PHP_ROUND_HALF_UP);
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
