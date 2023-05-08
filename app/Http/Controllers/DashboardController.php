@@ -2508,15 +2508,15 @@ class DashboardController extends Controller
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
             $html .= '<tbody>
                         <tr class="">
-                            <th class="col-lg-4">';
+                            <td>';
 
-            $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . ' text-center justify-content-center rounded font-weight-bold height-bar-progress"
-                    style="height: 30px !important;display:flex; align-items: center; color: black !important;">
+            $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . ' text-center font-weight-bold height-bar-progress"
+                    style="height: 30px !important; color: black !important;">
                     TOTAL DE PEDIDOS DEL DIA: ' . $object_totales['pedidos_dia'] . ' </span>';
 
             $html .= '
-                  </th>
-                  <th class="col-lg-4">';
+                  </td>
+                  <td>';
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded h-40 h-60-res height-bar-progress" style="height: 25px !important;">';
 
@@ -2586,8 +2586,8 @@ class DashboardController extends Controller
     <div class="position-absolute w-100 text-center rounded height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 25px !important;font-size: 12px;">
 <span style="font-weight: lighter"> <b class="bold-size" style="font-weight: bold !important; font-size: 12px; text-transform: uppercase;"> TOTAL COBRANZA - ' . Carbon::parse($date_pagos)->monthName . ' :  ' . $object_totales['progress_pagos'] . '%</b> - ' . $object_totales['total_pagado'] . '/' . $object_totales['total_pedido_mespasado'] . '</span></div>';
 
-            $html .= ' </th>
-                  <th class="col-lg-4">';
+            $html .= ' </td>
+                  <td>';
             $html .= '<div class="position-relative rounded">
                 <div class="progress rounded height-bar-progress" style="height: 25px !important;">';
 
@@ -2701,7 +2701,7 @@ class DashboardController extends Controller
 
             }
 
-            $html .= '</th>
+            $html .= '</td>
               </tr>
               </tbody>';
             $html .= '</table>';
