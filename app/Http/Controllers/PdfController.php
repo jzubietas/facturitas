@@ -693,8 +693,8 @@ class PdfController extends Controller
                 $html[] = '</td>';
                 $html[] = '<td style="width:80%">';
 
-                $porcentaje = round(($activos_cuenta / (($activos_cuenta+$recurrentes_cuenta)*0.7) ) * 100, 2);
-                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(70/100) - $activos_cuenta;
+                $porcentaje = round(($activos_cuenta / (($activos_cuenta+$recurrentes_cuenta)*0.75) ) * 100, 2);
+                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(0.75)*0.38 - $activos_cuenta;
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
