@@ -243,10 +243,10 @@ class PedidoStatusController extends Controller
                     ->where('users.estado', '1')
                     ->Where('users.operario', Auth::user()->id)
                     ->select(
-                        DB::raw("users.identificador as identificador")
+                        DB::raw("users.clave_pedidos as clave_pedidos")
                     )
-                    ->pluck('users.identificador');
-                $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+                    ->pluck('users.clave_pedidos');
+                $pedidos = $pedidos->WhereIn('pedidos.user_clavepedido', $asesores);
 
 
             } else if (Auth::user()->rol == "Jefe de operaciones") {
@@ -263,21 +263,21 @@ class PedidoStatusController extends Controller
                     ->where('users.estado', '1')
                     ->WhereIn('users.operario', $operarios)
                     ->select(
-                        DB::raw("users.identificador as identificador")
+                        DB::raw("users.clave_pedidos as clave_pedidos")
                     )
-                    ->pluck('users.identificador');
+                    ->pluck('users.clave_pedidos');
 
-                $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+                $pedidos = $pedidos->WhereIn('pedidos.user_clavepedido', $asesores);
             } elseif (Auth::user()->rol == "Encargado") {
                 $usersasesores = User::whereIn('users.rol', ['Asesor', User::ROL_ADMIN])
                     ->where('users.estado', '1')
                     ->where('users.supervisor', Auth::user()->id)
                     ->select(
-                        DB::raw("users.identificador as identificador")
+                        DB::raw("users.clave_pedidos as clave_pedidos")
                     )
-                    ->pluck('users.identificador');
+                    ->pluck('users.clave_pedidos');
 
-                $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+                $pedidos = $pedidos->WhereIn('pedidos.user_clavepedido', $usersasesores);
             } else if (Auth::user()->rol == "Asesor") {
                 $usersasesores = User::where('users.rol', 'Asesor')
                     ->where('users.estado', '1')
@@ -291,7 +291,7 @@ class PedidoStatusController extends Controller
             } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
                 $pedidos = $pedidos->where('u.identificador', \auth()->user()->identificador);
             } else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
-                $pedidos = $pedidos->whereIn('u.identificador', ['15','16','17','18','19']);
+                $pedidos = $pedidos->whereIn('pedidos.user_clavepedido', ['15','16','17','18','19','20','21','22','23']);
             }
 
 
@@ -446,10 +446,10 @@ class PedidoStatusController extends Controller
                     ->where('users.estado', '1')
                     ->Where('users.operario', Auth::user()->id)
                     ->select(
-                        DB::raw("users.identificador as identificador")
+                        DB::raw("users.clave_pedidos as clave_pedidos")
                     )
-                    ->pluck('users.identificador');
-                $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+                    ->pluck('users.clave_pedidos');
+                $pedidos = $pedidos->WhereIn('pedidos.user_clavepedido', $asesores);
 
 
             } else if (Auth::user()->rol == "Jefe de operaciones") {
@@ -466,31 +466,31 @@ class PedidoStatusController extends Controller
                     ->where('users.estado', '1')
                     ->WhereIn('users.operario', $operarios)
                     ->select(
-                        DB::raw("users.identificador as identificador")
+                        DB::raw("users.clave_pedidos as clave_pedidos")
                     )
-                    ->pluck('users.identificador');
+                    ->pluck('users.clave_pedidos');
 
-                $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+                $pedidos = $pedidos->WhereIn('pedidos.user_clavepedido', $asesores);
             } else if (Auth::user()->rol == "Llamadas") {
                 $usersasesores = User::where('users.rol', 'Asesor')
                     ->where('users.estado', '1')
                     ->where('users.llamada', Auth::user()->id)
                     ->select(
-                        DB::raw("users.identificador as identificador")
+                        DB::raw("users.clave_pedidos as clave_pedidos")
                     )
-                    ->pluck('users.identificador');
+                    ->pluck('users.clave_pedidos');
 
-                $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+                $pedidos = $pedidos->WhereIn('pedidos.user_clavepedido', $usersasesores);
             } elseif (Auth::user()->rol == "Encargado") {
                 $usersasesores = User::whereIn('users.rol', ['Asesor', User::ROL_ADMIN])
                     ->where('users.estado', '1')
                     ->where('users.supervisor', Auth::user()->id)
                     ->select(
-                        DB::raw("users.identificador as identificador")
+                        DB::raw("users.clave_pedidos as clave_pedidos")
                     )
-                    ->pluck('users.identificador');
+                    ->pluck('users.clave_pedidos');
 
-                $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+                $pedidos = $pedidos->WhereIn('pedidos.user_clavepedido', $usersasesores);
             } else if (Auth::user()->rol == "Asesor") {
                 $usersasesores = User::where('users.rol', 'Asesor')
                     ->where('users.estado', '1')
@@ -504,7 +504,7 @@ class PedidoStatusController extends Controller
             } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
                 $pedidos = $pedidos->where('u.identificador', Auth::user()->identificador);
             }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
-                $pedidos = $pedidos->whereIn('u.identificador', ['15','16','17','18','19']);
+                $pedidos = $pedidos->whereIn('pedidos.user_clavepedido', ['15','16','17','18','19','20','21','22','23']);
             }
 
             $pedidos->where('pedidos.da_confirmar_descarga', '0')
