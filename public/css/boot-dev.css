@@ -3894,10 +3894,10 @@ body {
 }
 
 @media screen and (max-width: 992px) {
-    .responsive-table {
+    /*.responsive-table {
         display: flex !important;
         flex-wrap: wrap !important;
-    }
+    }*/
 
     .h-50-res {
         height: 50px !important;
