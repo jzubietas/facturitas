@@ -342,7 +342,7 @@
         }
     });
 
-    $(document).on('change blur','#porcentaje1,#porcentaje2,#porcentaje3,#porcentaje4' ,function(event){
+    $(document).on('change blur','#porcentaje_fsb,#porcentaje_fcb,#porcentaje_esb,#porcentaje_ecb' ,function(event){
         console.log(event.target.id);
 
         let val=parseFloat($(this).val());
