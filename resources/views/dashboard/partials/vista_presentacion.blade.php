@@ -116,7 +116,7 @@
             <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
         </div>
     </div>
-    <div class="card-footer">
+    <div class="card-footer text-center">
         <buton style="background: none; border: none;" onclick="openFullscreen();">
             <i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i>
         </buton>
