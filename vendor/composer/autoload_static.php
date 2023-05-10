@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
+class ComposerStaticInit501a172a018d95d84115e8d4d88909ef
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -264,11 +264,11 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         ),
         'Yajra\\DataTables\\' => 
         array (
-            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
-            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
+            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
             2 => __DIR__ . '/..' . '/yajra/laravel-datatables-fractal/src',
-            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
-            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
+            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
+            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
         ),
         'Whoops\\' => 
         array (
@@ -460,8 +460,8 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -848,6 +848,9 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Console\\Commands\\AutomaticMetasResetAsesorMasivo' => __DIR__ . '/../..' . '/app/Console/Commands/AutomaticMetasResetAsesorMasivo.php',
         'App\\Console\\Commands\\AutomaticMetasResetAsesorPersonalizado' => __DIR__ . '/../..' . '/app/Console/Commands/AutomaticMetasResetAsesorPersonalizado.php',
         'App\\Console\\Commands\\AutomaticMetasResetLlamadas' => __DIR__ . '/../..' . '/app/Console/Commands/AutomaticMetasResetLlamadas.php',
+        'App\\Console\\Commands\\CalcularUltimoPedido' => __DIR__ . '/../..' . '/app/Console/Commands/CalcularUltimoPedido.php',
+        'App\\Console\\Commands\\CalcularUltimoPedidoIndividual' => __DIR__ . '/../..' . '/app/Console/Commands/CalcularUltimoPedidoIndividual.php',
+        'App\\Console\\Commands\\CalculoReseteoVidas_Personalizado' => __DIR__ . '/../..' . '/app/Console/Commands/CalculoReseteoVidas_Personalizado.php',
         'App\\Console\\Commands\\DeleteDireccionGrupoEmpty' => __DIR__ . '/../..' . '/app/Console/Commands/DeleteDireccionGrupoEmpty.php',
         'App\\Console\\Commands\\DestruirGrupos' => __DIR__ . '/../..' . '/app/Console/Commands/DestruirGrupos.php',
         'App\\Console\\Commands\\DireccionGrupoId' => __DIR__ . '/../..' . '/app/Console/Commands/DireccionGrupoId.php',
@@ -934,10 +937,14 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Exports\\Templates\\PlantillaExportClientesReporteMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportClientesReporteMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportClientescuatromesesMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportClientescuatromesesMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportClientesdosmesesMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportClientesdosmesesMultiple.php',
+        'App\\Exports\\Templates\\PlantillaExportClientsFallendDebtMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportClientsFallendDebtMultiple.php',
+        'App\\Exports\\Templates\\PlantillaExportClientsFallendWithOutDebtMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportClientsFallendWithOutDebtMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportMovimientosReporteMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportMovimientosReporteMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportMultipleLlamada' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportMultipleLlamada.php',
         'App\\Exports\\Templates\\PlantillaExportPedidoMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportPedidoMultiple.php',
+        'App\\Exports\\Templates\\PlantillaExportPedidosDestinoLimaMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportPedidosDestinoLimaMultiple.php',
+        'App\\Exports\\Templates\\PlantillaExportPedidosDestinoProvinciaMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportPedidosDestinoProvinciaMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportPedidosPerdonarCourierReporteMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportPedidosPerdonarCourierReporteMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportRutaenvioMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportRutaenvioMultiple.php',
         'App\\Exports\\Templates\\PlantillaExportaListadoOlva' => __DIR__ . '/../..' . '/app/Exports/Templates/PlantillaExportaListadoOlva.php',
@@ -949,6 +956,8 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Exports\\Templates\\Sheets\\Envios\\PageclienteCuatromesesHaciaatras' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Envios/PageclienteCuatromesesHaciaatras.php',
         'App\\Exports\\Templates\\Sheets\\Envios\\PageclienteCuatromesesNodeben' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Envios/PageclienteCuatromesesNodeben.php',
         'App\\Exports\\Templates\\Sheets\\Envios\\PageclienteDosmeses' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Envios/PageclienteDosmeses.php',
+        'App\\Exports\\Templates\\Sheets\\Envios\\PageclientsFallenDebt' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Envios/PageclientsFallenDebt.php',
+        'App\\Exports\\Templates\\Sheets\\Envios\\PageclientsFallenWithOutDebt' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Envios/PageclientsFallenWithOutDebt.php',
         'App\\Exports\\Templates\\Sheets\\Movimientos\\PagemovimientoReporteMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Movimientos/PagemovimientoReporteMultiple.php',
         'App\\Exports\\Templates\\Sheets\\PageclienteDiciembre' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/PageclienteDiciembre.php',
         'App\\Exports\\Templates\\Sheets\\PageclienteInfo' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/PageclienteInfo.php',
@@ -976,12 +985,15 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Exports\\Templates\\Sheets\\PagerutaenvioProvincia' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/PagerutaenvioProvincia.php',
         'App\\Exports\\Templates\\Sheets\\PaginaOne' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/PaginaOne.php',
         'App\\Exports\\Templates\\Sheets\\Pedidos\\PagepedidoperdonarcourierReporteMultiple' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Pedidos/PagepedidoperdonarcourierReporteMultiple.php',
+        'App\\Exports\\Templates\\Sheets\\Pedidos\\PagepedidosDestinoLima' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Pedidos/PagepedidosDestinoLima.php',
+        'App\\Exports\\Templates\\Sheets\\Pedidos\\PagepedidosDestinoProvincia' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/Pedidos/PagepedidosDestinoProvincia.php',
         'App\\Exports\\Templates\\Sheets\\basefria\\PageBasefria' => __DIR__ . '/../..' . '/app/Exports/Templates/Sheets/basefria/PageBasefria.php',
         'App\\Exports\\UsuariosExport' => __DIR__ . '/../..' . '/app/Exports/UsuariosExport.php',
         'App\\Http\\Controllers\\AdministracionController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdministracionController.php',
         'App\\Http\\Controllers\\AlertaController' => __DIR__ . '/../..' . '/app/Http/Controllers/AlertaController.php',
         'App\\Http\\Controllers\\AnulacionController' => __DIR__ . '/../..' . '/app/Http/Controllers/AnulacionController.php',
         'App\\Http\\Controllers\\BasefriaController' => __DIR__ . '/../..' . '/app/Http/Controllers/BasefriaController.php',
+        'App\\Http\\Controllers\\CallAtentionController' => __DIR__ . '/../..' . '/app/Http/Controllers/CallAtentionController.php',
         'App\\Http\\Controllers\\ChartController' => __DIR__ . '/../..' . '/app/Http/Controllers/ChartController.php',
         'App\\Http\\Controllers\\ClienteController' => __DIR__ . '/../..' . '/app/Http/Controllers/ClienteController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
@@ -1026,6 +1038,7 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Jobs\\PostAnulledPedido' => __DIR__ . '/../..' . '/app/Jobs/PostAnulledPedido.php',
         'App\\Jobs\\PostCreatePedido' => __DIR__ . '/../..' . '/app/Jobs/PostCreatePedido.php',
+        'App\\Jobs\\PostCreatePedidoClienteUltimoPedido' => __DIR__ . '/../..' . '/app/Jobs/PostCreatePedidoClienteUltimoPedido.php',
         'App\\Jobs\\PostUpdatePedido' => __DIR__ . '/../..' . '/app/Jobs/PostUpdatePedido.php',
         'App\\Jobs\\PostUpdateSituacion' => __DIR__ . '/../..' . '/app/Jobs/PostUpdateSituacion.php',
         'App\\Jobs\\SyncOlvaJob' => __DIR__ . '/../..' . '/app/Jobs/SyncOlvaJob.php',
@@ -1036,6 +1049,7 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Listeners\\PedidoListener' => __DIR__ . '/../..' . '/app/Listeners/PedidoListener.php',
         'App\\Models\\Alerta' => __DIR__ . '/../..' . '/app/Models/Alerta.php',
         'App\\Models\\AttachCorrection' => __DIR__ . '/../..' . '/app/Models/AttachCorrection.php',
+        'App\\Models\\CallAtention' => __DIR__ . '/../..' . '/app/Models/CallAtention.php',
         'App\\Models\\Cliente' => __DIR__ . '/../..' . '/app/Models/Cliente.php',
         'App\\Models\\Correction' => __DIR__ . '/../..' . '/app/Models/Correction.php',
         'App\\Models\\CourierRegistro' => __DIR__ . '/../..' . '/app/Models/CourierRegistro.php',
@@ -1066,8 +1080,10 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Models\\Media' => __DIR__ . '/../..' . '/app/Models/Media.php',
         'App\\Models\\Meta' => __DIR__ . '/../..' . '/app/Models/Meta.php',
         'App\\Models\\MovimientoBancario' => __DIR__ . '/../..' . '/app/Models/MovimientoBancario.php',
+        'App\\Models\\OlvaMovimiento' => __DIR__ . '/../..' . '/app/Models/OlvaMovimiento.php',
         'App\\Models\\Pago' => __DIR__ . '/../..' . '/app/Models/Pago.php',
         'App\\Models\\PagoPedido' => __DIR__ . '/../..' . '/app/Models/PagoPedido.php',
+        'App\\Models\\PasswordReset' => __DIR__ . '/../..' . '/app/Models/PasswordReset.php',
         'App\\Models\\Pedido' => __DIR__ . '/../..' . '/app/Models/Pedido.php',
         'App\\Models\\PedidoHistory' => __DIR__ . '/../..' . '/app/Models/PedidoHistory.php',
         'App\\Models\\PedidoMotorizadoHistory' => __DIR__ . '/../..' . '/app/Models/PedidoMotorizadoHistory.php',
@@ -1079,6 +1095,7 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
         'App\\Models\\SituacionClientes' => __DIR__ . '/../..' . '/app/Models/SituacionClientes.php',
         'App\\Models\\TipoMovimiento' => __DIR__ . '/../..' . '/app/Models/TipoMovimiento.php',
         'App\\Models\\Titular' => __DIR__ . '/../..' . '/app/Models/Titular.php',
+        'App\\Models\\UpdateMovimiento' => __DIR__ . '/../..' . '/app/Models/UpdateMovimiento.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Notifications\\DevolucionApproved' => __DIR__ . '/../..' . '/app/Notifications/DevolucionApproved.php',
         'App\\Notifications\\PagoNotification' => __DIR__ . '/../..' . '/app/Notifications/PagoNotification.php',
@@ -8922,10 +8939,10 @@ class ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit540e5c5ba96b1e63e5327a3fb410e1aa::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit501a172a018d95d84115e8d4d88909ef::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit501a172a018d95d84115e8d4d88909ef::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit501a172a018d95d84115e8d4d88909ef::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit501a172a018d95d84115e8d4d88909ef::$classMap;
 
         }, null, ClassLoader::class);
     }

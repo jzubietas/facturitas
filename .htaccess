@@ -1,0 +1,8 @@
+
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Configure el paquete “ea-php81” como el lenguaje de programación predeterminado “PHP”.
+<IfModule mime_module>
+  AddHandler text/plain .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
