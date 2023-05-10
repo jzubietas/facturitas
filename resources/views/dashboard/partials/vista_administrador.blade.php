@@ -139,7 +139,7 @@
         {{-- FIN-TABLA-DUAL --}}
 
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <h3 class="text-center">General (01-16)</h3>
+            <h3 class="text-center">General (01-17)</h3>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div id="metas_total_general"></div>
