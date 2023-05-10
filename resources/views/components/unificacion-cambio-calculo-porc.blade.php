@@ -590,20 +590,20 @@
                     Swal.fire('Error', 'Debe seleccionar el cliente.', 'error');
                     return false;
                 }
-                if (porcentaje_fsb < 1.3) {
-                    Swal.fire('Error', 'El porcentaje [FISICO - sin banca] debe ser mayor a 1.3%', 'error');
+                if (porcentaje_fsb < 0.9) {
+                    Swal.fire('Error', 'El porcentaje [FISICO - sin banca] debe ser mayor a 0.9%', 'error');
                     return false;
                 }
-                if (porcentaje_fcb < 1.3) {
-                    Swal.fire('Error', 'El porcentaje [FISICO - banca] debe ser mayor a 1.3%', 'error');
+                if (porcentaje_fcb < 0.9) {
+                    Swal.fire('Error', 'El porcentaje [FISICO - banca] debe ser mayor a 0.9%', 'error');
                     return false;
                 }
-                if (porcentaje_esb < 1.3) {
-                    Swal.fire('Error', 'El porcentaje [ELECTRONICA - sin banca] debe ser mayor a 1.3%', 'error');
+                if (porcentaje_esb < 0.9) {
+                    Swal.fire('Error', 'El porcentaje [ELECTRONICA - sin banca] debe ser mayor a 0.9%', 'error');
                     return false;
                 }
-                if (porcentaje_ecb < 1.3) {
-                    Swal.fire('Error', 'El porcentaje [ELECTRONICA - banca] debe ser mayor a 1.3%', 'error');
+                if (porcentaje_ecb < 0.9) {
+                    Swal.fire('Error', 'El porcentaje [ELECTRONICA - banca] debe ser mayor a 0.9%', 'error');
                     return false;
                 }
                 var frmPorcentaje = new FormData();
