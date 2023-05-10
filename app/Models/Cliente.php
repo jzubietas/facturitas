@@ -448,7 +448,7 @@ class Cliente extends Model
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'LEVANTADO',
+                                          "situacion" => 'CAIDO',
                                           "flag_fp" => '1'
                                       ]);
                                   }
