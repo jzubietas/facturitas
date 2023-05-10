@@ -75,6 +75,11 @@
     <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
 </div>
 
+{{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
+<div class="col-lg-12">
+    <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
+</div>
+
 
 <!-- MODAL -->
 {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -133,7 +138,7 @@
         {{-- FIN-TABLA-DUAL --}}
 
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <h3 class="text-center">General (01-16)</h3>
+            <h3 class="text-center">General (01-17)</h3>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div id="metas_total_general"></div>
