@@ -346,7 +346,7 @@ class AnalisisSituacionClientePersonalizado extends Command
                                       ]);
                                   }else{
                                       $situacion_create->update([
-                                          "situacion" => 'LEVANTADO',
+                                          "situacion" => 'CAIDO',
                                           "flag_fp" => '1'
                                       ]);
                                   }
