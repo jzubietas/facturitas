@@ -7876,7 +7876,7 @@ class DashboardController extends Controller
                 $html .= '<div class="row">';
                 $html .= '<div class="col-12 text-center">';
 
-                $html .='<b class="font-16 text-success">Asesor Zs</b>';
+                $html .='<b class="font-16 text-success">Asesor Z</b>';
 
                 $html .= '</div>';
                 $html .= '</div>';
