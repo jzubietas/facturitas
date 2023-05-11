@@ -870,7 +870,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             //grafico_metas_asesores();
 
-            setInterval(myTimer, 60000);
+            setInterval(myTimer, 90000);
 
             function myTimer() {
                 console.log("recargando")
@@ -896,7 +896,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva17(17);
                 cargaNueva17(37);
 
-                //cargaNuevaCalendario(17);
+                cargaNuevaCalendario(17);
 
                 cargaNueva99(99);
 
