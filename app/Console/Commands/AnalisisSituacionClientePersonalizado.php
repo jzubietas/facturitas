@@ -59,9 +59,9 @@ class AnalisisSituacionClientePersonalizado extends Command
 
 
     $clientes=Cliente:://join('clientes_b18 as a','a.celular','clientes.celular')->whereIn('clientes.tipo',['0','1'])
-      //where('situacion','=','RECUPERADO RECIENTE')
+      where('clientes.situacion','=','RECUPERADO RECIENTE')
         //whereIn('clientes.id',[8,16,770,954,1525,1895,1962,4259,5170,5370,5419,5474,14457,15157,15466,15944,16074,18416,25173,27745,31949,33608,33609,33610,33611,33612,33613,33614,33615,33616,33617,33618,33619,33620,33621,33622,33623])//
-        whereIn('clientes.tipo',[0,1])
+        //whereIn('clientes.tipo',[0,1])
       ->orderBy('clientes.id','asc')->get();
 
     $progress = $this->output->createProgressBar($clientes->count());
