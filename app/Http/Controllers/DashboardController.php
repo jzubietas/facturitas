@@ -8400,7 +8400,7 @@ class DashboardController extends Controller
 
             $clientes_actuales=Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                 ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
-                ->where('clientes.tipo','=','0')
+                //->where('clientes.tipo','=','0')
                 ->where('clientes.congelado','<>',1)
                 ->activo()
                 ->count();
@@ -8434,7 +8434,7 @@ class DashboardController extends Controller
 
                 $clientes_actuales_dia=Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
                     ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
-                    ->where('clientes.tipo','=','0')
+                    //->where('clientes.tipo','=','0')
                     ->where('clientes.congelado','<>',1)
                     ->whereDate('clientes.created_at', date("Y-m-d", $i))
                     ->activo()
