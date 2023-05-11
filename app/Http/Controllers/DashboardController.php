@@ -1030,6 +1030,7 @@ class DashboardController extends Controller
 
         if ($request->ii == 0)
         {
+            $html .= '<h3 class="text-center">General (01-17)</h3>';
             $html .= '<table class="table tabla-metas_pagos_pedidos" style="background: #ade0db; color: #0a0302">';
             $html .= '<tbody>
               <tr>
