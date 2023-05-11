@@ -9040,10 +9040,28 @@ class DashboardController extends Controller
                 //$object_totales[date("Y-m-d", $i)]=collect($progressData)->pluck(date("Y-m-d", $i))->sum();
             }
 
-
             $html .= '</tr>';
 
             $html .= '</tbody>';
+
+            $html .= '<tfoot>';
+
+            $html .= '<tr>';
+
+            $html .= '<th>Asesor</th>';
+            $html .= '<th>Id</th>';
+            $html .= '<th>Inicio</th>';
+            $html .= '<th>Chats</th>';
+
+            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+            {
+                $html .= '<th>0</th>';
+            }
+
+
+            $html .= '</tr>';
+
+            $html .= '</tfoot>';
 
             $html .= '</table>';
         }
