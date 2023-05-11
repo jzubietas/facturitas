@@ -5871,11 +5871,20 @@ class DashboardController extends Controller
                 ->activo()
                 ->count();
 
+            $clientes_actuales=Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
+                ->where('clientes.tipo','=','1')
+                ->where('clientes.congelado','<>',1)
+                ->activo()
+                ->count();
+
             $encargado_asesor = $asesor->supervisor;
 
             $item = [
                 "identificador" => $asesor->clave_pedidos,
                 "code" => "{$asesor->name}",
+                "inicio" => Carbon::parse($asesor->created_at)->format('d-m-Y'),
+                "chats" => $clientes_actuales,
                 "pedidos_dia" => $asesor_pedido_dia,
                 "name" => $asesor->name,
                 "total_pedido" => $total_pedido,
@@ -6351,7 +6360,7 @@ class DashboardController extends Controller
                 $html .= '<div class="row">';
                 $html .= '<div class="col-12 text-center">';
 
-                $html .='<b class="font-16 text-success">1 al 17</b>';
+                $html .='<b class="font-16 text-success">Publicidad</b>';
 
                 $html .= '</div>';
                 $html .= '</div>';
@@ -6385,6 +6394,8 @@ class DashboardController extends Controller
                 <tr>
                     <th width="8%">Asesor</th>
                     <th width="11%">Id</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Inicio</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Chats</th>
                     <th width="8%"><span style="font-size:10px;">Día ' . Carbon::now()->day . '  </span></th>
                     <th width="33%">Cobranza  ' . Carbon::parse($date_pagos)->monthName . ' </th>
                     <th width="40%">Pedidos  ' . Carbon::parse($fechametames)->monthName . ' </th>
@@ -6882,7 +6893,10 @@ class DashboardController extends Controller
             }
 
             $html .= '<tr>';
-            $html .= '<td colspan="3">';
+            $html .= '
+                    <td style="font-weight: bold;color:blue;">'.$data["inicio"].'</td>
+                    <td style="font-weight: bold;color:blue;">'.$data["chats"].'</td>
+                    <td colspan="1">';
             $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . '"
                         style="height: 30px !important; color: black !important;">
                         TOTAL DE PEDIDOS DEL DIA: ' . $object_totales['pedidos_dia'] . ' </span>';
