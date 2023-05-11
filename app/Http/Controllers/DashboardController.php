@@ -6893,10 +6893,9 @@ class DashboardController extends Controller
             }
 
             $html .= '<tr>';
-            $html .= '
-                    <td style="font-weight: bold;color:blue;">'.$data["inicio"].'</td>
-                    <td style="font-weight: bold;color:blue;">'.$data["chats"].'</td>
-                    <td colspan="1">';
+            $html .= '<td style="font-weight: bold;color:blue;">Inicio '.$data["inicio"].'</td>
+                    <td style="font-weight: bold;color:blue;">Chats'.$data["chats"].'</td>
+                    <td>';
             $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . '"
                         style="height: 30px !important; color: black !important;">
                         TOTAL DE PEDIDOS DEL DIA: ' . $object_totales['pedidos_dia'] . ' </span>';
