@@ -6448,6 +6448,8 @@ class DashboardController extends Controller
                 }
                 $html .= '
              </td>
+             <td style="font-weight: bold;color:blue;">'.$data["inicio"].'</td>
+             <td style="font-weight: bold;color:blue;">'.$data["chats"].'</td>
              <td>';
                 if ($data["pedidos_dia"] > 0) {
                     $html .= '<span class="px-4 pt-1 pb-1 bg-white text-center justify-content-center w-100 rounded font-weight-bold" > ' . $data["pedidos_dia"] . '</span> ';
@@ -6893,9 +6895,7 @@ class DashboardController extends Controller
             }
 
             $html .= '<tr>';
-            $html .= '<td style="font-weight: bold;color:blue;">Inicio '.$data["inicio"].'</td>
-                    <td style="font-weight: bold;color:blue;">Chats'.$data["chats"].'</td>
-                    <td>';
+            $html .= '<td colspan="3">';
             $html .= '<span class="px-4 pt-1 pb-1 ' . (($object_totales['pedidos_dia'] == 0) ? 'bg-red' : 'bg-white') . '"
                         style="height: 30px !important; color: black !important;">
                         TOTAL DE PEDIDOS DEL DIA: ' . $object_totales['pedidos_dia'] . ' </span>';
