@@ -8953,7 +8953,7 @@ class DashboardController extends Controller
 
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $html .= '<th>'.date("Y-m-d", $i).'</th>';
+                $html .= '<th>'.date("d-m", $i).'</th>';
             }
 
             $html .='</tr>
