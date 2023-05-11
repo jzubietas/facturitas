@@ -474,7 +474,7 @@ class PdfController extends Controller
         $nuevos_cuenta=0;
         $a_reciente_cuenta=0;
         $html = [];
-        $html[] = '<h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>';
+        $html[] = '<h3 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h3>';
         $html[] = '<table class="table table-situacion-clientes align-self-center" style="background: #ade0db; color: #0a0302">';
 
         foreach ($situaciones_clientes as $situacion_cliente_3)
