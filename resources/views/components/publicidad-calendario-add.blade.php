@@ -11,7 +11,7 @@
             <div class="col-4">
                 <div class="form-group">
                     {!! Form::Label('item_id', 'Item:') !!}
-                    {!! Form::select('item_id', $publicidad, '', ['class' => 'form-control']) !!}
+                    {!! Form::select('item_id', $publicidad, '', ['class' => 'form-control select2']) !!}
                 </div>
             </div>
             <div class="col-4">
