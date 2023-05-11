@@ -2,6 +2,12 @@
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/timeline@4.4.2/main.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@4.4.2/main.min.css" rel="stylesheet" />
+    <style>
+        .table td, .table th
+        {
+            padding: .25rem !important;
+        }
+    </style>
 @endpush
 
 @yield('css-datatables')
@@ -155,6 +161,17 @@
             <div id="metas_total_general"></div>
         </div>
 
+        <div class="col-lg-12" id="metas_dp_99"></div>
+
+        <div class="col-md-12 bg-white">
+            <div class="d-flex justify-content-center">
+                <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
+            </div>
+            <div id="metas_situacion_clientes"></div>
+        </div>
+
+
+
     </div>
 
 
@@ -213,7 +230,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
         <div class="col-lg-12" id="metas_dp_17"></div>
         <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
-        <div class="col-lg-12" id="metas_dp_99"></div>
+
         <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
 
     </div>
@@ -239,14 +256,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
         </div>
 
-
-        <!--<div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="dejaronpedir_supervisor_A"></div>
-        </div>
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="dejaronpedir_supervisor_B"></div>
-        </div>-->
-
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div id="dejaronpedir_supervisor_total"></div>
         </div>
@@ -255,7 +264,18 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 </div>
 
 
+<div class="col-md-12 bg-white">
+    <div class="card bg-cyan">
+        <div class="card-header">
+            <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
+        </div>
+        <div class="card-body">
+            <div id="metas_cobranzas_general"></div>
+        </div>
+        <div class="card-fotter"></div>
+    </div>
 
+</div>
 <br>
 
 {{-- METAS ASESOR DE LLAMADAS --}}
@@ -273,25 +293,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
     </div>
 
 
-    <div class="col-md-12 bg-white">
-        <div class="d-flex justify-content-center">
-            <h1 class="text-uppercase justify-center text-center">Metas Asesores de Llamadas</h1>
-        </div>
-        <div id="metas_situacion_clientes"></div>
-    </div>
 
-    <div class="col-md-12 bg-white">
-        <div class="card bg-cyan">
-            <div class="card-header">
-                <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
-            </div>
-            <div class="card-body">
-                <div id="metas_cobranzas_general"></div>
-            </div>
-            <div class="card-fotter"></div>
-        </div>
-
-    </div>
 </div>
 
 {{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
