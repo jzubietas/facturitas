@@ -221,11 +221,15 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             </div>
         </div>
         {{-- FIN-TABLA-DUAL --}}
-
-        <div class="col-lg-12" id="metas_dp_17"></div>
-        <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
-
-        <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
+        <div class="row">
+            <div class="col-lg-12" id="metas_dp_17"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
+        </div>
 
     </div>
 

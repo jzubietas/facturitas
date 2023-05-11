@@ -7,6 +7,7 @@ use App\Models\DetallePedido;
 use App\Models\DireccionGrupo;
 use App\Models\Meta;
 use App\Models\Pedido;
+use App\Models\Publicidad;
 use App\Models\Ruc;
 use App\Models\SituacionClientes;
 use App\Models\User;
@@ -8943,6 +8944,7 @@ class DashboardController extends Controller
             $html .= '</div>';
             $html .= '</div>';
 
+            $html .= '<div class="table-responsive">';
             $html .= '<table class="table tabla-metas_pagos_pedidos table-dark" style="background: #e4dbc6; color: #232121; margin-bottom: 3px !important;">';
             $html .= '<thead>
                 <tr>
@@ -8953,7 +8955,7 @@ class DashboardController extends Controller
 
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $html .= '<th>'.date("d-m", $i).'</th>';
+                $html .= '<th width="6%">'.date("d-m", $i).'</th>';
             }
 
             $html .='</tr>
@@ -9046,24 +9048,36 @@ class DashboardController extends Controller
 
             $html .= '<tfoot>';
 
+            //72
             $html .= '<tr>';
-
-            $html .= '<th>Asesor</th>';
+            $html .= '<th>Luis</th>';
             $html .= '<th>Id</th>';
             $html .= '<th>Inicio</th>';
             $html .= '<th>Chats</th>';
-
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $html .= '<th>0</th>';
+                $count_1 = Publicidad::query()->where('email','Dante@ojoceleste.com')->first()->total;
+                $html .= '<th>'.$count_1.'</th>';
             }
+            $html .= '</tr>';
 
-
+            //95
+            $html .= '<tr>';
+            $html .= '<th>Dante</th>';
+            $html .= '<th>Id</th>';
+            $html .= '<th>Inicio</th>';
+            $html .= '<th>Chats</th>';
+            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+            {
+                $count_2 = Publicidad::query()->where('email','Dante@ojoceleste.com')->first()->total;
+                $html .= '<th>'.$count_2.'</th>';
+            }
             $html .= '</tr>';
 
             $html .= '</tfoot>';
 
             $html .= '</table>';
+            $html .= '</div>';
         }
 
         return $html;
