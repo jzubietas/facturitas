@@ -91,6 +91,8 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
                         [
                             'rol'=>User::ROL_ASESOR,
                             'user_id'=>$usuario->id,
+                            'identificador'=>$usuario->identificador,
+                            'user_clavepedido'=>$usuario->user_clavepedido,
                             'email'=>$usuario->email,
                             'anio'=>$where_anio,
                             'mes'=>$where_mes,
@@ -99,7 +101,22 @@ class AutomaticMetasResetAsesorPersonalizado extends Command
                             'meta_cobro'=>0,
                             'status'=>1,
                             'created_at'=>now(),
-                            'meta_quincena'=>0
+                            'meta_quincena'=>0,
+                            'cliente_nuevo'=>0,
+                            'cliente_recurrente'=>0,
+                            'cliente_recuperado_abandono'=>0,
+                            'cliente_recuperado_reciente'=>0,
+                            'cliente_nuevo_2'=>0,
+                            'cliente_recurrente_2'=>0,
+                            'cliente_recuperado_abandono_2'=>0,
+                            'cliente_recuperado_reciente_2'=>0,
+                            'meta_quincena_nuevo'=>0,
+                            'meta_quincena_recuperado_abandono'=>0,
+                            'meta_quincena_recuperado_reciente'=>0,
+                            'meta_intermedia'=>0,
+                            'meta_quincena_activo'=>0,
+                            'cliente_activo'=>0,
+                            'cliente_activo_2'=>0,
                         ]
                     );
                     /*User::where('id',$usuario->id )->where('rol',User::ROL_ASESOR)->update(
