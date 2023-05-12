@@ -9033,11 +9033,11 @@ class DashboardController extends Controller
             $html .= '<tr>';
             $html .= '<td class="text-center font-weight-bold" colspan="3">TOTAL</td>';
 
-            $html .= '<td class="text-warning font-weight-bold">'.$object_totales['chats'].'</td>';
+            $html .= '<td class="bg-warning font-weight-bold">'.$object_totales['chats'].'</td>';
 
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $html .= '<td class="text-warning font-weight-bold">'.$object_totales[date("Y-m-d", $i)].'</td>';
+                $html .= '<td class="bg-warning font-weight-bold">'.$object_totales[date("Y-m-d", $i)].'</td>';
                 //$object_totales[date("Y-m-d", $i)]=collect($progressData)->pluck(date("Y-m-d", $i))->sum();
             }
 
