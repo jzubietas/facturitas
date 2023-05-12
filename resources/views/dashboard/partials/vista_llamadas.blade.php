@@ -788,7 +788,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 cargaNuevaCalendario(17);
 
-                cargaNueva99(99);
 
                 cargReporteMetasCobranzasGeneral();
 
@@ -820,7 +819,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
             cargaNuevaCalendario(17);
 
-            cargaNueva99(99);
 
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
@@ -857,7 +855,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 cargaNuevaCalendario(17);
 
-                cargaNueva99(99);
 
                 cargReporteMetasSituacionClientes();
 
