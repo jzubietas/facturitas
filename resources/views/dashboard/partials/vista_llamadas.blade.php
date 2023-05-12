@@ -79,21 +79,9 @@
 {{-- BUSCAR / QUITAR VIDA --}}
 <div class="row mb-3">
     @include('dashboard.widgets.buscar_cliente')
-    @include('dashboard.partials.vista_quitar_vidas')
 </div>
 
 {{-- LLAMADA DE ATENCION --}}
-
-<div class="col-lg-12">
-    <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
-</div>
-
-
-
-{{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
-<div class="col-lg-12">
-    <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
-</div>
 
 
 <!-- MODAL -->
@@ -112,7 +100,6 @@
 {{-- FULLSCREEN --}}
 
 <div id="spinner" class="d-none"><!--position-relative d-flex justify-content-center -->
-
 
     <div class="position-relative top-50 start-50 translate-middle">
         <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
@@ -332,77 +319,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 </div>
 
-{{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
-<div class="conatiner-fluid">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card">
-            <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                    <h3 class="card-title text-uppercase">Pedidos actuales por día</h3>
-                    {{--<a href="javascript:void(0);">View Report</a>--}}
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <p class="d-flex flex-column">
-                            <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
-                            <span>Cantidad de pedidos del día</span>
-                        </p>
-                    </div>
-                </div>
-
-                <canvas id="visitors-chart" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-
-                <div class="row">
-                    <div class="col">
-                        <span class="text-uppercase">
-                            <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
-                        </span>
-                        <span class="mr-2 text-uppercase">
-                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
-                    </span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<br>
-
-{{-- SPARKLINE OLVA --}}
-<div class="conatiner-fluid">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card">
-            <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                    <h3 class="card-title text-uppercase">TOTAL RECAUDADO DE OLVA POR DÍA</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <span class="text-bold text-lg">{{$gasto_total_olva}}</span>
-                        <span>Cantidad total del día</span>
-                    </div>
-                </div>
-
-                <canvas id="visitors-chart-olva" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-
-                <div class="row">
-                    <div class="col">
-                        <span class="mr-2 text-uppercase">
-                            <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
-                        </span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
 
 @section('js-datatables')
     <script>
@@ -1033,116 +949,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //calendario1.render();
 
         });
-    </script>
-
-    <script>
-        $(function () {
-            var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
-            var mode = 'index'
-            var intersect = true
-            var $visitorsChart = $('#visitors-chart')
-            let $arrr = [{{$contadores_arr}}]
-            let $mes_actual = [{{$contadores_mes_actual}}]
-            let $mes_anterior = [{{$contadores_mes_anterior}}]
-            var visitorsChart = new Chart($visitorsChart, {
-                type: 'line',
-                data: {
-                    /*eje x: dias*/
-                    labels: $arrr,
-                    datasets: [{
-                        label:'Mes actual',
-                        /*azul*/
-                        type: 'line',
-                        data: $mes_actual,
-                        backgroundColor: 'transparent',
-                        borderColor: '#007bff',
-                        pointBorderColor: '#007bff',
-                        pointBackgroundColor: '#007bff',
-                        fill: false,
-                        tension:0.1
-                    }, {
-                        label:'Mes anterior',
-                        /*plomo*/
-                        type: 'line',
-                        data: $mes_anterior,
-                        backgroundColor: 'tansparent',
-                        borderColor: '#ced4da',
-                        pointBorderColor: '#ced4da',
-                        pointBackgroundColor: '#ced4da',
-                        fill: false,
-                        tension:0.1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    tooltips: {mode: mode, intersect: intersect},
-                    hover: {mode: mode, intersect: intersect},
-                    legend: {display: false},
-                    /*scales: {
-                        yAxes: [{
-                            gridLines: {
-                                display: true,
-                                lineWidth: '4px',
-                                color: 'rgba(0, 0, 0, .2)',
-                                zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 100}, ticksStyle)
-                        }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
-                    }*/
-                }
-            })
-        })
-
-        $(function () {
-            var ticksStyle = {fontColor: '#495057', fontStyle: 'bold'}
-            var mode = 'index'
-            var intersect = true
-
-            var $visitorsChartOlva = $('#visitors-chart-olva')
-            let $arrr = [{{$contadores_arr}}]
-            let $gasto_olva_dia = [{{$contadores_mes_actual_olva}}]
-
-            var $visitorsChartOlva = new Chart($visitorsChartOlva, {
-                type: 'line',
-                data: {
-                    labels: $arrr,
-                    datasets: [{
-                        label:'Gasto Olva',
-                        type: 'line',
-                        data: $gasto_olva_dia,
-                        backgroundColor: 'transparent',
-                        borderColor: '#17a2b8',
-                        pointBorderColor: '#17a2b8',
-                        pointBackgroundColor: '#17a2b8',
-                        fill: false,
-                        tension:0.1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    tooltips: {mode: mode, intersect: intersect},
-                    hover: {mode: mode, intersect: intersect},
-                    legend: {display: true},
-                    /*scales: {
-                        yAxes: [{
-                            gridLines: {
-                                display: true,
-                                lineWidth: '4px',
-                                color: 'rgba(0, 0, 0, .2)',
-                                zeroLineColor: 'transparent'
-                            }, ticks: $.extend({beginAtZero: true, suggestedMax: 400}, ticksStyle)
-                        }], xAxes: [{display: true, gridLines: {display: false}, ticks: ticksStyle}]
-                    }*/
-                    plugins:{
-                        legend:{
-                            display:true,
-                            labels:{
-                                color: 'rgb(255,99,132)'
-                            }
-                        }
-                    }
-                }
-            })
-        })
     </script>
 
 
