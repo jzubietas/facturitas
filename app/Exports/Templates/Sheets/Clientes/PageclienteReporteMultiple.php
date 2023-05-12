@@ -84,6 +84,11 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
         //$clientes=$clientes->limit(10);
         switch($cal_sit)
             {
+                case 'BLOQUEADO':
+                    $clientes=$clientes->whereIn('clientes.bloqueado',[1]);
+                case 'CONGELADO':
+                    $clientes=$clientes->whereIn('clientes.congelado',[1]);
+                break;
                 case 'PRETENDIDO':
                     $clientes=$clientes->whereIn('clientes.situacion',['PRETENDIDO']);
                     break;
@@ -108,9 +113,9 @@ class PageclienteReporteMultiple extends Export implements WithStyles, WithColum
                 case 'ABANDONO RECIENTE':
                     $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO RECIENTE']);
                     break;
-            case 'ACTIVO':
-                $clientes=$clientes->whereIn('clientes.situacion',['ACTIVO']);
-                break;
+                case 'ACTIVO':
+                    $clientes=$clientes->whereIn('clientes.situacion',['ACTIVO']);
+                    break;
                 default:break;
             }
 

@@ -1460,6 +1460,7 @@ class ClienteController extends Controller
             //->where('clientes.tipo', '1')
             ->whereNotIn('u.clave_pedidos',['B','15','16','17','18','19','99'])
             ->where('clientes.situacion',Cliente::BLOQUEADO)
+            ->where('clientes.bloqueado',1)
             ->groupBy(
                 'clientes.id',
                 'clientes.nombre',

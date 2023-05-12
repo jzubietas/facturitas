@@ -366,7 +366,8 @@ class BasefriaController extends Controller
                 'estado' => '0',
                 'path_adjunto_anular' => null,
                 'path_adjunto_anular_disk' => 'pstorage',
-                'situacion'=>'BLOQUEADO',
+                //'situacion'=>'BLOQUEADO',
+                'bloqueado'=>1
             ]);
 
             $html = $cliente;
