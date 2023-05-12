@@ -241,6 +241,18 @@ class ClienteController extends Controller
                     }
                 }
 
+                if (\auth()->user()->can('clientes.block')) {
+                    //if ($row->estado == '1') {
+                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="' . $row->id . '" data-asesor="' . trim($row->identificador) . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
+                    //}
+                }
+
+                if (\auth()->user()->can('clientes.freeze')) {
+                    //if ($row->estado == '1') {
+                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="' . $row->id . '" data-asesor="' . trim($row->identificador) . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
+                    //}
+                }
+
                 $btn = $btn . '<a href="" data-target="#modal-historial-situacion-cliente" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
 
                 if (
