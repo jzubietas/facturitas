@@ -12,23 +12,29 @@
     <div class="card">
         <div class="card-body">
             <div class="border rounded card-body border-secondary">
-                <div class="form-row">
-                    <table class="table table-active">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="col-lg-2" style="text-align: right;">ASESOR:</th>
-                            <th scope="col">{{ $pagos->users }}</th>
 
-                            <th scope="col" class="col-lg-2" style="text-align: right;">CLIENTE:</th>
-                            <th scope="col">{{ $pagos->celular }} - {{ $pagos->nombre }}</th>
-
-                            <th scope="col" colspan="" class="col-lg-2" style="text-align: right;">ESTADO:</th>
-                            <th scope="col">{{ $pagos->condicion }}</th>
-
-                        </tr>
-                        </thead>
-                    </table>
+                <div class="row">
+                    <div class="col">
+                        <label for="id_ingresomaterial">Cliente</label>
+                        <p>{{ $pagos->celular }} - {{ $pagos->nombre }}</p>
+                    </div>
+                    <div class="col">
+                        <label for="id_ingresomaterial">Asesor:</label>
+                        <p>{{ $pagos->users }}</p>
+                    </div>
+                    <div class="col">
+                        <label for="id_ingresomaterial">Estado:</label>
+                        <p>{{ $pagos->condicion }}</p>
+                    </div>
                 </div>
+                <div class="row justify-content-center">
+                    <div class="col-4">
+                        <label for="id_ingresomaterial">Pago subido por:</label>
+                        <p>{{-- $pagos->subio_pago --}}</p>
+                    </div>
+
+                </div>
+
             </div>
         </div>
         <div class="card-body">
