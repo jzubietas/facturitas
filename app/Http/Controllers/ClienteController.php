@@ -1217,10 +1217,10 @@ class ClienteController extends Controller
             ->where('clientes.tipo', '1')
             ->whereNotIn('clientes.user_clavepedido',['B','99'])
             ->when($request->has("situacion"), function ($query) use ($request) {
-                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE])->where('clientes.congelado','<>',1);
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE])->where('clientes.congelado','<>',1)->where('clientes.bloqueado','<>',1);
             })
             ->when(!$request->has("situacion"), function ($query) use ($request) {
-                $query->whereIn('clientes.situacion', [Cliente::ABANDONO])->where('clientes.congelado','<>',1);
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO])->where('clientes.congelado','<>',1)->where('clientes.bloqueado','<>',1);
             })
             ->groupBy(
                 'clientes.id',
@@ -2114,6 +2114,7 @@ class ClienteController extends Controller
             ->whereNotIn('u.clave_pedidos',['B','15','16'])
             ->whereIn('clientes.situacion', [Cliente::NUEVO])
             ->where('clientes.congelado','<>',1)
+            ->where('clientes.bloqueado','<>',1)
             ->groupBy(
                 'clientes.id',
                 'clientes.nombre',
@@ -2228,6 +2229,7 @@ class ClienteController extends Controller
             ->where('clientes.tipo', '1')
             ->whereIn('clientes.situacion', [Cliente::RECURRENTE])
             ->where('clientes.congelado','<>',1)
+            ->where('clientes.bloqueado','<>',1)
             ->groupBy(
                 'clientes.id',
                 'clientes.nombre',
@@ -2341,6 +2343,7 @@ class ClienteController extends Controller
             ->where('clientes.tipo', '1')
             ->whereIn('clientes.situacion', [Cliente::RECUPERADO_ABANDONO,Cliente::RECUPERADO_RECIENTE,Cliente::RECUPERADO,Cliente::LEVANTADO,Cliente::NUEVO])
             ->where('clientes.congelado','<>',1)
+            ->where('clientes.bloqueado','<>',1)
             ->groupBy(
                 'clientes.id',
                 'clientes.nombre',
@@ -2454,6 +2457,7 @@ class ClienteController extends Controller
             ->where('clientes.tipo', '1')
             ->whereIn('clientes.situacion', [Cliente::LEVANTADO])
             ->where('clientes.congelado','<>',1)
+            ->where('clientes.bloqueado','<>',1)
             ->groupBy(
                 'clientes.id',
                 'clientes.nombre',
@@ -2572,6 +2576,7 @@ class ClienteController extends Controller
                 $query->whereIn('clientes.situacion', [Cliente::RECUPERADO_PERMANENTE]);
             })
             ->where('clientes.congelado','<>',1)
+            ->where('clientes.bloqueado','<>',1)
             ->groupBy(
                 'clientes.id',
                 'clientes.nombre',
@@ -2685,6 +2690,7 @@ class ClienteController extends Controller
         $query->whereIn('clientes.situacion', [Cliente::SITUACION_NULO]);
       })
         ->where('clientes.congelado','<>',1)
+        ->where('clientes.bloqueado','<>',1)
       ->groupBy([
         'clientes.id',
         'clientes.nombre',
