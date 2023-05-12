@@ -783,10 +783,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva(8);
                 cargaNueva(9);
 
-                cargaNueva17(17);
+
                 cargaNueva17(37);
 
-                cargaNuevaCalendario(17);
+
 
 
                 cargReporteMetasCobranzasGeneral();
@@ -811,13 +811,13 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //cargaNueva(15);//paola
             //totales porcentajes debajo de metas
 
-            cargaNueva17(17);
+
 
 
 
             cargaNueva17(37);
 
-            cargaNuevaCalendario(17);
+
 
 
             cargReporteAnalisis();
@@ -850,10 +850,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //cargaNueva(14);//fernando
                 //cargaNueva(15);//paola
                 //totales porcentajes debajo de metas
-                cargaNueva17(17);
+
                 cargaNueva17(37);
 
-                cargaNuevaCalendario(17);
+               
 
 
                 cargReporteMetasSituacionClientes();
