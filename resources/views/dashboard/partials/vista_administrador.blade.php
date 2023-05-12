@@ -258,6 +258,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </button>
             </div>
             <div class="col-lg-12" id="metas_dp_17"></div>
+            <div class="col-lg-12" id="metas_dp_17_calendario"></div>
         </div>
         <div class="row">
             <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
@@ -684,7 +685,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             $(".h1-change-day").attr('style', 'color: blue !important');
                     }
                     if (entero === 17) {
-                        $('#metas_dp_17').html(resultado);
+                        $('#metas_dp_17_calendario').html(resultado);
                     }else if (entero === 37) {
                         $('#metas_asesores_total_dp17').html(resultado);
                     }

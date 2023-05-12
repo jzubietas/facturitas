@@ -79,6 +79,7 @@
 {{-- BUSCAR / QUITAR VIDA --}}
 <div class="row mb-3">
     @include('dashboard.widgets.buscar_cliente')
+    @include('dashboard.partials.vista_quitar_vidas')
 </div>
 
 {{-- LLAMADA DE ATENCION --}}
@@ -86,6 +87,8 @@
 <div class="col-lg-12">
     <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
 </div>
+
+
 
 {{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
 <div class="col-lg-12">
@@ -171,6 +174,34 @@
 
 </div>
 
+<div class="modal" id="modal-publicidad-calendario-add">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Modal</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <x-publicidad-calendario-add></x-publicidad-calendario-add>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <div class="row">
     <div class="col-lg-12 bg-white" id="contenedor-fullscreen-g2">
 
@@ -220,11 +251,21 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             </div>
         </div>
         {{-- FIN-TABLA-DUAL --}}
-
-        <div class="col-lg-12" id="metas_dp_17"></div>
-        <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
-
-        <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-publicidad-calendario-add">
+                    Agregar
+                </button>
+            </div>
+            <div class="col-lg-12" id="metas_dp_17"></div>
+            <div class="col-lg-12" id="metas_dp_17_calendario"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
+        </div>
 
     </div>
 
@@ -644,7 +685,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                             $(".h1-change-day").attr('style', 'color: blue !important');
                     }
                     if (entero === 17) {
-                        $('#metas_dp_17').html(resultado);
+                        $('#metas_dp_17_calendario').html(resultado);
                     }else if (entero === 37) {
                         $('#metas_asesores_total_dp17').html(resultado);
                     }
