@@ -17,6 +17,8 @@ class Meta extends Model
         'id',
         'rol',
         'user_id',
+        'identificador',
+        'user_clavepedido',
         'email',
         'anio',
         'mes',
