@@ -7,28 +7,37 @@
         <div class="card-title">Publicidad agregar calendario</div>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    {!! Form::Label('item_id', 'Item:') !!}
-                    {!! Form::select('item_id', $publicidad, '', ['class' => 'form-control select2']) !!}
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    {!! Form::Label('CalendarDateTime', 'Fecha:') !!}
-                    <input type="text" value="" id="CalendarDateTime" name="CalendarDateTime" class="form-control">
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    {!! Form::Label('amount', 'Cantidad:') !!}
-                    {!! Form::input('number', 'amount', null, ['class' => 'form-control number']) !!}
-                </div>
 
+        <form id="formpublicidadcalendarioadd" name="formpublicidadcalendarioadd">
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        {!! Form::Label('item_id', 'Item:') !!}
+                        {!! Form::select('item_id', $publicidad, '', ['class' => 'form-control select2']) !!}
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        {!! Form::Label('CalendarDateTime', 'Fecha:') !!}
+                        <input type="text" value="" id="CalendarDateTime" name="CalendarDateTime" class="form-control">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        {!! Form::Label('amount', 'Cantidad:') !!}
+                        {!! Form::input('number', 'amount', null, ['class' => 'form-control number']) !!}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
 
-        </div>
+        </form>
 
 
 
@@ -61,6 +70,29 @@
                     //$("#errmsg").html("Number Only").stop().show().fadeOut("slow");
                     return false;
                 }
+            });
+
+            $(document).on("submit","#formpublicidadcalendarioadd",function(event) {
+                event.preventDefault();
+                let formData = new FormData();
+                //let formData = $("#formpublicidadcalendarioadd").serialize();
+                formData.append('item_id',$('#item_id').val());
+                formData.append('CalendarDateTime',$('#CalendarDateTime').val());
+                formData.append('amount',$('#amount').val());
+                console.log(formData);
+
+                $.ajax({
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('dashboard.publicidad.calendario.add') }}",
+                    success: function (data) {
+                        console.log("grabado");
+                        $("#modal-publicidad-calendario-add").modal("hide");
+                    }
+                })
+
             });
         });
     </script>

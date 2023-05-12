@@ -178,6 +178,23 @@ class DashboardController extends Controller
 
     }
 
+    public function addPublicidadCalendario(Request $request)
+    {
+        $publicidad = $request->get("item_id");//72
+        $fecha = $request->get('CalendarDateTime');
+        $fecha =trim($fecha);
+        if($fecha!='')
+        {
+            $fecha=Carbon::parse($fecha)->format('Y-m-d');
+        }
+        echo $fecha;
+
+        $monto = $request->get('amount');
+
+        //buscar
+
+    }
+
     public function widgets(Request $request)
     {
         $widget1 = new PedidosMesCountProgressBar();
