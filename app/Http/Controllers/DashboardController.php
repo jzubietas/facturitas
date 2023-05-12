@@ -12156,7 +12156,12 @@ class DashboardController extends Controller
                 ->where('anio', $fechametames->format('Y'))
                 ->where('mes', $fechametames->format('m'))->first();
 
-            $html .= $asesor->clave_pedidos.'|'.$fechametames->format('Y').'|'.$fechametames->format('m').'<br>';
+            if($meta_calculo_row==null)
+            {
+                \Log::info("Error en meta_dashboard para asesor id -> " . $asesor->id." en periodo ".$fechametames);
+            }
+
+            //$html .= $asesor->clave_pedidos.'|'.$fechametames->format('Y').'|'.$fechametames->format('m').'<br>';
             $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
             $metatotal_intermedia = (float)$meta_calculo_row->meta_intermedia;
             $metatotal_1 = (float)$meta_calculo_row->meta_pedido;
