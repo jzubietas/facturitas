@@ -9132,11 +9132,11 @@ class DashboardController extends Controller
             //72
             $html .= '<tr>';
             $html .= '<th colspan="2">Total Publicidad</th>';
-            $html .= '<th>Inicio</th>';
+            $html .= '<th></th>';
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $count_1 = Publicidad::query()->where('email','Dante@ojoceleste.com')->first()->total;
+                $count_1 = Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->first()->total;
                 $html .= '<th>'.$count_1.'</th>';
             }
             $html .= '</tr>';
@@ -9144,10 +9144,11 @@ class DashboardController extends Controller
             //95
             $html .= '<tr>';
             $html .= '<th colspan="2">Total Dante</th>';
+            $html .= '<th></th>';
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $count_2 = Publicidad::query()->where('email','Dante@ojoceleste.com')->first()->total;
+                $count_2 = Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->first()->total;
                 $html .= '<th>'.$count_2.'</th>';
             }
             $html .= '</tr>';
