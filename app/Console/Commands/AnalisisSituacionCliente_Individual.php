@@ -60,7 +60,10 @@ class AnalisisSituacionCliente_Individual extends Command
 
 
 
-      $clientes=Cliente::whereIn('tipo',['0','1'])->where('id',$cliente_id)->orderBy('id','asc')->get();
+      $clientes=Cliente::whereIn('tipo',['0','1'])->where('id',$cliente_id)
+          ->where('congelado','<>',1)
+          ->where('bloqueado','<>',1)
+          ->orderBy('id','asc')->get();
       //->where('id',1739) //->where('id',45)
       $progress = $this->output->createProgressBar($clientes->count());
       //$periodo_original=$primer_periodo;
