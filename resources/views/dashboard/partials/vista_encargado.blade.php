@@ -1,3 +1,15 @@
+@push('css')
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/timeline@4.4.2/main.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@4.4.2/main.min.css" rel="stylesheet" />
+    <style>
+        .table td, .table th
+        {
+            padding: .25rem !important;
+        }
+    </style>
+@endpush
+
 @yield('css-datatables')
 
 {{-- BIENVENIDA --}}
@@ -76,6 +88,8 @@
     <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
 </div>
 
+
+
 {{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
 <div class="col-lg-12">
     <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
@@ -117,7 +131,11 @@
             <button class="btn btn-success btn-md" id="fechametames-button">Fecha hoy</button>
         </div>
     </div>
-    <div class="card-footer"></div>
+    <div class="card-footer text-center">
+        <buton style="background: none; border: none;" onclick="openFullscreen();">
+            <i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i>
+        </buton>
+    </div>
 </div>
 
 <!--grafico metas de asesor de pedidos-->
@@ -127,20 +145,28 @@
         <div class="" style=" overflow: hidden !important;">
             <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
                 <div class="row">
-
-                    @if (auth()->user()->id==24)
-                        <div class="col-lg-12 col-md-12 col-sm-12" id="metas_dp_1"></div>
-                    @endif
-
-                    @if (auth()->user()->id==46)
-                        <div class="col-lg-12 col-md-12 col-sm-12" id="metas_dp_2"></div>
-                    @endif
-
+                    <div class="col-lg-6 col-md-6 col-sm-6" id="metas_dp_1"></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6" id="metas_dp_2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12" id="metas_dp_3"></div>
                 </div>
 
             </div>
         </div>
         {{-- FIN-TABLA-DUAL --}}
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="metas_total_general"></div>
+        </div>
+
+        <div class="col-lg-12" id="metas_dp_99"></div>
+
+        <div class="col-md-12 bg-white">
+            <div id="metas_situacion_clientes"></div>
+        </div>
+
+
 
     </div>
 
@@ -148,11 +174,161 @@
 
 </div>
 
+<div class="modal" id="modal-publicidad-calendario-add">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Modal</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <x-publicidad-calendario-add></x-publicidad-calendario-add>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12 bg-white" id="contenedor-fullscreen-g2">
+
+        <div class="row">
+            <div class="col-3 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
+                    <p id="porcentaje_cobranzas_metas_g2" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                </div>
+            </div>
+            <div class="col-6 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h2 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
+background: #FFFFFF;
+text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0 0 #242120, 0 2px 0 #242120, -2px 0 0 #242120, 0 -2px 0 #242120;">Metas del mes
+                        de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h2>
+                    <button style="background: none; border: none" onclick="openFullscreen2();">
+                        <i class="fas fa-expand-arrows-alt ml-3"
+                           style="font-size: 20px"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-3 bg-white">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h5 class="card-title text-uppercase">Total de pedidos:</h5>
+                    <p id="porcentaje_pedidos_metas_g2" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
+                </div>
+            </div>
+
+        </div>
+
+        {{-- TABLA DUAL --}}
+        <div class="" style=" overflow: hidden !important;">
+            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
+                <div class="row">
+                    <div class="contain-table-dual row" style="width: 100% !important;">
+                        <div class="col-lg-6" id="metas_asesores_g2_a"></div>
+                        <div class="col-lg-6" id="metas_asesores_g2_b"></div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="metas_asesores_total_g2"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {{-- FIN-TABLA-DUAL --}}
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-publicidad-calendario-add">
+                    Agregar
+                </button>
+            </div>
+            <div class="col-lg-12" id="metas_dp_17"></div>
+            <div class="col-lg-12" id="metas_dp_17_calendario"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="calendario1" style="padding:2px"></div>
+        </div>
+    </div>
+</div>
+
+<div class ="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <br><br>
+            <h1 class="text-center">CLIENTES LEVANTADOS/CAIDOS (%)</h1>
+        </div>
+        <div class="contain-table-dual row" style="width: 100% !important;">
+            <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
+            <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="dejaronpedir_supervisor_total"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="col-md-12 bg-white">
+    <div class="card bg-cyan">
+        <div class="card-header">
+            <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
+        </div>
+        <div class="card-body">
+            <div id="metas_cobranzas_general"></div>
+        </div>
+        <div class="card-fotter"></div>
+    </div>
+
+</div>
 <br>
 
 {{-- METAS ASESOR DE LLAMADAS --}}
+<div class="container-fluid bg-white" id="contenedor-fullscreen-llamadas">
+    <div class="col-md-12 d-flex justify-content-center align-items-center">
+        <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
+background: #FFFFFF;
+text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">
+            Metas Llamadas/Cobranzas
+            de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
+        <button style="background: none; border: none" onclick="openFullscreenllamadas();">
+            <i class="fas fa-expand-arrows-alt ml-3"
+               style="font-size: 20px"></i>
+        </button>
+    </div>
 
+
+
+</div>
 
 {{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
 <div class="conatiner-fluid">
@@ -336,9 +512,6 @@
                     } else if (entero === 15) {
                         $('#dejaronpedir_supervisor_B').html(resultado);
                     }
-                    else if (entero === 17) {
-                        $('#metas_dp_17').html(resultado);
-                    }
                     //otro bloque segun virginia
                     else if (entero === 21) {
                         $('#metas_asesores_g2_a').html(resultado);
@@ -481,6 +654,83 @@
             })
         }
 
+        window.cargaNuevaCalendario = function (entero) {
+            var fd = new FormData();
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable_G17_Calendario') }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero===1 || entero===2)
+                    {
+                        console.log("cambiar color");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+                    if (entero === 17) {
+                        $('#metas_dp_17_calendario').html(resultado);
+                    }else if (entero === 37) {
+                        $('#metas_asesores_total_dp17').html(resultado);
+                    }
+                }
+            })
+        }
+
+        window.cargaNueva99 = function (entero) {
+            console.log(' ' + entero)
+            var fd = new FormData();
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable_G99') }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero===1 || entero===2)
+                    {
+                        console.log("cambiar color");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+                    if (entero === 99) {
+                        $('#metas_dp_99').html(resultado);
+                    }
+                }
+            })
+        }
+
         window.cargaNuevaRecurrenteActivo = function (entero) {
             console.log(' ' + entero)
             var fd = new FormData();
@@ -604,16 +854,9 @@
                 cargaNuevaGeneral(0);
 
                 //grupo 1
-                @if (auth()->user()->id==24)
                 cargaNueva(1);
-                cargaNueva(3);
-                @endif
-
-                @if (auth()->user()->id==46)
                 cargaNueva(2);
                 cargaNueva(3);
-                @endif
-
 
                 //porcentajes grupo 2
                 cargaNueva2(26);
@@ -625,22 +868,20 @@
                 cargaNueva17(17);
                 cargaNueva17(37);
 
+                cargaNuevaCalendario(17);
+
+                cargaNueva99(99);
+
                 cargReporteMetasCobranzasGeneral();
 
             });
 
             cargaNuevaGeneral(0);
 
-
-            @if (auth()->user()->id==24)
+            //grupo 1
             cargaNueva(1);
-            cargaNueva(3);
-            @endif
-
-            @if (auth()->user()->id==46)
             cargaNueva(2);
             cargaNueva(3);
-            @endif
 
             //porcentaje grupo 2
             cargaNueva2(26);
@@ -654,7 +895,14 @@
             //totales porcentajes debajo de metas
 
             cargaNueva17(17);
+
+
+
             cargaNueva17(37);
+
+            cargaNuevaCalendario(17);
+
+            cargaNueva99(99);
 
             cargReporteAnalisis();
             cargReporteMetasSituacionClientes();
@@ -663,20 +911,17 @@
 
             //grafico_metas_asesores();
 
-            setInterval(myTimer, 60000);
+            setInterval(myTimer, 90000);
 
             function myTimer() {
                 console.log("recargando")
 
                 cargaNuevaGeneral(0);
 
-                @if (auth()->user()->id==24)
+                //grupo 1
                 cargaNueva(1);
-                @endif
-
-                @if (auth()->user()->id==46)
                 cargaNueva(2);
-                @endif
+                cargaNueva(3);
 
                 //porcentaje grupo 2
                 cargaNueva2(26);
@@ -691,6 +936,10 @@
                 //totales porcentajes debajo de metas
                 cargaNueva17(17);
                 cargaNueva17(37);
+
+                cargaNuevaCalendario(17);
+
+                cargaNueva99(99);
 
                 cargReporteMetasSituacionClientes();
 
@@ -733,6 +982,53 @@
                     elem_llamada.msRequestFullscreen();
                 }
             }
+
+        });
+    </script>
+
+    <script src=" {{asset('plugins/moment/moment.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timeline@4.4.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-common@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@4.4.2/main.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            /*let calendarEl = document.getElementById('calendario1');
+
+            let calendario1 = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['resourceTimeline', 'interaction'],
+                droppable: true,
+                locale: 'es',
+                showNonCurrentDates: false,
+                header: {
+                    left: 'today,prev,next',
+                    center: 'title',
+                    right: 'resourceTimelineWeek'
+                },
+                aspectRatio: 1.5,
+                defaultView: 'resourceTimelineWeek',
+                resourceAreaWidth: '40%',
+                resourceColumns: [
+                    {
+                        group: false,
+                        labelText: 'Publicidad',
+                        field: 'users'
+                    },
+                ],
+                resources: [
+                    { id: 'a', users: 'Publicidad 1' },
+                    { id: 'b', users: 'Publicidad 2' },
+                    { id: 'g', users: 'Publicidad 3' },
+                    { id: 'h', users: 'Publicidad 4' },
+                    { id: 'z', users: 'Publicidad 5' }
+                ]
+            });*/
+
+            //calendario1.render();
 
         });
     </script>
