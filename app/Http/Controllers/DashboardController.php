@@ -195,7 +195,7 @@ class DashboardController extends Controller
         $fecha =trim($fecha);
         if($fecha!='')
         {
-            $fecha=Carbon::parse($fecha)->format('Y-m-d');
+            $fecha=Carbon::parse($fecha)->format('Y-d-m');
         }
         $monto = $request->get('amount');
         $search=Publicidad::query()->where('name','Total Publicidad')->where('cargado',$fecha)
