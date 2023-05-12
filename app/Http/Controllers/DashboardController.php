@@ -2258,23 +2258,51 @@ class DashboardController extends Controller
             $total_asesor = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->count();
         }
         else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
+
+            if($request->ii==1)$encargado=24;
+            if($request->ii==2)$encargado=46;
+
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 //->where('excluir_meta', '<>', '1')
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 //->where('excluir_meta', '<>', '1')
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })
                 ->count();
         }
         else if (auth()->user()->rol == User::ROL_LLAMADAS) {
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
+
+            if($request->ii==1)$encargado=24;
+            if($request->ii==2)$encargado=46;
+
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 //->where('excluir_meta', '<>', '1')
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 //->where('excluir_meta', '<>', '1')
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })
                 ->count();
         }
         else if (auth()->user()->rol == User::ROL_FORMACION) {
@@ -2284,12 +2312,12 @@ class DashboardController extends Controller
             if($request->ii==2)$encargado=46;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'])
+                ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'])
+                ->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
