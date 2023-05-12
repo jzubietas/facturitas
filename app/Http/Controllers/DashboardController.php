@@ -6640,21 +6640,21 @@ class DashboardController extends Controller
         }
         else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
                 //->where('excluir_meta', '<>', '1')
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
                 //->where('excluir_meta', '<>', '1')
                 ->count();
         }
         else if (auth()->user()->rol == User::ROL_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
                 //->where('excluir_meta', '<>', '1')
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
                 //->where('excluir_meta', '<>', '1')
                 ->count();
         }
@@ -8157,21 +8157,21 @@ class DashboardController extends Controller
         }
         else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
                 //->where('excluir_meta', '<>', '1')
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
                 //->where('excluir_meta', '<>', '1')
                 ->count();
         }
         else if (auth()->user()->rol == User::ROL_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
                 //->where('excluir_meta', '<>', '1')
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereNotIn('clave_pedidos',['17','18','19'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
                 //->where('excluir_meta', '<>', '1')
                 ->count();
         }
