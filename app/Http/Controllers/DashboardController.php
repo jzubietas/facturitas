@@ -9136,8 +9136,13 @@ class DashboardController extends Controller
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $count_1 = Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->first()->total;
-                $html .= '<th>'.$count_1.'</th>';
+                $count_1 = Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->count();
+                if($count_1==1)
+                {
+                    $count_1=Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->first();
+                    $html .= '<th>'.$count_1->total.'</th>';
+                }
+
             }
             $html .= '</tr>';
 
@@ -9148,8 +9153,13 @@ class DashboardController extends Controller
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $count_2 = Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->first()->total;
-                $html .= '<th>'.$count_2.'</th>';
+                $count_2 = Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->count();
+                if($count_2==1)
+                {
+                    $count_2=Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->first();
+                    $html .= '<th>'.$count_2->total.'</th>';
+                }
+
             }
             $html .= '</tr>';
 
