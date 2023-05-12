@@ -1086,15 +1086,7 @@ class PagoController extends Controller
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->leftJoin('users as ub','pagos.user_reg','ub.id')
             ->select(['pagos.id',
-                DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
-                                '-',pagos.id
-                                )
-                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
-                                '-',pagos.id)
-                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
-                                '-',pagos.id)
-                            ELSE concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
-                                '-',pagos.id) END) AS id2"),
+                'pagos.correlativo as id2',
                 'u.name as users',
                 'c.celular', //cliente
                 'c.nombre', //cliente
