@@ -187,11 +187,22 @@ class DashboardController extends Controller
         {
             $fecha=Carbon::parse($fecha)->format('Y-m-d');
         }
-        echo $fecha;
+
+
+        //echo $fecha;
+        //$status
+
 
         $monto = $request->get('amount');
+        $array=[
+
+        ];
 
         //buscar
+
+        return response()->json([
+            "html" => array('status' => $status, 'data' => $data)
+        ]);
 
     }
 
@@ -9078,7 +9089,7 @@ class DashboardController extends Controller
             }
 
             $html .= '<tr>';
-            $html .= '<td class="text-center font-weight-bold" colspan="3">TOTAL</td>';
+            $html .= '<td class="text-center font-weight-bold" colspan="3">TOTAL NETO</td>';
 
             $html .= '<td class="bg-warning font-weight-bold">'.$object_totales['chats'].'</td>';
 
@@ -9096,8 +9107,7 @@ class DashboardController extends Controller
 
             //72
             $html .= '<tr>';
-            $html .= '<th>Luis</th>';
-            $html .= '<th>Id</th>';
+            $html .= '<th colspan="2">Total Publicidad</th>';
             $html .= '<th>Inicio</th>';
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
@@ -9109,9 +9119,7 @@ class DashboardController extends Controller
 
             //95
             $html .= '<tr>';
-            $html .= '<th>Dante</th>';
-            $html .= '<th>Id</th>';
-            $html .= '<th>Inicio</th>';
+            $html .= '<th colspan="2">Total Dante</th>';
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
