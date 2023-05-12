@@ -9141,6 +9141,8 @@ class DashboardController extends Controller
                 {
                     $count_1=Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->first();
                     $html .= '<th>'.$count_1->total.'</th>';
+                }else{
+                    $html .= '<th>0</th>';
                 }
 
             }
@@ -9158,6 +9160,8 @@ class DashboardController extends Controller
                 {
                     $count_2=Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->first();
                     $html .= '<th>'.$count_2->total.'</th>';
+                }else{
+                    $html .= '<th>0</th>';
                 }
 
             }
