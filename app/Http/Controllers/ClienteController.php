@@ -237,7 +237,7 @@ class ClienteController extends Controller
 
                 if (\auth()->user()->can('clientes.destroy')) {
                     if ($row->estado == '1') {
-                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="' . $row->id . '" data-asesor="' . trim($row->identificador) . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
+                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="' . $row->id . '" data-asesor="' . trim($row->identificador) . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                     }
                 }
 
@@ -249,7 +249,7 @@ class ClienteController extends Controller
 
                 if (\auth()->user()->can('clientes.freeze')) {
                     //if ($row->estado == '1') {
-                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="' . $row->id . '" data-asesor="' . trim($row->identificador) . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
+                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="' . $row->id . '" data-asesor="' . trim($row->identificador) . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Congelar</button></a>';
                     //}
                 }
 
