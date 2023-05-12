@@ -26,6 +26,7 @@ class PublicidadCalendarioAdd extends Component
     {
         //cargar asistente publicicad
         $publicidad=User::query()->where('rol',User::ROL_ASISTENTE_PUBLICIDAD)->activo()
+            ->whereIn('id',[72,95])
             ->pluck('name','id');
 
         return view('components.publicidad-calendario-add',compact('publicidad'));
