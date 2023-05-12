@@ -9037,7 +9037,7 @@ class DashboardController extends Controller
 
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                $html .= '<td class="text-danger">'.$object_totales[date("Y-m-d", $i)].'</td>';
+                $html .= '<td class="warning font-weight-bold">'.$object_totales[date("Y-m-d", $i)].'</td>';
                 //$object_totales[date("Y-m-d", $i)]=collect($progressData)->pluck(date("Y-m-d", $i))->sum();
             }
 
