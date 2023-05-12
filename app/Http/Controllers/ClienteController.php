@@ -460,15 +460,20 @@ class ClienteController extends Controller
             ->limit(1)
             ->first();
         $porcentaje_retorno=0;
-        if($ultimopedido)
+        if(auth()->user()->rol==User::ROL_JEFE_LLAMADAS)
         {
-            $ultimopedido_fecha=Carbon::parse($ultimopedido->created_at)->format('Y_m');
-            $mes_situacion_up='s_'.$ultimopedido_fecha;
-            $mes_situacion_actual=''.date('Y').'_'.date('M');
-            /*if($ultimopedido_fecha==$mes_situacion_actual)
+            $porcentaje_retorno=1.0;
+        }else
+        {
+            if($ultimopedido)
             {
-                $situacion='LEVANTADO';
-            }else*/{
+                $ultimopedido_fecha=Carbon::parse($ultimopedido->created_at)->format('Y_m');
+                $mes_situacion_up='s_'.$ultimopedido_fecha;
+                $mes_situacion_actual=''.date('Y').'_'.date('M');
+                /*if($ultimopedido_fecha==$mes_situacion_actual)
+                {
+                    $situacion='LEVANTADO';
+                }else*/{
                 $fecha = now()->startOfDay();
                 $fecha_comparar=Carbon::parse($ultimopedido->created_at)->startOfDay();
                 $count=$fecha_comparar->diffInMonths($fecha);
@@ -489,48 +494,50 @@ class ClienteController extends Controller
                         break;
                 }
             }
-            $asesor=Cliente::where("id",$cliente->id)->first()->user_id;
-            $asesor_identi=User::where('id',$asesor)->first()->identificador;
-            $ultimopedido_fecha_comparacion=Carbon::parse($ultimopedido->created_at)
-                ->startOfMonth()
-                ->startOfDay()
-                ->format('Y-m-d');
+                $asesor=Cliente::where("id",$cliente->id)->first()->user_id;
+                $asesor_identi=User::where('id',$asesor)->first()->identificador;
+                $ultimopedido_fecha_comparacion=Carbon::parse($ultimopedido->created_at)
+                    ->startOfMonth()
+                    ->startOfDay()
+                    ->format('Y-m-d');
 
-            if($asesor_identi=='01')
-            {
-                $mes_submonth_nov=Carbon::now()->startOfMonth()->subMonths(5);//noviembre
-                if($situacion=='ABANDONO' &&
-                    (   $mes_submonth_nov->startOfMonth()->format('Y-m-d')   >=$ultimopedido_fecha_comparacion  &&
-                        $ultimopedido_fecha_comparacion             <=$mes_submonth_nov->endOfMonth()->format('Y-m-d')
-                    )
-                )
+                if($asesor_identi=='01')
                 {
-                    $porcentaje_retorno=1.5;
-                }
-            }
-            else{
-                $mes_submonth_dic=Carbon::now()->startOfMonth()->subMonths(4);//diciembre
-                $mes_submonth_nov=Carbon::now()->startOfMonth()->subMonths(5);//noviembre
-                $mes_submonth_oct=Carbon::now()->startOfMonth()->subMonths(6);//octubre
-                //dd($mes_submonth_dic->clone()->startOfMonth()->startOfDay()->format('Y-m'));
-                if($situacion=='ABANDONO' &&
-                    (   $mes_submonth_dic->startOfMonth()->format('Y-m-d')   >=$ultimopedido_fecha_comparacion  &&
-                        $ultimopedido_fecha_comparacion             <=$mes_submonth_dic->endOfMonth()->format('Y-m-d')
+                    $mes_submonth_nov=Carbon::now()->startOfMonth()->subMonths(5);//noviembre
+                    if($situacion=='ABANDONO' &&
+                        (   $mes_submonth_nov->startOfMonth()->format('Y-m-d')   >=$ultimopedido_fecha_comparacion  &&
+                            $ultimopedido_fecha_comparacion             <=$mes_submonth_nov->endOfMonth()->format('Y-m-d')
+                        )
                     )
-                ){
-                    $porcentaje_retorno=1.8;
+                    {
+                        $porcentaje_retorno=1.5;
+                    }
                 }
-                else if($situacion=='ABANDONO' &&
-                    $ultimopedido_fecha_comparacion < $mes_submonth_nov->startOfMonth()->format('Y-m-d')
-                ){
-                    $porcentaje_retorno=1.8;
-                }
-                else if($situacion=='ABANDONO' &&
-                    $ultimopedido_fecha_comparacion>= $mes_submonth_nov->startOfMonth()->format('Y-m-d')){
-                    $porcentaje_retorno=1.5;
+                else{
+                    $mes_submonth_dic=Carbon::now()->startOfMonth()->subMonths(4);//diciembre
+                    $mes_submonth_nov=Carbon::now()->startOfMonth()->subMonths(5);//noviembre
+                    $mes_submonth_oct=Carbon::now()->startOfMonth()->subMonths(6);//octubre
+                    //dd($mes_submonth_dic->clone()->startOfMonth()->startOfDay()->format('Y-m'));
+                    if($situacion=='ABANDONO' &&
+                        (   $mes_submonth_dic->startOfMonth()->format('Y-m-d')   >=$ultimopedido_fecha_comparacion  &&
+                            $ultimopedido_fecha_comparacion             <=$mes_submonth_dic->endOfMonth()->format('Y-m-d')
+                        )
+                    ){
+                        $porcentaje_retorno=1.8;
+                    }
+                    else if($situacion=='ABANDONO' &&
+                        $ultimopedido_fecha_comparacion < $mes_submonth_nov->startOfMonth()->format('Y-m-d')
+                    ){
+                        $porcentaje_retorno=1.8;
+                    }
+                    else if($situacion=='ABANDONO' &&
+                        $ultimopedido_fecha_comparacion>= $mes_submonth_nov->startOfMonth()->format('Y-m-d')){
+                        $porcentaje_retorno=1.5;
+                    }
                 }
             }
         }
+
         return view('clientes.edit', compact('cliente', 'users', 'p_fsb','p_fcb','p_esb','p_ecb', 'mirol','porcentaje_retorno'));
     }
 
