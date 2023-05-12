@@ -181,27 +181,51 @@ class DashboardController extends Controller
     public function addPublicidadCalendario(Request $request)
     {
         $publicidad = $request->get("item_id");//72
+
+        switch ($publicidad)
+        {
+            case '72':
+                $publicidad='TOTAL PUBLICIDAD';
+                break;
+            case '95':
+                $publicidad='TOTAL DANTE';
+                break;
+        }
         $fecha = $request->get('CalendarDateTime');
         $fecha =trim($fecha);
         if($fecha!='')
         {
             $fecha=Carbon::parse($fecha)->format('Y-m-d');
         }
-
-
-        //echo $fecha;
-        //$status
-
-
         $monto = $request->get('amount');
-        $array=[
-
-        ];
-
-        //buscar
+        $search=Publicidad::query()->where('name','Total Publicidad')->where('cargado',$fecha)
+            ->count();
+        $status=0;
+        $data='';
+        if($search==0)
+        {
+            Publicidad::create([
+                'name'=>$publicidad,
+                'email'=>'',
+                'cargado'=>$fecha,
+                'total'=>$monto,
+                'created_at'=>now(),
+                'estado'=>1
+            ]);
+            $status=1;
+            $data='Registro satisfactorio';
+        }else{
+            Publicidad::where('name','Total Publicidad')->where('cargado',$fecha)
+                ->update([
+                    'total'=>$monto,
+                    'updated_at'=>now(),
+                ]);
+            $status=1;
+            $data='Actualizacion exitosa';
+        }
 
         return response()->json([
-            "html" => array('status' => $status, 'data' => $data)
+            "html" => array('status' => $status, 'msm' => $data)
         ]);
 
     }

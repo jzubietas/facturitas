@@ -13,6 +13,8 @@ class Publicidad extends Model
     use HasFactory;
     use CommonModel;
 
+    protected $guarded = ['id'];
+
     protected $table = 'publicidad';
 
     protected $fillable = [
