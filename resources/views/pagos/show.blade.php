@@ -30,7 +30,7 @@
                 <div class="row justify-content-center">
                     <div class="col-4">
                         <label for="id_ingresomaterial">Pago subido por:</label>
-                        <p>{{-- $pagos->subio_pago --}}</p>
+                        <p>{{ $pagos->subio_pago }}</p>
                     </div>
 
                 </div>

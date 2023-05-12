@@ -1084,6 +1084,7 @@ class PagoController extends Controller
     {
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+            ->leftJoin('users as ub','pagos.user_reg','ub.id')
             ->select(['pagos.id',
                 DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
                                 '-',pagos.id
@@ -1100,19 +1101,10 @@ class PagoController extends Controller
                 'pagos.observacion',
                 'pagos.condicion',
                 'pagos.estado',
-                'pagos.created_at as fecha'
+                'pagos.created_at as fecha',
+                'ub.name as  subio_pago',
             ])
             ->where('pagos.id', $pago->id)
-            ->groupBy('pagos.id',
-                'u.name',
-                'u.identificador',
-                'c.celular',
-                'c.nombre',
-                'pagos.observacion',
-                'pagos.condicion',
-                'pagos.estado',
-                'pagos.created_at'
-            )
             ->first();
 
         $pagoPedidos = PagoPedido::join('pedidos as p', 'pago_pedidos.pedido_id', 'p.id')
