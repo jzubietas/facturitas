@@ -11,6 +11,10 @@
         <form id="formpublicidadcalendarioadd" name="formpublicidadcalendarioadd">
 
             <div class="row">
+
+            </div>
+
+            <div class="row">
                 <div class="col-4">
                     <div class="form-group">
                         {!! Form::Label('item_id', 'Item:') !!}

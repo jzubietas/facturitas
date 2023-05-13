@@ -10,7 +10,7 @@ return [
     | Here you can change the default title of your admin panel.
     |
     | For detailed instructions you can look the title section here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
+    | https://g<vithub.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
     |
     */
 
@@ -290,6 +290,13 @@ return [
         [
             'text' => 'Configuracion',
             'route' => 'settings.admin-settings',
+            'can' => 'admin.configuration',
+            'icon' => 'fas fa-cogs',
+            'active' => ['pagos perdonar courier'],
+        ],
+        [
+            'text' => 'Registro de Ingresos',
+            'route' => 'registro.ingresos.index',
             'can' => 'admin.configuration',
             'icon' => 'fas fa-cogs',
             'active' => ['pagos perdonar courier'],

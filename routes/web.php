@@ -19,6 +19,7 @@ use App\Http\Controllers\PedidoHistoryController;
 use App\Http\Controllers\Pedidos\PedidoStatusController;
 use App\Http\Controllers\PedidosAnulacionController;
 use App\Http\Controllers\RecojoController;
+use App\Http\Controllers\RegisterIncomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScraperController;
 use App\Http\Controllers\SettingsController;
@@ -915,5 +916,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
 
     Route::post('clientecongelarAction', [ClienteController::class, 'congelar'])->name('clientecongelarAction');
+
+    Route::any('registro.ingresos.index', [RegisterIncomeController::class, 'index'])->name('registro.ingresos.index');
 
 });
