@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RegisterIncomeController extends Controller
@@ -24,6 +26,41 @@ class RegisterIncomeController extends Controller
                 'user_clavepedido as asesor',
                 'llamado'
             ]);
+
+            if (Auth::user()->rol == "Llamadas") {
+            } else if (Auth::user()->rol == "Jefe de llamadas") {
+            } elseif (Auth::user()->rol == "Asesor") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.clave_pedidos', Auth::user()->clave_pedidos)
+                    ->select(
+                        DB::raw("users.clave_pedidos as clave_pedidos")
+                    )
+                    ->pluck('users.clave_pedidos');
+                $query = $query->WhereIn("user_clavepedido", $usersasesores);
+
+            } else if (Auth::user()->rol == "Encargado") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.supervisor', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.clave_pedidos as clave_pedidos")
+                    )
+                    ->pluck('users.clave_pedidos');
+                $query = $query->WhereIn("user_clavepedido", $usersasesores);
+            } elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+                $query = $query->Where("clientes.user_clavepedido", '=', 'B');
+            }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+                $usersasesores = User::where('users.rol', User::ROL_ASESOR)
+                    ->where('users.estado', '1')
+                    ->whereIn('users.clave_pedidos', ['15','16','17','18','19','20','21','22','23'])
+                    ->select(
+                        DB::raw("users.clave_pedidos as clave_pedidos")
+                    )
+                    ->pluck('users.clave_pedidos');
+                $query = $query->WhereIn('user_clavepedido', $usersasesores);
+            }
+            
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
                 ->addColumn('action', function ($cliente)  {
@@ -135,6 +172,41 @@ class RegisterIncomeController extends Controller
                     'user_clavepedido as asesor',
                     'llamado'
                 ]);
+
+            if (Auth::user()->rol == "Llamadas") {
+            } else if (Auth::user()->rol == "Jefe de llamadas") {
+            } elseif (Auth::user()->rol == "Asesor") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.clave_pedidos', Auth::user()->clave_pedidos)
+                    ->select(
+                        DB::raw("users.clave_pedidos as clave_pedidos")
+                    )
+                    ->pluck('users.clave_pedidos');
+                $query = $query->WhereIn("user_clavepedido", $usersasesores);
+
+            } else if (Auth::user()->rol == "Encargado") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.supervisor', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.clave_pedidos as clave_pedidos")
+                    )
+                    ->pluck('users.clave_pedidos');
+                $query = $query->WhereIn("user_clavepedido", $usersasesores);
+            } elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+                $query = $query->Where("clientes.user_clavepedido", '=', 'B');
+            }else if (Auth::user()->rol == User::ROL_ASISTENTE_PUBLICIDAD) {
+                $usersasesores = User::where('users.rol', User::ROL_ASESOR)
+                    ->where('users.estado', '1')
+                    ->whereIn('users.clave_pedidos', ['15','16','17','18','19','20','21','22','23'])
+                    ->select(
+                        DB::raw("users.clave_pedidos as clave_pedidos")
+                    )
+                    ->pluck('users.clave_pedidos');
+                $query = $query->WhereIn('user_clavepedido', $usersasesores);
+            }
+
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
                 ->addColumn('action', function ($cliente)  {
