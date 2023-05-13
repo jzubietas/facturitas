@@ -298,14 +298,14 @@ return [
             'text' => 'Registro de Ingresos',
             'route' => 'registro.ingresos.index',
             'can' => 'admin.configuration',
-            'icon' => 'fas fa-cogs',
+            'icon' => 'fa fa-phone',
             'active' => ['pagos perdonar courier'],
         ],
         [
             'text' => 'Registro de Chats',
             'route' => 'registro.chats.index',
             'can' => 'admin.configuration',
-            'icon' => 'fas fa-cogs',
+            'icon' => 'fa fa-comments',
             'active' => ['pagos perdonar courier'],
         ],
 

@@ -139,7 +139,7 @@ class RegisterIncomeController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($cliente)  {
                     $btn = [];
-                    $btn []= '<a target="_blank" href="https://api.whatsapp.com/send?phone='.$cliente->basefria.'"><i class="fa fa-phone"></i></a>';
+                    $btn []= '<a target="_blank" href="https://api.whatsapp.com/send?phone='.$cliente->basefria.'"><i class="fa fa-comments"></i></a>';
 
                     return join('', $btn);
                 })
