@@ -15,14 +15,14 @@ class RegisterIncomeController extends Controller
      */
     public function index(Request $request)
     {
-
         if ($request->has('datatable'))
         {
-            $query=Cliente::query()->where('tipo',0)->activo()
+            $query=Cliente::query()->where('tipo',0)->activo()->whereIn('llamado',[0])
             ->select([
                 'created_at',
                 'celular as basefria',
-                'user_clavepedido as asesor'
+                'user_clavepedido as asesor',
+                'llamado'
             ]);
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
@@ -104,5 +104,50 @@ class RegisterIncomeController extends Controller
         //
     }
 
+    public function realizoLlamada(Request $request)
+    {
+        $q=$request->get('basefria');
+
+        $cliente=Cliente::query()
+            ->where('tipo',0)
+            ->where('llamado',0)
+            ->where('celular',$q)->first();
+        $cliente->update([
+            'llamado'=>1,
+            'asesor_llamado'=>$cliente->user_clavepedido,
+            'user_llamado'=>auth()->user()->id,
+            'fecha_llamado'=>now()
+        ]);
+
+
+    }
+
+
+    public function indexChats(Request $request)
+    {
+        if ($request->has('datatable'))
+        {
+            $query=Cliente::query()->where('tipo',0)->activo()->whereIn('llamado',[0,1])
+                ->whereDate('created_at','<=','2023-05-12')
+                ->select([
+                    'created_at',
+                    'celular as basefria',
+                    'user_clavepedido as asesor',
+                    'llamado'
+                ]);
+            return datatables()->query(DB::table($query))
+                ->addIndexColumn()
+                ->addColumn('action', function ($cliente)  {
+                    $btn = [];
+                    $btn []= '<a target="_blank" href="https://api.whatsapp.com/send?phone='.$cliente->basefria.'"><i class="fa fa-phone"></i></a>';
+
+                    return join('', $btn);
+                })
+                ->rawColumns(['action'])
+                //->toJson();
+                ->make(true);
+        }
+        return view('register_chats.index');
+    }
 
 }

@@ -301,6 +301,13 @@ return [
             'icon' => 'fas fa-cogs',
             'active' => ['pagos perdonar courier'],
         ],
+        [
+            'text' => 'Registro de Chats',
+            'route' => 'registro.chats.index',
+            'can' => 'admin.configuration',
+            'icon' => 'fas fa-cogs',
+            'active' => ['pagos perdonar courier'],
+        ],
 
         ['header' => 'MÓDULOS'],
 

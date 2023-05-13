@@ -918,5 +918,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('clientecongelarAction', [ClienteController::class, 'congelar'])->name('clientecongelarAction');
 
     Route::any('registro.ingresos.index', [RegisterIncomeController::class, 'index'])->name('registro.ingresos.index');
+    Route::any('registro.ingresos.realizo.llamada', [RegisterIncomeController::class, 'realizoLlamada'])->name('registro.ingresos.realizo.llamada');
+
+    Route::any('registro.chats.index', [RegisterIncomeController::class, 'indexChats'])->name('registro.chats.index');
 
 });

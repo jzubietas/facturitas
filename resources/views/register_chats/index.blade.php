@@ -1,10 +1,10 @@
 @extends('adminlte::page')
 
-@section('title', 'Registro de Ingreso')
+@section('title', 'Registro de Chats')
 
 @section('content_header')
   <h1 class="text-center">
-    <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Registro De Ingreso
+    <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Registro De Chats
   </h1>
 
 @stop
@@ -15,7 +15,7 @@
 
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="enmotorizado" role="tabpanel" aria-labelledby="enmotorizado-tab">
-        <table id="registerincometable" class="table table-striped w-100">
+        <table id="registerchatstable" class="table table-striped w-100">
           <thead>
           <tr>
             <th scope="col" style="vertical-align: middle">Fecha de Registro</th>
@@ -102,13 +102,13 @@
               type: 'POST',
               url: "{{ route('registro.ingresos.realizo.llamada') }}",
               success: function (data) {
-                  $('#registerincometable').DataTable().ajax.reload();
+                  $('#registerchatstable').DataTable().ajax.reload();
               }
           });
 
       });
 
-        datatable = $('#registerincometable').DataTable({
+        datatable = $('#registerchatstable').DataTable({
         //dom: '<"top"i>rt<"bottom"lp><"clear">',
         lengthChange: false,
         processing: true,
@@ -117,7 +117,7 @@
         searching: true,
         order: [ [0,'asc'], [4,'asc']],
         ajax: {
-          url: "{{ route('registro.ingresos.index',['datatable'=>1]) }}",
+          url: "{{ route('registro.chats.index',['datatable'=>1]) }}",
           data: function (q) {
             q.fechaconsulta = $("#fecha_consulta").val();
             q.tab = 'enmotorizado'
