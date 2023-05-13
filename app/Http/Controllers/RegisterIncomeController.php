@@ -60,7 +60,7 @@ class RegisterIncomeController extends Controller
                     ->pluck('users.clave_pedidos');
                 $query = $query->WhereIn('user_clavepedido', $usersasesores);
             }
-            
+
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
                 ->addColumn('action', function ($cliente)  {
