@@ -81,7 +81,8 @@ class User extends Authenticatable
         'cant_vidas_cero',
         'meta_quincena',
         'birthday',
-        'unificado'
+        'unificado',
+        'publicidad'
     ];
 
     /**
