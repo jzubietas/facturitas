@@ -165,13 +165,12 @@ class RegisterIncomeController extends Controller
     {
         if ($request->has('datatable'))
         {
-            $query=Cliente::query()->where('tipo',0)->activo()->whereIn('llamado',[0,1])
-                ->whereDate('created_at','<=','2023-05-12')
+            $query=Cliente::query()->where('tipo',0)->activo()->whereIn('chateado',[0])
                 ->select([
                     'created_at',
                     'celular as basefria',
                     'user_clavepedido as asesor',
-                    'llamado'
+                    'chateado as chat'
                 ]);
 
             if (Auth::user()->rol == "Llamadas") {
@@ -213,7 +212,10 @@ class RegisterIncomeController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($cliente)  {
                     $btn = [];
-                    $btn []= '<a target="_blank" href="https://api.whatsapp.com/send?phone='.$cliente->basefria.'"><i class="fa fa-comments"></i></a>';
+
+                    $btn []='<button type="button" class="btn btn-warning btn-sm btn_chat"  data-basefria="' . $cliente->basefria . '"><i class="fa fa-phone"></i></a>';
+
+                    //$btn []= '<a target="_blank" href="https://api.whatsapp.com/send?phone='.$cliente->basefria.'"><i class="fa fa-comments"></i></a>';
 
                     return join('', $btn);
                 })
@@ -222,6 +224,24 @@ class RegisterIncomeController extends Controller
                 ->make(true);
         }
         return view('register_chats.index');
+    }
+
+    public function realizoChat(Request $request)
+    {
+        $q=$request->get('basefria');
+
+        $cliente=Cliente::query()
+            ->where('tipo',0)
+            ->where('chateado',0)
+            ->where('celular',$q)->first();
+        $cliente->update([
+            'chateado'=>1,
+            'asesor_chateado'=>$cliente->user_clavepedido,
+            'user_chateado'=>auth()->user()->id,
+            'fecha_chateado'=>now()
+        ]);
+
+
     }
 
 }

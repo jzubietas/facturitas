@@ -921,5 +921,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('registro.ingresos.realizo.llamada', [RegisterIncomeController::class, 'realizoLlamada'])->name('registro.ingresos.realizo.llamada');
 
     Route::any('registro.chats.index', [RegisterIncomeController::class, 'indexChats'])->name('registro.chats.index');
+    Route::any('registro.chats.realizo.chat', [RegisterIncomeController::class, 'realizoChat'])->name('registro.chats.realizo.chat');
 
 });

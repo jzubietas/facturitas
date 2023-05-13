@@ -21,7 +21,7 @@
             <th scope="col" style="vertical-align: middle">Fecha de Registro</th>
             <th scope="col" style="vertical-align: middle">Base Fria</th>
             <th scope="col" style="vertical-align: middle">Asesor</th>
-            <th scope="col" style="vertical-align: middle">Llamado</th>
+            <th scope="col" style="vertical-align: middle">Chat</th>
             <th scope="col" style="vertical-align: middle">Accion</th>
           </tr>
           </thead>
@@ -88,7 +88,7 @@
         }
       });
 
-      $(document).on('click','.btn_llamar',function(event){
+      $(document).on('click','.btn_chat',function(event){
           var button = $(this);
           var basefria = button.data('basefria');
           console.log(basefria);
@@ -100,9 +100,12 @@
               processData: false,
               contentType: false,
               type: 'POST',
-              url: "{{ route('registro.ingresos.realizo.llamada') }}",
+              url: "{{ route('registro.chats.realizo.chat') }}",
               success: function (data) {
+
                   $('#registerchatstable').DataTable().ajax.reload();
+
+                  window.open('https://api.whatsapp.com/send?phone='+basefria, '_blank')
               }
           });
 
@@ -146,7 +149,7 @@
             data: 'asesor',
             name: 'asesor',
           },
-          {data:'llamado',name:'llamado',visible:false},
+          {data:'chat',name:'chat',visible:false},
           {
             data: 'action',
             name: 'action',
@@ -177,66 +180,6 @@
         }
       });
 
-      $('#modal-envio-recojo').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var grupopedido = button.data('grupopedido')
-        var codigos = button.data('codigos')
-
-        $(".textcode").html(codigos);
-        $("#hiddenIdGrupoPedido").val(grupopedido);
-      });
-
-      $(document).on("submit", "#modal-envio-recojo", function (evento) {
-        evento.preventDefault();
-
-        var data = new FormData();
-        data.append('hiddenIdGrupoPedido', $("#hiddenIdGrupoPedido").val());
-
-        $.ajax({
-          data: data,
-          processData: false,
-          contentType: false,
-          type: 'POST',
-          url: "{{ route('envios.confirmar-recepcion-recojo') }}",
-          success: function (data) {
-            console.log(data);
-            $("#modal-envio-recojo .textcode").text('');
-            $("#modal-envio-recojo").modal("hide");
-            Swal.fire('Mensaje', data.mensaje, 'success')
-            $('#tablaRecojo').DataTable().ajax.reload();
-          }
-        });
-      });
-
-      /*datatablerecojo.on('responsive-display', function (e, datatable, row, showHide, update) {
-        console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
-        if (showHide) {
-          renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
-        }
-      });*/
-
-      /*$('#modal_recojomotorizado').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        $("#input_recojomotorizado").val(button.data('direccion_grupo'));
-      });*/
-
-      /*$(document).on("submit", "#form_recojo_enviarope", function (evento) {
-        evento.preventDefault();
-        var drecojoenviarope = new FormData();
-        drecojoenviarope.append('input_recojoenviarope', $('#input_recojoenviarope').val());
-        $.ajax({
-          data: drecojoenviarope,
-          processData: false,
-          contentType: false,
-          type: 'POST',
-          url: "{{-- route('courier.recojoenviarope') --}}",
-          success: function (data) {
-            $("#modal_recojoenviarope").modal("hide");
-            $('#tablaPrincipal').DataTable().ajax.reload();
-          }
-        });
-
-      });*/
     });
   </script>
 
