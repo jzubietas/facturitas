@@ -102,7 +102,7 @@
 
                                 <div class="form-group col-lg-6" style="font-size: 18px">
                                     {!! Form::label('titulares', 'Titulares') !!}
-                                    {!! Form::select('titulares', $titulares , '0', ['readonly' => 'readonly','class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+                                    {!! Form::select('titulares', $users_combo , '0', ['readonly' => 'readonly','class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                                 </div>
 
                             </div>
