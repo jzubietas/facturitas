@@ -9165,9 +9165,9 @@ class DashboardController extends Controller
                     ->where('name','TOTAL DANTE')
                     ->where('cargado',date("Y-m-d", $i))
                     ->first();
-                if($divisor_porcentaje!=null)
+                if(!$divisor_porcentaje)
                 {
-                    $porcentaje_publi = ($diviendo_porcentaje/$divisor_porcentaje)*100;
+                    $porcentaje_publi = ($diviendo_porcentaje/$divisor_porcentaje->total)*100;
                 }else{
                     $porcentaje_publi = 0;
                 }
