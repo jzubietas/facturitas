@@ -19,7 +19,7 @@ class RegisterIncomeController extends Controller
     {
         if ($request->has('datatable'))
         {
-            $query=Cliente::query()->where('tipo',0)->activo()->whereIn('llamado',[0])
+            $query=Cliente::query()->where('tipo',0)->activo()->whereIn('llamado',[0,1])
             ->select([
                 'created_at',
                 'celular as basefria',

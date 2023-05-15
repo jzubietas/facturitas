@@ -295,7 +295,7 @@ return [
             'active' => ['pagos perdonar courier'],
         ],
         [
-            'text' => 'Registro de Ingresos',
+            'text' => 'Registro de Llamadas',
             'route' => 'registro.ingresos.index',
             'can' => 'access.registro.ingreso',
             'icon' => 'fa fa-phone',
