@@ -79,22 +79,12 @@
 {{-- BUSCAR / QUITAR VIDA --}}
 <div class="row mb-3">
     @include('dashboard.widgets.buscar_cliente')
-    @include('dashboard.partials.vista_quitar_vidas')
 </div>
 
 {{-- LLAMADA DE ATENCION --}}
 
-<div class="col-lg-12">
-    <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
-</div>
-
-
 
 {{-- PEDIDOS PENDIENTES/ELECTRONICOS/ANULACION --}}
-<div class="col-lg-12">
-    <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
-</div>
-
 
 <!-- MODAL -->
 {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -112,7 +102,6 @@
 {{-- FULLSCREEN --}}
 
 <div id="spinner" class="d-none"><!--position-relative d-flex justify-content-center -->
-
 
     <div class="position-relative top-50 start-50 translate-middle">
         <img src="{{asset('images/drawing-2802.gif')}}" alt="Your Spinner" class=" spinner " width="700px">
@@ -205,51 +194,6 @@
 <div class="row">
     <div class="col-lg-12 bg-white" id="contenedor-fullscreen-g2">
 
-        <div class="row">
-            <div class="col-3 bg-white">
-                <div class="d-flex justify-content-center align-items-center">
-                    <h5 class="card-title text-uppercase">Total de cobranzas :</h5>
-                    <p id="porcentaje_cobranzas_metas_g2" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
-                </div>
-            </div>
-            <div class="col-6 bg-white">
-                <div class="d-flex justify-content-center align-items-center">
-                    <h2 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
-background: #FFFFFF;
-text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0 0 #242120, 0 2px 0 #242120, -2px 0 0 #242120, 0 -2px 0 #242120;">Metas del mes
-                        de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h2>
-                    <button style="background: none; border: none" onclick="openFullscreen2();">
-                        <i class="fas fa-expand-arrows-alt ml-3"
-                           style="font-size: 20px"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="col-3 bg-white">
-                <div class="d-flex justify-content-center align-items-center">
-                    <h5 class="card-title text-uppercase">Total de pedidos:</h5>
-                    <p id="porcentaje_pedidos_metas_g2" class="card-text font-weight-bold" style="font-size: 25px"> --%</p>
-                </div>
-            </div>
-
-        </div>
-
-        {{-- TABLA DUAL --}}
-        <div class="" style=" overflow: hidden !important;">
-            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
-                <div class="row">
-                    <div class="contain-table-dual row" style="width: 100% !important;">
-                        <div class="col-lg-6" id="metas_asesores_g2_a"></div>
-                        <div class="col-lg-6" id="metas_asesores_g2_b"></div>
-                    </div>
-
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div id="metas_asesores_total_g2"></div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
         {{-- FIN-TABLA-DUAL --}}
         <div class="row">
 
@@ -274,136 +218,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="calendario1" style="padding:2px"></div>
-        </div>
-    </div>
-</div>
-
-<div class ="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <br><br>
-            <h1 class="text-center">CLIENTES LEVANTADOS/CAIDOS (%)</h1>
-        </div>
-        <div class="contain-table-dual row" style="width: 100% !important;">
-            <div class="col-lg-6" id="grafico_dejaronpedir_left"></div>
-            <div class="col-lg-6" id="grafico_dejaronpedir_right"></div>
-        </div>
-
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="dejaronpedir_supervisor_total"></div>
-        </div>
-
-    </div>
-</div>
-
-
-<div class="col-md-12 bg-white">
-    <div class="card bg-cyan">
-        <div class="card-header">
-            <h1 class="text-uppercase justify-center text-center">Metas Cobranzas</h1>
-        </div>
-        <div class="card-body">
-            <div id="metas_cobranzas_general"></div>
-        </div>
-        <div class="card-fotter"></div>
-    </div>
-
-</div>
-<br>
-
-{{-- METAS ASESOR DE LLAMADAS --}}
-<div class="container-fluid bg-white" id="contenedor-fullscreen-llamadas">
-    <div class="col-md-12 d-flex justify-content-center align-items-center">
-        <h1 class="text-uppercase justify-center text-center h1-change-day" style="color: #FFFFFF;
-background: #FFFFFF;
-text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2px 0 #242120, 2px 0 0 #242120, 0px 2px 0 #242120, -2px 0px 0 #242120, 0px -2px 0 #242120;">
-            Metas Llamadas/Cobranzas
-            de {{\Carbon\Carbon::now()->startOfMonth()->translatedFormat('F')}}</h1>
-        <button style="background: none; border: none" onclick="openFullscreenllamadas();">
-            <i class="fas fa-expand-arrows-alt ml-3"
-               style="font-size: 20px"></i>
-        </button>
-    </div>
-
-
-
-</div>
-
-{{-- SPARKLINE PEDIDOS ACTUALES POR DÍA --}}
-<div class="conatiner-fluid">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card">
-            <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                    <h3 class="card-title text-uppercase">Pedidos actuales por día</h3>
-                    {{--<a href="javascript:void(0);">View Report</a>--}}
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <p class="d-flex flex-column">
-                            <span class="text-bold text-lg">{{$asesor_pedido_dia}}</span>
-                            <span>Cantidad de pedidos del día</span>
-                        </p>
-                    </div>
-                </div>
-
-                <canvas id="visitors-chart" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-
-                <div class="row">
-                    <div class="col">
-                        <span class="text-uppercase">
-                            <i class="fas fa-square text-gray"></i> #{{\Carbon\Carbon::now()->subMonth()->monthName}}
-                        </span>
-                        <span class="mr-2 text-uppercase">
-                        <i class="fas fa-square text-primary"></i> #{{\Carbon\Carbon::now()->monthName}}
-                    </span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<br>
-
-{{-- SPARKLINE OLVA --}}
-<div class="conatiner-fluid">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card">
-            <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                    <h3 class="card-title text-uppercase">TOTAL RECAUDADO DE OLVA POR DÍA</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <span class="text-bold text-lg">{{$gasto_total_olva}}</span>
-                        <span>Cantidad total del día</span>
-                    </div>
-                </div>
-
-                <canvas id="visitors-chart-olva" style="min-height: 750px; height: 750px; max-height: 750px; max-width: 100%;"></canvas>
-
-                <div class="row">
-                    <div class="col">
-                        <span class="mr-2 text-uppercase">
-                            <i class="fas fa-square" style="background: #17a2b8; color: #17a2b8"></i> #{{\Carbon\Carbon::now()->monthName}}
-                        </span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
 
 @section('js-datatables')
     <script>
