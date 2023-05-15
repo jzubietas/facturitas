@@ -14,7 +14,7 @@ class CreateTableHistorialChats extends Migration
      */
     public function up()
     {
-        Schema::table('historial_chats', function (Blueprint $table) {
+        Schema::create('historial_chats', function (Blueprint $table) {
             $table->id();
             $table->string('celular')->nullable()->default('');
             $table->integer('user_registro')->default(0);
