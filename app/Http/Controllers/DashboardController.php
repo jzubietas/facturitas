@@ -9160,14 +9160,14 @@ class DashboardController extends Controller
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
                 $porcentaje_publi=0;
-                $diviendo_porcentaje = $object_totales[date("Y-m-d", $i)];
+                $dividendo_porcentaje = $object_totales[date("Y-m-d", $i)];
                 $divisor_porcentaje = Publicidad::query()
                     ->where('name','TOTAL DANTE')
                     ->where('cargado',date("Y-m-d", $i))
                     ->first();
-                if(!$divisor_porcentaje)
+                if($divisor_porcentaje!==null)
                 {
-                    $porcentaje_publi = ($diviendo_porcentaje/$divisor_porcentaje->total)*100;
+                    $porcentaje_publi = ($dividendo_porcentaje/$divisor_porcentaje->total)*100;
                 }else{
                     $porcentaje_publi = 0;
                 }
