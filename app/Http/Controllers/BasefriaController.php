@@ -42,9 +42,19 @@ class BasefriaController extends Controller
                 ->pluck('identificador', 'id');
         }
 
-        $users_publicidad=User::query()->where('rol',User::ROL_ASISTENTE_PUBLICIDAD)->activo()->pluck('name','id');
+        $users_publicidad=User::query()->where('rol',User::ROL_ASISTENTE_PUBLICIDAD)->activo()
+            ->select([
+                    DB::raw("name AS name"), 'id'
+            ])
+            ->get();
 
-        return view('base_fria.index', compact('superasesor', 'users','users_publicidad'));
+        $users_combo = User::query()->where('estado','=',1)->whereIn('rol',[User::ROL_ASESOR_ADMINISTRATIVO,User::ROL_ASESOR])
+            ->select([
+                'identificador', 'id'
+            ])
+            ->pluck('identificador', 'id');
+
+        return view('base_fria.index', compact('superasesor','users','users_publicidad','users_combo' ));
     }
 
     public function indextabla(Request $request)

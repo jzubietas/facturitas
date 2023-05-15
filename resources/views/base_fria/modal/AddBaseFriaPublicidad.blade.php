@@ -53,8 +53,27 @@
 
                                 <div class="btn-group " role="group" aria-label="Basic example">
                                     <!--lista de usuarios de publicidad-->
-                                    @foreach($users_publicidad as $user_publi)
-                                        <button class="button mx-2 p-2 btn-navigate-titular btn btn-primary btn-lg rounded text-white" type="button" step_number="2" titular="{{$user_publi['id']}}">{{$user_publi['name']}}</button>
+                                    @foreach($users_publicidad as $user_publi_k)
+                                        @if($user_publi_k->name=='Renzo')
+                                            <button class="button mx-2 p-2 btn-navigate-titular btn btn-success btn-lg rounded text-white"
+                                                    type="button" step_number="2"
+                                                    titular="{{ $user_publi_k->name }}">
+                                                {{ $user_publi_k->name }}
+                                            </button>
+                                        @elseif($user_publi_k->name=='Luis Fernando Leon')
+                                            <button class="button mx-2 p-2 btn-navigate-titular btn btn-info btn-lg rounded text-white"
+                                                    type="button" step_number="2"
+                                                    titular="{{ $user_publi_k->name }}">
+                                                {{ $user_publi_k->name }}
+                                            </button>
+                                        @elseif($user_publi_k->name=='jeremy')
+                                            <button class="button mx-2 p-2 btn-navigate-titular btn btn-primary btn-lg rounded text-white"
+                                                    type="button" step_number="2"
+                                                    titular="{{ $user_publi_k->name }}">
+                                                {{ $user_publi_k->name }}
+                                            </button>
+                                        @endif
+
                                     @endforeach
                                 </div>
 
@@ -64,53 +83,41 @@
                         <div class="mt-3">
                             <button class="button btn-navigate-form-step d-none" type="button" step_number="2">Siguiente</button>
                         </div>
+
                     </section>
+
+
 
                     <section id="step-2" class="form-step d-none">
-                        <h2 class="font-normal "></h2>
-                        <!-- Step 2 input fields -->
-
-                        <div class="form-row">
-
-                            <div class="form-group col-lg-12 mx-auto text-center" style="font-size: 18px">
-
-                                <div class="btn-group mx-auto text-center " role="group" aria-label="Basic example">
-
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="mt-3 mx-auto text-center">
-
-
-
-                            <button class="button btn-navigate-form-step btn btn-info btn-lg rounded text-white" type="button" step_number="1">Atras</button>
-                            <button class="button btn-navigate-form-step btn-navigate-banco d-none" type="button" step_number="3">Siguiente</button>
-                        </div>
-                    </section>
-
-                    <section id="step-3" class="form-step d-none">
 
                         <!-- Step 3 input fields -->
                         <div class="mt-3">
 
                             <div class="form-row">
+                                <div class="form-group col-lg-6">
+                                    {!! Form::label('tipo', 'Tipo de cliente') !!}
+                                    <input type="hidden" name="tipo" requerid value="0" class="form-control">
+                                    <input type="text" name="cliente" value="Base fría" class="form-control" disabled>
+                                </div>
 
+                                <div class="form-group col-lg-6" style="font-size: 18px">
+                                    {!! Form::label('titulares', 'Titulares') !!}
+                                    {!! Form::select('titulares', $titulares , '0', ['readonly' => 'readonly','class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+                                </div>
 
                             </div>
 
                             <div class="form-row">
-                                <div class="form-group col-lg-6" style="font-size: 18px">
-                                    {!! Form::label('monto', 'Monto pagado') !!}
-                                    <input type="text" name="monto" id="monto" class="form-control number" placeholder="Monto pagado...">
+                                <div class="form-group col-lg-6">
+                                    {!! Form::label('nombre', 'Nombre') !!}
+                                    {!! Form::text('nombre', null, ['class' => 'form-control', 'id' => 'nombre']) !!}
                                 </div>
-                                <div class="form-group col lg-6" style="font-size: 18px">
-                                    {!! Form::label('fecha', 'Fecha de voucher') !!}
-                                    {!! Form::date('fecha', \Carbon\Carbon::now(), ['class' => 'form-control']) !!}
+
+                                <div class="form-group col-lg-6">
+                                    {!! Form::label('celular', 'Celular*') !!}
+                                    {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
                                 </div>
+
                             </div>
 
 
