@@ -516,7 +516,7 @@
             });
         }
 
-        window.cargaReporteBasefriaRendimiento = function () {
+        function cargaReporteBasefriaRendimiento(){
             var fd = new FormData();
             $.ajax({
                 data: fd,
