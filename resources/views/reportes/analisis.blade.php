@@ -516,8 +516,13 @@
             });
         }
 
-        function cargaReporteBasefriaRendimiento(){
+        function cargaReporteBasefriaRendimiento(entero){
+            const ddd = new Date();
+            let valor=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+
             var fd = new FormData();
+            fd.append('fechametames', valor);
+            fd.append('ii', entero);
             $.ajax({
                 data: fd,
                 processData: false,
@@ -542,7 +547,7 @@
             grafico_vienen_de_barra();
             grafico_activos_bloqueados_barra();
 
-            cargaReporteBasefriaRendimiento();
+            cargaReporteBasefriaRendimiento(17);
 
 
         });

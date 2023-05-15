@@ -9152,7 +9152,7 @@ class DashboardController extends Controller
 
             //95
             $html .= '<tr>';
-            $html .= '<th colspan="2">Total Dante</th>';
+            $html .= '<th colspan="2"><span class="font-20 text-success">Publicidad Dante</span></th>';
             $html .= '<th></th>';
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)

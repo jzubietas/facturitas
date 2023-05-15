@@ -7,6 +7,7 @@ use App\Models\DetallePago;
 use App\Models\DetallePedido;
 use App\Models\Meta;
 use App\Models\Pago;
+use App\Models\Publicidad;
 use App\Models\SituacionClientes;
 use App\Models\User;
 use App\Models\Pedido;
@@ -180,14 +181,12 @@ class PdfController extends Controller
 
             $asesores = User::query()->activo()->rolAsesor()
                 ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
-                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
 
             $total_asesor = User::query()->activo()->rolAsesor()
                 ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
-                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->count();
@@ -930,10 +929,11 @@ class PdfController extends Controller
             $html .= '<table class="table tabla-metas_pagos_pedidos table-dark" style="background: #e4dbc6; color: #232121; margin-bottom: 3px !important;">';
             $html .= '<thead>
                 <tr>
-                    <th width="8%">Asesor</th>
-                    <th width="11%">Id</th>
-                    <th width="6%" style="font-weight: bold;color:blue;">Inicio</th>
-                    <th width="6%" style="font-weight: bold;color:blue;">Chats</th>';
+                    <th width="8%">Publicidad</th>
+                    <th width="11%">Asesor</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Chats Diarios</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Llamadas Diarias</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Clientes en el dia</th>';
 
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
