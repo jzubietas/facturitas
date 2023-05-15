@@ -1892,7 +1892,7 @@ class PdfController extends Controller
                 ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
                 ->whereNotIn('pedidos.user_clavepedido',['B','99','17','18','19'])
                 //->where('pedidos.estado_correccion','0')
-                ->where('pedidos.codigo','not like ','%-C%')
+                ->where('pedidos.codigo','not like','%-C%')
                 ->where('pedidos.estado', '1')
                 ->where([
                     ['pedidos_anulacions.state_solicitud','=','1'],
@@ -1905,7 +1905,7 @@ class PdfController extends Controller
                 ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
                 ->whereNotIn('pedidos.user_clavepedido',['B','99','17','18','19'])
                 //->where('pedidos.estado_correccion','0')
-                ->where('pedidos.codigo','not like ','%-C%')
+                ->where('pedidos.codigo','not like','%-C%')
                 ->where('pedidos.estado', '1')
                 ->where([
                     ['pedidos.pago','=','1'],
@@ -1920,7 +1920,7 @@ class PdfController extends Controller
                 ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
                 ->whereNotIn('pedidos.user_clavepedido',['B','99','17','18','19'])
                 //->where('pedidos.estado_correccion','0')
-                ->where('pedidos.codigo','not like ','%-C%')
+                ->where('pedidos.codigo','not like','%-C%')
                 ->where('pedidos.estado', '1')
                 ->where([
                     ['pedidos_anulacions.state_solicitud','=','1'],
@@ -1937,7 +1937,7 @@ class PdfController extends Controller
                 ->whereNotIn('pedidos.user_clavepedido',['B','99','17','18','19'])
                 ->where('pedidos.estado', '1')
                 //->where('pedidos.estado_correccion','0')
-                ->where('pedidos.codigo','not like ','%-C%')
+                ->where('pedidos.codigo','not like','%-C%')
                 ->whereIn('pedidos.pendiente_anulacion',  ['0','1'])
                 ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$mes_artificio->clone()->startOfMonth()->startOfDay(), $mes_artificio->clone()->endOfMonth()->endOfDay()])
                 ->count();
