@@ -3751,11 +3751,11 @@ class DashboardController extends Controller
 
             if ($object_totales['meta'] == 0) {
 
-                $diferencia_ver=$object_totales['meta']*0.38-$object_totales['total_pedido'];
+                $diferencia_ver=$object_totales['meta']-$object_totales['total_pedido'];
                 $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b style="font-weight: bold !important; font-size: 16px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . round(0 * 100, 2) . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta'] .
-                    '<p class="text-red d-inline format-size" style="color: #d9686!important">'.$diferencia_ver.'</p>'.
+                    '<p class="text-red d-inline format-size font-18 font-weight-bold" style="color: #d9686!important">'.$diferencia_ver.'</p>'.
                     '</span>
     </div>';
             } else {
@@ -3766,23 +3766,23 @@ class DashboardController extends Controller
                     {
                         $object_totales['progress_pedidos']=0;
                     }else{
-                        $diferencia_ver=($object_totales['meta_combinar'])*0.38-$object_totales['total_pedido'];
+                        $diferencia_ver=($object_totales['meta_combinar'])-$object_totales['total_pedido'];
                         $object_totales['progress_pedidos']=round(($object_totales['total_pedido']/$object_totales['meta_combinar'])*100,2);
                     }
 
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 12px; text-transform: uppercase;">  TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] .
-                        '<p class="text-red d-inline format-size" style="color: #d9686!important">'.$diferencia_ver.'</p>'.
+                        '<p class="text-red d-inline format-size font-18 font-weight-bold" style="color: #d9686!important">'.$diferencia_ver.'</p>'.
                         '</span>    </div>';
                 }else if ($object_totales['meta_new'] == 2)
                 {
-                    $diferencia_ver=$object_totales['meta_combinar']*0.38-$object_totales['total_pedido'];
+                    $diferencia_ver=$object_totales['meta_combinar']-$object_totales['total_pedido'];
                     $object_totales['progress_pedidos']=round(($object_totales['total_pedido']/$object_totales['meta_combinar'])*100,2);
                     $html .= '</div>
     <div class="position-absolute w-100 text-center rounded h-40 h-60-res height-bar-progress top-progress-bar-total" style="top: 3px !important;height: 30px !important;font-size: 12px;">
              <span style="font-weight: lighter"> <b class="bold-size-total" style="font-weight: bold !important; font-size: 12px; text-transform: uppercase;">   TOTAL PEDIDOS -  ' . Carbon::parse($fechametames)->monthName . ' : ' . $object_totales['progress_pedidos'] . '%</b> - ' . $object_totales['total_pedido'] . '/' . $object_totales['meta_combinar'] .
-                        '<p class="text-red d-inline format-size" style="color: #d9686!important">'.$diferencia_ver.'</p>'.
+                        '<p class="text-red d-inline format-size font-18 font-weight-bold" style="color: #d9686!important">'.$diferencia_ver.'</p>'.
                         '</span>    </div>';
                 }
 
