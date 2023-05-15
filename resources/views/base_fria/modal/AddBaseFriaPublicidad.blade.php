@@ -20,7 +20,7 @@
                     <span class="form-stepper-circle">
                         <span>1</span>
                     </span>
-                                <div class="label">TITULAR</div>
+                                <div class="label">Usuarios de Publicidad</div>
                             </a>
                         </li>
                         <!-- Step 2 -->
@@ -52,8 +52,10 @@
                             <div class="form-group col-lg-6 mx-auto" style="font-size: 18px">
 
                                 <div class="btn-group " role="group" aria-label="Basic example">
-
-
+                                    <!--lista de usuarios de publicidad-->
+                                    @foreach($users_publicidad as $user_publi)
+                                        <button class="button mx-2 p-2 btn-navigate-titular btn btn-primary btn-lg rounded text-white" type="button" step_number="2" titular="{{$user_publi['id']}}">{{$user_publi['name']}}</button>
+                                    @endforeach
                                 </div>
 
                             </div>

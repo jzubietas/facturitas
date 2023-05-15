@@ -1542,7 +1542,7 @@ class PdfController extends Controller
             {
                 //meta quincena
                 $porcentaje = round(($_resultado_grafico_v["dividendo"] / ($_resultado_grafico_v["meta_quincena"])  ) * 100, 2);
-                $diferenciameta = $_resultado_grafico_v["meta_quincena"]*0.38 - $_resultado_grafico_v["dividendo"];
+                $diferenciameta = $_resultado_grafico_v["meta_quincena"] - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
                 $valor_meta = ($_resultado_grafico_v["meta_quincena"]);
                 if($porcentaje < 90){
@@ -1554,7 +1554,7 @@ class PdfController extends Controller
             else if ($_resultado_grafico_v["dividendo"] < $_resultado_grafico_v["meta_1"]) {
                 //meta 1
                 $porcentaje = round(($_resultado_grafico_v["dividendo"] / (($_resultado_grafico_v["meta_1"])) ) * 100, 2);
-                $diferenciameta = $_resultado_grafico_v["meta_1"]*0.38 - $_resultado_grafico_v["dividendo"];
+                $diferenciameta = $_resultado_grafico_v["meta_1"] - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
                 $valor_meta = ($_resultado_grafico_v["meta_1"]);
                 if($porcentaje < 45){
@@ -1575,7 +1575,7 @@ class PdfController extends Controller
                 }else{
                     $porcentaje = round(0, 2);
                 }
-                $diferenciameta = $_resultado_grafico_v["meta_2"]*0.38 - $_resultado_grafico_v["dividendo"];
+                $diferenciameta = $_resultado_grafico_v["meta_2"] - $_resultado_grafico_v["dividendo"];
                 if ($diferenciameta < 0) $diferenciameta = 0;
                 $valor_meta = ($_resultado_grafico_v["meta_2"]);
                 if ($porcentaje < 99){
@@ -1693,7 +1693,7 @@ class PdfController extends Controller
                 $html[] = '<td style="width:80%">';
 
                 $porcentaje = round(($r_reciente_cuenta / (($a_reciente_cuenta+$r_reciente_cuenta)*0.75) ) * 100, 2);
-                $diferenciameta = (($a_reciente_cuenta+$r_reciente_cuenta)*0.75)*0.38-$r_reciente_cuenta;
+                $diferenciameta = (($a_reciente_cuenta+$r_reciente_cuenta)*0.75)-$r_reciente_cuenta;
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
@@ -1746,7 +1746,7 @@ class PdfController extends Controller
                 $html[] = '<td style="width:80%">';
 
                 $porcentaje = round(($activos_cuenta / (($activos_cuenta+$recurrentes_cuenta)*0.75) ) * 100, 2);
-                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(0.75)*0.38 - $activos_cuenta;
+                $diferenciameta = ($activos_cuenta+$recurrentes_cuenta)*(0.75) - $activos_cuenta;
                 $diferenciameta = round($diferenciameta,2,PHP_ROUND_HALF_UP);
 
                 $diferenciameta=round($diferenciameta);

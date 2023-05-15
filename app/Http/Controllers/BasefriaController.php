@@ -42,7 +42,9 @@ class BasefriaController extends Controller
                 ->pluck('identificador', 'id');
         }
 
-        return view('base_fria.index', compact('superasesor', 'users'));
+        $users_publicidad=User::query()->where('rol',User::ROL_ASISTENTE_PUBLICIDAD)->activo()->pluck('name','id');
+
+        return view('base_fria.index', compact('superasesor', 'users','users_publicidad'));
     }
 
     public function indextabla(Request $request)
