@@ -542,6 +542,8 @@
             grafico_vienen_de_barra();
             grafico_activos_bloqueados_barra();
 
+            cargaReporteBasefriaRendimiento();
+
 
         });
 
