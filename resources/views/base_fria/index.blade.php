@@ -236,6 +236,8 @@
                 }
 
 
+
+
             });
 
 
@@ -247,7 +249,29 @@
                 if (stepNumberb == 2) {
                     //guardar banco
                     stepper_titular = $(this).attr("titular");
-                    $("#titulares").val(stepper_titular).selectpicker("refresh").trigger("change");
+                    //elegir un asesor de este publicidad
+                    var fd=new FormData();
+                    fd.append('publicidad',stepper_titular);
+                    $.ajax({
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        dataType:'json',
+                        url: "{{ route('basefria.asesor.publicidad.select') }}",
+                        success: function (data) {
+                            console.log(data);
+                            var options = '';
+                            for (var i = 0; i < data.length; i++) {
+                                for (var j = 0; j< data[i].length; j++){
+                                    options += '<option value="' + data[i][j].product_id + '">' + data[i][j].name + '</option>';
+                                }
+                            }
+                            $("#titulares").html(options);
+                            $("#titulares").selectpicker("refresh").trigger("change");
+                        }
+                    });
+
                     //console.log(stepper_titular);
                 }
 

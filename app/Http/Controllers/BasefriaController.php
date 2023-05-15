@@ -388,6 +388,17 @@ class BasefriaController extends Controller
         return response()->json(['html' => $html]);
     }
 
+    public function AsesorPublicidadSelect(Request $request)
+    {
+        $users_combo = User::query()->where('estado','=',1)->whereIn('rol',[User::ROL_ASESOR])
+            ->select([
+                'identificador', 'id'
+            ])
+            ->where('publicidad',$request->publicidad)
+            ->pluck('identificador', 'id')->take(1);
+        return response()->json($users_combo);
+    }
+
     public function updatebfpost(Request $request)
     {
         $request->validate([

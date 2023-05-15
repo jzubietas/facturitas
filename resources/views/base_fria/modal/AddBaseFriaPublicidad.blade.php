@@ -52,29 +52,25 @@
                             <div class="form-group col-lg-6 mx-auto" style="font-size: 18px">
 
                                 <div class="btn-group " role="group" aria-label="Basic example">
-                                    <!--lista de usuarios de publicidad-->
-                                    @foreach($users_publicidad as $user_publi_k)
-                                        @if($user_publi_k->name=='Renzo')
-                                            <button class="button mx-2 p-2 btn-navigate-titular btn btn-success btn-lg rounded text-white"
-                                                    type="button" step_number="2"
-                                                    titular="{{ $user_publi_k->name }}">
-                                                {{ $user_publi_k->name }}
-                                            </button>
-                                        @elseif($user_publi_k->name=='Luis Fernando Leon')
-                                            <button class="button mx-2 p-2 btn-navigate-titular btn btn-info btn-lg rounded text-white"
-                                                    type="button" step_number="2"
-                                                    titular="{{ $user_publi_k->name }}">
-                                                {{ $user_publi_k->name }}
-                                            </button>
-                                        @elseif($user_publi_k->name=='jeremy')
-                                            <button class="button mx-2 p-2 btn-navigate-titular btn btn-primary btn-lg rounded text-white"
-                                                    type="button" step_number="2"
-                                                    titular="{{ $user_publi_k->name }}">
-                                                {{ $user_publi_k->name }}
-                                            </button>
-                                        @endif
 
-                                    @endforeach
+                                        <button class="button mx-2 p-2 btn-navigate-titular btn btn-success btn-lg rounded text-white"
+                                                type="button" step_number="2"
+                                                titular="1">
+                                            Publicidad 1
+                                        </button>
+
+                                        <button class="button mx-2 p-2 btn-navigate-titular btn btn-info btn-lg rounded text-white"
+                                                type="button" step_number="2"
+                                                titular="2">
+                                            Publicidad 2
+                                        </button>
+
+                                        <button class="button mx-2 p-2 btn-navigate-titular btn btn-primary btn-lg rounded text-white"
+                                                type="button" step_number="2"
+                                                titular="3">
+                                            Publicidad 3
+                                        </button>
+
                                 </div>
 
                             </div>
@@ -86,8 +82,6 @@
 
                     </section>
 
-
-
                     <section id="step-2" class="form-step d-none">
 
                         <!-- Step 3 input fields -->
@@ -95,8 +89,16 @@
 
                             <div class="form-row">
                                 <div class="form-group col-lg-6">
+                                    {!! Form::label('publicidad', 'Tipo de cliente') !!}
+                                    <input type="hidden" name="publicidad_bf" requerid value="0" class="form-control">
+                                    <input type="text" name="publicidad_bf" value="Base fría" class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-lg-6">
                                     {!! Form::label('tipo', 'Tipo de cliente') !!}
-                                    <input type="hidden" name="tipo" requerid value="0" class="form-control">
+                                    <input type="hidden" name="tipo_bf" requerid value="0" class="form-control">
                                     <input type="text" name="cliente" value="Base fría" class="form-control" disabled>
                                 </div>
 

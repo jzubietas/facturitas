@@ -227,6 +227,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('basefriaclienteRequest', [BasefriaController::class, 'updatebfpost'])->name('basefriaRequest.post');
 
+    Route::any('basefria.asesor.publicidad.select', [BasefriaController::class, 'AsesorPublicidadSelect'])->name('basefria.asesor.publicidad.select');
+
     Route::get('basefria', [BasefriaController::class, 'index'])->name('basefria');//actualizado para serverside
 
     Route::get('basefriatabla', [BasefriaController::class, 'indextabla'])->name('basefriatabla');//actualizado para serverside
