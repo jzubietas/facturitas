@@ -9132,24 +9132,6 @@ class DashboardController extends Controller
 
             $html .= '<tfoot>';
 
-            //72
-            $html .= '<tr class="bg-success">';
-            $html .= '<th colspan="2"><span class="font-20">Total Publicidad</span></th>';
-            $html .= '<th></th>';
-            $html .= '<th>Chats</th>';
-            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
-            {
-                $count_1 = Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->count();
-                if($count_1==1)
-                {
-                    $count_1=Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->first();
-                    $html .= '<th>'.$count_1->total.'</th>';
-                }else{
-                    $html .= '<th>0</th>';
-                }
-            }
-            $html .= '</tr>';
-
             //95
             $html .= '<tr class="bg-success">';
             $html .= '<th colspan="2"><span class="font-20">Publicidad Dante</span></th>';
@@ -9182,8 +9164,8 @@ class DashboardController extends Controller
                 $divisor_porcentaje = Publicidad::query()
                     ->where('name','TOTAL DANTE')
                     ->where('cargado',date("Y-m-d", $i))
-                    ->count();
-                if($divisor_porcentaje>0)
+                    ->first();
+                if($divisor_porcentaje!=null)
                 {
                     $porcentaje_publi = ($diviendo_porcentaje/$divisor_porcentaje)*100;
                 }else{
