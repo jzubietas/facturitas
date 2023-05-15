@@ -9100,7 +9100,6 @@ class DashboardController extends Controller
 
              }
 
-
                 $font_size_sub=12;
 
                 $sub_html='<sub class="top-visible" style="display: block !important;">
@@ -9119,6 +9118,8 @@ class DashboardController extends Controller
 
             $html .= '<td class="bg-warning font-weight-bold">'.$object_totales['chats'].'</td>';
 
+
+
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
                 $html .= '<td class="bg-warning font-weight-bold">'.$object_totales[date("Y-m-d", $i)].'</td>';
@@ -9132,8 +9133,8 @@ class DashboardController extends Controller
             $html .= '<tfoot>';
 
             //72
-            $html .= '<tr>';
-            $html .= '<th colspan="2"><span class="font-20 text-success">Total Publicidad</span></th>';
+            $html .= '<tr class="bg-success">';
+            $html .= '<th colspan="2"><span class="font-20">Total Publicidad</span></th>';
             $html .= '<th></th>';
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
@@ -9146,13 +9147,12 @@ class DashboardController extends Controller
                 }else{
                     $html .= '<th>0</th>';
                 }
-
             }
             $html .= '</tr>';
 
             //95
-            $html .= '<tr>';
-            $html .= '<th colspan="2"><span class="font-20 text-success">Publicidad Dante</span></th>';
+            $html .= '<tr class="bg-success">';
+            $html .= '<th colspan="2"><span class="font-20">Publicidad Dante</span></th>';
             $html .= '<th></th>';
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
@@ -9170,23 +9170,28 @@ class DashboardController extends Controller
             $html .= '</tr>';
 
             //porcentajes
-            $html .= '<tr>';
-            $html .= '<th colspan="2"><span class="font-20 text-info">Porcentajes</span></th>';
+            $html .= '<tr class="bg-info">';
+            $html .= '<th colspan="2"><span class="font-20">Porcentajes</span></th>';
             $html .= '<th></th>';
             $html .= '<th></th>';
 
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
             {
-                //$count_2 = Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->count();
-                //if($count_2==1)
-                /*{
-                    $count_2=Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->first();
-                    $html .= '<th>'.$count_2->total.'</th>';
-                }
-                else*/
+                $porcentaje_publi=0;
+                $diviendo_porcentaje = $object_totales[date("Y-m-d", $i)];
+                $divisor_porcentaje = Publicidad::query()
+                    ->where('name','TOTAL DANTE')
+                    ->where('cargado',date("Y-m-d", $i))
+                    ->count();
+                if($divisor_porcentaje>0)
                 {
-                    $html .= '<th>0</th>';
+                    $porcentaje_publi = ($diviendo_porcentaje/$divisor_porcentaje)*100;
+                }else{
+                    $porcentaje_publi = 0;
                 }
+
+                $html .= '<th>'.$porcentaje_publi.'</th>';
+
 
             }
 
