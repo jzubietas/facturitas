@@ -102,6 +102,11 @@
               type: 'POST',
               url: "{{ route('registro.ingresos.realizo.llamada') }}",
               success: function (data) {
+                  Swal.fire(
+                      'Informacion',
+                      'Registro de llamadas exitoso',
+                      'success'
+                  )
                   $('#registerincometable').DataTable().ajax.reload();
               }
           });
