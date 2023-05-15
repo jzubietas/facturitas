@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class HistorialChats extends Model
 {
     use HasFactory;
+    
+    protected $fillable = [
+        'id',
+        'celular',
+        'user_registro',
+        'subido',
+        'created_at',
+        'updated_at',
+        'estado'
+    ];
 }
