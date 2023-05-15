@@ -109,13 +109,13 @@
 
                             <div class="form-row">
                                 <div class="form-group col-lg-6">
-                                    {!! Form::label('nombre', 'Nombre') !!}
-                                    {!! Form::text('nombre', null, ['class' => 'form-control', 'id' => 'nombre']) !!}
+                                    {!! Form::label('nombre_bf', 'Nombre') !!}
+                                    {!! Form::text('nombre_bf', null, ['class' => 'form-control', 'id' => 'nombre_bf']) !!}
                                 </div>
 
                                 <div class="form-group col-lg-6">
-                                    {!! Form::label('celular', 'Celular*') !!}
-                                    {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
+                                    {!! Form::label('celular_bf', 'Celular*') !!}
+                                    {!! Form::number('celular_bf', null, ['class' => 'form-control', 'id' => 'celular_bf', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
                                 </div>
 
                             </div>
@@ -124,7 +124,7 @@
                         </div>
                         <div class="mt-3">
                             <button class="button btn-navigate-form-step btn btn-info btn-lg rounded text-white" type="button" step_number="2">Atras</button>
-                            <button id="registrar_movimientos" type="button" class="btn btn-success button btn-lg  submit-btn"><i class="fas fa-save"></i> Guardar</button>
+                            <button id="registrar_basefria_publicidad" type="button" class="btn btn-success button btn-lg  submit-btn"><i class="fas fa-save"></i> Guardar</button>
                         </div>
                     </section>
 

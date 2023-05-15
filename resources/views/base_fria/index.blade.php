@@ -202,6 +202,42 @@
 
         $(document).ready(function () {
 
+            $(document).on("click", "#registrar_basefria_publicidad", function (e) {
+                e.preventDefault();
+
+                let asesor_de_publicidad = $("#titulares").prop("disabled", false).selectpicker("refresh");
+                let asesor_p = asesor_de_publicidad.val();
+                $("#titulares").prop("disabled", true)
+
+                let nombre = $("#nombre").val();
+                let celular = $("#celular").val();
+
+                if (asesor_p == '') {
+                    Swal.fire(
+                        'Error',
+                        'Elija al asesor',
+                        'warning'
+                    )
+                    return;
+                }else if (nombre == '') {
+                    Swal.fire(
+                        'Error',
+                        'Ingrese el monto',
+                        'warning'
+                    )
+                    return;
+                }else if (celular == '') {
+                    Swal.fire(
+                        'Error',
+                        'Ingrese el monto',
+                        'warning'
+                    )
+                    return;
+                }
+
+
+            });
+
 
             $(document).on("click", '.btn-navigate-titular', function (e) {
 

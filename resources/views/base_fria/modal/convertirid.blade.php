@@ -3,7 +3,7 @@
     <div class="modal-dialog" style="max-width: 1000px!important;">
       <div class="modal-content">
         <div class="modal-header bg-info">
-          <h5 class="modal-title" id="exampleModalLabel">Convertir base fría a CLIENTE 2</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Convertir base fría a CLIENTE :::</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
