@@ -213,7 +213,7 @@ class RegisterIncomeController extends Controller
                 ->addColumn('action', function ($cliente)  {
                     $btn = [];
 
-                    $btn []='<button type="button" class="btn btn-warning btn-sm btn_chat"  data-basefria="' . $cliente->basefria . '"><i class="fa fa-phone"></i></a>';
+                    $btn []='<button type="button" class="btn btn-warning btn-sm btn_chat"  data-basefria="' . $cliente->basefria . '"><i class="fa fa-comments "></i></a>';
 
                     //$btn []= '<a target="_blank" href="https://api.whatsapp.com/send?phone='.$cliente->basefria.'"><i class="fa fa-comments"></i></a>';
 
