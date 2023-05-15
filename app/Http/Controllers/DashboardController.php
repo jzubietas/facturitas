@@ -9170,10 +9170,27 @@ class DashboardController extends Controller
             $html .= '</tr>';
 
             //porcentajes
-            //$html .= '<tr>';
-            //$html .= '<th colspan="2"><span class="font-20 text-info">Porcentajes</span></th>';
+            $html .= '<tr>';
+            $html .= '<th colspan="2"><span class="font-20 text-info">Porcentajes</span></th>';
+            $html .= '<th></th>';
+            $html .= '<th></th>';
 
-            //$html .= '</tr>';
+            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+            {
+                //$count_2 = Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->count();
+                //if($count_2==1)
+                /*{
+                    $count_2=Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->first();
+                    $html .= '<th>'.$count_2->total.'</th>';
+                }
+                else*/
+                {
+                    $html .= '<th>0</th>';
+                }
+
+            }
+
+            $html .= '</tr>';
 
 
             $html .= '</tfoot>';
