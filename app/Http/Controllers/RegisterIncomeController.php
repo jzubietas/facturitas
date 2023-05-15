@@ -150,7 +150,7 @@ class RegisterIncomeController extends Controller
 
         $cliente=Cliente::query()
             ->where('tipo',0)
-            ->where('llamado',0,1)
+            ->whereIn('llamado',[0,1])
             ->where('celular',$q)->first();
         $cliente->update([
             'llamado'=>1,
