@@ -154,8 +154,10 @@ class RegisterIncomeController extends Controller
             'llamado'=>1,
             'asesor_llamado'=>$cliente->user_clavepedido,
             'user_llamado'=>auth()->user()->id,
-            'fecha_llamado'=>now()
+            'fecha_llamado'=>now(),
+            'total_llamadas'=>( intval($cliente->total_llamadas) + 1 )
         ]);
+        //historial llamadas
 
 
     }
