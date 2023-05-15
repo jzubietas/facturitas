@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\HistorialChats;
+use App\Models\HistorialLlamadas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -148,7 +150,7 @@ class RegisterIncomeController extends Controller
 
         $cliente=Cliente::query()
             ->where('tipo',0)
-            ->where('llamado',0)
+            ->where('llamado',0,1)
             ->where('celular',$q)->first();
         $cliente->update([
             'llamado'=>1,
@@ -156,6 +158,13 @@ class RegisterIncomeController extends Controller
             'user_llamado'=>auth()->user()->id,
             'fecha_llamado'=>now(),
             'total_llamadas'=>( intval($cliente->total_llamadas) + 1 )
+        ]);
+
+        HistorialLlamadas::create([
+            'celular'=>$q,
+            'user_registro'=>auth()->user()->id,
+            'subido'=>now(),
+            'estado'=>1
         ]);
         //historial llamadas
 
@@ -241,6 +250,13 @@ class RegisterIncomeController extends Controller
             'asesor_chateado'=>$cliente->user_clavepedido,
             'user_chateado'=>auth()->user()->id,
             'fecha_chateado'=>now()
+        ]);
+
+        HistorialChats::create([
+            'celular'=>$q,
+            'user_registro'=>auth()->user()->id,
+            'subido'=>now(),
+            'estado'=>1
         ]);
 
 
