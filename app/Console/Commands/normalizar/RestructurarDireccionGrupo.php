@@ -48,7 +48,7 @@ class RestructurarDireccionGrupo extends Command
         $clientes=Cliente::query()->activo()
             ->orderBy('id');
 
-        
+
         $this->progress = $this->output->createProgressBar($clientes->count());
         $clientes->chunk(1000, function ($_clientes) {
             foreach ($_clientes as $cliente) {

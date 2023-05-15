@@ -11,6 +11,13 @@
         @can('base_fria.create')
             <a href="{{ route('basefria.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
         @endcan
+
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_agregarbasefria_publicidad">
+            <i class="fas fa-plus-circle"></i> Agregar por Publicidad
+        </button>
+
+        @include('base_fria.modal.AddBaseFriaPublicidad')
+
         @can('base_fria.exportar')
             <div class="float-right btn-group dropleft">
 
