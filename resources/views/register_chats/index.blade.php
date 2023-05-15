@@ -105,7 +105,7 @@
 
                   $('#registerchatstable').DataTable().ajax.reload();
 
-                  window.open('https://api.whatsapp.com/send?phone='+basefria, '_blank')
+                  window.open('https://api.whatsapp.com/send?phone=+51'+basefria, '_blank')
               }
           });
 
