@@ -127,42 +127,6 @@
     </div>
 </div>
 
-<!--grafico metas de asesor de pedidos-->
-<div class="row">
-    <div class="col-lg-12 bg-white" id="contenedor-fullscreen">
-
-        <div class="" style=" overflow: hidden !important;">
-            <div class=" " style=" overflow-x: scroll !important; overflow-y: scroll !important;">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6" id="metas_dp_1"></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6" id="metas_dp_2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12" id="metas_dp_3"></div>
-                </div>
-
-            </div>
-        </div>
-        {{-- FIN-TABLA-DUAL --}}
-
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="metas_total_general"></div>
-        </div>
-
-        <div class="col-lg-12" id="metas_dp_99"></div>
-
-        <div class="col-md-12 bg-white">
-            <div id="metas_situacion_clientes"></div>
-        </div>
-
-
-
-    </div>
-
-
-
-</div>
-
 <div class="modal" id="modal-publicidad-calendario-add">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -210,9 +174,7 @@
         <div class="row">
             <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
         </div>
-        <div class="row">
-            <div class="col-lg-12" id="metas_situacion_clientes_metasasesores"></div>
-        </div>
+        
 
     </div>
 
