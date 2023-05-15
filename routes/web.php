@@ -698,6 +698,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('reportes.misasesores', [PdfController::class, 'MisAsesores'])->name('reportes.misasesores');
     Route::get('reportes.operaciones', [PdfController::class, 'Operaciones'])->name('reportes.operaciones');
     Route::get('reportes.analisis', [PdfController::class, 'Analisis'])->name('reportes.analisis');
+    Route::get('reportes.analisis.rendimiento', [PdfController::class, 'AnalisisRendimiento'])->name('reportes.analisis.rendimiento');
 
     Route::resource('notifications', NotificationsController::class)->names('notifications');
     Route::get('notifications.get', [NotificationsController::class, 'getNotificationsData'])->name('notifications.get');

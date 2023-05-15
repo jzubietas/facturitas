@@ -166,11 +166,7 @@
             <div id="metas_situacion_clientes"></div>
         </div>
 
-
-
     </div>
-
-
 
 </div>
 
@@ -199,7 +195,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="row">
     <div class="col-lg-12 bg-white" id="contenedor-fullscreen-g2">
@@ -298,7 +293,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
     </div>
 </div>
-
 
 <div class="col-md-12 bg-white">
     <div class="card bg-cyan">

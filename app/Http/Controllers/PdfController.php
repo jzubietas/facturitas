@@ -81,6 +81,1000 @@ class PdfController extends Controller
         return view('reportes.analisis', compact('users', '_pedidos_mes_pasado', 'mes_month', 'mes_anio', 'mes_mes', 'anios', 'dateM', 'dateY'));
     }
 
+    public function AnalisisRendimiento(Request $request)
+    {
+        $total_asesor = User::query()->activo()->rolAsesor()->count();
+        if (auth()->user()->rol == User::ROL_ASESOR) {
+            $asesores = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->get();
+            $total_asesor = User::query()->activo()->rolAsesor()->where('clave_pedidos', auth()->user()->clave_pedidos)->where('excluir_meta', '<>', '1')->count();
+        }
+        else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
+            $asesores = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->where('excluir_meta', '<>', '1')
+                ->get();
+            $total_asesor = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->where('excluir_meta', '<>', '1')
+                ->count();
+        }
+        else if (auth()->user()->rol == User::ROL_LLAMADAS) {
+            $asesores = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->where('excluir_meta', '<>', '1')
+                ->get();
+            $total_asesor = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->where('excluir_meta', '<>', '1')
+                ->count();
+        }
+        else if (auth()->user()->rol == User::ROL_FORMACION) {
+            $encargado = null;
+
+            if($request->ii==1)$encargado=24;
+            if($request->ii==2)$encargado=46;
+
+            $asesores = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->get();
+            $total_asesor = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->count();
+
+        }
+        else if (auth()->user()->rol == User::ROL_PRESENTACION) {
+            $encargado = null;
+
+            if($request->ii==1)$encargado=24;
+            if($request->ii==2)$encargado=46;
+
+            $asesores = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->get();
+            $total_asesor = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->count();
+        }
+        else if (auth()->user()->rol == User::ROL_ADMIN) {
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
+
+            if($request->ii==1)$encargado=24;
+            if($request->ii==2)$encargado=46;
+
+            $asesores = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->get();
+
+            $total_asesor = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->count();
+
+        }
+        else{
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
+
+            $asesores = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->get();
+
+            $total_asesor = User::query()->activo()->rolAsesor()
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })->count();
+        }
+
+        $supervisores_array = User::query()->activo()->rolSupervisor()->get();
+        $count_asesor = [];
+        foreach ($supervisores_array as $supervisor) {
+            $count_asesor[$supervisor->id] =
+                [
+                    'pedidos_totales' => 0,
+                    'total_pedido_mespasado' => 0,
+                    'meta_quincena' => 0,
+                    'meta_intermedia' => 0,
+                    'meta' => 0,
+                    'meta_2' => 0,
+                    'total_pagado' => 0,
+                    'progress_pagos' => 0,
+                    'progress_pedidos' => 0,
+                    'total_pedido' => 0,
+                    'pedidos_dia' => 0,
+                    'all_situacion_activo' => 0,
+                    'all_situacion_recurrente' => 0,
+                    'meta_new'=>0,
+                    'name'=>$supervisor->name
+                ];
+        }
+
+        $clientes_situacion_activo_mayor=0;
+        foreach ($asesores as $asesori)
+        {
+            $clientes_situacion_activo_mayor_ = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('user_id', $asesori->id)
+                ->where('clientes.situacion', '=', 'ACTIVO')
+                ->activo()
+                ->count();
+            if($clientes_situacion_activo_mayor_>=$clientes_situacion_activo_mayor_)
+            {
+                $clientes_situacion_activo_mayor=$clientes_situacion_activo_mayor_;
+            }
+        }
+
+        //dd($progressData);
+
+        //$fechaInicio=strtotime("25-02-2008");
+        $fechaInicio=strtotime(Carbon::now()->startOfMonth()->startOfDay()->format('d-m-Y'));
+        //$fechaFin=strtotime("01-04-2008");
+        $fechaFin=strtotime(Carbon::now()->startOfDay()->format('d-m-Y'));
+
+        foreach ($asesores as $asesor)
+        {
+            /*echo "<pre>";
+            print_r($asesor);
+            echo "</pre>";*/
+            if (in_array(auth()->user()->rol, [
+                User::ROL_FORMACION
+                , User::ROL_ADMIN
+                , User::ROL_PRESENTACION
+                , User::ROL_ASESOR
+                , User::ROL_LLAMADAS
+                , User::ROL_JEFE_LLAMADAS
+                , User::ROL_ASISTENTE_PUBLICIDAD
+            ])) {
+            } else {
+                if (auth()->user()->rol != User::ROL_ADMIN) {
+                    if (auth()->user()->rol != User::ROL_ENCARGADO) {
+                        if (auth()->user()->id != $asesor->id) {
+                            continue;
+                        }
+                    } else {
+                        if (auth()->user()->id != $asesor->supervisor) {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            /*CONSULTAS PARA MOSTRAR INFO EN TABLA*/
+            $date_pagos = Carbon::parse(now())->subMonth()->startOfMonth();
+            $fechametames = Carbon::now()->clone();
+
+            if (!request()->has("fechametames")) {
+                $fechametames = Carbon::now()->clone();
+                $date_pagos = Carbon::parse(now())->clone()->startOfMonth()->subMonth();
+            } else {
+                $fechametames = Carbon::parse($request->fechametames)->clone();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
+            }
+
+            //dd($fechametames,$date_pagos);
+
+
+            $asesor_pedido_dia = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.clave_pedidos', $asesor->clave_pedidos)
+                ->where('pedidos.codigo', 'not like', "%-C%")->activo()
+                ->whereDate('pedidos.created_at', $fechametames)
+                ->where('pendiente_anulacion', '<>', '1')->count();
+
+            $meta_calculo_row = Meta::where('rol', User::ROL_ASESOR)
+                ->where('user_id', $asesor->id)
+                ->where('anio', $fechametames->format('Y'))
+                ->where('mes', $fechametames->format('m'))->first();
+
+
+
+
+            if($meta_calculo_row==null)
+            {
+                \Log::info("Error en meta_dashboard para asesor id -> " . $asesor->id." en periodo ".$fechametames);
+            }
+
+            $metatotal_quincena = (float)$meta_calculo_row->meta_quincena;
+            $metatotal_intermedia = (float)$meta_calculo_row->meta_intermedia;
+            $metatotal_1 = (float)$meta_calculo_row->meta_pedido;
+            $metatotal_2 = (float)$meta_calculo_row->meta_pedido_2;
+
+            $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
+
+            if (!request()->has("fechametames")) {
+                $fechametames = Carbon::now()->clone();
+                $date_pagos = Carbon::parse(now())->clone()->startOfMonth()->subMonth();
+            } else {
+                $fechametames = Carbon::parse($request->fechametames)->clone();
+                $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
+            }
+
+            $total_pedido = Pedido::query()->where('user_clavepedido', $asesor->clave_pedidos)
+                ->where('pedidos.codigo', 'not like', "%-C%")->where('pedidos.estado', '1')
+                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$fechametames->clone()->startOfMonth()->startOfDay(), $fechametames->clone()->endOfDay()])
+                ->count();
+
+            $total_pagado_a = Pedido::query()
+                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
+                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.estado', '1')
+                ->where([
+                    ['pedidos_anulacions.state_solicitud','=','1'],
+                    ['pedidos_anulacions.tipo','=','C'],
+                ])
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
+                //->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->count();
+
+            $total_pagado_b = Pedido::query()
+                ->leftjoin("pago_pedidos", "pago_pedidos.pedido_id", "pedidos.id")
+                ->leftjoin("pedidos_anulacions", "pedidos_anulacions.pedido_id", "pedidos.id")
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
+                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.estado', '1')
+                ->where([
+                    ['pedidos.pago','=','1'],
+                    ['pedidos.pagado','=','2'],
+                    ['pago_pedidos.estado','=',1],
+                    ['pago_pedidos.pagado','=',2]
+                ])
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
+                ->where(DB::raw('CAST(pago_pedidos.created_at as date)'), '<=', $fechametames->clone()->endOfDay())
+                ->count();
+
+            $total_pagado=$total_pagado_a+$total_pagado_b;
+
+            $total_pedido_mespasado = Pedido::query()
+                ->where('pedidos.user_clavepedido', $asesor->clave_pedidos)
+                ->where('pedidos.estado_correccion','0')
+                ->where('pedidos.estado', '1')
+                ->where('pedidos.pendiente_anulacion', '<>', '1')
+                ->whereBetween(DB::raw('CAST(pedidos.created_at as date)'), [$date_pagos->clone()->startOfMonth()->startOfDay(), $date_pagos->clone()->endOfMonth()->endOfDay()])
+                ->count();
+
+            $supervisor = User::where('rol', User::ROL_ASESOR)->where('clave_pedidos', $asesor->clave_pedidos)->activo()->first()->supervisor;
+            $pedidos_totales = Pedido::query()->join('users as u', 'u.id', 'pedidos.user_id')->where('u.clave_pedidos', $asesor->clave_pedidos)
+                ->where('pedidos.codigo', 'not like', "%-C%")->activo()
+                ->where('pendiente_anulacion', '<>', '1')
+                ->whereDate('pedidos.created_at', $fechametames)->count();
+
+            $clientes_situacion_activo = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
+                ->where('clientes.situacion','=','LEVANTADO')
+                ->where('clientes.congelado','<>',1)
+                ->activo()
+                ->count();
+
+            $clientes_situacion_recurrente = Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->join('situacion_clientes as cv','cv.cliente_id','clientes.id')
+                ->where('cv.periodo',Carbon::now()->clone()->startOfMonth()->subMonth()->format('Y-m'))
+                ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
+                ->where('clientes.situacion','=','CAIDO')
+                ->where('clientes.congelado','<>',1)
+                ->activo()
+                ->count();
+
+            $clientes_actuales=Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
+                //->where('clientes.tipo','=','0')
+                ->where('clientes.congelado','<>',1)
+                ->activo()
+                ->count();
+
+            $encargado_asesor = $asesor->supervisor;
+
+            $item = [
+                "identificador" => $asesor->clave_pedidos,
+                "code" => "{$asesor->name}",
+                "inicio" => Carbon::parse($asesor->created_at)->format('d-m-Y'),
+                "chats" => $clientes_actuales,
+                "pedidos_dia" => $asesor_pedido_dia,
+                "name" => $asesor->name,
+                "total_pedido" => $total_pedido,
+                "total_pedido_mespasado" => $total_pedido_mespasado,
+                "total_pagado" => $total_pagado,
+                "meta_quincena" => $metatotal_quincena,
+                "meta_intermedia" => $metatotal_intermedia,
+                "meta" => $metatotal_1,
+                "meta_2" => $metatotal_2,
+                "pedidos_totales" => $pedidos_totales,
+                "clientes_situacion_activo" => $clientes_situacion_activo,
+                "clientes_situacion_recurrente" => $clientes_situacion_recurrente,
+                "supervisor" => $supervisor,
+            ];
+
+
+
+            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400){
+                //echo date("d-m-Y", $i)."<br>";
+
+                $clientes_actuales_dia=Cliente::query()->join('users as u', 'u.id', 'clientes.user_id')
+                    ->where('clientes.user_clavepedido', $asesor->clave_pedidos)
+                    //->where('clientes.tipo','=','0')
+                    ->where('clientes.congelado','<>',1)
+                    ->whereDate('clientes.created_at', date("Y-m-d", $i))
+                    ->activo()
+                    ->count();
+
+                $item[date("Y-m-d", $i)]=$clientes_actuales_dia;
+            }
+            /*echo "<pre>";
+            print_r($item);
+            echo "</pre>";*/
+
+            if (array_key_exists($encargado_asesor, $count_asesor)) {
+                /*if ($encargado_asesor == 46) {
+                    $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
+                    $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
+                    $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
+                    $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
+                    $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
+                    $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
+                    $count_asesor[$encargado_asesor]['meta_intermedia'] = $metatotal_intermedia + $count_asesor[$encargado_asesor]['meta_intermedia'];
+                    $count_asesor[$encargado_asesor]['meta'] = $metatotal_1 + $count_asesor[$encargado_asesor]['meta'];
+                    $count_asesor[$encargado_asesor]['meta_2'] = $metatotal_2 + $count_asesor[$encargado_asesor]['meta_2'];
+                    $count_asesor[$encargado_asesor]['total_pedido'] = $total_pedido + $count_asesor[$encargado_asesor]['total_pedido'];
+                    $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
+                } else*/ if ($encargado_asesor == 24) {
+                    $count_asesor[$encargado_asesor]['pedidos_totales'] = $pedidos_totales + $count_asesor[$encargado_asesor]['pedidos_totales'];
+                    $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = $clientes_situacion_recurrente + $count_asesor[$encargado_asesor]['all_situacion_recurrente'];
+                    $count_asesor[$encargado_asesor]['all_situacion_activo'] = $clientes_situacion_activo + $count_asesor[$encargado_asesor]['all_situacion_activo'];
+                    $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
+                    $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
+                    $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
+                    $count_asesor[$encargado_asesor]['meta_intermedia'] = $metatotal_intermedia + $count_asesor[$encargado_asesor]['meta_intermedia'];
+                    $count_asesor[$encargado_asesor]['meta'] = $metatotal_1 + $count_asesor[$encargado_asesor]['meta'];
+                    $count_asesor[$encargado_asesor]['meta_2'] = $metatotal_2 + $count_asesor[$encargado_asesor]['meta_2'];
+                    $count_asesor[$encargado_asesor]['total_pedido'] = $total_pedido + $count_asesor[$encargado_asesor]['total_pedido'];
+                    $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
+                } else {
+                    $count_asesor[$encargado_asesor]['pedidos_totales'] = 0;
+                    $count_asesor[$encargado_asesor]['all_situacion_recurrente'] = 0;
+                    $count_asesor[$encargado_asesor]['all_situacion_activo'] = 0;
+                    $count_asesor[$encargado_asesor]['total_pagado'] = $total_pagado + $count_asesor[$encargado_asesor]['total_pagado'];
+                    $count_asesor[$encargado_asesor]['total_pedido_mespasado'] = $total_pedido_mespasado + $count_asesor[$encargado_asesor]['total_pedido_mespasado'];
+                    $count_asesor[$encargado_asesor]['meta_quincena'] = $metatotal_quincena + $count_asesor[$encargado_asesor]['meta_quincena'];
+                    $count_asesor[$encargado_asesor]['meta_intermedia'] = $metatotal_intermedia + $count_asesor[$encargado_asesor]['meta_intermedia'];
+                    $count_asesor[$encargado_asesor]['meta'] = $metatotal_1 + $count_asesor[$encargado_asesor]['meta'];
+                    $count_asesor[$encargado_asesor]['meta_2'] = $metatotal_2 + $count_asesor[$encargado_asesor]['meta_2'];
+                    $count_asesor[$encargado_asesor]['total_pedido'] = $total_pedido + $count_asesor[$encargado_asesor]['total_pedido'];
+                    $count_asesor[$encargado_asesor]['pedidos_dia'] = $asesor_pedido_dia + $count_asesor[$encargado_asesor]['pedidos_dia'];
+
+                }
+            }
+
+            if ($asesor->excluir_meta)
+            {
+                if ($total_pedido_mespasado > 0)
+                {
+                    $p_pagos = round(($total_pagado / $total_pedido_mespasado) * 100, 2);
+                }
+                else {
+                    $p_pagos = 0;
+                }
+
+                if ($metatotal_quincena > 0)
+                {
+                    $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
+                }
+                else
+                {
+                    $p_quincena = 0;
+                }
+                if ($metatotal_quincena > 0)
+                {
+                    $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
+                }
+                else
+                {
+                    $p_quincena = 0;
+                }
+
+                if ($metatotal_intermedia > 0)
+                {
+                    $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
+                }
+                else
+                {
+                    $p_intermedia = 0;
+                }
+                if ($metatotal_intermedia > 0)
+                {
+                    $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
+                }
+                else
+                {
+                    $p_intermedia = 0;
+                }
+
+                if ($metatotal_1 > 0) {
+                    $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
+                }
+                else {
+                    $p_pedidos = 0;
+                }
+                if ($metatotal_1 > 0)
+                {
+                    $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
+                }
+                else {
+                    $p_pedidos = 0;
+                }
+
+                if ($metatotal_2 > 0) {
+                    $p_pedidos_2 = round(($total_pedido / $metatotal_2) * 100, 2);
+                }
+                else {
+                    $p_pedidos_2 = 0;
+                }
+                if ($metatotal_2 > 0) {
+                    $p_pedidos_2 = round(($total_pedido / $metatotal_2) * 100, 2);
+                } else {
+                    $p_pedidos_2 = 0;
+                }
+
+                /*-----------------------*/
+                /*if ($total_pedido>=0 && $total_pedido < $metatotal_quincena) {
+                    if ($metatotal_quincena > 0) {
+                        $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
+                    } else {
+                        $p_quincena = 0;
+                        $item['meta_new'] = 0;
+                        $item['progress_pedidos'] = $p_quincena;
+                    }
+                }
+                else *//*if ($total_pedido>=$metatotal_quincena && $total_pedido < $metatotal_intermedia) {
+                /*-----------------------*/
+                /*if ($total_pedido>=0 && $total_pedido < $metatotal_quincena) {
+                    if ($metatotal_quincena > 0) {
+                        $p_quincena = round(($total_pedido / $metatotal_quincena) * 100, 2);
+                    } else {
+                        $p_quincena = 0;
+                        $item['meta_new'] = 0;
+                        $item['progress_pedidos'] = $p_quincena;
+                    }
+                }
+                else *//*if ($total_pedido>=$metatotal_quincena && $total_pedido < $metatotal_intermedia) {
+                if ($metatotal_intermedia > 0) {
+                    $p_intermedia = round(($total_pedido / $metatotal_intermedia) * 100, 2);
+                } else {
+                    $p_intermedia = 0;
+                    $item['meta_new'] = 0.5;
+                    $item['progress_pedidos'] = $p_intermedia;
+                }
+            }
+            else */
+                if ($total_pedido>=0 && $total_pedido < $metatotal_1) {
+                    if ($metatotal_1 > 0) {
+                        $p_pedidos = round(($total_pedido / $metatotal_1) * 100, 2);
+                    } else {
+                        $p_pedidos = 0;
+                    }
+                    $item['meta_new'] = 1;
+                    $item['progress_pedidos'] = $p_pedidos;
+                    /*meta 2*/
+                }
+                else if ($total_pedido>=$metatotal_1)
+                {
+                    if ($metatotal_2 > 0) {
+                        $p_pedidos = round(($total_pedido / $metatotal_2) * 100, 2);
+                    } else {
+                        $p_pedidos = 0;
+                    }
+                    $item['meta_new'] = 2;
+                    $item['progress_pedidos'] = $p_pedidos;
+                }
+                /*-----------------------*/
+                $item['progress_pagos'] = $p_pagos;
+                $item['progress_pedidos'] = $p_pedidos;
+                $item['meta_quincena'] = $p_quincena;
+                $item['meta_intermedia'] = $p_intermedia;
+                $item['meta'] = $p_pedidos;
+                $item['meta_2'] = $p_pedidos_2;
+
+
+            }
+            else {
+                $progressData[] = $item;
+            }
+
+
+        }
+
+        //dd($progressData);
+        $newData = [];
+        $union = collect($progressData)->groupBy('identificador');
+        foreach ($union as $identificador => $items) {
+            foreach ($items as $item) {
+                if (!isset($newData[$identificador])) {
+                    $newData[$identificador] = $item;
+                } else {
+                    /*echo "<pre>";
+                    print_r($item);
+                    echo "</pre>";*/
+                    $newData[$identificador]['total_pedido'] += data_get($item, 'total_pedido');
+                    $newData[$identificador]['total_pedido_mespasado'] += data_get($item, 'total_pedido_mespasado');
+                    $newData[$identificador]['total_pagado'] += data_get($item, 'total_pagado');
+                    $newData[$identificador]['pedidos_dia'] += data_get($item, 'pedidos_dia');
+                    $newData[$identificador]['supervisor'] += data_get($item, 'supervisor');
+                    $newData[$identificador]['meta_new'] += data_get($item, 'meta_new');//0 quincena //0.5 intermedia //1 meta1//2 meta2
+                    $newData[$identificador]['pedidos_totales'] += data_get($item, 'pedidos_totales');//todo el mes
+                    $newData[$identificador]['clientes_situacion_recurrente'] += data_get($item, 'clientes_situacion_recurrente');//todo el mes
+                    $newData[$identificador]['clientes_situacion_activo'] += data_get($item, 'clientes_situacion_activo');//todo el mes
+                    $newData[$identificador]['meta_quincena'] += data_get($item, 'meta_quincena');
+                    $newData[$identificador]['meta_intermedia'] += data_get($item, 'meta_intermedia');
+                    $newData[$identificador]['meta'] += data_get($item, 'meta');
+                    $newData[$identificador]['meta_2'] += data_get($item, 'meta_2');
+                }
+            }
+            $newData[$identificador]['name'] = collect($items)->map(function ($item) {
+                return explode(" ", data_get($item, 'name'))[0];
+            })->first();
+        }
+        $progressData = collect($newData)->values()->map(function ($item) {
+            $all = data_get($item, 'total_pedido');
+            $all_mespasado = data_get($item, 'total_pedido_mespasado');
+            $pay = data_get($item, 'total_pagado');
+            $allmeta__quincena = data_get($item, 'meta_quincena');//15
+            $allmeta_intermedia = data_get($item, 'meta_intermedia');//in
+            $allmeta = data_get($item, 'meta');//meta 1
+            $allmeta_2 = data_get($item, 'meta_2');//meta 2
+            $pedidos_dia = data_get($item, 'pedidos_dia');//pedidos diario
+            $pedidos_totales = data_get($item, 'pedidos_totales');//pedidos de todo el mes
+            $clientes_situacion_recurrente = data_get($item, 'clientes_situacion_recurrente');//pedidos de todo el mes
+            $clientes_situacion_activo = data_get($item, 'clientes_situacion_activo');//pedidos de todo el mes
+            $supervisor = data_get($item, 'supervisor');
+            $meta_new = data_get($item, 'meta_new');
+
+            if ($all_mespasado == 0) {
+                $p_pagos = 0;
+            } else {
+                if ($pay > 0) {
+                    $p_pagos = round(($pay / $all_mespasado) * 100, 2);
+                } else {
+                    $p_pagos = 0;
+                }
+            }
+
+            /*meta quincena = 0*/
+            /*if ($all>=0 && $all < $allmeta__quincena) {
+                if ($allmeta__quincena > 0) {
+                    $p_quincena = round(($all / $allmeta__quincena) * 100, 2);
+                } else {
+                    $p_quincena = 0;
+                }
+                $meta_new = 0;
+                $item['progress_pedidos'] = $p_quincena;
+            } else if ($all>=$allmeta__quincena  &&  $all < $allmeta_intermedia) {
+                if ($allmeta_intermedia > 0) {
+                    $p_intermedia = round(($all / $allmeta_intermedia) * 100, 2);
+                } else {
+                    $p_intermedia = 0;
+                }
+                $meta_new = 0.5;
+                $item['progress_pedidos'] = $p_intermedia;
+            }else */if ($all>=0  && $all < $allmeta) {
+                if ($allmeta > 0) {
+                    $p_pedidos = round(($all / $allmeta) * 100, 2);
+                } else {
+                    $p_pedidos = 0;
+                }
+                $meta_new = 1;
+                $item['progress_pedidos'] = $p_pedidos;
+            }
+            else if($all>=$allmeta){
+                if ($allmeta_2 > 0) {
+                    $p_pedidos_2 = round(($all / $allmeta_2) * 100, 2);
+                } else {
+                    $p_pedidos_2 = 0;
+                }
+                $meta_new = 2;
+                $item['progress_pedidos'] = $p_pedidos_2;
+            }
+
+            $item['progress_pagos'] = $p_pagos;
+            $item['total_pedido'] = $all;
+            $item['total_pedido_pasado'] = $all_mespasado;
+            $item['pedidos_dia'] = $pedidos_dia;
+            $item['pedidos_totales'] = $pedidos_totales;
+            $item['all_situacion_recurrente'] = $clientes_situacion_recurrente;
+            $item['all_situacion_activo'] = $clientes_situacion_activo;
+            $item['meta_new'] = $meta_new;
+
+            if($meta_new==0)
+            {
+                $item['meta_combinar']=$item['meta_quincena'];
+            }
+            else if($meta_new==1)
+            {
+                $item['meta_combinar']=$item['meta'];
+            }else if($meta_new==2)
+            {
+                $item['meta_combinar']=$item['meta_2'];
+            }
+
+            if($allmeta_2==0)
+                $item['porcentaje_general']=0;
+            else
+            {
+                $item['porcentaje_general']=($all/$allmeta_2);
+            }
+
+            return $item;
+        })->sortBy('meta_new', SORT_NUMERIC, true)
+            ->sortBy('progress_pedidos', SORT_NUMERIC, true);//->all();
+
+        if ($request->ii == 1) {
+            $progressData->all();
+            /*if ($total_asesor % 2 == 0) {
+                $skip = 0;
+                $take = intval($total_asesor / 2);
+            } else {
+                $skip = 0;
+                $take = intval($total_asesor / 2) + 1;
+            }
+            $progressData->splice($skip, $take)->all();*/
+        }
+        else if ($request->ii == 2) {
+            $progressData->all();
+            /*if ($total_asesor % 2 == 0) {
+                $skip = 0;
+                $take = intval($total_asesor / 2);
+            } else {
+                $skip = 0;
+                $take = intval($total_asesor / 2) + 1;
+            }
+            $progressData->splice($skip, $take)->all();*/
+        }
+        else if ($request->ii == 17) {
+            $progressData->all();
+            /*if ($total_asesor % 2 == 0) {
+                $skip = 0;
+                $take = intval($total_asesor / 2);
+            } else {
+                $skip = 0;
+                $take = intval($total_asesor / 2) + 1;
+            }
+            $progressData->splice($skip, $take)->all();*/
+        }
+        else if ($request->ii == 37) {
+            $progressData->all();
+        }
+
+        //aqui la division de  1  o 2
+        $all = collect($progressData)->pluck('total_pedido')->sum();
+        $all_situacion_recurrente = collect($progressData)->pluck('all_situacion_recurrente')->sum();
+        $all_situacion_activo = collect($progressData)->pluck('all_situacion_activo')->sum();
+        $all_mespasado = collect($progressData)->pluck('total_pedido_mespasado')->sum();
+        $pay = collect($progressData)->pluck('total_pagado')->sum();
+        $meta_quincena = collect($progressData)->pluck('meta_quincena')->sum();
+        $meta_intermedia = collect($progressData)->pluck('meta_intermedia')->sum();
+        $meta = collect($progressData)->pluck('meta')->sum();
+        $meta_2 = collect($progressData)->pluck('meta_2')->sum();
+        $meta_combinar = collect($progressData)->pluck('meta_combinar')->sum();
+        $pedidos_dia = collect($progressData)->pluck('pedidos_dia')->sum();
+        $supervisor = collect($progressData)->pluck('supervisor')->sum();
+        $loschats = collect($progressData)->pluck('chats')->sum();
+        $meta_new=0;
+        $progress_pedidos=0;
+
+        foreach ($supervisores_array as $supervisor_2)
+        {
+
+            //dd($count_asesor);
+            if ($count_asesor[$supervisor_2->id]['total_pedido'] >= 0 && $count_asesor[$supervisor_2->id]['total_pedido'] < $count_asesor[$supervisor_2->id]['meta'])
+            {
+                if($count_asesor[$supervisor_2->id]['total_pedido']>0)
+                {
+                    $count_asesor[$supervisor_2->id]['progress_pedidos']=round(($count_asesor[$supervisor_2->id]['total_pedido']/$count_asesor[$supervisor_2->id]['meta'])*100,2 );
+                }else{
+                    $count_asesor[$supervisor_2->id]['progress_pedidos']=0;
+                }
+                $count_asesor[$supervisor_2->id]['meta_new']=1;
+            }else if($count_asesor[$supervisor_2->id]['total_pedido'] >= $count_asesor[$supervisor_2->id]['meta'])
+            {
+                if($count_asesor[$supervisor_2->id]['meta_2'] > 0)
+                {
+                    $count_asesor[$supervisor_2->id]['progress_pedidos']=round( ($count_asesor[$supervisor_2->id]['total_pedido']/$count_asesor[$supervisor_2->id]['meta_2'])*100,2 );
+                }else{
+                    $count_asesor[$supervisor_2->id]['progress_pedidos']=0;
+                }
+                $count_asesor[$supervisor_2->id]['meta_new']=2;
+            }
+        }
+
+        //verificar totales
+
+        if ($all >= 0 && $all < $meta)
+        {
+            if($all>0)
+            {
+                $progress_pedidos=round(($all/$meta)*100,2 );
+            }else{
+                $progress_pedidos=0;
+            }
+            $meta_new=1;
+        }else if($all >= $meta)
+        {
+            if($meta_2 > 0)
+            {
+                $progress_pedidos=round( ($all/$meta_2)*100,2 );
+            }else{
+                $progress_pedidos=0;
+            }
+            $meta_new=2;
+        }
+
+        if ($all_mespasado == 0) {
+            $p_pagos = 0;
+        } else {
+            if ($pay > 0) {
+                $p_pagos = round(($pay / $all_mespasado) * 100, 2);
+            } else {
+                $p_pagos = 0;
+            }
+        }
+
+        $object_totales = [
+            //"progress_pedidos" => $p_pedidos,
+            "progress_pagos" => $p_pagos,
+            "total_pedido" => $all,
+            "all_situacion_recurrente" => $all_situacion_recurrente,
+            "all_situacion_activo" => $all_situacion_activo,
+            "total_pedido_mespasado" => $all_mespasado,
+            "total_pagado" => $pay,
+            "meta" => $meta,
+            "meta_2" => $meta_2,
+            "meta_combinar" => $meta_combinar,
+            "pedidos_dia" => $pedidos_dia,
+            "supervisor" => $supervisor,
+            "meta_new"=>$meta_new,
+            "progress_pedidos"=>$progress_pedidos,
+            "chats"=>$loschats
+        ];
+
+        for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+        {
+            $object_totales[date("Y-m-d", $i)]=collect($progressData)->pluck(date("Y-m-d", $i))->sum();
+        }
+
+
+        $html = '';
+
+        /*TOTAL*/
+
+        if ($request->ii == 1 || $request->ii == 2 || $request->ii == 17 )
+        {
+            if ($request->ii == 1 )
+            {
+                $html .= '<div class="row">';
+                $html .= '<div class="col-12 text-center b">';
+
+                $html .='<b class="font-16 text-success">PAOLA</b>';
+
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+            else if ($request->ii == 2 )
+            {
+                $html .= '<div class="row">';
+                $html .= '<div class="col-12 text-center">';
+
+                $html .='<b class="font-16 text-success">ALEXANDRA</b>';
+
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+            else if ($request->ii == 17 )
+            {
+                $html .= '<div class="row">';
+                $html .= '<div class="col-12 text-center">';
+
+                $html .='<b class="font-16 text-success">Publicidad - Calendario</b>';
+
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+
+            $html .= '<div class="row">';
+            $html .= '<div class="col-3">';
+
+            $html .='<h5 class="card-title text-uppercase font-weight-bold">Total de cobranzas :</h5>';
+            $html .= '<p class="porcentaje_cobranzas_metas" class="card-text font-weight-bold" style="font-size: 25px">'.$object_totales['progress_pagos'].'%</p>';
+
+            $html .= '</div>';
+
+            $html .= '<div class="col-6 d-flex justify-content-center align-items-center">';
+            $html .= '<h2 class="card-title text-uppercase h1-change-day text-center font-weight-bold">METAS DEL MES DE '.Carbon::now()->startOfMonth()->translatedFormat('F').' :</h2>';
+            $html .= '<buton style="background: none; border: none;" onclick="openFullscreen();">';
+            $html .= '<i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i>';
+            $html .= '</button>';
+            $html .= '</div>';
+
+            $html .= '<div class="col-3">';
+
+            $html .='<h5 class="card-title text-uppercase font-weight-bold">Total de pedidos :</h5>';
+            $html .= '<p class="porcentaje_pedidos_metas" class="card-text font-weight-bold" style="font-size: 25px">'.$object_totales['progress_pedidos'].'%</p>';
+
+            $html .= '</div>';
+            $html .= '</div>';
+
+            $html .= '<div class="table-responsive">';
+            $html .= '<table class="table tabla-metas_pagos_pedidos table-dark" style="background: #e4dbc6; color: #232121; margin-bottom: 3px !important;">';
+            $html .= '<thead>
+                <tr>
+                    <th width="8%">Asesor</th>
+                    <th width="11%">Id</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Inicio</th>
+                    <th width="6%" style="font-weight: bold;color:blue;">Chats</th>';
+
+            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+            {
+                $html .= '<th width="6%">'.date("d-m", $i).'</th>';
+            }
+
+            $html .='</tr>
+                </thead>
+                <tbody>';
+            $medall_icon='';
+            foreach ($progressData as $data) {
+
+                if($data["meta_new"]=='0')
+                {
+                    //bronce
+                    $medall_icon='bron<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
+
+                }
+                else if($data["meta_new"]=='0.5')
+                {
+                    //bronce
+                    $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
+
+                }
+                else if($data["meta_new"]=='1')
+                {
+                    //plata
+                    $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:silver;"></i>';
+                    $medall_icon='';
+                }
+                else if($data["meta_new"]=='2')
+                {
+                    //oro
+                    $medall_icon='';
+                    $medall_icon=$medall_icon.'<i class="fas fa-medal fa-xs" style="font-size:18px;color:#cd7f32;"></i>';
+                    $medall_icon=$medall_icon.'<i class="fas fa-medal fa-xs" style="font-size:18px;color:silver;"></i>';
+                    //$medall_icon=$medall_icon.'<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
+                    $medall_icon=$medall_icon.'<i class="fas fa-trophy fa-xs" style="font-size:18px;color:goldenrod;"></i>';
+                }else{
+                    //nada
+                    $medall_icon='<i class="fas fa-medal fa-xs" style="font-size:18px;color:goldenrod;"></i>';
+                    $medall_icon='';
+                }
+
+                $html .= '<tr>
+             <td class="font-weight-bold"><span class="d-inline-block">'. $data["name"] . '</span></td>
+             <td class="font-weight-bold">' . $data["identificador"] . ' ';
+
+                if ($data["supervisor"] == 46) {
+                    $html .= '- A';
+                } else {
+                    $html .= '- B';
+                }
+                $html .= '
+             </td>
+             <td style="font-weight: bold;color:blue;">'.$data["inicio"].'</td>
+             <td style="font-weight: bold;color:blue;">'.$data["chats"].'</td>';
+
+                for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+                {
+                    $html .= '<td>'. $data[date("Y-m-d", $i)].'</td>';
+
+                }
+
+
+                $font_size_sub=12;
+
+                $sub_html='<sub class="top-visible" style="display: block !important;">
+                                      <span style="background:#FFD4D4  !important;" class="badge font-'.$font_size_sub.'">Qui. . '.$data["meta_quincena"].'</span>
+                                      <span class="badge bg-warning font-'.$font_size_sub.'">Int. . '.$data["meta_intermedia"].'</span>
+                                      <span class="badge bg-success text-dark font-'.$font_size_sub.'"">Pri. . '.$data["meta"].'</span>
+                                      <span class="badge bg-primary text-dark font-'.$font_size_sub.'"">Seg. . '.$data["meta_2"].'</span>
+                                  </sub>';
+                $sub_html='';
+
+                $html .= '</tr> ';
+            }
+
+            $html .= '<tr>';
+            $html .= '<td class="text-center font-weight-bold" colspan="3">TOTAL NETO</td>';
+
+            $html .= '<td class="bg-warning font-weight-bold">'.$object_totales['chats'].'</td>';
+
+            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+            {
+                $html .= '<td class="bg-warning font-weight-bold">'.$object_totales[date("Y-m-d", $i)].'</td>';
+                //$object_totales[date("Y-m-d", $i)]=collect($progressData)->pluck(date("Y-m-d", $i))->sum();
+            }
+
+            $html .= '</tr>';
+
+            $html .= '</tbody>';
+
+            $html .= '<tfoot>';
+
+            //72
+            $html .= '<tr>';
+            $html .= '<th colspan="2">Total Publicidad</th>';
+            $html .= '<th></th>';
+            $html .= '<th>Chats</th>';
+            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+            {
+                $count_1 = Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->count();
+                if($count_1==1)
+                {
+                    $count_1=Publicidad::query()->where('name','TOTAL PUBLICIDAD')->where('cargado',date("Y-m-d", $i))->first();
+                    $html .= '<th>'.$count_1->total.'</th>';
+                }else{
+                    $html .= '<th>0</th>';
+                }
+
+            }
+            $html .= '</tr>';
+
+            //95
+            $html .= '<tr>';
+            $html .= '<th colspan="2">Total Dante</th>';
+            $html .= '<th></th>';
+            $html .= '<th>Chats</th>';
+            for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
+            {
+                $count_2 = Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->count();
+                if($count_2==1)
+                {
+                    $count_2=Publicidad::query()->where('name','TOTAL DANTE')->where('cargado',date("Y-m-d", $i))->first();
+                    $html .= '<th>'.$count_2->total.'</th>';
+                }else{
+                    $html .= '<th>0</th>';
+                }
+
+            }
+            $html .= '</tr>';
+
+            $html .= '</tfoot>';
+
+            $html .= '</table>';
+            $html .= '</div>';
+        }
+
+        return $html;
+    }
+
     public function SituacionClientes(Request $request)
     {
         $inicio_s = Carbon::now()->clone()->startOfMonth()->format('Y-m-d');

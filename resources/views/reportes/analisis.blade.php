@@ -92,6 +92,19 @@
         </div>
     </div>
 
+    <div class="card">
+        <div class="card-header">
+
+        </div>
+        <div class="card-body">
+            <div id="basefria_rendimiento"></div>
+
+        </div>
+        <div class="card-footer">
+
+        </div>
+    </div>
+
     <div class="card card-primary card-outline">
         <div class="card-header">
             <h3 class="card-title">
@@ -503,6 +516,20 @@
             });
         }
 
+        window.cargaReporteBasefriaRendimiento = function () {
+            var fd = new FormData();
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('reportes.analisis.rendimiento') }}",
+                success: function (resultado) {
+                    $('#basefria_rendimiento').html(resultado);
+                }
+            })
+        }
+
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -514,6 +541,8 @@
             grafico_vienen_de();
             grafico_vienen_de_barra();
             grafico_activos_bloqueados_barra();
+
+
         });
 
 
