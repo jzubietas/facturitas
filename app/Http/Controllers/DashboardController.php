@@ -8351,6 +8351,7 @@ class DashboardController extends Controller
                 , User::ROL_ASESOR
                 , User::ROL_LLAMADAS
                 , User::ROL_JEFE_LLAMADAS
+                , User::ROL_ASISTENTE_PUBLICIDAD
             ])) {
             } else {
                 if (auth()->user()->rol != User::ROL_ADMIN) {
