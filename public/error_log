@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [15-May-2023 17:12:52 America/Lima] PHP Fatal error:  During class fetch: Uncaught ErrorException: include(/home/ojosacelestepe/public_html/vendor/composer/../laravel/framework/src/Illuminate/View/Compilers/Concerns/CompilesTranslations.php): Failed to open stream: No such file or directory in /home/ojosacelestepe/public_html/vendor/composer/ClassLoader.php:571
 Stack trace:
 #0 /home/ojosacelestepe/public_html/vendor/composer/ClassLoader.php(571): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'include(/home/o...', '/home/ojosacele...', 571)
@@ -35,3 +36,29 @@ Stack trace:
 #32 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(111): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
 #33 /home/ojosacelestepe/public_html/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
 #34 {main} in /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/View/Compilers/BladeCompiler.php on line 15
+=======
+[12-May-2023 08:33:28 America/Lima] PHP Fatal error:  During class fetch: Uncaught ParseError: Unterminated comment starting line 39 in /home/ojosacelestepe/public_html/vendor/nesbot/carbon/src/Carbon/Traits/Date.php:39
+Stack trace:
+#0 /home/ojosacelestepe/public_html/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/ojosacele...')
+#1 /home/ojosacelestepe/public_html/vendor/nesbot/carbon/src/Carbon/Carbon.php(510): Composer\Autoload\ClassLoader->loadClass('Carbon\\Traits\\D...')
+#2 /home/ojosacelestepe/public_html/vendor/composer/ClassLoader.php(571): include('/home/ojosacele...')
+#3 /home/ojosacelestepe/public_html/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/ojosacele...')
+#4 /home/ojosacelestepe/public_html/vendor/nesbot/carbon/src/Carbon/Laravel/ServiceProvider.php(69): Composer\Autoload\ClassLoader->loadClass('Carbon\\Carbon')
+#5 /home/ojosacelestepe/public_html/vendor/nesbot/carbon/src/Carbon/Laravel/ServiceProvider.php(45): Carbon\Laravel\ServiceProvider->updateLocale()
+#6 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Carbon\Laravel\ServiceProvider->boot()
+#7 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\Container\BoundMethod::Illuminate\Container\{closure}()
+#8 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\Container\Util::unwrapIfClosure(Object(Closure))
+#9 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\Container\BoundMethod::callBoundMethod(Object(Illuminate\Foundation\Application), Array, Object(Closure))
+#10 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php(653): Illuminate\Container\BoundMethod::call(Object(Illuminate\Foundation\Application), Array, Array, NULL)
+#11 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(924): Illuminate\Container\Container->call(Array)
+#12 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(905): Illuminate\Foundation\Application->bootProvider(Object(Carbon\Laravel\ServiceProvider))
+#13 [internal function]: Illuminate\Foundation\Application->Illuminate\Foundation\{closure}(Object(Carbon\Laravel\ServiceProvider), 30)
+#14 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(906): array_walk(Array, Object(Closure))
+#15 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/BootProviders.php(17): Illuminate\Foundation\Application->boot()
+#16 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(237): Illuminate\Foundation\Bootstrap\BootProviders->bootstrap(Object(Illuminate\Foundation\Application))
+#17 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(153): Illuminate\Foundation\Application->bootstrapWith(Array)
+#18 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(137): Illuminate\Foundation\Http\Kernel->bootstrap()
+#19 /home/ojosacelestepe/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(111): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#20 /home/ojosacelestepe/public_html/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#21 {main} in /home/ojosacelestepe/public_html/vendor/nesbot/carbon/src/Carbon/Carbon.php on line 510
+>>>>>>> 48ccb0b11 (a)
