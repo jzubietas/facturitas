@@ -235,7 +235,7 @@ class BasefriaController extends Controller
             /* DB::rollback();
             dd($th); */
         }
-        return redirect()->route('basefria')->with('info', 'registrado');
+        return redirect()->route('basefria.create')->with('info', 'registrado');
 
     }
 
