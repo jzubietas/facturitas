@@ -9133,7 +9133,7 @@ class DashboardController extends Controller
 
             //72
             $html .= '<tr>';
-            $html .= '<th colspan="2">Total Publicidad</th>';
+            $html .= '<th colspan="2"><span class="font-20 text-success">Total Publicidad</span></th>';
             $html .= '<th></th>';
             $html .= '<th>Chats</th>';
             for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
@@ -9168,6 +9168,13 @@ class DashboardController extends Controller
 
             }
             $html .= '</tr>';
+
+            //porcentajes
+            //$html .= '<tr>';
+            //$html .= '<th colspan="2"><span class="font-20 text-info">Porcentajes</span></th>';
+
+            //$html .= '</tr>';
+
 
             $html .= '</tfoot>';
 
