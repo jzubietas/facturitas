@@ -9091,7 +9091,7 @@ class DashboardController extends Controller
                 }
                 $html .= '
              </td>
-             <td style="font-weight: bold;color:blue;">'.$data["inicio"].'</td>
+             <td style="font-weight: bold;color:blue;">'.Carbon::parse($data["inicio"])->format('d-m').'</td>
              <td style="font-weight: bold;color:blue;">'.$data["chats"].'</td>';
 
              for($i=$fechaInicio; $i<=$fechaFin; $i+=86400)
