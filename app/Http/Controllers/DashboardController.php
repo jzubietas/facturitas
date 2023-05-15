@@ -9167,7 +9167,7 @@ class DashboardController extends Controller
                     ->first();
                 if($divisor_porcentaje!==null)
                 {
-                    $porcentaje_publi = ($dividendo_porcentaje/$divisor_porcentaje->total)*100;
+                    $porcentaje_publi = round( ($dividendo_porcentaje/$divisor_porcentaje->total)*100 ,2 );
                 }else{
                     $porcentaje_publi = 0;
                 }
