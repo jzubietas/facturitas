@@ -123,18 +123,20 @@ class BasefriaController extends Controller
             ->editColumn('action', function ($row) {
                 $btn = "";
 
-                $btn = $btn . '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="' . $row->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-person"></i> Convertir a cliente</button></a>';
+                if(\auth()->user()->can('basefria.convertir.cliente')):
+                    $btn = $btn . '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="' . $row->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-person"></i> Convertir a cliente</button></a>';
+                endif;
 
                 if (auth()->user()->can('base_fria.edit')):
                     $btn = $btn.'<a href="'.route('basefria.edit', $row->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
                 endif;
 
-                //if(\auth()->user()->can('clientes.destroy')) {
+                if(\auth()->user()->can('basefria.bloquear')) {
                     if($row->estado=='1')
                     {
                         $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="'.$row->id.'" data-asesor="'.trim($row->identificador).'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
                     }
-                //}
+                }
 
                 return $btn;
             })
