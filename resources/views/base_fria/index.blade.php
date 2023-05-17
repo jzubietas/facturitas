@@ -330,7 +330,7 @@
                                 Swal.fire({
                                     icon: 'warning',
                                     title: 'Advertencia',
-                                    html: 'Este cliente ya se encuentra registrado en duplicados',
+                                    html: 'Este cliente ya se encuentra registrado en duplicados. '+data.actualizacion,
                                     showDenyButton: true,
                                     confirmButtonText: 'Estoy de acuerdo',
                                     denyButtonText: 'Cancelar',
