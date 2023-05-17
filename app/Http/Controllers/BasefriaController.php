@@ -353,13 +353,18 @@ class BasefriaController extends Controller
             ->where('celular', '=', $request->celular)
             ->whereTime('created_at', '>=', Carbon::now()->subHour()->toTimeString())
             ->whereTime('created_at', '<=', Carbon::now()->toTimeString())
+            ->orderby('created_at')
+            ->limit(1)
             ->get();
 
         //return Carbon::now()->subHour()->toTimeString();
 
         return response()->json([
             'is_repetido' => $clientes_repetidos_publicidad->count() > 0,
-            'coincidencia' => $clientes_repetidos_publicidad
+            'coincidencia' => $clientes_repetidos_publicidad,
+            'actualizacion' => $clientes_repetidos_publicidad->map(function (ClienteDuplicado $p) {
+                    return "<span class='text-danger'>" . $p->created_at . "</span>";
+            })->join(', '),
         ]);
     }
 
