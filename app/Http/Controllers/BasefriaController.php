@@ -379,14 +379,20 @@ class BasefriaController extends Controller
         $data = ClienteDuplicado::
             //join('users as u', 'clientes.user_id', 'u.id')
             select([
-                'cliente_duplicados.correlativo as id',
+                'cliente_duplicados.id',
+                'cliente_duplicados.cliente_id',
                 'cliente_duplicados.nombre',
                 'cliente_duplicados.icelular',
                 'cliente_duplicados.celular',
                 'cliente_duplicados.user_clavepedido as identificador',
                 'cliente_duplicados.estado',
                 'cliente_duplicados.situacion',
-                'cliente_duplicados.created_at'
+                'cliente_duplicados.fsb_porcentaje',
+                'cliente_duplicados.fcb_porcentaje',
+                'cliente_duplicados.esb_porcentaje',
+                'cliente_duplicados.ecb_porcentaje',
+                'cliente_duplicados.created_at',
+                DB::raw(" (select sum(dp.saldo) from detalle_pedidos dp inner join pedidos p on p.id=dp.pedido_id where dp.estado=1 and p.estado=1 and p.cliente_id=cliente_duplicados.id ) as total_deuda ")
             ]);
             //->where('clientes.tipo', '0');
 
@@ -425,7 +431,8 @@ class BasefriaController extends Controller
                 ];
 
             }else{*/
-                ClienteDuplicado::create([
+                $cliente_duplicado=ClienteDuplicado::create([
+                    'cliente_id'=>$searchCliente->id,
                     'nombre' => $searchCliente->nombre,
                     'celular' => $searchCliente->celular,
                     'icelular'=> $searchCliente->icelular,
@@ -441,7 +448,15 @@ class BasefriaController extends Controller
                     'deuda' => $searchCliente->deuda,
                     'pidio' => $searchCliente->pidio,
                     'grupo_publicidad' =>$searchCliente->grupo_publicidad,
-                    'estado' => $searchCliente->estado
+                    'estado' => $searchCliente->estado,
+                    'situacion' => $searchCliente->situacion,
+                    'fsb_porcentaje' => $searchCliente->fsb_porcentaje,
+                    'fcb_porcentaje' => $searchCliente->fcb_porcentaje,
+                    'esb_porcentaje' => $searchCliente->esb_porcentaje,
+                    'ecb_porcentaje' => $searchCliente->ecb_porcentaje,
+                ]);
+                $cliente_duplicado->update([
+                    'correlativo'=>'BF'.($searchCliente->user_clavepedido).str_pad($cliente_duplicado->cliente_id,6,0)
                 ]);
             //}
 
