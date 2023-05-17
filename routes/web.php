@@ -88,6 +88,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('dashboard.viewMetaTable_G3', [DashboardController::class, 'viewMetaTableG3'])->name('dashboard.viewMetaTable_G3');
     Route::any('dashboard.viewMetaTable_G17', [DashboardController::class, 'viewMetaTableG17'])->name('dashboard.viewMetaTable_G17');
     Route::any('dashboard.viewMetaTable_G17_Calendario', [DashboardController::class, 'viewMetaTableG17Calendario'])->name('dashboard.viewMetaTable_G17_Calendario');
+    Route::any('dashboard.viewMetaTable_G17_Rendimiento', [DashboardController::class, 'viewMetaTableG17Rendimiento'])->name('dashboard.viewMetaTable_G17_Rendimiento');
     Route::any('dashboard.viewMetaTable_G99', [DashboardController::class, 'viewMetaTableG99'])->name('dashboard.viewMetaTable_G99');
     Route::any('dashboard.viewMetaTable.Recurrente.Activo', [DashboardController::class, 'viewMetaTableRecurrenteActivo'])->name('dashboard.viewMetaTable.Recurrente.Activo');
 
