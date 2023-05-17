@@ -25,6 +25,12 @@
                     <th>Nombre de cliente</th>
                     <th>Celular</th>
                     <th>Asesor</th>
+                    <th>Situacion</th>
+                    <th>P. FSB</th>
+                    <th>P. FCB</th>
+                    <th>P. ESB</th>
+                    <th>P. ECB</th>
+                    <th>Deuda</th>
                     <th>Creado</th>
                     <th width="100px">Acciones</th>
                 </tr>
@@ -441,8 +447,8 @@
                 },
                 columns: [
                     {
-                        data: 'id',
-                        name: 'id',
+                        data: 'cliente_id',
+                        name: 'cliente_id',
                     },
                     {
                         data: 'nombre',
@@ -463,6 +469,12 @@
                         data: 'identificador',
                         name: 'Asesor',
                     },
+                    {data: 'situacion',name: 'situacion',},
+                    {data: 'fsb_porcentaje',name: 'fsb_porcentaje',},
+                    {data: 'fcb_porcentaje',name: 'fcb_porcentaje',},
+                    {data: 'esb_porcentaje',name: 'esb_porcentaje',},
+                    {data: 'ecb_porcentaje',name: 'ecb_porcentaje',},
+                    {data: 'total_deuda',name: 'total_deuda',},
                     {
                         data: 'created_at',
                         name: 'created_at',

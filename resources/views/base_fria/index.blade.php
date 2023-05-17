@@ -13,9 +13,11 @@
             <a href="{{ route('basefria.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
         @endcan
 
+        @can('basefria.agregar.publicidad')
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_agregarbasefria_publicidad">
             <i class="fas fa-plus-circle"></i> Agregar por Publicidad
         </button>
+        @endcan
 
         @include('base_fria.modal.AddBaseFriaPublicidad')
 
@@ -306,6 +308,9 @@
                                             '',
                                             'success'
                                         )
+                                        //cambia index de select
+                                        //$('#asesores_bf option:selected').prop("selected", false).next().prop("selected", true);
+                                        //console.log($('#asesores_bf').val());
                                         $('#tablaserverside').DataTable().ajax.reload();
                                     },
                                     error:function(xhr)
@@ -357,6 +362,8 @@
                                                     '',
                                                     'success'
                                                 )
+                                                //$('#asesores_bf option:selected').prop("selected", false).next().prop("selected", true);
+                                                //console.log($('#asesores_bf').val());
                                                 $('#tablaserverside').DataTable().ajax.reload();
                                             },
                                             error:function(xhr)
