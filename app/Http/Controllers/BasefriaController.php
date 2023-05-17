@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 //use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\ClienteDuplicado;
 use App\Models\Porcentaje;
 use App\Models\TipoMovimiento;
 use App\Models\User;
@@ -342,12 +343,46 @@ class BasefriaController extends Controller
         //
     }
 
+    public function clientesDuplicados(Request $request)
+    {
+
+        return view('base_fria.duplicados');
+    }
+
+    public function clientesDuplicadosTabla(Request $request)
+    {
+        $data = ClienteDuplicado::
+            //join('users as u', 'clientes.user_id', 'u.id')
+            select([
+                'cliente_duplicados.correlativo as id',
+                'cliente_duplicados.nombre',
+                'cliente_duplicados.icelular',
+                'cliente_duplicados.celular',
+                'cliente_duplicados.user_clavepedido as identificador',
+                'cliente_duplicados.estado',
+                'cliente_duplicados.situacion'
+            ]);
+            //->where('clientes.tipo', '0');
+
+        return Datatables::of(DB::table($data))
+            ->addIndexColumn()
+            ->editColumn('action', function ($row) {
+                $btn = "";
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+
+    }
+
     public function storePublicidad(Request $request)
     {
 
         $user = User::where('id', $request->asesor_bf)->first();//el asesor
         $letra=$user->letra;
-        $searchCliente = Cliente::query()->with('user')->where('celular', '=', $request->celularbf)->first();
+        $searchCliente = Cliente::query()->with('user')->where('celular', '=', $request->celular)->first();
 
         $messages = [];
 
@@ -355,12 +390,42 @@ class BasefriaController extends Controller
             $messages = [
                 'celular.unique' => 'EL CELULAR INGRESADO SE ENCUENTA ASIGNADO AL ASESOR <b>' . $searchCliente->user->clave_pedidos.'</b>',
             ];
+
+            /*$searchClienteDuplicado = ClienteDuplicado::query()->where('celular', '=', $request->celular)->first();
+            if($searchClienteDuplicado != null)
+            {
+                $messages = [
+                    'celular.unique' => 'EL CELULAR INGRESADO SE ENCUENTA ASIGNADO AL ASESOR <b>' . $searchCliente->user->clave_pedidos.', y tambien en duplicados</b>',
+                ];
+
+            }else{*/
+                ClienteDuplicado::create([
+                    'nombre' => $searchCliente->nombre,
+                    'celular' => $searchCliente->celular,
+                    'icelular'=> $searchCliente->icelular,
+                    'user_id' => $searchCliente->user_id,
+                    'user_identificador' => $searchCliente->user_identificador,
+                    'user_clavepedido' => $searchCliente->user_clavepedido,
+                    'tipo' => $searchCliente->tipo,
+                    'provincia' => $searchCliente->provincia,
+                    'distrito' => $searchCliente->distrito,
+                    'direccion' => $searchCliente->direccion,
+                    'referencia' => $searchCliente->referencia,
+                    'dni' => $searchCliente->dni,
+                    'deuda' => $searchCliente->deuda,
+                    'pidio' => $searchCliente->pidio,
+                    'grupo_publicidad' =>$searchCliente->grupo_publicidad,
+                    'estado' => $searchCliente->estado
+                ]);
+            //}
+
+
+
         }
         $request->validate([
             'celular' => 'required|unique:clientes',
         ], $messages);
 
-        //return $request;
         try {
             DB::beginTransaction();
 

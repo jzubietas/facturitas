@@ -8,58 +8,9 @@
 @endsection
 
 @section('content_header')
-    <h1>Base fría
-        @can('base_fria.create')
-            <a href="{{ route('basefria.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
-        @endcan
-
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_agregarbasefria_publicidad">
-            <i class="fas fa-plus-circle"></i> Agregar por Publicidad
-        </button>
-
-        @include('base_fria.modal.AddBaseFriaPublicidad')
-
-        @can('base_fria.exportar')
-            <div class="float-right btn-group dropleft">
-
-                @if(Auth::user()->rol == 'Asesor')
-                    <a href="{{route('excel/basefria/exportar')}}" target="_blank" class="btn btn-dark mr-4">
-                        <i class="fa fa-download"></i>
-                        <i class="fa fa-file-excel"></i>
-                        Base fria Asesor
-                    </a>
-                @endif
-
-                @if(Auth::user()->rol == \App\Models\User::ROL_LLAMADAS || Auth::user()->rol == \App\Models\User::ROL_JEFE_LLAMADAS || Auth::user()->rol == \App\Models\User::ROL_ADMIN || Auth::user()->rol == \App\Models\User::ROL_ASISTENTE_PUBLICIDAD)
-                    <a href="{{route('excel.basefria-all_asesor-excel')}}" target="_blank" class="btn btn-dark mr-4">
-                        <i class="fa fa-download"></i>
-                        <i class="fa fa-file-excel"></i>
-                        EXPORTAR TODO BASE FRIA DE TODOS LOS ASESORES
-                    </a>
-                @endif
-
-                {{--@if(Auth::user()->rol == 'Administrador' || Auth::user()->rol == 'Llamadas' || Auth::user()->rol == 'Jefe de llamadas')
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Exportar
-                    </button>
-                    <div class="dropdown-menu">
-                        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría por asesor</a>
-                    </div>
-                @endif--}}
-
-            </div>
-            {{-- @include('base_fria.modal.exportar') --}}
-            @include('base_fria.modal.exportar2')
-        @endcan
+    <h1>Base fría Duplicados
     </h1>
-    @if($superasesor > 0)
-        <br>
-        <div class="bg-4">
-            <h1 class="t-stroke t-shadow-halftone2" style="text-align: center">
-                asesores con privilegios superiores: {{ $superasesor }}
-            </h1>
-        </div>
-    @endif
+
 @stop
 
 @section('content')
@@ -67,15 +18,7 @@
     <div class="card" style="overflow: hidden !important;">
         <div class="card-body" style="overflow-x: scroll !important;">
 
-            <div class="col-md-12">
-                <a type="button" class="btn btn-outline-warning btn-sm" href="{{ route('basefria.duplicados')  }}">
-                    <span class="badge bg-success">0</span>
-                    <i class="fas fa-dolly-flatbed"></i>
-                    Clientes Duplicados</a>
-
-            </div>
-
-            <table class="table table-striped data-table" id="tablaserverside" style="width:100%">
+            <table class="table table-striped data-table" id="tablaserversideduplicados" style="width:100%">
                 <thead>
                 <tr>
                     <th>COD.</th>
@@ -88,8 +31,7 @@
                 <tbody>
                 </tbody>
             </table>
-            @include('base_fria.modal.convertirid')
-            @include('base_fria.modal.modalid')
+
         </div>
     </div>
 
@@ -484,10 +426,10 @@
 
 
 
-            $('#tablaserverside').DataTable({
+            $('#tablaserversideduplicados').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('basefriatabla') }}",
+                ajax: "{{ route('basefria.duplicados.tabla') }}",
                 initComplete: function (settings, json) {
 
                 },
@@ -500,31 +442,6 @@
                     {
                         data: 'id',
                         name: 'id',
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                if (row.identificador == null) {
-                                    return 'BF' + '000' + row.id;
-                                } else {
-                                    return 'BF' + row.identificador + '000' + row.id;
-                                }
-                            } else if (row.id < 100) {
-                                if (row.identificador == null) {
-                                    return 'BF' + '00' + row.id;
-                                } else {
-                                    return 'BF' + row.identificador + '00' + row.id;
-                                }
-                            } else if (row.id < 1000) {
-                                if (row.identificador == null) {
-                                    return 'BF' + '0' + row.id;
-                                } else {
-                                    return 'BF' + row.identificador + '0' + row.id;
-                                }
-                            } else {
-                                return 'BF' + row.identificador + '000' + row.id;
-                            }
-                            //return row.id+' aa';
-                            //return ''+data+'';
-                        }
                     },
                     {
                         data: 'nombre',
