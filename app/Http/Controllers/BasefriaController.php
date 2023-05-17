@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 //use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\ClienteDuplicado;
+use App\Models\DetallePedido;
+use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\TipoMovimiento;
 use App\Models\User;
@@ -343,6 +345,22 @@ class BasefriaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function validadClienteDuplicadoPublicidad(Request $request)
+    {
+        $clientes_repetidos_publicidad = ClienteDuplicado::query()->with('user')
+            ->where('celular', '=', $request->celular)
+            ->whereTime('created_at', '>=', Carbon::now()->subHour()->toTimeString())
+            ->whereTime('created_at', '<=', Carbon::now()->toTimeString())
+            ->get();
+
+        //return Carbon::now()->subHour()->toTimeString();
+
+        return response()->json([
+            'is_repetido' => $clientes_repetidos_publicidad->count() > 0,
+            'coincidencia' => $clientes_repetidos_publicidad
+        ]);
     }
 
     public function clientesDuplicados(Request $request)

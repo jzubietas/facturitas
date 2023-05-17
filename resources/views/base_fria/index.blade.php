@@ -273,44 +273,116 @@
                     return;
                 } else{
                     //validaciones
-                    var fdbf=new FormData()
 
                     $.ajax({
-                        url: "{{ route('basefria.store.publicidad') }}",
+                        url: "{{ route('basefria.valid.store.publicidad') }}",
                         data: {
                             "nombrebf": nombrebf,
                             "celular": celularbf,
                             "asesor_bf": asesor_p_bf,
-                            "publicidadbf":publicidadbf
+                            "publicidadbf": publicidadbf
                         },
                         method: 'POST',
-                        success: function (data)
-                        {
-                            $("#nombre_bf").val("");
-                            $("#celular_bf").val("");
-                            Swal.fire(
-                                'Base Fria registrado exitosamente',
-                                '',
-                                'success'
-                            )
-                            $('#tablaserverside').DataTable().ajax.reload();
-                        },
-                        error:function(xhr)
-                        {
-                            $.each(xhr.responseJSON.errors, function(key,value) {
-                                console.log(value[0])
-                                $("#nombre_bf").val("");
-                                $("#celular_bf").val("");
-                                Swal.fire(
-                                    'Alerta',
-                                    value[0],
-                                    'warning'
-                                )
-                                //return;
-                                //$('#validation-errors').append('<div class="alert alert-danger">'+value+'</div');
-                            });
+                        success: function (data) {
+                            if (!data.is_repetido)
+                            {
+                                var fdbf=new FormData()
+
+                                $.ajax({
+                                    url: "{{ route('basefria.store.publicidad') }}",
+                                    data: {
+                                        "nombrebf": nombrebf,
+                                        "celular": celularbf,
+                                        "asesor_bf": asesor_p_bf,
+                                        "publicidadbf":publicidadbf
+                                    },
+                                    method: 'POST',
+                                    success: function (data)
+                                    {
+                                        $("#nombre_bf").val("");
+                                        $("#celular_bf").val("");
+                                        Swal.fire(
+                                            'Base Fria registrado exitosamente',
+                                            '',
+                                            'success'
+                                        )
+                                        $('#tablaserverside').DataTable().ajax.reload();
+                                    },
+                                    error:function(xhr)
+                                    {
+                                        $.each(xhr.responseJSON.errors, function(key,value) {
+                                            console.log(value[0])
+                                            $("#nombre_bf").val("");
+                                            $("#celular_bf").val("");
+                                            Swal.fire(
+                                                'Alerta',
+                                                value[0],
+                                                'warning'
+                                            )
+                                            //return;
+                                            //$('#validation-errors').append('<div class="alert alert-danger">'+value+'</div');
+                                        });
+                                    }
+                                });
+
+                            }else
+                            {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Advertencia',
+                                    html: 'Este cliente ya se encuentra registrado en duplicados',
+                                    showDenyButton: true,
+                                    confirmButtonText: 'Estoy de acuerdo',
+                                    denyButtonText: 'Cancelar',
+                                }).then((result) => {
+                                    if (result.isConfirmed)
+                                    {
+                                        var fdbf=new FormData()
+
+                                        $.ajax({
+                                            url: "{{ route('basefria.store.publicidad') }}",
+                                            data: {
+                                                "nombrebf": nombrebf,
+                                                "celular": celularbf,
+                                                "asesor_bf": asesor_p_bf,
+                                                "publicidadbf":publicidadbf
+                                            },
+                                            method: 'POST',
+                                            success: function (data)
+                                            {
+                                                $("#nombre_bf").val("");
+                                                $("#celular_bf").val("");
+                                                Swal.fire(
+                                                    'Base Fria registrado exitosamente',
+                                                    '',
+                                                    'success'
+                                                )
+                                                $('#tablaserverside').DataTable().ajax.reload();
+                                            },
+                                            error:function(xhr)
+                                            {
+                                                $.each(xhr.responseJSON.errors, function(key,value) {
+                                                    console.log(value[0])
+                                                    $("#nombre_bf").val("");
+                                                    $("#celular_bf").val("");
+                                                    Swal.fire(
+                                                        'Alerta',
+                                                        value[0],
+                                                        'warning'
+                                                    )
+                                                    //return;
+                                                    //$('#validation-errors').append('<div class="alert alert-danger">'+value+'</div');
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+
+                            }
                         }
-                    });
+                    })
+
+
 
 
                 }
