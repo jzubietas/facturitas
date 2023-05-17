@@ -2,13 +2,13 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Base Fria</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Base Fria - Publicidad</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
-            {!! Form::open(['route' => 'movimientos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
+            {!! Form::open(['route' => 'basefria.store.publicidad','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
 
             <div class="modal-body">
 
@@ -53,21 +53,21 @@
 
                                 <div class="btn-group " role="group" aria-label="Basic example">
 
-                                        <button class="button mx-2 p-2 btn-navigate-titular btn btn-success btn-lg rounded text-white"
+                                        <button class="button mx-2 p-2 btn-navigate-grupopublicidad btn btn-success btn-lg rounded text-white"
                                                 type="button" step_number="2"
-                                                titular="1">
+                                                publicidad="1">
                                             Publicidad 1
                                         </button>
 
-                                        <button class="button mx-2 p-2 btn-navigate-titular btn btn-info btn-lg rounded text-white"
+                                        <button class="button mx-2 p-2 btn-navigate-grupopublicidad btn btn-info btn-lg rounded text-white"
                                                 type="button" step_number="2"
-                                                titular="2">
+                                                publicidad="2">
                                             Publicidad 2
                                         </button>
 
-                                        <button class="button mx-2 p-2 btn-navigate-titular btn btn-primary btn-lg rounded text-white"
+                                        <button class="button mx-2 p-2 btn-navigate-grupopublicidad btn btn-primary btn-lg rounded text-white"
                                                 type="button" step_number="2"
-                                                titular="3">
+                                                publicidad="3">
                                             Publicidad 3
                                         </button>
 
@@ -89,9 +89,16 @@
 
                             <div class="form-row">
                                 <div class="form-group col-lg-6">
-                                    {!! Form::label('publicidad', 'Tipo de cliente') !!}
-                                    <input type="hidden" name="publicidad_bf" requerid value="0" class="form-control">
-                                    <input type="text" name="publicidad_bf" value="Base fría" class="form-control" disabled>
+                                    {!! Form::label('publicidad', 'Grupo Publicidad') !!}
+                                    <input type="text" id="publicidad_bf" name="publicidad_bf" value="Base fría" class="form-control" disabled>
+                                </div>
+
+
+                                <div class="form-group col-lg-6">
+                                    {!! Form::label('asesores_bf', 'Asesores') !!}
+                                    {!! Form::select('asesores_bf', [] , '', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- Elige Asesor ----']) !!}
+
+
                                 </div>
                             </div>
 
@@ -100,11 +107,6 @@
                                     {!! Form::label('tipo', 'Tipo de cliente') !!}
                                     <input type="hidden" name="tipo_bf" requerid value="0" class="form-control">
                                     <input type="text" name="cliente" value="Base fría" class="form-control" disabled>
-                                </div>
-
-                                <div class="form-group col-lg-6" style="font-size: 18px">
-                                    {!! Form::label('titulares', 'Titulares') !!}
-                                    {!! Form::select('titulares', $users_combo , '0', ['readonly' => 'readonly','class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                                 </div>
 
                             </div>
@@ -125,7 +127,7 @@
 
                         </div>
                         <div class="mt-3">
-                            <button class="button btn-navigate-form-step btn btn-info btn-lg rounded text-white" type="button" step_number="2">Atras</button>
+                            <button class="button btn-navigate-form-step btn btn-info btn-lg rounded text-white" type="button" step_number="1">Atras</button>
                             <button id="registrar_basefria_publicidad" type="button" class="btn btn-success button btn-lg  submit-btn"><i class="fas fa-save"></i> Guardar</button>
                         </div>
                     </section>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 //use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Porcentaje;
+use App\Models\TipoMovimiento;
 use App\Models\User;
 
 //use App\DataTables\BasefriaDataTable;
@@ -341,6 +342,64 @@ class BasefriaController extends Controller
         //
     }
 
+    public function storePublicidad(Request $request)
+    {
+
+        $user = User::where('id', $request->asesor_bf)->first();//el asesor
+        $letra=$user->letra;
+        $searchCliente = Cliente::query()->with('user')->where('celular', '=', $request->celularbf)->first();
+
+        $messages = [];
+
+        if ($searchCliente != null) {
+            $messages = [
+                'celular.unique' => 'EL CELULAR INGRESADO SE ENCUENTA ASIGNADO AL ASESOR <b>' . $searchCliente->user->clave_pedidos.'</b>',
+            ];
+        }
+        $request->validate([
+            'celular' => 'required|unique:clientes',
+        ], $messages);
+
+        //return $request;
+        try {
+            DB::beginTransaction();
+
+            $cliente = Cliente::create([
+                'nombre' => $request->nombrebf,
+                'celular' => $request->celular,
+                'icelular'=> $letra,
+                'user_id' => $request->asesor_bf,
+                'user_identificador' => $user->identificador,
+                'user_clavepedido' => $user->clave_pedidos,
+                'tipo' => 0,
+                'provincia' => $request->provincia,
+                'distrito' => $request->distrito,
+                'direccion' => $request->direccion,
+                'referencia' => $request->referencia,
+                'dni' => $request->dni,
+                'deuda' => '0',
+                'pidio' => '0',
+                'grupo_publicidad' =>$request->publicidadbf,
+                'estado' => '1'
+            ]);
+            $cliente->update([
+                'correlativo'=>'BF'.($user->clave_pedidos).str_pad($cliente->id,6,0)
+            ]);
+            DB::commit();
+            $html = array('status'=>1,'msg'=>'Registrado exitosamente');
+            return response()->json($html);
+        } catch (\Throwable $th) {
+            throw $th;
+            $html = array('status'=>0,'msg'=>'Ocurrio un error');
+            return response()->json($html);
+
+            /* DB::rollback();
+            dd($th); */
+        }
+        //return redirect()->route('basefria.create')->with('info', 'registrado');
+
+    }
+
     public function destroyid(Request $request)
     {
         if (!$request->hiddenID) {
@@ -390,13 +449,40 @@ class BasefriaController extends Controller
 
     public function AsesorPublicidadSelect(Request $request)
     {
-        $users_combo = User::query()->where('estado','=',1)->whereIn('rol',[User::ROL_ASESOR])
+        //$search = $request->search;
+
+        //if($search == ''){
+            //$employees = User::orderby('name','asc')->activo()->rolAsesor()->select('id','identificador')/*->limit(5)*/->get();
+        /*}else{
+            $employees = Employees::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
+        }*/
+
+        $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+        $usuarios_asesores_publicidad = User::orderby('id','asc')->activo()->rolAsesor()->where('publicidad','<>',0)->get();
+        foreach ($usuarios_asesores_publicidad as $user_asesor_publicidad) {
+            $html .= '<option value="' . $user_asesor_publicidad->id . '">' . $user_asesor_publicidad->clave_pedidos . '</option>';
+        }
+
+        return response()->json(['html' => $html]);
+
+
+        /*$employees = User::orderby('name','asc')->activo()->rolAsesor()->select('id','identificador')/*->limit(5)*//*->get();
+
+        $response = array();
+        foreach($employees as $employee){
+            $response[] = array(
+                "id"=>$employee->id,
+                "text"=>$employee->identificador
+            );
+        }
+        return response()->json($response);*/
+
+        /*$users_combo = User::query()>
             ->select([
                 'identificador', 'id'
             ])
-            ->where('publicidad',$request->publicidad)
-            ->pluck('identificador', 'id')->take(1);
-        return response()->json($users_combo);
+            ->pluck('identificador', 'id');//->take(1);
+        return response()->json($users_combo);*/
     }
 
     public function updatebfpost(Request $request)
