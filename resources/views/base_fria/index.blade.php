@@ -4,6 +4,7 @@
 
 @section('style')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+
 @endsection
 
 @section('content_header')
@@ -92,6 +93,7 @@
 
 @push('css')
     {{--<link rel="stylesheet" href="/css/admin_custom.css">--}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .bg-4 {
             background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
@@ -143,6 +145,11 @@
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  -->
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+    {{--<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>--}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     <script>
         function resetearcamposdelete() {
             $('#motivo').val("");
@@ -200,39 +207,114 @@
             }
         };
 
+        let stepper_titular = "";
+
+        document.querySelectorAll(".btn-navigate-form-step").forEach((formNavigationBtn) => {
+            /**
+             * Add a click event listener to the button.
+             */
+            console.log("estep");
+            formNavigationBtn.addEventListener("click", () => {
+                /**
+                 * Get the value of the step.
+                 */
+                const stepNumber = parseInt(formNavigationBtn.getAttribute("step_number"));
+
+                navigateToFormStep(stepNumber);
+            });
+        });
+
         $(document).ready(function () {
+
+            $('#modal_agregarbasefria_publicidad').on('show.bs.modal', function (event) {
+                //cargar select2
+                console.log("carga de datos")
+
+
+            })
 
             $(document).on("click", "#registrar_basefria_publicidad", function (e) {
                 e.preventDefault();
 
-                let asesor_de_publicidad = $("#titulares").prop("disabled", false).selectpicker("refresh");
-                let asesor_p = asesor_de_publicidad.val();
-                $("#titulares").prop("disabled", true)
+                let asesor_de_publicidad = $("#asesores_bf").prop("disabled", false).selectpicker("refresh");
+                let asesor_p_bf = asesor_de_publicidad.val();
+                //$("#titulares").prop("disabled", true)
 
-                let nombre = $("#nombre").val();
-                let celular = $("#celular").val();
+                let publicidadbf=$("#publicidad_bf").val();
 
-                if (asesor_p == '') {
+                let nombrebf = $("#nombre_bf").val();
+                let celularbf = $("#celular_bf").val();
+
+                if (asesor_p_bf == '') {
                     Swal.fire(
                         'Error',
                         'Elija al asesor',
                         'warning'
                     )
                     return;
-                }else if (nombre == '') {
+                }else if (celularbf == '') {
                     Swal.fire(
                         'Error',
-                        'Ingrese el monto',
+                        'Ingrese el celular',
                         'warning'
                     )
                     return;
-                }else if (celular == '') {
+                }else if (celularbf.length!=9) {
                     Swal.fire(
                         'Error',
-                        'Ingrese el monto',
+                        'Ingrese el celular con 9 digitos',
                         'warning'
                     )
                     return;
+                } else{
+                    //validaciones
+                    var fdbf=new FormData()
+
+                    $.ajax({
+                        url: "{{ route('basefria.store.publicidad') }}",
+                        data: {
+                            "nombrebf": nombrebf,
+                            "celular": celularbf,
+                            "asesor_bf": asesor_p_bf,
+                            "publicidadbf":publicidadbf
+                        },
+                        method: 'POST',
+                        success: function (data)
+                        {
+                            console.log(data);
+                            if(data.error.lenght>0)
+                            {
+                                console.log("error");
+                            }
+                            else{
+                                console.log("ejecuto registro");
+                            }
+                            /*console.log("ejecuto registro");
+                            $("#nombre_bf").val("");
+                            $("#celular_bf").val("");
+                            Swal.fire(
+                                'Base Fria registrado exitosamente',
+                                '',
+                                'success'
+                            )
+                            $('#tablaserverside').DataTable().ajax.reload();*/
+                        },
+                        error:function(xhr)
+                        {
+                            $.each(xhr.responseJSON.errors, function(key,value) {
+                                console.log(value[0])
+                                Swal.fire(
+                                    'Error',
+                                    value[0],
+                                    'warning'
+                                )
+                                return;
+                                //$('#validation-errors').append('<div class="alert alert-danger">'+value+'</div');
+                            });
+                        }
+                    });
+
+
                 }
 
 
@@ -240,37 +322,74 @@
 
             });
 
+            //$.fn.modal.Constructor.prototype._enforceFocus = function() {};
 
-            $(document).on("click", '.btn-navigate-titular', function (e) {
+            $(document).on("click", '.btn-navigate-grupopublicidad', function (e) {
 
                 let stepNumberb = parseInt($(this).attr("step_number"));
                 console.log(stepNumberb)
 
                 if (stepNumberb == 2) {
-                    //guardar banco
-                    stepper_titular = $(this).attr("titular");
+                    //guardar grupo publicidad
+                    stepper_publicidad = $(this).attr("publicidad");
                     //elegir un asesor de este publicidad
                     var fd=new FormData();
-                    fd.append('publicidad',stepper_titular);
+                    //fd.append('publicidad',stepper_titular);
+
+                    $("#publicidad_bf").val(stepper_publicidad);
+
                     $.ajax({
-                        data: fd,
+                        url: "{{ route('basefria.asesor.publicidad.select') }}",
+                        method: 'post',
+                        success: function (data) {
+                            //carga ajax a combo
+                            console.log(data);
+                            $('#asesores_bf').html(data.html);
+                            $("#asesores_bf").selectpicker("refresh");//.trigger('change');
+                        }
+                    });
+
+                    /*$( "#asesores_bf" ).select2({
+                        placeholder: "Elije Asesor",
+                        dropdownParent: $('#modal_agregarbasefria_publicidad .modal-content'),
+                        theme: "bootstrap",
+                        ajax: {
+                            url: "{{route('basefria.asesor.publicidad.select')}}",
+                            type: "post",
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    _token: $('meta[name="csrf-token"]').attr('content'),
+                                    search: params.term
+                                };
+                            },
+                            processResults: function (response) {
+                                return {
+                                    results: response
+                                };
+                            },
+                            cache: true
+                        }
+                    });*/
+
+                    /*$.ajax({
+                        //data: fd,
                         processData: false,
                         contentType: false,
                         type: 'POST',
                         dataType:'json',
-                        url: "{{ route('basefria.asesor.publicidad.select') }}",
+                        url: "{{-- route('basefria.asesor.publicidad.select') --}}",
                         success: function (data) {
                             console.log(data);
                             var options = '';
                             for (var i = 0; i < data.length; i++) {
-                                for (var j = 0; j< data[i].length; j++){
-                                    options += '<option value="' + data[i][j].product_id + '">' + data[i][j].name + '</option>';
-                                }
+                                options += '<option value="' + data[i].identificador + '">' + data[i].name + '</option>';
                             }
+                            console.log(options)
                             $("#titulares").html(options);
-                            $("#titulares").selectpicker("refresh").trigger("change");
                         }
-                    });
+                    });*/
 
                     //console.log(stepper_titular);
                 }
@@ -357,6 +476,8 @@
                     }
                 });
             });
+
+
 
             $('#tablaserverside').DataTable({
                 processing: true,

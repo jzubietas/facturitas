@@ -214,6 +214,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Basefria*/
 
     Route::resource('basefria', BasefriaController::class)->names('basefria');
+    Route::post('basefria.store.publicidad', [BasefriaController::class, 'storePublicidad'])->name('basefria.store.publicidad');
     Route::post('basefria.edit.celularduplicado', [BasefriaController::class, 'celularduplicado'])->name('basefria.edit.celularduplicado');
     Route::get('clientes.editbf/{cliente}/edit2', [BasefriaController::class, 'editbf'])->name('clientes.editbf');
 
