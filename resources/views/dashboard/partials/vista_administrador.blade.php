@@ -256,6 +256,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     Agregar
                 </button>
             </div>
+
+            <div class="col-lg-12" id="metas_dp_17_rendimiento"></div>
+
+
         </div>
         <div class="row">
             <div class="col-lg-12" id="metas_asesores_total_dp17"></div>
@@ -689,6 +693,45 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             })
         }
 
+        window.cargaRendimiento = function (entero) {
+            var fd = new FormData();
+            let valorr=$('#fechametames').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable_G17_Rendimiento') }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero===1 || entero===2)
+                    {
+                        console.log("cambiar color");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+                    if (entero === 17) {
+                        $('#metas_dp_17_rendimiento').html(resultado);
+                    }else if (entero === 37) {
+                        $('#metas_asesores_total_dp17').html(resultado);
+                    }
+                }
+            })
+        }
+
         window.cargaNueva99 = function (entero) {
             console.log(' ' + entero)
             var fd = new FormData();
@@ -866,6 +909,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
                 cargaNuevaCalendario(17);
 
+                cargaRendimiento(17);
+
                 cargaNueva99(99);
 
                 cargReporteMetasCobranzasGeneral();
@@ -897,6 +942,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             cargaNueva17(37);
 
             cargaNuevaCalendario(17);
+
+            cargaRendimiento(17);
 
             cargaNueva99(99);
 
@@ -934,6 +981,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva17(37);
 
                 cargaNuevaCalendario(17);
+
+                cargaRendimiento(17);
 
                 cargaNueva99(99);
 
