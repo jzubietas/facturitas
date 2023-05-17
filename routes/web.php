@@ -219,6 +219,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientes.editbf/{cliente}/edit2', [BasefriaController::class, 'editbf'])->name('clientes.editbf');
 
 
+    Route::any('basefria.duplicados', [BasefriaController::class, 'clientesDuplicados'])->name('basefria.duplicados');
+    Route::any('basefria.duplicados.tabla', [BasefriaController::class, 'clientesDuplicadosTabla'])->name('basefria.duplicados.tabla');
+
+
     Route::middleware('authorize.pedido.anulled')
         ->post('basefriadeleteRequest', [BasefriaController::class, 'destroyid'])
         ->name('basefriadeleteRequest.post');
