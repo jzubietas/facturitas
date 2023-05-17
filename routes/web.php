@@ -221,6 +221,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::any('basefria.duplicados', [BasefriaController::class, 'clientesDuplicados'])->name('basefria.duplicados');
     Route::any('basefria.duplicados.tabla', [BasefriaController::class, 'clientesDuplicadosTabla'])->name('basefria.duplicados.tabla');
+    Route::any('basefria.valid.store.publicidad', [BasefriaController::class, 'validadClienteDuplicadoPublicidad'])->name('basefria.valid.store.publicidad');
 
 
     Route::middleware('authorize.pedido.anulled')

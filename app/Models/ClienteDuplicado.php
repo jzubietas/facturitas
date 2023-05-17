@@ -20,4 +20,9 @@ class ClienteDuplicado extends Model
     protected $casts=[
         'activado_pedido'=>'integer'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
