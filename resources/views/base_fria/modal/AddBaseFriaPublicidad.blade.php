@@ -88,6 +88,15 @@
                         <div class="mt-3">
 
                             <div class="form-row">
+                                <div class="form-group col-lg-12">
+                                    {!! Form::label('tipo', 'Tipo de cliente') !!}
+                                    <input type="hidden" name="tipo_bf" requerid value="0" class="form-control">
+                                    <input type="text" name="cliente" value="Base fría" class="form-control" disabled>
+                                </div>
+
+                            </div>
+
+                            <div class="form-row">
                                 <div class="form-group col-lg-6">
                                     {!! Form::label('publicidad', 'Grupo Publicidad') !!}
                                     <input type="text" id="publicidad_bf" name="publicidad_bf" value="Base fría" class="form-control" disabled>
@@ -102,14 +111,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-lg-6">
-                                    {!! Form::label('tipo', 'Tipo de cliente') !!}
-                                    <input type="hidden" name="tipo_bf" requerid value="0" class="form-control">
-                                    <input type="text" name="cliente" value="Base fría" class="form-control" disabled>
-                                </div>
 
-                            </div>
 
                             <div class="form-row">
                                 <div class="form-group col-lg-6">
