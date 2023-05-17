@@ -286,15 +286,6 @@
                         method: 'POST',
                         success: function (data)
                         {
-                            console.log(data);
-                            if(data.error.lenght>0)
-                            {
-                                console.log("error");
-                            }
-                            else{
-                                console.log("ejecuto registro");
-                            }
-                            /*console.log("ejecuto registro");
                             $("#nombre_bf").val("");
                             $("#celular_bf").val("");
                             Swal.fire(
@@ -302,18 +293,20 @@
                                 '',
                                 'success'
                             )
-                            $('#tablaserverside').DataTable().ajax.reload();*/
+                            $('#tablaserverside').DataTable().ajax.reload();
                         },
                         error:function(xhr)
                         {
                             $.each(xhr.responseJSON.errors, function(key,value) {
                                 console.log(value[0])
+                                $("#nombre_bf").val("");
+                                $("#celular_bf").val("");
                                 Swal.fire(
                                     'Error',
                                     value[0],
                                     'warning'
                                 )
-                                return;
+                                //return;
                                 //$('#validation-errors').append('<div class="alert alert-danger">'+value+'</div');
                             });
                         }
