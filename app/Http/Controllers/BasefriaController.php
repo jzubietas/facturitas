@@ -360,7 +360,8 @@ class BasefriaController extends Controller
                 'cliente_duplicados.celular',
                 'cliente_duplicados.user_clavepedido as identificador',
                 'cliente_duplicados.estado',
-                'cliente_duplicados.situacion'
+                'cliente_duplicados.situacion',
+                'cliente_duplicados.created_at'
             ]);
             //->where('clientes.tipo', '0');
 

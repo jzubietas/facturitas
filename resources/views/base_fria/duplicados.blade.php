@@ -25,6 +25,7 @@
                     <th>Nombre de cliente</th>
                     <th>Celular</th>
                     <th>Asesor</th>
+                    <th>Creado</th>
                     <th width="100px">Acciones</th>
                 </tr>
                 </thead>
@@ -461,6 +462,10 @@
                     {
                         data: 'identificador',
                         name: 'Asesor',
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
                     },
                     {
                         data: 'action',
