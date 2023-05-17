@@ -302,7 +302,7 @@
                                 $("#nombre_bf").val("");
                                 $("#celular_bf").val("");
                                 Swal.fire(
-                                    'Error',
+                                    'Alerta',
                                     value[0],
                                     'warning'
                                 )
