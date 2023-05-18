@@ -10065,7 +10065,7 @@ class DashboardController extends Controller
             $html .= '<tr class="bg-success">';
             $html .= '<th><span class="font-20">Publicidad 1</span></th>';
 
-            $acumulado_bruto_publi_1_a=Cliente::query()->activo->where('grupo_publicidad','1')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_1_a=Cliente::query()->activo()->where('grupo_publicidad','1')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
             $acumulado_bruto_publi_1_b=ClienteDuplicado::query()->where('grupo_publicidad','1')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
             $acumulado_bruto_publi_1=intval($acumulado_bruto_publi_1_a) + intval($acumulado_bruto_publi_1_b);
 
@@ -10080,7 +10080,7 @@ class DashboardController extends Controller
             $html .= '<tr class="bg-success">';
             $html .= '<th><span class="font-20">Publicidad 2</span></th>';
 
-            $acumulado_bruto_publi_2_a=Cliente::query()->activo->where('grupo_publicidad','2')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_2_a=Cliente::query()->activo()->where('grupo_publicidad','2')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
             $acumulado_bruto_publi_2_b=ClienteDuplicado::query()->where('grupo_publicidad','2')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
             $acumulado_bruto_publi_2=intval($acumulado_bruto_publi_2_a) + intval($acumulado_bruto_publi_2_b);
 
@@ -10095,7 +10095,7 @@ class DashboardController extends Controller
             $html .= '<tr class="bg-success">';
             $html .= '<th><span class="font-20">Publicidad 3</span></th>';
 
-            $acumulado_bruto_publi_3_a=Cliente::query()->activo->where('grupo_publicidad','3')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_3_a=Cliente::query()->activo()->where('grupo_publicidad','3')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
             $acumulado_bruto_publi_3_b=ClienteDuplicado::query()->where('grupo_publicidad','3')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
             $acumulado_bruto_publi_3=intval($acumulado_bruto_publi_3_a) + intval($acumulado_bruto_publi_3_b);
 
