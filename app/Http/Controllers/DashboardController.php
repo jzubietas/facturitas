@@ -10069,7 +10069,7 @@ class DashboardController extends Controller
 
             $html .= '<th>'.$acumulado_bruto_publi_1.'</th>';
             $html .= '<th>'.$acumulado_bruto_publi_1_a.'</th>';
-            $html .= '<th>0</th>';
+            $html .= '<th>'.$acumulado_bruto_publi_1_b.'</th>';
 
             $html .= '</tr>';
 
@@ -10083,7 +10083,7 @@ class DashboardController extends Controller
 
             $html .= '<th>'.$acumulado_bruto_publi_2.'</th>';
             $html .= '<th>'.$acumulado_bruto_publi_2_a.'</th>';
-            $html .= '<th>0</th>';
+            $html .= '<th>'.$acumulado_bruto_publi_2_b.'</th>';
 
             $html .= '</tr>';
 
@@ -10096,7 +10096,7 @@ class DashboardController extends Controller
 
             $html .= '<th>'.$acumulado_bruto_publi_3.'</th>';
             $html .= '<th>'.$acumulado_bruto_publi_3_a.'</th>';
-            $html .= '<th>0</th>';
+            $html .= '<th>'.$acumulado_bruto_publi_3_b.'</th>';
 
             $html .= '</tr>';
 
