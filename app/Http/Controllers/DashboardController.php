@@ -10049,7 +10049,7 @@ class DashboardController extends Controller
             $html .= '<table class="table tabla-metas_pagos_pedidos table-dark" style="background: #e4dbc6; color: #232121; margin-bottom: 3px !important;">';
             $html .= '<thead>
                 <tr>
-                    <th width="8%" colspan="2">ACUMULADO</th>
+                    <th width="8%">ACUMULADO</th>
                     <th width="6%" style="font-weight: bold;color:blue;" class="text-uppercase">Acumulado de chats bruto '.Carbon::now()->day.'</th>
                     <th width="6%" style="font-weight: bold;color:blue;" class="text-uppercase">Acumulado de chats NETO'.Carbon::now()->day.'</th>
 
