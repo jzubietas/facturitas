@@ -10016,7 +10016,7 @@ class DashboardController extends Controller
                 $html .= '<div class="row">';
                 $html .= '<div class="col-12 text-center">';
 
-                $html .='<b class="font-16 text-success">Publicidad - Rendimiento</b>';
+                $html .='<b class="font-16 text-success">Publicidad - Rendimiento '.Carbon::now()->format('Y-m-d').'</b>';
 
                 $html .= '</div>';
                 $html .= '</div>';
