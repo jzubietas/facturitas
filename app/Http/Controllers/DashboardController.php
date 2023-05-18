@@ -9352,9 +9352,10 @@ class DashboardController extends Controller
         //dd($progressData);
 
         //$fechaInicio=strtotime("25-02-2008");
+        $fechametames17=strtotime(Carbon::parse($request->fechametames17))->format('d-m-Y');
         $fechaInicio=strtotime(Carbon::now()->startOfMonth()->startOfDay()->format('d-m-Y'));
         //$fechaFin=strtotime("01-04-2008");
-        $fechaFin=strtotime(Carbon::now()->startOfDay()->format('d-m-Y'));
+        //$fechaFin=strtotime(Carbon::now()->startOfDay()->format('d-m-Y'));
 
         foreach ($asesores as $asesor)
         {
@@ -9388,12 +9389,12 @@ class DashboardController extends Controller
             $date_pagos = Carbon::parse(now())->subMonth()->startOfMonth();
             $fechametames = Carbon::now()->clone();
 
-            if (!request()->has("fechametames")) {
+            if (!request()->has("fechametames17")) {
                 $fechametames = Carbon::now()->clone();
                 $date_pagos = Carbon::parse(now())->clone()->startOfMonth()->subMonth();
             } else {
-                $fechametames = Carbon::parse($request->fechametames)->clone();
-                $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
+                $fechametames = Carbon::parse($request->fechametames17)->clone();
+                $date_pagos = Carbon::parse($request->fechametames17)->clone()->startOfMonth()->subMonth();
             }
 
             //dd($fechametames,$date_pagos);
@@ -9424,12 +9425,12 @@ class DashboardController extends Controller
 
             $asesorid = User::where('rol', User::ROL_ASESOR)->where('id', $asesor->id)->pluck('id');
 
-            if (!request()->has("fechametames")) {
+            if (!request()->has("fechametames17")) {
                 $fechametames = Carbon::now()->clone();
                 $date_pagos = Carbon::parse(now())->clone()->startOfMonth()->subMonth();
             } else {
-                $fechametames = Carbon::parse($request->fechametames)->clone();
-                $date_pagos = Carbon::parse($request->fechametames)->clone()->startOfMonth()->subMonth();
+                $fechametames = Carbon::parse($request->fechametames17)->clone();
+                $date_pagos = Carbon::parse($request->fechametames17)->clone()->startOfMonth()->subMonth();
             }
 
             $total_pedido = Pedido::query()->where('user_clavepedido', $asesor->clave_pedidos)
@@ -10032,7 +10033,7 @@ class DashboardController extends Controller
 
             $html .= '<div class="col-6 d-flex justify-content-center align-items-center">';
             $html .= '<h2 class="card-title text-uppercase h1-change-day text-center font-weight-bold">METAS DEL MES DE '.Carbon::now()->startOfMonth()->translatedFormat('F').' :</h2>';
-            $html .= '<buton style="background: none; border: none;" onclick="openFullscreen();">';
+            $html .= '<buton style="background: none; border: none;" onclick="openFullscreen17();">';
             $html .= '<i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i>';
             $html .= '</button>';
             $html .= '</div>';
@@ -10063,8 +10064,8 @@ class DashboardController extends Controller
             $html .= '<tr class="bg-success">';
             $html .= '<th><span class="font-20">Publicidad 1</span></th>';
 
-            $acumulado_bruto_publi_1_a=Cliente::query()->activo()->where('grupo_publicidad','1')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
-            $acumulado_bruto_publi_1_b=ClienteDuplicado::query()->where('grupo_publicidad','1')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_1_a=Cliente::query()->activo()->where('grupo_publicidad','1')->whereDate('created_at',Carbon::parse($request->fechametames17)->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_1_b=ClienteDuplicado::query()->where('grupo_publicidad','1')->whereDate('created_at',Carbon::parse($request->fechametames17)->format('Y-m-d'))->count();
             $acumulado_bruto_publi_1=intval($acumulado_bruto_publi_1_a) + intval($acumulado_bruto_publi_1_b);
 
             $html .= '<th>'.$acumulado_bruto_publi_1.'</th>';
@@ -10077,8 +10078,8 @@ class DashboardController extends Controller
             $html .= '<th><span class="font-20">Publicidad 2</span></th>';
 
 
-            $acumulado_bruto_publi_2_a=Cliente::query()->activo()->where('grupo_publicidad','2')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
-            $acumulado_bruto_publi_2_b=ClienteDuplicado::query()->where('grupo_publicidad','2')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_2_a=Cliente::query()->activo()->where('grupo_publicidad','2')->whereDate('created_at',Carbon::parse($request->fechametames17)->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_2_b=ClienteDuplicado::query()->where('grupo_publicidad','2')->whereDate('created_at',Carbon::parse($request->fechametames17)->format('Y-m-d'))->count();
             $acumulado_bruto_publi_2=intval($acumulado_bruto_publi_2_a) + intval($acumulado_bruto_publi_2_b);
 
             $html .= '<th>'.$acumulado_bruto_publi_2.'</th>';
@@ -10090,8 +10091,8 @@ class DashboardController extends Controller
             $html .= '<tr class="bg-success">';
             $html .= '<th><span class="font-20">Publicidad 3</span></th>';
 
-            $acumulado_bruto_publi_3_a=Cliente::query()->activo()->where('grupo_publicidad','3')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
-            $acumulado_bruto_publi_3_b=ClienteDuplicado::query()->where('grupo_publicidad','3')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_3_a=Cliente::query()->activo()->where('grupo_publicidad','3')->whereDate('created_at',Carbon::parse($request->fechametames17)->format('Y-m-d'))->count();
+            $acumulado_bruto_publi_3_b=ClienteDuplicado::query()->where('grupo_publicidad','3')->whereDate('created_at',Carbon::parse($request->fechametames17)->format('Y-m-d'))->count();
             $acumulado_bruto_publi_3=intval($acumulado_bruto_publi_3_a) + intval($acumulado_bruto_publi_3_b);
 
             $html .= '<th>'.$acumulado_bruto_publi_3.'</th>';

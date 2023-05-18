@@ -247,7 +247,10 @@
                 let asesor_p_bf = asesor_de_publicidad.val();
                 //$("#titulares").prop("disabled", true)
 
+                $("#publicidad_bf").prop("disabled", false)
+
                 let publicidadbf=$("#publicidad_bf").val();
+                $("#publicidad_bf").prop("disabled", true)
 
                 let nombrebf = $("#nombre_bf").val();
                 let celularbf = $("#celular_bf").val();
@@ -411,9 +414,11 @@
                     stepper_publicidad = $(this).attr("publicidad");
                     //elegir un asesor de este publicidad
                     var fd=new FormData();
-                    //fd.append('publicidad',stepper_titular);
+                    //fd.append('publicidad',stepper_publicidad);
 
+                    $("#publicidad_bf").prop("disabled", false);
                     $("#publicidad_bf").val(stepper_publicidad);
+                    $("#publicidad_bf").prop("disabled", true)
 
                     $.ajax({
                         url: "{{ route('basefria.asesor.publicidad.select') }}",

@@ -257,7 +257,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 </button>
             </div>
 
-            <div class="col-lg-12" id="metas_dp_17_rendimiento"></div>
+
 
 
         </div>
@@ -270,6 +270,34 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
     </div>
 
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Eleccion de Fecha Calendario Publicidad
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-center align-items-center ml-5">
+            <label class="p-0 m-0" for="fechametames17">Fecha: </label>
+            <input type="text" id="fechametames17" class="border-0 ml-3" name="fechametames17"
+                   value="" readonly>
+            <button class="btn btn-success btn-md" id="fechametames17-button">Fecha hoy</button>
+        </div>
+    </div>
+    <div class="card-footer text-center">
+        <buton style="background: none; border: none;" onclick="openFullscreen17();">
+            <i class="fas fa-expand-arrows-alt ml-3" style="font-size: 20px"></i>
+        </buton>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 bg-white" id="contenedor-fullscreen-g17">
+
+        <div class="row">
+            <div class="col-lg-12" id="metas_dp_17_rendimiento"></div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
@@ -695,7 +723,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
         window.cargaRendimiento = function (entero) {
             var fd = new FormData();
-            let valorr=$('#fechametames').val();
+            let valorr=$('#fechametames17').val();
             var parts = valorr.split("-");
             valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
 
@@ -703,7 +731,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
             console.log(" "+ddd_1)
 
-            fd.append('fechametames', valorr);
+            fd.append('fechametames17', valorr);
             console.log()
             fd.append('ii', entero);
 
@@ -874,18 +902,26 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 dateFormat: 'dd-mm-yy'
             });
 
-            $("#fechametames-button").click(function() {
-                //$("#fechametames").datepicker("show");
+            $('#fechametames17').datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
 
-                //$('#fechametames').datepicker('setDate', new Date());
+            $("#fechametames-button").click(function() {
                 $('#fechametames').datepicker('setDate', new Date());
                 $('#fechametames').trigger('change');
             });
 
-            $('#fechametames').datepicker('setDate', new Date());
-            //console.log($('#fechametames').datepicker({ dateFormat: 'dd-mm-yy' }).val());
+            $("#fechametames17-button").click(function() {
+                $('#fechametames17').datepicker('setDate', new Date());
+                $('#fechametames17').trigger('change');
+            });
 
-            //$('#exampleModalCenter').modal('show');
+            $('#fechametames').datepicker('setDate', new Date());
+            $('#fechametames17').datepicker('setDate', new Date());
+
+            $(document).on('change', '#fechametames17', function () {
+                cargaRendimiento(17);
+            })
 
             $(document).on('change', '#fechametames', function () {
                 //const value = e.target.value;
@@ -908,8 +944,6 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 cargaNueva17(37);
 
                 cargaNuevaCalendario(17);
-
-                cargaRendimiento(17);
 
                 cargaNueva99(99);
 
