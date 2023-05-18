@@ -416,6 +416,8 @@ class BasefriaController extends Controller
         $letra=$user->letra;
         $searchCliente = Cliente::query()->with('user')->where('celular', '=', $request->celular)->first();
 
+        //return response()->json($request);
+
         $messages = [];
 
         if ($searchCliente != null) {
@@ -447,7 +449,7 @@ class BasefriaController extends Controller
                     'dni' => $searchCliente->dni,
                     'deuda' => $searchCliente->deuda,
                     'pidio' => $searchCliente->pidio,
-                    'grupo_publicidad' =>$searchCliente->grupo_publicidad,
+                    'grupo_publicidad' =>$request->publicidadbf,
                     'estado' => $searchCliente->estado,
                     'situacion' => $searchCliente->situacion,
                     'fsb_porcentaje' => $searchCliente->fsb_porcentaje,
