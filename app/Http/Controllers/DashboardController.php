@@ -10053,8 +10053,6 @@ class DashboardController extends Controller
                     <th width="6%" style="font-weight: bold;color:blue;" class="text-uppercase">Acumulado de chats bruto '.Carbon::now()->day.'</th>
                     <th width="6%" style="font-weight: bold;color:blue;" class="text-uppercase">Acumulado de chats NETO'.Carbon::now()->day.'</th>
 
-                    <th width="6%" style="font-weight: bold;color:blue;">Chats bruto</th>
-                    <th width="6%" style="font-weight: bold;color:blue;" class="bg-warning font-weight-bold">Chats NETO</th>
                     <th width="6%" style="font-weight: bold;color:blue;">Duplicado del asesor</th>';
 
             $html .='</tr>
@@ -10072,13 +10070,12 @@ class DashboardController extends Controller
             $html .= '<th>'.$acumulado_bruto_publi_1.'</th>';
             $html .= '<th>'.$acumulado_bruto_publi_1_a.'</th>';
             $html .= '<th>0</th>';
-            $html .= '<th>0</th>';
-            $html .= '<th>0</th>';
 
             $html .= '</tr>';
 
             $html .= '<tr class="bg-success">';
             $html .= '<th><span class="font-20">Publicidad 2</span></th>';
+
 
             $acumulado_bruto_publi_2_a=Cliente::query()->activo()->where('grupo_publicidad','2')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
             $acumulado_bruto_publi_2_b=ClienteDuplicado::query()->where('grupo_publicidad','2')->whereDate('created_at',Carbon::now()->format('Y-m-d'))->count();
@@ -10086,8 +10083,6 @@ class DashboardController extends Controller
 
             $html .= '<th>'.$acumulado_bruto_publi_2.'</th>';
             $html .= '<th>'.$acumulado_bruto_publi_2_a.'</th>';
-            $html .= '<th>0</th>';
-            $html .= '<th>0</th>';
             $html .= '<th>0</th>';
 
             $html .= '</tr>';
@@ -10101,8 +10096,6 @@ class DashboardController extends Controller
 
             $html .= '<th>'.$acumulado_bruto_publi_3.'</th>';
             $html .= '<th>'.$acumulado_bruto_publi_3_a.'</th>';
-            $html .= '<th>0</th>';
-            $html .= '<th>0</th>';
             $html .= '<th>0</th>';
 
             $html .= '</tr>';
