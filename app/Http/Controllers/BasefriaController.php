@@ -401,9 +401,9 @@ class BasefriaController extends Controller
             ->editColumn('action', function ($row) {
                 $btn = "";
 
-                //if(\auth()->user()->can('basefria.convertir.cliente')):
+                if(\auth()->user()->can('basefria.duplicado.marcar')):
                     $btn = $btn . '<button class="btn btn-info btn-sm btn-marcar" data-marcar="'.$row->id.'"><i class="fas fa-person"></i> Marcar</button>';
-                //endif;
+                endif;
 
                 return $btn;
             })
