@@ -297,6 +297,10 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         <div class="row">
             <div class="col-lg-12" id="metas_dp_17_rendimiento"></div>
         </div>
+
+        <div class="row">
+            <div class="col-lg-12" id="metas_dp_17_rendimiento_segundo"></div>
+        </div>
     </div>
 </div>
 
@@ -753,6 +757,45 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                     }
                     if (entero === 17) {
                         $('#metas_dp_17_rendimiento').html(resultado);
+                    }else if (entero === 37) {
+                        $('#metas_asesores_total_dp17').html(resultado);
+                    }
+                }
+            })
+        }
+
+        window.cargaRendimientoSegundo = function (entero) {
+            var fd = new FormData();
+            let valorr=$('#fechametames17').val();
+            var parts = valorr.split("-");
+            valorr=parts[2]+'-'+parts[1]+'-'+parts[0]
+
+            const ddd = new Date();
+            ddd_1=(ddd.getFullYear()+'-'+(ddd.getMonth()+1).toString().padStart(2, "0")+'-'+ddd.getDate().toString().padStart(2, "0"))
+            console.log(" "+ddd_1)
+
+            fd.append('fechametames17', valorr);
+            console.log()
+            fd.append('ii', entero);
+
+            $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                method: 'POST',
+                url: "{{ route('dashboard.viewMetaTable_G17_Rendimiento_Segundo') }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error
+                },
+                success: function (resultado) {
+                    if(entero===1 || entero===2)
+                    {
+                        console.log("cambiar color");
+                        if(valorr!=ddd_1)
+                            $(".h1-change-day").attr('style', 'color: blue !important');
+                    }
+                    if (entero === 17) {
+                        $('#metas_dp_17_rendimiento_segundo').html(resultado);
                     }else if (entero === 37) {
                         $('#metas_asesores_total_dp17').html(resultado);
                     }

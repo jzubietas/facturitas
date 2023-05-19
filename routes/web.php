@@ -89,6 +89,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('dashboard.viewMetaTable_G17', [DashboardController::class, 'viewMetaTableG17'])->name('dashboard.viewMetaTable_G17');
     Route::any('dashboard.viewMetaTable_G17_Calendario', [DashboardController::class, 'viewMetaTableG17Calendario'])->name('dashboard.viewMetaTable_G17_Calendario');
     Route::any('dashboard.viewMetaTable_G17_Rendimiento', [DashboardController::class, 'viewMetaTableG17Rendimiento'])->name('dashboard.viewMetaTable_G17_Rendimiento');
+    Route::any('dashboard.viewMetaTable_G17_Rendimiento_Segundo', [DashboardController::class, 'viewMetaTableG17RendimientoSegundo'])->name('dashboard.viewMetaTable_G17_Rendimiento_Segundo');
     Route::any('dashboard.viewMetaTable_G99', [DashboardController::class, 'viewMetaTableG99'])->name('dashboard.viewMetaTable_G99');
     Route::any('dashboard.viewMetaTable.Recurrente.Activo', [DashboardController::class, 'viewMetaTableRecurrenteActivo'])->name('dashboard.viewMetaTable.Recurrente.Activo');
 
@@ -224,6 +225,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::any('basefria.duplicados.tabla', [BasefriaController::class, 'clientesDuplicadosTabla'])->name('basefria.duplicados.tabla');
     Route::any('basefria.valid.store.publicidad', [BasefriaController::class, 'validadClienteDuplicadoPublicidad'])->name('basefria.valid.store.publicidad');
 
+    Route::post('basefria.duplicados.marcar', [BasefriaController::class, 'MarcarDuplicado'])->name('basefria.duplicados.marcar');
 
     Route::middleware('authorize.pedido.anulled')
         ->post('basefriadeleteRequest', [BasefriaController::class, 'destroyid'])

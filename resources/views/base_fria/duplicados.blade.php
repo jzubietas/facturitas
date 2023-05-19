@@ -431,6 +431,33 @@
                 });
             });
 
+            $(document).on('click','.btn-marcar',function(){
+                var button = $(this)
+                var marcado = button.data('marcar')//id  basefria
+                //console.log(marcado);
+                var formData = new FormData();
+                formData.append("marcado", marcado)
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('basefria.duplicados.marcar') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                }).done(function (data) {
+                    //console.log(data);
+                    if(data.status==1)
+                    {
+                        $('#tablaserversideduplicados').DataTable().ajax.reload();
+                    }else{
+                        Swal.fire(
+                            'Sucedio un error',
+                            '',
+                            'warning'
+                        )
+                    }
+                })
+            })
+
 
 
             $('#tablaserversideduplicados').DataTable({
@@ -605,9 +632,7 @@
 
     <script>
         //VALIDAR CAMPOS ANTES DE ENVIAR
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("formconvertir").addEventListener('submit', validarFormulario);
-        });
+
 
         function validarFormulario(evento) {
             evento.preventDefault();

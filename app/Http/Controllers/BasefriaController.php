@@ -393,19 +393,35 @@ class BasefriaController extends Controller
                 'cliente_duplicados.ecb_porcentaje',
                 'cliente_duplicados.created_at',
                 DB::raw(" (select sum(dp.saldo) from detalle_pedidos dp inner join pedidos p on p.id=dp.pedido_id where dp.estado=1 and p.estado=1 and p.cliente_id=cliente_duplicados.id ) as total_deuda ")
-            ]);
-            //->where('clientes.tipo', '0');
+            ])
+            ->where('cliente_duplicados.estado', '1');
 
         return Datatables::of(DB::table($data))
             ->addIndexColumn()
             ->editColumn('action', function ($row) {
                 $btn = "";
 
+                //if(\auth()->user()->can('basefria.convertir.cliente')):
+                    $btn = $btn . '<button class="btn btn-info btn-sm btn-marcar" data-marcar="'.$row->id.'"><i class="fas fa-person"></i> Marcar</button>';
+                //endif;
+
                 return $btn;
             })
             ->rawColumns(['action'])
             ->make(true);
 
+
+    }
+
+    public function MarcarDuplicado(Request $request)
+    {
+        $marcado=ClienteDuplicado::query()->find($request->marcado);
+        $marcado->update([
+           'estado'=>0
+        ]);
+
+        $html = array('status'=>1,'msg'=>'');
+        return response()->json($html);
 
     }
 
