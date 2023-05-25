@@ -438,6 +438,7 @@ class UserController extends Controller
                     || $user->clave_pedidos == '21'
                     || $user->clave_pedidos == '22'
                     || $user->clave_pedidos == '23'
+                    || $user->clave_pedidos == '24'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
