@@ -174,6 +174,8 @@ class UserController extends Controller
             'direccion' => $request->direccion,
             'referencia' => $request->referencia,
             'profile_photo_path' => $file_name,
+            // SI ES UN ASESOR SE GUARDA LA "CLAVE PEDIDO" CON EL VALOR DEL IDENTIFICADOR
+            'clave_pedidos' => $request->role_id == 2 ? $request->identificador: null,
             'estado' => '1'
         ]);
 
@@ -438,6 +440,7 @@ class UserController extends Controller
                     || $user->clave_pedidos == '21'
                     || $user->clave_pedidos == '22'
                     || $user->clave_pedidos == '23'
+                    || $user->clave_pedidos == '24'
                 ) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {

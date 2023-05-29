@@ -45,7 +45,6 @@ class NotificationsController extends Controller
 
     public function getNotificationsData(Request $request)
     {
-
         $notifications = [
             [
                 'icon' => 'fas fa-fw fa-envelope',//'fas fa-bell',
