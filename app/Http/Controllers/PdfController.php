@@ -1706,9 +1706,9 @@ class PdfController extends Controller
                 }
                 else if($porcentaje < 50){
                     $color_progress = 'linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%)';  /*ROJO-AMARILLO*/
-                }else if($porcentaje < 95){
+                }else if($porcentaje < 90){
                     $color_progress = '#ffc107';  /*AMARILLO*/
-                }else if($porcentaje < 99){
+                }else if($porcentaje < 95){
                      /*AMARILLO-VERDE GRADIENTE*/
                     $color_progress = 'linear-gradient(90deg, #ffc107 0%, #ffc107 89%, #8ec117 100%)';
                 }else{
@@ -1775,9 +1775,9 @@ class PdfController extends Controller
                 }
                 else if($porcentaje < 50){
                     $color_progress = 'linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%)';  /*ROJO-AMARILLO*/
-                }else if($porcentaje < 95){
+                }else if($porcentaje < 90){
                     $color_progress = '#ffc107';  /*AMARILLO*/
-                }else if($porcentaje < 99){
+                }else if($porcentaje < 95){
                      /*AMARILLO-VERDE GRADIENTE*/
                     $color_progress = 'linear-gradient(90deg, #ffc107 0%, #ffc107 89%, #8ec117 100%)';
                 }else{
