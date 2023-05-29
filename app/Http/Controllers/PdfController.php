@@ -1693,11 +1693,27 @@ class PdfController extends Controller
                 $html[] = '<td style="width:80%">';
 
                 $porcentaje = round(($r_reciente_cuenta / (($a_reciente_cuenta+$r_reciente_cuenta)*0.75) ) * 100, 2);
+                // $porcentaje = 96;
                 $diferenciameta = (($a_reciente_cuenta+$r_reciente_cuenta)*0.75)-$r_reciente_cuenta;
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
-                $color_progress = '#FFD4D4';  /*ROSADO*/
+                $color_progress = '';
+
+                // var_dump($_resultado_grafico_v2);
+                if($porcentaje < 45){
+                    $color_progress = '#DC3545FF';  /*ROJO*/
+                }
+                else if($porcentaje < 50){
+                    $color_progress = 'linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%)';  /*ROJO-AMARILLO*/
+                }else if($porcentaje < 95){
+                    $color_progress = '#ffc107';  /*AMARILLO*/
+                }else if($porcentaje < 99){
+                     /*AMARILLO-VERDE GRADIENTE*/
+                    $color_progress = 'linear-gradient(90deg, #ffc107 0%, #ffc107 89%, #8ec117 100%)';
+                }else{
+                    $color_progress= '#8ec117';  /*AMARILLO-VERDE*/
+                }
 
                 if ($porcentaje >= 0)
                 {
@@ -1751,7 +1767,22 @@ class PdfController extends Controller
 
                 $diferenciameta=round($diferenciameta);
                 if($diferenciameta<0)$diferenciameta=0;
-                $color_progress = '#FFD4D4';  /*ROSADO*/
+                $color_progress = '';
+
+                // var_dump($_resultado_grafico_v2);
+                if($porcentaje < 45){
+                    $color_progress = '#DC3545FF';  /*ROJO*/
+                }
+                else if($porcentaje < 50){
+                    $color_progress = 'linear-gradient(90deg, rgba(220,53,69,1) 0%, rgba(194,70,82,1) 89%, rgba(255,193,7,1) 100%)';  /*ROJO-AMARILLO*/
+                }else if($porcentaje < 95){
+                    $color_progress = '#ffc107';  /*AMARILLO*/
+                }else if($porcentaje < 99){
+                     /*AMARILLO-VERDE GRADIENTE*/
+                    $color_progress = 'linear-gradient(90deg, #ffc107 0%, #ffc107 89%, #8ec117 100%)';
+                }else{
+                    $color_progress= '#8ec117';  /*AMARILLO-VERDE*/
+                }
 
                 if ($porcentaje >= 0)
                 {
