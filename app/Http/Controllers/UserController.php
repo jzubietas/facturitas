@@ -174,6 +174,8 @@ class UserController extends Controller
             'direccion' => $request->direccion,
             'referencia' => $request->referencia,
             'profile_photo_path' => $file_name,
+            // SI ES UN ASESOR SE GUARDA LA "CLAVE PEDIDO" CON EL VALOR DEL IDENTIFICADOR
+            'clave_pedidos' => $request->role_id == 2 ? $request->identificador: null,
             'estado' => '1'
         ]);
 

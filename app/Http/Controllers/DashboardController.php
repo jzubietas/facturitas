@@ -6686,21 +6686,21 @@ class DashboardController extends Controller
         }
         else if (auth()->user()->rol == User::ROL_JEFE_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->where('excluir_meta', '<>', '1')
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->where('excluir_meta', '<>', '1')
                 ->count();
         }
         else if (auth()->user()->rol == User::ROL_LLAMADAS) {
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->where('excluir_meta', '<>', '1')
                 ->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->where('excluir_meta', '<>', '1')
                 ->count();
         }
@@ -6711,13 +6711,13 @@ class DashboardController extends Controller
             if($request->ii==2)$encargado=46;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
@@ -6731,13 +6731,13 @@ class DashboardController extends Controller
             if($request->ii==2)$encargado=46;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
@@ -6753,14 +6753,14 @@ class DashboardController extends Controller
             if($request->ii==2)$encargado=46;
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
 
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
@@ -6774,14 +6774,14 @@ class DashboardController extends Controller
             }
 
             $asesores = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })->get();
 
             $total_asesor = User::query()->activo()->rolAsesor()
-                ->whereIn('clave_pedidos',['18','19','20','21','22','23'])
+                ->whereIn('clave_pedidos',['18','19','20','21','22','23','24'])
                 //->whereIn('clave_pedidos',['01','01.5','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17'])
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
@@ -7206,6 +7206,7 @@ class DashboardController extends Controller
                 return explode(" ", data_get($item, 'name'))[0];
             })->first();
         }
+        // TODO: DAVID
         $progressData = collect($newData)->values()->map(function ($item) {
             $all = data_get($item, 'total_pedido');
             $all_mespasado = data_get($item, 'total_pedido_mespasado');
@@ -7500,6 +7501,7 @@ class DashboardController extends Controller
                 </thead>
                 <tbody>';
             $medall_icon='';
+            // TODO: David
             foreach ($progressData as $data) {
 
                 if($data["meta_new"]=='0')
