@@ -435,6 +435,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             console.log()
             fd.append('ii', entero);
 
+            console.log("david1", fd);
+
             $.ajax({
                 data: fd,
                 processData: false,

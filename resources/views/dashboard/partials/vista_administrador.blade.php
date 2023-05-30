@@ -455,7 +455,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
 
     <script>
         window.cargaNuevaGeneral = function (entero) {
-            console.log(' ' + entero)
+            console.log('entero 111 ' + entero)
             var fd = new FormData();
             let valorr=$('#fechametames').val();
             var parts = valorr.split("-");
@@ -496,7 +496,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
         }
 
         window.cargaNueva = function (entero) {
-            console.log(' ' + entero)
+            console.log('entero ' + entero)
             var fd = new FormData();
             //$('#fechametames').datepicker( "option", "dateFormat", "yy-mm-dd" );
             let valorr=$('#fechametames').val();
@@ -510,6 +510,8 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             fd.append('fechametames', valorr);
             console.log()
             fd.append('ii', entero);
+
+            console.log("david3", fd);
 
             $.ajax({
                 data: fd,
@@ -974,7 +976,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //grupo 1
                 cargaNueva(1);
                 cargaNueva(2);
-                cargaNueva(3);
+                // cargaNueva(3);
 
                 //porcentajes grupo 2
                 cargaNueva2(26);
@@ -999,7 +1001,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
             //grupo 1
             cargaNueva(1);
             cargaNueva(2);
-            cargaNueva(3);
+            // cargaNueva(3);
 
             //porcentaje grupo 2
             cargaNueva2(26);
@@ -1041,7 +1043,7 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 //grupo 1
                 cargaNueva(1);
                 cargaNueva(2);
-                cargaNueva(3);
+                // cargaNueva(3);
 
                 //porcentaje grupo 2
                 cargaNueva2(26);

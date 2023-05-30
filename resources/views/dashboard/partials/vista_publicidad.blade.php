@@ -258,6 +258,8 @@
             console.log()
             fd.append('ii', entero);
 
+            console.log("david11", fd);
+
             $.ajax({
                 data: fd,
                 processData: false,

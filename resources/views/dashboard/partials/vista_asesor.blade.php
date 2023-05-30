@@ -327,6 +327,9 @@ text-shadow: 2px 2px 0 #242120, 2px -2px 0 #242120, -2px 2px 0 #242120, -2px -2p
                 var fd = new FormData();
                 fd.append('fechametames', $('#fechametames').val());
                 fd.append('ii', entero);
+
+                console.log("david4", fd);
+
                 $.ajax({
                     data: fd,
                     processData: false,
