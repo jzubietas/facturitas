@@ -5,6 +5,8 @@
 /storage/*.key
 /vendor
 .env
+php.ini
+.user.ini
 .env.backup
 .phpunit.result.cache
 Homestead.json
